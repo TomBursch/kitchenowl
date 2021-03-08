@@ -11,7 +11,7 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   void setup() async {
-    final url = await SecureStorage.getInstance().read(key: 'URL');
+    final url = await PreferenceStorage.getInstance().read(key: 'URL');
     if (url != null && url.isNotEmpty) {
       final token = await SecureStorage.getInstance().read(key: 'TOKEN');
       _newConnection(url, token: token, storeData: false);
@@ -88,7 +88,7 @@ class AuthCubit extends Cubit<AuthState> {
 
   void removeServer() async {
     emit(Loading());
-    await SecureStorage.getInstance().delete(key: 'URL');
+    await PreferenceStorage.getInstance().delete(key: 'URL');
     await SecureStorage.getInstance().delete(key: 'TOKEN');
     ApiService.getInstance().dispose();
     refresh();
@@ -102,7 +102,7 @@ class AuthCubit extends Cubit<AuthState> {
     if (url == null || url.isEmpty) return;
     await ApiService.connectTo(url, refreshToken: token);
     if (storeData && ApiService.getInstance().isConnected()) {
-      await SecureStorage.getInstance().write(key: 'URL', value: url);
+      await PreferenceStorage.getInstance().write(key: 'URL', value: url);
       if (token != null && token.isNotEmpty)
         await SecureStorage.getInstance().write(key: 'TOKEN', value: token);
     }

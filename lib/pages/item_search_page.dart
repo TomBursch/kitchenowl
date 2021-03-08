@@ -62,7 +62,9 @@ class _ItemSearchPageState extends State<ItemSearchPage> {
                 onChanged: cubit.search,
                 autofocus: true,
                 textInputAction: TextInputAction.done,
-                onEditingComplete: () {},
+                onEditingComplete: () {
+                  cubit.search('');
+                },
                 onSubmitted: (text) {
                   if (cubit.state.selectedItems
                       .map((e) => e.name)

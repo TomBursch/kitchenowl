@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -51,13 +53,13 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
               ? AppLocalizations.of(context).recipeEdit
               : AppLocalizations.of(context).recipeNew),
           actions: [
-            if (isUpdate)
+            if (Platform.isAndroid || Platform.isIOS)
               IconButton(
-                  icon: Icon(Icons.delete),
+                  icon: Icon(Icons.save),
                   onPressed: () async {
-                    await cubit.removeRecipe();
-                    Navigator.of(context).pop(UpdateEnum.deleted);
-                  })
+                    await cubit.saveRecipe();
+                    Navigator.of(context).pop(UpdateEnum.updated);
+                  }),
           ],
         ),
         body: CustomScrollView(
@@ -178,22 +180,40 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                 ),
               ),
             ),
-            SliverPadding(
-              padding: const EdgeInsets.all(16),
-              sliver: SliverToBoxAdapter(
-                child: ElevatedButton(
-                  onPressed: () async {
-                    await cubit.saveRecipe();
-                    Navigator.of(context).pop(UpdateEnum.updated);
-                  },
-                  child: Text(
-                    isUpdate
-                        ? AppLocalizations.of(context).save
-                        : AppLocalizations.of(context).recipeAdd,
+            if (isUpdate)
+              SliverPadding(
+                padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+                sliver: SliverToBoxAdapter(
+                  child: ElevatedButton(
+                    style: ButtonStyle(
+                      backgroundColor:
+                          MaterialStateProperty.all<Color>(Colors.redAccent),
+                    ),
+                    onPressed: () async {
+                      await cubit.removeRecipe();
+                      Navigator.of(context).pop(UpdateEnum.deleted);
+                    },
+                    child: Text(AppLocalizations.of(context).delete),
                   ),
                 ),
               ),
-            )
+            if (!(Platform.isAndroid || Platform.isIOS))
+              SliverPadding(
+                padding: const EdgeInsets.all(16),
+                sliver: SliverToBoxAdapter(
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      await cubit.saveRecipe();
+                      Navigator.of(context).pop(UpdateEnum.updated);
+                    },
+                    child: Text(
+                      isUpdate
+                          ? AppLocalizations.of(context).save
+                          : AppLocalizations.of(context).recipeAdd,
+                    ),
+                  ),
+                ),
+              )
           ],
         ));
   }

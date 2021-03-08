@@ -1,3 +1,6 @@
+import 'dart:io';
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/cubits/shoppinglist_cubit.dart';
@@ -31,6 +34,9 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
 
   @override
   Widget build(BuildContext context) {
+    final int crossAxisCount =
+        ((MediaQuery.of(context).size.width / 1080).clamp(0, 1) * 6 + 3)
+            .round();
     return BlocProvider<ShoppinglistCubit>(
       create: (context) => ShoppinglistCubit(),
       lazy: false,
@@ -54,7 +60,9 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                     controller: searchController,
                     onChanged: (s) => cubit.search(s),
                     textInputAction: TextInputAction.done,
-                    onEditingComplete: () {},
+                    onEditingComplete: () {
+                      cubit.search('');
+                    },
                     onSubmitted: (text) {
                       final state = cubit.state;
                       if (state is SearchShoppinglistCubitState) {
@@ -96,8 +104,8 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                           padding: const EdgeInsets.symmetric(horizontal: 16),
                           gridDelegate:
                               SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 3,
-                            crossAxisSpacing: 4,
+                            crossAxisCount: crossAxisCount,
+                            crossAxisSpacing: 3,
                             mainAxisSpacing: 4,
                           ),
                           itemCount: state.result.length,
@@ -126,7 +134,7 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                             sliver: SliverGrid(
                               gridDelegate:
                                   SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 3,
+                                crossAxisCount: crossAxisCount,
                                 mainAxisSpacing: 4,
                                 crossAxisSpacing: 4,
                                 childAspectRatio: 1,
@@ -169,7 +177,7 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                             sliver: SliverGrid(
                               gridDelegate:
                                   SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 3,
+                                crossAxisCount: crossAxisCount,
                                 mainAxisSpacing: 4,
                                 crossAxisSpacing: 4,
                                 childAspectRatio: 1,

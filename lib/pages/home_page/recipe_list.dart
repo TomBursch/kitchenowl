@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:alphabet_scroll_view/alphabet_scroll_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -77,54 +79,59 @@ class _RecipeListPageState extends State<RecipeListPage> {
             ),
           ),
           Expanded(
-            child: RefreshIndicator(
-              onRefresh: cubit.refresh,
-              child: BlocBuilder<RecipeListCubit, ListRecipeCubitState>(
-                  cubit: cubit,
-                  builder: (context, state) {
-                    final recipes = state.recipes;
-                    return AlphabetScrollView(
-                      list: recipes.map((e) => AlphaModel(e.name)).toList(),
-                      alignment: LetterAlignment.left,
-                      // isAlphabetsFiltered: state is SearchRecipeCubitState,
-                      waterMark: (value) => Container(
-                        height: 50,
-                        width: 50,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Theme.of(context).primaryColor,
-                        ),
-                        alignment: Alignment.center,
-                        child: Text(
-                          value.toUpperCase(),
-                          style: TextStyle(fontSize: 20, color: Colors.white),
-                        ),
-                      ),
-                      itemExtent: 65,
-                      itemBuilder: (context, index, name) {
-                        return Padding(
-                          padding: const EdgeInsets.only(left: 32, right: 16),
-                          child: Card(
-                            child: ListTile(
-                              title: Text(recipes[index].name),
-                              trailing: Icon(Icons.arrow_right_rounded),
-                              onTap: () async {
-                                final recipe = await ApiService.getInstance()
-                                    .getRecipe(recipes[index]);
-                                final res = await Navigator.of(context)
-                                    .push<UpdateEnum>(MaterialPageRoute(
-                                        builder: (context) => RecipePage(
-                                              recipe: recipe ?? recipes[index],
-                                            )));
-                                if (res == UpdateEnum.updated ||
-                                    res == UpdateEnum.deleted) cubit.refresh();
-                              },
-                            ),
+            child: Scrollbar(
+              isAlwaysShown: !(Platform.isAndroid || Platform.isIOS),
+              child: RefreshIndicator(
+                onRefresh: cubit.refresh,
+                child: BlocBuilder<RecipeListCubit, ListRecipeCubitState>(
+                    cubit: cubit,
+                    builder: (context, state) {
+                      final recipes = state.recipes;
+                      return AlphabetScrollView(
+                        list: recipes.map((e) => AlphaModel(e.name)).toList(),
+                        alignment: LetterAlignment.left,
+                        // isAlphabetsFiltered: state is SearchRecipeCubitState,
+                        waterMark: (value) => Container(
+                          height: 50,
+                          width: 50,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Theme.of(context).primaryColor,
                           ),
-                        );
-                      },
-                    );
-                  }),
+                          alignment: Alignment.center,
+                          child: Text(
+                            value.toUpperCase(),
+                            style: TextStyle(fontSize: 20, color: Colors.white),
+                          ),
+                        ),
+                        itemExtent: 65,
+                        itemBuilder: (context, index, name) {
+                          return Padding(
+                            padding: const EdgeInsets.only(left: 32, right: 16),
+                            child: Card(
+                              child: ListTile(
+                                title: Text(recipes[index].name),
+                                trailing: Icon(Icons.arrow_right_rounded),
+                                onTap: () async {
+                                  final recipe = await ApiService.getInstance()
+                                      .getRecipe(recipes[index]);
+                                  final res = await Navigator.of(context)
+                                      .push<UpdateEnum>(MaterialPageRoute(
+                                          builder: (context) => RecipePage(
+                                                recipe:
+                                                    recipe ?? recipes[index],
+                                              )));
+                                  if (res == UpdateEnum.updated ||
+                                      res == UpdateEnum.deleted)
+                                    cubit.refresh();
+                                },
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    }),
+              ),
             ),
           ),
         ],

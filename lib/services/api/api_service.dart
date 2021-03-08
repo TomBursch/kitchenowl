@@ -19,6 +19,7 @@ enum Connection {
 }
 
 class ApiService {
+  static const Duration _TIMEOUT = const Duration(seconds: 3);
   static ApiService _instance;
   final _client = http.Client();
   final String baseUrl;
@@ -92,8 +93,10 @@ class ApiService {
     return _instance._setConnectionState(Connection.disconnected);
   }
 
-  Future<http.Response> get(String url) => _handleRequest(
+  Future<http.Response> get(String url, {bool refreshOnException}) =>
+      _handleRequest(
         () => this._client.get(Uri.parse(this.baseUrl + url), headers: headers),
+        refreshOnException: refreshOnException,
       );
 
   Future<http.Response> post(String url, dynamic body, {Encoding encoding}) =>
@@ -112,17 +115,17 @@ class ApiService {
         return http.Response.fromStream(await this._client.send(request));
       });
 
-  Future<http.Response> _handleRequest(
-      Future<http.Response> Function() request) async {
+  Future<http.Response> _handleRequest(Future<http.Response> Function() request,
+      {bool refreshOnException = true}) async {
     try {
-      http.Response response = await request();
+      http.Response response = await request().timeout(_TIMEOUT);
       if (response.statusCode == 401) {
         await refresh();
         if (this.isAuthenticated()) response = await request();
       }
       return response;
     } catch (e) {
-      await refresh();
+      if (refreshOnException) await refresh();
     }
     return http.Response('', 500);
   }

@@ -1,0 +1,65 @@
+{
+    "about": "About",
+    "addItemTitle": "Add Items",
+    "addNumberIngredients": "Add {number} ingredients",
+    "@addNumberIngredients": {
+        "placeholders": {
+            "number": {}
+        }
+    },
+    "address": "Address",
+    "appDescription": "KitchenOwl helps you organize your grocery life.",
+    "appLegal": "2021 The KitchenOwl Authors",
+    "appTitle": "KitchenOwl",
+    "@appTitle": {
+        "description": "The title of the app"
+    },
+    "cancel": "Cancel",
+    "darkmode": "Darkmode",
+    "delete": "Delete",
+    "description": "Description",
+    "go": "Go",
+    "items": "Items",
+    "itemsAdd": "Add Items",
+    "itemsOptional": "Optional Items",
+    "itemsRecent": "Recent Items",
+    "login": "Login",
+    "loginTo": "Login to",
+    "logout": "Logout",
+    "name": "Name",
+    "onboardingTitle": "Let's create a user",
+    "or": "or",
+    "password": "Password",
+    "passwordSave": "Update Password",
+    "profile": "Profile",
+    "recipeAdd": "Add Recipe",
+    "recipeEdit": "Edit Recipe",
+    "recipeNew": "New Recipe",
+    "recipes": "Recipe",
+    "refresh": "Refresh",
+    "save": "Save",
+    "searchHint": "Looking for something?",
+    "server": "Server",
+    "serverChange": "Switch Server",
+    "setupTitle": "Hey there! Ready to shop?",
+    "shoppingList": "Shopping list",
+    "shoppingLists": "Shopping lists",
+    "start": "Start",
+    "swipeToDeleteUser": "Swipe to delete user",
+    "underConstruction": "Under Construction",
+    "unreachableMessage": "Hmmmm... coulnd't reach server",
+    "unsupportedBackendMessage": "The server version is not supported, please update the app/backend",
+    "user": "User",
+    "userAdd": "Add User",
+    "userDelete": "Delete User",
+    "userDeleteConfirmation": "Are you sure you want to remove {user}?",
+    "@userDeleteConfirmation": {
+        "placeholders": {
+            "user": {}
+        }
+    },
+    "username": "Username",
+    "users": "Users",
+    "writeMarkdownHere": "You can use markdown here!",
+    "you": "you"
+}

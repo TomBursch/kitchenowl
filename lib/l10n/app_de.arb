@@ -1,0 +1,65 @@
+{
+    "about": "About",
+    "addItemTitle": "Artikel Hinzufügen",
+    "addNumberIngredients": "Füge {number} Produkte hinzu",
+    "@addNumberIngredients": {
+        "placeholders": {
+            "number": {}
+        }
+    },
+    "address": "Adresse",
+    "appDescription": "KitchenOwl hilft dir dein Lebensmitteleinkauf zu erleichtern",
+    "appLegal": "2021 The KitchenOwl Authors",
+    "appTitle": "KitchenOwl",
+    "@appTitle": {
+        "description": "The title of the app"
+    },
+    "cancel": "Abbrechen",
+    "darkmode": "Nachtmodus",
+    "delete": "Löschen",
+    "description": "Beschreibung",
+    "go": "Los",
+    "items": "Artikel",
+    "itemsAdd": "Hinzufügen",
+    "itemsOptional": "Optionale Artikel",
+    "itemsRecent": "Zuletzt benutzt",
+    "login": "Login",
+    "loginTo": "Login bei",
+    "logout": "Logout",
+    "name": "Name",
+    "onboardingTitle": "Lass uns einen Nutzer erstellen",
+    "or": "oder",
+    "password": "Passwort",
+    "passwordSave": "Passwort Speichern",
+    "profile": "Profil",
+    "recipeAdd": "Rezept Hinzufügen",
+    "recipeEdit": "Rezept Bearbeiten",
+    "recipeNew": "Neues Rezept",
+    "recipes": "Rezepte",
+    "refresh": "Aktualisieren",
+    "save": "Speichern",
+    "searchHint": "Looking for something?",
+    "server": "Server",
+    "serverChange": "Server wechseln",
+    "setupTitle": "Hi! Bereit zum Einkaufen?",
+    "shoppingList": "Einkaufsliste",
+    "shoppingLists": "Einkaufslisten",
+    "start": "Start",
+    "swipeToDeleteUser": "Wische zum löschen",
+    "underConstruction": "Baustelle",
+    "unreachableMessage": "Hmmmm... der Server wurde nicht erreicht",
+    "unsupportedBackendMessage": "Die Server version wird nicht unterstützt, bitte update die/den App/Server",
+    "user": "Benutzer",
+    "userAdd": "Benutzer hinzufügen",
+    "userDelete": "Benutzer löschen",
+    "userDeleteConfirmation": "Bist du dir sicher, dass du {user} löschen möchtest?",
+    "@userDeleteConfirmation": {
+        "placeholders": {
+            "user": {}
+        }
+    },
+    "username": "Benutzername",
+    "users": "Benutzer",
+    "writeMarkdownHere": "Hier wird markdown unterstützt!",
+    "you": "du"
+}

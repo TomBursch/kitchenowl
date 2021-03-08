@@ -1,1 +1,1 @@
-# shoppy-mobile
+# kitchenowl-mobile

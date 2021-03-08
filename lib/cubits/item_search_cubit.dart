@@ -26,6 +26,8 @@ class ItemSearchCubit extends Cubit<ItemSearchState> {
           items[0].name.toLowerCase() != query.toLowerCase())
         items.add(Item(name: query));
       emit(ItemSearchState(state.selectedItems, query, items));
+    } else {
+      emit(ItemSearchState(state.selectedItems, query, state.searchResults));
     }
   }
 }

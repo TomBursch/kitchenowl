@@ -5,10 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/cubits/recipe_list_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
-import 'package:kitchenowl/models/recipe.dart';
 import 'package:kitchenowl/pages/recipe_page.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
 import 'package:kitchenowl/kitchenowl.dart';
+import 'package:kitchenowl/widgets/search_text_field.dart';
 
 class RecipeListPage extends StatefulWidget {
   RecipeListPage({Key key}) : super(key: key);
@@ -20,7 +20,6 @@ class RecipeListPage extends StatefulWidget {
 class _RecipeListPageState extends State<RecipeListPage> {
   final List<Widget> favouriteList = [];
   final TextEditingController searchController = TextEditingController();
-  final RecipeListCubit cubit = RecipeListCubit();
 
   @override
   void initState() {
@@ -29,12 +28,13 @@ class _RecipeListPageState extends State<RecipeListPage> {
 
   @override
   void dispose() {
-    cubit.close();
+    searchController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final cubit = BlocProvider.of<RecipeListCubit>(context);
     return SafeArea(
       child: Column(
         children: [
@@ -51,29 +51,11 @@ class _RecipeListPageState extends State<RecipeListPage> {
                     }
                   }
                 },
-                child: TextField(
-                  key: ValueKey<String>('SearchTextField'),
+                child: SearchTextField(
                   controller: searchController,
-                  onChanged: (s) => cubit.search(s),
+                  onSearch: (s) => cubit.search(s),
                   textInputAction: TextInputAction.search,
-                  onSubmitted: (text) => FocusScope.of(context).unfocus(),
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    prefixIcon: Icon(Icons.search),
-                    suffix: IconButton(
-                      onPressed: () {
-                        if (searchController.text.isNotEmpty) {
-                          cubit.search('');
-                        }
-                        FocusScope.of(context).unfocus();
-                      },
-                      icon: Icon(
-                        Icons.close,
-                        color: Colors.grey,
-                      ),
-                    ),
-                    labelText: AppLocalizations.of(context).searchHint,
-                  ),
+                  onSubmitted: () => FocusScope.of(context).unfocus(),
                 ),
               ),
             ),
@@ -122,8 +104,9 @@ class _RecipeListPageState extends State<RecipeListPage> {
                                                     recipe ?? recipes[index],
                                               )));
                                   if (res == UpdateEnum.updated ||
-                                      res == UpdateEnum.deleted)
+                                      res == UpdateEnum.deleted) {
                                     cubit.refresh();
+                                  }
                                 },
                               ),
                             ),

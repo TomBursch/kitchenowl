@@ -29,7 +29,13 @@ class ShoppingItemWidget<T extends Item> extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(item.name),
+          Text(
+            item.name,
+            maxLines: 3,
+            overflow: TextOverflow.ellipsis,
+            softWrap: true,
+            textAlign: TextAlign.center,
+          ),
           if (item is ShoppinglistItem &&
               (item as ShoppinglistItem).description != null &&
               (item as ShoppinglistItem).description.isNotEmpty)

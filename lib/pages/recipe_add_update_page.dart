@@ -9,7 +9,7 @@ import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/models/recipe.dart';
 import 'package:kitchenowl/pages/item_search_page.dart';
 import 'package:kitchenowl/kitchenowl.dart';
-import 'package:kitchenowl/widgets/home_page/shopping_item.dart';
+import 'package:kitchenowl/widgets/shopping_item.dart';
 
 class AddUpdateRecipePage extends StatefulWidget {
   final Recipe recipe;
@@ -55,7 +55,7 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
           actions: [
             if (Platform.isAndroid || Platform.isIOS)
               IconButton(
-                  icon: Icon(Icons.save),
+                  icon: Icon(Icons.save_rounded),
                   onPressed: () async {
                     await cubit.saveRecipe();
                     Navigator.of(context).pop(UpdateEnum.updated);
@@ -182,7 +182,7 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
             ),
             if (isUpdate)
               SliverPadding(
-                padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+                padding: const EdgeInsets.all(16),
                 sliver: SliverToBoxAdapter(
                   child: ElevatedButton(
                     style: ButtonStyle(
@@ -199,7 +199,7 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
               ),
             if (!(Platform.isAndroid || Platform.isIOS))
               SliverPadding(
-                padding: const EdgeInsets.all(16),
+                padding: EdgeInsets.fromLTRB(16, isUpdate ? 0 : 16, 16, 16),
                 sliver: SliverToBoxAdapter(
                   child: ElevatedButton(
                     onPressed: () async {

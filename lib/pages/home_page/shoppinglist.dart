@@ -7,7 +7,9 @@ import 'package:kitchenowl/cubits/shoppinglist_cubit.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/pages/item_page.dart';
 import 'package:kitchenowl/kitchenowl.dart';
-import 'package:kitchenowl/widgets/home_page/shopping_item.dart';
+import 'package:kitchenowl/widgets/search_text_field.dart';
+import 'package:kitchenowl/widgets/shopping_item.dart';
+import 'package:responsive_builder/responsive_builder.dart';
 
 class ShoppinglistPage extends StatefulWidget {
   ShoppinglistPage({Key key}) : super(key: key);
@@ -18,7 +20,6 @@ class ShoppinglistPage extends StatefulWidget {
 
 class _ShoppinglistPageState extends State<ShoppinglistPage> {
   final TextEditingController searchController = TextEditingController();
-  final ShoppinglistCubit cubit = ShoppinglistCubit();
 
   @override
   void initState() {
@@ -27,16 +28,19 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
 
   @override
   void dispose() {
-    cubit.close();
     searchController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final int crossAxisCount =
-        ((MediaQuery.of(context).size.width / 1080).clamp(0, 1) * 6 + 3)
-            .round();
+    final cubit = BlocProvider.of<ShoppinglistCubit>(context);
+    final int crossAxisCount = getValueForScreenType<int>(
+      context: context,
+      mobile: 3,
+      tablet: 6,
+      desktop: 9,
+    );
     return BlocProvider<ShoppinglistCubit>(
       create: (context) => ShoppinglistCubit(),
       lazy: false,
@@ -56,14 +60,10 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                       }
                     }
                   },
-                  child: TextField(
+                  child: SearchTextField(
                     controller: searchController,
-                    onChanged: (s) => cubit.search(s),
-                    textInputAction: TextInputAction.done,
-                    onEditingComplete: () {
-                      cubit.search('');
-                    },
-                    onSubmitted: (text) {
+                    onSearch: (s) => cubit.search(s),
+                    onSubmitted: () {
                       final state = cubit.state;
                       if (state is SearchShoppinglistCubitState) {
                         if (!(state.result.first is ShoppinglistItem))
@@ -72,23 +72,6 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                         FocusScope.of(context).unfocus();
                       }
                     },
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      prefixIcon: Icon(Icons.search),
-                      suffix: IconButton(
-                        onPressed: () {
-                          if (searchController.text.isNotEmpty) {
-                            cubit.search('');
-                          }
-                          FocusScope.of(context).unfocus();
-                        },
-                        icon: Icon(
-                          Icons.close,
-                          color: Colors.grey,
-                        ),
-                      ),
-                      labelText: AppLocalizations.of(context).searchHint,
-                    ),
                   ),
                 ),
               ),

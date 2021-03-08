@@ -12,7 +12,7 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
 
   Future<void> add(String name) async {
     await ApiService.getInstance().addItemByName(name);
-    await refresh();
+    await refresh('');
   }
 
   Future<void> remove(ShoppinglistItem item) async {

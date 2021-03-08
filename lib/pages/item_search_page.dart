@@ -3,7 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/cubits/item_search_cubit.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/kitchenowl.dart';
-import 'package:kitchenowl/widgets/home_page/shopping_item.dart';
+import 'package:kitchenowl/widgets/search_text_field.dart';
+import 'package:kitchenowl/widgets/shopping_item.dart';
 
 class ItemSearchPage extends StatefulWidget {
   final bool multiple;
@@ -57,15 +58,12 @@ class _ItemSearchPageState extends State<ItemSearchPage> {
                   searchController.clear();
                 }
               },
-              child: TextField(
+              child: SearchTextField(
                 controller: searchController,
-                onChanged: cubit.search,
+                onSearch: cubit.search,
                 autofocus: true,
                 textInputAction: TextInputAction.done,
-                onEditingComplete: () {
-                  cubit.search('');
-                },
-                onSubmitted: (text) {
+                onSubmitted: () {
                   if (cubit.state.selectedItems
                       .map((e) => e.name)
                       .contains(cubit.state.searchResults.first.name)) return;
@@ -77,9 +75,7 @@ class _ItemSearchPageState extends State<ItemSearchPage> {
                   }
                 },
                 decoration: InputDecoration(
-                  fillColor: Theme.of(context).scaffoldBackgroundColor,
                   filled: true,
-                  border: OutlineInputBorder(),
                   prefixIcon: Icon(Icons.search),
                   suffix: IconButton(
                     onPressed: () {
@@ -92,6 +88,7 @@ class _ItemSearchPageState extends State<ItemSearchPage> {
                       Icons.close,
                       color: Colors.grey,
                     ),
+                    padding: EdgeInsets.zero,
                   ),
                   hintText: AppLocalizations.of(context).searchHint,
                 ),

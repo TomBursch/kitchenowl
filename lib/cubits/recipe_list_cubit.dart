@@ -11,9 +11,9 @@ class RecipeListCubit extends Cubit<ListRecipeCubitState> {
     refresh();
   }
 
-  void search(String query) {
+  Future<void> search(String query) {
     this.query = query ?? '';
-    refresh();
+    return refresh();
   }
 
   Future<void> refresh() async {

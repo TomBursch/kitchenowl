@@ -9,7 +9,7 @@ import 'package:kitchenowl/models/recipe.dart';
 import 'package:kitchenowl/pages/item_search_page.dart';
 import 'package:kitchenowl/pages/recipe_add_update_page.dart';
 import 'package:kitchenowl/kitchenowl.dart';
-import 'package:kitchenowl/widgets/home_page/shopping_item.dart';
+import 'package:kitchenowl/widgets/shopping_item.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class RecipePage extends StatefulWidget {
@@ -43,6 +43,10 @@ class _RecipePageState extends State<RecipePage> {
         builder: (conext, state) => Scaffold(
               appBar: AppBar(
                 title: Text(state.recipe.name),
+                leading: BackButton(
+                  onPressed: () =>
+                      Navigator.of(context).pop(cubit.state.updateState),
+                ),
                 actions: [
                   IconButton(
                     onPressed: () async {
@@ -51,7 +55,10 @@ class _RecipePageState extends State<RecipePage> {
                               builder: (context) => AddUpdateRecipePage(
                                     recipe: state.recipe,
                                   )));
-                      if (res == UpdateEnum.updated) cubit.refresh();
+                      if (res == UpdateEnum.updated) {
+                        cubit.setUpdateState(UpdateEnum.updated);
+                        cubit.refresh();
+                      }
                       if (res == UpdateEnum.deleted)
                         Navigator.of(context).pop(UpdateEnum.deleted);
                     },

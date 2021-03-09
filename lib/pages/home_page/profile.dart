@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/config.dart';
 import 'package:kitchenowl/cubits/auth_cubit.dart';
 import 'package:kitchenowl/cubits/settings_cubit.dart';
+import 'package:kitchenowl/models/user.dart';
 import 'package:kitchenowl/pages/settings_server_page.dart';
 import 'package:kitchenowl/pages/settings_shoppinglists_page.dart';
 import 'package:kitchenowl/pages/settings_user_page.dart';
@@ -14,6 +15,10 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint(BlocProvider.of<AuthCubit>(context).state.toString());
+    final user =
+        (BlocProvider.of<AuthCubit>(context).state as Authenticated).user ??
+            User(name: '', username: '');
     return CustomScrollView(
       physics: ClampingScrollPhysics(),
       slivers: [
@@ -27,9 +32,7 @@ class ProfilePage extends StatelessWidget {
               color: Theme.of(context).accentColor,
             ),
             Text(
-              (BlocProvider.of<AuthCubit>(context).state as Authenticated)
-                  .user
-                  .name,
+              user.name,
               style: Theme.of(context).textTheme.headline5,
               textAlign: TextAlign.center,
             ),
@@ -76,9 +79,7 @@ class ProfilePage extends StatelessWidget {
                         builder: (context) => SettingsUserPage())),
                   ),
                 ),
-                if ((BlocProvider.of<AuthCubit>(context).state as Authenticated)
-                    .user
-                    .owner)
+                if (user.owner)
                   Card(
                     child: ListTile(
                       title: Text(AppLocalizations.of(context).server),

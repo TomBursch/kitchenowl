@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:kitchenowl/cubits/auth_cubit.dart';
 import 'package:kitchenowl/cubits/settings_user_cubit.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 

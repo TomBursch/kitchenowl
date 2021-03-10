@@ -6,7 +6,7 @@ from app import app, db
 from app.models import Item, Shoppinglist
 from app.helpers import validate_args
 from .schemas import RemoveItem, UpdateDescription, AddItemByName, CreateList, AddRecipeItems
-from app.errors import InvalidUsage
+from app.errors import InvalidUsage, NotFoundRequest
 
 
 @app.before_first_request
@@ -41,16 +41,18 @@ def getRecentItems(id):
 def addShoppinglistItemByName(args, id):
     shoppinglist = Shoppinglist.find_by_id(id)
     if not shoppinglist:
-        return jsonify(), 404
+        raise NotFoundRequest()
     item = Item.find_by_name(args['name'])
     if not item:
         item = Item.create_by_name(args['name'])
-
-    description = args['description'] if 'description' in args else ''
-    con = ShoppinglistItems(description=description)
-    con.item = item
-    shoppinglist.items.append(con)
-    shoppinglist.save()
+    
+    con = ShoppinglistItems.find_by_ids(shoppinglist.id, item.id)
+    if not con:
+        description = args['description'] if 'description' in args else ''
+        con = ShoppinglistItems(description=description)
+        con.item = item
+        con.shoppinglist = shoppinglist
+        con.save()
     return jsonify(item.obj_to_dict())
 
 
@@ -60,11 +62,12 @@ def addShoppinglistItemByName(args, id):
 def removeShoppinglistItem(args, id):
     shoppinglist = Shoppinglist.find_by_id(id)
     if not shoppinglist:
-        return jsonify(), 404
+        raise NotFoundRequest()
     item = Item.find_by_id(args['item_id'])
     if not item:
-        item = Item.create_by_name(args['name'])
-
+        item = Item.find_by_name(args['name'])
+    if not item:
+        raise NotFoundRequest()
     con = ShoppinglistItems.find_by_ids(id, args['item_id'])
     con.delete()
     return jsonify({'msg': "DONE"})
@@ -84,7 +87,7 @@ def createList(args):
 def addRecipeItems(args, id):
     shoppinglist = Shoppinglist.find_by_id(id)
     if not shoppinglist:
-        return jsonify(), 404
+        raise NotFoundRequest()
 
     for recipeItem in args['items']:
         item = Item.find_by_id(recipeItem['id'])
@@ -120,5 +123,5 @@ def addRecipeItems(args, id):
 def getShoppinglist(id):
     shoppinglist = Shoppinglist.find_by_id(id)
     if not shoppinglist:
-        return jsonify(), 404
+        raise NotFoundRequest()
     return jsonify(shoppinglist.obj_to_dict())

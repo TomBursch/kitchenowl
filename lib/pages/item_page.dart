@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/kitchenowl.dart';
+import 'package:kitchenowl/services/api/api_service.dart';
 
 class ItemPage extends StatelessWidget {
   final Item item;
@@ -14,7 +16,10 @@ class ItemPage extends StatelessWidget {
         title: Text(item.name),
         actions: [
           IconButton(
-            onPressed: null,
+            onPressed: () async {
+              await ApiService.getInstance().deleteItem(item);
+              Navigator.of(context).pop(UpdateEnum.deleted);
+            },
             icon: Icon(Icons.delete),
           )
         ],

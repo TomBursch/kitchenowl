@@ -5,6 +5,8 @@ abstract class Model implements Equatable {
 
   Map<String, dynamic> toJson();
 
+  Map<String, dynamic> toJsonWithId() => this.toJson();
+
   @override
   bool get stringify => true;
 }

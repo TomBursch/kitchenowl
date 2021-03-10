@@ -1,6 +1,7 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kitchenowl/cubits/auth_cubit.dart';
 import 'package:kitchenowl/cubits/recipe_list_cubit.dart';
 import 'package:kitchenowl/cubits/shoppinglist_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
@@ -21,6 +22,7 @@ class _HomePageState extends State<HomePage> {
 
   List<Widget> pages;
   int _selectedIndex = 0;
+  bool isOffline;
 
   @override
   void initState() {
@@ -53,6 +55,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    isOffline =
+        BlocProvider.of<AuthCubit>(context).state is AuthenticatedOffline;
     return Scaffold(
       body: PageTransitionSwitcher(
         transitionBuilder: (
@@ -66,20 +70,28 @@ class _HomePageState extends State<HomePage> {
             child: child,
           );
         },
-        child: pages[_selectedIndex],
+        child: Align(
+          alignment: Alignment.topCenter,
+          child: ConstrainedBox(
+              constraints: BoxConstraints.expand(width: 1600),
+              child: pages[_selectedIndex]),
+        ),
       ),
       floatingActionButton: [
         null,
-        FloatingActionButton(
-          onPressed: () async {
-            final res = await Navigator.of(context).push<UpdateEnum>(
-                MaterialPageRoute(builder: (context) => AddUpdateRecipePage()));
-            if (res == UpdateEnum.updated) {
-              recipeListCubit.refresh();
-            }
-          },
-          child: Icon(Icons.add),
-        ),
+        !isOffline
+            ? FloatingActionButton(
+                onPressed: () async {
+                  final res = await Navigator.of(context).push<UpdateEnum>(
+                      MaterialPageRoute(
+                          builder: (context) => AddUpdateRecipePage()));
+                  if (res == UpdateEnum.updated) {
+                    recipeListCubit.refresh();
+                  }
+                },
+                child: Icon(Icons.add),
+              )
+            : null,
         null,
       ][_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
@@ -95,7 +107,7 @@ class _HomePageState extends State<HomePage> {
             label: AppLocalizations.of(context).recipes,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person),
+            icon: Icon(isOffline ? Icons.cloud_off_rounded : Icons.person),
             label: AppLocalizations.of(context).profile,
           ),
         ],

@@ -10,8 +10,8 @@ class User extends Model {
 
   factory User.fromJson(Map<String, dynamic> map) => User(
         id: map['id'],
-        name: map['name'],
         username: map['username'],
+        name: map['name'],
         owner: map['owner'] ?? false,
       );
 
@@ -20,6 +20,13 @@ class User extends Model {
 
   @override
   Map<String, dynamic> toJson() => {
-        "name": this.id,
+        "name": this.name,
+      };
+
+  Map<String, dynamic> toJsonWithId() => {
+        "id": this.id,
+        "username": this.username,
+        "name": this.name,
+        "owner": this.owner,
       };
 }

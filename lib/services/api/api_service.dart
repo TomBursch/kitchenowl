@@ -19,7 +19,7 @@ enum Connection {
 }
 
 class ApiService {
-  static const Duration _TIMEOUT = const Duration(seconds: 3);
+  static const Duration _TIMEOUT = const Duration(seconds: 5);
   static ApiService _instance;
   final _client = http.Client();
   final String baseUrl;
@@ -93,7 +93,7 @@ class ApiService {
     return _instance._setConnectionState(Connection.disconnected);
   }
 
-  Future<http.Response> get(String url, {bool refreshOnException}) =>
+  Future<http.Response> get(String url, {bool refreshOnException = true}) =>
       _handleRequest(
         () => this._client.get(Uri.parse(this.baseUrl + url), headers: headers),
         refreshOnException: refreshOnException,
@@ -119,9 +119,12 @@ class ApiService {
       {bool refreshOnException = true}) async {
     try {
       http.Response response = await request().timeout(_TIMEOUT);
-      if (response.statusCode == 401) {
+
+      if ((!isConnected() && refreshOnException) ||
+          response.statusCode == 401) {
         await refresh();
-        if (this.isAuthenticated()) response = await request();
+        if (response.statusCode == 401 && this.isAuthenticated())
+          response = await request();
       }
       return response;
     } catch (e) {
@@ -136,7 +139,8 @@ class ApiService {
 
   Future<Tuple2<bool, Map<String, dynamic>>> healthy() async {
     try {
-      final res = await get('/health/8M4F88S8ooi4sMbLBfkkV7ctWwgibW6V');
+      final res = await get('/health/8M4F88S8ooi4sMbLBfkkV7ctWwgibW6V',
+          refreshOnException: false);
       if (res.statusCode == 200)
         return Tuple2(
           jsonDecode(res.body)['msg'] == 'OK',

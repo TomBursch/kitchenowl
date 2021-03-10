@@ -10,16 +10,22 @@ class SettingsShoppinglistsPage extends StatelessWidget {
       appBar: AppBar(
         title: Text(AppLocalizations.of(context).shoppingLists),
       ),
-      body: ListView(
-        padding: EdgeInsets.all(16),
-        children: [
-          Card(
-            child: ListTile(
-              title: Text('Default'),
-              trailing: Icon(Icons.shopping_bag_outlined),
-            ),
+      body: Align(
+        alignment: Alignment.topCenter,
+        child: ConstrainedBox(
+          constraints: BoxConstraints.expand(width: 600),
+          child: ListView(
+            padding: EdgeInsets.all(16),
+            children: [
+              Card(
+                child: ListTile(
+                  title: Text('Default'),
+                  trailing: Icon(Icons.shopping_bag_outlined),
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

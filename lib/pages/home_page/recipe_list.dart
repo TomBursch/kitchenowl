@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:alphabet_scroll_view/alphabet_scroll_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,7 +5,6 @@ import 'package:kitchenowl/cubits/recipe_list_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/pages/recipe_page.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
-import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/widgets/search_text_field.dart';
 
 class RecipeListPage extends StatefulWidget {
@@ -61,15 +58,14 @@ class _RecipeListPageState extends State<RecipeListPage> {
             ),
           ),
           Expanded(
-            child: Scrollbar(
-              isAlwaysShown: !(Platform.isAndroid || Platform.isIOS),
-              child: RefreshIndicator(
-                onRefresh: cubit.refresh,
-                child: BlocBuilder<RecipeListCubit, ListRecipeCubitState>(
-                    cubit: cubit,
-                    builder: (context, state) {
-                      final recipes = state.recipes;
-                      return AlphabetScrollView(
+            child: BlocBuilder<RecipeListCubit, ListRecipeCubitState>(
+                cubit: cubit,
+                builder: (context, state) {
+                  final recipes = state.recipes;
+                  return Scrollbar(
+                    child: RefreshIndicator(
+                      onRefresh: cubit.refresh,
+                      child: AlphabetScrollView(
                         list: recipes.map((e) => AlphaModel(e.name)).toList(),
                         alignment: LetterAlignment.left,
                         // isAlphabetsFiltered: state is SearchRecipeCubitState,
@@ -112,10 +108,10 @@ class _RecipeListPageState extends State<RecipeListPage> {
                             ),
                           );
                         },
-                      );
-                    }),
-              ),
-            ),
+                      ),
+                    ),
+                  );
+                }),
           ),
         ],
       ),

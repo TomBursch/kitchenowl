@@ -5,9 +5,14 @@ import 'package:kitchenowl/services/api/api_service.dart';
 extension ItemApi on ApiService {
   Future<List<Item>> searchItem(String query) async {
     final res = await get('/item/search?query=$query');
-    if (res.statusCode != 200) return [];
+    if (res.statusCode != 200) return null;
 
     final body = List.from(jsonDecode(res.body));
     return body.map((e) => Item.fromJson(e)).toList();
+  }
+
+  Future<bool> deleteItem(Item item) async {
+    final res = await delete('/item/${item.id}');
+    return res.statusCode == 200;
   }
 }

@@ -9,14 +9,16 @@ class ItemSearchCubit extends Cubit<ItemSearchState> {
 
   void itemSelected(int i) {
     final List<Item> selectedItems = List.from(state.selectedItems);
-    if (state.selectedItems
+    final bool addItem = state.selectedItems
         .map((e) => e.name)
-        .contains(state.searchResults[i].name)) {
+        .contains(state.searchResults[i].name);
+    if (addItem) {
       selectedItems.removeWhere((e) => e.name == state.searchResults[i].name);
     } else {
       selectedItems.add(state.searchResults[i]);
     }
-    emit(ItemSearchState(selectedItems, state.query, state.searchResults));
+    emit(ItemSearchState(
+        selectedItems, addItem ? '' : state.query, state.searchResults));
   }
 
   Future<void> search(String query) async {

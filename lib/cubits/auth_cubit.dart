@@ -2,7 +2,9 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/models/user.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
-import 'package:kitchenowl/services/storage.dart';
+import 'package:kitchenowl/services/storage/storage.dart';
+import 'package:kitchenowl/services/storage/temp_storage.dart';
+import 'package:kitchenowl/services/transaction_handler.dart';
 
 class AuthCubit extends Cubit<AuthState> {
   AuthCubit() : super(Loading()) {
@@ -24,13 +26,21 @@ class AuthCubit extends Cubit<AuthState> {
     switch (ApiService.getInstance().connectionStatus) {
       case Connection.authenticated:
         final user = await ApiService.getInstance().getUser();
+        await TempStorage.getInstance().writeUser(user);
+        await TransactionHandler.getInstance().runOpenTransactions();
         emit(Authenticated(user));
         break;
       case Connection.disconnected:
-        if (ApiService.getInstance().baseUrl.isNotEmpty)
-          emit(Unreachable());
-        else
+        if (ApiService.getInstance().baseUrl.isNotEmpty) {
+          final user = await TempStorage.getInstance().readUser();
+          if (user != null) {
+            emit(AuthenticatedOffline(user));
+          } else {
+            emit(Unreachable());
+          }
+        } else {
           emit(Setup());
+        }
         break;
       case Connection.connected:
         if (await ApiService.getInstance().isOnboarding())
@@ -55,8 +65,17 @@ class AuthCubit extends Cubit<AuthState> {
   Future<void> refresh() => ApiService.getInstance().refresh();
 
   Future<void> refreshUser() async {
-    if (state is Authenticated)
-      emit(Authenticated(await ApiService.getInstance().getUser()));
+    if (state is Authenticated) {
+      if (state is AuthenticatedOffline) {
+        final user = await TempStorage.getInstance().readUser();
+        if (user != null) {
+          emit(AuthenticatedOffline(user));
+        } else {
+          emit(Unreachable());
+        }
+      } else
+        emit(Authenticated(await ApiService.getInstance().getUser()));
+    }
   }
 
   void createUser(String username, String name, String password) async {
@@ -66,7 +85,8 @@ class AuthCubit extends Cubit<AuthState> {
           await ApiService.getInstance().onboarding(username, name, password);
       if (token != null && ApiService.getInstance().isAuthenticated()) {
         await SecureStorage.getInstance().write(key: 'TOKEN', value: token);
-      }
+      } else
+        updateState();
     }
   }
 
@@ -76,13 +96,17 @@ class AuthCubit extends Cubit<AuthState> {
     if (token != null && ApiService.getInstance().isAuthenticated()) {
       await SecureStorage.getInstance().write(key: 'TOKEN', value: token);
     } else
-      refresh();
+      updateState();
   }
 
   void logout() async {
     emit(Loading());
     await SecureStorage.getInstance().delete(key: 'TOKEN');
+    await TempStorage.getInstance().clearUser();
+    await TempStorage.getInstance().clearItems();
     ApiService.getInstance().refreshToken = '';
+    if (ApiService.getInstance().connectionStatus == Connection.disconnected)
+      emit(Unreachable());
     refresh();
   }
 
@@ -90,6 +114,8 @@ class AuthCubit extends Cubit<AuthState> {
     emit(Loading());
     await PreferenceStorage.getInstance().delete(key: 'URL');
     await SecureStorage.getInstance().delete(key: 'TOKEN');
+    await TempStorage.getInstance().clearUser();
+    await TempStorage.getInstance().clearItems();
     ApiService.getInstance().dispose();
     refresh();
   }
@@ -115,6 +141,13 @@ class Authenticated extends AuthState {
   final User user;
 
   Authenticated(this.user);
+
+  @override
+  List<Object> get props => [user];
+}
+
+class AuthenticatedOffline extends Authenticated {
+  AuthenticatedOffline(User user) : super(user);
 
   @override
   List<Object> get props => [user];

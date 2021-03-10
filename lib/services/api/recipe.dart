@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/models/recipe.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
 
@@ -30,12 +29,12 @@ extension RecipeApi on ApiService {
 
   Future<bool> addRecipe(Recipe recipe) async {
     final res = await post('/recipe', jsonEncode(recipe.toJson()));
-    return res.statusCode != 200;
+    return res.statusCode == 200;
   }
 
   Future<bool> updateRecipe(Recipe recipe) async {
     final res = await post('/recipe/${recipe.id}', jsonEncode(recipe.toJson()));
-    return res.statusCode != 200;
+    return res.statusCode == 200;
   }
 
   Future<bool> deleteRecipe(Recipe recipe) async {

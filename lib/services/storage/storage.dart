@@ -20,11 +20,12 @@ class SecureStorage extends Storage {
   }
 
   Future<void> delete({String key}) async {
-    if (Platform.isAndroid || Platform.isIOS) await _storage.delete(key: key);
+    if (Platform.isAndroid || Platform.isIOS || Platform.isLinux)
+      await _storage.delete(key: key);
   }
 
   Future<String> read({String key}) async {
-    if (Platform.isAndroid || Platform.isIOS)
+    if (Platform.isAndroid || Platform.isIOS || Platform.isLinux)
       return await _storage.read(key: key);
     return '';
   }

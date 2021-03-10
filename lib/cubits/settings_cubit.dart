@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/config.dart';
-import 'package:kitchenowl/services/storage.dart';
+import 'package:kitchenowl/services/storage/storage.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 class SettingsCubit extends Cubit<SettingsState> {

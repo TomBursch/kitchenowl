@@ -1,7 +1,10 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/models/item.dart';
+import 'package:kitchenowl/models/transactions/shoppinglist.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
+import 'package:kitchenowl/services/storage/temp_storage.dart';
+import 'package:kitchenowl/services/transaction_handler.dart';
 
 class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
   ShoppinglistCubit() : super(const ShoppinglistCubitState()) {
@@ -11,21 +14,34 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
   Future<void> search(String query) => refresh(query ?? '');
 
   Future<void> add(String name) async {
-    await ApiService.getInstance().addItemByName(name);
+    await TransactionHandler.getInstance()
+        .runTransaction(TransactionShoppingListAddItem(name: name));
     await refresh('');
   }
 
   Future<void> remove(ShoppinglistItem item) async {
-    await ApiService.getInstance().removeItem(item);
+    await TransactionHandler.getInstance()
+        .runTransaction(TransactionShoppingListDeleteItem(item: item));
     await refresh();
   }
 
   Future<void> refresh([String query]) async {
     final state = this.state;
     if (state is SearchShoppinglistCubitState) query = query ?? state.query;
-    final shoppinglist = await ApiService.getInstance().getItems();
+    List<ShoppinglistItem> shoppinglist =
+        await ApiService.getInstance().getItems();
+    if (shoppinglist == null)
+      shoppinglist = await TempStorage.getInstance().readItems();
+    else
+      TempStorage.getInstance().writeItems(shoppinglist);
+    shoppinglist = shoppinglist ?? const [];
     if (query != null && query.isNotEmpty) {
-      final items = (await ApiService.getInstance().searchItem(query)) ?? [];
+      List<Item> items = (await ApiService.getInstance().searchItem(query));
+      if (items == null)
+        items = shoppinglist
+            .where((e) => e.name.contains(query))
+            .cast<Item>()
+            .toList();
       _mergeShoppinglistItems(items, shoppinglist);
       if (items.length == 0 ||
           items[0].name.toLowerCase() != query.toLowerCase())
@@ -36,7 +52,7 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
         listItems: shoppinglist,
       ));
     } else {
-      final recent = await ApiService.getInstance().getRecentItems();
+      final recent = await ApiService.getInstance().getRecentItems() ?? [];
       emit(ShoppinglistCubitState(shoppinglist, recent));
     }
   }

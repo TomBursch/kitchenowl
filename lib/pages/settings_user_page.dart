@@ -43,58 +43,64 @@ class _SettingsUserPageState extends State<SettingsUserPage> {
         appBar: AppBar(
           title: Text(AppLocalizations.of(context).user),
         ),
-        body: ListView(
-          padding: EdgeInsets.all(16),
-          children: [
-            Icon(
-              Icons.account_circle_rounded,
-              size: 90,
-              color: Theme.of(context).accentColor,
-            ),
-            TextField(
-              controller: usernameController,
-              autofocus: true,
-              enabled: false,
-              textInputAction: TextInputAction.next,
-              onEditingComplete: () => FocusScope.of(context).nextFocus(),
-              decoration: InputDecoration(
-                labelText: AppLocalizations.of(context).username,
-              ),
-            ),
-            TextField(
-              controller: nameController,
-              textInputAction: TextInputAction.done,
-              decoration: InputDecoration(
-                labelText: AppLocalizations.of(context).name,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 16, bottom: 8),
-              child: ElevatedButton(
-                onPressed: () => cubit.updateUser(
-                  context: context,
-                  name: nameController.text,
+        body: Align(
+          alignment: Alignment.topCenter,
+          child: ConstrainedBox(
+            constraints: BoxConstraints.expand(width: 600),
+            child: ListView(
+              padding: EdgeInsets.all(16),
+              children: [
+                Icon(
+                  Icons.account_circle_rounded,
+                  size: 90,
+                  color: Theme.of(context).accentColor,
                 ),
-                child: Text(AppLocalizations.of(context).save),
-              ),
+                TextField(
+                  controller: usernameController,
+                  autofocus: true,
+                  enabled: false,
+                  textInputAction: TextInputAction.next,
+                  onEditingComplete: () => FocusScope.of(context).nextFocus(),
+                  decoration: InputDecoration(
+                    labelText: AppLocalizations.of(context).username,
+                  ),
+                ),
+                TextField(
+                  controller: nameController,
+                  textInputAction: TextInputAction.done,
+                  decoration: InputDecoration(
+                    labelText: AppLocalizations.of(context).name,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 16, bottom: 8),
+                  child: ElevatedButton(
+                    onPressed: () => cubit.updateUser(
+                      context: context,
+                      name: nameController.text,
+                    ),
+                    child: Text(AppLocalizations.of(context).save),
+                  ),
+                ),
+                TextField(
+                  controller: passwordController,
+                  obscureText: true,
+                  textInputAction: TextInputAction.done,
+                  decoration: InputDecoration(
+                    labelText: AppLocalizations.of(context).password,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 16, bottom: 8),
+                  child: ElevatedButton(
+                    onPressed: () =>
+                        cubit.updateUser(password: passwordController.text),
+                    child: Text(AppLocalizations.of(context).passwordSave),
+                  ),
+                ),
+              ],
             ),
-            TextField(
-              controller: passwordController,
-              obscureText: true,
-              textInputAction: TextInputAction.done,
-              decoration: InputDecoration(
-                labelText: AppLocalizations.of(context).password,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 16, bottom: 8),
-              child: ElevatedButton(
-                onPressed: () =>
-                    cubit.updateUser(password: passwordController.text),
-                child: Text(AppLocalizations.of(context).passwordSave),
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );

@@ -20,6 +20,7 @@ class Item extends Model {
         "name": this.name,
       };
 
+  @override
   Map<String, dynamic> toJsonWithId() => this.toJson()
     ..addAll({
       "id": this.id,
@@ -37,6 +38,16 @@ class ShoppinglistItem extends Item {
         id: map['id'],
         name: map['name'],
         description: map['description'],
+      );
+
+  factory ShoppinglistItem.fromItem({
+    @required Item item,
+    String description = '',
+  }) =>
+      ShoppinglistItem(
+        id: item.id,
+        name: item.name,
+        description: description,
       );
 
   @override

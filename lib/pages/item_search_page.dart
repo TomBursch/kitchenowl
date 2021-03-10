@@ -5,6 +5,7 @@ import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/widgets/search_text_field.dart';
 import 'package:kitchenowl/widgets/shopping_item.dart';
+import 'package:responsive_builder/responsive_builder.dart';
 
 class ItemSearchPage extends StatefulWidget {
   final bool multiple;
@@ -40,6 +41,12 @@ class _ItemSearchPageState extends State<ItemSearchPage> {
 
   @override
   Widget build(BuildContext context) {
+    final int crossAxisCount = getValueForScreenType<int>(
+      context: context,
+      mobile: 3,
+      tablet: 6,
+      desktop: 9,
+    );
     final appbar = AppBar(
       title: Text(widget.title ?? AppLocalizations.of(context).itemsAdd),
       leading: BackButton(
@@ -108,7 +115,7 @@ class _ItemSearchPageState extends State<ItemSearchPage> {
         builder: (context, state) => GridView.builder(
           padding: const EdgeInsets.all(16),
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 3,
+            crossAxisCount: crossAxisCount,
             crossAxisSpacing: 4,
             mainAxisSpacing: 4,
           ),

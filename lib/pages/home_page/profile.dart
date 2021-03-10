@@ -15,10 +15,11 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint(BlocProvider.of<AuthCubit>(context).state.toString());
     final user =
         (BlocProvider.of<AuthCubit>(context).state as Authenticated).user ??
             User(name: '', username: '');
+    final isOffline =
+        BlocProvider.of<AuthCubit>(context).state is AuthenticatedOffline;
     return CustomScrollView(
       physics: ClampingScrollPhysics(),
       slivers: [
@@ -61,25 +62,27 @@ class ProfilePage extends StatelessWidget {
                     ),
                   ),
                 ),
-                Card(
-                  child: ListTile(
-                    title: Text(AppLocalizations.of(context).shoppingLists),
-                    leading: Icon(Icons.shopping_bag),
-                    trailing: Icon(Icons.arrow_right_rounded),
-                    onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => SettingsShoppinglistsPage())),
+                if (!isOffline)
+                  Card(
+                    child: ListTile(
+                      title: Text(AppLocalizations.of(context).shoppingLists),
+                      leading: Icon(Icons.shopping_bag),
+                      trailing: Icon(Icons.arrow_right_rounded),
+                      onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => SettingsShoppinglistsPage())),
+                    ),
                   ),
-                ),
-                Card(
-                  child: ListTile(
-                    title: Text(AppLocalizations.of(context).user),
-                    leading: Icon(Icons.person),
-                    trailing: Icon(Icons.arrow_right_rounded),
-                    onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => SettingsUserPage())),
+                if (!isOffline)
+                  Card(
+                    child: ListTile(
+                      title: Text(AppLocalizations.of(context).user),
+                      leading: Icon(Icons.person),
+                      trailing: Icon(Icons.arrow_right_rounded),
+                      onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => SettingsUserPage())),
+                    ),
                   ),
-                ),
-                if (user.owner)
+                if (!isOffline && user.owner)
                   Card(
                     child: ListTile(
                       title: Text(AppLocalizations.of(context).server),

@@ -1,9 +1,8 @@
-import 'dart:io';
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kitchenowl/cubits/auth_cubit.dart';
 import 'package:kitchenowl/cubits/shoppinglist_cubit.dart';
+import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/pages/item_page.dart';
 import 'package:kitchenowl/kitchenowl.dart';
@@ -41,6 +40,8 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
       tablet: 6,
       desktop: 9,
     );
+    final isOffline =
+        BlocProvider.of<AuthCubit>(context).state is AuthenticatedOffline;
     return BlocProvider<ShoppinglistCubit>(
       create: (context) => ShoppinglistCubit(),
       lazy: false,
@@ -77,106 +78,127 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
               ),
             ),
             Expanded(
-              child: RefreshIndicator(
-                onRefresh: cubit.refresh,
-                child: BlocBuilder<ShoppinglistCubit, ShoppinglistCubitState>(
-                    cubit: cubit,
-                    builder: (context, state) {
-                      if (state is SearchShoppinglistCubitState)
-                        return GridView.builder(
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                          gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: crossAxisCount,
-                            crossAxisSpacing: 3,
-                            mainAxisSpacing: 4,
-                          ),
-                          itemCount: state.result.length,
-                          itemBuilder: (context, i) => ShoppingItemWidget(
-                            item: state.result[i],
-                            selected: state.result[i] is ShoppinglistItem,
-                            onPressed: (item) {
-                              if (item is ShoppinglistItem)
-                                cubit.remove(item);
-                              else
-                                cubit.add(item.name);
-                            },
-                            onLongPressed: (item) => Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (BuildContext context) => ItemPage(
-                                  item: item,
-                                ),
-                              ),
-                            ),
-                          ),
-                        );
-                      return CustomScrollView(
-                        slivers: [
-                          SliverPadding(
+              child: Scrollbar(
+                child: RefreshIndicator(
+                  onRefresh: cubit.refresh,
+                  child: BlocBuilder<ShoppinglistCubit, ShoppinglistCubitState>(
+                      cubit: cubit,
+                      builder: (context, state) {
+                        if (state is SearchShoppinglistCubitState)
+                          return GridView.builder(
                             padding: const EdgeInsets.symmetric(horizontal: 16),
-                            sliver: SliverGrid(
-                              gridDelegate:
-                                  SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: crossAxisCount,
-                                mainAxisSpacing: 4,
-                                crossAxisSpacing: 4,
-                                childAspectRatio: 1,
-                              ),
-                              delegate: SliverChildBuilderDelegate(
-                                (context, i) => ShoppingItemWidget(
-                                  item: state.listItems[i],
-                                  selected: true,
-                                  onPressed: (item) {
-                                    if (item is ShoppinglistItem)
-                                      cubit.remove(item);
-                                    else
-                                      cubit.add(item.name);
-                                  },
-                                  onLongPressed: (item) =>
-                                      Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (BuildContext context) =>
-                                          ItemPage(
-                                        item: item,
-                                      ),
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: crossAxisCount,
+                              crossAxisSpacing: 3,
+                              mainAxisSpacing: 4,
+                            ),
+                            itemCount: state.result.length,
+                            itemBuilder: (context, i) => ShoppingItemWidget(
+                              item: state.result[i],
+                              selected: state.result[i] is ShoppinglistItem,
+                              onPressed: (item) {
+                                if (item is ShoppinglistItem)
+                                  cubit.remove(item);
+                                else
+                                  cubit.add(item.name);
+                              },
+                              onLongPressed: (item) async {
+                                final res = await Navigator.of(context)
+                                    .push<UpdateEnum>(
+                                  MaterialPageRoute(
+                                    builder: (BuildContext context) => ItemPage(
+                                      item: item,
                                     ),
                                   ),
+                                );
+                                if (res == UpdateEnum.deleted ||
+                                    res == UpdateEnum.updated) {
+                                  cubit.refresh();
+                                }
+                              },
+                            ),
+                          );
+                        return CustomScrollView(
+                          slivers: [
+                            SliverPadding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16),
+                              sliver: SliverGrid(
+                                gridDelegate:
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: crossAxisCount,
+                                  mainAxisSpacing: 4,
+                                  crossAxisSpacing: 4,
+                                  childAspectRatio: 1,
                                 ),
-                                childCount: state.listItems.length,
-                              ),
-                            ),
-                          ),
-                          SliverPadding(
-                            padding: const EdgeInsets.all(16),
-                            sliver: SliverToBoxAdapter(
-                              child: Text(
-                                AppLocalizations.of(context).itemsRecent + ':',
-                                style: Theme.of(context).textTheme.headline6,
-                              ),
-                            ),
-                          ),
-                          SliverPadding(
-                            padding: const EdgeInsets.symmetric(horizontal: 16),
-                            sliver: SliverGrid(
-                              gridDelegate:
-                                  SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: crossAxisCount,
-                                mainAxisSpacing: 4,
-                                crossAxisSpacing: 4,
-                                childAspectRatio: 1,
-                              ),
-                              delegate: SliverChildBuilderDelegate(
-                                (context, i) => ShoppingItemWidget(
-                                  item: state.recentItems[i],
-                                  onPressed: (item) => cubit.add(item.name),
+                                delegate: SliverChildBuilderDelegate(
+                                  (context, i) => ShoppingItemWidget(
+                                    item: state.listItems[i],
+                                    selected: true,
+                                    onPressed: (item) {
+                                      if (item is ShoppinglistItem)
+                                        cubit.remove(item);
+                                      else
+                                        cubit.add(item.name);
+                                    },
+                                    onLongPressed: (item) async {
+                                      final res = await Navigator.of(context)
+                                          .push<UpdateEnum>(
+                                        MaterialPageRoute(
+                                          builder: (BuildContext context) =>
+                                              ItemPage(
+                                            item: item,
+                                          ),
+                                        ),
+                                      );
+                                      if (res == UpdateEnum.deleted ||
+                                          res == UpdateEnum.updated) {
+                                        cubit.refresh();
+                                      }
+                                    },
+                                  ),
+                                  childCount: state.listItems.length,
                                 ),
-                                childCount: state.recentItems.length,
                               ),
                             ),
-                          ),
-                        ],
-                      );
-                    }),
+                            if (!isOffline)
+                              SliverPadding(
+                                padding: const EdgeInsets.all(16),
+                                sliver: SliverToBoxAdapter(
+                                  child: Text(
+                                    AppLocalizations.of(context).itemsRecent +
+                                        ':',
+                                    style:
+                                        Theme.of(context).textTheme.headline6,
+                                  ),
+                                ),
+                              ),
+                            if (!isOffline)
+                              SliverPadding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 16),
+                                sliver: SliverGrid(
+                                  gridDelegate:
+                                      SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: crossAxisCount,
+                                    mainAxisSpacing: 4,
+                                    crossAxisSpacing: 4,
+                                    childAspectRatio: 1,
+                                  ),
+                                  delegate: SliverChildBuilderDelegate(
+                                    (context, i) => ShoppingItemWidget(
+                                      item: state.recentItems[i],
+                                      onPressed: (item) => cubit.add(item.name),
+                                    ),
+                                    childCount: state.recentItems.length,
+                                  ),
+                                ),
+                              ),
+                          ],
+                        );
+                      }),
+                ),
               ),
             ),
           ],

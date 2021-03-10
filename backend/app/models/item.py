@@ -8,6 +8,7 @@ class Item(db.Model, DbModelMixin, TimestampMixin):
     name = db.Column(db.String(128), unique=True)
 
     recipes = db.relationship('RecipeItems', back_populates='item', cascade="all, delete-orphan")
+    shoppinglists = db.relationship('ShoppinglistItems', back_populates='item', cascade="all, delete-orphan")
 
     @classmethod
     def create_by_name(cls, name):

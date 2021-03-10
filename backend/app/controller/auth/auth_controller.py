@@ -10,8 +10,8 @@ from .schemas import Login
 @app.route('/auth', methods=['POST'])
 @validate_args(Login)
 def login(args):
-    username = args['username']
-    user = User.find_by_username(username.lower())
+    username = args['username'].lower()
+    user = User.find_by_username(username)
     if not user or not user.check_password(args['password']):
         raise UnauthorizedRequest(message='Unauthorized')
     ret = {
@@ -24,7 +24,7 @@ def login(args):
 @app.route('/auth/fresh-login', methods=['POST'])
 @validate_args(Login)
 def fresh_login(args):
-    username = args['username']
+    username = args['username'].lower()
     user = User.find_by_username(username.lower())
     if not user or not user.check_password(args['password']):
         raise UnauthorizedRequest(message='Unauthorized')

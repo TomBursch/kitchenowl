@@ -24,7 +24,8 @@ class ShoppinglistItems(db.Model, DbModelMixin, TimestampMixin):
     item_id = db.Column(db.Integer, db.ForeignKey('item.id'), primary_key=True)
     description = db.Column('description', db.String())
 
-    item = db.relationship("Item")
+    item = db.relationship("Item", back_populates='shoppinglists')
+    shoppinglist = db.relationship("Shoppinglist", back_populates='items')
 
     def obj_to_item_dict(self):
         res = self.item.obj_to_dict()

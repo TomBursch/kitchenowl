@@ -190,6 +190,21 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                                     (context, i) => ShoppingItemWidget(
                                       item: state.recentItems[i],
                                       onPressed: (item) => cubit.add(item.name),
+                                      onLongPressed: (item) async {
+                                        final res = await Navigator.of(context)
+                                            .push<UpdateEnum>(
+                                          MaterialPageRoute(
+                                            builder: (BuildContext context) =>
+                                                ItemPage(
+                                              item: item,
+                                            ),
+                                          ),
+                                        );
+                                        if (res == UpdateEnum.deleted ||
+                                            res == UpdateEnum.updated) {
+                                          cubit.refresh();
+                                        }
+                                      },
                                     ),
                                     childCount: state.recentItems.length,
                                   ),

@@ -10,6 +10,7 @@ import 'package:kitchenowl/pages/splash_page.dart';
 import 'package:kitchenowl/pages/unreachable_page.dart';
 import 'package:kitchenowl/pages/home_page.dart';
 import 'package:kitchenowl/pages/unsupported_page.dart';
+import 'package:kitchenowl/styles/colors.dart';
 
 class App extends StatelessWidget {
   @override
@@ -30,14 +31,14 @@ class App extends StatelessWidget {
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,
             theme: ThemeData(
-              primarySwatch: Colors.blue,
+              primarySwatch: AppColors.green,
               visualDensity: VisualDensity.adaptivePlatformDensity,
             ),
             darkTheme: ThemeData.dark().copyWith(
-              accentColor: Colors.blue,
+              accentColor: AppColors.green,
               colorScheme: ColorScheme.fromSwatch(
-                primarySwatch: Colors.blue,
-                accentColor: Colors.blue,
+                primarySwatch: AppColors.green,
+                accentColor: AppColors.green,
                 brightness: Brightness.dark,
               ),
               visualDensity: VisualDensity.adaptivePlatformDensity,

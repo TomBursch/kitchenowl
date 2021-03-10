@@ -24,8 +24,8 @@ class ShoppingItemWidget<T extends Item> extends StatelessWidget {
             : Theme.of(context).disabledColor),
         elevation: MaterialStateProperty.all<double>(0),
       ),
-      onPressed: () => onPressed(item),
-      onLongPress: () => onLongPressed(item),
+      onPressed: onPressed != null ? () => onPressed(item) : null,
+      onLongPress: onLongPressed != null ? () => onLongPressed(item) : null,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [

@@ -19,9 +19,13 @@ class ShoppingItemWidget<T extends Item> extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.all<Color>(selected
-            ? Theme.of(context).accentColor
-            : Theme.of(context).disabledColor),
+        backgroundColor: MaterialStateProperty.all<Color>(
+          selected
+              ? Theme.of(context).accentColor
+              : Theme.of(context).brightness == Brightness.dark
+                  ? Theme.of(context).cardColor
+                  : Theme.of(context).disabledColor,
+        ),
         elevation: MaterialStateProperty.all<double>(0),
       ),
       onPressed: onPressed != null ? () => onPressed(item) : null,

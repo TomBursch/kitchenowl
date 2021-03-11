@@ -42,85 +42,134 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
     );
     final isOffline =
         BlocProvider.of<AuthCubit>(context).state is AuthenticatedOffline;
-    return BlocProvider<ShoppinglistCubit>(
-      create: (context) => ShoppinglistCubit(),
-      lazy: false,
-      child: SafeArea(
-        child: Column(
-          children: [
-            SizedBox(
-              height: 80,
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: BlocListener<ShoppinglistCubit, ShoppinglistCubitState>(
-                  cubit: cubit,
-                  listener: (context, state) {
-                    if (!(state is SearchShoppinglistCubitState)) {
-                      if (searchController.text.isNotEmpty) {
-                        searchController.clear();
-                      }
+    return SafeArea(
+      child: Column(
+        children: [
+          SizedBox(
+            height: 80,
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: BlocListener<ShoppinglistCubit, ShoppinglistCubitState>(
+                cubit: cubit,
+                listener: (context, state) {
+                  if (!(state is SearchShoppinglistCubitState)) {
+                    if (searchController.text.isNotEmpty) {
+                      searchController.clear();
+                    }
+                  }
+                },
+                child: SearchTextField(
+                  controller: searchController,
+                  onSearch: (s) => cubit.search(s),
+                  onSubmitted: () {
+                    final state = cubit.state;
+                    if (state is SearchShoppinglistCubitState) {
+                      if (!(state.result.first is ShoppinglistItem))
+                        cubit.add(state.result.first.name);
+                    } else {
+                      FocusScope.of(context).unfocus();
                     }
                   },
-                  child: SearchTextField(
-                    controller: searchController,
-                    onSearch: (s) => cubit.search(s),
-                    onSubmitted: () {
-                      final state = cubit.state;
-                      if (state is SearchShoppinglistCubitState) {
-                        if (!(state.result.first is ShoppinglistItem))
-                          cubit.add(state.result.first.name);
-                      } else {
-                        FocusScope.of(context).unfocus();
-                      }
-                    },
-                  ),
                 ),
               ),
             ),
-            Expanded(
-              child: Scrollbar(
-                child: RefreshIndicator(
-                  onRefresh: cubit.refresh,
-                  child: BlocBuilder<ShoppinglistCubit, ShoppinglistCubitState>(
-                      cubit: cubit,
-                      builder: (context, state) {
-                        if (state is SearchShoppinglistCubitState)
-                          return GridView.builder(
-                            padding: const EdgeInsets.symmetric(horizontal: 16),
-                            gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: crossAxisCount,
-                              crossAxisSpacing: 3,
-                              mainAxisSpacing: 4,
-                            ),
-                            itemCount: state.result.length,
-                            itemBuilder: (context, i) => ShoppingItemWidget(
-                              item: state.result[i],
-                              selected: state.result[i] is ShoppinglistItem,
-                              onPressed: (item) {
-                                if (item is ShoppinglistItem)
-                                  cubit.remove(item);
-                                else
-                                  cubit.add(item.name);
-                              },
-                              onLongPressed: (item) async {
-                                final res = await Navigator.of(context)
-                                    .push<UpdateEnum>(
-                                  MaterialPageRoute(
-                                    builder: (BuildContext context) => ItemPage(
-                                      item: item,
-                                    ),
+          ),
+          Expanded(
+            child: Scrollbar(
+              child: RefreshIndicator(
+                onRefresh: cubit.refresh,
+                child: BlocBuilder<ShoppinglistCubit, ShoppinglistCubitState>(
+                    cubit: cubit,
+                    builder: (context, state) {
+                      if (state is SearchShoppinglistCubitState)
+                        return GridView.builder(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: crossAxisCount,
+                            crossAxisSpacing: 3,
+                            mainAxisSpacing: 4,
+                          ),
+                          itemCount: state.result.length,
+                          itemBuilder: (context, i) => ShoppingItemWidget(
+                            item: state.result[i],
+                            selected: state.result[i] is ShoppinglistItem,
+                            onPressed: (item) {
+                              if (item is ShoppinglistItem)
+                                cubit.remove(item);
+                              else
+                                cubit.add(item.name);
+                            },
+                            onLongPressed: (item) async {
+                              final res =
+                                  await Navigator.of(context).push<UpdateEnum>(
+                                MaterialPageRoute(
+                                  builder: (BuildContext context) => ItemPage(
+                                    item: item,
                                   ),
-                                );
-                                if (res == UpdateEnum.deleted ||
-                                    res == UpdateEnum.updated) {
-                                  cubit.refresh();
-                                }
-                              },
+                                ),
+                              );
+                              if (res == UpdateEnum.deleted ||
+                                  res == UpdateEnum.updated) {
+                                cubit.refresh();
+                              }
+                            },
+                          ),
+                        );
+                      return CustomScrollView(
+                        slivers: [
+                          SliverPadding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            sliver: SliverGrid(
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: crossAxisCount,
+                                mainAxisSpacing: 4,
+                                crossAxisSpacing: 4,
+                                childAspectRatio: 1,
+                              ),
+                              delegate: SliverChildBuilderDelegate(
+                                (context, i) => ShoppingItemWidget(
+                                  item: state.listItems[i],
+                                  selected: true,
+                                  onPressed: (item) {
+                                    if (item is ShoppinglistItem)
+                                      cubit.remove(item);
+                                    else
+                                      cubit.add(item.name);
+                                  },
+                                  onLongPressed: (item) async {
+                                    final res = await Navigator.of(context)
+                                        .push<UpdateEnum>(
+                                      MaterialPageRoute(
+                                        builder: (BuildContext context) =>
+                                            ItemPage(
+                                          item: item,
+                                        ),
+                                      ),
+                                    );
+                                    if (res == UpdateEnum.deleted ||
+                                        res == UpdateEnum.updated) {
+                                      cubit.refresh();
+                                    }
+                                  },
+                                ),
+                                childCount: state.listItems.length,
+                              ),
                             ),
-                          );
-                        return CustomScrollView(
-                          slivers: [
+                          ),
+                          if (!isOffline)
+                            SliverPadding(
+                              padding: const EdgeInsets.all(16),
+                              sliver: SliverToBoxAdapter(
+                                child: Text(
+                                  AppLocalizations.of(context).itemsRecent +
+                                      ':',
+                                  style: Theme.of(context).textTheme.headline6,
+                                ),
+                              ),
+                            ),
+                          if (!isOffline)
                             SliverPadding(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 16),
@@ -134,14 +183,8 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                                 ),
                                 delegate: SliverChildBuilderDelegate(
                                   (context, i) => ShoppingItemWidget(
-                                    item: state.listItems[i],
-                                    selected: true,
-                                    onPressed: (item) {
-                                      if (item is ShoppinglistItem)
-                                        cubit.remove(item);
-                                      else
-                                        cubit.add(item.name);
-                                    },
+                                    item: state.recentItems[i],
+                                    onPressed: (item) => cubit.add(item.name),
                                     onLongPressed: (item) async {
                                       final res = await Navigator.of(context)
                                           .push<UpdateEnum>(
@@ -158,66 +201,17 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                                       }
                                     },
                                   ),
-                                  childCount: state.listItems.length,
+                                  childCount: state.recentItems.length,
                                 ),
                               ),
                             ),
-                            if (!isOffline)
-                              SliverPadding(
-                                padding: const EdgeInsets.all(16),
-                                sliver: SliverToBoxAdapter(
-                                  child: Text(
-                                    AppLocalizations.of(context).itemsRecent +
-                                        ':',
-                                    style:
-                                        Theme.of(context).textTheme.headline6,
-                                  ),
-                                ),
-                              ),
-                            if (!isOffline)
-                              SliverPadding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 16),
-                                sliver: SliverGrid(
-                                  gridDelegate:
-                                      SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: crossAxisCount,
-                                    mainAxisSpacing: 4,
-                                    crossAxisSpacing: 4,
-                                    childAspectRatio: 1,
-                                  ),
-                                  delegate: SliverChildBuilderDelegate(
-                                    (context, i) => ShoppingItemWidget(
-                                      item: state.recentItems[i],
-                                      onPressed: (item) => cubit.add(item.name),
-                                      onLongPressed: (item) async {
-                                        final res = await Navigator.of(context)
-                                            .push<UpdateEnum>(
-                                          MaterialPageRoute(
-                                            builder: (BuildContext context) =>
-                                                ItemPage(
-                                              item: item,
-                                            ),
-                                          ),
-                                        );
-                                        if (res == UpdateEnum.deleted ||
-                                            res == UpdateEnum.updated) {
-                                          cubit.refresh();
-                                        }
-                                      },
-                                    ),
-                                    childCount: state.recentItems.length,
-                                  ),
-                                ),
-                              ),
-                          ],
-                        );
-                      }),
-                ),
+                        ],
+                      );
+                    }),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

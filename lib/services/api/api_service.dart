@@ -78,7 +78,7 @@ class ApiService {
       final healthy = await _instance.healthy();
       if (healthy.item1) {
         if (healthy.item2['min_frontend_version'] <=
-                (int.tryParse(Config.packageInfo?.buildNumber) ?? 0) &&
+                (int.tryParse(Config.packageInfo?.buildNumber ?? '0') ?? 0) &&
             (healthy.item2['version'] ?? 0) >= Config.MIN_BACKEND_VERSION) {
           if (await _instance.refreshAuth()) {
             return _instance._setConnectionState(Connection.authenticated);

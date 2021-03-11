@@ -1,8 +1,10 @@
 import 'package:alphabet_scroll_view/alphabet_scroll_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kitchenowl/cubits/auth_cubit.dart';
 import 'package:kitchenowl/cubits/recipe_list_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
+import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/pages/recipe_page.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
 import 'package:kitchenowl/widgets/search_text_field.dart';
@@ -61,6 +63,18 @@ class _RecipeListPageState extends State<RecipeListPage> {
             child: BlocBuilder<RecipeListCubit, ListRecipeCubitState>(
                 cubit: cubit,
                 builder: (context, state) {
+                  if (BlocProvider.of<AuthCubit>(context).state
+                      is AuthenticatedOffline) {
+                    return Center(
+                        child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(AppLocalizations.of(context).offlineMessage),
+                        const SizedBox(width: 5),
+                        Icon(Icons.cloud_off_rounded)
+                      ],
+                    ));
+                  }
                   final recipes = state.recipes;
                   return Scrollbar(
                     child: RefreshIndicator(

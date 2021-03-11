@@ -27,6 +27,7 @@
     "loginTo": "Login bei",
     "logout": "Logout",
     "name": "Name",
+    "offlineMessage": "Du bist offline",
     "onboardingTitle": "Lass uns einen Nutzer erstellen",
     "or": "oder",
     "password": "Passwort",

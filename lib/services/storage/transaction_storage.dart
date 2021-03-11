@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:kitchenowl/models/transaction.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -26,29 +27,33 @@ class TransactionStorage {
   }
 
   Future<List<Transaction>> readTransactions() async {
-    try {
-      final file = await _localFile;
-      final String content = await file.readAsString();
-      return List<Transaction>.from(
-          json.decode(content).map((e) => Transaction.fromJson(e)));
-    } catch (e) {
-      return [];
-    }
+    if (!kIsWeb)
+      try {
+        final file = await _localFile;
+        final String content = await file.readAsString();
+        return List<Transaction>.from(
+            json.decode(content).map((e) => Transaction.fromJson(e)));
+      } catch (e) {}
+    return [];
   }
 
   Future<File> clearTransactions() async {
-    try {
-      final file = await _localFile;
-      if (await file.exists()) return file.delete();
-    } catch (e) {}
+    if (!kIsWeb)
+      try {
+        final file = await _localFile;
+        if (await file.exists()) return file.delete();
+      } catch (e) {}
     return null;
   }
 
   Future<File> addTransaction(Transaction t) async {
-    final transactions = await readTransactions();
-    transactions.add(t);
-    final file = await _localFile;
-    return file.writeAsString(
-        json.encode(transactions.map((t) => t.toJson()).toList()));
+    if (!kIsWeb) {
+      final transactions = await readTransactions();
+      transactions.add(t);
+      final file = await _localFile;
+      return file.writeAsString(
+          json.encode(transactions.map((t) => t.toJson()).toList()));
+    }
+    return null;
   }
 }

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/cubits/auth_cubit.dart';
@@ -66,12 +67,13 @@ class OnboardingPage extends StatelessWidget {
                       child: Text(AppLocalizations.of(context).start),
                     ),
                   ),
-                  Text(AppLocalizations.of(context).or),
-                  TextButton(
-                    onPressed: () =>
-                        BlocProvider.of<AuthCubit>(context).removeServer(),
-                    child: Text(AppLocalizations.of(context).serverChange),
-                  )
+                  if (!kIsWeb) Text(AppLocalizations.of(context).or),
+                  if (!kIsWeb)
+                    TextButton(
+                      onPressed: () =>
+                          BlocProvider.of<AuthCubit>(context).removeServer(),
+                      child: Text(AppLocalizations.of(context).serverChange),
+                    )
                 ],
               ),
             ),

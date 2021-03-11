@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/models/user.dart';
 import 'package:path_provider/path_provider.dart';
@@ -32,50 +33,58 @@ class TempStorage {
   }
 
   Future<User> readUser() async {
-    try {
-      final file = await _localUserFile;
-      final String content = await file.readAsString();
-      return User.fromJson(json.decode(content));
-    } catch (e) {
-      return null;
-    }
+    if (!kIsWeb)
+      try {
+        final file = await _localUserFile;
+        final String content = await file.readAsString();
+        return User.fromJson(json.decode(content));
+      } catch (e) {}
+    return null;
   }
 
   Future<File> clearUser() async {
-    try {
-      final file = await _localUserFile;
-      if (await file.exists()) return file.delete();
-    } catch (e) {}
+    if (!kIsWeb)
+      try {
+        final file = await _localUserFile;
+        if (await file.exists()) return file.delete();
+      } catch (e) {}
     return null;
   }
 
   Future<File> writeUser(User user) async {
-    final file = await _localUserFile;
-    return file.writeAsString(json.encode(user.toJsonWithId()));
+    if (!kIsWeb) {
+      final file = await _localUserFile;
+      return file.writeAsString(json.encode(user.toJsonWithId()));
+    }
+    return null;
   }
 
   Future<List<ShoppinglistItem>> readItems() async {
-    try {
-      final file = await _localItemFile;
-      final String content = await file.readAsString();
-      return List<ShoppinglistItem>.from(
-          json.decode(content).map((e) => ShoppinglistItem.fromJson(e)));
-    } catch (e) {
-      return null;
-    }
+    if (!kIsWeb)
+      try {
+        final file = await _localItemFile;
+        final String content = await file.readAsString();
+        return List<ShoppinglistItem>.from(
+            json.decode(content).map((e) => ShoppinglistItem.fromJson(e)));
+      } catch (e) {}
+    return null;
   }
 
   Future<File> writeItems(List<ShoppinglistItem> items) async {
-    final file = await _localItemFile;
-    return file.writeAsString(
-        json.encode(items.map((e) => e.toJsonWithId()).toList()));
+    if (!kIsWeb) {
+      final file = await _localItemFile;
+      return file.writeAsString(
+          json.encode(items.map((e) => e.toJsonWithId()).toList()));
+    }
+    return null;
   }
 
   Future<File> clearItems() async {
-    try {
-      final file = await _localItemFile;
-      if (await file.exists()) return file.delete();
-    } catch (e) {}
+    if (!kIsWeb)
+      try {
+        final file = await _localItemFile;
+        if (await file.exists()) return file.delete();
+      } catch (e) {}
     return null;
   }
 }

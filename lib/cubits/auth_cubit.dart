@@ -1,10 +1,12 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/models/user.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
 import 'package:kitchenowl/services/storage/storage.dart';
 import 'package:kitchenowl/services/storage/temp_storage.dart';
 import 'package:kitchenowl/services/transaction_handler.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class AuthCubit extends Cubit<AuthState> {
   AuthCubit() : super(Loading()) {
@@ -13,7 +15,12 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   void setup() async {
-    final url = await PreferenceStorage.getInstance().read(key: 'URL');
+    String url;
+    if (kIsWeb) {
+      url = env['BACK_URL'];
+    } else {
+      url = await PreferenceStorage.getInstance().read(key: 'URL');
+    }
     if (url != null && url.isNotEmpty) {
       final token = await SecureStorage.getInstance().read(key: 'TOKEN');
       _newConnection(url, token: token, storeData: false);
@@ -31,7 +38,7 @@ class AuthCubit extends Cubit<AuthState> {
         emit(Authenticated(user));
         break;
       case Connection.disconnected:
-        if (ApiService.getInstance().baseUrl.isNotEmpty) {
+        if (kIsWeb || ApiService.getInstance().baseUrl.isNotEmpty) {
           final user = await TempStorage.getInstance().readUser();
           if (user != null) {
             emit(AuthenticatedOffline(user));
@@ -58,6 +65,7 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   void setupServer(String url) async {
+    if (kIsWeb) return;
     emit(Loading());
     _newConnection(url);
   }
@@ -111,6 +119,8 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   void removeServer() async {
+    if (kIsWeb) return logout(); //Cannot remove server on WEB
+
     emit(Loading());
     await PreferenceStorage.getInstance().delete(key: 'URL');
     await SecureStorage.getInstance().delete(key: 'TOKEN');
@@ -128,7 +138,8 @@ class AuthCubit extends Cubit<AuthState> {
     if (url == null || url.isEmpty) return;
     await ApiService.connectTo(url, refreshToken: token);
     if (storeData && ApiService.getInstance().isConnected()) {
-      await PreferenceStorage.getInstance().write(key: 'URL', value: url);
+      if (!kIsWeb)
+        await PreferenceStorage.getInstance().write(key: 'URL', value: url);
       if (token != null && token.isNotEmpty)
         await SecureStorage.getInstance().write(key: 'TOKEN', value: token);
     }

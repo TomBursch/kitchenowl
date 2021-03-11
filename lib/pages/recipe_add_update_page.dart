@@ -60,7 +60,7 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
               ? AppLocalizations.of(context).recipeEdit
               : AppLocalizations.of(context).recipeNew),
           actions: [
-            if (Platform.isAndroid || Platform.isIOS)
+            if (!kIsWeb && (Platform.isAndroid || Platform.isIOS))
               IconButton(
                   icon: Icon(Icons.save_rounded),
                   onPressed: () async {
@@ -216,7 +216,7 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                       ),
                     ),
                   ),
-                if (!(Platform.isAndroid || Platform.isIOS))
+                if (kIsWeb || (!(Platform.isAndroid || Platform.isIOS)))
                   SliverPadding(
                     padding: EdgeInsets.fromLTRB(16, isUpdate ? 0 : 16, 16, 16),
                     sliver: SliverToBoxAdapter(

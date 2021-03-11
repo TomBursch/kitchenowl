@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -20,18 +21,18 @@ class SecureStorage extends Storage {
   }
 
   Future<void> delete({String key}) async {
-    if (Platform.isAndroid || Platform.isIOS || Platform.isLinux)
+    if (!kIsWeb && (Platform.isAndroid || Platform.isIOS || Platform.isLinux))
       await _storage.delete(key: key);
   }
 
   Future<String> read({String key}) async {
-    if (Platform.isAndroid || Platform.isIOS || Platform.isLinux)
+    if (!kIsWeb && (Platform.isAndroid || Platform.isIOS || Platform.isLinux))
       return await _storage.read(key: key);
     return '';
   }
 
   Future<void> write({String key, String value}) async {
-    if (Platform.isAndroid || Platform.isIOS)
+    if (!kIsWeb && (Platform.isAndroid || Platform.isIOS || Platform.isLinux))
       await _storage.write(key: key, value: value);
   }
 }

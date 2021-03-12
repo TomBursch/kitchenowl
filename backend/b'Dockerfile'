@@ -14,5 +14,7 @@ RUN chmod u+x ./entrypoint.sh
 HEALTHCHECK --interval=5m --timeout=3s \
   CMD curl -f http://localhost:5000/health/8M4F88S8ooi4sMbLBfkkV7ctWwgibW6V || exit 1
 
+ENV FRONT_URL='http://localhost'
+
 EXPOSE 5000
 ENTRYPOINT ["./entrypoint.sh"]

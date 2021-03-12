@@ -22,7 +22,9 @@ def before_first_request():
 @app.route('/shoppinglist/<id>/items', methods=['GET'])
 @jwt_required()
 def getAllShoppingListItems(id):
-    return jsonify([e.obj_to_item_dict() for e in Shoppinglist.find_by_id(id).items])
+    items = ShoppinglistItems.query.filter(ShoppinglistItems.shoppinglist_id == id).join(ShoppinglistItems.item).order_by(
+        Item.name).all()
+    return jsonify([e.obj_to_item_dict() for e in items])
 
 
 @app.route('/shoppinglist/<id>/recent-items', methods=['GET'])
@@ -45,7 +47,7 @@ def addShoppinglistItemByName(args, id):
     item = Item.find_by_name(args['name'])
     if not item:
         item = Item.create_by_name(args['name'])
-    
+
     con = ShoppinglistItems.find_by_ids(shoppinglist.id, item.id)
     if not con:
         description = args['description'] if 'description' in args else ''

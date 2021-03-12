@@ -1,0 +1,30 @@
+version: "3"
+services:
+  front:
+    image: tombursch/kitchenowl-web:latest
+    ports:
+      - "80:80"
+    depends_on:
+      - back
+    networks:
+      - default
+    environment:
+      - BACK_URL=http://localhost:5000
+  back:
+    image: tombursch/kitchenowl:latest
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    networks:
+      - default
+    environment:
+      - JWT_SECRET_KEY=PLEASE_CHANGE_ME
+      - FRONT_URL=http://localhost
+    volumes:
+    - kitchenowl_data:/data
+
+volumes:
+  kitchenowl_data:
+
+networks:
+  default:

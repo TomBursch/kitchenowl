@@ -4,11 +4,14 @@
   </a>
 </p>
 <p align="center">
+  <a>
+    <img alt="Stars" src="https://img.shields.io/github/stars/tombursch/KitchenOwl" />
+  </a>
   <a href="LICENSE">
     <img alt="License" src="https://img.shields.io/github/license/TomBursch/KitchenOwl" />
   </a>
   <a href="https://hub.docker.com/repository/docker/tombursch/kitchenowl">
-    <img alt="Docker pulls" src="https://img.shields.io/docker/pulls/TomBursch/KitchenOwl" />
+    <img alt="Docker pulls" src="https://img.shields.io/docker/pulls/tombursch/kitchenowl" />
   </a>
 </p>
 <h1 align="center">

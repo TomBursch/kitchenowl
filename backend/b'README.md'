@@ -1,13 +1,13 @@
 <p align="center">
-  <a href="">
+  <a>
     <img alt="KitchenOwl" src="docs/icon.png" width="128" />
   </a>
 </p>
 <p align="center">
-  <a href="">
+  <a href="LICENSE">
     <img alt="License" src="https://img.shields.io/github/license/TomBursch/KitchenOwl" />
   </a>
-  <a href="">
+  <a href="https://hub.docker.com/repository/docker/tombursch/kitchenowl">
     <img alt="Docker pulls" src="https://img.shields.io/docker/pulls/TomBursch/KitchenOwl" />
   </a>
 </p>

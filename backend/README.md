@@ -63,7 +63,7 @@ Recommended using [docker-compose](https://docs.docker.com/compose/):
 
 ## 🙌 Contributing
 
-From opening a bug report to creating a pull request: every contribution is appreciated and welcomed. If you're planning to implement a new feature or change the API please create an issue first. This way we can ensure your work is not in vain. For more information see [Contributing](https://github.com/TomBursch/KitchenOwl/CONTRIBUTING.md)
+From opening a bug report to creating a pull request: every contribution is appreciated and welcomed. If you're planning to implement a new feature or change the API please create an issue first. This way we can ensure your work is not in vain. For more information see [Contributing](https://github.com/TomBursch/KitchenOwl/blob/main/CONTRIBUTING.md)
 
 ## 📚 Related
 - [KitchenOwl App](https://github.com/TomBursch/KitchenOwl-app) Repository

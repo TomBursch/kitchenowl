@@ -29,6 +29,7 @@ The `description` is a descriptive summary of the change the PR will make.
 
 ### Setup & Install
 - Create a new python environment and install dependencies `pip3 install -r requirements.txt`
+- Initialize/Upgrade the sqlite database with `flask db upgrade`
 - Run debug server with `python3 wsgi.py`
 - The backend should be reachable at `localhost:5000`
 

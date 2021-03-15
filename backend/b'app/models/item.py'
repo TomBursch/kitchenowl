@@ -16,7 +16,7 @@ class Item(db.Model, DbModelMixin, TimestampMixin):
     # determines order of items in the shoppinglist
     ordering = db.Column(db.Integer, server_default='0')
     # frequency of item, used for item suggestions
-    support = db.Column(db.Integer, server_default='0')
+    support = db.Column(db.Float, server_default='0.0')
 
     history = db.relationship("History", back_populates="item")
     antecedents = db.relationship(
@@ -44,11 +44,10 @@ class Item(db.Model, DbModelMixin, TimestampMixin):
         found = []
 
         # name is a regex
-        if '*' in name or '_' in name:
-            looking_for = name.replace('_', '__')\
-                .replace('*', '%')\
-                .replace('?', '_')
-            return cls.query.filter(cls.name.ilike(looking_for)).order_by(cls.support.desc()).limit(item_count).all()
+        if '*' in name or '?' in name or '%' in name or '_' in name:
+            looking_for = name.replace('*', '%').replace('?', '_')
+            found = cls.query.filter(cls.name.ilike(looking_for)).order_by(cls.support.desc()).limit(item_count).all()
+            return found
 
         # name is no regex
         starts_with = '{0}%'.format(name)

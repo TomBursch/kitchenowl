@@ -2,4 +2,10 @@ Flask==1.1.2
 Flask-Migrate==2.7.0 
 Flask-Bcrypt==0.7.1
 Flask-JWT-Extended==4.0.2 
+Flask-APScheduler==1.11.0
 marshmallow==3.10.0
+dbscan1d==0.1.6
+numpy==1.17.4
+pandas==0.25.3
+mlxtend==0.18.0
+autopep8==0.10.2

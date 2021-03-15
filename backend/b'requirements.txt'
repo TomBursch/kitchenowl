@@ -8,4 +8,4 @@ dbscan1d==0.1.6
 numpy==1.17.4
 pandas==0.25.3
 mlxtend==0.18.0
-autopep8==0.10.2
+autopep8==1.5.5

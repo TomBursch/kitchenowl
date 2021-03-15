@@ -3,10 +3,12 @@ import json
 from flask import jsonify
 from flask_jwt_extended import jwt_required
 from app import app, db
-from app.models import Item, Shoppinglist
+from app.models import Item, Shoppinglist, History, Status, Association
 from app.helpers import validate_args
-from .schemas import RemoveItem, UpdateDescription, AddItemByName, CreateList, AddRecipeItems
+from .schemas import (RemoveItem, UpdateDescription,
+                      AddItemByName, CreateList, AddRecipeItems)
 from app.errors import InvalidUsage, NotFoundRequest
+from datetime import datetime, timedelta
 
 
 @app.before_first_request
@@ -22,8 +24,10 @@ def before_first_request():
 @app.route('/shoppinglist/<id>/items', methods=['GET'])
 @jwt_required()
 def getAllShoppingListItems(id):
-    items = ShoppinglistItems.query.filter(ShoppinglistItems.shoppinglist_id == id).join(ShoppinglistItems.item).order_by(
-        Item.name).all()
+    items = ShoppinglistItems.query.filter(
+        ShoppinglistItems.shoppinglist_id == id).join(
+        ShoppinglistItems.item).order_by(
+        Item.ordering, Item.name).all()
     return jsonify([e.obj_to_item_dict() for e in items])
 
 
@@ -35,6 +39,61 @@ def getRecentItems(id):
     q = Item.query.filter(Item.id.notin_(sq)).order_by(
         Item.updated_at).limit(9)
     return jsonify([e.obj_to_dict() for e in q])
+
+
+def getSuggestionsBasedOnLastAddedItems(id, item_count):
+    suggestions = []
+
+    # subquery for item ids which are on the shoppinglist
+    subquery = db.session.query(ShoppinglistItems.item_id).filter(
+        ShoppinglistItems.shoppinglist_id == id).subquery()
+
+    # suggestion based on recently added items
+    ten_minutes_back = datetime.now() - timedelta(minutes=10)
+    recently_added = History.query.filter(
+        History.shoppinglist_id == id,
+        History.status == Status.ADDED,
+        History.created_at > ten_minutes_back).order_by(
+        History.created_at.desc()).limit(3)
+
+    for recent in recently_added:
+        assocs = Association.query.filter(
+            Association.antecedent_id == recent.id,
+            Association.consequent_id.notin_(subquery)).order_by(
+            Association.lift.desc()).limit(item_count)
+        for rule in assocs:
+            suggestions.append(rule.consequent)
+            item_count -= 1
+
+    return suggestions
+
+
+def getSuggestionsBasedOnFrequency(id, item_count):
+    suggestions = []
+
+    # subquery for item ids which are on the shoppinglist
+    subquery = db.session.query(ShoppinglistItems.item_id).filter(
+        ShoppinglistItems.shoppinglist_id == id).subquery()
+
+    # suggestion based on overall frequency
+    if item_count > 0:
+        suggestions = Item.query.filter(Item.id.notin_(subquery)).order_by(
+            Item.support.desc(), Item.name).limit(item_count)
+    return suggestions
+
+
+@app.route('/shoppinglist/<id>/suggested-items', methods=['GET'])
+@jwt_required()
+def getSuggestedItems(id):
+    item_suggestion_count = 9
+    suggestions = []
+
+    suggestions += getSuggestionsBasedOnLastAddedItems(
+        id, item_suggestion_count)
+    suggestions += getSuggestionsBasedOnFrequency(
+        id, item_suggestion_count - len(suggestions))
+
+    return jsonify([item.obj_to_dict() for item in suggestions])
 
 
 @app.route('/shoppinglist/<id>/item', methods=['POST'])
@@ -55,6 +114,9 @@ def addShoppinglistItemByName(args, id):
         con.item = item
         con.shoppinglist = shoppinglist
         con.save()
+
+    History.create_added(shoppinglist, item)
+
     return jsonify(item.obj_to_dict())
 
 
@@ -72,6 +134,9 @@ def removeShoppinglistItem(args, id):
         raise NotFoundRequest()
     con = ShoppinglistItems.find_by_ids(id, args['item_id'])
     con.delete()
+
+    History.create_dropped(shoppinglist, item)
+
     return jsonify({'msg': "DONE"})
 
 
@@ -97,7 +162,8 @@ def addRecipeItems(args, id):
             description = recipeItem['description']
             con = ShoppinglistItems.find_by_ids(shoppinglist.id, item.id)
             if con:
-                con.description = description if not con.description else con.description + \
+                con.description = \
+                    description if not con.description else con.description + \
                     ', ' + description
                 con.save()
             else:
@@ -105,6 +171,8 @@ def addRecipeItems(args, id):
                 con.item = item
                 con.shoppinglist = shoppinglist
                 con.save()
+
+            History.create_added(shoppinglist, item)
 
     shoppinglist.save()
     return jsonify(item.obj_to_dict())

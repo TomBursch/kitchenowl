@@ -4,6 +4,7 @@ from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import JWTManager
+from flask_apscheduler import APScheduler
 import os
 
 MIN_FRONTEND_VERSION = 1
@@ -20,6 +21,11 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 bcrypt = Bcrypt(app)
 jwt = JWTManager(app)
+
+scheduler = APScheduler()
+scheduler.api_enabled = False
+scheduler.init_app(app)
+scheduler.start()
 
 
 @app.after_request

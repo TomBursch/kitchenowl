@@ -103,7 +103,8 @@ def addRecipeItems(args, id):
             else:
                 con = ShoppinglistItems(description=description)
                 con.item = item
-                shoppinglist.items.append(con)
+                con.shoppinglist = shoppinglist
+                con.save()
 
     shoppinglist.save()
     return jsonify(item.obj_to_dict())

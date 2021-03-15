@@ -8,7 +8,7 @@ from flask_apscheduler import APScheduler
 import os
 
 MIN_FRONTEND_VERSION = 1
-BACKEND_VERSION = 1
+BACKEND_VERSION = 2
 
 app = Flask(__name__)
 

@@ -1,0 +1,4 @@
+#!/bin/sh
+chmod +x /usr/bin/kitchenowl
+chmod +x /usr/lib/kitchenowl/kitchenowl
+exit 0

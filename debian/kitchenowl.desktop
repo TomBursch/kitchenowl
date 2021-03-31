@@ -1,0 +1,5 @@
+Name=KitchenOwl
+Icon=/usr/lib/kitchenowl/icon.png
+Terminal=false
+Type=Application
+Categories=Utility;X-Productivity;

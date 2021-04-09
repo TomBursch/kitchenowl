@@ -65,7 +65,13 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                     final state = cubit.state;
                     if (state is SearchShoppinglistCubitState) {
                       if (!(state.result.first is ShoppinglistItem))
-                        cubit.add(state.result.first.name);
+                        cubit.add(
+                          state.result.first.name,
+                          (state.result.first is ItemWithDescription)
+                              ? (state.result.first as ItemWithDescription)
+                                  .description
+                              : null,
+                        );
                     } else {
                       FocusScope.of(context).unfocus();
                     }
@@ -98,7 +104,12 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                               if (item is ShoppinglistItem)
                                 cubit.remove(item);
                               else
-                                cubit.add(item.name);
+                                cubit.add(
+                                  item.name,
+                                  (item is ItemWithDescription)
+                                      ? item.description
+                                      : null,
+                                );
                             },
                             onLongPressed: (item) async {
                               final res =

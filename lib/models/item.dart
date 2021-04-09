@@ -27,11 +27,52 @@ class Item extends Model {
     });
 }
 
-class ShoppinglistItem extends Item {
+class ItemWithDescription extends Item {
   final String description;
 
-  const ShoppinglistItem({int id, String name, this.description})
+  const ItemWithDescription({int id, String name, this.description})
       : super(id: id, name: name);
+
+  factory ItemWithDescription.fromJson(Map<String, dynamic> map) =>
+      ItemWithDescription(
+        id: map['id'],
+        name: map['name'],
+        description: map['description'],
+      );
+
+  factory ItemWithDescription.fromItem({
+    @required Item item,
+    String description = '',
+  }) =>
+      ItemWithDescription(
+        id: item.id,
+        name: item.name,
+        description: description,
+      );
+
+  @override
+  Map<String, dynamic> toJson() => super.toJson()
+    ..addAll({
+      "description": description,
+    });
+
+  ItemWithDescription copyWith({
+    String name,
+    String description,
+  }) =>
+      ItemWithDescription(
+        id: id,
+        name: name ?? this.name,
+        description: description ?? this.description,
+      );
+
+  @override
+  List<Object> get props => super.props + [this.description];
+}
+
+class ShoppinglistItem extends ItemWithDescription {
+  const ShoppinglistItem({int id, String name, String description})
+      : super(id: id, name: name, description: description);
 
   factory ShoppinglistItem.fromJson(Map<String, dynamic> map) =>
       ShoppinglistItem(
@@ -51,13 +92,20 @@ class ShoppinglistItem extends Item {
       );
 
   @override
-  Map<String, dynamic> toJson() => super.toJson()
-    ..addAll({
-      "description": description,
-    });
+  Map<String, dynamic> toJson() => super.toJson();
+
+  ShoppinglistItem copyWith({
+    String name,
+    String description,
+  }) =>
+      ShoppinglistItem(
+        id: id,
+        name: name ?? this.name,
+        description: description ?? this.description,
+      );
 
   @override
-  List<Object> get props => super.props + [this.description];
+  List<Object> get props => super.props;
 }
 
 class RecipeItem extends ShoppinglistItem {
@@ -90,6 +138,18 @@ class RecipeItem extends ShoppinglistItem {
     ..addAll({
       "optional": optional,
     });
+
+  RecipeItem copyWith({
+    String name,
+    String description,
+    bool optional,
+  }) =>
+      RecipeItem(
+        id: id,
+        name: name ?? this.name,
+        description: description ?? this.description,
+        optional: optional ?? this.optional,
+      );
 
   Item toItem() => Item(id: this.id, name: this.name);
 

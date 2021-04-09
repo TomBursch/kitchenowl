@@ -21,6 +21,12 @@
     "go": "Go",
     "items": "Items",
     "itemsAdd": "Add Items",
+    "itemDeleteConfirmation": "Are you sure you want to delete {item}? This will remove the item from any recipe containing it.",
+    "@itemDeleteConfirmation": {
+        "placeholders": {
+            "item": {}
+        }
+    },
     "itemsOptional": "Optional Items",
     "itemsRecent": "Recent Items",
     "login": "Login",

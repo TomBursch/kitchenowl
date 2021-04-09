@@ -40,10 +40,20 @@ class ShoppingItemWidget<T extends Item> extends StatelessWidget {
             softWrap: true,
             textAlign: TextAlign.center,
           ),
-          if (item is ShoppinglistItem &&
-              (item as ShoppinglistItem).description != null &&
-              (item as ShoppinglistItem).description.isNotEmpty)
-            Text((item as ShoppinglistItem).description),
+          if (item is ItemWithDescription &&
+              (item as ItemWithDescription).description != null &&
+              (item as ItemWithDescription).description.isNotEmpty)
+            Padding(
+              padding: const EdgeInsets.only(top: 2),
+              child: Text(
+                (item as ItemWithDescription).description,
+                style: Theme.of(context).textTheme.caption,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                softWrap: true,
+                textAlign: TextAlign.center,
+              ),
+            ),
         ],
       ),
     );

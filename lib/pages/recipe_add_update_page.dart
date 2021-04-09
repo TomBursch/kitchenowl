@@ -7,6 +7,7 @@ import 'package:kitchenowl/cubits/recipe_add_update_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/models/recipe.dart';
+import 'package:kitchenowl/pages/item_page.dart';
 import 'package:kitchenowl/pages/item_search_page.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/widgets/shopping_item.dart';
@@ -147,6 +148,7 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                               .where((e) => !e.optional)
                               .elementAt(i),
                           onPressed: (item) => cubit.removeItem(item),
+                          // onLongPressed: (item) => _editItem(context, item),
                         ),
                         childCount:
                             state.items.where((e) => !e.optional).length,
@@ -193,6 +195,7 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                           item:
                               state.items.where((e) => e.optional).elementAt(i),
                           onPressed: (item) => cubit.removeItem(item),
+                          // onLongPressed: (item) => _editItem(context, item),
                         ),
                         childCount: state.items.where((e) => e.optional).length,
                       ),
@@ -251,4 +254,17 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                 )));
     cubit.updateFromItemList(items, optional);
   }
+
+  // Future<void> _editItem(BuildContext context, RecipeItem item) async {
+  //   final res = await Navigator.of(context).push<UpdateEnum>(
+  //     MaterialPageRoute(
+  //       builder: (BuildContext context) => ItemPage(
+  //         item: item,
+  //       ),
+  //     ),
+  //   );
+  //   if (res == UpdateEnum.deleted || res == UpdateEnum.updated) {
+  //     // cubit.refresh();
+  //   }
+  // }
 }

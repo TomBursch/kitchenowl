@@ -21,6 +21,12 @@
     "go": "Los",
     "items": "Artikel",
     "itemsAdd": "Hinzufügen",
+    "itemDeleteConfirmation": "Bist du dir sicher, dass du {item} löschen möchtest? Diese Aktion entfernt den Artikel von allen Rezepten.",
+    "@itemDeleteConfirmation": {
+        "placeholders": {
+            "item": {}
+        }
+    },
     "itemsOptional": "Optionale Artikel",
     "itemsRecent": "Zuletzt benutzt",
     "login": "Login",

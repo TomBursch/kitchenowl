@@ -13,9 +13,9 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
 
   Future<void> search(String query) => refresh(query ?? '');
 
-  Future<void> add(String name) async {
-    await TransactionHandler.getInstance()
-        .runTransaction(TransactionShoppingListAddItem(name: name));
+  Future<void> add(String name, [String description]) async {
+    await TransactionHandler.getInstance().runTransaction(
+        TransactionShoppingListAddItem(name: name, description: description));
     await refresh('');
   }
 
@@ -36,16 +36,29 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
       TempStorage.getInstance().writeItems(shoppinglist);
     shoppinglist = shoppinglist ?? const [];
     if (query != null && query.isNotEmpty) {
-      List<Item> items = (await ApiService.getInstance().searchItem(query));
+      final splitIndex = query.indexOf(',');
+      String queryName = query;
+      String queryDescription = '';
+      if (splitIndex >= 0) {
+        queryName = query.substring(0, splitIndex).trim();
+        queryDescription = query.substring(splitIndex + 1).trim();
+      }
+
+      List<Item> items = (await ApiService.getInstance().searchItem(queryName))
+          .map((e) => ItemWithDescription.fromItem(
+              item: e, description: queryDescription))
+          .toList();
       if (items == null)
         items = shoppinglist
-            .where((e) => e.name.contains(query))
+            .where((e) => e.name.contains(queryName))
             .cast<Item>()
             .toList();
       _mergeShoppinglistItems(items, shoppinglist);
       if (items.length == 0 ||
-          items[0].name.toLowerCase() != query.toLowerCase())
-        items.add(Item(name: query));
+          items[0].name.toLowerCase() != queryName.toLowerCase()) {
+        items.add(ItemWithDescription(
+            name: queryName, description: queryDescription));
+      }
       emit(SearchShoppinglistCubitState(
         result: items,
         query: query,

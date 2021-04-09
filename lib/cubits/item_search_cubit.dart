@@ -9,24 +9,36 @@ class ItemSearchCubit extends Cubit<ItemSearchState> {
 
   void itemSelected(int i) {
     final List<Item> selectedItems = List.from(state.selectedItems);
-    final bool addItem = state.selectedItems
+    final bool containsItem = state.selectedItems
         .map((e) => e.name)
         .contains(state.searchResults[i].name);
-    if (addItem) {
+    if (containsItem) {
       selectedItems.removeWhere((e) => e.name == state.searchResults[i].name);
     } else {
       selectedItems.add(state.searchResults[i]);
     }
-    emit(ItemSearchState(
-        selectedItems, addItem ? '' : state.query, state.searchResults));
+    emit(ItemSearchState(selectedItems, '', state.searchResults));
   }
 
   Future<void> search(String query) async {
     if (query.isNotEmpty) {
-      final items = (await ApiService.getInstance().searchItem(query)) ?? [];
+      final splitIndex = query.indexOf(',');
+      String queryName = query;
+      String queryDescription = '';
+      if (splitIndex >= 0) {
+        queryName = query.substring(0, splitIndex).trim();
+        queryDescription = query.substring(splitIndex + 1).trim();
+      }
+
+      final items =
+          ((await ApiService.getInstance().searchItem(queryName)) ?? [])
+              .map((e) => ItemWithDescription.fromItem(
+                  item: e, description: queryDescription))
+              .toList();
       if (items.length == 0 ||
-          items[0].name.toLowerCase() != query.toLowerCase())
-        items.add(Item(name: query));
+          items[0].name.toLowerCase() != queryName.toLowerCase())
+        items.add(ItemWithDescription(
+            name: queryName, description: queryDescription));
       emit(ItemSearchState(state.selectedItems, query, items));
     } else {
       emit(ItemSearchState(state.selectedItems, query, state.searchResults));

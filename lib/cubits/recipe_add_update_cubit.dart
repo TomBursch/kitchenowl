@@ -61,10 +61,15 @@ class AddUpdateRecipeCubit extends Cubit<AddUpdateRecipeState> {
   void updateFromItemList(List<Item> items, bool optional) {
     final l = <RecipeItem>[];
     for (final item in items) {
-      l.add(state.items.where((e) => e.optional == optional).firstWhere(
+      l.add(state.items
+          .where((e) => e.optional == optional)
+          .firstWhere(
             (e) => e.toItem() == item,
             orElse: () => RecipeItem.fromItem(item: item, optional: optional),
-          ));
+          )
+          .copyWith(
+              description:
+                  (item is ItemWithDescription) ? item.description : null));
     }
     l.addAll(state.items.where((e) => e.optional != optional));
     emit(state.copyWith(items: l));

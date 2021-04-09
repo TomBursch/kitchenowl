@@ -19,7 +19,7 @@ enum Connection {
 }
 
 class ApiService {
-  static const Duration _TIMEOUT = const Duration(seconds: 5);
+  static const Duration _TIMEOUT = const Duration(seconds: 2);
   static ApiService _instance;
   final _client = http.Client();
   final String baseUrl;

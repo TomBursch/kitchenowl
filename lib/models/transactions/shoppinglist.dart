@@ -6,14 +6,17 @@ import 'package:kitchenowl/services/storage/temp_storage.dart';
 
 class TransactionShoppingListAddItem extends Transaction {
   final String name;
+  final String description;
 
-  TransactionShoppingListAddItem({this.name, DateTime timestamp})
+  TransactionShoppingListAddItem(
+      {this.name, this.description, DateTime timestamp})
       : super.internal(timestamp ?? DateTime.now(), TransactionEnum.itemAdd);
 
   factory TransactionShoppingListAddItem.fromJson(
           Map<String, dynamic> map, DateTime timestamp) =>
       TransactionShoppingListAddItem(
         name: map['name'],
+        description: map['description'],
         timestamp: timestamp,
       );
 
@@ -21,19 +24,20 @@ class TransactionShoppingListAddItem extends Transaction {
   Map<String, dynamic> toJson() => super.toJson()
     ..addAll({
       "name": this.name,
+      "description": this.description,
     });
 
   @override
   Future<bool> runLocal() async {
     final list = await TempStorage.getInstance().readItems();
-    list.add(ShoppinglistItem(name: this.name));
+    list.add(ShoppinglistItem(name: this.name, description: this.description));
     await TempStorage.getInstance().writeItems(list);
     return true;
   }
 
   @override
   Future<bool> runOnline() {
-    return ApiService.getInstance().addItemByName(this.name);
+    return ApiService.getInstance().addItemByName(this.name, this.description);
   }
 }
 

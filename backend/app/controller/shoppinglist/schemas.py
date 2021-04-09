@@ -33,9 +33,6 @@ class CreateList(Schema):
 
 
 class UpdateDescription(Schema):
-    item_id = fields.Integer(
-        required=True,
-    )
     description = fields.String(
         required=True
     )

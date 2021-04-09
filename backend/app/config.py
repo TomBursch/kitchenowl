@@ -7,8 +7,8 @@ from flask_jwt_extended import JWTManager
 from flask_apscheduler import APScheduler
 import os
 
-MIN_FRONTEND_VERSION = 1
-BACKEND_VERSION = 2
+MIN_FRONTEND_VERSION = 8
+BACKEND_VERSION = 3
 
 app = Flask(__name__)
 

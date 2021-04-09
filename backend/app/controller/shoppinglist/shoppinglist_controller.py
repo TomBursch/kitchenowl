@@ -21,6 +21,28 @@ def before_first_request():
         sl.save()
 
 
+@app.route('/shoppinglist/<id>/item/<item_id>', methods=['GET'])
+@jwt_required()
+def getShoppingListItem(id, item_id):
+    item = Item.find_by_id(item_id)
+    if not item:
+        raise NotFoundRequest()
+    return jsonify(item.obj_to_dict())
+
+
+@app.route('/shoppinglist/<id>/item/<item_id>', methods=['POST'])
+@jwt_required()
+@validate_args(UpdateDescription)
+def updateItemDescription(args, id, item_id):
+    con = ShoppinglistItems.find_by_ids(id, item_id)
+    if not con:
+        raise NotFoundRequest()
+    
+    con.description = args['description'] or ''
+    con.save()
+    return jsonify(con.obj_to_item_dict())
+
+
 @app.route('/shoppinglist/<id>/items', methods=['GET'])
 @jwt_required()
 def getAllShoppingListItems(id):
@@ -96,7 +118,7 @@ def getSuggestedItems(id):
     return jsonify([item.obj_to_dict() for item in suggestions])
 
 
-@app.route('/shoppinglist/<id>/item', methods=['POST'])
+@app.route('/shoppinglist/<id>/add-item-by-name', methods=['POST'])
 @jwt_required()
 @validate_args(AddItemByName)
 def addShoppinglistItemByName(args, id):

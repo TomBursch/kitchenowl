@@ -9,7 +9,10 @@ class Recipe(db.Model, DbModelMixin, TimestampMixin):
     name = db.Column(db.String(128))
     description = db.Column(db.String())
     photo = db.Column(db.String())
-    items = db.relationship('RecipeItems', back_populates='recipe', cascade="all, delete-orphan")
+    planned = db.Column(db.Boolean)
+
+    items = db.relationship(
+        'RecipeItems', back_populates='recipe', cascade="all, delete-orphan")
 
     def obj_to_full_dict(self):
         res = super().obj_to_dict()

@@ -2,6 +2,7 @@ import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/cubits/auth_cubit.dart';
+import 'package:kitchenowl/cubits/planner_cubit.dart';
 import 'package:kitchenowl/cubits/recipe_list_cubit.dart';
 import 'package:kitchenowl/cubits/shoppinglist_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
@@ -19,6 +20,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final ShoppinglistCubit shoppingListCubit = ShoppinglistCubit();
   final RecipeListCubit recipeListCubit = RecipeListCubit();
+  final PlannerCubit plannerCubit = PlannerCubit();
 
   List<Widget> pages;
   int _selectedIndex = 0;
@@ -30,6 +32,7 @@ class _HomePageState extends State<HomePage> {
     pages = [
       BlocProvider.value(value: shoppingListCubit, child: ShoppinglistPage()),
       BlocProvider.value(value: recipeListCubit, child: RecipeListPage()),
+      BlocProvider.value(value: plannerCubit, child: PlannerPage()),
       ProfilePage(),
     ];
   }
@@ -47,6 +50,9 @@ class _HomePageState extends State<HomePage> {
     }
     if (i == 1 && _selectedIndex != i) {
       recipeListCubit.refresh();
+    }
+    if (i == 2 && _selectedIndex != i) {
+      plannerCubit.refresh();
     }
     setState(() {
       _selectedIndex = i;
@@ -93,10 +99,12 @@ class _HomePageState extends State<HomePage> {
               )
             : null,
         null,
+        null,
       ][_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         showUnselectedLabels: false,
         showSelectedLabels: true,
+        type: BottomNavigationBarType.fixed,
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.shopping_bag_outlined),
@@ -105,6 +113,10 @@ class _HomePageState extends State<HomePage> {
           BottomNavigationBarItem(
             icon: Icon(Icons.receipt),
             label: AppLocalizations.of(context).recipes,
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.calendar_today_rounded),
+            label: AppLocalizations.of(context).planner,
           ),
           BottomNavigationBarItem(
             icon: Icon(isOffline ? Icons.cloud_off_rounded : Icons.person),

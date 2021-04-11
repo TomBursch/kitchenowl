@@ -95,15 +95,17 @@ class _RecipePageState extends State<RecipePage> {
                           ),
                         ),
                       ),
-                      SliverPadding(
-                        padding: const EdgeInsets.all(16),
-                        sliver: SliverToBoxAdapter(
-                          child: Text(
-                            AppLocalizations.of(context).items + ':',
-                            style: Theme.of(context).textTheme.headline6,
+                      if (state.recipe.items.where((e) => !e.optional).length >
+                          0)
+                        SliverPadding(
+                          padding: const EdgeInsets.all(16),
+                          sliver: SliverToBoxAdapter(
+                            child: Text(
+                              AppLocalizations.of(context).items + ':',
+                              style: Theme.of(context).textTheme.headline6,
+                            ),
                           ),
                         ),
-                      ),
                       SliverPadding(
                         padding: const EdgeInsets.symmetric(horizontal: 16),
                         sliver: SliverGrid(
@@ -131,15 +133,17 @@ class _RecipePageState extends State<RecipePage> {
                           ),
                         ),
                       ),
-                      SliverPadding(
-                        padding: const EdgeInsets.all(16),
-                        sliver: SliverToBoxAdapter(
-                          child: Text(
-                            AppLocalizations.of(context).itemsOptional + ':',
-                            style: Theme.of(context).textTheme.headline6,
+                      if (state.recipe.items.where((e) => e.optional).length >
+                          0)
+                        SliverPadding(
+                          padding: const EdgeInsets.all(16),
+                          sliver: SliverToBoxAdapter(
+                            child: Text(
+                              AppLocalizations.of(context).itemsOptional + ':',
+                              style: Theme.of(context).textTheme.headline6,
+                            ),
                           ),
                         ),
-                      ),
                       SliverPadding(
                         padding: const EdgeInsets.symmetric(horizontal: 16),
                         sliver: SliverGrid(
@@ -186,7 +190,20 @@ class _RecipePageState extends State<RecipePage> {
                             ),
                           ),
                         ),
-                      )
+                      ),
+                      SliverPadding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        sliver: SliverToBoxAdapter(
+                          child: ElevatedButton(
+                            child: Text(AppLocalizations.of(context)
+                                .addRecipeToPlanner),
+                            onPressed: () async {
+                              await cubit.addRecipeToPlanner();
+                              Navigator.of(context).pop(UpdateEnum.unchanged);
+                            },
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),

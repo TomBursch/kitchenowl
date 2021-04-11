@@ -7,6 +7,7 @@
             "number": {}
         }
     },
+    "addRecipeToPlanner": "Zum Essensplan hinzufügen",
     "address": "Adresse",
     "appDescription": "KitchenOwl hilft dir dein Lebensmitteleinkauf zu erleichtern",
     "appLegal": "2021 The KitchenOwl Authors",
@@ -38,6 +39,9 @@
     "or": "oder",
     "password": "Passwort",
     "passwordSave": "Passwort Speichern",
+    "planner": "Planer",
+    "plannerEmpty": "Keine geplanten essen, finde ein passendes Rezept und leg los!",
+    "plannerTitle": "Deine geplanten Mahlzeiten",
     "profile": "Profil",
     "recipeAdd": "Rezept Hinzufügen",
     "recipeEdit": "Rezept Bearbeiten",

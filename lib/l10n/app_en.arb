@@ -7,6 +7,7 @@
             "number": {}
         }
     },
+    "addRecipeToPlanner": "Add to meal plan",
     "address": "Address",
     "appDescription": "KitchenOwl helps you organize your grocery life.",
     "appLegal": "2021 The KitchenOwl Authors",
@@ -38,6 +39,9 @@
     "or": "or",
     "password": "Password",
     "passwordSave": "Update Password",
+    "planner": "Planner",
+    "plannerEmpty": "No meals planned, start by selecting one of your recipes!",
+    "plannerTitle": "Your planned meals",
     "profile": "Profile",
     "recipeAdd": "Add Recipe",
     "recipeEdit": "Edit Recipe",

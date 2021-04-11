@@ -38,6 +38,10 @@ class RecipeCubit extends Cubit<RecipeState> {
   Future<void> addItemsToList() async {
     await ApiService.getInstance().addRecipeItems(state.selectedItems);
   }
+
+  Future<void> addRecipeToPlanner() async {
+    await ApiService.getInstance().addPlannedRecipe(state.recipe);
+  }
 }
 
 class RecipeState extends Equatable {

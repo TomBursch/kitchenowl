@@ -5,12 +5,14 @@ class Recipe extends Model {
   final int id;
   final String name;
   final String description;
+  final bool isPlanned;
   final List<RecipeItem> items;
 
   const Recipe({
     this.id,
     this.name = '',
     this.description = '',
+    this.isPlanned = false,
     this.items = const [],
   });
 
@@ -23,6 +25,7 @@ class Recipe extends Model {
       id: map['id'],
       name: map['name'],
       description: map['description'],
+      isPlanned: map['planned'] ?? false,
       items: items,
     );
   }
@@ -37,6 +40,7 @@ class Recipe extends Model {
         name: name ?? this.name,
         description: description ?? this.description,
         items: items ?? this.items,
+        isPlanned: this.isPlanned,
       );
 
   @override

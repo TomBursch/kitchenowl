@@ -9,6 +9,7 @@ export 'user.dart';
 export 'item.dart';
 export 'shoppinglist.dart';
 export 'recipe.dart';
+export 'planner.dart';
 
 enum Connection {
   disconnected,

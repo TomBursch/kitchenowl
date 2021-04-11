@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/cubits/item_edit_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/kitchenowl.dart';
+import 'package:kitchenowl/widgets/recipe_item.dart';
 
 class ItemPage extends StatefulWidget {
   final Item item;
@@ -95,37 +97,65 @@ class _ItemPageState extends State<ItemPage> {
             )
           ],
         ),
-        body: CustomScrollView(
-          slivers: [
-            if (widget.item is ShoppinglistItem)
-              SliverPadding(
-                padding: const EdgeInsets.all(16),
-                sliver: SliverToBoxAdapter(
-                  child: TextField(
-                    autofocus: true,
-                    controller: descController,
-                    onChanged: (s) => cubit.setDescription(s),
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: AppLocalizations.of(context).description,
-                      // suffix: IconButton(
-                      //   onPressed: () {
-                      //     if (descController.text.isNotEmpty) {
-                      //       cubit.setDescription('');
-                      //       descController.clear();
-                      //     }
-                      //     FocusScope.of(context).unfocus();
-                      //   },
-                      //   icon: Icon(
-                      //     Icons.close,
-                      //     color: Colors.grey,
-                      //   ),
-                      // ),
+        body: Scrollbar(
+          child: RefreshIndicator(
+            onRefresh: cubit.refresh,
+            child: CustomScrollView(
+              slivers: [
+                if (widget.item is ShoppinglistItem)
+                  SliverPadding(
+                    padding: const EdgeInsets.all(16),
+                    sliver: SliverToBoxAdapter(
+                      child: TextField(
+                        autofocus: true,
+                        controller: descController,
+                        onChanged: (s) => cubit.setDescription(s),
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(),
+                          labelText: AppLocalizations.of(context).description,
+                          // suffix: IconButton(
+                          //   onPressed: () {
+                          //     if (descController.text.isNotEmpty) {
+                          //       cubit.setDescription('');
+                          //       descController.clear();
+                          //     }
+                          //     FocusScope.of(context).unfocus();
+                          //   },
+                          //   icon: Icon(
+                          //     Icons.close,
+                          //     color: Colors.grey,
+                          //   ),
+                          // ),
+                        ),
+                      ),
                     ),
                   ),
+                BlocBuilder<ItemEditCubit, ItemEditState>(
+                  bloc: cubit,
+                  builder: (context, state) {
+                    return SliverPadding(
+                      padding: EdgeInsets.only(
+                        top: (widget.item is ShoppinglistItem) ? 0 : 16,
+                        bottom: 16,
+                      ),
+                      sliver: SliverList(
+                        delegate: SliverChildBuilderDelegate(
+                          (context, i) => Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 13),
+                            child: RecipeItemWidget(
+                              recipe: state.recipes[i],
+                              onUpdated: cubit.refresh,
+                            ),
+                          ),
+                          childCount: state.recipes.length,
+                        ),
+                      ),
+                    );
+                  },
                 ),
-              ),
-          ],
+              ],
+            ),
+          ),
         ),
       ),
     );

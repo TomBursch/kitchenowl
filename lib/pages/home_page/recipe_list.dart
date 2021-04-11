@@ -3,10 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/cubits/auth_cubit.dart';
 import 'package:kitchenowl/cubits/recipe_list_cubit.dart';
-import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/kitchenowl.dart';
-import 'package:kitchenowl/pages/recipe_page.dart';
-import 'package:kitchenowl/services/api/api_service.dart';
+import 'package:kitchenowl/widgets/recipe_item.dart';
 import 'package:kitchenowl/widgets/search_text_field.dart';
 
 class RecipeListPage extends StatefulWidget {
@@ -100,25 +98,9 @@ class _RecipeListPageState extends State<RecipeListPage> {
                         itemBuilder: (context, index, name) {
                           return Padding(
                             padding: const EdgeInsets.only(left: 32, right: 16),
-                            child: Card(
-                              child: ListTile(
-                                title: Text(recipes[index].name),
-                                trailing: Icon(Icons.arrow_right_rounded),
-                                onTap: () async {
-                                  final recipe = await ApiService.getInstance()
-                                      .getRecipe(recipes[index]);
-                                  final res = await Navigator.of(context)
-                                      .push<UpdateEnum>(MaterialPageRoute(
-                                          builder: (context) => RecipePage(
-                                                recipe:
-                                                    recipe ?? recipes[index],
-                                              )));
-                                  if (res == UpdateEnum.updated ||
-                                      res == UpdateEnum.deleted) {
-                                    cubit.refresh();
-                                  }
-                                },
-                              ),
+                            child: RecipeItemWidget(
+                              recipe: recipes[index],
+                              onUpdated: cubit.refresh,
                             ),
                           );
                         },

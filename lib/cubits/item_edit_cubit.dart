@@ -11,12 +11,18 @@ class ItemEditCubit extends Cubit<ItemEditState> {
       : super(ItemEditState(
           description: (item is ItemWithDescription) ? item.description : '',
           name: item.name,
-        ));
+        )) {
+    refresh();
+  }
 
   Future<void> refresh() async {
-    final item = await ApiService.getInstance().getItem(this.item);
-    if (item != null) {
-      emit(state.copyWith());
+    if (item.id != null) {
+      final item = await ApiService.getInstance().getItem(this.item);
+      if (item != null) {
+        final recipes =
+            (await ApiService.getInstance().getItemRecipes(item)) ?? [];
+        emit(state.copyWith(recipes: recipes));
+      }
     }
   }
 

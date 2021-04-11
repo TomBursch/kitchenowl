@@ -192,7 +192,7 @@ class _RecipePageState extends State<RecipePage> {
                         ),
                       ),
                       SliverPadding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
                         sliver: SliverToBoxAdapter(
                           child: ElevatedButton(
                             child: Text(AppLocalizations.of(context)

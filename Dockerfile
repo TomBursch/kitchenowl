@@ -33,7 +33,7 @@ RUN flutter upgrade
 RUN flutter doctor -v
 
 # Copy the app files to the container
-COPY .metadata l10n.yaml pubspec.yaml .env* /usr/local/src/app/
+COPY .metadata l10n.yaml pubspec.yaml .env* entrypoint.sh /usr/local/src/app/
 COPY lib /usr/local/src/app/lib
 COPY web /usr/local/src/app/web
 COPY scripts /usr/local/src/app/scripts
@@ -49,7 +49,9 @@ RUN flutter packages get
 # Build the app for the web
 RUN flutter build web
 
-COPY ./build/web ./entrypoint.sh /usr/local/web/
+RUN mkdir /usr/local/web/
+RUN ls
+RUN cp -r ./build/web ./entrypoint.sh /usr/local/web/
 WORKDIR /usr/local/web
 
 # Clean up files

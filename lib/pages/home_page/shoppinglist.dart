@@ -50,7 +50,7 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: BlocListener<ShoppinglistCubit, ShoppinglistCubitState>(
-                cubit: cubit,
+                bloc: cubit,
                 listener: (context, state) {
                   if (!(state is SearchShoppinglistCubitState)) {
                     if (searchController.text.isNotEmpty) {
@@ -85,7 +85,7 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
               child: RefreshIndicator(
                 onRefresh: cubit.refresh,
                 child: BlocBuilder<ShoppinglistCubit, ShoppinglistCubitState>(
-                    cubit: cubit,
+                    bloc: cubit,
                     builder: (context, state) {
                       if (state is SearchShoppinglistCubitState)
                         return GridView.builder(

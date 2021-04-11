@@ -32,7 +32,7 @@ class _SettingsUserPageState extends State<SettingsUserPage> {
   @override
   Widget build(BuildContext context) {
     return BlocListener<SettingsUserCubit, SettingsUserState>(
-      cubit: cubit,
+      bloc: cubit,
       listener: (context, state) {
         if (state.user != null) {
           usernameController.text = state.user.username;

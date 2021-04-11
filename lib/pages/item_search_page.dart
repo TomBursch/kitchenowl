@@ -59,7 +59,7 @@ class _ItemSearchPageState extends State<ItemSearchPage> {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
             child: BlocListener<ItemSearchCubit, ItemSearchState>(
-              cubit: cubit,
+              bloc: cubit,
               listener: (context, state) {
                 if (state.query.isEmpty && searchController.text.isNotEmpty) {
                   searchController.clear();
@@ -111,7 +111,7 @@ class _ItemSearchPageState extends State<ItemSearchPage> {
         child: appbar,
       ),
       body: BlocBuilder<ItemSearchCubit, ItemSearchState>(
-        cubit: cubit,
+        bloc: cubit,
         builder: (context, state) => GridView.builder(
           padding: const EdgeInsets.all(16),
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(

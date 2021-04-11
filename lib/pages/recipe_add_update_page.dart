@@ -131,7 +131,7 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   sliver:
                       BlocBuilder<AddUpdateRecipeCubit, AddUpdateRecipeState>(
-                    cubit: cubit,
+                    bloc: cubit,
                     buildWhen: (previous, current) =>
                         !listEquals(previous.items, current.items),
                     builder: (context, state) => SliverGrid(
@@ -180,7 +180,7 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   sliver:
                       BlocBuilder<AddUpdateRecipeCubit, AddUpdateRecipeState>(
-                    cubit: cubit,
+                    bloc: cubit,
                     buildWhen: (previous, current) =>
                         !listEquals(previous.items, current.items),
                     builder: (context, state) => SliverGrid(

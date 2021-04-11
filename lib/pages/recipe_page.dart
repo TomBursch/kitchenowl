@@ -44,7 +44,7 @@ class _RecipePageState extends State<RecipePage> {
       desktop: 9,
     );
     return BlocBuilder<RecipeCubit, RecipeState>(
-        cubit: cubit,
+        bloc: cubit,
         builder: (conext, state) => Scaffold(
               appBar: AppBar(
                 title: Text(state.recipe.name),
@@ -175,7 +175,7 @@ class _RecipePageState extends State<RecipePage> {
                         padding: const EdgeInsets.all(16),
                         sliver: SliverToBoxAdapter(
                           child: BlocBuilder<RecipeCubit, RecipeState>(
-                            cubit: cubit,
+                            bloc: cubit,
                             builder: (conext, state) => ElevatedButton(
                               child: Text(AppLocalizations.of(context)
                                   .addNumberIngredients(

@@ -46,7 +46,7 @@ class _PlannerPageState extends State<PlannerPage> {
         child: RefreshIndicator(
           onRefresh: cubit.refresh,
           child: BlocBuilder<PlannerCubit, PlannerCubitState>(
-              cubit: cubit,
+              bloc: cubit,
               builder: (context, state) {
                 if (isOffline) {
                   return Center(

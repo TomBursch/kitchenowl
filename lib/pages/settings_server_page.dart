@@ -76,7 +76,7 @@ class _SettingsServerPageState extends State<SettingsServerPage> {
                   ],
                 ),
                 BlocBuilder<SettingsServerCubit, SettingsServerState>(
-                  cubit: cubit,
+                  bloc: cubit,
                   builder: (context, state) => ListView.builder(
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),

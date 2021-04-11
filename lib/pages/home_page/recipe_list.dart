@@ -42,7 +42,7 @@ class _RecipeListPageState extends State<RecipeListPage> {
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: BlocListener<RecipeListCubit, ListRecipeCubitState>(
-                cubit: cubit,
+                bloc: cubit,
                 listener: (context, state) {
                   if (!(state is SearchRecipeCubitState)) {
                     if (searchController.text.isNotEmpty) {
@@ -61,7 +61,7 @@ class _RecipeListPageState extends State<RecipeListPage> {
           ),
           Expanded(
             child: BlocBuilder<RecipeListCubit, ListRecipeCubitState>(
-                cubit: cubit,
+                bloc: cubit,
                 builder: (context, state) {
                   if (BlocProvider.of<AuthCubit>(context).state
                       is AuthenticatedOffline) {

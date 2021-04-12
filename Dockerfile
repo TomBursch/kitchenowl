@@ -51,7 +51,7 @@ RUN flutter build web
 
 RUN mkdir /usr/local/web/
 RUN ls
-RUN cp -r ./build/web ./entrypoint.sh /usr/local/web/
+RUN cp -r ./build/web/* ./entrypoint.sh /usr/local/web/
 WORKDIR /usr/local/web
 
 # Clean up files

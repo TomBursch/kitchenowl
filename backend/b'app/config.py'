@@ -23,6 +23,7 @@ bcrypt = Bcrypt(app)
 jwt = JWTManager(app)
 
 scheduler = APScheduler()
+# enable for debugging jobs: ../scheduler/jobs to see scheduled jobs
 scheduler.api_enabled = False
 scheduler.init_app(app)
 scheduler.start()

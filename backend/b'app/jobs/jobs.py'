@@ -11,8 +11,9 @@ def load_jobs():
     # def test():
     #     print("--- test analysis is starting ---")
     #     shopping_instances = clusterShoppings()
-    #     findItemOrdering(shopping_instances)
-    #     findItemSuggestions(shopping_instances)
+    #     if(shopping_instances):
+    #         findItemOrdering(shopping_instances)
+    #         findItemSuggestions(shopping_instances)
     #     print("--- test analysis is completed ---")
 
     @scheduler.task('cron', id='everyDay', day_of_week='*', hour='3')

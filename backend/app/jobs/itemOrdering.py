@@ -24,6 +24,8 @@ def findItemOrdering(shopping_instances):
     # commit changes to db
     db.session.commit()
 
+    print("new ordering was determined and stored in the database")
+
 
 class ItemSort:
 

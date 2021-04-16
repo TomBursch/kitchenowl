@@ -1,4 +1,5 @@
-database.db
+*.db
+*.db-journal
 
 # Visual Studio Code related
 .classpath

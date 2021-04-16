@@ -18,7 +18,7 @@ class Item(db.Model, DbModelMixin, TimestampMixin):
     # frequency of item, used for item suggestions
     support = db.Column(db.Float, server_default='0.0')
 
-    history = db.relationship("History", back_populates="item")
+    history = db.relationship("History", back_populates="item", cascade="all, delete-orphan")
     antecedents = db.relationship(
         "Association", back_populates="antecedent", foreign_keys='Association.antecedent_id')
     consequents = db.relationship(

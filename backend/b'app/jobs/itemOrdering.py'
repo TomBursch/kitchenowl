@@ -1,4 +1,4 @@
-from app import db
+from app import app, db
 from app.models import Item
 import copy
 
@@ -24,7 +24,7 @@ def findItemOrdering(shopping_instances):
     # commit changes to db
     db.session.commit()
 
-    print("new ordering was determined and stored in the database")
+    app.logger.info("new ordering was determined and stored in the database")
 
 
 class ItemSort:

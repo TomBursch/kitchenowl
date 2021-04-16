@@ -9,17 +9,17 @@ def load_jobs():
     # for debugging:
     # @scheduler.task('interval', id='test', seconds=5)
     # def test():
-    #     print("--- test analysis is starting ---")
+    #     app.logger.info("--- test analysis is starting ---")
     #     shopping_instances = clusterShoppings()
     #     if(shopping_instances):
     #         findItemOrdering(shopping_instances)
     #         findItemSuggestions(shopping_instances)
-    #     print("--- test analysis is completed ---")
+    #     app.logger.info("--- test analysis is completed ---")
 
     @scheduler.task('cron', id='everyDay', day_of_week='*', hour='3')
     def daily():
-        print("--- daily analysis is starting ---")
+        app.logger.info("--- daily analysis is starting ---")
         shopping_instances = clusterShoppings()
         findItemOrdering(shopping_instances)
         findItemSuggestions(shopping_instances)
-        print("--- daily analysis is completed ---")
+        app.logger.info("--- daily analysis is completed ---")

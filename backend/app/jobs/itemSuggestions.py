@@ -1,4 +1,4 @@
-from app import db
+from app import app, db
 from app.models import Item, Association
 
 import pandas as pd
@@ -18,8 +18,9 @@ def findItemSuggestions(shopping_instances):
     store = pd.DataFrame(te_ary, columns=te.columns_)
 
     # compute the frequent itemsets with minimal support 0.1
-    frequent_itemsets = apriori(store, min_support=0.001, use_colnames=True, max_len=2)
-    print("apriori finished")
+    frequent_itemsets = apriori(
+        store, min_support=0.001, use_colnames=True, max_len=2)
+    app.logger.info("apriori finished")
 
     # extract support for single items
     single_items = frequent_itemsets[frequent_itemsets['itemsets'].apply(
@@ -40,7 +41,7 @@ def findItemSuggestions(shopping_instances):
 
     # commit changes to db
     db.session.commit()
-    print("frequency of single items was stored")
+    app.logger.info("frequency of single items was stored")
 
     # compute all association rules with lift > 1.2 and confidence > 0.1
     association_rules = arule(
@@ -62,4 +63,4 @@ def findItemSuggestions(shopping_instances):
     for index, rule in single_rules.iterrows():
         Association.create(rule["antecedent"], rule["consequent"],
                            rule["support"], rule["confidence"], rule["lift"])
-    print("associations rules of size 2 were updated")
+    app.logger.info("associations rules of size 2 were updated")

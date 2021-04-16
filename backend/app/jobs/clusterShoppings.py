@@ -1,3 +1,4 @@
+from app import app
 from app.models import History
 
 import time
@@ -9,7 +10,7 @@ def clusterShoppings():
     dropped = History.find_dropped_by_shoppinglist_id(1)
 
     if(len(dropped) == 0):
-        print("no history to investigate")
+        app.logger.info("no history to investigate")
         return None
 
     # determine shopping instances via clustering
@@ -24,7 +25,7 @@ def clusterShoppings():
     labels = dbs.fit_predict(timestamps)
 
     if(len(labels) == 0):
-        print("no shopping instances identified")
+        app.logger.info("no shopping instances identified")
         return None
 
     # extract indices of clusters into lists
@@ -43,7 +44,7 @@ def clusterShoppings():
     shopping_instances = [list(set(instance))
                           for instance in shopping_instances]
 
-    print('the found shopping instances are:')
-    print(shopping_instances)
+    app.logger.info('the found shopping instances are:')
+    app.logger.info(shopping_instances)
 
     return shopping_instances

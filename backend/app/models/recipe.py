@@ -1,5 +1,6 @@
 from app import db
 from app.helpers import DbModelMixin, TimestampMixin
+from .item import Item
 
 
 class Recipe(db.Model, DbModelMixin, TimestampMixin):
@@ -16,7 +17,10 @@ class Recipe(db.Model, DbModelMixin, TimestampMixin):
 
     def obj_to_full_dict(self):
         res = super().obj_to_dict()
-        res['items'] = [e.obj_to_item_dict() for e in self.items]
+        items = RecipeItems.query.filter(RecipeItems.recipe_id == self.id).join(
+            RecipeItems.item).order_by(
+            Item.name).all()
+        res['items'] = [e.obj_to_item_dict() for e in items]
         return res
 
     @classmethod

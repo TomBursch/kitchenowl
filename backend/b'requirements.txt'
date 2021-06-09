@@ -29,7 +29,7 @@ mypy-extensions==0.4.3
 numpy==1.17.4
 pandas==0.25.3
 pathspec==0.8.1
-Pillow==8.1.2
+Pillow==8.2.0
 pycodestyle==2.7.0
 pycparser==2.20
 pyflakes==2.3.0

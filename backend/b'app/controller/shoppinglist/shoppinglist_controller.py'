@@ -49,7 +49,7 @@ def getAllShoppingListItems(id):
     items = ShoppinglistItems.query.filter(
         ShoppinglistItems.shoppinglist_id == id).join(
         ShoppinglistItems.item).order_by(
-        Item.ordering, Item.name).all()
+        Item.name).all()
     return jsonify([e.obj_to_item_dict() for e in items])
 
 

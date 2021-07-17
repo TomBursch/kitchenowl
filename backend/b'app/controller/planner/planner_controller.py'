@@ -1,3 +1,4 @@
+from app.models.recipe_history import RecipeHistory
 from app.errors import NotFoundRequest
 from flask import jsonify
 from flask_jwt_extended import jwt_required
@@ -23,6 +24,7 @@ def addPlannedRecipe(args):
         raise NotFoundRequest()
     recipe.planned = True
     recipe.save()
+    RecipeHistory.create_added(recipe)
     return jsonify(recipe.obj_to_dict())
 
 
@@ -34,4 +36,5 @@ def removePlannedRecipeById(id):
         raise NotFoundRequest()
     recipe.planned = False
     recipe.save()
+    RecipeHistory.create_dropped(recipe)
     return jsonify(recipe.obj_to_dict())

@@ -4,3 +4,4 @@ from .association import Association
 from .history import History, Status
 from .recipe import RecipeItems, Recipe
 from .shoppinglist import ShoppinglistItems, Shoppinglist
+from .recipe_history import RecipeHistory

@@ -12,6 +12,7 @@ class Recipe(db.Model, DbModelMixin, TimestampMixin):
     photo = db.Column(db.String())
     planned = db.Column(db.Boolean)
 
+    recipe_history = db.relationship("RecipeHistory", back_populates="recipe", cascade="all, delete-orphan")
     items = db.relationship(
         'RecipeItems', back_populates='recipe', cascade="all, delete-orphan")
 

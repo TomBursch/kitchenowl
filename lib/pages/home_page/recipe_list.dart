@@ -21,6 +21,8 @@ class _RecipeListPageState extends State<RecipeListPage> {
   @override
   void initState() {
     super.initState();
+    searchController.text =
+        BlocProvider.of<RecipeListCubit>(context)?.query ?? "";
   }
 
   @override

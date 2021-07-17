@@ -249,7 +249,7 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                   title: AppLocalizations.of(context).itemsAdd,
                   selectedItems: cubit.state.items
                       .where((e) => e.optional == optional)
-                      .map((e) => e.toItem())
+                      .map((e) => e.toItemWithDescription())
                       .toList(),
                 )));
     cubit.updateFromItemList(items, optional);

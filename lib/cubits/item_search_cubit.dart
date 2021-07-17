@@ -30,11 +30,17 @@ class ItemSearchCubit extends Cubit<ItemSearchState> {
         queryDescription = query.substring(splitIndex + 1).trim();
       }
 
-      final items =
-          ((await ApiService.getInstance().searchItem(queryName)) ?? [])
-              .map((e) => ItemWithDescription.fromItem(
-                  item: e, description: queryDescription))
-              .toList();
+      List<Item> items = [];
+      for (Item item
+          in (await ApiService.getInstance().searchItem(queryName) ?? [])) {
+        String description = state.selectedItems
+                .whereType<ItemWithDescription>()
+                .firstWhere((e) => e.name == item.name, orElse: () => null)
+                ?.description ??
+            queryDescription;
+        items.add(
+            ItemWithDescription.fromItem(item: item, description: description));
+      }
       if (items.length == 0 ||
           items[0].name.toLowerCase() != queryName.toLowerCase())
         items.add(ItemWithDescription(

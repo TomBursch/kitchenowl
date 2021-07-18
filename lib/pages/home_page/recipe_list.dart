@@ -83,7 +83,7 @@ class _RecipeListPageState extends State<RecipeListPage> {
                         list: recipes.map((e) => AlphaModel(e.name)).toList(),
                         alignment: LetterAlignment.left,
                         // isAlphabetsFiltered: state is SearchRecipeCubitState,
-                        waterMark: (value) => Container(
+                        overlayWidget: (value) => Container(
                           height: 50,
                           width: 50,
                           decoration: BoxDecoration(

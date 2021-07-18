@@ -13,8 +13,10 @@ import 'package:url_launcher/url_launcher.dart';
 
 class RecipePage extends StatefulWidget {
   final Recipe recipe;
+  final bool updateOnPlanningEdit;
 
-  const RecipePage({Key key, this.recipe}) : super(key: key);
+  const RecipePage({Key key, this.recipe, this.updateOnPlanningEdit = false})
+      : super(key: key);
 
   @override
   _RecipePageState createState() => _RecipePageState();
@@ -199,7 +201,10 @@ class _RecipePageState extends State<RecipePage> {
                                 .addRecipeToPlanner),
                             onPressed: () async {
                               await cubit.addRecipeToPlanner();
-                              Navigator.of(context).pop(UpdateEnum.unchanged);
+                              Navigator.of(context).pop(
+                                  widget.updateOnPlanningEdit
+                                      ? UpdateEnum.updated
+                                      : UpdateEnum.unchanged);
                             },
                           ),
                         ),

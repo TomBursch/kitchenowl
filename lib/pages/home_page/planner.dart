@@ -75,16 +75,18 @@ class _PlannerPageState extends State<PlannerPage> {
                       ),
                     ),
                     if (state.plannedRecipes.length == 0)
-                      SliverFillRemaining(
-                        hasScrollBody: false,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Icon(Icons.no_food_rounded),
-                            const SizedBox(height: 16),
-                            Text(AppLocalizations.of(context).plannerEmpty),
-                          ],
+                      SliverToBoxAdapter(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Icon(Icons.no_food_rounded),
+                              const SizedBox(height: 16),
+                              Text(AppLocalizations.of(context).plannerEmpty),
+                            ],
+                          ),
                         ),
                       ),
                     if (state.plannedRecipes.length > 0)
@@ -124,6 +126,53 @@ class _PlannerPageState extends State<PlannerPage> {
                           ),
                         ),
                       ),
+                    if (state.recentRecipes.length > 0) ...[
+                      SliverPadding(
+                        padding: const EdgeInsets.all(16),
+                        sliver: SliverToBoxAdapter(
+                          child: Text(
+                            AppLocalizations.of(context).itemsRecent + ':',
+                            style: Theme.of(context).textTheme.headline6,
+                          ),
+                        ),
+                      ),
+                      SliverPadding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        sliver: SliverGrid(
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: crossAxisCount,
+                            mainAxisSpacing: 4,
+                            crossAxisSpacing: 4,
+                            childAspectRatio: 1,
+                          ),
+                          delegate: SliverChildBuilderDelegate(
+                            (context, i) => SelectableButtonCard(
+                              title: state.recentRecipes[i].name,
+                              onPressed: () {
+                                cubit.add(state.recentRecipes[i]);
+                              },
+                              onLongPressed: () async {
+                                final recipe = await ApiService.getInstance()
+                                    .getRecipe(state.recentRecipes[i]);
+                                final res = await Navigator.of(context)
+                                    .push<UpdateEnum>(MaterialPageRoute(
+                                        builder: (context) => RecipePage(
+                                              recipe: recipe ??
+                                                  state.recentRecipes[i],
+                                              updateOnPlanningEdit: true,
+                                            )));
+                                if (res == UpdateEnum.updated ||
+                                    res == UpdateEnum.deleted) {
+                                  cubit.refresh();
+                                }
+                              },
+                            ),
+                            childCount: state.recentRecipes.length,
+                          ),
+                        ),
+                      ),
+                    ],
                   ],
                 );
               }),

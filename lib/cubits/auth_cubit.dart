@@ -17,7 +17,7 @@ class AuthCubit extends Cubit<AuthState> {
   void setup() async {
     String url;
     if (kIsWeb) {
-      url = env['BACK_URL'];
+      url = dotenv.env['BACK_URL'];
     } else {
       url = await PreferenceStorage.getInstance().read(key: 'URL');
     }

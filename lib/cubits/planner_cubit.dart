@@ -13,17 +13,26 @@ class PlannerCubit extends Cubit<PlannerCubitState> {
     await refresh();
   }
 
+  Future<void> add(Recipe recipe) async {
+    await ApiService.getInstance().addPlannedRecipe(recipe);
+    await refresh();
+  }
+
   Future<void> refresh([String query]) async {
     final planned = await ApiService.getInstance().getPlannedRecipes() ?? [];
-    emit(PlannerCubitState(planned));
+    final recent =
+        await ApiService.getInstance().getRecentPlannedRecipes() ?? [];
+    emit(PlannerCubitState(planned, recent));
   }
 }
 
 class PlannerCubitState extends Equatable {
   final List<Recipe> plannedRecipes;
+  final List<Recipe> recentRecipes;
 
-  const PlannerCubitState([this.plannedRecipes = const []]);
+  const PlannerCubitState(
+      [this.plannedRecipes = const [], this.recentRecipes = const []]);
 
   @override
-  List<Object> get props => plannedRecipes.cast<Object>();
+  List<Object> get props => plannedRecipes.cast<Object>() + recentRecipes;
 }

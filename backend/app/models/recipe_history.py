@@ -18,7 +18,8 @@ class RecipeHistory(db.Model, DbModelMixin, TimestampMixin):
 
     recipe_id = db.Column(db.Integer, db.ForeignKey('recipe.id'))
 
-    recipe = db.relationship("Recipe", uselist=False, back_populates="recipe_history")
+    recipe = db.relationship("Recipe", uselist=False,
+                             back_populates="recipe_history")
 
     status = db.Column(db.Enum(Status))
 
@@ -52,3 +53,9 @@ class RecipeHistory(db.Model, DbModelMixin, TimestampMixin):
     @classmethod
     def find_all(cls):
         return cls.query.all()
+
+    @classmethod
+    def get_recent(cls):
+        sq = db.session.query(Recipe.id).filter(
+            Recipe.planned).subquery()
+        return cls.query.filter(cls.status == Status.DROPPED).filter(cls.recipe_id.notin_(sq)).order_by(cls.id.desc()).group_by(cls.recipe_id).limit(9)

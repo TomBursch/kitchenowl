@@ -4,7 +4,7 @@ from flask import jsonify
 from flask_jwt_extended import jwt_required
 from app import app
 from app.helpers import validate_args
-from app.models import Recipe
+from app.models import Recipe, RecipeHistory
 from .schemas import AddPlannedRecipe
 
 
@@ -38,3 +38,10 @@ def removePlannedRecipeById(id):
     recipe.save()
     RecipeHistory.create_dropped(recipe)
     return jsonify(recipe.obj_to_dict())
+
+
+@app.route('/planner/recent-recipes', methods=['GET'])
+@jwt_required()
+def getRecentRecipes():
+    recipes = RecipeHistory.get_recent()
+    return jsonify([e.recipe.obj_to_dict() for e in recipes])

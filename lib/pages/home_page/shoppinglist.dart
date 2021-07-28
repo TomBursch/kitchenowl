@@ -23,6 +23,8 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
   @override
   void initState() {
     super.initState();
+    searchController.text =
+        BlocProvider.of<ShoppinglistCubit>(context)?.query ?? "";
   }
 
   @override

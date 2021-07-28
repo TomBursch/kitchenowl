@@ -108,7 +108,7 @@ class ShoppinglistItem extends ItemWithDescription {
   List<Object> get props => super.props;
 }
 
-class RecipeItem extends ShoppinglistItem {
+class RecipeItem extends ItemWithDescription {
   final bool optional;
 
   const RecipeItem({int id, String name, String description, this.optional})

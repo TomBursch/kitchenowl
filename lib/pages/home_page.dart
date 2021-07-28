@@ -45,11 +45,17 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _onItemTapped(int i) {
-    if (i == 0 && _selectedIndex != i) {
-      shoppingListCubit.refresh();
+    if (i == 0) {
+      if (_selectedIndex == i)
+        shoppingListCubit.refresh("");
+      else
+        shoppingListCubit.refresh();
     }
-    if (i == 1 && _selectedIndex != i) {
-      recipeListCubit.refresh();
+    if (i == 1) {
+      if (_selectedIndex == i)
+        recipeListCubit.refresh("");
+      else
+        recipeListCubit.refresh();
     }
     if (i == 2 && _selectedIndex != i) {
       plannerCubit.refresh();

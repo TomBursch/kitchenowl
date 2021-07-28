@@ -4,20 +4,24 @@ import 'package:kitchenowl/models/recipe.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
 
 class RecipeListCubit extends Cubit<ListRecipeCubitState> {
-  String query = "";
   List<Recipe> shoppinglist = [];
 
   RecipeListCubit() : super(ListRecipeCubitState([])) {
     refresh();
   }
 
+  String get query => (state != null && state is SearchRecipeCubitState)
+      ? (state as SearchRecipeCubitState).query
+      : "";
+
   Future<void> search(String query) {
-    this.query = query ?? '';
-    return refresh();
+    return refresh(query);
   }
 
-  Future<void> refresh() async {
-    if (this.query.isNotEmpty) {
+  Future<void> refresh([String query]) async {
+    if (state is SearchRecipeCubitState)
+      query = query ?? (state as SearchRecipeCubitState).query;
+    if (query != null && query.isNotEmpty) {
       final items = (await ApiService.getInstance().searchRecipe(query)) ?? [];
       emit(SearchRecipeCubitState(query, items));
     } else {

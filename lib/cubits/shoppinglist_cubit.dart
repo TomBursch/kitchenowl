@@ -7,6 +7,10 @@ import 'package:kitchenowl/services/storage/temp_storage.dart';
 import 'package:kitchenowl/services/transaction_handler.dart';
 
 class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
+  String get query => (state is SearchShoppinglistCubitState)
+      ? (state as SearchShoppinglistCubitState).query
+      : "";
+
   ShoppinglistCubit() : super(const ShoppinglistCubitState()) {
     refresh();
   }

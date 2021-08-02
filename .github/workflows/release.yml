@@ -14,7 +14,7 @@ jobs:
     steps:
       - uses: actions/setup-python@v2
         with:
-          python-version: '3.x'
+          python-version: "3.x"
       - name: Install dependencies
         run: pip3 install shyaml
       - name: Set outputs
@@ -187,7 +187,7 @@ jobs:
         if: matrix.target == 'Debian'
         run: build.sh
         working-directory: debian
-       - name: Rename build for Android
+      - name: Rename build for Android
         if: matrix.target == 'Debian'
         run: mv kitchenowl.deb $GITHUB_WORKSPACE/kitchenowl_${{ matrix.target }}.deb
         working-directory: ${{ matrix.build_path }}

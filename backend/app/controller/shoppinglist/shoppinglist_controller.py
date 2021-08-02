@@ -37,7 +37,7 @@ def updateItemDescription(args, id, item_id):
     con = ShoppinglistItems.find_by_ids(id, item_id)
     if not con:
         raise NotFoundRequest()
-    
+
     con.description = args['description'] or ''
     con.save()
     return jsonify(con.obj_to_item_dict())
@@ -56,11 +56,8 @@ def getAllShoppingListItems(id):
 @app.route('/shoppinglist/<id>/recent-items', methods=['GET'])
 @jwt_required()
 def getRecentItems(id):
-    sq = db.session.query(ShoppinglistItems.item_id).filter(
-        ShoppinglistItems.shoppinglist_id == id).subquery()
-    q = Item.query.filter(Item.id.notin_(sq)).order_by(
-        Item.updated_at).limit(9)
-    return jsonify([e.obj_to_dict() for e in q])
+    items = History.get_recent(id)
+    return jsonify([e.item.obj_to_dict() for e in items])
 
 
 def getSuggestionsBasedOnLastAddedItems(id, item_count):

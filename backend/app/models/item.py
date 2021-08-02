@@ -18,11 +18,18 @@ class Item(db.Model, DbModelMixin, TimestampMixin):
     # frequency of item, used for item suggestions
     support = db.Column(db.Float, server_default='0.0')
 
-    history = db.relationship("History", back_populates="item", cascade="all, delete-orphan")
+    history = db.relationship(
+        "History", back_populates="item", cascade="all, delete-orphan")
     antecedents = db.relationship(
         "Association", back_populates="antecedent", foreign_keys='Association.antecedent_id')
     consequents = db.relationship(
         "Association", back_populates="consequent", foreign_keys='Association.consequent_id')
+
+    def obj_to_export_dict(self):
+        res = {
+            "name": self.name,
+        }
+        return res
 
     @classmethod
     def create_by_name(cls, name):
@@ -46,7 +53,8 @@ class Item(db.Model, DbModelMixin, TimestampMixin):
         # name is a regex
         if '*' in name or '?' in name or '%' in name or '_' in name:
             looking_for = name.replace('*', '%').replace('?', '_')
-            found = cls.query.filter(cls.name.ilike(looking_for)).order_by(cls.support.desc()).limit(item_count).all()
+            found = cls.query.filter(cls.name.ilike(looking_for)).order_by(
+                cls.support.desc()).limit(item_count).all()
             return found
 
         # name is no regex

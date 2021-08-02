@@ -2,6 +2,7 @@ from app import db
 from app.helpers import DbModelMixin, TimestampMixin
 from .recipe import Recipe
 from .shoppinglist import Shoppinglist
+from sqlalchemy import func
 
 import enum
 
@@ -57,5 +58,7 @@ class RecipeHistory(db.Model, DbModelMixin, TimestampMixin):
     @classmethod
     def get_recent(cls):
         sq = db.session.query(Recipe.id).filter(
-            Recipe.planned).subquery()
-        return cls.query.filter(cls.status == Status.DROPPED).filter(cls.recipe_id.notin_(sq)).order_by(cls.id.desc()).group_by(cls.recipe_id).limit(9)
+            Recipe.planned).subquery().select(Recipe.id)
+        sq2 = db.session.query(func.max(cls.id)).filter(cls.status == Status.DROPPED).filter(
+            cls.recipe_id.notin_(sq)).group_by(cls.recipe_id).join(cls.recipe).subquery().select(cls.id)
+        return cls.query.filter(cls.id.in_(sq2)).order_by(cls.id.desc()).limit(9)

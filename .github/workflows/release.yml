@@ -1,0 +1,205 @@
+name: Draft Github Release
+on:
+  workflow_dispatch:
+    # Enable manual run
+  push:
+    branches: [stable]
+
+jobs:
+  parse-version:
+    name: Parse version number
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.set_outputs.outputs.version }}
+    steps:
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+      - name: Install dependencies
+        run: pip3 install shyaml
+      - name: Set outputs
+        id: set_outputs
+        run: echo "::set-output name=version::v$(cat pubspec.yaml | shyaml get-value version | grep -oE "^[^+]+")"
+
+  generate-changelog:
+    name: Generate changelog
+    needs: parse-version
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get latest published release
+        id: get_latest_release
+        uses: pozetroninc/github-action-get-latest-release@v0.5.0
+        with:
+          repository: ${{ github.repository }}
+          excludes: prerelease, draft
+      - name: Generate changelog since last published release
+        uses: charmixer/auto-changelog-action@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          future_release: ${{ needs.parse-version.outputs.version }}
+          since_tag: ${{ steps.get_latest_release.outputs.release }}
+      - name: Upload changelog
+        uses: actions/upload-artifact@v2
+        with:
+          name: changelog
+          path: CHANGELOG.md
+
+  draft-release:
+    name: Draft Github release
+    needs: [parse-version, generate-changelog]
+    runs-on: ubuntu-20.04
+    outputs:
+      upload_url: ${{ steps.create_release.outputs.upload_url }}
+    steps:
+      - name: Download changelog
+        uses: actions/download-artifact@v2
+        with:
+          name: changelog
+      - name: Draft release with changelog
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ needs.parse-version.outputs.version }}
+          release_name: KitchenOwl ${{ needs.parse-version.outputs.version }}
+          body_path: CHANGELOG.md
+          draft: true
+          prerelease: false
+
+  create-build:
+    name: Create ${{ matrix.target }} build
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        target: [macOS, Windows, Linux, Android, Debian]
+        include:
+          # - os: macos-10.15 # Catalina
+          #   target: macOS
+          #   build_target: macos
+          #   build_path: build/macos/Build/Products/Release
+          #   asset_extension: .zip
+          #   asset_content_type: application/zip
+          - os: windows-2019
+            target: Windows
+            build_target: windows
+            build_path: build\windows\runner\Release
+            asset_extension: .zip
+            asset_content_type: application/zip
+          - os: ubuntu-20.04
+            target: Linux
+            build_target: linux
+            build_path: build/linux/x64/release/bundle
+            asset_extension: .tar.gz
+            asset_content_type: application/gzip
+          - os: ubuntu-20.04
+            target: Android
+            build_target: apk
+            build_path: build/app/outputs/flutter-apk
+            asset_extension: .apk
+            asset_content_type: application/vnd.android.package-archive
+          - os: ubuntu-20.04
+            target: Debian
+            build_target: linux
+            build_path: build/debian/release
+            asset_extension: .deb
+            asset_content_type: application/vnd.debian.binary-package
+      # Disable fail-fast as we want results from all even if one fails.
+      fail-fast: false
+    needs: draft-release
+    steps:
+      # Set up Flutter.
+      - name: Clone Flutter repository with master channel
+        uses: subosito/flutter-action@v1.5.0
+        with:
+          channel: master
+
+      - name: Install Linux dependencies
+        if: matrix.target == 'Linux' || matrix.target == 'Debian'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgtk-3-dev libx11-dev pkg-config cmake ninja-build libblkid-dev libsecret-1-dev libjsoncpp-dev
+      - name: Install Android dependencies
+        if: matrix.target == 'Android'
+        uses: actions/setup-java@v1
+        with:
+          java-version: "12.x"
+      - name: Install Debian dependencies
+        if: matrix.target == 'Debian'
+        run: |
+          sudo apt-get install -y python3
+          pip3 install shyaml
+      - name: Enable desktop support
+        if: matrix.target != 'Android'
+        run: |
+          flutter config --enable-linux-desktop
+          flutter config --enable-macos-desktop
+          flutter config --enable-windows-desktop
+      - run: flutter doctor -v
+      # Checkout code, recreate missing files, and get packages.
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - run: flutter create .
+      - run: flutter pub get
+
+      - name: Configure Keystore for Android
+        if: matrix.target == 'Android'
+        run: |
+          echo "$PLAY_STORE_UPLOAD_KEY" | base64 --decode > app/upload-keystore.jks
+          echo "storeFile=upload-keystore.jks" >> key.properties
+          echo "keyAlias=$KEYSTORE_KEY_ALIAS" >> key.properties
+          echo "storePassword=$KEYSTORE_STORE_PASSWORD" >> key.properties
+          echo "keyPassword=$KEYSTORE_KEY_PASSWORD" >> key.properties
+        env:
+          PLAY_STORE_UPLOAD_KEY: ${{ secrets.PLAY_STORE_UPLOAD_KEY }}
+          KEYSTORE_KEY_ALIAS: ${{ secrets.KEYSTORE_KEY_ALIAS }}
+          KEYSTORE_KEY_PASSWORD: ${{ secrets.KEYSTORE_KEY_PASSWORD }}
+          KEYSTORE_STORE_PASSWORD: ${{ secrets.KEYSTORE_STORE_PASSWORD }}
+        working-directory: android
+
+      # Build the application.
+      - run: flutter build -v ${{ matrix.build_target }} --release
+
+      # Package the build.
+      - name: Copy VC redistributables to release directory for Windows
+        if: matrix.target == 'Windows'
+        run: |
+          Copy-Item (vswhere -latest -find 'VC\Redist\MSVC\*\x64\*\msvcp140.dll') .
+          Copy-Item (vswhere -latest -find 'VC\Redist\MSVC\*\x64\*\vcruntime140.dll') .
+          Copy-Item (vswhere -latest -find 'VC\Redist\MSVC\*\x64\*\vcruntime140_1.dll') .
+      - name: Rename build for Android
+        if: matrix.target == 'Android'
+        run: mv app-release.apk $GITHUB_WORKSPACE/kitchenowl_${{ matrix.target }}.apk
+        working-directory: ${{ matrix.build_path }}
+      - name: Compress build for Linux
+        if: matrix.target == 'Linux'
+        run: tar czf $GITHUB_WORKSPACE/kitchenowl_${{ matrix.target }}.tar.gz *
+        working-directory: ${{ matrix.build_path }}
+      - name: Compress build for macOS
+        if: matrix.target == 'macOS'
+        run: ditto -c -k --sequesterRsrc --keepParent kitchenowl.app $GITHUB_WORKSPACE/kitchenowl_${{ matrix.target }}.zip
+        working-directory: ${{ matrix.build_path }}
+      - name: Compress build for Windows
+        if: matrix.target == 'Windows'
+        run: compress-archive -Path * -DestinationPath ${env:GITHUB_WORKSPACE}\kitchenowl_${{ matrix.target }}.zip
+        working-directory: ${{ matrix.build_path }}
+      - name: Package build for debian
+        if: matrix.target == 'Debian'
+        run: build.sh
+        working-directory: debian
+       - name: Rename build for Android
+        if: matrix.target == 'Debian'
+        run: mv kitchenowl.deb $GITHUB_WORKSPACE/kitchenowl_${{ matrix.target }}.deb
+        working-directory: ${{ matrix.build_path }}
+
+      # Upload the build.
+      - name: Add packaged build to release draft
+        id: upload_release_asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.draft-release.outputs.upload_url }}
+          asset_path: ./kitchenowl_${{ matrix.target }}${{ matrix.asset_extension }}
+          asset_name: kitchenowl_${{ matrix.target }}${{ matrix.asset_extension }}
+          asset_content_type: ${{ matrix.asset_content_type }}

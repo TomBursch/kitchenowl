@@ -18,7 +18,7 @@ DESCRIPTION=$(cat pubspec.yaml | shyaml get-value description)
 flutter build linux
 mkdir -p build/debian/release
 cp -r debian/$NAME build/debian/release/
-cp -r build/linux/release/bundle/ build/debian/release/$NAME/usr/lib/$NAME/
+cp -r build/linux/x64/release/bundle/ build/debian/release/$NAME/usr/lib/$NAME/
 cp debian/icon.png build/debian/release/$NAME/usr/lib/$NAME/
 
 # DEB settings

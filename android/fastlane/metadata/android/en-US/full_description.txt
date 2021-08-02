@@ -1,0 +1,3 @@
+KitchenOwl helps you organize your grocery life. Open-Source and self-hosted groceries list.
+
+* Requires self-hosted backend.

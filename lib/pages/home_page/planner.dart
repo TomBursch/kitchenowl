@@ -131,7 +131,7 @@ class _PlannerPageState extends State<PlannerPage> {
                         padding: const EdgeInsets.all(16),
                         sliver: SliverToBoxAdapter(
                           child: Text(
-                            AppLocalizations.of(context).itemsRecent + ':',
+                            AppLocalizations.of(context).recipesRecent + ':',
                             style: Theme.of(context).textTheme.headline6,
                           ),
                         ),

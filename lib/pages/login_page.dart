@@ -28,6 +28,7 @@ class LoginPage extends StatelessWidget {
                   TextField(
                     controller: usernameController,
                     autofocus: true,
+                    autofillHints: [AutofillHints.username],
                     textInputAction: TextInputAction.next,
                     onEditingComplete: () => FocusScope.of(context).nextFocus(),
                     decoration: InputDecoration(
@@ -38,6 +39,7 @@ class LoginPage extends StatelessWidget {
                     controller: passwordController,
                     obscureText: true,
                     textInputAction: TextInputAction.go,
+                    autofillHints: [AutofillHints.password],
                     onSubmitted: (value) =>
                         BlocProvider.of<AuthCubit>(context).login(
                       usernameController.text,

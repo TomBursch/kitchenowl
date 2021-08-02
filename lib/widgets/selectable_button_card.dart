@@ -46,7 +46,10 @@ class SelectableButtonCard extends StatelessWidget {
               padding: const EdgeInsets.only(top: 2),
               child: Text(
                 description,
-                style: Theme.of(context).textTheme.caption,
+                style: Theme.of(context).textTheme.caption.copyWith(
+                    color: Theme.of(context).brightness == Brightness.dark
+                        ? null
+                        : Colors.white70),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
                 softWrap: true,

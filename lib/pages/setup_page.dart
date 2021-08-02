@@ -23,6 +23,7 @@ class SetupPage extends StatelessWidget {
                   Text(AppLocalizations.of(context).setupTitle),
                   TextField(
                     controller: urlController,
+                    autofillHints: [AutofillHints.url],
                     textInputAction: TextInputAction.go,
                     keyboardType: TextInputType.url,
                     onSubmitted: (text) => BlocProvider.of<AuthCubit>(context)

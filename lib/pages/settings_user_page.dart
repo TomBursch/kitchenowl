@@ -84,6 +84,7 @@ class _SettingsUserPageState extends State<SettingsUserPage> {
                 ),
                 TextField(
                   controller: passwordController,
+                  autofillHints: [AutofillHints.newPassword],
                   obscureText: true,
                   textInputAction: TextInputAction.done,
                   decoration: InputDecoration(

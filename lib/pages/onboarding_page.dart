@@ -27,6 +27,10 @@ class OnboardingPage extends StatelessWidget {
                   TextField(
                     controller: usernameController,
                     autofocus: true,
+                    autofillHints: [
+                      AutofillHints.newUsername,
+                      AutofillHints.username
+                    ],
                     textInputAction: TextInputAction.next,
                     onEditingComplete: () => FocusScope.of(context).nextFocus(),
                     decoration: InputDecoration(
@@ -36,6 +40,7 @@ class OnboardingPage extends StatelessWidget {
                   TextField(
                     controller: nameController,
                     textInputAction: TextInputAction.next,
+                    autofillHints: [AutofillHints.name, AutofillHints.nickname],
                     onEditingComplete: () => FocusScope.of(context).nextFocus(),
                     decoration: InputDecoration(
                       labelText: AppLocalizations.of(context).name,
@@ -44,6 +49,10 @@ class OnboardingPage extends StatelessWidget {
                   TextField(
                     controller: passwordController,
                     obscureText: true,
+                    autofillHints: [
+                      AutofillHints.newPassword,
+                      AutofillHints.password
+                    ],
                     textInputAction: TextInputAction.go,
                     onSubmitted: (text) =>
                         BlocProvider.of<AuthCubit>(context).createUser(

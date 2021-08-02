@@ -5,4 +5,5 @@ from . import recipe
 from . import shoppinglist
 from . import planner
 from . import onboarding
+from . import exportimport
 from . import health_controller

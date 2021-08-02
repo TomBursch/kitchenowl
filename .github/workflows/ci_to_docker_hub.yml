@@ -6,7 +6,7 @@ name: CI to Docker Hub
 on:
   # Triggers the workflow on push events but only for the stable branch
   push:
-    branches: [ stable ]
+    branches: [stable]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -21,7 +21,7 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
-      
+
       - name: Cache Docker layers
         uses: actions/cache@v2
         with:
@@ -29,7 +29,6 @@ jobs:
           key: ${{ runner.os }}-buildx-${{ github.sha }}
           restore-keys: |
             ${{ runner.os }}-buildx-
-
 
       - name: Login to Docker Hub
         uses: docker/login-action@v1

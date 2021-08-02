@@ -10,6 +10,10 @@ import os
 MIN_FRONTEND_VERSION = 8
 BACKEND_VERSION = 7
 
+APP_DIR = os.path.dirname(os.path.abspath(__file__))
+
+SUPPORTED_LANGUAGES = ['en', 'de']
+
 app = Flask(__name__)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + \

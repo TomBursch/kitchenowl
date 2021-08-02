@@ -12,7 +12,8 @@ class Recipe(db.Model, DbModelMixin, TimestampMixin):
     photo = db.Column(db.String())
     planned = db.Column(db.Boolean)
 
-    recipe_history = db.relationship("RecipeHistory", back_populates="recipe", cascade="all, delete-orphan")
+    recipe_history = db.relationship(
+        "RecipeHistory", back_populates="recipe", cascade="all, delete-orphan")
     items = db.relationship(
         'RecipeItems', back_populates='recipe', cascade="all, delete-orphan")
 
@@ -23,6 +24,21 @@ class Recipe(db.Model, DbModelMixin, TimestampMixin):
             Item.name).all()
         res['items'] = [e.obj_to_item_dict() for e in items]
         return res
+
+    def obj_to_export_dict(self):
+        items = RecipeItems.query.filter(RecipeItems.recipe_id == self.id).join(
+            RecipeItems.item).order_by(
+            Item.name).all()
+        res = {
+            "name": self.name,
+            "description": self.description,
+            "items": [{"name": e.item.name, "description": e.description, "optional": e.optional} for e in items],
+        }
+        return res
+
+    @classmethod
+    def find_by_name(cls, name):
+        return cls.query.filter(cls.name == name).first()
 
     @classmethod
     def search_name(cls, name):

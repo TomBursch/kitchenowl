@@ -8,7 +8,6 @@ ENV STORAGE_PATH='/data'
 ENV JWT_SECRET_KEY='PLEASE_CHANGE_ME'
 ENV DEBUG='False'
 RUN pip3 install -r requirements.txt && rm requirements.txt
-RUN flask db upgrade
 RUN chmod u+x ./entrypoint.sh
 
 HEALTHCHECK --interval=5m --timeout=3s \

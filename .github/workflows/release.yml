@@ -173,7 +173,7 @@ jobs:
         working-directory: ${{ matrix.build_path }}
       - name: Package build for debian
         if: matrix.target == 'Debian'
-        run: build.sh
+        run: ./build.sh
         working-directory: debian
       - name: Rename build for Android
         if: matrix.target == 'Debian'

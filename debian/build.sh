@@ -15,7 +15,7 @@ VERSION=$(cat pubspec.yaml | shyaml get-value version | grep -oE "^[^+]+")
 DESCRIPTION=$(cat pubspec.yaml | shyaml get-value description)
 
 # Build project and create structure
-flutter build linux
+flutter build linux --release
 mkdir -p build/debian/release
 cp -r debian/$NAME build/debian/release/
 cp -r build/linux/x64/release/bundle/ build/debian/release/$NAME/usr/lib/$NAME/

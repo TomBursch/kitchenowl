@@ -94,10 +94,13 @@ jobs:
     needs: draft-release
     steps:
       # Set up Flutter.
-      - name: Clone Flutter repository with master channel
-        uses: subosito/flutter-action@v1.5.0
+      - name: Clone Flutter repository with stable channel
+        uses: subosito/flutter-action@v1
         with:
-          channel: master
+          channel: stable
+
+      - name: Create .env file
+        run: touch .env
 
       - name: Install Linux dependencies
         if: matrix.target == 'Linux' || matrix.target == 'Debian'

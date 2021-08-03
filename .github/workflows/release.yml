@@ -3,30 +3,15 @@ on:
   workflow_dispatch:
     # Enable manual run
   push:
-    branches: [stable]
+    tags:
+      - "v*"
 
 jobs:
-  parse-version:
-    name: Parse version number
-    runs-on: ubuntu-latest
-    outputs:
-      version: ${{ steps.set_outputs.outputs.version }}
-    steps:
-      - uses: actions/setup-python@v2
-        with:
-          python-version: "3.x"
-      - name: Install dependencies
-        run: pip3 install shyaml
-      - name: Set outputs
-        id: set_outputs
-        run: echo "::set-output name=version::v$(cat pubspec.yaml | shyaml get-value version | grep -oE "^[^+]+")"
-
   generate-changelog:
     name: Generate changelog
-    needs: parse-version
     runs-on: ubuntu-latest
     steps:
-      - name: Get latest published release
+      - name: Get latest published release tag
         id: get_latest_release
         uses: pozetroninc/github-action-get-latest-release@v0.5.0
         with:
@@ -36,7 +21,7 @@ jobs:
         uses: charmixer/auto-changelog-action@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          future_release: ${{ needs.parse-version.outputs.version }}
+          future_release: ${{ github.ref }}
           since_tag: ${{ steps.get_latest_release.outputs.release }}
       - name: Upload changelog
         uses: actions/upload-artifact@v2
@@ -46,7 +31,7 @@ jobs:
 
   draft-release:
     name: Draft Github release
-    needs: [parse-version, generate-changelog]
+    needs: generate-changelog
     runs-on: ubuntu-20.04
     outputs:
       upload_url: ${{ steps.create_release.outputs.upload_url }}
@@ -61,8 +46,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ needs.parse-version.outputs.version }}
-          release_name: KitchenOwl ${{ needs.parse-version.outputs.version }}
+          tag_name: ${{ github.ref }}
+          release_name: KitchenOwl ${{ github.ref }}
           body_path: CHANGELOG.md
           draft: true
           prerelease: false

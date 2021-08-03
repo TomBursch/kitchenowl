@@ -8,7 +8,8 @@ on:
         required: true
         default: "beta"
   push:
-    branches: [stable]
+    tags:
+      - "v*"
 
 jobs:
   fastlane-deploy:
@@ -16,13 +17,13 @@ jobs:
     steps:
       # Set up Flutter.
       - name: Clone Flutter repository with master channel
-        uses: subosito/flutter-action@v1.5.0
+        uses: subosito/flutter-action@v1
         with:
           channel: master
       - run: flutter doctor -v
 
       # Checkout gallery code and get packages.
-      - name: Checkout gallery code
+      - name: Checkout code
         uses: actions/checkout@v2
       - run: flutter pub get
 
@@ -30,7 +31,7 @@ jobs:
       - name: Setup Fastlane
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: "2.6"
+          ruby-version: "2.7"
           bundler-cache: true
           working-directory: android
 

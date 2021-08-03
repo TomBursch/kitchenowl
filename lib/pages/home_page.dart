@@ -92,16 +92,37 @@ class _HomePageState extends State<HomePage> {
       floatingActionButton: [
         null,
         !isOffline
-            ? FloatingActionButton(
-                onPressed: () async {
-                  final res = await Navigator.of(context).push<UpdateEnum>(
-                      MaterialPageRoute(
-                          builder: (context) => AddUpdateRecipePage()));
-                  if (res == UpdateEnum.updated) {
+            ? OpenContainer(
+                transitionType: ContainerTransitionType.fade,
+                openBuilder: (BuildContext context, VoidCallback _) {
+                  return const AddUpdateRecipePage();
+                },
+                openColor: Theme.of(context).scaffoldBackgroundColor,
+                onClosed: (data) {
+                  if (data == UpdateEnum.updated) {
                     recipeListCubit.refresh();
                   }
                 },
-                child: Icon(Icons.add),
+                closedElevation: 6.0,
+                closedShape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(56 / 2),
+                  ),
+                ),
+                closedColor: Theme.of(context).colorScheme.secondary,
+                closedBuilder:
+                    (BuildContext context, VoidCallback openContainer) {
+                  return SizedBox(
+                    height: 56,
+                    width: 56,
+                    child: Center(
+                      child: Icon(
+                        Icons.add,
+                        color: Theme.of(context).colorScheme.onSecondary,
+                      ),
+                    ),
+                  );
+                },
               )
             : null,
         null,

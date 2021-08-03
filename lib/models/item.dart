@@ -4,12 +4,14 @@ import 'package:kitchenowl/models/model.dart';
 class Item extends Model {
   final int id;
   final String name;
+  final int ordering;
 
-  const Item({this.id, this.name});
+  const Item({this.id, this.name, this.ordering = 0});
 
   factory Item.fromJson(Map<String, dynamic> map) => Item(
         id: map['id'],
         name: map['name'],
+        ordering: map['ordering'],
       );
 
   @override

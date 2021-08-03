@@ -1,2 +1,1 @@
-json_key_file("/home/tombursch/Keys/play-store-credentials.json") # Path to the json secret file - Follow https://docs.fastlane.tools/actions/supply/#setup to get one
 package_name("com.tombursch.kitchenowl") # e.g. com.krausefx.app

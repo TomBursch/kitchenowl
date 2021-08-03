@@ -1,6 +1,6 @@
 <p align="center">
   <a>
-    <img alt="KitchenOwl" src="docs/icon.png" width="128" />
+    <img alt="KitchenOwl" src="https://raw.githubusercontent.com/TomBursch/kitchenowl/main/docs/icon.png" width="128" />
   </a>
 </p>
 <p align="center">
@@ -34,13 +34,14 @@
 The following features have been implemented:
 
 - Add items to your shopping list and sync them with multiple users
-- Partial offline support so you don't lose track of what to buy even when there is no signal
-- Manage recipes and add items directly from a recipe.
+- Partial offline support, so you don't lose track of what to buy even when there is no signal
+- Manage recipes and add them to your shopping list
+- Create a meal plan to know what you'll be eating
 - Mobile/Web/Desktop apps
 
-This project is still in development, so some options may not be fully implemented yet.
+This project is still in development, so some features may not be fully implemented yet.
 
-For a list of planned features, check out the [Roadmap](https://github.com/TomBursch/KitchenOwl/wiki/Roadmap)!
+For a list of planned features, check out the [Roadmap](https://github.com/TomBursch/kitchenowl/wiki/Roadmap)!
 
 ## 🤖 Install
 
@@ -57,13 +58,13 @@ docker run -d -p 5000:5000 --name=kitchenowl --restart=unless-stopped -v kitchen
 
 ### Backend and Web-app
 Recommended using [docker-compose](https://docs.docker.com/compose/):
-1. Download the [docker-compose.yml](docker-compose.yml)
+1. Download the [docker-compose.yml](https://github.com/TomBursch/kitchenowl-backend/blob/main/docker-compose.yml)
 2. Change default values such as `JWT_SECRET_KEY` and the URLs (corresponding to the ones your instance will be running on)
 3. Run `docker-compose up -d`
 
 ## 🙌 Contributing
 
-From opening a bug report to creating a pull request: every contribution is appreciated and welcomed. If you're planning to implement a new feature or change the API please create an issue first. This way we can ensure your work is not in vain. For more information see [Contributing](https://github.com/TomBursch/KitchenOwl/blob/main/CONTRIBUTING.md)
+From opening a bug report to creating a pull request: every contribution is appreciated and welcomed. If you're planning to implement a new feature or change the API please create an issue first. This way, we can ensure your work is not in vain. For more information see [Contributing](https://github.com/TomBursch/kitchenowl/blob/main/CONTRIBUTING.md)
 
 ## 📚 Related
 - [KitchenOwl Backend](https://github.com/TomBursch/kitchenowl-backend) Repository

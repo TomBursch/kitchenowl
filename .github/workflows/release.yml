@@ -99,9 +99,6 @@ jobs:
         with:
           channel: stable
 
-      - name: Create .env file
-        run: touch .env
-
       - name: Install Linux dependencies
         if: matrix.target == 'Linux' || matrix.target == 'Debian'
         run: |
@@ -144,6 +141,9 @@ jobs:
           KEYSTORE_KEY_PASSWORD: ${{ secrets.KEYSTORE_KEY_PASSWORD }}
           KEYSTORE_STORE_PASSWORD: ${{ secrets.KEYSTORE_STORE_PASSWORD }}
         working-directory: android
+
+      - name: Create .env file
+        run: touch .env
 
       # Build the application.
       - run: flutter build -v ${{ matrix.build_target }} --release

@@ -1,14 +1,14 @@
 <p align="center">
   <a>
-    <img alt="KitchenOwl" src="docs/icon.png" width="128" />
+    <img alt="KitchenOwl" src="icon.png" width="128" />
   </a>
 </p>
 <p align="center">
-  <a>
-    <img alt="Stars" src="https://img.shields.io/github/stars/tombursch/kitchenowl" />
+  <a href="https://github.com/TomBursch/KitchenOwl">
+    <img alt="Stars" src="https://img.shields.io/github/stars/tombursch/KitchenOwl" />
   </a>
-  <a href="LICENSE">
-    <img alt="License" src="https://img.shields.io/github/license/TomBursch/kitchenowl" />
+  <a href="https://github.com/TomBursch/KitchenOwl/LICENSE">
+    <img alt="License" src="https://img.shields.io/github/license/TomBursch/KitchenOwl" />
   </a>
   <a href="https://hub.docker.com/repository/docker/tombursch/kitchenowl">
     <img alt="Docker pulls" src="https://img.shields.io/docker/pulls/tombursch/kitchenowl" />
@@ -33,7 +33,7 @@
 
 The following features have been implemented:
 
-- Add items to your shopping list and sync them with multiple users
+- Add items to your shopping list and sync it with multiple users
 - Partial offline support so you don't lose track of what to buy even when there is no signal
 - Manage recipes and add items directly from a recipe.
 - Mobile/Web/Desktop apps
@@ -42,35 +42,19 @@ This project is still in development, so some options may not be fully implement
 
 For a list of planned features, check out the [Roadmap](https://github.com/TomBursch/KitchenOwl/wiki/Roadmap)!
 
-## 🤖 Install
-
-You can either install only the backend or add the web-app to it. [Docker](https://docs.docker.com/engine/install/) is required.
-
-### Backend only
-Using docker cli:
-```
-docker volume create kitchenowl_data
-```
-```
-docker run -d -p 5000:5000 --name=kitchenowl --restart=unless-stopped -v kitchenowl_data:/data tombursch/kitchenowl:latest
-```
-
-### Backend and Web-app
-Recommended using [docker-compose](https://docs.docker.com/compose/):
-1. Download the [docker-compose.yml](docker-compose.yml)
-2. Change default values such as `JWT_SECRET_KEY` and the URLs (corresponding to the ones your instance will be running on)
-3. Run `docker-compose up -d`
-
-## 🙌 Contributing
-
-From opening a bug report to creating a pull request: every contribution is appreciated and welcomed. If you're planning to implement a new feature or change the API please create an issue first. This way we can ensure your work is not in vain. For more information see [Contributing](https://github.com/TomBursch/KitchenOwl/blob/main/CONTRIBUTING.md)
-
 ## 📚 Related
-- [KitchenOwl Backend](https://github.com/TomBursch/kitchenowl-backend) Repository
+- [Wiki](https://github.com/TomBursch/KitchenOwl/wiki)
+- [Discussion](https://github.com/TomBursch/KitchenOwl/discussion)
+- Android & iOS [Privacy Policy](https://tombursch.github.io/KitchenOwl/about/app-privacy-policy)
+- [KitchenOwl App](https://github.com/TomBursch/KitchenOwl-app) Repository
 - [DockerHub](https://hub.docker.com/repository/docker/tombursch/kitchenowl)
 - Icons modified from [Those Icons](https://www.flaticon.com/authors/those-icons) and [Freepik](https://www.flaticon.com/authors/freepik)
+
 
 ### 🔨 Built With
 - [Flask](https://flask.palletsprojects.com/en/1.1.x/)
 - [Flutter](https://flutter.dev/)
 - [Docker](https://docs.docker.com/)
+
+### Support or Contact
+Having troubles? Check out the [discussions](https://github.com/TomBursch/KitchenOwl/discussions) or [issues](https://github.com/TomBursch/KitchenOwl/issues) and we’ll sort it out.

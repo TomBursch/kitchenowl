@@ -25,7 +25,7 @@ jobs:
       # Checkout gallery code and get packages.
       - name: Checkout code
         uses: actions/checkout@v2
-      - run: flutter pub get
+      - run: flutter packages get
 
       # Setup Ruby, Bundler, and Gemfile dependencies
       - name: Setup Fastlane

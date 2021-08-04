@@ -52,9 +52,9 @@ jobs:
       - name: Create .env file
         run: touch .env
 
-      # Build and deploy with Fastlane (by default, to beta track) 🚀.
+      # Build and deploy with Fastlane (by default, to internal track) 🚀.
       # Naturally, promote_to_production only deploys.
-      - run: bundle exec fastlane ${{ github.event.inputs.lane || 'beta' }}
+      - run: bundle exec fastlane ${{ github.event.inputs.lane || 'internal' }}
         env:
           PLAY_STORE_CONFIG_JSON: ${{ secrets.PLAY_STORE_CONFIG_JSON }}
         working-directory: android

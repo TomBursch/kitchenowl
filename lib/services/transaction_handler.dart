@@ -13,9 +13,11 @@ class TransactionHandler {
   }
 
   Future<void> runOpenTransactions() async {
-    final transactions =
-        await TransactionStorage.getInstance().readTransactions();
+    if (!ApiService.getInstance().isConnected())
+      ApiService.getInstance().refresh();
     if (ApiService.getInstance().isConnected()) {
+      final transactions =
+          await TransactionStorage.getInstance().readTransactions();
       final now = DateTime.now();
       for (final t in transactions) {
         if (t != null && t.timestamp.difference(now).inDays < 3) t.runOnline();

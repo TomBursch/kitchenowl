@@ -110,8 +110,7 @@ class AuthCubit extends Cubit<AuthState> {
   void logout() async {
     emit(Loading());
     await SecureStorage.getInstance().delete(key: 'TOKEN');
-    await TempStorage.getInstance().clearUser();
-    await TempStorage.getInstance().clearItems();
+    await TempStorage.getInstance().clearAll();
     ApiService.getInstance().refreshToken = '';
     if (ApiService.getInstance().connectionStatus == Connection.disconnected)
       emit(Unreachable());
@@ -124,8 +123,7 @@ class AuthCubit extends Cubit<AuthState> {
     emit(Loading());
     await PreferenceStorage.getInstance().delete(key: 'URL');
     await SecureStorage.getInstance().delete(key: 'TOKEN');
-    await TempStorage.getInstance().clearUser();
-    await TempStorage.getInstance().clearItems();
+    await TempStorage.getInstance().clearAll();
     ApiService.getInstance().dispose();
     refresh();
   }

@@ -14,6 +14,7 @@ import 'package:kitchenowl/pages/splash_page.dart';
 import 'package:kitchenowl/pages/unreachable_page.dart';
 import 'package:kitchenowl/pages/home_page.dart';
 import 'package:kitchenowl/pages/unsupported_page.dart';
+import 'package:kitchenowl/services/transaction_handler.dart';
 import 'package:kitchenowl/styles/themes.dart';
 
 class App extends StatelessWidget {
@@ -59,16 +60,24 @@ class App extends StatelessWidget {
               },
               listenWhen: (previous, current) =>
                   previous.themeMode != current.themeMode,
-              child: BlocBuilder<AuthCubit, AuthState>(
-                builder: (context, state) {
-                  if (state is Setup) return SetupPage();
-                  if (state is Onboarding) return OnboardingPage();
-                  if (state is Unauthenticated) return LoginPage();
-                  if (state is Authenticated) return HomePage();
-                  if (state is Unreachable) return UnreachablePage();
-                  if (state is Unsupported) return UnsupportedPage();
-                  return SplashPage();
+              child: BlocListener<SettingsCubit, SettingsState>(
+                listener: (context, state) {
+                  if (!state.forcedOfflineMode)
+                    TransactionHandler.getInstance().runOpenTransactions();
                 },
+                listenWhen: (previous, current) =>
+                    previous.forcedOfflineMode != current.forcedOfflineMode,
+                child: BlocBuilder<AuthCubit, AuthState>(
+                  builder: (context, state) {
+                    if (state is Setup) return SetupPage();
+                    if (state is Onboarding) return OnboardingPage();
+                    if (state is Unauthenticated) return LoginPage();
+                    if (state is Authenticated) return HomePage();
+                    if (state is Unreachable) return UnreachablePage();
+                    if (state is Unsupported) return UnsupportedPage();
+                    return SplashPage();
+                  },
+                ),
               ),
             ),
           ),

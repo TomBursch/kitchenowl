@@ -38,6 +38,12 @@ class TempStorage {
     return File('$path/recipes.json');
   }
 
+  Future<void> clearAll() async {
+    await this.clearItems();
+    await this.clearUser();
+    await this.clearRecipes();
+  }
+
   Future<User> readUser() async {
     if (!kIsWeb)
       try {

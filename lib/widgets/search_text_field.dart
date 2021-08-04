@@ -7,6 +7,7 @@ class SearchTextField extends StatelessWidget {
   final void Function() onSubmitted;
   final TextInputAction textInputAction;
   final bool autofocus;
+  final bool clearOnSubmit;
   final InputDecoration decoration;
 
   const SearchTextField({
@@ -16,6 +17,7 @@ class SearchTextField extends StatelessWidget {
     this.onSubmitted,
     this.textInputAction,
     this.autofocus = false,
+    this.clearOnSubmit = true,
     this.decoration,
   }) : super(key: key);
 
@@ -25,7 +27,7 @@ class SearchTextField extends StatelessWidget {
       controller: controller,
       onChanged: onSearch,
       textInputAction: textInputAction ?? TextInputAction.done,
-      onEditingComplete: () => onSearch(''),
+      onEditingComplete: clearOnSubmit ? () => onSearch('') : null,
       onSubmitted: onSubmitted != null ? (_) => onSubmitted() : null,
       autofocus: autofocus,
       decoration: decoration?.applyDefaults(InputDecorationTheme(

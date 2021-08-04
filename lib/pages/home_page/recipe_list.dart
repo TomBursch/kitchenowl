@@ -50,6 +50,7 @@ class _RecipeListPageState extends State<RecipeListPage> {
                 },
                 child: SearchTextField(
                   controller: searchController,
+                  clearOnSubmit: false,
                   onSearch: (s) => cubit.search(s),
                   textInputAction: TextInputAction.search,
                   onSubmitted: () => FocusScope.of(context).unfocus(),

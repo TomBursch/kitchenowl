@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:kitchenowl/models/item.dart';
+import 'package:kitchenowl/models/recipe.dart';
 import 'package:kitchenowl/models/user.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -30,6 +31,11 @@ class TempStorage {
   Future<File> get _localItemFile async {
     final path = await _localPath;
     return File('$path/items.json');
+  }
+
+  Future<File> get _localRecipeFile async {
+    final path = await _localPath;
+    return File('$path/recipes.json');
   }
 
   Future<User> readUser() async {
@@ -83,6 +89,35 @@ class TempStorage {
     if (!kIsWeb)
       try {
         final file = await _localItemFile;
+        if (await file.exists()) return file.delete();
+      } catch (e) {}
+    return null;
+  }
+
+  Future<List<Recipe>> readRecipes() async {
+    if (!kIsWeb)
+      try {
+        final file = await _localRecipeFile;
+        final String content = await file.readAsString();
+        return List<Recipe>.from(
+            json.decode(content).map((e) => Recipe.fromJson(e)));
+      } catch (e) {}
+    return null;
+  }
+
+  Future<File> writeRecipes(List<Recipe> recipes) async {
+    if (!kIsWeb) {
+      final file = await _localRecipeFile;
+      return file.writeAsString(
+          json.encode(recipes.map((e) => e.toJsonWithId()).toList()));
+    }
+    return null;
+  }
+
+  Future<File> clearRecipes() async {
+    if (!kIsWeb)
+      try {
+        final file = await _localRecipeFile;
         if (await file.exists()) return file.delete();
       } catch (e) {}
     return null;

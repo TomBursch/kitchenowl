@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:kitchenowl/cubits/auth_cubit.dart';
+import 'package:kitchenowl/app.dart';
 import 'package:kitchenowl/cubits/shoppinglist_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/models/item.dart';
@@ -42,8 +42,7 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
       tablet: 6,
       desktop: 9,
     );
-    final isOffline =
-        BlocProvider.of<AuthCubit>(context).state is AuthenticatedOffline;
+    final isOffline = App.isOffline(context);
     return SafeArea(
       child: Column(
         children: [

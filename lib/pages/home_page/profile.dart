@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kitchenowl/app.dart';
 import 'package:kitchenowl/config.dart';
 import 'package:kitchenowl/cubits/auth_cubit.dart';
 import 'package:kitchenowl/cubits/settings_cubit.dart';
@@ -18,8 +19,7 @@ class ProfilePage extends StatelessWidget {
     final user =
         (BlocProvider.of<AuthCubit>(context).state as Authenticated).user ??
             User(name: '', username: '');
-    final isOffline =
-        BlocProvider.of<AuthCubit>(context).state is AuthenticatedOffline;
+    final isOffline = App.isOffline(context);
     return CustomScrollView(
       physics: ClampingScrollPhysics(),
       slivers: [
@@ -39,89 +39,111 @@ class ProfilePage extends StatelessWidget {
             ),
           ])),
         ),
-        SliverFillRemaining(
-          hasScrollBody: false,
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                ListTile(
-                  title: Text(AppLocalizations.of(context).darkmode),
-                  leading: Icon(Icons.nights_stay_sharp),
-                  contentPadding: EdgeInsets.only(left: 20, right: 0),
-                  trailing: Transform.scale(
-                    scale: 0.9,
-                    child: CupertinoSwitch(
-                      value: Theme.of(context).brightness == Brightness.dark,
-                      activeColor: Theme.of(context).accentColor,
-                      onChanged: (value) {
-                        BlocProvider.of<SettingsCubit>(context)
-                            .setTheme(value ? ThemeMode.dark : ThemeMode.light);
-                      },
+        BlocBuilder<SettingsCubit, SettingsState>(
+          builder: (context, state) => SliverFillRemaining(
+            hasScrollBody: false,
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  ListTile(
+                    title: Text(AppLocalizations.of(context).darkmode),
+                    leading: Icon(Icons.nights_stay_sharp),
+                    contentPadding: EdgeInsets.only(left: 20, right: 0),
+                    trailing: Transform.scale(
+                      scale: 0.9,
+                      child: CupertinoSwitch(
+                        value: Theme.of(context).brightness == Brightness.dark,
+                        activeColor: Theme.of(context).accentColor,
+                        onChanged: (value) {
+                          BlocProvider.of<SettingsCubit>(context).setTheme(
+                              value ? ThemeMode.dark : ThemeMode.light);
+                        },
+                      ),
                     ),
                   ),
-                ),
-                if (!isOffline)
+                  ListTile(
+                    title: Text(AppLocalizations.of(context).forceOfflineMode),
+                    leading: Icon(Icons.mobiledata_off_outlined),
+                    contentPadding: EdgeInsets.only(left: 20, right: 0),
+                    trailing: Transform.scale(
+                      scale: 0.9,
+                      child: CupertinoSwitch(
+                        value: state.forcedOfflineMode,
+                        activeColor: Theme.of(context).accentColor,
+                        onChanged: (value) =>
+                            BlocProvider.of<SettingsCubit>(context)
+                                .setForcedOfflineMode(value),
+                      ),
+                    ),
+                  ),
+                  if (!isOffline)
+                    Card(
+                      child: ListTile(
+                        title: Text(AppLocalizations.of(context).shoppingLists),
+                        leading: Icon(Icons.shopping_bag),
+                        trailing: Icon(Icons.arrow_right_rounded),
+                        onTap: () => Navigator.of(context).push(
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    SettingsShoppinglistsPage())),
+                      ),
+                    ),
+                  if (!isOffline)
+                    Card(
+                      child: ListTile(
+                        title: Text(AppLocalizations.of(context).user),
+                        leading: Icon(Icons.person),
+                        trailing: Icon(Icons.arrow_right_rounded),
+                        onTap: () => Navigator.of(context).push(
+                            MaterialPageRoute(
+                                builder: (context) => SettingsUserPage())),
+                      ),
+                    ),
+                  if (!isOffline && user.owner)
+                    Card(
+                      child: ListTile(
+                        title: Text(AppLocalizations.of(context).server),
+                        leading: Icon(Icons.account_tree_rounded),
+                        trailing: Icon(Icons.arrow_right_rounded),
+                        onTap: () => Navigator.of(context).push(
+                            MaterialPageRoute(
+                                builder: (context) => SettingsServerPage())),
+                      ),
+                    ),
                   Card(
                     child: ListTile(
-                      title: Text(AppLocalizations.of(context).shoppingLists),
-                      leading: Icon(Icons.shopping_bag),
+                      title: Text(AppLocalizations.of(context).about),
+                      leading: Icon(Icons.privacy_tip_rounded),
                       trailing: Icon(Icons.arrow_right_rounded),
-                      onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => SettingsShoppinglistsPage())),
-                    ),
-                  ),
-                if (!isOffline)
-                  Card(
-                    child: ListTile(
-                      title: Text(AppLocalizations.of(context).user),
-                      leading: Icon(Icons.person),
-                      trailing: Icon(Icons.arrow_right_rounded),
-                      onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => SettingsUserPage())),
-                    ),
-                  ),
-                if (!isOffline && user.owner)
-                  Card(
-                    child: ListTile(
-                      title: Text(AppLocalizations.of(context).server),
-                      leading: Icon(Icons.account_tree_rounded),
-                      trailing: Icon(Icons.arrow_right_rounded),
-                      onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => SettingsServerPage())),
-                    ),
-                  ),
-                Card(
-                  child: ListTile(
-                    title: Text(AppLocalizations.of(context).about),
-                    leading: Icon(Icons.privacy_tip_rounded),
-                    trailing: Icon(Icons.arrow_right_rounded),
-                    onTap: () => showAboutDialog(
-                        context: context,
-                        applicationVersion: Config.packageInfo?.version,
-                        applicationLegalese:
-                            '\u{a9} ' + AppLocalizations.of(context).appLegal,
-                        applicationIcon: ConstrainedBox(
-                          constraints:
-                              BoxConstraints.expand(width: 64, height: 64),
-                          child: Image.asset(
-                            'assets/icon/icon.png',
+                      onTap: () => showAboutDialog(
+                          context: context,
+                          applicationVersion: Config.packageInfo?.version,
+                          applicationLegalese:
+                              '\u{a9} ' + AppLocalizations.of(context).appLegal,
+                          applicationIcon: ConstrainedBox(
+                            constraints:
+                                BoxConstraints.expand(width: 64, height: 64),
+                            child: Image.asset(
+                              'assets/icon/icon.png',
+                            ),
                           ),
-                        ),
-                        children: [
-                          const SizedBox(height: 24),
-                          Text(
-                            AppLocalizations.of(context).appDescription,
-                          )
-                        ]),
+                          children: [
+                            const SizedBox(height: 24),
+                            Text(
+                              AppLocalizations.of(context).appDescription,
+                            )
+                          ]),
+                    ),
                   ),
-                ),
-                TextButton(
-                  onPressed: () => BlocProvider.of<AuthCubit>(context).logout(),
-                  child: Text(AppLocalizations.of(context).logout),
-                ),
-              ],
+                  TextButton(
+                    onPressed: () =>
+                        BlocProvider.of<AuthCubit>(context).logout(),
+                    child: Text(AppLocalizations.of(context).logout),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

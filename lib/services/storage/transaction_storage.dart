@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
-import 'package:kitchenowl/models/transaction.dart';
+import 'package:kitchenowl/services/transaction.dart';
 import 'package:path_provider/path_provider.dart';
 
 class TransactionStorage {

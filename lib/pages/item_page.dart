@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kitchenowl/app.dart';
 import 'package:kitchenowl/cubits/item_edit_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/models/item.dart';
@@ -50,51 +51,52 @@ class _ItemPageState extends State<ItemPage> {
         appBar: AppBar(
           title: Text(widget.item.name),
           actions: [
-            IconButton(
-              onPressed: () async {
-                final confirmed = await showDialog<bool>(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: Text(
-                              AppLocalizations.of(context).userDelete,
-                            ),
-                            content: Text(AppLocalizations.of(context)
-                                .itemDeleteConfirmation(widget.item.name)),
-                            actions: <Widget>[
-                              TextButton(
-                                child:
-                                    Text(AppLocalizations.of(context).cancel),
-                                style: ButtonStyle(
-                                  foregroundColor:
-                                      MaterialStateProperty.all<Color>(
-                                    Theme.of(context).disabledColor,
-                                  ),
-                                ),
-                                onPressed: () =>
-                                    Navigator.of(context).pop(false),
+            if (!App.isOffline(context))
+              IconButton(
+                onPressed: () async {
+                  final confirmed = await showDialog<bool>(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: Text(
+                                AppLocalizations.of(context).userDelete,
                               ),
-                              TextButton(
-                                child:
-                                    Text(AppLocalizations.of(context).delete),
-                                style: ButtonStyle(
-                                  foregroundColor:
-                                      MaterialStateProperty.all<Color>(
-                                    Colors.red,
+                              content: Text(AppLocalizations.of(context)
+                                  .itemDeleteConfirmation(widget.item.name)),
+                              actions: <Widget>[
+                                TextButton(
+                                  child:
+                                      Text(AppLocalizations.of(context).cancel),
+                                  style: ButtonStyle(
+                                    foregroundColor:
+                                        MaterialStateProperty.all<Color>(
+                                      Theme.of(context).disabledColor,
+                                    ),
                                   ),
+                                  onPressed: () =>
+                                      Navigator.of(context).pop(false),
                                 ),
-                                onPressed: () =>
-                                    Navigator.of(context).pop(true),
-                              ),
-                            ],
-                          );
-                        }) ??
-                    false;
-                if (confirmed && await cubit.deleteItem())
-                  Navigator.of(context).pop(UpdateEnum.deleted);
-              },
-              icon: Icon(Icons.delete),
-            )
+                                TextButton(
+                                  child:
+                                      Text(AppLocalizations.of(context).delete),
+                                  style: ButtonStyle(
+                                    foregroundColor:
+                                        MaterialStateProperty.all<Color>(
+                                      Colors.red,
+                                    ),
+                                  ),
+                                  onPressed: () =>
+                                      Navigator.of(context).pop(true),
+                                ),
+                              ],
+                            );
+                          }) ??
+                      false;
+                  if (confirmed && await cubit.deleteItem())
+                    Navigator.of(context).pop(UpdateEnum.deleted);
+                },
+                icon: Icon(Icons.delete),
+              )
           ],
         ),
         body: Scrollbar(

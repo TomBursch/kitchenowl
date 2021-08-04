@@ -1,7 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/models/recipe.dart';
-import 'package:kitchenowl/services/api/api_service.dart';
+import 'package:kitchenowl/services/transaction_handler.dart';
+import 'package:kitchenowl/services/transactions/recipe.dart';
 
 class RecipeListCubit extends Cubit<ListRecipeCubitState> {
   List<Recipe> shoppinglist = [];
@@ -22,10 +23,14 @@ class RecipeListCubit extends Cubit<ListRecipeCubitState> {
     if (state is SearchRecipeCubitState)
       query = query ?? (state as SearchRecipeCubitState).query;
     if (query != null && query.isNotEmpty) {
-      final items = (await ApiService.getInstance().searchRecipe(query)) ?? [];
+      final items = (await TransactionHandler.getInstance()
+              .runTransaction(TransactionRecipeSearchRecipes(query: query))) ??
+          [];
       emit(SearchRecipeCubitState(query, items));
     } else {
-      this.shoppinglist = await ApiService.getInstance().getRecipes();
+      this.shoppinglist = await TransactionHandler.getInstance()
+              .runTransaction(TransactionRecipeGetRecipes()) ??
+          const [];
       emit(ListRecipeCubitState(shoppinglist));
     }
   }

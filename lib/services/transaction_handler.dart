@@ -1,4 +1,5 @@
-import 'package:kitchenowl/models/transaction.dart';
+import 'package:kitchenowl/app.dart';
+import 'package:kitchenowl/services/transaction.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
 import 'package:kitchenowl/services/storage/transaction_storage.dart';
 
@@ -17,18 +18,21 @@ class TransactionHandler {
     if (ApiService.getInstance().isConnected()) {
       final now = DateTime.now();
       for (final t in transactions) {
-        if (t.timestamp.difference(now).inDays < 3) t.runOnline();
+        if (t != null && t.timestamp.difference(now).inDays < 3) t.runOnline();
       }
       TransactionStorage.getInstance().clearTransactions();
     }
   }
 
-  Future<void> runTransaction(Transaction t) async {
-    if (ApiService.getInstance().isConnected())
-      return t.runOnline();
-    else {
-      await TransactionStorage.getInstance().addTransaction(t);
-      return t.runLocal();
+  Future<T> runTransaction<T>(Transaction<T> t) async {
+    if (!ApiService.getInstance().isConnected())
+      ApiService.getInstance().refresh();
+    if (!App.isForcedOffline && ApiService.getInstance().isConnected()) {
+      Future<T> res = t.runOnline();
+      if (await res != null) return res;
     }
+    if (t.saveTransaction)
+      await TransactionStorage.getInstance().addTransaction(t);
+    return t.runLocal();
   }
 }

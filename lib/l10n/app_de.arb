@@ -19,6 +19,7 @@
     "darkmode": "Nachtmodus",
     "delete": "Löschen",
     "description": "Beschreibung",
+    "forceOfflineMode": "Erzwinge offline Modus",
     "go": "Los",
     "items": "Artikel",
     "itemsAdd": "Hinzufügen",

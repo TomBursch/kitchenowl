@@ -1,9 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/models/item.dart';
-import 'package:kitchenowl/models/transactions/shoppinglist.dart';
-import 'package:kitchenowl/services/api/api_service.dart';
-import 'package:kitchenowl/services/storage/temp_storage.dart';
+import 'package:kitchenowl/services/transactions/shoppinglist.dart';
 import 'package:kitchenowl/services/transaction_handler.dart';
 
 class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
@@ -32,13 +30,9 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
   Future<void> refresh([String query]) async {
     final state = this.state;
     if (state is SearchShoppinglistCubitState) query = query ?? state.query;
-    List<ShoppinglistItem> shoppinglist =
-        await ApiService.getInstance().getItems();
-    if (shoppinglist == null)
-      shoppinglist = await TempStorage.getInstance().readItems();
-    else
-      TempStorage.getInstance().writeItems(shoppinglist);
-    shoppinglist = shoppinglist ?? const [];
+    List<ShoppinglistItem> shoppinglist = await TransactionHandler.getInstance()
+            .runTransaction(TransactionShoppingListGetItems()) ??
+        const [];
     if (query != null && query.isNotEmpty) {
       final splitIndex = query.indexOf(',');
       String queryName = query;
@@ -48,7 +42,8 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
         queryDescription = query.substring(splitIndex + 1).trim();
       }
 
-      List<Item> items = (await ApiService.getInstance().searchItem(queryName))
+      List<Item> items = (await TransactionHandler.getInstance().runTransaction(
+              TransactionShoppingListSearchItem(query: queryName)))
           .map((e) => ItemWithDescription.fromItem(
               item: e, description: queryDescription))
           .toList();
@@ -69,7 +64,8 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
         listItems: shoppinglist,
       ));
     } else {
-      final recent = await ApiService.getInstance().getRecentItems() ?? [];
+      final recent = await TransactionHandler.getInstance()
+          .runTransaction(TransactionShoppingListGetRecentItems());
       emit(ShoppinglistCubitState(shoppinglist, recent));
     }
   }

@@ -30,22 +30,30 @@ class SettingsCubit extends Cubit<SettingsState> {
         .writeBool(key: 'darkmode', value: themeMode == ThemeMode.dark);
     emit(state.copyWith(themeMode: themeMode));
   }
+
+  void setForcedOfflineMode(bool forcedOfflineMode) {
+    emit(state.copyWith(forcedOfflineMode: forcedOfflineMode));
+  }
 }
 
 class SettingsState extends Equatable {
   final ThemeMode themeMode;
+  final bool forcedOfflineMode;
 
   SettingsState({
     this.themeMode = ThemeMode.system,
+    this.forcedOfflineMode = false,
   });
 
   SettingsState copyWith({
     ThemeMode themeMode,
+    bool forcedOfflineMode,
   }) =>
       SettingsState(
         themeMode: themeMode ?? this.themeMode,
+        forcedOfflineMode: forcedOfflineMode ?? this.forcedOfflineMode,
       );
 
   @override
-  List<Object> get props => [themeMode];
+  List<Object> get props => [themeMode, forcedOfflineMode];
 }

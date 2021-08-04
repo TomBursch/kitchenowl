@@ -17,6 +17,20 @@ import 'package:kitchenowl/pages/unsupported_page.dart';
 import 'package:kitchenowl/styles/themes.dart';
 
 class App extends StatelessWidget {
+  static App _instance;
+  final SettingsCubit _settingsCubit = SettingsCubit();
+
+  static bool isOffline(BuildContext context) =>
+      BlocProvider.of<AuthCubit>(context).state is AuthenticatedOffline ||
+      isForcedOffline;
+
+  static bool get isForcedOffline =>
+      _instance._settingsCubit.state.forcedOfflineMode;
+
+  App({Key key}) : super(key: key) {
+    _instance = this;
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -26,7 +40,7 @@ class App extends StatelessWidget {
       child: MultiBlocProvider(
         providers: [
           BlocProvider(create: (BuildContext context) => AuthCubit()),
-          BlocProvider(create: (BuildContext context) => SettingsCubit()),
+          BlocProvider.value(value: _settingsCubit),
         ],
         child: BlocBuilder<SettingsCubit, SettingsState>(
           builder: (context, state) => MaterialApp(

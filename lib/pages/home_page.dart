@@ -1,7 +1,7 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:kitchenowl/cubits/auth_cubit.dart';
+import 'package:kitchenowl/app.dart';
 import 'package:kitchenowl/cubits/planner_cubit.dart';
 import 'package:kitchenowl/cubits/recipe_list_cubit.dart';
 import 'package:kitchenowl/cubits/shoppinglist_cubit.dart';
@@ -24,7 +24,6 @@ class _HomePageState extends State<HomePage> {
 
   List<Widget> pages;
   int _selectedIndex = 0;
-  bool isOffline;
 
   @override
   void initState() {
@@ -67,8 +66,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    isOffline =
-        BlocProvider.of<AuthCubit>(context).state is AuthenticatedOffline;
+    final bool isOffline = App.isOffline(context);
     return Scaffold(
       body: PageTransitionSwitcher(
         transitionBuilder: (

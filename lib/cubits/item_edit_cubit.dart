@@ -3,6 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/models/recipe.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
+import 'package:kitchenowl/services/transaction_handler.dart';
+import 'package:kitchenowl/services/transactions/item.dart';
+import 'package:kitchenowl/services/transactions/shoppinglist.dart';
 
 class ItemEditCubit extends Cubit<ItemEditState> {
   final Item item;
@@ -17,10 +20,12 @@ class ItemEditCubit extends Cubit<ItemEditState> {
 
   Future<void> refresh() async {
     if (item.id != null) {
-      final item = await ApiService.getInstance().getItem(this.item);
+      final item = await TransactionHandler.getInstance()
+          .runTransaction(TransactionItemGet(item: this.item));
       if (item != null) {
-        final recipes =
-            (await ApiService.getInstance().getItemRecipes(item)) ?? [];
+        final recipes = (await TransactionHandler.getInstance()
+                .runTransaction(TransactionItemGetRecipes(item: this.item))) ??
+            [];
         emit(state.copyWith(recipes: recipes));
       }
     }
@@ -33,8 +38,9 @@ class ItemEditCubit extends Cubit<ItemEditState> {
 
   Future<void> saveItem() async {
     if (item is ShoppinglistItem) {
-      await ApiService.getInstance()
-          .updateShoppingListItemDescription(item, state.description ?? '');
+      await TransactionHandler.getInstance().runTransaction(
+          TransactionShoppingListUpdateItem(
+              item: this.item, description: state.description ?? ''));
     }
   }
 

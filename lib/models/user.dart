@@ -23,6 +23,7 @@ class User extends Model {
         "name": this.name,
       };
 
+  @override
   Map<String, dynamic> toJsonWithId() => {
         "id": this.id,
         "username": this.username,

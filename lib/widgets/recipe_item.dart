@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/models/recipe.dart';
 import 'package:kitchenowl/pages/recipe_page.dart';
-import 'package:kitchenowl/services/api/api_service.dart';
 
 class RecipeItemWidget extends StatelessWidget {
   final Recipe recipe;
@@ -21,11 +20,10 @@ class RecipeItemWidget extends StatelessWidget {
         title: Text(recipe.name),
         trailing: Icon(Icons.arrow_right_rounded),
         onTap: () async {
-          final recipe = await ApiService.getInstance().getRecipe(this.recipe);
           final res =
               await Navigator.of(context).push<UpdateEnum>(MaterialPageRoute(
                   builder: (context) => RecipePage(
-                        recipe: recipe ?? this.recipe,
+                        recipe: this.recipe,
                       )));
           if (onUpdated != null &&
               (res == UpdateEnum.updated || res == UpdateEnum.deleted)) {

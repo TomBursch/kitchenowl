@@ -19,6 +19,7 @@
     "darkmode": "Darkmode",
     "delete": "Delete",
     "description": "Description",
+    "forceOfflineMode": "Force offline mode",
     "go": "Go",
     "items": "Items",
     "itemsAdd": "Add Items",

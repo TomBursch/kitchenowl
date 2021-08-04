@@ -5,7 +5,7 @@ import 'package:kitchenowl/services/api/api_service.dart';
 extension RecipeApi on ApiService {
   Future<List<Recipe>> getRecipes() async {
     final res = await get('/recipe');
-    if (res.statusCode != 200) return [];
+    if (res.statusCode != 200) return null;
 
     final body = List.from(jsonDecode(res.body));
     return body.map((e) => Recipe.fromJson(e)).toList();
@@ -13,7 +13,7 @@ extension RecipeApi on ApiService {
 
   Future<List<Recipe>> searchRecipe(String query) async {
     final res = await get('/recipe/search?query=$query');
-    if (res.statusCode != 200) return [];
+    if (res.statusCode != 200) return null;
 
     final body = List.from(jsonDecode(res.body));
     return body.map((e) => Recipe.fromJson(e)).toList();

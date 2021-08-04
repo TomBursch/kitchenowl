@@ -3,14 +3,19 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/models/recipe.dart';
-import 'package:kitchenowl/services/api/api_service.dart';
+import 'package:kitchenowl/services/transaction_handler.dart';
+import 'package:kitchenowl/services/transactions/planner.dart';
+import 'package:kitchenowl/services/transactions/recipe.dart';
+import 'package:kitchenowl/services/transactions/shoppinglist.dart';
 
 class RecipeCubit extends Cubit<RecipeState> {
   RecipeCubit(Recipe recipe)
       : super(RecipeState(
           recipe: recipe,
           selectedItems: recipe.items.where((e) => !e.optional).toList(),
-        ));
+        )) {
+    refresh();
+  }
 
   void itemSelected(RecipeItem item) {
     final List<RecipeItem> selectedItems = List.from(state.selectedItems);
@@ -27,7 +32,8 @@ class RecipeCubit extends Cubit<RecipeState> {
   }
 
   void refresh() async {
-    final recipe = await ApiService.getInstance().getRecipe(state.recipe);
+    final recipe = await TransactionHandler.getInstance()
+        .runTransaction(TransactionRecipeGetRecipe(recipe: state.recipe));
     if (recipe != null)
       emit(state.copyWith(
         recipe: recipe,
@@ -36,11 +42,13 @@ class RecipeCubit extends Cubit<RecipeState> {
   }
 
   Future<void> addItemsToList() async {
-    await ApiService.getInstance().addRecipeItems(state.selectedItems);
+    await TransactionHandler.getInstance().runTransaction(
+        TransactionShoppingListAddRecipeItems(items: state.selectedItems));
   }
 
   Future<void> addRecipeToPlanner() async {
-    await ApiService.getInstance().addPlannedRecipe(state.recipe);
+    await TransactionHandler.getInstance()
+        .runTransaction(TransactionPlannerAddRecipe(recipe: state.recipe));
   }
 }
 

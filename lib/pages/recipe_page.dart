@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:kitchenowl/app.dart';
 import 'package:kitchenowl/cubits/recipe_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/models/recipe.dart';
@@ -55,22 +56,23 @@ class _RecipePageState extends State<RecipePage> {
                       Navigator.of(context).pop(cubit.state.updateState),
                 ),
                 actions: [
-                  IconButton(
-                    onPressed: () async {
-                      final res = await Navigator.of(context)
-                          .push<UpdateEnum>(MaterialPageRoute(
-                              builder: (context) => AddUpdateRecipePage(
-                                    recipe: state.recipe,
-                                  )));
-                      if (res == UpdateEnum.updated) {
-                        cubit.setUpdateState(UpdateEnum.updated);
-                        cubit.refresh();
-                      }
-                      if (res == UpdateEnum.deleted)
-                        Navigator.of(context).pop(UpdateEnum.deleted);
-                    },
-                    icon: Icon(Icons.edit),
-                  )
+                  if (!App.isOffline(context))
+                    IconButton(
+                      onPressed: () async {
+                        final res = await Navigator.of(context)
+                            .push<UpdateEnum>(MaterialPageRoute(
+                                builder: (context) => AddUpdateRecipePage(
+                                      recipe: state.recipe,
+                                    )));
+                        if (res == UpdateEnum.updated) {
+                          cubit.setUpdateState(UpdateEnum.updated);
+                          cubit.refresh();
+                        }
+                        if (res == UpdateEnum.deleted)
+                          Navigator.of(context).pop(UpdateEnum.deleted);
+                      },
+                      icon: Icon(Icons.edit),
+                    )
                 ],
               ),
               body: Align(

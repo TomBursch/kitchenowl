@@ -158,6 +158,9 @@ class RecipeItem extends ItemWithDescription {
   ItemWithDescription toItemWithDescription() => ItemWithDescription(
       id: this.id, name: this.name, description: this.description);
 
+  ShoppinglistItem toShoppingListItem() => ShoppinglistItem(
+      id: this.id, name: this.name, description: this.description);
+
   @override
   List<Object> get props => super.props + [this.optional];
 }

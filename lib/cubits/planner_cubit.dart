@@ -1,7 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/models/recipe.dart';
-import 'package:kitchenowl/services/api/api_service.dart';
+import 'package:kitchenowl/services/transaction_handler.dart';
+import 'package:kitchenowl/services/transactions/planner.dart';
 
 class PlannerCubit extends Cubit<PlannerCubitState> {
   PlannerCubit() : super(const PlannerCubitState()) {
@@ -9,19 +10,24 @@ class PlannerCubit extends Cubit<PlannerCubitState> {
   }
 
   Future<void> remove(Recipe recipe) async {
-    await ApiService.getInstance().removePlannedRecipe(recipe);
+    await TransactionHandler.getInstance()
+        .runTransaction(TransactionPlannerRemoveRecipe(recipe: recipe));
     await refresh();
   }
 
   Future<void> add(Recipe recipe) async {
-    await ApiService.getInstance().addPlannedRecipe(recipe);
+    await TransactionHandler.getInstance()
+        .runTransaction(TransactionPlannerAddRecipe(recipe: recipe));
     await refresh();
   }
 
   Future<void> refresh([String query]) async {
-    final planned = await ApiService.getInstance().getPlannedRecipes() ?? [];
-    final recent =
-        await ApiService.getInstance().getRecentPlannedRecipes() ?? [];
+    final planned = await TransactionHandler.getInstance()
+            .runTransaction(TransactionPlannerGetPlannedRecipes()) ??
+        [];
+    final recent = await TransactionHandler.getInstance()
+            .runTransaction(TransactionPlannerGetRecentPlannedRecipes()) ??
+        [];
     emit(PlannerCubitState(planned, recent));
   }
 }

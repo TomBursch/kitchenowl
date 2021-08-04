@@ -52,4 +52,12 @@ class Recipe extends Model {
         "description": this.description,
         "items": items.map((e) => e.toJson()).toList()
       };
+
+  @override
+  Map<String, dynamic> toJsonWithId() => this.toJson()
+    ..addAll({
+      "id": this.id,
+      "planned": this.isPlanned,
+      "items": this.items.map((e) => e.toJsonWithId()).toList(),
+    });
 }

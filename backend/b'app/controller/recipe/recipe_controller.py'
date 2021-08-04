@@ -12,7 +12,7 @@ from .schemas import SearchByNameRequest, AddItemByName, RemoveItem, AddRecipe, 
 @app.route('/recipe', methods=['GET'])
 @jwt_required()
 def getAllRecipes():
-    return jsonify([e.obj_to_dict() for e in Recipe.all_by_name()])
+    return jsonify([e.obj_to_full_dict() for e in Recipe.all_by_name()])
 
 
 @app.route('/recipe/<id>', methods=['GET'])

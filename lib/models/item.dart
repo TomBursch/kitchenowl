@@ -32,8 +32,9 @@ class Item extends Model {
 class ItemWithDescription extends Item {
   final String description;
 
-  const ItemWithDescription({int id, String name, this.description})
-      : super(id: id, name: name);
+  const ItemWithDescription(
+      {int id, String name, int ordering, this.description})
+      : super(id: id, name: name, ordering: ordering);
 
   factory ItemWithDescription.fromJson(Map<String, dynamic> map) =>
       ItemWithDescription(
@@ -73,14 +74,16 @@ class ItemWithDescription extends Item {
 }
 
 class ShoppinglistItem extends ItemWithDescription {
-  const ShoppinglistItem({int id, String name, String description})
-      : super(id: id, name: name, description: description);
+  const ShoppinglistItem(
+      {int id, String name, String description, int ordering})
+      : super(id: id, name: name, description: description, ordering: ordering);
 
   factory ShoppinglistItem.fromJson(Map<String, dynamic> map) =>
       ShoppinglistItem(
         id: map['id'],
         name: map['name'],
         description: map['description'],
+        ordering: map['ordering'],
       );
 
   factory ShoppinglistItem.fromItem({
@@ -113,8 +116,9 @@ class ShoppinglistItem extends ItemWithDescription {
 class RecipeItem extends ItemWithDescription {
   final bool optional;
 
-  const RecipeItem({int id, String name, String description, this.optional})
-      : super(id: id, name: name, description: description);
+  const RecipeItem(
+      {int id, String name, String description, int ordering, this.optional})
+      : super(id: id, name: name, description: description, ordering: ordering);
 
   factory RecipeItem.fromJson(Map<String, dynamic> map) => RecipeItem(
         id: map['id'],

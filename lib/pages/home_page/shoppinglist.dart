@@ -132,6 +132,34 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                         slivers: [
                           SliverPadding(
                             padding: const EdgeInsets.symmetric(horizontal: 16),
+                            sliver: SliverToBoxAdapter(
+                              child: Align(
+                                alignment: Alignment.centerRight,
+                                child: TextButton(
+                                  onPressed: cubit.incrementSorting,
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Text(state.sorting ==
+                                                ShoppinglistSorting.alphabetical
+                                            ? AppLocalizations.of(context)
+                                                .sortingAlphabetical
+                                            : AppLocalizations.of(context)
+                                                .sortingAlgorithmic),
+                                        const SizedBox(width: 4),
+                                        Icon(Icons.sort),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          SliverPadding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
                             sliver: SliverGrid(
                               gridDelegate:
                                   SliverGridDelegateWithFixedCrossAxisCount(

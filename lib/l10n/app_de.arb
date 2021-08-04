@@ -58,6 +58,8 @@
     "shoppingList": "Einkaufsliste",
     "shoppingLists": "Einkaufslisten",
     "start": "Start",
+    "sortingAlphabetical": "Alphabetisch",
+    "sortingAlgorithmic": "Algorithmisch",
     "swipeToDeleteUser": "Wische zum löschen",
     "underConstruction": "Baustelle",
     "unreachableMessage": "Hmmmm... der Server wurde nicht erreicht",

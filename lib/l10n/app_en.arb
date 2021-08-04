@@ -58,6 +58,8 @@
     "shoppingList": "Shopping list",
     "shoppingLists": "Shopping lists",
     "start": "Start",
+    "sortingAlphabetical": "Alphabetical",
+    "sortingAlgorithmic": "Algorithmic",
     "swipeToDeleteUser": "Swipe to delete user",
     "underConstruction": "Under Construction",
     "unreachableMessage": "Hmmmm... coulnd't reach server",

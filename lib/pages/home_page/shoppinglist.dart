@@ -138,8 +138,8 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                                 child: TextButton(
                                   onPressed: cubit.incrementSorting,
                                   child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 8),
+                                    padding: const EdgeInsets.only(
+                                        left: 4, right: 1),
                                     child: Row(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [

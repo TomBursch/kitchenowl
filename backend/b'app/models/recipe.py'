@@ -11,6 +11,7 @@ class Recipe(db.Model, DbModelMixin, TimestampMixin):
     description = db.Column(db.String())
     photo = db.Column(db.String())
     planned = db.Column(db.Boolean)
+    suggestion_score = db.Column(db.Integer, server_default='0')
 
     recipe_history = db.relationship(
         "RecipeHistory", back_populates="recipe", cascade="all, delete-orphan")
@@ -39,6 +40,10 @@ class Recipe(db.Model, DbModelMixin, TimestampMixin):
     @classmethod
     def find_by_name(cls, name):
         return cls.query.filter(cls.name == name).first()
+
+    @classmethod
+    def find_by_id(cls, id):
+        return cls.query.filter(cls.id == id).first()
 
     @classmethod
     def search_name(cls, name):

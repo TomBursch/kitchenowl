@@ -28,7 +28,9 @@ The `description` is a descriptive summary of the change the PR will make.
 - One PR per fix or feature
 
 ### Setup & Install
-- Create a new python environment and install dependencies `pip3 install -r requirements.txt`
+- Create a python environment `python3 -m venv venv`
+- Activate your python environment `source venv/bin/activate` (environment can be deactivated with `deactivate`)
+- Install dependencies `pip3 install -r requirements.txt`
 - Initialize/Upgrade the sqlite database with `flask db upgrade`
 - Run debug server with `python3 wsgi.py`
 - The backend should be reachable at `localhost:5000`

@@ -50,6 +50,7 @@ def getRecentRecipes():
 
 
 @app.route('/planner/suggested-recipes', methods=['GET'])
+@jwt_required()
 def getSuggestedRecipes():
     # get all unplanned recipes with positive suggestion_score
     recipes = Recipe.query.filter(Recipe.planned == False).filter(  # noqa

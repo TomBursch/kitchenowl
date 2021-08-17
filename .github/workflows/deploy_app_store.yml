@@ -1,0 +1,46 @@
+name: Deploy to Play Store
+on:
+  workflow_dispatch:
+    # Enable manual run
+    inputs:
+      lane:
+        description: "Fastlane lane to use (beta)"
+        required: true
+        default: "beta"
+
+jobs:
+  fastlane-deploy:
+    runs-on: macos-10.15
+    steps:
+      # Set up Flutter.
+      - name: Clone Flutter repository with stable channel
+        uses: subosito/flutter-action@v1
+        with:
+          channel: stable
+      - run: flutter doctor -v
+
+      # Checkout gallery code and get packages.
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - run: flutter packages get
+      - run: pod install
+        working-directory: ios
+
+      # Setup Ruby, Bundler, and Gemfile dependencies
+      - name: Setup Fastlane
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "2.7"
+          bundler-cache: true
+          working-directory: ios
+
+      - name: Create .env file
+        run: touch .env
+
+      # Build and deploy with Fastlane (by default, to internal track) 🚀.
+      # Naturally, promote_to_production only deploys.
+      - run: bundle exec fastlane ${{ github.event.inputs.lane || 'beta' }}
+        env:
+          FASTLANE_PASSWORD: ${{ secrets.APP_STORE_PASSWORD }}
+          FASTLANE_USER: ${{ secrets.APP_STORE_EMAIL }}
+        working-directory: ios

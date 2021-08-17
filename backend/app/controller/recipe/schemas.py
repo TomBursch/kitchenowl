@@ -8,10 +8,10 @@ class AddRecipe(Schema):
             validate=lambda a: len(a) > 0
         )
         description = fields.String(
-            default=''
+            load_default=''
         )
         optional = fields.Boolean(
-            default=True
+            load_default=True
         )
 
     name = fields.String(
@@ -20,6 +20,7 @@ class AddRecipe(Schema):
     description = fields.String()
     items = fields.List(fields.Nested(RecipeItem()))
 
+
 class UpdateRecipe(Schema):
     class RecipeItem(Schema):
         name = fields.String(
@@ -27,11 +28,12 @@ class UpdateRecipe(Schema):
             validate=lambda a: len(a) > 0
         )
         description = fields.String()
-        optional = fields.Boolean(default=True)
+        optional = fields.Boolean(load_default=True)
 
     name = fields.String()
     description = fields.String()
     items = fields.List(fields.Nested(RecipeItem()))
+
 
 class SearchByNameRequest(Schema):
     query = fields.String(

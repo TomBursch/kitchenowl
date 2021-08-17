@@ -1,8 +1,8 @@
 from marshmallow.exceptions import ValidationError
 from app.errors import InvalidUsage
 from flask import request
-from app.config import app
 from functools import wraps
+
 
 def validate_args(schema_cls):
     def validate(func):
@@ -10,7 +10,7 @@ def validate_args(schema_cls):
         def func_wrapper(*args, **kwargs):
             if not schema_cls:
                 raise Exception("Invalid usage. Schema class missing")
-            
+
             if request.method == 'GET':
                 request_data = request.args
                 load_fn = schema_cls().load

@@ -26,7 +26,7 @@ def getItem(id):
 @jwt_required()
 def getItemRecipes(id):
     items = RecipeItems.query.filter(
-        RecipeItems.item_id == id, RecipeItems.optional == False).join(
+        RecipeItems.item_id == id, RecipeItems.optional == False).join(  # noqa
         RecipeItems.recipe).order_by(
         Recipe.name).all()
     return jsonify([e.recipe.obj_to_dict() for e in items])

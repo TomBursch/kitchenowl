@@ -1,6 +1,5 @@
 from app import db
 from app.helpers import DbModelMixin, TimestampMixin
-from .item import Item
 
 
 class Shoppinglist(db.Model, DbModelMixin, TimestampMixin):

@@ -22,7 +22,7 @@ def importData(args):
 @jwt_required()
 def importLang(lang):
     file_path = f'{APP_DIR}/../templates/{lang}.json'
-    if not lang in SUPPORTED_LANGUAGES or not exists(file_path):
+    if lang not in SUPPORTED_LANGUAGES or not exists(file_path):
         raise NotFoundRequest('Language code not supported')
     with open(file_path, 'r') as f:
         data = json.load(f)

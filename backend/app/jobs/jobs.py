@@ -1,13 +1,13 @@
-from app.jobs.recipeSuggestions import findMealInstancesFromHistory, computeRecipeSuggestions, findMealInstancesFromHistory
+from app.jobs.recipe_suggestions import findMealInstancesFromHistory, computeRecipeSuggestions
 from app import app, scheduler
-from .itemOrdering import findItemOrdering
-from .itemSuggestions import findItemSuggestions
-from .clusterShoppings import clusterShoppings
+from .item_ordering import findItemOrdering
+from .item_suggestions import findItemSuggestions
+from .cluster_shoppings import clusterShoppings
 
 
 @app.before_first_request
 def load_jobs():
-    #for debugging:
+    # for debugging:
     # @scheduler.task('interval', id='test', seconds=5)
     # def test():
     #     app.logger.info("--- test analysis is starting ---")

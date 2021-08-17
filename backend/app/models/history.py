@@ -1,7 +1,6 @@
 from app import db
 from app.helpers import DbModelMixin, TimestampMixin
-from .item import Item
-from .shoppinglist import Shoppinglist, ShoppinglistItems
+from .shoppinglist import ShoppinglistItems
 from sqlalchemy import func
 
 import enum

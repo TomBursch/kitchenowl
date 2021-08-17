@@ -1,5 +1,6 @@
 from marshmallow import fields, Schema
 
+
 class CreateUser(Schema):
     name = fields.String(
         required=True,
@@ -13,4 +14,3 @@ class CreateUser(Schema):
         required=True,
         validate=lambda a: len(a) > 0
     )
-

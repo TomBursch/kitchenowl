@@ -1,17 +1,19 @@
-from app.models import Recipe,RecipeHistory
+from app.models import Recipe, RecipeHistory
 from app import app, db
 import datetime
 
 
 # minimum hours on planner until a recipe is considered to have been cooked
-MEAL_THRESHOLD = 3  
+MEAL_THRESHOLD = 3
+
 
 def findMealInstancesFromHistory():
     return findMealInstances(
-        RecipeHistory.find_added(), 
+        RecipeHistory.find_added(),
         RecipeHistory.find_dropped())
 
-def findMealInstances(added, dropped):    
+
+def findMealInstances(added, dropped):
     # pointers for added and dropped recipes
     # both lists are marched through together in chronological order
     added_pointer = 0
@@ -34,12 +36,12 @@ def findMealInstances(added, dropped):
             # compute duration while recipe on the planner
             added_time = added_recipes[current_dropped.recipe_id]
             dropped_time = current_dropped.created_at
-            # if duration threshold is met, consider it as a cooked meal 
-            if(dropped_time - added_time >= 
+            # if duration threshold is met, consider it as a cooked meal
+            if(dropped_time - added_time >=
                     datetime.timedelta(hours=MEAL_THRESHOLD)):
                 meal = {
-                    "recipe_id":current_dropped.recipe_id,
-                    "cooked_at":dropped_time}
+                    "recipe_id": current_dropped.recipe_id,
+                    "cooked_at": dropped_time}
                 meals.append(meal)
 
             # proceed to next dropped recipe
@@ -47,7 +49,7 @@ def findMealInstances(added, dropped):
             dropped_pointer += 1
             # break if no more dropped recipes
             if not (dropped_pointer < len(dropped)):
-                break 
+                break
             current_dropped = dropped[dropped_pointer]
     app.logger.info("meal instances are identified")
     return meals
@@ -75,7 +77,7 @@ def computeRecipeSuggestions(meal_instances):
                 cooking_count += 1
         # set suggestion_score to cooking_count
         Recipe.find_by_id(id).suggestion_score = cooking_count
-        
+
     # 2) do not suggest recent meals
     week_ago = datetime.datetime.now() - datetime.timedelta(days=7)
     # find recently cooked meals

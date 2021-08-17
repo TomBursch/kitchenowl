@@ -1,4 +1,3 @@
-from app.models.recipe_history import RecipeHistory
 from app.errors import NotFoundRequest
 from flask import jsonify
 from flask_jwt_extended import jwt_required
@@ -48,21 +47,23 @@ def removePlannedRecipeById(id):
 def getRecentRecipes():
     recipes = RecipeHistory.get_recent()
     return jsonify([e.recipe.obj_to_dict() for e in recipes])
-    
+
+
 @app.route('/planner/suggested-recipes', methods=['GET'])
 def getSuggestedRecipes():
     # get all unplanned recipes with positive suggestion_score
-    recipes = Recipe.query.filter(Recipe.planned == False).filter(Recipe.suggestion_score != 0).all()
+    recipes = Recipe.query.filter(Recipe.planned == False).filter(  # noqa
+        Recipe.suggestion_score != 0).all()
     # compute the initial sum of all suggestion_scores
     suggestion_sum = 0
     for r in recipes:
         suggestion_sum += r.suggestion_score
-    # randomly suggest one recipe weighted by their score   
+    # randomly suggest one recipe weighted by their score
     suggested_recipes = []
     while len(suggested_recipes) < 9 and len(recipes) > 0:
-        choose = randint(1,suggestion_sum)
+        choose = randint(1, suggestion_sum)
         to_be_removed = -1
-        for (i,r) in enumerate(recipes):
+        for (i, r) in enumerate(recipes):
             choose -= r.suggestion_score
             if choose <= 0:
                 suggested_recipes.append(r)
@@ -72,4 +73,3 @@ def getSuggestedRecipes():
         recipes.pop(to_be_removed)
     # jsonfy suggestions
     return jsonify([r.obj_to_dict() for r in suggested_recipes])
-

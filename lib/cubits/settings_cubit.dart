@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/config.dart';
 import 'package:kitchenowl/services/storage/storage.dart';
+import 'package:kitchenowl/services/transaction_handler.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 class SettingsCubit extends Cubit<SettingsState> {
@@ -33,6 +34,8 @@ class SettingsCubit extends Cubit<SettingsState> {
 
   void setForcedOfflineMode(bool forcedOfflineMode) {
     emit(state.copyWith(forcedOfflineMode: forcedOfflineMode));
+    if (!forcedOfflineMode)
+      TransactionHandler.getInstance().runOpenTransactions();
   }
 }
 

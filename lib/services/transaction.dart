@@ -32,7 +32,7 @@ abstract class Transaction<T> extends Model {
   factory Transaction.fromJson(Map<String, dynamic> map) {
     final DateTime timestamp =
         DateTime.tryParse(map['timestamp']) ?? DateTime.now();
-    if (map.containsKey(map['className']))
+    if (map.containsKey('className'))
       return _transactionTypes[map['className']](map, timestamp);
     return null;
   }
@@ -42,7 +42,7 @@ abstract class Transaction<T> extends Model {
 
   @override
   Map<String, dynamic> toJson() => {
-        "type": this.className,
+        "className": this.className,
         "timestamp": this.timestamp.toIso8601String(),
       };
 }

@@ -26,6 +26,7 @@ class Item extends Model {
   Map<String, dynamic> toJsonWithId() => this.toJson()
     ..addAll({
       "id": this.id,
+      "ordering": this.ordering,
     });
 }
 

@@ -33,7 +33,8 @@ class TransactionShoppingListSearchItem extends Transaction<List<Item>> {
   Future<List<Item>> runLocal() async {
     final shoppinglist =
         await TempStorage.getInstance().readItems() ?? const [];
-    shoppinglist.retainWhere((e) => e.name.contains(query));
+    shoppinglist
+        .retainWhere((e) => e.name.toLowerCase().contains(query.toLowerCase()));
     return shoppinglist;
   }
 

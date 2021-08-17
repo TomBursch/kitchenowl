@@ -1,5 +1,6 @@
 from marshmallow import fields, Schema
 
+
 class SearchByNameRequest(Schema):
     query = fields.String(
         required=True,

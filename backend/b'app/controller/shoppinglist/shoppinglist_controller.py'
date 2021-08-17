@@ -1,5 +1,4 @@
 from app.models import ShoppinglistItems
-import json
 from flask import jsonify
 from flask_jwt_extended import jwt_required
 from app import app, db
@@ -7,7 +6,7 @@ from app.models import Item, Shoppinglist, History, Status, Association
 from app.helpers import validate_args
 from .schemas import (RemoveItem, UpdateDescription,
                       AddItemByName, CreateList, AddRecipeItems)
-from app.errors import InvalidUsage, NotFoundRequest
+from app.errors import NotFoundRequest
 from datetime import datetime, timedelta
 
 

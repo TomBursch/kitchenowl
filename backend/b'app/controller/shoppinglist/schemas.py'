@@ -1,5 +1,4 @@
-from marshmallow import fields, validates_schema, ValidationError, Schema
-from app.models import Item
+from marshmallow import fields, Schema
 
 
 class AddItemByName(Schema):
@@ -17,10 +16,10 @@ class AddRecipeItems(Schema):
             validate=lambda a: len(a) > 0
         )
         description = fields.String(
-            default=''
+            load_default=''
         )
         optional = fields.Boolean(
-            default=True
+            load_default=True
         )
 
     items = fields.List(fields.Nested(RecipeItem))

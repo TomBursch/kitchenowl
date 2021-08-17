@@ -1,12 +1,11 @@
 from app.errors import NotFoundRequest
 from app.models.recipe import RecipeItems
-import json
 from flask import jsonify
 from flask_jwt_extended import jwt_required
 from app import app
 from app.helpers import validate_args
 from app.models import Recipe, Item
-from .schemas import SearchByNameRequest, AddItemByName, RemoveItem, AddRecipe, UpdateRecipe
+from .schemas import SearchByNameRequest, AddRecipe, UpdateRecipe
 
 
 @app.route('/recipe', methods=['GET'])
@@ -50,7 +49,7 @@ def addRecipe(args):
 @app.route('/recipe/<id>', methods=['POST'])
 @jwt_required()
 @validate_args(UpdateRecipe)
-def updateRecipe(args, id):
+def updateRecipe(args, id):  # noqa: C901
     recipe = Recipe.find_by_id(id)
     if not recipe:
         raise NotFoundRequest()
@@ -62,7 +61,7 @@ def updateRecipe(args, id):
     if 'items' in args:
         for con in recipe.items:
             item_names = [e['name'] for e in args['items']]
-            if not con.item.name in item_names:
+            if con.item.name not in item_names:
                 con.delete()
         for recipeItem in args['items']:
             item = Item.find_by_name(recipeItem['name'])

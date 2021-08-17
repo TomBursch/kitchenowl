@@ -15,10 +15,10 @@ class ImportSchema(Schema):
                 validate=lambda a: len(a) > 0
             )
             optional = fields.Boolean(
-                default=False
+                load_default=False
             )
             description = fields.String(
-                default=''
+                load_default=''
             )
 
         name = fields.String(
@@ -26,7 +26,7 @@ class ImportSchema(Schema):
             validate=lambda a: len(a) > 0
         )
         description = fields.String(
-            default=''
+            load_default=''
         )
         items = fields.List(fields.Nested(RecipeItem))
 

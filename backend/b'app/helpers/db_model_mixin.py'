@@ -142,7 +142,7 @@ class DbModelMixin(object):
         Return all instances of model
         """
         return cls.query.order_by(cls.id).all()
-    
+
     @classmethod
     def all_by_name(cls):
         """

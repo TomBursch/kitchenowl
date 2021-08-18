@@ -89,3 +89,7 @@ def computeRecipeSuggestions(meal_instances):
     # commit changes to db
     db.session.commit()
     app.logger.info("computed and stored new suggestion scores")
+
+    # compute new suggestion ranking
+    Recipe.compute_suggestion_ranking()
+    app.logger.info("computed and stored new suggestion ranking")

@@ -1,6 +1,7 @@
 from app import db
 from app.helpers import DbModelMixin, TimestampMixin
 from .item import Item
+from random import randint
 
 
 class Recipe(db.Model, DbModelMixin, TimestampMixin):
@@ -12,6 +13,7 @@ class Recipe(db.Model, DbModelMixin, TimestampMixin):
     photo = db.Column(db.String())
     planned = db.Column(db.Boolean)
     suggestion_score = db.Column(db.Integer, server_default='0')
+    suggestion_rank = db.Column(db.Integer, server_default='0')
 
     recipe_history = db.relationship(
         "RecipeHistory", back_populates="recipe", cascade="all, delete-orphan")
@@ -36,6 +38,39 @@ class Recipe(db.Model, DbModelMixin, TimestampMixin):
             "items": [{"name": e.item.name, "description": e.description, "optional": e.optional} for e in items],
         }
         return res
+
+    @classmethod
+    def compute_suggestion_ranking(cls):
+        # reset all suggestion ranks
+        for r in cls.all():
+            r.suggestion_rank = 0
+        # get all recipes with positive suggestion_score
+        recipes = cls.query.filter(  # noqa
+            cls.suggestion_score != 0).all()
+        # compute the initial sum of all suggestion_scores
+        suggestion_sum = 0
+        for r in recipes:
+            suggestion_sum += r.suggestion_score
+        # iteratively assign increasing suggestion rank to random recipes weighted by their score
+        current_rank = 1
+        while len(recipes) > 0:
+            choose = randint(1, suggestion_sum)
+            to_be_removed = -1
+            for (i, r) in enumerate(recipes):
+                choose -= r.suggestion_score
+                if choose <= 0:
+                    r.suggestion_rank = current_rank
+                    current_rank += 1
+                    suggestion_sum -= r.suggestion_score
+                    to_be_removed = i
+                    break
+            recipes.pop(to_be_removed)
+        db.session.commit()
+
+    @classmethod
+    def find_suggestions(cls):
+        return cls.query.filter(cls.planned == False).filter(  # noqa
+            cls.suggestion_rank > 0).order_by(cls.suggestion_rank).limit(9).all()
 
     @classmethod
     def find_by_name(cls, name):

@@ -1,4 +1,4 @@
-from marshmallow import fields, Schema
+from marshmallow import fields, Schema, EXCLUDE
 
 
 class AddItemByName(Schema):
@@ -10,6 +10,8 @@ class AddItemByName(Schema):
 
 class AddRecipeItems(Schema):
     class RecipeItem(Schema):
+        class Meta:
+            unknown = EXCLUDE
         id = fields.Integer(required=True)
         name = fields.String(
             required=True,

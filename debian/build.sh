@@ -18,8 +18,10 @@ DESCRIPTION=$(cat pubspec.yaml | shyaml get-value description)
 flutter build linux --release
 mkdir -p build/debian/release
 cp -r debian/$NAME build/debian/release/
+mkdir build/debian/release/$NAME/usr/lib
 cp -r build/linux/x64/release/bundle/ build/debian/release/$NAME/usr/lib/$NAME/
 cp debian/icon.png build/debian/release/$NAME/usr/lib/$NAME/
+mkdir -p build/debian/release/$NAME/usr/share/applications/
 
 # DEB settings
 CONTROL_FILE="build/debian/release/$NAME/DEBIAN/control"

@@ -11,7 +11,7 @@ import 'package:kitchenowl/widgets/shopping_item.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
 class ShoppinglistPage extends StatefulWidget {
-  ShoppinglistPage({Key key}) : super(key: key);
+  const ShoppinglistPage({Key key}) : super(key: key);
 
   @override
   _ShoppinglistPageState createState() => _ShoppinglistPageState();
@@ -53,7 +53,7 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
               child: BlocListener<ShoppinglistCubit, ShoppinglistCubitState>(
                 bloc: cubit,
                 listener: (context, state) {
-                  if (!(state is SearchShoppinglistCubitState)) {
+                  if (state is! SearchShoppinglistCubitState) {
                     if (searchController.text.isNotEmpty) {
                       searchController.clear();
                     }
@@ -65,7 +65,7 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                   onSubmitted: () {
                     final state = cubit.state;
                     if (state is SearchShoppinglistCubitState) {
-                      if (!(state.result.first is ShoppinglistItem))
+                      if (state.result.first is! ShoppinglistItem) {
                         cubit.add(
                           state.result.first.name,
                           (state.result.first is ItemWithDescription)
@@ -73,6 +73,7 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                                   .description
                               : null,
                         );
+                      }
                     } else {
                       FocusScope.of(context).unfocus();
                     }
@@ -88,7 +89,7 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                 child: BlocBuilder<ShoppinglistCubit, ShoppinglistCubitState>(
                     bloc: cubit,
                     builder: (context, state) {
-                      if (state is SearchShoppinglistCubitState)
+                      if (state is SearchShoppinglistCubitState) {
                         return GridView.builder(
                           padding: const EdgeInsets.symmetric(horizontal: 16),
                           gridDelegate:
@@ -102,15 +103,16 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                             item: state.result[i],
                             selected: state.result[i] is ShoppinglistItem,
                             onPressed: (item) {
-                              if (item is ShoppinglistItem)
+                              if (item is ShoppinglistItem) {
                                 cubit.remove(item);
-                              else
+                              } else {
                                 cubit.add(
                                   item.name,
                                   (item is ItemWithDescription)
                                       ? item.description
                                       : null,
                                 );
+                              }
                             },
                             onLongPressed: (item) async {
                               final res =
@@ -128,6 +130,7 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                             },
                           ),
                         );
+                      }
                       return CustomScrollView(
                         slivers: [
                           SliverPadding(
@@ -150,7 +153,7 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                                             : AppLocalizations.of(context)
                                                 .sortingAlgorithmic),
                                         const SizedBox(width: 4),
-                                        Icon(Icons.sort),
+                                        const Icon(Icons.sort),
                                       ],
                                     ),
                                   ),
@@ -173,10 +176,11 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                                   item: state.listItems[i],
                                   selected: true,
                                   onPressed: (item) {
-                                    if (item is ShoppinglistItem)
+                                    if (item is ShoppinglistItem) {
                                       cubit.remove(item);
-                                    else
+                                    } else {
                                       cubit.add(item.name);
+                                    }
                                   },
                                   onLongPressed: (item) async {
                                     final res = await Navigator.of(context)

@@ -11,29 +11,35 @@ abstract class Storage {
 }
 
 class SecureStorage extends Storage {
-  final _storage = new FlutterSecureStorage();
+  final _storage = const FlutterSecureStorage();
   static SecureStorage _instance;
 
   SecureStorage._internal();
   static SecureStorage getInstance() {
-    if (_instance == null) _instance = SecureStorage._internal();
+    _instance ??= SecureStorage._internal();
     return _instance;
   }
 
+  @override
   Future<void> delete({String key}) async {
-    if (!kIsWeb && (Platform.isAndroid || Platform.isIOS || Platform.isLinux))
+    if (!kIsWeb && (Platform.isAndroid || Platform.isIOS || Platform.isLinux)) {
       await _storage.delete(key: key);
+    }
   }
 
+  @override
   Future<String> read({String key}) async {
-    if (!kIsWeb && (Platform.isAndroid || Platform.isIOS || Platform.isLinux))
+    if (!kIsWeb && (Platform.isAndroid || Platform.isIOS || Platform.isLinux)) {
       return await _storage.read(key: key);
+    }
     return '';
   }
 
+  @override
   Future<void> write({String key, String value}) async {
-    if (!kIsWeb && (Platform.isAndroid || Platform.isIOS || Platform.isLinux))
+    if (!kIsWeb && (Platform.isAndroid || Platform.isIOS || Platform.isLinux)) {
       await _storage.write(key: key, value: value);
+    }
   }
 }
 
@@ -43,16 +49,19 @@ class PreferenceStorage extends Storage {
 
   PreferenceStorage._internal();
   static PreferenceStorage getInstance() {
-    if (_instance == null) _instance = PreferenceStorage._internal();
+    _instance ??= PreferenceStorage._internal();
     return _instance;
   }
 
+  @override
   Future<void> delete({String key}) async => (await _storage).remove(key);
 
+  @override
   Future<String> read({String key}) async => (await _storage).getString(key);
   Future<int> readInt({String key}) async => (await _storage).getInt(key);
   Future<bool> readBool({String key}) async => (await _storage).getBool(key);
 
+  @override
   Future<void> write({String key, String value}) async =>
       (await _storage).setString(key, value);
   Future<void> writeInt({String key, int value}) async =>

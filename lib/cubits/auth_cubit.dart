@@ -10,7 +10,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class AuthCubit extends Cubit<AuthState> {
   AuthCubit() : super(Loading()) {
-    ApiService.getInstance().addListener(this.updateState);
+    ApiService.getInstance().addListener(updateState);
     setup();
   }
 
@@ -50,10 +50,11 @@ class AuthCubit extends Cubit<AuthState> {
         }
         break;
       case Connection.connected:
-        if (await ApiService.getInstance().isOnboarding())
+        if (await ApiService.getInstance().isOnboarding()) {
           emit(Onboarding());
-        else
+        } else {
           emit(Unauthenticated());
+        }
         break;
       case Connection.unsupported:
         emit(Unsupported());
@@ -81,8 +82,9 @@ class AuthCubit extends Cubit<AuthState> {
         } else {
           emit(Unreachable());
         }
-      } else
+      } else {
         emit(Authenticated(await ApiService.getInstance().getUser()));
+      }
     }
   }
 
@@ -93,8 +95,9 @@ class AuthCubit extends Cubit<AuthState> {
           await ApiService.getInstance().onboarding(username, name, password);
       if (token != null && ApiService.getInstance().isAuthenticated()) {
         await SecureStorage.getInstance().write(key: 'TOKEN', value: token);
-      } else
+      } else {
         updateState();
+      }
     }
   }
 
@@ -103,8 +106,9 @@ class AuthCubit extends Cubit<AuthState> {
     final token = await ApiService.getInstance().login(username, password);
     if (token != null && ApiService.getInstance().isAuthenticated()) {
       await SecureStorage.getInstance().write(key: 'TOKEN', value: token);
-    } else
+    } else {
       updateState();
+    }
   }
 
   void logout() async {
@@ -112,8 +116,9 @@ class AuthCubit extends Cubit<AuthState> {
     await SecureStorage.getInstance().delete(key: 'TOKEN');
     await TempStorage.getInstance().clearAll();
     ApiService.getInstance().refreshToken = '';
-    if (ApiService.getInstance().connectionStatus == Connection.disconnected)
+    if (ApiService.getInstance().connectionStatus == Connection.disconnected) {
       emit(Unreachable());
+    }
     refresh();
   }
 
@@ -136,10 +141,12 @@ class AuthCubit extends Cubit<AuthState> {
     if (url == null || url.isEmpty) return;
     await ApiService.connectTo(url, refreshToken: token);
     if (storeData && ApiService.getInstance().isConnected()) {
-      if (!kIsWeb)
+      if (!kIsWeb) {
         await PreferenceStorage.getInstance().write(key: 'URL', value: url);
-      if (token != null && token.isNotEmpty)
+      }
+      if (token != null && token.isNotEmpty) {
         await SecureStorage.getInstance().write(key: 'TOKEN', value: token);
+      }
     }
   }
 }

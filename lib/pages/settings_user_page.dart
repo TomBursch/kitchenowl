@@ -5,7 +5,7 @@ import 'package:kitchenowl/kitchenowl.dart';
 
 class SettingsUserPage extends StatefulWidget {
   final int userId;
-  SettingsUserPage({Key key, this.userId}) : super(key: key);
+  const SettingsUserPage({Key key, this.userId}) : super(key: key);
 
   @override
   _SettingsUserPageState createState() => _SettingsUserPageState();
@@ -46,14 +46,14 @@ class _SettingsUserPageState extends State<SettingsUserPage> {
         body: Align(
           alignment: Alignment.topCenter,
           child: ConstrainedBox(
-            constraints: BoxConstraints.expand(width: 600),
+            constraints: const BoxConstraints.expand(width: 600),
             child: ListView(
-              padding: EdgeInsets.all(16),
+              padding: const EdgeInsets.all(16),
               children: [
                 Icon(
                   Icons.account_circle_rounded,
                   size: 90,
-                  color: Theme.of(context).accentColor,
+                  color: Theme.of(context).colorScheme.secondary,
                 ),
                 TextField(
                   controller: usernameController,
@@ -84,7 +84,7 @@ class _SettingsUserPageState extends State<SettingsUserPage> {
                 ),
                 TextField(
                   controller: passwordController,
-                  autofillHints: [AutofillHints.newPassword],
+                  autofillHints: const [AutofillHints.newPassword],
                   obscureText: true,
                   textInputAction: TextInputAction.done,
                   decoration: InputDecoration(

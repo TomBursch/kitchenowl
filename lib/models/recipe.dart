@@ -40,24 +40,24 @@ class Recipe extends Model {
         name: name ?? this.name,
         description: description ?? this.description,
         items: items ?? this.items,
-        isPlanned: this.isPlanned,
+        isPlanned: isPlanned,
       );
 
   @override
-  List<Object> get props => [this.id, this.name, this.description];
+  List<Object> get props => [id, name, description];
 
   @override
   Map<String, dynamic> toJson() => {
-        "name": this.name,
-        "description": this.description,
+        "name": name,
+        "description": description,
         "items": items.map((e) => e.toJson()).toList()
       };
 
   @override
-  Map<String, dynamic> toJsonWithId() => this.toJson()
+  Map<String, dynamic> toJsonWithId() => toJson()
     ..addAll({
-      "id": this.id,
-      "planned": this.isPlanned,
-      "items": this.items.map((e) => e.toJsonWithId()).toList(),
+      "id": id,
+      "planned": isPlanned,
+      "items": items.map((e) => e.toJsonWithId()).toList(),
     });
 }

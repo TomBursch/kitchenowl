@@ -5,12 +5,14 @@ import 'package:kitchenowl/cubits/auth_cubit.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 
 class UnsupportedPage extends StatelessWidget {
+  const UnsupportedPage({Key key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
         child: ConstrainedBox(
-          constraints: BoxConstraints.expand(width: 600),
+          constraints: const BoxConstraints.expand(width: 600),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

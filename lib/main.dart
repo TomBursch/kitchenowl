@@ -6,7 +6,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 Future main() async {
   try {
     await dotenv.load();
-  } catch (e) {}
+  } catch (_) {}
   await PackageInfo.fromPlatform();
   runApp(App());
 }

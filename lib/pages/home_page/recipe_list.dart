@@ -6,7 +6,7 @@ import 'package:kitchenowl/widgets/recipe_item.dart';
 import 'package:kitchenowl/widgets/search_text_field.dart';
 
 class RecipeListPage extends StatefulWidget {
-  RecipeListPage({Key key}) : super(key: key);
+  const RecipeListPage({Key key}) : super(key: key);
 
   @override
   _RecipeListPageState createState() => _RecipeListPageState();
@@ -42,7 +42,7 @@ class _RecipeListPageState extends State<RecipeListPage> {
               child: BlocListener<RecipeListCubit, ListRecipeCubitState>(
                 bloc: cubit,
                 listener: (context, state) {
-                  if (!(state is SearchRecipeCubitState)) {
+                  if (state is! SearchRecipeCubitState) {
                     if (searchController.text.isNotEmpty) {
                       searchController.clear();
                     }
@@ -80,7 +80,8 @@ class _RecipeListPageState extends State<RecipeListPage> {
                           alignment: Alignment.center,
                           child: Text(
                             value.toUpperCase(),
-                            style: TextStyle(fontSize: 20, color: Colors.white),
+                            style: const TextStyle(
+                                fontSize: 20, color: Colors.white),
                           ),
                         ),
                         itemExtent: 65,

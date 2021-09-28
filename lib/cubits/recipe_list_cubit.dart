@@ -7,7 +7,7 @@ import 'package:kitchenowl/services/transactions/recipe.dart';
 class RecipeListCubit extends Cubit<ListRecipeCubitState> {
   List<Recipe> shoppinglist = [];
 
-  RecipeListCubit() : super(ListRecipeCubitState([])) {
+  RecipeListCubit() : super(const ListRecipeCubitState([])) {
     refresh();
   }
 
@@ -20,15 +20,16 @@ class RecipeListCubit extends Cubit<ListRecipeCubitState> {
   }
 
   Future<void> refresh([String query]) async {
-    if (state is SearchRecipeCubitState)
+    if (state is SearchRecipeCubitState) {
       query = query ?? (state as SearchRecipeCubitState).query;
+    }
     if (query != null && query.isNotEmpty) {
       final items = (await TransactionHandler.getInstance()
               .runTransaction(TransactionRecipeSearchRecipes(query: query))) ??
           [];
       emit(SearchRecipeCubitState(query, items));
     } else {
-      this.shoppinglist = await TransactionHandler.getInstance()
+      shoppinglist = await TransactionHandler.getInstance()
               .runTransaction(TransactionRecipeGetRecipes()) ??
           const [];
       emit(ListRecipeCubitState(shoppinglist));
@@ -39,7 +40,7 @@ class RecipeListCubit extends Cubit<ListRecipeCubitState> {
 class ListRecipeCubitState extends Equatable {
   final List<Recipe> recipes;
 
-  ListRecipeCubitState(this.recipes);
+  const ListRecipeCubitState(this.recipes);
 
   @override
   List<Object> get props => recipes;
@@ -48,7 +49,8 @@ class ListRecipeCubitState extends Equatable {
 class SearchRecipeCubitState extends ListRecipeCubitState {
   final String query;
 
-  SearchRecipeCubitState(this.query, List<Recipe> recipes) : super(recipes);
+  const SearchRecipeCubitState(this.query, List<Recipe> recipes)
+      : super(recipes);
 
   @override
   List<Object> get props => super.props + recipes;

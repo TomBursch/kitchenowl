@@ -7,7 +7,7 @@ import 'package:kitchenowl/services/api/api_service.dart';
 
 class SettingsUserCubit extends Cubit<SettingsUserState> {
   final int userId;
-  SettingsUserCubit(this.userId) : super(SettingsUserState(null)) {
+  SettingsUserCubit(this.userId) : super(const SettingsUserState(null)) {
     refresh();
   }
 
@@ -43,8 +43,9 @@ class SettingsUserCubit extends Cubit<SettingsUserState> {
     if (res) {
       if (userId == null &&
           context != null &&
-          BlocProvider.of<AuthCubit>(context) != null)
+          BlocProvider.of<AuthCubit>(context) != null) {
         BlocProvider.of<AuthCubit>(context).refreshUser();
+      }
       await refresh();
     }
   }
@@ -53,7 +54,7 @@ class SettingsUserCubit extends Cubit<SettingsUserState> {
 class SettingsUserState extends Equatable {
   final User user;
 
-  SettingsUserState(this.user);
+  const SettingsUserState(this.user);
 
   @override
   List<Object> get props => [user];

@@ -34,11 +34,12 @@ class RecipeCubit extends Cubit<RecipeState> {
   void refresh() async {
     final recipe = await TransactionHandler.getInstance()
         .runTransaction(TransactionRecipeGetRecipe(recipe: state.recipe));
-    if (recipe != null)
+    if (recipe != null) {
       emit(state.copyWith(
         recipe: recipe,
         selectedItems: recipe.items.where((e) => !e.optional).toList(),
       ));
+    }
   }
 
   Future<void> addItemsToList() async {
@@ -57,7 +58,7 @@ class RecipeState extends Equatable {
   final Recipe recipe;
   final UpdateEnum updateState;
 
-  RecipeState({
+  const RecipeState({
     this.recipe,
     this.selectedItems,
     this.updateState = UpdateEnum.unchanged,

@@ -32,17 +32,18 @@ abstract class Transaction<T> extends Model {
   factory Transaction.fromJson(Map<String, dynamic> map) {
     final DateTime timestamp =
         DateTime.tryParse(map['timestamp']) ?? DateTime.now();
-    if (map.containsKey('className'))
+    if (map.containsKey('className')) {
       return _transactionTypes[map['className']](map, timestamp);
+    }
     return null;
   }
 
   @override
-  List<Object> get props => [this.className, this.timestamp];
+  List<Object> get props => [className, timestamp];
 
   @override
   Map<String, dynamic> toJson() => {
-        "className": this.className,
-        "timestamp": this.timestamp.toIso8601String(),
+        "className": className,
+        "timestamp": timestamp.toIso8601String(),
       };
 }

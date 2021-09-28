@@ -5,7 +5,7 @@ import 'package:kitchenowl/services/api/api_service.dart';
 
 class ItemSearchCubit extends Cubit<ItemSearchState> {
   ItemSearchCubit(List<Item> selectedItems)
-      : super(ItemSearchState(selectedItems, '', []));
+      : super(ItemSearchState(selectedItems, '', const []));
 
   void itemSelected(int i) {
     final List<Item> selectedItems = List.from(state.selectedItems);
@@ -41,10 +41,11 @@ class ItemSearchCubit extends Cubit<ItemSearchState> {
         items.add(
             ItemWithDescription.fromItem(item: item, description: description));
       }
-      if (items.length == 0 ||
-          items[0].name.toLowerCase() != queryName.toLowerCase())
+      if (items.isEmpty ||
+          items[0].name.toLowerCase() != queryName.toLowerCase()) {
         items.add(ItemWithDescription(
             name: queryName, description: queryDescription));
+      }
       emit(ItemSearchState(state.selectedItems, query, items));
     } else {
       emit(ItemSearchState(state.selectedItems, query, state.searchResults));
@@ -57,7 +58,7 @@ class ItemSearchState extends Equatable {
   final String query;
   final List<Item> searchResults;
 
-  ItemSearchState(this.selectedItems, this.query, this.searchResults);
+  const ItemSearchState(this.selectedItems, this.query, this.searchResults);
 
   @override
   List<Object> get props => [selectedItems, query, searchResults];

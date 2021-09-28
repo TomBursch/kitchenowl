@@ -14,11 +14,11 @@ class Shoppinglist extends Model {
       );
 
   @override
-  List<Object> get props => [this.id, this.name];
+  List<Object> get props => [id, name];
 
   @override
   Map<String, dynamic> toJson() => {
-        "id": this.id,
-        "name": this.id,
+        "id": id,
+        "name": id,
       };
 }

@@ -10,7 +10,7 @@ class TransactionPlannerGetPlannedRecipes extends Transaction<List<Recipe>> {
 
   @override
   Future<List<Recipe>> runLocal() async {
-    final recipes = await TempStorage.getInstance().readRecipes();
+    final recipes = await TempStorage.getInstance().readRecipes() ?? const [];
     recipes.retainWhere((e) => e.isPlanned);
     return recipes;
   }
@@ -58,7 +58,7 @@ class TransactionPlannerAddRecipe extends Transaction<bool> {
   @override
   Map<String, dynamic> toJson() => super.toJson()
     ..addAll({
-      "recipe": this.recipe.toJsonWithId(),
+      "recipe": recipe.toJsonWithId(),
     });
 
   @override
@@ -92,7 +92,7 @@ class TransactionPlannerRemoveRecipe extends Transaction<bool> {
   @override
   Map<String, dynamic> toJson() => super.toJson()
     ..addAll({
-      "recipe": this.recipe.toJsonWithId(),
+      "recipe": recipe.toJsonWithId(),
     });
 
   @override

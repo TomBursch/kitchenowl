@@ -40,7 +40,7 @@ class ItemEditCubit extends Cubit<ItemEditState> {
     if (item is ShoppinglistItem) {
       await TransactionHandler.getInstance().runTransaction(
           TransactionShoppingListUpdateItem(
-              item: this.item, description: state.description ?? ''));
+              item: item, description: state.description ?? ''));
     }
   }
 

@@ -20,7 +20,7 @@ class CreateUserPage extends StatelessWidget {
         child: Align(
           alignment: Alignment.topCenter,
           child: ConstrainedBox(
-            constraints: BoxConstraints.expand(width: 600),
+            constraints: const BoxConstraints.expand(width: 600),
             child: SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.all(16),

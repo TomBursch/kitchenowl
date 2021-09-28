@@ -22,7 +22,7 @@ class SelectableButtonCard extends StatelessWidget {
       style: ButtonStyle(
         backgroundColor: MaterialStateProperty.all<Color>(
           selected
-              ? Theme.of(context).accentColor
+              ? Theme.of(context).colorScheme.secondary
               : Theme.of(context).brightness == Brightness.dark
                   ? Theme.of(context).cardColor
                   : Theme.of(context).disabledColor,

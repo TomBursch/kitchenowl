@@ -39,11 +39,11 @@ class _SettingsServerPageState extends State<SettingsServerPage> {
       body: Align(
         alignment: Alignment.topCenter,
         child: ConstrainedBox(
-          constraints: BoxConstraints.expand(width: 600),
+          constraints: const BoxConstraints.expand(width: 600),
           child: RefreshIndicator(
             onRefresh: cubit.refresh,
             child: ListView(
-              padding: EdgeInsets.all(16),
+              padding: const EdgeInsets.all(16),
               children: [
                 Text(
                   AppLocalizations.of(context).server + ':',
@@ -64,7 +64,7 @@ class _SettingsServerPageState extends State<SettingsServerPage> {
                       ),
                     ),
                     IconButton(
-                      icon: Icon(Icons.add),
+                      icon: const Icon(Icons.add),
                       onPressed: () =>
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (context) => BlocProvider.value(
@@ -79,7 +79,7 @@ class _SettingsServerPageState extends State<SettingsServerPage> {
                   bloc: cubit,
                   builder: (context, state) => ListView.builder(
                     shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
+                    physics: const NeverScrollableScrollPhysics(),
                     itemCount: state.users.length,
                     itemBuilder: (context, i) => Dismissible(
                       key: ValueKey<User>(state.users[i]),
@@ -135,7 +135,7 @@ class _SettingsServerPageState extends State<SettingsServerPage> {
                           borderRadius: BorderRadius.circular(5),
                           color: Colors.red,
                         ),
-                        child: Icon(Icons.delete, color: Colors.white),
+                        child: const Icon(Icons.delete, color: Colors.white),
                       ),
                       secondaryBackground: Container(
                         alignment: Alignment.centerRight,
@@ -144,7 +144,7 @@ class _SettingsServerPageState extends State<SettingsServerPage> {
                           borderRadius: BorderRadius.circular(5),
                           color: Colors.red,
                         ),
-                        child: Icon(Icons.delete, color: Colors.white),
+                        child: const Icon(Icons.delete, color: Colors.white),
                       ),
                       child: Card(
                         child: ListTile(
@@ -158,7 +158,7 @@ class _SettingsServerPageState extends State<SettingsServerPage> {
                                   ? ' (${AppLocalizations.of(context).you})'
                                   : '')),
                           trailing: state.users[i].owner
-                              ? Icon(Icons.admin_panel_settings_rounded)
+                              ? const Icon(Icons.admin_panel_settings_rounded)
                               : null,
                           onTap: () =>
                               Navigator.of(context).push(MaterialPageRoute(

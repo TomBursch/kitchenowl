@@ -6,6 +6,8 @@ import 'package:kitchenowl/kitchenowl.dart';
 class SetupPage extends StatelessWidget {
   final TextEditingController urlController = TextEditingController();
 
+  SetupPage({Key key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -13,7 +15,7 @@ class SetupPage extends StatelessWidget {
         child: Align(
           alignment: Alignment.topCenter,
           child: ConstrainedBox(
-            constraints: BoxConstraints.expand(width: 600),
+            constraints: const BoxConstraints.expand(width: 600),
             child: Padding(
               padding: const EdgeInsets.all(16),
               child: Column(
@@ -23,7 +25,7 @@ class SetupPage extends StatelessWidget {
                   Text(AppLocalizations.of(context).setupTitle),
                   TextField(
                     controller: urlController,
-                    autofillHints: [AutofillHints.url],
+                    autofillHints: const [AutofillHints.url],
                     textInputAction: TextInputAction.go,
                     keyboardType: TextInputType.url,
                     onSubmitted: (text) => BlocProvider.of<AuthCubit>(context)

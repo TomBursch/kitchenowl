@@ -8,13 +8,14 @@ class TransactionHandler {
 
   TransactionHandler._internal();
   static TransactionHandler getInstance() {
-    if (_instance == null) _instance = TransactionHandler._internal();
+    _instance ??= TransactionHandler._internal();
     return _instance;
   }
 
   Future<void> runOpenTransactions() async {
-    if (!ApiService.getInstance().isConnected())
+    if (!ApiService.getInstance().isConnected()) {
       ApiService.getInstance().refresh();
+    }
     if (ApiService.getInstance().isConnected()) {
       final transactions =
           await TransactionStorage.getInstance().readTransactions();
@@ -27,14 +28,16 @@ class TransactionHandler {
   }
 
   Future<T> runTransaction<T>(Transaction<T> t) async {
-    if (!ApiService.getInstance().isConnected())
+    if (!ApiService.getInstance().isConnected()) {
       ApiService.getInstance().refresh();
+    }
     if (!App.isForcedOffline && ApiService.getInstance().isConnected()) {
       Future<T> res = t.runOnline();
       if (await res != null) return res;
     }
-    if (t.saveTransaction)
+    if (t.saveTransaction) {
       await TransactionStorage.getInstance().addTransaction(t);
+    }
     return t.runLocal();
   }
 }

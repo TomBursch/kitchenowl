@@ -8,7 +8,7 @@ import 'package:kitchenowl/widgets/selectable_button_card.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
 class PlannerPage extends StatefulWidget {
-  PlannerPage({Key key}) : super(key: key);
+  const PlannerPage({Key key}) : super(key: key);
 
   @override
   _PlannerPageState createState() => _PlannerPageState();
@@ -58,7 +58,7 @@ class _PlannerPageState extends State<PlannerPage> {
                     ),
                   ),
                 ),
-                if (state.plannedRecipes.length == 0)
+                if (state.plannedRecipes.isEmpty)
                   SliverToBoxAdapter(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 16),
@@ -66,14 +66,14 @@ class _PlannerPageState extends State<PlannerPage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Icon(Icons.no_food_rounded),
+                          const Icon(Icons.no_food_rounded),
                           const SizedBox(height: 16),
                           Text(AppLocalizations.of(context).plannerEmpty),
                         ],
                       ),
                     ),
                   ),
-                if (state.plannedRecipes.length > 0)
+                if (state.plannedRecipes.isNotEmpty)
                   SliverPadding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     sliver: SliverGrid(
@@ -106,7 +106,7 @@ class _PlannerPageState extends State<PlannerPage> {
                       ),
                     ),
                   ),
-                if (state.recentRecipes.length > 0) ...[
+                if (state.recentRecipes.isNotEmpty) ...[
                   SliverPadding(
                     padding: const EdgeInsets.all(16),
                     sliver: SliverToBoxAdapter(

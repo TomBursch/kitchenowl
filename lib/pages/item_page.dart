@@ -24,8 +24,9 @@ class _ItemPageState extends State<ItemPage> {
   @override
   void initState() {
     super.initState();
-    if (widget.item is ShoppinglistItem)
+    if (widget.item is ShoppinglistItem) {
       descController.text = (widget.item as ShoppinglistItem).description;
+    }
     cubit = ItemEditCubit(item: widget.item);
   }
 
@@ -92,10 +93,11 @@ class _ItemPageState extends State<ItemPage> {
                             );
                           }) ??
                       false;
-                  if (confirmed && await cubit.deleteItem())
+                  if (confirmed && await cubit.deleteItem()) {
                     Navigator.of(context).pop(UpdateEnum.deleted);
+                  }
                 },
-                icon: Icon(Icons.delete),
+                icon: const Icon(Icons.delete),
               )
           ],
         ),
@@ -113,7 +115,7 @@ class _ItemPageState extends State<ItemPage> {
                         controller: descController,
                         onChanged: (s) => cubit.setDescription(s),
                         decoration: InputDecoration(
-                          border: OutlineInputBorder(),
+                          border: const OutlineInputBorder(),
                           labelText: AppLocalizations.of(context).description,
                           // suffix: IconButton(
                           //   onPressed: () {

@@ -15,18 +15,18 @@ class Item extends Model {
       );
 
   @override
-  List<Object> get props => [this.id, this.name];
+  List<Object> get props => [id, name];
 
   @override
   Map<String, dynamic> toJson() => {
-        "name": this.name,
+        "name": name,
       };
 
   @override
-  Map<String, dynamic> toJsonWithId() => this.toJson()
+  Map<String, dynamic> toJsonWithId() => toJson()
     ..addAll({
-      "id": this.id,
-      "ordering": this.ordering,
+      "id": id,
+      "ordering": ordering,
     });
 }
 
@@ -71,7 +71,7 @@ class ItemWithDescription extends Item {
       );
 
   @override
-  List<Object> get props => super.props + [this.description];
+  List<Object> get props => super.props + [description];
 }
 
 class ShoppinglistItem extends ItemWithDescription {
@@ -98,8 +98,6 @@ class ShoppinglistItem extends ItemWithDescription {
       );
 
   @override
-  Map<String, dynamic> toJson() => super.toJson();
-
   ShoppinglistItem copyWith({
     String name,
     String description,
@@ -109,9 +107,6 @@ class ShoppinglistItem extends ItemWithDescription {
         name: name ?? this.name,
         description: description ?? this.description,
       );
-
-  @override
-  List<Object> get props => super.props;
 }
 
 class RecipeItem extends ItemWithDescription {
@@ -146,6 +141,7 @@ class RecipeItem extends ItemWithDescription {
       "optional": optional,
     });
 
+  @override
   RecipeItem copyWith({
     String name,
     String description,
@@ -158,14 +154,14 @@ class RecipeItem extends ItemWithDescription {
         optional: optional ?? this.optional,
       );
 
-  Item toItem() => Item(id: this.id, name: this.name);
+  Item toItem() => Item(id: id, name: name);
 
-  ItemWithDescription toItemWithDescription() => ItemWithDescription(
-      id: this.id, name: this.name, description: this.description);
+  ItemWithDescription toItemWithDescription() =>
+      ItemWithDescription(id: id, name: name, description: description);
 
-  ShoppinglistItem toShoppingListItem() => ShoppinglistItem(
-      id: this.id, name: this.name, description: this.description);
+  ShoppinglistItem toShoppingListItem() =>
+      ShoppinglistItem(id: id, name: name, description: description);
 
   @override
-  List<Object> get props => super.props + [this.optional];
+  List<Object> get props => super.props + [optional];
 }

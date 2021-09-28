@@ -31,12 +31,12 @@ class SearchTextField extends StatelessWidget {
       onSubmitted: onSubmitted != null ? (_) => onSubmitted() : null,
       autofocus: autofocus,
       decoration: decoration?.applyDefaults(InputDecorationTheme(
-            border: OutlineInputBorder(),
+            border: const OutlineInputBorder(),
             fillColor: Theme.of(context).scaffoldBackgroundColor,
           )) ??
           InputDecoration(
-            border: OutlineInputBorder(),
-            prefixIcon: Icon(Icons.search),
+            border: const OutlineInputBorder(),
+            prefixIcon: const Icon(Icons.search),
             suffix: IconButton(
               onPressed: () {
                 if (controller.text.isNotEmpty) {
@@ -44,7 +44,7 @@ class SearchTextField extends StatelessWidget {
                 }
                 FocusScope.of(context).unfocus();
               },
-              icon: Icon(
+              icon: const Icon(
                 Icons.close,
                 color: Colors.grey,
               ),

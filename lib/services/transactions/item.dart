@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/models/recipe.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
@@ -7,7 +8,7 @@ import 'package:kitchenowl/services/transaction.dart';
 class TransactionItemGet extends Transaction<Item> {
   final Item item;
 
-  TransactionItemGet({this.item, DateTime timestamp})
+  TransactionItemGet({@required this.item, DateTime timestamp})
       : assert(item != null),
         super.internal(timestamp ?? DateTime.now(), "TransactionItemGet");
 
@@ -18,14 +19,14 @@ class TransactionItemGet extends Transaction<Item> {
 
   @override
   Future<Item> runOnline() async {
-    return ApiService.getInstance().getItem(this.item);
+    return ApiService.getInstance().getItem(item);
   }
 }
 
 class TransactionItemGetRecipes extends Transaction<List<Recipe>> {
   final Item item;
 
-  TransactionItemGetRecipes({this.item, DateTime timestamp})
+  TransactionItemGetRecipes({@required this.item, DateTime timestamp})
       : assert(item != null),
         super.internal(
             timestamp ?? DateTime.now(), "TransactionItemGetRecipes");

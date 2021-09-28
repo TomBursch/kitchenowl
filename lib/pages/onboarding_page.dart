@@ -9,6 +9,8 @@ class OnboardingPage extends StatelessWidget {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
+  OnboardingPage({Key key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -16,7 +18,7 @@ class OnboardingPage extends StatelessWidget {
         child: Align(
           alignment: Alignment.topCenter,
           child: ConstrainedBox(
-            constraints: BoxConstraints.expand(width: 600),
+            constraints: const BoxConstraints.expand(width: 600),
             child: Padding(
               padding: const EdgeInsets.all(16),
               child: Column(
@@ -27,7 +29,7 @@ class OnboardingPage extends StatelessWidget {
                   TextField(
                     controller: usernameController,
                     autofocus: true,
-                    autofillHints: [
+                    autofillHints: const [
                       AutofillHints.newUsername,
                       AutofillHints.username
                     ],
@@ -40,7 +42,10 @@ class OnboardingPage extends StatelessWidget {
                   TextField(
                     controller: nameController,
                     textInputAction: TextInputAction.next,
-                    autofillHints: [AutofillHints.name, AutofillHints.nickname],
+                    autofillHints: const [
+                      AutofillHints.name,
+                      AutofillHints.nickname
+                    ],
                     onEditingComplete: () => FocusScope.of(context).nextFocus(),
                     decoration: InputDecoration(
                       labelText: AppLocalizations.of(context).name,
@@ -49,7 +54,7 @@ class OnboardingPage extends StatelessWidget {
                   TextField(
                     controller: passwordController,
                     obscureText: true,
-                    autofillHints: [
+                    autofillHints: const [
                       AutofillHints.newPassword,
                       AutofillHints.password
                     ],

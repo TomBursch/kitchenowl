@@ -68,17 +68,18 @@ class _RecipePageState extends State<RecipePage> {
                           cubit.setUpdateState(UpdateEnum.updated);
                           cubit.refresh();
                         }
-                        if (res == UpdateEnum.deleted)
+                        if (res == UpdateEnum.deleted) {
                           Navigator.of(context).pop(UpdateEnum.deleted);
+                        }
                       },
-                      icon: Icon(Icons.edit),
+                      icon: const Icon(Icons.edit),
                     )
                 ],
               ),
               body: Align(
                 alignment: Alignment.topCenter,
                 child: ConstrainedBox(
-                  constraints: BoxConstraints.expand(width: 1600),
+                  constraints: const BoxConstraints.expand(width: 1600),
                   child: CustomScrollView(
                     slivers: [
                       SliverPadding(
@@ -99,8 +100,9 @@ class _RecipePageState extends State<RecipePage> {
                           ),
                         ),
                       ),
-                      if (state.recipe.items.where((e) => !e.optional).length >
-                          0)
+                      if (state.recipe.items
+                          .where((e) => !e.optional)
+                          .isNotEmpty)
                         SliverPadding(
                           padding: const EdgeInsets.all(16),
                           sliver: SliverToBoxAdapter(
@@ -137,8 +139,9 @@ class _RecipePageState extends State<RecipePage> {
                           ),
                         ),
                       ),
-                      if (state.recipe.items.where((e) => e.optional).length >
-                          0)
+                      if (state.recipe.items
+                          .where((e) => e.optional)
+                          .isNotEmpty)
                         SliverPadding(
                           padding: const EdgeInsets.all(16),
                           sliver: SliverToBoxAdapter(
@@ -184,7 +187,7 @@ class _RecipePageState extends State<RecipePage> {
                               child: Text(AppLocalizations.of(context)
                                   .addNumberIngredients(
                                       state.selectedItems.length)),
-                              onPressed: state.selectedItems.length == 0
+                              onPressed: state.selectedItems.isEmpty
                                   ? null
                                   : () async {
                                       await cubit.addItemsToList();

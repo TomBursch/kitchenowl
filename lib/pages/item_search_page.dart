@@ -83,7 +83,7 @@ class _ItemSearchPageState extends State<ItemSearchPage> {
                 },
                 decoration: InputDecoration(
                   filled: true,
-                  prefixIcon: Icon(Icons.search),
+                  prefixIcon: const Icon(Icons.search),
                   suffix: IconButton(
                     onPressed: () {
                       if (searchController.text.isNotEmpty) {
@@ -91,7 +91,7 @@ class _ItemSearchPageState extends State<ItemSearchPage> {
                       }
                       FocusScope.of(context).unfocus();
                     },
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.close,
                       color: Colors.grey,
                     ),
@@ -126,10 +126,11 @@ class _ItemSearchPageState extends State<ItemSearchPage> {
                 .searchResults[i]
                 .name), //#TODO map shouldn't be necessary (Bug in equatable?)
             onPressed: (item) {
-              if (!widget.multiple)
+              if (!widget.multiple) {
                 Navigator.of(context).pop([item]);
-              else
+              } else {
                 cubit.itemSelected(i);
+              }
             },
           ),
         ),

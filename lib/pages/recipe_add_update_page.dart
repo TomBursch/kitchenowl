@@ -62,7 +62,7 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
           actions: [
             if (!kIsWeb && (Platform.isAndroid || Platform.isIOS))
               IconButton(
-                  icon: Icon(Icons.save_rounded),
+                  icon: const Icon(Icons.save_rounded),
                   onPressed: () async {
                     await cubit.saveRecipe();
                     Navigator.of(context).pop(UpdateEnum.updated);
@@ -72,7 +72,7 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
         body: Align(
           alignment: Alignment.topCenter,
           child: ConstrainedBox(
-            constraints: BoxConstraints.expand(width: 1600),
+            constraints: const BoxConstraints.expand(width: 1600),
             child: CustomScrollView(
               slivers: [
                 SliverPadding(
@@ -98,7 +98,7 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                       onChanged: (s) => cubit.setDescription(s),
                       maxLines: null,
                       decoration: InputDecoration(
-                        border: OutlineInputBorder(),
+                        border: const OutlineInputBorder(),
                         labelText: AppLocalizations.of(context).description,
                         hintText:
                             AppLocalizations.of(context).writeMarkdownHere,
@@ -118,7 +118,7 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                           ),
                         ),
                         IconButton(
-                          icon: Icon(Icons.add),
+                          icon: const Icon(Icons.add),
                           onPressed: () => _updateItems(context, false),
                           padding: EdgeInsets.zero,
                         )
@@ -167,7 +167,7 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                           ),
                         ),
                         IconButton(
-                          icon: Icon(Icons.add),
+                          icon: const Icon(Icons.add),
                           onPressed: () => _updateItems(context, true),
                           padding: EdgeInsets.zero,
                         )

@@ -7,7 +7,7 @@ import 'package:kitchenowl/services/transaction_handler.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 class SettingsCubit extends Cubit<SettingsState> {
-  SettingsCubit() : super(SettingsState()) {
+  SettingsCubit() : super(const SettingsState()) {
     load();
   }
 
@@ -34,8 +34,9 @@ class SettingsCubit extends Cubit<SettingsState> {
 
   void setForcedOfflineMode(bool forcedOfflineMode) {
     emit(state.copyWith(forcedOfflineMode: forcedOfflineMode));
-    if (!forcedOfflineMode)
+    if (!forcedOfflineMode) {
       TransactionHandler.getInstance().runOpenTransactions();
+    }
   }
 }
 
@@ -43,7 +44,7 @@ class SettingsState extends Equatable {
   final ThemeMode themeMode;
   final bool forcedOfflineMode;
 
-  SettingsState({
+  const SettingsState({
     this.themeMode = ThemeMode.system,
     this.forcedOfflineMode = false,
   });

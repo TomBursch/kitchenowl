@@ -17,8 +17,9 @@ class TransactionShoppingListGetItems
   @override
   Future<List<ShoppinglistItem>> runOnline() async {
     final shoppinglist = await ApiService.getInstance().getItems();
-    if (shoppinglist != null)
+    if (shoppinglist != null) {
       TempStorage.getInstance().writeItems(shoppinglist);
+    }
     return shoppinglist;
   }
 }
@@ -83,21 +84,21 @@ class TransactionShoppingListAddItem extends Transaction<bool> {
   @override
   Map<String, dynamic> toJson() => super.toJson()
     ..addAll({
-      "name": this.name,
-      "description": this.description,
+      "name": name,
+      "description": description,
     });
 
   @override
   Future<bool> runLocal() async {
     final list = await TempStorage.getInstance().readItems();
-    list.add(ShoppinglistItem(name: this.name, description: this.description));
+    list.add(ShoppinglistItem(name: name, description: description));
     await TempStorage.getInstance().writeItems(list);
     return true;
   }
 
   @override
   Future<bool> runOnline() {
-    return ApiService.getInstance().addItemByName(this.name, this.description);
+    return ApiService.getInstance().addItemByName(name, description);
   }
 }
 
@@ -121,20 +122,20 @@ class TransactionShoppingListDeleteItem extends Transaction<bool> {
   @override
   Map<String, dynamic> toJson() => super.toJson()
     ..addAll({
-      "item": this.item.toJsonWithId(),
+      "item": item.toJsonWithId(),
     });
 
   @override
   Future<bool> runLocal() async {
     final list = await TempStorage.getInstance().readItems();
-    list.removeWhere((e) => e.name == this.item.name);
+    list.removeWhere((e) => e.name == item.name);
     await TempStorage.getInstance().writeItems(list);
     return true;
   }
 
   @override
   Future<bool> runOnline() {
-    return ApiService.getInstance().removeItem(this.item);
+    return ApiService.getInstance().removeItem(item);
   }
 }
 
@@ -161,18 +162,18 @@ class TransactionShoppingListUpdateItem extends Transaction<bool> {
   @override
   Map<String, dynamic> toJson() => super.toJson()
     ..addAll({
-      "item": this.item.toJsonWithId(),
-      "description": this.description,
+      "item": item.toJsonWithId(),
+      "description": description,
     });
 
   @override
   Future<bool> runLocal() async {
     if (item is ShoppinglistItem) {
       final list = await TempStorage.getInstance().readItems();
-      final int i = list.indexWhere((e) => e.id == this.item.id);
+      final int i = list.indexWhere((e) => e.id == item.id);
       list.removeAt(i);
-      list.insert(i,
-          (item as ShoppinglistItem).copyWith(description: this.description));
+      list.insert(
+          i, (item as ShoppinglistItem).copyWith(description: description));
       await TempStorage.getInstance().writeItems(list);
       return true;
     }
@@ -183,7 +184,7 @@ class TransactionShoppingListUpdateItem extends Transaction<bool> {
   Future<bool> runOnline() async {
     if (item is ShoppinglistItem) {
       return ApiService.getInstance()
-          .updateShoppingListItemDescription(this.item, this.description ?? '');
+          .updateShoppingListItemDescription(item, description ?? '');
     }
     return false;
   }
@@ -212,13 +213,13 @@ class TransactionShoppingListAddRecipeItems extends Transaction<bool> {
   @override
   Map<String, dynamic> toJson() => super.toJson()
     ..addAll({
-      "items": this.items.map((e) => e.toJsonWithId()).toList(),
+      "items": items.map((e) => e.toJsonWithId()).toList(),
     });
 
   @override
   Future<bool> runLocal() async {
     final list = await TempStorage.getInstance().readItems();
-    for (final item in this.items) {
+    for (final item in items) {
       final int i = list.indexWhere((e) => e.id == item.id);
       if (i >= 0) {
         list.removeAt(i);
@@ -233,6 +234,6 @@ class TransactionShoppingListAddRecipeItems extends Transaction<bool> {
 
   @override
   Future<bool> runOnline() {
-    return ApiService.getInstance().addRecipeItems(this.items);
+    return ApiService.getInstance().addRecipeItems(items);
   }
 }

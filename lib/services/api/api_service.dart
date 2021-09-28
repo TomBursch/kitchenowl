@@ -20,13 +20,14 @@ enum Connection {
 }
 
 class ApiService {
-  static const Duration _TIMEOUT = const Duration(seconds: 2);
+  // ignore: constant_identifier_names
+  static const Duration _TIMEOUT = Duration(seconds: 2);
   static ApiService _instance;
   final _client = http.Client();
   final String baseUrl;
   String _refreshToken;
 
-  static ValueNotifier<Connection> _connectionNotifier =
+  static final ValueNotifier<Connection> _connectionNotifier =
       ValueNotifier<Connection>(Connection.undefined);
   Map<String, String> headers = {};
 
@@ -35,16 +36,13 @@ class ApiService {
   }
 
   static ApiService getInstance() {
-    if (_instance == null) {
-      _instance = ApiService._internal('');
-    }
+    _instance ??= ApiService._internal('');
     return _instance;
   }
 
   Connection get connectionStatus => _connectionNotifier.value;
 
-  set refreshToken(String newRefreshToken) =>
-      this._refreshToken = newRefreshToken;
+  set refreshToken(String newRefreshToken) => _refreshToken = newRefreshToken;
 
   bool isConnected() => _connectionNotifier.value != Connection.disconnected;
 
@@ -96,24 +94,24 @@ class ApiService {
 
   Future<http.Response> get(String url, {bool refreshOnException = true}) =>
       _handleRequest(
-        () => this._client.get(Uri.parse(this.baseUrl + url), headers: headers),
+        () => _client.get(Uri.parse(baseUrl + url), headers: headers),
         refreshOnException: refreshOnException,
       );
 
   Future<http.Response> post(String url, dynamic body, {Encoding encoding}) =>
-      _handleRequest(() => this._client.post(Uri.parse(this.baseUrl + url),
+      _handleRequest(() => _client.post(Uri.parse(baseUrl + url),
           body: body, headers: headers, encoding: encoding));
 
   Future<http.Response> delete(String url, {dynamic body, Encoding encoding}) =>
       _handleRequest(() async {
         final request = http.Request(
           'DELETE',
-          Uri.parse(this.baseUrl + url),
+          Uri.parse(baseUrl + url),
         );
-        request.headers.addAll(this.headers);
+        request.headers.addAll(headers);
         if (encoding != null) request.encoding = encoding;
         if (body != null) request.body = body;
-        return http.Response.fromStream(await this._client.send(request));
+        return http.Response.fromStream(await _client.send(request));
       });
 
   Future<http.Response> _handleRequest(Future<http.Response> Function() request,
@@ -124,8 +122,9 @@ class ApiService {
       if ((!isConnected() && refreshOnException) ||
           response.statusCode == 401) {
         await refresh();
-        if (response.statusCode == 401 && this.isAuthenticated())
+        if (response.statusCode == 401 && isAuthenticated()) {
           response = await request();
+        }
       }
       return response;
     } catch (e) {
@@ -142,24 +141,24 @@ class ApiService {
     try {
       final res = await get('/health/8M4F88S8ooi4sMbLBfkkV7ctWwgibW6V',
           refreshOnException: false);
-      if (res.statusCode == 200)
+      if (res.statusCode == 200) {
         return Tuple2(
           jsonDecode(res.body)['msg'] == 'OK',
           jsonDecode(res.body),
         );
-    } catch (e) {}
-    return Tuple2(false, null);
+      }
+    } catch (_) {}
+    return const Tuple2(false, null);
   }
 
   Future<bool> refreshAuth() async {
     final _headers = Map<String, String>.from(headers);
     _headers['Authorization'] = 'Bearer ' + _refreshToken;
-    final res = await this
-        ._client
-        .get(Uri.parse(this.baseUrl + '/auth/refresh'), headers: _headers);
+    final res = await _client.get(Uri.parse(baseUrl + '/auth/refresh'),
+        headers: _headers);
     if (res.statusCode == 200) {
       final body = jsonDecode(res.body);
-      this.headers['Authorization'] = 'Bearer ' + body['access_token'];
+      headers['Authorization'] = 'Bearer ' + body['access_token'];
       _setConnectionState(Connection.authenticated);
       return true;
     }
@@ -171,7 +170,7 @@ class ApiService {
         '/auth', jsonEncode({'username': username, 'password': password}));
     if (res.statusCode == 200) {
       final body = jsonDecode(res.body);
-      this.headers['Authorization'] = 'Bearer ' + body['access_token'];
+      headers['Authorization'] = 'Bearer ' + body['access_token'];
       _refreshToken = body['refresh_token'];
       _setConnectionState(Connection.authenticated);
       return _refreshToken;
@@ -198,7 +197,7 @@ class ApiService {
         }));
     if (res.statusCode == 200) {
       final body = jsonDecode(res.body);
-      this.headers['Authorization'] = 'Bearer ' + body['access_token'];
+      headers['Authorization'] = 'Bearer ' + body['access_token'];
       _refreshToken = body['refresh_token'];
       _setConnectionState(Connection.authenticated);
       return _refreshToken;

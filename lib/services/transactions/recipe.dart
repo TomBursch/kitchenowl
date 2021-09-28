@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:kitchenowl/models/recipe.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
 import 'package:kitchenowl/services/storage/temp_storage.dart';
@@ -24,19 +25,19 @@ class TransactionRecipeGetRecipes extends Transaction<List<Recipe>> {
 class TransactionRecipeGetRecipe extends Transaction<Recipe> {
   final Recipe recipe;
 
-  TransactionRecipeGetRecipe({this.recipe, DateTime timestamp})
+  TransactionRecipeGetRecipe({@required this.recipe, DateTime timestamp})
       : assert(recipe != null),
         super.internal(
             timestamp ?? DateTime.now(), "TransactionRecipeGetRecipe");
 
   @override
   Future<Recipe> runLocal() async {
-    return this.recipe;
+    return recipe;
   }
 
   @override
   Future<Recipe> runOnline() {
-    return ApiService.getInstance().getRecipe(this.recipe);
+    return ApiService.getInstance().getRecipe(recipe);
   }
 }
 

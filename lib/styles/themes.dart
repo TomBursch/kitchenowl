@@ -8,7 +8,6 @@ abstract class AppThemes {
     visualDensity: VisualDensity.adaptivePlatformDensity,
   );
   static ThemeData dark = ThemeData.dark().copyWith(
-    accentColor: AppColors.green,
     colorScheme: ColorScheme.fromSwatch(
       primarySwatch: AppColors.green,
       accentColor: AppColors.green,

@@ -9,6 +9,8 @@ class LoginPage extends StatelessWidget {
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
+  LoginPage({Key key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -16,7 +18,7 @@ class LoginPage extends StatelessWidget {
         child: Align(
           alignment: Alignment.topCenter,
           child: ConstrainedBox(
-            constraints: BoxConstraints.expand(width: 600),
+            constraints: const BoxConstraints.expand(width: 600),
             child: Padding(
               padding: const EdgeInsets.all(16),
               child: Column(
@@ -28,7 +30,7 @@ class LoginPage extends StatelessWidget {
                   TextField(
                     controller: usernameController,
                     autofocus: true,
-                    autofillHints: [AutofillHints.username],
+                    autofillHints: const [AutofillHints.username],
                     textInputAction: TextInputAction.next,
                     onEditingComplete: () => FocusScope.of(context).nextFocus(),
                     decoration: InputDecoration(
@@ -39,7 +41,7 @@ class LoginPage extends StatelessWidget {
                     controller: passwordController,
                     obscureText: true,
                     textInputAction: TextInputAction.go,
-                    autofillHints: [AutofillHints.password],
+                    autofillHints: const [AutofillHints.password],
                     onSubmitted: (value) =>
                         BlocProvider.of<AuthCubit>(context).login(
                       usernameController.text,

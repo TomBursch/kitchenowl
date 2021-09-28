@@ -10,7 +10,7 @@ class TransactionStorage {
 
   TransactionStorage._internal();
   static TransactionStorage getInstance() {
-    if (_instance == null) _instance = TransactionStorage._internal();
+    _instance ??= TransactionStorage._internal();
     return _instance;
   }
 
@@ -27,22 +27,24 @@ class TransactionStorage {
   }
 
   Future<List<Transaction>> readTransactions() async {
-    if (!kIsWeb)
+    if (!kIsWeb) {
       try {
         final file = await _localFile;
         final String content = await file.readAsString();
         return List<Transaction>.from(
             json.decode(content).map((e) => Transaction.fromJson(e)));
-      } catch (e) {}
+      } catch (_) {}
+    }
     return [];
   }
 
   Future<File> clearTransactions() async {
-    if (!kIsWeb)
+    if (!kIsWeb) {
       try {
         final file = await _localFile;
         if (await file.exists()) return file.delete();
-      } catch (e) {}
+      } catch (_) {}
+    }
     return null;
   }
 

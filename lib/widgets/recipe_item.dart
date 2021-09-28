@@ -18,12 +18,12 @@ class RecipeItemWidget extends StatelessWidget {
     return Card(
       child: ListTile(
         title: Text(recipe.name),
-        trailing: Icon(Icons.arrow_right_rounded),
+        trailing: const Icon(Icons.arrow_right_rounded),
         onTap: () async {
           final res =
               await Navigator.of(context).push<UpdateEnum>(MaterialPageRoute(
                   builder: (context) => RecipePage(
-                        recipe: this.recipe,
+                        recipe: recipe,
                       )));
           if (onUpdated != null &&
               (res == UpdateEnum.updated || res == UpdateEnum.deleted)) {

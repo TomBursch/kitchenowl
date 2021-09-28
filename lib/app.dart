@@ -54,8 +54,9 @@ class App extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             home: BlocListener<SettingsCubit, SettingsState>(
               listener: (context, state) {
-                if (!kIsWeb && (Platform.isAndroid || Platform.isIOS))
+                if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
                   _setSystemUI(context, state);
+                }
               },
               listenWhen: (previous, current) =>
                   previous.themeMode != current.themeMode,
@@ -64,10 +65,10 @@ class App extends StatelessWidget {
                   if (state is Setup) return SetupPage();
                   if (state is Onboarding) return OnboardingPage();
                   if (state is Unauthenticated) return LoginPage();
-                  if (state is Authenticated) return HomePage();
-                  if (state is Unreachable) return UnreachablePage();
-                  if (state is Unsupported) return UnsupportedPage();
-                  return SplashPage();
+                  if (state is Authenticated) return const HomePage();
+                  if (state is Unreachable) return const UnreachablePage();
+                  if (state is Unsupported) return const UnsupportedPage();
+                  return const SplashPage();
                 },
               ),
             ),
@@ -82,10 +83,11 @@ class App extends StatelessWidget {
       case ThemeMode.system:
         final Brightness brightnessValue =
             MediaQuery.of(context).platformBrightness;
-        if (brightnessValue == Brightness.dark)
+        if (brightnessValue == Brightness.dark) {
           continue dark;
-        else
+        } else {
           continue light;
+        }
         break;
       light:
       case ThemeMode.light:

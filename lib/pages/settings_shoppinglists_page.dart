@@ -13,10 +13,10 @@ class SettingsShoppinglistsPage extends StatelessWidget {
       body: Align(
         alignment: Alignment.topCenter,
         child: ConstrainedBox(
-          constraints: BoxConstraints.expand(width: 600),
+          constraints: const BoxConstraints.expand(width: 600),
           child: ListView(
-            padding: EdgeInsets.all(16),
-            children: [
+            padding: const EdgeInsets.all(16),
+            children: const [
               Card(
                 child: ListTile(
                   title: Text('Default'),

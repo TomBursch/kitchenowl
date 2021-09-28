@@ -12,7 +12,7 @@ class TempStorage {
 
   TempStorage._internal();
   static TempStorage getInstance() {
-    if (_instance == null) _instance = TempStorage._internal();
+    _instance ??= TempStorage._internal();
     return _instance;
   }
 
@@ -39,27 +39,29 @@ class TempStorage {
   }
 
   Future<void> clearAll() async {
-    await this.clearItems();
-    await this.clearUser();
-    await this.clearRecipes();
+    await clearItems();
+    await clearUser();
+    await clearRecipes();
   }
 
   Future<User> readUser() async {
-    if (!kIsWeb)
+    if (!kIsWeb) {
       try {
         final file = await _localUserFile;
         final String content = await file.readAsString();
         return User.fromJson(json.decode(content));
-      } catch (e) {}
+      } catch (_) {}
+    }
     return null;
   }
 
   Future<File> clearUser() async {
-    if (!kIsWeb)
+    if (!kIsWeb) {
       try {
         final file = await _localUserFile;
         if (await file.exists()) return file.delete();
-      } catch (e) {}
+      } catch (_) {}
+    }
     return null;
   }
 
@@ -72,13 +74,14 @@ class TempStorage {
   }
 
   Future<List<ShoppinglistItem>> readItems() async {
-    if (!kIsWeb)
+    if (!kIsWeb) {
       try {
         final file = await _localItemFile;
         final String content = await file.readAsString();
         return List<ShoppinglistItem>.from(
             json.decode(content).map((e) => ShoppinglistItem.fromJson(e)));
-      } catch (e) {}
+      } catch (_) {}
+    }
     return null;
   }
 
@@ -92,22 +95,24 @@ class TempStorage {
   }
 
   Future<File> clearItems() async {
-    if (!kIsWeb)
+    if (!kIsWeb) {
       try {
         final file = await _localItemFile;
         if (await file.exists()) return file.delete();
-      } catch (e) {}
+      } catch (_) {}
+    }
     return null;
   }
 
   Future<List<Recipe>> readRecipes() async {
-    if (!kIsWeb)
+    if (!kIsWeb) {
       try {
         final file = await _localRecipeFile;
         final String content = await file.readAsString();
         return List<Recipe>.from(
             json.decode(content).map((e) => Recipe.fromJson(e)));
-      } catch (e) {}
+      } catch (_) {}
+    }
     return null;
   }
 
@@ -121,11 +126,12 @@ class TempStorage {
   }
 
   Future<File> clearRecipes() async {
-    if (!kIsWeb)
+    if (!kIsWeb) {
       try {
         final file = await _localRecipeFile;
         if (await file.exists()) return file.delete();
-      } catch (e) {}
+      } catch (_) {}
+    }
     return null;
   }
 }

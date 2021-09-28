@@ -35,8 +35,9 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
   }
 
   void setSorting(ShoppinglistSorting sorting) {
-    if (!(state is SearchShoppinglistCubitState))
+    if (state is! SearchShoppinglistCubitState) {
       _sortShoppinglistItems(state.listItems, sorting);
+    }
     emit(state.copyWith(sorting: sorting));
   }
 
@@ -64,13 +65,12 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
           .map((e) => ItemWithDescription.fromItem(
               item: e, description: queryDescription))
           .toList();
-      if (items == null)
-        items = shoppinglist
-            .where((e) => e.name.contains(queryName))
-            .cast<Item>()
-            .toList();
+      items ??= shoppinglist
+          .where((e) => e.name.contains(queryName))
+          .cast<Item>()
+          .toList();
       _mergeShoppinglistItems(items, shoppinglist);
-      if (items.length == 0 ||
+      if (items.isEmpty ||
           items[0].name.toLowerCase() != queryName.toLowerCase()) {
         items.add(ItemWithDescription(
             name: queryName, description: queryDescription));
@@ -82,8 +82,9 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
       ));
     } else {
       // Sort if needed
-      if (sorting != ShoppinglistSorting.alphabetical)
+      if (sorting != ShoppinglistSorting.alphabetical) {
         _sortShoppinglistItems(shoppinglist, sorting);
+      }
 
       final recent = await TransactionHandler.getInstance()
           .runTransaction(TransactionShoppingListGetRecentItems());
@@ -165,8 +166,8 @@ class SearchShoppinglistCubitState extends ShoppinglistCubitState {
         listItems: listItems ?? this.listItems,
         recentItems: recentItems ?? this.recentItems,
         sorting: sorting ?? this.sorting,
-        query: this.query,
-        result: this.result,
+        query: query,
+        result: result,
       );
 
   @override

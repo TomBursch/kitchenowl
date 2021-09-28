@@ -11,7 +11,7 @@ import 'package:kitchenowl/pages/home_page/home_page.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage({Key key}) : super(key: key);
+  const HomePage({Key key}) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -29,10 +29,11 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     pages = [
-      BlocProvider.value(value: shoppingListCubit, child: ShoppinglistPage()),
-      BlocProvider.value(value: recipeListCubit, child: RecipeListPage()),
-      BlocProvider.value(value: plannerCubit, child: PlannerPage()),
-      ProfilePage(),
+      BlocProvider.value(
+          value: shoppingListCubit, child: const ShoppinglistPage()),
+      BlocProvider.value(value: recipeListCubit, child: const RecipeListPage()),
+      BlocProvider.value(value: plannerCubit, child: const PlannerPage()),
+      const ProfilePage(),
     ];
   }
 
@@ -45,16 +46,18 @@ class _HomePageState extends State<HomePage> {
 
   void _onItemTapped(int i) {
     if (i == 0) {
-      if (_selectedIndex == i)
+      if (_selectedIndex == i) {
         shoppingListCubit.refresh("");
-      else
+      } else {
         shoppingListCubit.refresh();
+      }
     }
     if (i == 1) {
-      if (_selectedIndex == i)
+      if (_selectedIndex == i) {
         recipeListCubit.refresh("");
-      else
+      } else {
         recipeListCubit.refresh();
+      }
     }
     if (i == 2 && _selectedIndex != i) {
       plannerCubit.refresh();
@@ -83,7 +86,7 @@ class _HomePageState extends State<HomePage> {
         child: Align(
           alignment: Alignment.topCenter,
           child: ConstrainedBox(
-              constraints: BoxConstraints.expand(width: 1600),
+              constraints: const BoxConstraints.expand(width: 1600),
               child: pages[_selectedIndex]),
         ),
       ),
@@ -132,15 +135,15 @@ class _HomePageState extends State<HomePage> {
         type: BottomNavigationBarType.fixed,
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_bag_outlined),
+            icon: const Icon(Icons.shopping_bag_outlined),
             label: AppLocalizations.of(context).shoppingList,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.receipt),
+            icon: const Icon(Icons.receipt),
             label: AppLocalizations.of(context).recipes,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.calendar_today_rounded),
+            icon: const Icon(Icons.calendar_today_rounded),
             label: AppLocalizations.of(context).planner,
           ),
           BottomNavigationBarItem(

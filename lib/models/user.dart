@@ -16,18 +16,18 @@ class User extends Model {
       );
 
   @override
-  List<Object> get props => [this.id, this.name, this.username, this.owner];
+  List<Object> get props => [id, name, username, owner];
 
   @override
   Map<String, dynamic> toJson() => {
-        "name": this.name,
+        "name": name,
       };
 
   @override
   Map<String, dynamic> toJsonWithId() => {
-        "id": this.id,
-        "username": this.username,
-        "name": this.name,
-        "owner": this.owner,
+        "id": id,
+        "username": username,
+        "name": name,
+        "owner": owner,
       };
 }

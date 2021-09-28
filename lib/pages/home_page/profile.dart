@@ -18,10 +18,10 @@ class ProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final user =
         (BlocProvider.of<AuthCubit>(context).state as Authenticated).user ??
-            User(name: '', username: '');
+            const User(name: '', username: '');
     final isOffline = App.isOffline(context);
     return CustomScrollView(
-      physics: ClampingScrollPhysics(),
+      physics: const ClampingScrollPhysics(),
       slivers: [
         SliverPadding(
           padding: const EdgeInsets.fromLTRB(16, 64, 16, 16),
@@ -30,7 +30,7 @@ class ProfilePage extends StatelessWidget {
             Icon(
               Icons.account_circle_rounded,
               size: 90,
-              color: Theme.of(context).accentColor,
+              color: Theme.of(context).colorScheme.secondary,
             ),
             Text(
               user.name,
@@ -49,13 +49,13 @@ class ProfilePage extends StatelessWidget {
                 children: [
                   ListTile(
                     title: Text(AppLocalizations.of(context).darkmode),
-                    leading: Icon(Icons.nights_stay_sharp),
-                    contentPadding: EdgeInsets.only(left: 20, right: 0),
+                    leading: const Icon(Icons.nights_stay_sharp),
+                    contentPadding: const EdgeInsets.only(left: 20, right: 0),
                     trailing: Transform.scale(
                       scale: 0.9,
                       child: CupertinoSwitch(
                         value: Theme.of(context).brightness == Brightness.dark,
-                        activeColor: Theme.of(context).accentColor,
+                        activeColor: Theme.of(context).colorScheme.secondary,
                         onChanged: (value) {
                           BlocProvider.of<SettingsCubit>(context).setTheme(
                               value ? ThemeMode.dark : ThemeMode.light);
@@ -65,13 +65,13 @@ class ProfilePage extends StatelessWidget {
                   ),
                   ListTile(
                     title: Text(AppLocalizations.of(context).forceOfflineMode),
-                    leading: Icon(Icons.mobiledata_off_outlined),
-                    contentPadding: EdgeInsets.only(left: 20, right: 0),
+                    leading: const Icon(Icons.mobiledata_off_outlined),
+                    contentPadding: const EdgeInsets.only(left: 20, right: 0),
                     trailing: Transform.scale(
                       scale: 0.9,
                       child: CupertinoSwitch(
                         value: state.forcedOfflineMode,
-                        activeColor: Theme.of(context).accentColor,
+                        activeColor: Theme.of(context).colorScheme.secondary,
                         onChanged: (value) =>
                             BlocProvider.of<SettingsCubit>(context)
                                 .setForcedOfflineMode(value),
@@ -82,49 +82,51 @@ class ProfilePage extends StatelessWidget {
                     Card(
                       child: ListTile(
                         title: Text(AppLocalizations.of(context).shoppingLists),
-                        leading: Icon(Icons.shopping_bag),
-                        trailing: Icon(Icons.arrow_right_rounded),
+                        leading: const Icon(Icons.shopping_bag),
+                        trailing: const Icon(Icons.arrow_right_rounded),
                         onTap: () => Navigator.of(context).push(
                             MaterialPageRoute(
                                 builder: (context) =>
-                                    SettingsShoppinglistsPage())),
+                                    const SettingsShoppinglistsPage())),
                       ),
                     ),
                   if (!isOffline)
                     Card(
                       child: ListTile(
                         title: Text(AppLocalizations.of(context).user),
-                        leading: Icon(Icons.person),
-                        trailing: Icon(Icons.arrow_right_rounded),
+                        leading: const Icon(Icons.person),
+                        trailing: const Icon(Icons.arrow_right_rounded),
                         onTap: () => Navigator.of(context).push(
                             MaterialPageRoute(
-                                builder: (context) => SettingsUserPage())),
+                                builder: (context) =>
+                                    const SettingsUserPage())),
                       ),
                     ),
                   if (!isOffline && user.owner)
                     Card(
                       child: ListTile(
                         title: Text(AppLocalizations.of(context).server),
-                        leading: Icon(Icons.account_tree_rounded),
-                        trailing: Icon(Icons.arrow_right_rounded),
+                        leading: const Icon(Icons.account_tree_rounded),
+                        trailing: const Icon(Icons.arrow_right_rounded),
                         onTap: () => Navigator.of(context).push(
                             MaterialPageRoute(
-                                builder: (context) => SettingsServerPage())),
+                                builder: (context) =>
+                                    const SettingsServerPage())),
                       ),
                     ),
                   Card(
                     child: ListTile(
                       title: Text(AppLocalizations.of(context).about),
-                      leading: Icon(Icons.privacy_tip_rounded),
-                      trailing: Icon(Icons.arrow_right_rounded),
+                      leading: const Icon(Icons.privacy_tip_rounded),
+                      trailing: const Icon(Icons.arrow_right_rounded),
                       onTap: () => showAboutDialog(
                           context: context,
                           applicationVersion: Config.packageInfo?.version,
                           applicationLegalese:
                               '\u{a9} ' + AppLocalizations.of(context).appLegal,
                           applicationIcon: ConstrainedBox(
-                            constraints:
-                                BoxConstraints.expand(width: 64, height: 64),
+                            constraints: const BoxConstraints.expand(
+                                width: 64, height: 64),
                             child: Image.asset(
                               'assets/icon/icon.png',
                             ),

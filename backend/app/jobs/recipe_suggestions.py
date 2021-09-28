@@ -83,7 +83,7 @@ def computeRecipeSuggestions(meal_instances):
     # find recently cooked meals
     for id in meal_hist:
         for cooked in meal_hist[id]:
-            if cooked < week_ago:
+            if cooked > week_ago:
                 Recipe.find_by_id(id).suggestion_score = 0
 
     # commit changes to db

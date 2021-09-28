@@ -52,6 +52,7 @@ class App extends StatelessWidget {
             darkTheme: AppThemes.dark,
             themeMode: state.themeMode,
             debugShowCheckedModeBanner: false,
+            restorationScopeId: "com.tombursch.kitchenowl",
             home: BlocListener<SettingsCubit, SettingsState>(
               listener: (context, state) {
                 if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {

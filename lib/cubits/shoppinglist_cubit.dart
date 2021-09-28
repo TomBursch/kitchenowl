@@ -112,7 +112,13 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
         shoppinglist.sort((a, b) => a.name.compareTo(b.name));
         break;
       case ShoppinglistSorting.algorithmic:
-        shoppinglist.sort((a, b) => a.ordering.compareTo(b.ordering));
+        shoppinglist.sort((a, b) {
+          final int ordering = a.ordering.compareTo(b.ordering);
+          // Ordering of 0 means not sortable and should be at the back
+          if (ordering != 0 && a.ordering == 0) return 1;
+          if (ordering != 0 && b.ordering == 0) return -1;
+          return ordering;
+        });
         break;
     }
   }

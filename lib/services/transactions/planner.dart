@@ -38,6 +38,22 @@ class TransactionPlannerGetRecentPlannedRecipes
   }
 }
 
+class TransactionPlannerGetSuggestedRecipes extends Transaction<List<Recipe>> {
+  TransactionPlannerGetSuggestedRecipes({DateTime timestamp})
+      : super.internal(timestamp ?? DateTime.now(),
+            "TransactionPlannerGetSuggestedRecipes");
+
+  @override
+  Future<List<Recipe>> runLocal() async {
+    return [];
+  }
+
+  @override
+  Future<List<Recipe>> runOnline() async {
+    return await ApiService.getInstance().getSuggestedRecipes();
+  }
+}
+
 class TransactionPlannerAddRecipe extends Transaction<bool> {
   final Recipe recipe;
 

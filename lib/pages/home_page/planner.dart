@@ -149,6 +149,49 @@ class _PlannerPageState extends State<PlannerPage> {
                     ),
                   ),
                 ],
+                if (state.suggestedRecipes.isNotEmpty) ...[
+                  SliverPadding(
+                    padding: const EdgeInsets.all(16),
+                    sliver: SliverToBoxAdapter(
+                      child: Text(
+                        AppLocalizations.of(context).recipesSuggested + ':',
+                        style: Theme.of(context).textTheme.headline6,
+                      ),
+                    ),
+                  ),
+                  SliverPadding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    sliver: SliverGrid(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: crossAxisCount,
+                        mainAxisSpacing: 4,
+                        crossAxisSpacing: 4,
+                        childAspectRatio: 1,
+                      ),
+                      delegate: SliverChildBuilderDelegate(
+                        (context, i) => SelectableButtonCard(
+                          title: state.suggestedRecipes[i].name,
+                          onPressed: () {
+                            cubit.add(state.suggestedRecipes[i]);
+                          },
+                          onLongPressed: () async {
+                            final res = await Navigator.of(context)
+                                .push<UpdateEnum>(MaterialPageRoute(
+                                    builder: (context) => RecipePage(
+                                          recipe: state.suggestedRecipes[i],
+                                          updateOnPlanningEdit: true,
+                                        )));
+                            if (res == UpdateEnum.updated ||
+                                res == UpdateEnum.deleted) {
+                              cubit.refresh();
+                            }
+                          },
+                        ),
+                        childCount: state.suggestedRecipes.length,
+                      ),
+                    ),
+                  ),
+                ],
               ],
             ),
           ),

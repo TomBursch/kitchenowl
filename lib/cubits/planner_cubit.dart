@@ -28,17 +28,24 @@ class PlannerCubit extends Cubit<PlannerCubitState> {
     final recent = await TransactionHandler.getInstance()
             .runTransaction(TransactionPlannerGetRecentPlannedRecipes()) ??
         [];
-    emit(PlannerCubitState(planned, recent));
+    final suggested = await TransactionHandler.getInstance()
+            .runTransaction(TransactionPlannerGetSuggestedRecipes()) ??
+        [];
+    emit(PlannerCubitState(planned, recent, suggested));
   }
 }
 
 class PlannerCubitState extends Equatable {
   final List<Recipe> plannedRecipes;
   final List<Recipe> recentRecipes;
+  final List<Recipe> suggestedRecipes;
 
   const PlannerCubitState(
-      [this.plannedRecipes = const [], this.recentRecipes = const []]);
+      [this.plannedRecipes = const [],
+      this.recentRecipes = const [],
+      this.suggestedRecipes = const []]);
 
   @override
-  List<Object> get props => plannedRecipes.cast<Object>() + recentRecipes;
+  List<Object> get props =>
+      plannedRecipes.cast<Object>() + recentRecipes + suggestedRecipes;
 }

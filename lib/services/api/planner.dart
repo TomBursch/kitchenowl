@@ -29,4 +29,12 @@ extension PlannerApi on ApiService {
     final body = List.from(jsonDecode(res.body));
     return body.map((e) => Recipe.fromJson(e)).toList();
   }
+
+  Future<List<Recipe>> getSuggestedRecipes() async {
+    final res = await get('/planner/suggested-recipes');
+    if (res.statusCode != 200) return [];
+
+    final body = List.from(jsonDecode(res.body));
+    return body.map((e) => Recipe.fromJson(e)).toList();
+  }
 }

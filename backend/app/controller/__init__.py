@@ -7,4 +7,5 @@ from . import planner
 from . import onboarding
 from . import exportimport
 from . import settings
+from . import expense
 from . import health_controller

@@ -13,6 +13,13 @@ class User(db.Model, DbModelMixin, TimestampMixin):
     photo = db.Column(db.String())
     owner = db.Column(db.Boolean(), default=False)
 
+    expense_balance = db.Column(db.Float(), default=0)
+
+    expenses_paid = db.relationship(
+        'Expense', back_populates='paid_by', cascade="all, delete-orphan")
+    expenses_paid_for = db.relationship(
+        'ExpensePaidFor', back_populates='user', cascade="all, delete-orphan")
+
     def check_password(self, password):
         return bcrypt.check_password_hash(self.password, password)
 

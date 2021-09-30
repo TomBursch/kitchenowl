@@ -49,6 +49,10 @@ dependencies:
   http: ^0.13.3
   flutter_markdown: ^0.6.6
   tuple: ^2.0.0
+  charts_flutter:
+    git:
+      url: git://github.com/google/charts.git
+      path: charts_flutter
   # cached_network_image: ^3.0.0
 
 dev_dependencies:
@@ -63,7 +67,7 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
-  
+
   # Localization generation
   generate: true
 

@@ -28,6 +28,11 @@ class TempStorage {
     return File('$path/user.json');
   }
 
+  Future<File> get _localUsersFile async {
+    final path = await _localPath;
+    return File('$path/users.json');
+  }
+
   Future<File> get _localItemFile async {
     final path = await _localPath;
     return File('$path/items.json');
@@ -41,6 +46,7 @@ class TempStorage {
   Future<void> clearAll() async {
     await clearItems();
     await clearUser();
+    await clearUsers();
     await clearRecipes();
   }
 
@@ -69,6 +75,37 @@ class TempStorage {
     if (!kIsWeb) {
       final file = await _localUserFile;
       return file.writeAsString(json.encode(user.toJsonWithId()));
+    }
+    return null;
+  }
+
+  Future<List<User>> readUsers() async {
+    if (!kIsWeb) {
+      try {
+        final file = await _localUsersFile;
+        final String content = await file.readAsString();
+        List<Map<String, dynamic>> list = json.decode(content);
+        return list.map((e) => User.fromJson(e)).toList();
+      } catch (_) {}
+    }
+    return null;
+  }
+
+  Future<File> clearUsers() async {
+    if (!kIsWeb) {
+      try {
+        final file = await _localUsersFile;
+        if (await file.exists()) return file.delete();
+      } catch (_) {}
+    }
+    return null;
+  }
+
+  Future<File> writeUsers(List<User> users) async {
+    if (!kIsWeb) {
+      final file = await _localUsersFile;
+      return file
+          .writeAsString(json.encode(users.map((e) => e.toJsonWithId())));
     }
     return null;
   }

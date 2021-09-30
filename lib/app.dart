@@ -80,6 +80,7 @@ class App extends StatelessWidget {
   }
 
   void _setSystemUI(BuildContext context, SettingsState state) {
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
     switch (state.themeMode) {
       case ThemeMode.system:
         final Brightness brightnessValue =

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:kitchenowl/config.dart';
+import 'package:kitchenowl/models/server_settings.dart';
 import 'package:tuple/tuple.dart';
 
 // Export extensions
@@ -10,6 +11,8 @@ export 'item.dart';
 export 'shoppinglist.dart';
 export 'recipe.dart';
 export 'planner.dart';
+export 'import_export.dart';
+export 'expense.dart';
 
 enum Connection {
   disconnected,
@@ -31,6 +34,9 @@ class ApiService {
       ValueNotifier<Connection>(Connection.undefined);
   Map<String, String> headers = {};
 
+  static final ValueNotifier<ServerSettings> _settingsNotifier =
+      ValueNotifier<ServerSettings>(ServerSettings());
+
   ApiService._internal(this.baseUrl) {
     _connectionNotifier.value = Connection.undefined;
   }
@@ -41,6 +47,8 @@ class ApiService {
   }
 
   Connection get connectionStatus => _connectionNotifier.value;
+
+  ServerSettings get serverSettings => _settingsNotifier.value;
 
   set refreshToken(String newRefreshToken) => _refreshToken = newRefreshToken;
 
@@ -63,6 +71,14 @@ class ApiService {
     _connectionNotifier.removeListener(f);
   }
 
+  void addSettingsListener(void Function() f) {
+    _settingsNotifier.addListener(f);
+  }
+
+  void removeSettingsListener(void Function() f) {
+    _settingsNotifier.removeListener(f);
+  }
+
   static Future<void> connectTo(String url, {String refreshToken}) async {
     getInstance().dispose();
     _instance = ApiService._internal(
@@ -80,6 +96,7 @@ class ApiService {
                 (int.tryParse(Config.packageInfo?.buildNumber ?? '0') ?? 0) &&
             (healthy.item2['version'] ?? 0) >= Config.MIN_BACKEND_VERSION) {
           if (await _instance.refreshAuth()) {
+            _settingsNotifier.value = ServerSettings.fromJson(healthy.item2);
             return _instance._setConnectionState(Connection.authenticated);
           } else {
             return _instance._setConnectionState(Connection.connected);
@@ -203,5 +220,20 @@ class ApiService {
       return _refreshToken;
     }
     return null;
+  }
+
+  Future<ServerSettings> getSettings() async {
+    final res = await get('/settings');
+    if (res.statusCode != 200) return null;
+    _settingsNotifier.value = ServerSettings.fromJson(jsonDecode(res.body));
+    return _settingsNotifier.value;
+  }
+
+  Future<bool> setSettings(ServerSettings settings) async {
+    final res = await post('/settings', jsonEncode(settings.toJson()));
+    if (res.statusCode == 200) {
+      _settingsNotifier.value = ServerSettings.fromJson(jsonDecode(res.body));
+    }
+    return res.statusCode == 200;
   }
 }

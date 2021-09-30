@@ -1,3 +1,4 @@
+from sqlalchemy.sql.expression import desc
 from app.errors import NotFoundRequest
 from flask import jsonify
 from flask_jwt_extended import jwt_required
@@ -11,7 +12,7 @@ from .schemas import AddExpense, UpdateExpense
 @app.route('/expense', methods=['GET'])
 @jwt_required()
 def getAllExpenses():
-    return jsonify([e.obj_to_full_dict() for e in Expense.all()])
+    return jsonify([e.obj_to_full_dict() for e in Expense.query.order_by(desc(Expense.id)).limit(50).all()])
 
 
 @app.route('/expense/<id>', methods=['GET'])

@@ -14,27 +14,27 @@ class AddUpdateExpenseCubit extends Cubit<AddUpdateExpenseState> {
           paidFor: expense.paidFor,
         ));
 
-  Future<void> saveRecipe() async {
-    if (expense.id == null) {
-      if (state.name.isNotEmpty) {
+  Future<void> saveExpense() async {
+    if (state.isValid()) {
+      if (expense.id == null) {
         await ApiService.getInstance().addExpense(Expense(
-          amount: expense.amount,
-          name: expense.name,
-          paidById: expense.paidById,
-          paidFor: expense.paidFor,
+          amount: state.amount,
+          name: state.name,
+          paidById: state.paidBy,
+          paidFor: state.paidFor,
+        ));
+      } else {
+        await ApiService.getInstance().updateExpense(expense.copyWith(
+          name: state.name,
+          amount: state.amount,
+          paidById: state.paidBy,
+          paidFor: state.paidFor,
         ));
       }
-    } else {
-      await ApiService.getInstance().updateExpense(expense.copyWith(
-        name: state.name,
-        amount: state.amount,
-        paidById: state.paidBy,
-        paidFor: state.paidFor,
-      ));
     }
   }
 
-  Future<bool> removeRecipe() async {
+  Future<bool> deleteExpense() async {
     if (expense.id != null) {
       return ApiService.getInstance().deleteExpense(expense);
     }
@@ -53,13 +53,19 @@ class AddUpdateExpenseCubit extends Cubit<AddUpdateExpenseState> {
     emit(state.copyWith(paidBy: user.id));
   }
 
+  void setPaidById(int userId) {
+    emit(state.copyWith(paidBy: userId));
+  }
+
   void addUser(User user) {
-    emit(state.copyWith(
-        paidFor: List.from(state.paidFor)
-          ..add(PaidForModel(
-            userId: user.id,
-            factor: 1,
-          ))));
+    if (!containsUser(user)) {
+      emit(state.copyWith(
+          paidFor: List.from(state.paidFor)
+            ..add(PaidForModel(
+              userId: user.id,
+              factor: 1,
+            ))));
+    }
   }
 
   bool containsUser(User user) {
@@ -70,6 +76,15 @@ class AddUpdateExpenseCubit extends Cubit<AddUpdateExpenseState> {
     final l = List<PaidForModel>.from(state.paidFor);
     l.removeWhere((e) => e.userId == user.id);
     emit(state.copyWith(paidFor: l));
+  }
+
+  void setFactor(User user, int factor) {
+    final l = List<PaidForModel>.from(state.paidFor);
+    final i = l.indexWhere((e) => e.userId == user.id);
+    if (i > 0) {
+      l[i] = PaidForModel(userId: user.id, factor: factor);
+      emit(state.copyWith(paidFor: l));
+    }
   }
 }
 
@@ -94,6 +109,8 @@ class AddUpdateExpenseState extends Equatable {
         paidBy: paidBy ?? this.paidBy,
         paidFor: paidFor ?? this.paidFor,
       );
+
+  bool isValid() => name.isNotEmpty && amount != 0;
 
   @override
   List<Object> get props => [name, amount, paidBy] + paidFor;

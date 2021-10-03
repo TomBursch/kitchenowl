@@ -171,12 +171,14 @@ class _HomePageState extends State<HomePage> {
                       ? OpenContainer(
                           transitionType: ContainerTransitionType.fade,
                           openBuilder: (BuildContext context, VoidCallback _) {
-                            return const AddUpdateExpensePage();
+                            return AddUpdateExpensePage(
+                              users: expenseCubit.state.users,
+                            );
                           },
                           openColor: Theme.of(context).scaffoldBackgroundColor,
                           onClosed: (data) {
                             if (data == UpdateEnum.updated) {
-                              recipeListCubit.refresh();
+                              expenseCubit.refresh();
                             }
                           },
                           closedElevation: 6.0,

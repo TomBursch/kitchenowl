@@ -104,8 +104,8 @@ class TempStorage {
   Future<File> writeUsers(List<User> users) async {
     if (!kIsWeb) {
       final file = await _localUsersFile;
-      return file
-          .writeAsString(json.encode(users.map((e) => e.toJsonWithId())));
+      return file.writeAsString(
+          json.encode(users.map((e) => e.toJsonWithId()).toList()));
     }
     return null;
   }

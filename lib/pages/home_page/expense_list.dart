@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:kitchenowl/app.dart';
 import 'package:kitchenowl/cubits/expense_list_cubit.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/user.dart';
@@ -49,22 +50,7 @@ class _ExpensePageState extends State<ExpenseListPage> {
                     ),
                   ),
                 ),
-                if (state.expenses.isEmpty)
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          const Icon(Icons.money_off_rounded),
-                          const SizedBox(height: 16),
-                          Text(AppLocalizations.of(context).plannerEmpty),
-                        ],
-                      ),
-                    ),
-                  ),
-                if (state.expenses.isNotEmpty) ...[
+                if (state.users.isNotEmpty) ...[
                   SliverPadding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       sliver: SliverToBoxAdapter(
@@ -144,19 +130,50 @@ class _ExpensePageState extends State<ExpenseListPage> {
                           ),
                         ),
                       )),
-                  SliverPadding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    sliver: SliverList(
-                      delegate: SliverChildBuilderDelegate(
-                        (context, i) => ExpenseItemWidget(
-                          expense: state.expenses[i],
-                          users: state.users,
-                          onUpdated: cubit.refresh,
+                  if (state.expenses.isEmpty && !App.isOffline(context))
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            const Icon(Icons.money_off_rounded),
+                            const SizedBox(height: 16),
+                            Text(AppLocalizations.of(context).expenseEmpty),
+                          ],
                         ),
-                        childCount: state.expenses.length,
                       ),
                     ),
-                  ),
+                  if (state.expenses.isEmpty && App.isOffline(context))
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            const Icon(Icons.cloud_off),
+                            const SizedBox(height: 16),
+                            Text(AppLocalizations.of(context).offlineMessage),
+                          ],
+                        ),
+                      ),
+                    ),
+                  if (state.expenses.isNotEmpty)
+                    SliverPadding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      sliver: SliverList(
+                        delegate: SliverChildBuilderDelegate(
+                          (context, i) => ExpenseItemWidget(
+                            expense: state.expenses[i],
+                            users: state.users,
+                            onUpdated: cubit.refresh,
+                          ),
+                          childCount: state.expenses.length,
+                        ),
+                      ),
+                    ),
                 ]
               ],
             ),

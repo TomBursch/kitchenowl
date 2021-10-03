@@ -35,7 +35,7 @@ class ApiService {
   Map<String, String> headers = {};
 
   static final ValueNotifier<ServerSettings> _settingsNotifier =
-      ValueNotifier<ServerSettings>(ServerSettings());
+      ValueNotifier<ServerSettings>(const ServerSettings());
 
   ApiService._internal(this.baseUrl) {
     _connectionNotifier.value = Connection.undefined;

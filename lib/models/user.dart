@@ -21,7 +21,7 @@ class User extends Model {
         username: map['username'],
         name: map['name'],
         owner: map['owner'] ?? false,
-        balance: map['expense_balance'],
+        balance: map['expense_balance'] ?? 0,
       );
 
   @override
@@ -38,5 +38,6 @@ class User extends Model {
         "username": username,
         "name": name,
         "owner": owner,
+        "expense_balance": balance,
       };
 }

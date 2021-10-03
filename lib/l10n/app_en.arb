@@ -23,6 +23,7 @@
     "expenseAdd": "Add Expense",
     "expenseAmount": "Amount",
     "expenseEdit": "Edit Expense",
+    "expenseEmpty": "No expenses, start by creating one!",
     "expenseFactor": "Factor",
     "expensePaidBy": "Paid by",
     "expensePaidFor": "Paid for",

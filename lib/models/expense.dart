@@ -54,7 +54,7 @@ class Expense extends Model {
         "name": name,
         "amount": amount,
         "paid_by": {"id": paidById},
-        "paid_for": paidFor.map((e) => e.toJsonWithId()).toList()
+        "paid_for": paidFor.map((e) => e.toJson()).toList()
       };
 
   @override
@@ -75,7 +75,7 @@ class PaidForModel extends Model {
 
   @override
   Map<String, dynamic> toJson() => {
-        "user": {"id": userId},
+        "id": userId,
         "factor": factor,
       };
 

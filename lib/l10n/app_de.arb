@@ -23,6 +23,7 @@
     "expenseAdd": "Ausgabe Hinzufügen",
     "expenseAmount": "Betrag",
     "expenseEdit": "Ausgabe Bearbeiten",
+    "expenseEmpty": "Keine Ausgaben, fange an welche zu erstellen!",
     "expenseFactor": "Faktor",
     "expensePaidBy": "Bezahlt von",
     "expensePaidFor": "Bezahlt für",

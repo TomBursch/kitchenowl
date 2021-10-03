@@ -57,5 +57,5 @@ class ExpenseCubitState extends Equatable {
       );
 
   @override
-  List<Object> get props => [expense, users];
+  List<Object> get props => [updateState, expense, users];
 }

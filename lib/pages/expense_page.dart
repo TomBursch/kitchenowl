@@ -54,6 +54,7 @@ class _ExpensePageState extends State<ExpensePage> {
                             .push<UpdateEnum>(MaterialPageRoute(
                                 builder: (context) => AddUpdateExpensePage(
                                       expense: state.expense,
+                                      users: state.users,
                                     )));
                         if (res == UpdateEnum.updated) {
                           cubit.setUpdateState(UpdateEnum.updated);

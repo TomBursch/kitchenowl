@@ -79,7 +79,7 @@ def updateExpense(args, id):  # noqa: C901
             if con.user.id not in user_ids:
                 con.delete()
         for user_data in args['paid_for']:
-            user = User.find_by_name(user_data['id'])
+            user = User.find_by_id(user_data['id'])
             if user:
                 con = ExpensePaidFor.find_by_ids(expense.id, user.id)
                 if con:

@@ -183,7 +183,14 @@ class _AddUpdateRecipePageState extends State<AddUpdateExpensePage> {
                               : cubit.removeUser)(widget.users[i]),
                           subtitle: Text(NumberFormat.simpleCurrency().format(
                               (state.amount *
-                                  state.paidFor[i].factor /
+                                  (cubit.state.paidFor
+                                          .firstWhere(
+                                              (e) =>
+                                                  e.userId ==
+                                                  widget.users[i].id,
+                                              orElse: () => null)
+                                          ?.factor ??
+                                      0) /
                                   state.paidFor
                                       .fold(0, (p, v) => p + v.factor)))),
                           trailing: ConstrainedBox(

@@ -110,7 +110,7 @@ class AddUpdateExpenseState extends Equatable {
         paidFor: paidFor ?? this.paidFor,
       );
 
-  bool isValid() => name.isNotEmpty && amount != 0;
+  bool isValid() => name.isNotEmpty && amount != 0 && paidFor.isNotEmpty;
 
   @override
   List<Object> get props => [name, amount, paidBy] + paidFor;

@@ -61,11 +61,17 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
               : AppLocalizations.of(context).recipeNew),
           actions: [
             if (!kIsWeb && (Platform.isAndroid || Platform.isIOS))
-              IconButton(
-                  icon: const Icon(Icons.save_rounded),
-                  onPressed: () async {
-                    await cubit.saveRecipe();
-                    Navigator.of(context).pop(UpdateEnum.updated);
+              BlocBuilder<AddUpdateRecipeCubit, AddUpdateRecipeState>(
+                  bloc: cubit,
+                  builder: (context, state) {
+                    return IconButton(
+                        icon: const Icon(Icons.save_rounded),
+                        onPressed: state.isValid()
+                            ? () async {
+                                await cubit.saveRecipe();
+                                Navigator.of(context).pop(UpdateEnum.updated);
+                              }
+                            : null);
                   }),
           ],
         ),
@@ -222,15 +228,21 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                   SliverPadding(
                     padding: EdgeInsets.fromLTRB(16, isUpdate ? 0 : 16, 16, 16),
                     sliver: SliverToBoxAdapter(
-                      child: ElevatedButton(
-                        onPressed: () async {
-                          await cubit.saveRecipe();
-                          Navigator.of(context).pop(UpdateEnum.updated);
-                        },
-                        child: Text(
-                          isUpdate
-                              ? AppLocalizations.of(context).save
-                              : AppLocalizations.of(context).recipeAdd,
+                      child: BlocBuilder<AddUpdateRecipeCubit,
+                          AddUpdateRecipeState>(
+                        bloc: cubit,
+                        builder: (context, state) => ElevatedButton(
+                          onPressed: state.isValid()
+                              ? () async {
+                                  await cubit.saveRecipe();
+                                  Navigator.of(context).pop(UpdateEnum.updated);
+                                }
+                              : null,
+                          child: Text(
+                            isUpdate
+                                ? AppLocalizations.of(context).save
+                                : AppLocalizations.of(context).recipeAdd,
+                          ),
                         ),
                       ),
                     ),

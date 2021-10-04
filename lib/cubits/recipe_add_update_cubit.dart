@@ -14,20 +14,20 @@ class AddUpdateRecipeCubit extends Cubit<AddUpdateRecipeState> {
         ));
 
   Future<void> saveRecipe() async {
-    if (recipe.id == null) {
-      if (state.name.isNotEmpty) {
+    if (state.isValid()) {
+      if (recipe.id == null) {
         await ApiService.getInstance().addRecipe(Recipe(
           name: state.name,
           description: state.description ?? "",
           items: state.items,
         ));
+      } else {
+        await ApiService.getInstance().updateRecipe(recipe.copyWith(
+          name: state.name,
+          description: state.description,
+          items: state.items,
+        ));
       }
-    } else {
-      await ApiService.getInstance().updateRecipe(recipe.copyWith(
-        name: state.name,
-        description: state.description,
-        items: state.items,
-      ));
     }
   }
 
@@ -94,6 +94,8 @@ class AddUpdateRecipeState extends Equatable {
         description: description ?? this.description,
         items: items ?? this.items,
       );
+
+  bool isValid() => name.isNotEmpty;
 
   @override
   List<Object> get props => [name, description, items];

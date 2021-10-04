@@ -1,6 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/cubits/auth_cubit.dart';
+import 'package:kitchenowl/cubits/settings_cubit.dart';
 import 'package:kitchenowl/cubits/settings_server_cubit.dart';
 import 'package:kitchenowl/models/user.dart';
 import 'package:kitchenowl/pages/settings/create_user_page.dart';
@@ -54,6 +56,51 @@ class _SettingsServerPageState extends State<SettingsServerPage> {
                   child: ListTile(
                       title: Text(Uri.parse(ApiService.getInstance().baseUrl)
                           .authority)),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  AppLocalizations.of(context).features + ':',
+                  style: Theme.of(context).textTheme.headline6,
+                ),
+                const SizedBox(height: 8),
+                BlocBuilder<SettingsCubit, SettingsState>(
+                  builder: (context, state) => Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      ListTile(
+                        title: Text(AppLocalizations.of(context).mealPlanner),
+                        leading: const Icon(Icons.calendar_today_rounded),
+                        contentPadding:
+                            const EdgeInsets.only(left: 20, right: 0),
+                        trailing: Transform.scale(
+                          scale: 0.9,
+                          child: CupertinoSwitch(
+                            value: state.serverSettings.featurePlanner,
+                            activeColor:
+                                Theme.of(context).colorScheme.secondary,
+                            onChanged: BlocProvider.of<SettingsCubit>(context)
+                                .setFeaturePlanner,
+                          ),
+                        ),
+                      ),
+                      ListTile(
+                        title: Text(AppLocalizations.of(context).balances),
+                        leading: const Icon(Icons.account_balance_rounded),
+                        contentPadding:
+                            const EdgeInsets.only(left: 20, right: 0),
+                        trailing: Transform.scale(
+                          scale: 0.9,
+                          child: CupertinoSwitch(
+                            value: state.serverSettings.featureExpenses,
+                            activeColor:
+                                Theme.of(context).colorScheme.secondary,
+                            onChanged: BlocProvider.of<SettingsCubit>(context)
+                                .setFeatureExpenses,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
                 Row(
                   children: [

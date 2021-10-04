@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:kitchenowl/app.dart';
 import 'package:kitchenowl/cubits/recipe_cubit.dart';
+import 'package:kitchenowl/cubits/settings_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/models/recipe.dart';
 import 'package:kitchenowl/pages/recipe_add_update_page.dart';
@@ -198,22 +199,26 @@ class _RecipePageState extends State<RecipePage> {
                           ),
                         ),
                       ),
-                      SliverPadding(
-                        padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-                        sliver: SliverToBoxAdapter(
-                          child: ElevatedButton(
-                            child: Text(AppLocalizations.of(context)
-                                .addRecipeToPlanner),
-                            onPressed: () async {
-                              await cubit.addRecipeToPlanner();
-                              Navigator.of(context).pop(
-                                  widget.updateOnPlanningEdit
-                                      ? UpdateEnum.updated
-                                      : UpdateEnum.unchanged);
-                            },
+                      if (BlocProvider.of<SettingsCubit>(context)
+                          .state
+                          .serverSettings
+                          .featurePlanner)
+                        SliverPadding(
+                          padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                          sliver: SliverToBoxAdapter(
+                            child: ElevatedButton(
+                              child: Text(AppLocalizations.of(context)
+                                  .addRecipeToPlanner),
+                              onPressed: () async {
+                                await cubit.addRecipeToPlanner();
+                                Navigator.of(context).pop(
+                                    widget.updateOnPlanningEdit
+                                        ? UpdateEnum.updated
+                                        : UpdateEnum.unchanged);
+                              },
+                            ),
                           ),
                         ),
-                      ),
                     ],
                   ),
                 ),

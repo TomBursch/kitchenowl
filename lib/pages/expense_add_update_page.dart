@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:kitchenowl/cubits/expense_add_update_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/helpers/currency_text_input_formatter.dart';
@@ -39,7 +40,9 @@ class _AddUpdateRecipePageState extends State<AddUpdateExpensePage> {
       amountController.text = widget.expense.amount.toStringAsFixed(2);
     }
     if (widget.expense == null) {
+      amountController.text = 0.toStringAsFixed(2);
       cubit = AddUpdateExpenseCubit(Expense(
+        amount: 0,
         paidById: widget.users[0].id,
         paidFor: widget.users
             .map((e) => PaidForModel(userId: e.id, factor: 1))
@@ -67,12 +70,17 @@ class _AddUpdateRecipePageState extends State<AddUpdateExpensePage> {
               : AppLocalizations.of(context).expenseAdd),
           actions: [
             if (!kIsWeb && (Platform.isAndroid || Platform.isIOS))
-              IconButton(
-                  icon: const Icon(Icons.save_rounded),
-                  onPressed: () async {
-                    await cubit.saveExpense();
-                    Navigator.of(context).pop(UpdateEnum.updated);
-                  }),
+              BlocBuilder<AddUpdateExpenseCubit, AddUpdateExpenseState>(
+                bloc: cubit,
+                builder: (context, state) => IconButton(
+                    icon: const Icon(Icons.save_rounded),
+                    onPressed: state.isValid()
+                        ? () async {
+                            await cubit.saveExpense();
+                            Navigator.of(context).pop(UpdateEnum.updated);
+                          }
+                        : null),
+              ),
           ],
         ),
         body: Align(
@@ -81,73 +89,77 @@ class _AddUpdateRecipePageState extends State<AddUpdateExpensePage> {
             constraints: const BoxConstraints.expand(width: 1600),
             child: CustomScrollView(
               slivers: [
-                SliverPadding(
-                  padding: const EdgeInsets.all(16),
-                  sliver: SliverToBoxAdapter(
-                    child: TextField(
-                      controller: nameController,
-                      onChanged: (s) => cubit.setName(s),
-                      textInputAction: TextInputAction.next,
-                      onEditingComplete: () =>
-                          FocusScope.of(context).nextFocus(),
-                      decoration: InputDecoration(
-                        labelText: AppLocalizations.of(context).name,
-                      ),
-                    ),
-                  ),
-                ),
-                SliverPadding(
-                  padding: const EdgeInsets.all(16),
-                  sliver: SliverToBoxAdapter(
-                    child: TextField(
-                      controller: amountController,
-                      onChanged: (s) =>
-                          cubit.setAmount(double.tryParse(s) ?? 0),
-                      textInputAction: TextInputAction.next,
-                      keyboardType: TextInputType.number,
-                      onEditingComplete: () =>
-                          FocusScope.of(context).nextFocus(),
-                      inputFormatters: [CurrencyTextInputFormater()],
-                      decoration: InputDecoration(
-                        labelText: AppLocalizations.of(context).expenseAmount,
-                      ),
-                    ),
-                  ),
-                ),
-                BlocBuilder<AddUpdateExpenseCubit, AddUpdateExpenseState>(
-                  bloc: cubit,
-                  builder: (context, state) => SliverPadding(
-                    padding: const EdgeInsets.all(16),
-                    sliver: SliverToBoxAdapter(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(AppLocalizations.of(context).expensePaidBy),
-                          DropdownButton<int>(
-                            value: state.paidBy,
-                            isExpanded: true,
-                            onChanged: (id) => cubit.setPaidById(id),
-                            items: widget.users
-                                .map(
-                                  (user) => DropdownMenuItem<int>(
-                                    child: Text(user.name),
-                                    value: user.id,
-                                  ),
-                                )
-                                .toList(),
+                SliverList(
+                  delegate: SliverChildListDelegate(
+                    [
+                      Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: TextField(
+                          controller: nameController,
+                          onChanged: (s) => cubit.setName(s),
+                          textInputAction: TextInputAction.next,
+                          onEditingComplete: () =>
+                              FocusScope.of(context).nextFocus(),
+                          decoration: InputDecoration(
+                            labelText: AppLocalizations.of(context).name,
                           ),
-                        ],
+                        ),
                       ),
-                    ),
-                  ),
-                ),
-                SliverPadding(
-                  padding: const EdgeInsets.all(16),
-                  sliver: SliverToBoxAdapter(
-                    child: Text(
-                      AppLocalizations.of(context).expensePaidFor,
-                    ),
+                      Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: TextField(
+                          controller: amountController,
+                          onChanged: (s) =>
+                              cubit.setAmount(double.tryParse(s) ?? 0),
+                          textInputAction: TextInputAction.next,
+                          keyboardType: TextInputType.number,
+                          onEditingComplete: () =>
+                              FocusScope.of(context).nextFocus(),
+                          inputFormatters: [CurrencyTextInputFormater()],
+                          decoration: InputDecoration(
+                            labelText:
+                                AppLocalizations.of(context).expenseAmount,
+                          ),
+                        ),
+                      ),
+                      BlocBuilder<AddUpdateExpenseCubit, AddUpdateExpenseState>(
+                        bloc: cubit,
+                        builder: (context, state) => Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                AppLocalizations.of(context).expensePaidBy,
+                                style: Theme.of(context).textTheme.caption,
+                              ),
+                              DropdownButton<int>(
+                                value: state.paidBy,
+                                isExpanded: true,
+                                onChanged: (id) => cubit.setPaidById(id),
+                                items: widget.users
+                                    .map(
+                                      (user) => DropdownMenuItem<int>(
+                                        child: Text(user.name),
+                                        value: user.id,
+                                      ),
+                                    )
+                                    .toList(),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+                        child: Text(
+                          AppLocalizations.of(context).expensePaidFor,
+                          style: Theme.of(context).textTheme.caption,
+                        ),
+                      ),
+                      const Divider(indent: 16, endIndent: 16),
+                    ],
                   ),
                 ),
                 BlocBuilder<AddUpdateExpenseCubit, AddUpdateExpenseState>(
@@ -169,8 +181,16 @@ class _AddUpdateRecipePageState extends State<AddUpdateExpensePage> {
                           onChanged: (v) => (v
                               ? cubit.addUser
                               : cubit.removeUser)(widget.users[i]),
-                          trailing: SizedBox(
-                            width: 100,
+                          subtitle: Text(NumberFormat.simpleCurrency().format(
+                              (state.amount *
+                                  state.paidFor[i].factor /
+                                  state.paidFor
+                                      .fold(0, (p, v) => p + v.factor)))),
+                          trailing: ConstrainedBox(
+                            constraints: const BoxConstraints(
+                              minWidth: 20,
+                              maxWidth: 100,
+                            ),
                             child: TextField(
                               textInputAction: TextInputAction.next,
                               keyboardType: TextInputType.number,

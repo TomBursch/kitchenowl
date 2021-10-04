@@ -74,35 +74,62 @@ class _ExpensePageState extends State<ExpensePage> {
                   constraints: const BoxConstraints.expand(width: 1600),
                   child: CustomScrollView(
                     slivers: [
-                      SliverToBoxAdapter(
-                        child: ListTile(
-                          title:
-                              Text(AppLocalizations.of(context).expenseAmount),
-                          trailing: Text(NumberFormat.simpleCurrency()
-                              .format(state.expense.amount)),
-                        ),
-                      ),
-                      SliverToBoxAdapter(
-                        child: ListTile(
-                          title:
-                              Text(AppLocalizations.of(context).expensePaidBy),
-                          trailing: Text(
-                            state.users
-                                    .firstWhere(
-                                        (e) => e.id == state.expense.paidById,
-                                        orElse: () => null)
-                                    ?.name ??
-                                AppLocalizations.of(context).other,
-                          ),
-                        ),
-                      ),
-                      SliverPadding(
-                        padding: const EdgeInsets.all(8),
-                        sliver: SliverToBoxAdapter(
-                          child: Text(
-                            AppLocalizations.of(context).expensePaidFor + ':',
-                            style: Theme.of(context).textTheme.headline6,
-                          ),
+                      SliverList(
+                        delegate: SliverChildListDelegate(
+                          [
+                            const SizedBox(height: 16),
+                            Text(
+                              AppLocalizations.of(context).expenseAmount,
+                              style: Theme.of(context).textTheme.subtitle1,
+                              textAlign: TextAlign.center,
+                            ),
+                            Text(
+                              NumberFormat.simpleCurrency()
+                                  .format(state.expense.amount),
+                              style: Theme.of(context).textTheme.headline2,
+                              textAlign: TextAlign.center,
+                            ),
+                            ListTile(
+                              title: Text(
+                                AppLocalizations.of(context).expensePaidBy +
+                                    " " +
+                                    (state.users
+                                            .firstWhere(
+                                                (e) =>
+                                                    e.id ==
+                                                    state.expense.paidById,
+                                                orElse: () => null)
+                                            ?.name ??
+                                        AppLocalizations.of(context).other),
+                              ),
+                              trailing: state.expense.createdAt != null
+                                  ? Text(
+                                      state.expense.createdAt.toString(),
+                                    )
+                                  : null,
+                            ),
+                            const SizedBox(height: 24),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      AppLocalizations.of(context)
+                                              .expensePaidFor +
+                                          ':',
+                                      style:
+                                          Theme.of(context).textTheme.subtitle1,
+                                    ),
+                                  ),
+                                  Text(AppLocalizations.of(context)
+                                      .expenseFactor),
+                                ],
+                              ),
+                            ),
+                            const Divider(indent: 16, endIndent: 16),
+                          ],
                         ),
                       ),
                       SliverList(

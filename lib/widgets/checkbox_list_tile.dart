@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class CustomCheckboxListTile extends StatelessWidget {
   final Widget trailing;
   final Widget title;
+  final Widget subtitle;
   final Function(bool) onChanged;
   final bool value;
 
@@ -10,6 +11,7 @@ class CustomCheckboxListTile extends StatelessWidget {
     Key key,
     this.trailing,
     this.title,
+    this.subtitle,
     this.onChanged,
     this.value,
   }) : super(key: key);
@@ -19,6 +21,7 @@ class CustomCheckboxListTile extends StatelessWidget {
     return ListTile(
       title: title,
       trailing: trailing,
+      subtitle: subtitle,
       onTap: () => onChanged(!value),
       leading: Checkbox(
         value: value,

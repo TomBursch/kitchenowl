@@ -72,7 +72,7 @@ class TempStorage {
   }
 
   Future<File> writeUser(User user) async {
-    if (!kIsWeb) {
+    if (!kIsWeb && user != null) {
       final file = await _localUserFile;
       return file.writeAsString(json.encode(user.toJsonWithId()));
     }

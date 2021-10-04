@@ -14,7 +14,6 @@ RUN apt-get install -y --no-install-recommends \
   ca-certificates \
   gnupg \
   python3 \
-  lib32stdc++6 \
   libstdc++6 \
   libglu1-mesa
 RUN apt-get clean

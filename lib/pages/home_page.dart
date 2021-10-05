@@ -14,6 +14,7 @@ import 'package:kitchenowl/pages/expense_add_update_page.dart';
 import 'package:kitchenowl/pages/recipe_add_update_page.dart';
 import 'package:kitchenowl/pages/home_page/home_page.dart';
 import 'package:kitchenowl/kitchenowl.dart';
+import 'package:responsive_builder/responsive_builder.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key key}) : super(key: key);
@@ -215,38 +216,84 @@ class _HomePageState extends State<HomePage> {
               ),
             ];
 
-            return Scaffold(
-              body: PageTransitionSwitcher(
-                transitionBuilder: (
-                  Widget child,
-                  Animation<double> animation,
-                  Animation<double> secondaryAnimation,
-                ) {
-                  return FadeThroughTransition(
-                    animation: animation,
-                    secondaryAnimation: secondaryAnimation,
-                    child: child,
-                  );
-                },
-                child: Align(
-                  alignment: Alignment.topCenter,
-                  child: ConstrainedBox(
-                      constraints: const BoxConstraints.expand(width: 1600),
-                      child: _homePageMenuItems[_selectedIndex].page),
-                ),
+            Widget body = PageTransitionSwitcher(
+              transitionBuilder: (
+                Widget child,
+                Animation<double> animation,
+                Animation<double> secondaryAnimation,
+              ) {
+                return FadeThroughTransition(
+                  animation: animation,
+                  secondaryAnimation: secondaryAnimation,
+                  child: child,
+                );
+              },
+              child: Align(
+                alignment: Alignment.topCenter,
+                child: ConstrainedBox(
+                    constraints: const BoxConstraints.expand(width: 1600),
+                    child: _homePageMenuItems[_selectedIndex].page),
               ),
+            );
+
+            final bool useBottomNavigationBar = getValueForScreenType<bool>(
+              context: context,
+              mobile: true,
+              tablet: false,
+              desktop: false,
+            );
+
+            if (!useBottomNavigationBar) {
+              body = Row(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  SizedBox(
+                    width: 200,
+                    child: ListView(
+                      children: _homePageMenuItems
+                          .asMap()
+                          .entries
+                          .map(
+                            (e) => ListTile(
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.horizontal(
+                                    right: Radius.circular(5)),
+                              ),
+                              tileColor: _selectedIndex == e.key
+                                  ? Theme.of(context).colorScheme.primary
+                                  : null,
+                              title:
+                                  Text(e.value.bottomNavigationBarItem.label),
+                              leading: e.value.bottomNavigationBarItem.icon,
+                              onTap: () =>
+                                  _onItemTapped(e.key, _homePageMenuItems),
+                            ),
+                          )
+                          .toList(),
+                    ),
+                  ),
+                  const VerticalDivider(),
+                  Expanded(child: body),
+                ],
+              );
+            }
+
+            return Scaffold(
+              body: body,
               floatingActionButton:
                   _homePageMenuItems[_selectedIndex].floatingActionButton,
-              bottomNavigationBar: BottomNavigationBar(
-                showUnselectedLabels: false,
-                showSelectedLabels: true,
-                type: BottomNavigationBarType.fixed,
-                items: _homePageMenuItems
-                    .map((e) => e.bottomNavigationBarItem)
-                    .toList(),
-                currentIndex: _selectedIndex,
-                onTap: (i) => _onItemTapped(i, _homePageMenuItems),
-              ),
+              bottomNavigationBar: useBottomNavigationBar
+                  ? BottomNavigationBar(
+                      showUnselectedLabels: false,
+                      showSelectedLabels: true,
+                      type: BottomNavigationBarType.fixed,
+                      items: _homePageMenuItems
+                          .map((e) => e.bottomNavigationBarItem)
+                          .toList(),
+                      currentIndex: _selectedIndex,
+                      onTap: (i) => _onItemTapped(i, _homePageMenuItems),
+                    )
+                  : null,
             );
           },
         );

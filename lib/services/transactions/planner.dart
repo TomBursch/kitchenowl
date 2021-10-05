@@ -121,3 +121,20 @@ class TransactionPlannerRemoveRecipe extends Transaction<bool> {
     return ApiService.getInstance().removePlannedRecipe(recipe);
   }
 }
+
+class TransactionPlannerRefreshSuggestedRecipes
+    extends Transaction<List<Recipe>> {
+  TransactionPlannerRefreshSuggestedRecipes({DateTime timestamp})
+      : super.internal(timestamp ?? DateTime.now(),
+            "TransactionPlannerRefreshSuggestedRecipes");
+
+  @override
+  Future<List<Recipe>> runLocal() async {
+    return [];
+  }
+
+  @override
+  Future<List<Recipe>> runOnline() async {
+    return await ApiService.getInstance().refreshSuggestedRecipes();
+  }
+}

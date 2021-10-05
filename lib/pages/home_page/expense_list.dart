@@ -54,77 +54,7 @@ class _ExpensePageState extends State<ExpenseListPage> {
                   SliverToBoxAdapter(
                     child: SizedBox(
                       height: (state.users.length * 60 + 30).toDouble(),
-                      child: charts.BarChart(
-                        [
-                          charts.Series<User, String>(
-                            id: 'Balance',
-                            data: state.users,
-                            colorFn: (user, _) => charts.Color(
-                              r: Theme.of(context).colorScheme.secondary.red,
-                              g: Theme.of(context).colorScheme.secondary.green,
-                              b: Theme.of(context).colorScheme.secondary.blue,
-                            ),
-                            domainFn: (user, _) => user.username,
-                            measureFn: (user, _) => user.balance,
-                            labelAccessorFn: (user, _) =>
-                                "  ${user.name}: ${NumberFormat.simpleCurrency().format(user.balance)}",
-                          ),
-                          charts.Series<User, String>(
-                            id: 'zero',
-                            domainFn: (user, _) => user.username,
-                            measureFn: (user, _) => 0,
-                            data: state.users,
-                            colorFn: (user, _) => charts.Color(
-                              r: Theme.of(context).disabledColor.red,
-                              g: Theme.of(context).disabledColor.green,
-                              b: Theme.of(context).disabledColor.blue,
-                            ),
-                            strokeWidthPxFn: (user, _) => 5,
-                          )..setAttribute(charts.rendererIdKey, 'zero'),
-                        ],
-                        vertical: false,
-                        barRendererDecorator: charts.BarLabelDecorator<String>(
-                          outsideLabelStyleSpec: charts.TextStyleSpec(
-                            color: charts.Color(
-                              r: Theme.of(context)
-                                  .textTheme
-                                  .bodyText2
-                                  .color
-                                  .red,
-                              g: Theme.of(context)
-                                  .textTheme
-                                  .bodyText2
-                                  .color
-                                  .green,
-                              b: Theme.of(context)
-                                  .textTheme
-                                  .bodyText2
-                                  .color
-                                  .blue,
-                            ),
-                          ),
-                        ),
-                        customSeriesRenderers: [
-                          charts.BarTargetLineRendererConfig<String>(
-                            customRendererId: 'zero',
-                          )
-                        ],
-                        defaultInteractions: false,
-                        primaryMeasureAxis: charts.NumericAxisSpec(
-                            showAxisLine: false,
-                            renderSpec: const charts.NoneRenderSpec(),
-                            tickProviderSpec:
-                                charts.StaticNumericTickProviderSpec([
-                              charts.TickSpec(-state.users.fold<double>(0.0,
-                                  (p, e) => e.balance > p ? e.balance : p)),
-                              const charts.TickSpec<double>(0.0),
-                              charts.TickSpec(state.users.fold<double>(0.0,
-                                  (p, e) => e.balance > p ? e.balance : p)),
-                            ])),
-                        domainAxis: const charts.OrdinalAxisSpec(
-                          renderSpec: charts.NoneRenderSpec(),
-                        ),
-                      ),
+                      child: _getBarChart(context, state),
                     ),
                   ),
                   if (state.expenses.isEmpty && !App.isOffline(context))
@@ -176,6 +106,69 @@ class _ExpensePageState extends State<ExpenseListPage> {
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _getBarChart(BuildContext context, ExpenseListCubitState state) {
+    double maxBalance = state.users
+        .fold<double>(0.0, (p, e) => e.balance.abs() > p ? e.balance.abs() : p);
+    maxBalance = maxBalance > 0 ? maxBalance : 1;
+
+    return charts.BarChart(
+      [
+        charts.Series<User, String>(
+          id: 'Balance',
+          data: state.users,
+          colorFn: (user, _) => charts.Color(
+            r: Theme.of(context).colorScheme.secondary.red,
+            g: Theme.of(context).colorScheme.secondary.green,
+            b: Theme.of(context).colorScheme.secondary.blue,
+          ),
+          domainFn: (user, _) => user.username,
+          measureFn: (user, _) => user.balance,
+          labelAccessorFn: (user, _) =>
+              "  ${user.name}: ${NumberFormat.simpleCurrency().format(user.balance)}",
+        ),
+        charts.Series<User, String>(
+          id: 'zero',
+          domainFn: (user, _) => user.username,
+          measureFn: (user, _) => 0,
+          data: state.users,
+          colorFn: (user, _) => charts.Color(
+            r: Theme.of(context).disabledColor.red,
+            g: Theme.of(context).disabledColor.green,
+            b: Theme.of(context).disabledColor.blue,
+          ),
+          strokeWidthPxFn: (user, _) => 5,
+        )..setAttribute(charts.rendererIdKey, 'zero'),
+      ],
+      vertical: false,
+      barRendererDecorator: charts.BarLabelDecorator<String>(
+        outsideLabelStyleSpec: charts.TextStyleSpec(
+          color: charts.Color(
+            r: Theme.of(context).textTheme.bodyText2.color.red,
+            g: Theme.of(context).textTheme.bodyText2.color.green,
+            b: Theme.of(context).textTheme.bodyText2.color.blue,
+          ),
+        ),
+      ),
+      customSeriesRenderers: [
+        charts.BarTargetLineRendererConfig<String>(
+          customRendererId: 'zero',
+        )
+      ],
+      defaultInteractions: false,
+      primaryMeasureAxis: charts.NumericAxisSpec(
+          showAxisLine: false,
+          renderSpec: const charts.NoneRenderSpec(),
+          tickProviderSpec: charts.StaticNumericTickProviderSpec([
+            charts.TickSpec(-maxBalance),
+            const charts.TickSpec<double>(0.0),
+            charts.TickSpec(maxBalance),
+          ])),
+      domainAxis: const charts.OrdinalAxisSpec(
+        renderSpec: charts.NoneRenderSpec(),
       ),
     );
   }

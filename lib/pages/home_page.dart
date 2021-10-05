@@ -249,8 +249,17 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   SizedBox(
                     width: 200,
-                    child: ListView(
-                      children: _homePageMenuItems
+                    child: ListView(children: [
+                      // Image.asset('assets/images/header.png'),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          AppLocalizations.of(context).appTitle,
+                          style: Theme.of(context).textTheme.headline5,
+                        ),
+                      ),
+                      const Divider(),
+                      ..._homePageMenuItems
                           .asMap()
                           .entries
                           .map(
@@ -270,7 +279,7 @@ class _HomePageState extends State<HomePage> {
                             ),
                           )
                           .toList(),
-                    ),
+                    ]),
                   ),
                   const VerticalDivider(),
                   Expanded(child: body),

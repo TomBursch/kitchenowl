@@ -19,6 +19,7 @@ class RecipeItemWidget extends StatelessWidget {
       child: ListTile(
         title: Text(recipe.name),
         trailing: const Icon(Icons.arrow_right_rounded),
+        selected: recipe.isPlanned,
         onTap: () async {
           final res =
               await Navigator.of(context).push<UpdateEnum>(MaterialPageRoute(

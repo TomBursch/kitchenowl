@@ -9,7 +9,7 @@ class TransactionUserGetAll extends Transaction<List<User>> {
 
   @override
   Future<List<User>> runLocal() async {
-    return await TempStorage.getInstance().readUsers() ?? const [];
+    return (await TempStorage.getInstance().readUsers()) ?? const [];
   }
 
   @override

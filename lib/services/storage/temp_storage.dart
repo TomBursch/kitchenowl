@@ -84,7 +84,7 @@ class TempStorage {
       try {
         final file = await _localUsersFile;
         final String content = await file.readAsString();
-        List<Map<String, dynamic>> list = json.decode(content);
+        List list = json.decode(content);
         return list.map((e) => User.fromJson(e)).toList();
       } catch (_) {}
     }

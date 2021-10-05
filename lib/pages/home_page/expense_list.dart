@@ -72,21 +72,6 @@ class _ExpensePageState extends State<ExpenseListPage> {
                         ),
                       ),
                     ),
-                  if (state.expenses.isEmpty && App.isOffline(context))
-                    SliverToBoxAdapter(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            const Icon(Icons.cloud_off),
-                            const SizedBox(height: 16),
-                            Text(AppLocalizations.of(context).offlineMessage),
-                          ],
-                        ),
-                      ),
-                    ),
                   if (state.expenses.isNotEmpty)
                     SliverPadding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -101,7 +86,22 @@ class _ExpensePageState extends State<ExpenseListPage> {
                         ),
                       ),
                     ),
-                ]
+                ],
+                if (state.expenses.isEmpty && App.isOffline(context))
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          const Icon(Icons.cloud_off),
+                          const SizedBox(height: 16),
+                          Text(AppLocalizations.of(context).offlineMessage),
+                        ],
+                      ),
+                    ),
+                  ),
               ],
             ),
           ),

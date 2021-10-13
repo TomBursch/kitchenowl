@@ -180,9 +180,16 @@ def addRecipeItems(args, id):
             description = recipeItem['description']
             con = ShoppinglistItems.find_by_ids(shoppinglist.id, item.id)
             if con:
-                con.description = \
-                    description if not con.description else con.description + \
-                    ', ' + description
+                # merge descriptions
+                if description and con.description:
+                    con.description = description + ', ' + con.description
+                elif description:
+                    con.description = description + ', ...'
+                elif con.description:
+                    if not con.description.endswith('...'):
+                        con.description = con.description + ', ...'
+                else:
+                    con.description = '...'
                 con.save()
             else:
                 con = ShoppinglistItems(description=description)

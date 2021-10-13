@@ -69,7 +69,7 @@ def updateRecipe(args, id):  # noqa: C901
                 item = Item.create_by_name(recipeItem['name'])
             con = RecipeItems.find_by_ids(recipe.id, item.id)
             if con:
-                if 'description' in recipeItem and recipeItem['description']:
+                if 'description' in recipeItem:
                     con.description = recipeItem['description']
                 if 'optional' in recipeItem:
                     con.optional = recipeItem['optional']

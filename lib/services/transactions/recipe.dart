@@ -50,7 +50,8 @@ class TransactionRecipeSearchRecipes extends Transaction<List<Recipe>> {
   @override
   Future<List<Recipe>> runLocal() async {
     final recipes = await TempStorage.getInstance().readRecipes() ?? const [];
-    recipes.retainWhere((e) => e.name.contains(query));
+    recipes
+        .retainWhere((e) => e.name.toLowerCase().contains(query.toLowerCase()));
     return recipes;
   }
 

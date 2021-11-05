@@ -24,54 +24,56 @@ class CreateUserPage extends StatelessWidget {
             child: SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.all(16),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    TextField(
-                      controller: usernameController,
-                      autofocus: true,
-                      textInputAction: TextInputAction.next,
-                      onEditingComplete: () =>
-                          FocusScope.of(context).nextFocus(),
-                      decoration: InputDecoration(
-                        labelText: AppLocalizations.of(context).username,
+                child: AutofillGroup(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      TextField(
+                        controller: usernameController,
+                        autofocus: true,
+                        textInputAction: TextInputAction.next,
+                        onEditingComplete: () =>
+                            FocusScope.of(context).nextFocus(),
+                        decoration: InputDecoration(
+                          labelText: AppLocalizations.of(context).username,
+                        ),
                       ),
-                    ),
-                    TextField(
-                      controller: nameController,
-                      textInputAction: TextInputAction.next,
-                      onEditingComplete: () =>
-                          FocusScope.of(context).nextFocus(),
-                      decoration: InputDecoration(
-                        labelText: AppLocalizations.of(context).name,
+                      TextField(
+                        controller: nameController,
+                        textInputAction: TextInputAction.next,
+                        onEditingComplete: () =>
+                            FocusScope.of(context).nextFocus(),
+                        decoration: InputDecoration(
+                          labelText: AppLocalizations.of(context).name,
+                        ),
                       ),
-                    ),
-                    TextField(
-                      controller: passwordController,
-                      obscureText: true,
-                      textInputAction: TextInputAction.go,
-                      onSubmitted: (text) => FocusScope.of(context).unfocus(),
-                      decoration: InputDecoration(
-                        labelText: AppLocalizations.of(context).password,
+                      TextField(
+                        controller: passwordController,
+                        obscureText: true,
+                        textInputAction: TextInputAction.go,
+                        onSubmitted: (text) => FocusScope.of(context).unfocus(),
+                        decoration: InputDecoration(
+                          labelText: AppLocalizations.of(context).password,
+                        ),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 16),
-                      child: ElevatedButton(
-                        onPressed: () {
-                          BlocProvider.of<SettingsServerCubit>(context)
-                              .createUser(
-                            usernameController.text,
-                            nameController.text,
-                            passwordController.text,
-                          );
-                          Navigator.of(context).pop();
-                        },
-                        child: Text(AppLocalizations.of(context).userAdd),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 16),
+                        child: ElevatedButton(
+                          onPressed: () {
+                            BlocProvider.of<SettingsServerCubit>(context)
+                                .createUser(
+                              usernameController.text,
+                              nameController.text,
+                              passwordController.text,
+                            );
+                            Navigator.of(context).pop();
+                          },
+                          child: Text(AppLocalizations.of(context).userAdd),
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),

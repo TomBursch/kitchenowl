@@ -21,55 +21,58 @@ class LoginPage extends StatelessWidget {
             constraints: const BoxConstraints.expand(width: 600),
             child: Padding(
               padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(AppLocalizations.of(context).loginTo +
-                      ' ${Uri.parse(ApiService.getInstance().baseUrl).authority}'),
-                  TextField(
-                    controller: usernameController,
-                    autofocus: true,
-                    autofillHints: const [AutofillHints.username],
-                    textInputAction: TextInputAction.next,
-                    onEditingComplete: () => FocusScope.of(context).nextFocus(),
-                    decoration: InputDecoration(
-                      labelText: AppLocalizations.of(context).username,
+              child: AutofillGroup(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(AppLocalizations.of(context).loginTo +
+                        ' ${Uri.parse(ApiService.getInstance().baseUrl).authority}'),
+                    TextField(
+                      controller: usernameController,
+                      autofocus: true,
+                      autofillHints: const [AutofillHints.username],
+                      textInputAction: TextInputAction.next,
+                      onEditingComplete: () =>
+                          FocusScope.of(context).nextFocus(),
+                      decoration: InputDecoration(
+                        labelText: AppLocalizations.of(context).username,
+                      ),
                     ),
-                  ),
-                  TextField(
-                    controller: passwordController,
-                    obscureText: true,
-                    textInputAction: TextInputAction.go,
-                    autofillHints: const [AutofillHints.password],
-                    onSubmitted: (value) =>
-                        BlocProvider.of<AuthCubit>(context).login(
-                      usernameController.text,
-                      passwordController.text,
-                    ),
-                    decoration: InputDecoration(
-                      labelText: AppLocalizations.of(context).password,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 16, bottom: 8),
-                    child: ElevatedButton(
-                      onPressed: () =>
+                    TextField(
+                      controller: passwordController,
+                      obscureText: true,
+                      textInputAction: TextInputAction.go,
+                      autofillHints: const [AutofillHints.password],
+                      onSubmitted: (value) =>
                           BlocProvider.of<AuthCubit>(context).login(
                         usernameController.text,
                         passwordController.text,
                       ),
-                      child: Text(AppLocalizations.of(context).login),
+                      decoration: InputDecoration(
+                        labelText: AppLocalizations.of(context).password,
+                      ),
                     ),
-                  ),
-                  if (!kIsWeb) Text(AppLocalizations.of(context).or),
-                  if (!kIsWeb)
-                    TextButton(
-                      onPressed: () =>
-                          BlocProvider.of<AuthCubit>(context).removeServer(),
-                      child: Text(AppLocalizations.of(context).serverChange),
-                    )
-                ],
+                    Padding(
+                      padding: const EdgeInsets.only(top: 16, bottom: 8),
+                      child: ElevatedButton(
+                        onPressed: () =>
+                            BlocProvider.of<AuthCubit>(context).login(
+                          usernameController.text,
+                          passwordController.text,
+                        ),
+                        child: Text(AppLocalizations.of(context).login),
+                      ),
+                    ),
+                    if (!kIsWeb) Text(AppLocalizations.of(context).or),
+                    if (!kIsWeb)
+                      TextButton(
+                        onPressed: () =>
+                            BlocProvider.of<AuthCubit>(context).removeServer(),
+                        child: Text(AppLocalizations.of(context).serverChange),
+                      )
+                  ],
+                ),
               ),
             ),
           ),

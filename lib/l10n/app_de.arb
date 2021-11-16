@@ -15,7 +15,7 @@
     "@appTitle": {
         "description": "The title of the app"
     },
-    "balances": "Balances",
+    "balances": "Bilanz",
     "cancel": "Abbrechen",
     "darkmode": "Nachtmodus",
     "delete": "Löschen",

@@ -12,8 +12,8 @@ import 'package:package_info_plus/package_info_plus.dart';
 
 class SettingsCubit extends Cubit<SettingsState> {
   SettingsCubit() : super(const SettingsState()) {
-    load();
     ApiService.getInstance().addSettingsListener(serverSettingsUpdated);
+    load();
   }
 
   Future<void> serverSettingsUpdated() async {
@@ -35,9 +35,14 @@ class SettingsCubit extends Cubit<SettingsState> {
       themeMode = darkmode ? ThemeMode.dark : ThemeMode.light;
     }
 
-    final serverSettings = ServerSettings.fromJson(jsonDecode(
+    ServerSettings serverSettings = ServerSettings.fromJson(jsonDecode(
         (await PreferenceStorage.getInstance().read(key: 'serverSettings')) ??
             "{}"));
+
+    if (ApiService.getInstance().serverSettings.featureExpenses != null ||
+        ApiService.getInstance().serverSettings.featurePlanner != null) {
+      serverSettings = ApiService.getInstance().serverSettings;
+    }
 
     emit(SettingsState(
       themeMode: themeMode,

@@ -102,7 +102,7 @@ class ProfilePage extends StatelessWidget {
                                     const SettingsUserPage())),
                       ),
                     ),
-                  if (!isOffline && user.owner)
+                  if (!isOffline && user.hasAdminRights())
                     Card(
                       child: ListTile(
                         title: Text(AppLocalizations.of(context).server),

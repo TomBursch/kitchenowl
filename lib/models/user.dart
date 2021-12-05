@@ -5,6 +5,7 @@ class User extends Model {
   final String username;
   final String name;
   final bool owner;
+  final bool admin;
 
   final double balance;
 
@@ -13,6 +14,7 @@ class User extends Model {
     this.name,
     this.username,
     this.owner = false,
+    this.admin = false,
     this.balance = 0,
   });
 
@@ -21,11 +23,12 @@ class User extends Model {
         username: map['username'],
         name: map['name'],
         owner: map['owner'] ?? false,
+        admin: map['admin'] ?? false,
         balance: map['expense_balance'] ?? 0,
       );
 
   @override
-  List<Object> get props => [id, name, username, owner, balance];
+  List<Object> get props => [id, name, username, owner, admin, balance];
 
   @override
   Map<String, dynamic> toJson() => {
@@ -38,6 +41,9 @@ class User extends Model {
         "username": username,
         "name": name,
         "owner": owner,
+        "admin": admin,
         "expense_balance": balance,
       };
+
+  bool hasAdminRights() => admin || owner;
 }

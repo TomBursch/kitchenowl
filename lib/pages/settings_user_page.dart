@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/cubits/settings_user_cubit.dart';
@@ -42,6 +43,9 @@ class _SettingsUserPageState extends State<SettingsUserPage> {
       child: Scaffold(
         appBar: AppBar(
           title: Text(AppLocalizations.of(context).user),
+          leading: BackButton(
+            onPressed: () => Navigator.of(context).pop(cubit.state.updateState),
+          ),
         ),
         body: Align(
           alignment: Alignment.topCenter,
@@ -73,6 +77,28 @@ class _SettingsUserPageState extends State<SettingsUserPage> {
                       labelText: AppLocalizations.of(context).name,
                     ),
                   ),
+                  if (cubit.userId != null)
+                    BlocBuilder<SettingsUserCubit, SettingsUserState>(
+                      bloc: cubit,
+                      builder: (context, state) {
+                        return ListTile(
+                          title: Text(AppLocalizations.of(context).admin),
+                          leading:
+                              const Icon(Icons.admin_panel_settings_rounded),
+                          contentPadding:
+                              const EdgeInsets.only(left: 0, right: 0),
+                          trailing: Transform.scale(
+                            scale: 0.9,
+                            child: CupertinoSwitch(
+                              value: state.setAdmin,
+                              activeColor:
+                                  Theme.of(context).colorScheme.secondary,
+                              onChanged: cubit.setAdmin,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
                   Padding(
                     padding: const EdgeInsets.only(top: 16, bottom: 8),
                     child: ElevatedButton(

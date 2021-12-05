@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/cubits/auth_cubit.dart';
 import 'package:kitchenowl/cubits/settings_cubit.dart';
 import 'package:kitchenowl/cubits/settings_server_cubit.dart';
+import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/models/user.dart';
 import 'package:kitchenowl/pages/settings/create_user_page.dart';
 import 'package:kitchenowl/pages/settings_user_page.dart';
@@ -204,14 +205,19 @@ class _SettingsServerPageState extends State<SettingsServerPage> {
                                           .id)
                                   ? ' (${AppLocalizations.of(context).you})'
                                   : '')),
-                          trailing: state.users[i].owner
+                          trailing: state.users[i].hasAdminRights()
                               ? const Icon(Icons.admin_panel_settings_rounded)
                               : null,
-                          onTap: () =>
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => SettingsUserPage(
-                                        userId: state.users[i].id,
-                                      ))),
+                          onTap: () async {
+                            final res = await Navigator.of(context)
+                                .push<UpdateEnum>(MaterialPageRoute(
+                                    builder: (context) => SettingsUserPage(
+                                          userId: state.users[i].id,
+                                        )));
+                            if (res == UpdateEnum.updated) {
+                              cubit.refresh();
+                            }
+                          },
                         ),
                       ),
                     ),

@@ -46,12 +46,13 @@ extension UserApi on ApiService {
   }
 
   Future<bool> updateUserById(int userId,
-      {String name, String password}) async {
+      {String name, String password, bool admin}) async {
     if (!isAuthenticated()) return null;
 
     final body = {};
     if (name != null) body['name'] = name;
-    if (password != null) body['name'] = password;
+    if (password != null) body['password'] = password;
+    if (admin != null) body['admin'] = admin;
 
     final res = await post('/user/$userId', jsonEncode(body));
     return res.statusCode == 200;

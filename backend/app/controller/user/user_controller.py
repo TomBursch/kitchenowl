@@ -1,5 +1,5 @@
 from app.errors import NotFoundRequest, UnauthorizedRequest
-from app.helpers.admin_required import admin_required
+from app.helpers.admin_required import admin_required, owner_required
 from app.helpers import validate_args
 from flask import jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
@@ -70,6 +70,8 @@ def updateUserById(args, id):
         user.name = args['name']
     if 'password' in args and args['password']:
         user.set_password(args['password'])
+    if 'admin' in args:
+        user.admin = args['admin'] or user.owner
     user.save()
     return jsonify({'msg': 'DONE'})
 

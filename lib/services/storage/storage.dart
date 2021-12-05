@@ -20,16 +20,18 @@ class SecureStorage extends Storage {
     return _instance;
   }
 
+  bool _platformSupportsSecureStorage() => !kIsWeb;
+
   @override
   Future<void> delete({String key}) async {
-    if (!kIsWeb && (Platform.isAndroid || Platform.isIOS || Platform.isLinux)) {
+    if (_platformSupportsSecureStorage()) {
       await _storage.delete(key: key);
     }
   }
 
   @override
   Future<String> read({String key}) async {
-    if (!kIsWeb && (Platform.isAndroid || Platform.isIOS || Platform.isLinux)) {
+    if (_platformSupportsSecureStorage()) {
       return await _storage.read(key: key);
     }
     return '';
@@ -37,7 +39,7 @@ class SecureStorage extends Storage {
 
   @override
   Future<void> write({String key, String value}) async {
-    if (!kIsWeb && (Platform.isAndroid || Platform.isIOS || Platform.isLinux)) {
+    if (_platformSupportsSecureStorage()) {
       await _storage.write(key: key, value: value);
     }
   }

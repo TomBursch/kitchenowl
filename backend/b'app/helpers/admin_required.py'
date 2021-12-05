@@ -7,6 +7,18 @@ from app.errors import UnauthorizedRequest
 def admin_required(func):
     @wraps(func)
     def func_wrapper(*args, **kwargs):
+        user = User.find_by_username(get_jwt_identity())
+        if not user.owner and not user.admin:
+            raise UnauthorizedRequest(
+                message='Elevated rights required'
+            )
+        return func(*args, **kwargs)
+
+    return func_wrapper
+
+def owner_required(func):
+    @wraps(func)
+    def func_wrapper(*args, **kwargs):
         if not User.find_by_username(get_jwt_identity()).owner:
             raise UnauthorizedRequest(
                 message='Elevated rights required'

@@ -30,3 +30,6 @@ class UpdateUser(Schema):
         validate=lambda a: len(a) > 0,
         load_only=True,
     )
+    admin = fields.Boolean(
+        load_only=True,
+    )

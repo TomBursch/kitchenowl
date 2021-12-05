@@ -12,6 +12,7 @@ class User(db.Model, DbModelMixin, TimestampMixin):
     password = db.Column(db.String(256), nullable=False)
     photo = db.Column(db.String())
     owner = db.Column(db.Boolean(), default=False)
+    admin = db.Column(db.Boolean(), default=False)
 
     expense_balance = db.Column(db.Float(), default=0)
 

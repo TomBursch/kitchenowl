@@ -77,6 +77,7 @@
     "underConstruction": "Baustelle",
     "unreachableMessage": "Hmmmm... der Server wurde nicht erreicht",
     "unsupportedBackendMessage": "Die Server version wird nicht unterstützt, bitte update die/den App/Server",
+    "usedIn": "Benutzt in",
     "user": "Benutzer",
     "userAdd": "Benutzer hinzufügen",
     "userDelete": "Benutzer löschen",

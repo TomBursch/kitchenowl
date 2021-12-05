@@ -144,14 +144,28 @@ class _ItemPageState extends State<ItemPage> {
                       ),
                       sliver: SliverList(
                         delegate: SliverChildBuilderDelegate(
-                          (context, i) => Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 13),
-                            child: RecipeItemWidget(
-                              recipe: state.recipes[i],
-                              onUpdated: cubit.refresh,
-                            ),
-                          ),
-                          childCount: state.recipes.length,
+                          (context, i) {
+                            if (i == 0) {
+                              return Padding(
+                                padding:
+                                    const EdgeInsets.fromLTRB(13, 0, 13, 8),
+                                child: Text(
+                                  AppLocalizations.of(context).usedIn + ':',
+                                  style: Theme.of(context).textTheme.headline6,
+                                ),
+                              );
+                            }
+                            i = i - 1;
+                            return Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 13),
+                              child: RecipeItemWidget(
+                                recipe: state.recipes[i],
+                                onUpdated: cubit.refresh,
+                              ),
+                            );
+                          },
+                          childCount: state.recipes.length + 1,
                         ),
                       ),
                     );

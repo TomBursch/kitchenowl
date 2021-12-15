@@ -1,6 +1,3 @@
-import 'dart:io';
-
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -53,24 +50,20 @@ class App extends StatelessWidget {
             themeMode: state.themeMode,
             debugShowCheckedModeBanner: false,
             restorationScopeId: "com.tombursch.kitchenowl",
-            home: BlocListener<SettingsCubit, SettingsState>(
-              listener: (context, state) {
-                if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
-                  _setSystemUI(context, state);
-                }
-              },
-              listenWhen: (previous, current) =>
-                  previous.themeMode != current.themeMode,
-              child: BlocBuilder<AuthCubit, AuthState>(
-                builder: (context, state) {
-                  if (state is Setup) return SetupPage();
-                  if (state is Onboarding) return OnboardingPage();
-                  if (state is Unauthenticated) return LoginPage();
-                  if (state is Authenticated) return const HomePage();
-                  if (state is Unreachable) return const UnreachablePage();
-                  if (state is Unsupported) return const UnsupportedPage();
-                  return const SplashPage();
-                },
+            home: Builder(
+              builder: (context) => AnnotatedRegion<SystemUiOverlayStyle>(
+                value: _getSystemUI(context, state),
+                child: BlocBuilder<AuthCubit, AuthState>(
+                  builder: (context, state) {
+                    if (state is Setup) return SetupPage();
+                    if (state is Onboarding) return OnboardingPage();
+                    if (state is Unauthenticated) return LoginPage();
+                    if (state is Authenticated) return const HomePage();
+                    if (state is Unreachable) return const UnreachablePage();
+                    if (state is Unsupported) return const UnsupportedPage();
+                    return const SplashPage();
+                  },
+                ),
               ),
             ),
           ),
@@ -79,7 +72,9 @@ class App extends StatelessWidget {
     );
   }
 
-  void _setSystemUI(BuildContext context, SettingsState state) {
+  // Method always returns a value
+  // ignore: missing_return
+  SystemUiOverlayStyle _getSystemUI(BuildContext context, SettingsState state) {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
     switch (state.themeMode) {
       case ThemeMode.system:
@@ -94,26 +89,25 @@ class App extends StatelessWidget {
       light:
       case ThemeMode.light:
         final Color backgroundColor = AppThemes.light.scaffoldBackgroundColor;
-        SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
+        return SystemUiOverlayStyle.dark.copyWith(
           statusBarColor: Colors.transparent,
           statusBarIconBrightness: Brightness.dark,
-          systemNavigationBarColor: backgroundColor,
-          systemNavigationBarDividerColor: backgroundColor,
+          systemNavigationBarColor: backgroundColor.withAlpha(0),
+          systemNavigationBarDividerColor: backgroundColor.withAlpha(0),
           systemNavigationBarIconBrightness: Brightness.dark,
-        ));
-        break;
+          systemNavigationBarContrastEnforced: false,
+        );
       dark:
       case ThemeMode.dark:
         final Color backgroundColor = AppThemes.dark.scaffoldBackgroundColor;
-        SystemChrome.setSystemUIOverlayStyle(
-            SystemUiOverlayStyle.light.copyWith(
+        return SystemUiOverlayStyle.light.copyWith(
           statusBarColor: Colors.transparent,
           statusBarIconBrightness: Brightness.light,
-          systemNavigationBarColor: backgroundColor,
-          systemNavigationBarDividerColor: backgroundColor,
+          systemNavigationBarColor: backgroundColor.withAlpha(0),
+          systemNavigationBarDividerColor: backgroundColor.withAlpha(0),
           systemNavigationBarIconBrightness: Brightness.light,
-        ));
-        break;
+          systemNavigationBarContrastEnforced: false,
+        );
     }
   }
 }

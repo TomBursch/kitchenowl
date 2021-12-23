@@ -15,9 +15,17 @@
   </a>
 </p>
 
-<a href='https://play.google.com/store/apps/details?id=com.tombursch.kitchenowl'>
-  <img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png' height="70"/>
-</a>
+<div>
+  <a href='https://play.google.com/store/apps/details?id=com.tombursch.kitchenowl'>
+    <img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png' height="70" valign='middle'/>
+  </a>
+  <!-- <a href='https://testflight.apple.com/join/x7LhltFw'>
+    <img alt='Get it on TestFlight' src='https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg' height="47" valign='middle' style='margin: 0 11px 0 0'/>
+  </a> -->
+  <a href='https://testflight.apple.com/join/x7LhltFw'>
+    <img alt='Get it on TestFlight' src='https://askyourself.app/assets/testflight.png' height="47" valign='middle' />
+  </a>
+</div>
 
 <h1 align="center">
   KitchenOwl
@@ -50,7 +58,9 @@ For a list of planned features, check out the [Roadmap](https://github.com/TomBu
 
 ## 📱 Screenshots
 
-<img alt="Updates page" src="android/fastlane/metadata/android/en-US/images/phoneScreenshots/1_en-US.png" width="31%" hspace="5" /><img alt="Details page" src="android/fastlane/metadata/android/en-US/images/phoneScreenshots/2_en-US.png" width="31%" hspace="5" /><img alt="Search page" src="android/fastlane/metadata/android/en-US/images/phoneScreenshots/3_en-US.png" width="31%" hspace="5"/>
+<img alt="Updates page" src="android/fastlane/metadata/android/en-US/images/phoneScreenshots/1_en-US.png" width="31%" hspace="5" />
+<img alt="Details page" src="android/fastlane/metadata/android/en-US/images/phoneScreenshots/2_en-US.png" width="31%" hspace="5" />
+<img alt="Search page" src="android/fastlane/metadata/android/en-US/images/phoneScreenshots/3_en-US.png" width="31%" hspace="5"/>
 
 ## 🤖 App Install
 

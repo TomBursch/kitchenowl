@@ -1,6 +1,7 @@
 site_name: KitchenOwl
 repo_url: https://github.com/tombursch/kitchenowl
 repo_name: tombursch/kitchenowl
+edit_uri: edit/main/docs/
 copyright: Copyright &copy; 2021 - 2022 Tom Bursch
 theme:
   name: material

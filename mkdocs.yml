@@ -1,0 +1,45 @@
+site_name: KitchenOwl
+repo_url: https://github.com/tombursch/kitchenowl
+repo_name: tombursch/kitchenowl
+copyright: Copyright &copy; 2021 - 2022 Tom Bursch
+theme:
+  name: material
+  logo: img/logo.png
+  favicon: img/favicon.png
+  features:
+    - content.tabs.link
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: kitchenowl
+      accent: green
+      toggle:
+        icon: material/toggle-switch-off-outline
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: kitchenowl
+      accent: green
+      toggle:
+        icon: material/toggle-switch
+        name: Switch to light mode
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/tombursch
+    - icon: fontawesome/brands/docker
+      link: https://hub.docker.com/u/tombursch
+markdown_extensions:
+  - attr_list
+  - def_list
+  - md_in_html
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
+extra_css:
+  - stylesheets/extra.css

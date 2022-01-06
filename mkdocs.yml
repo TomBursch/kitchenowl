@@ -4,7 +4,7 @@ repo_name: tombursch/kitchenowl
 copyright: Copyright &copy; 2021 - 2022 Tom Bursch
 theme:
   name: material
-  logo: img/logo.png
+  logo: img/icon.png
   favicon: img/favicon.png
   features:
     - content.tabs.link

@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/models/recipe.dart';
+import 'package:kitchenowl/models/tag.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
 
 class AddUpdateRecipeCubit extends Cubit<AddUpdateRecipeState> {
@@ -10,7 +11,10 @@ class AddUpdateRecipeCubit extends Cubit<AddUpdateRecipeState> {
       : super(AddUpdateRecipeState(
           description: recipe.description,
           name: recipe.name,
+          time: recipe.time,
           items: recipe.items,
+          tags: recipe.tags,
+          selectedTags: recipe.tags,
         ));
 
   Future<void> saveRecipe() async {
@@ -19,13 +23,17 @@ class AddUpdateRecipeCubit extends Cubit<AddUpdateRecipeState> {
         await ApiService.getInstance().addRecipe(Recipe(
           name: state.name,
           description: state.description ?? "",
+          time: state.time,
           items: state.items,
+          tags: state.selectedTags,
         ));
       } else {
         await ApiService.getInstance().updateRecipe(recipe.copyWith(
           name: state.name,
           description: state.description,
+          time: state.time,
           items: state.items,
+          tags: state.selectedTags,
         ));
       }
     }
@@ -42,6 +50,29 @@ class AddUpdateRecipeCubit extends Cubit<AddUpdateRecipeState> {
 
   void setDescription(String desc) {
     emit(state.copyWith(description: desc));
+  }
+
+  void setTime(int time) {
+    emit(state.copyWith(time: time));
+  }
+
+  void selectTag(Tag tag, bool selected) {
+    final l = List<Tag>.from(state.selectedTags);
+    if (selected) {
+      l.add(tag);
+    } else {
+      l.remove(tag);
+    }
+    emit(state.copyWith(selectedTags: l));
+  }
+
+  void addTag(String tag) {
+    final l = List<Tag>.from(state.tags);
+    final selected = List<Tag>.from(state.selectedTags);
+    final t = Tag(name: tag);
+    l.add(t);
+    selected.add(t);
+    emit(state.copyWith(tags: l, selectedTags: selected));
   }
 
   void addItem(RecipeItem item) {
@@ -79,24 +110,40 @@ class AddUpdateRecipeCubit extends Cubit<AddUpdateRecipeState> {
 class AddUpdateRecipeState extends Equatable {
   final String name;
   final String description;
+  final int time;
   final List<RecipeItem> items;
+  final List<Tag> tags;
+  final List<Tag> selectedTags;
 
-  const AddUpdateRecipeState(
-      {this.name = "", this.description = "", this.items = const []});
+  const AddUpdateRecipeState({
+    this.name = "",
+    this.description = "",
+    this.time = 0,
+    this.items = const [],
+    this.tags = const [],
+    this.selectedTags = const [],
+  });
 
   AddUpdateRecipeState copyWith({
     String name,
     String description,
+    int time,
     List<RecipeItem> items,
+    List<Tag> tags,
+    List<Tag> selectedTags,
   }) =>
       AddUpdateRecipeState(
         name: name ?? this.name,
         description: description ?? this.description,
+        time: time ?? this.time,
         items: items ?? this.items,
+        tags: tags ?? this.tags,
+        selectedTags: selectedTags ?? this.selectedTags,
       );
 
   bool isValid() => name.isNotEmpty;
 
   @override
-  List<Object> get props => [name, description, items];
+  List<Object> get props =>
+      [name, description, time, items, tags, selectedTags];
 }

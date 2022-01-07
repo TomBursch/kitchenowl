@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/cubits/recipe_add_update_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
@@ -9,6 +10,7 @@ import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/models/recipe.dart';
 import 'package:kitchenowl/pages/item_search_page.dart';
 import 'package:kitchenowl/kitchenowl.dart';
+import 'package:kitchenowl/widgets/TextDialog.dart';
 import 'package:kitchenowl/widgets/shopping_item.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
@@ -24,6 +26,7 @@ class AddUpdateRecipePage extends StatefulWidget {
 class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController descController = TextEditingController();
+  final TextEditingController timeController = TextEditingController();
   AddUpdateRecipeCubit cubit;
   bool isUpdate = false;
 
@@ -34,6 +37,9 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
     if (isUpdate) {
       nameController.text = widget.recipe.name;
       descController.text = widget.recipe.description;
+      if ((widget.recipe.time ?? 0) > 0) {
+        timeController.text = widget.recipe.time.toString();
+      }
     }
     cubit = AddUpdateRecipeCubit(widget.recipe);
   }
@@ -43,6 +49,7 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
     cubit.close();
     nameController.dispose();
     descController.dispose();
+    timeController.dispose();
     super.dispose();
   }
 
@@ -81,56 +88,131 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
             constraints: const BoxConstraints.expand(width: 1600),
             child: CustomScrollView(
               slivers: [
-                SliverPadding(
-                  padding: const EdgeInsets.all(16),
-                  sliver: SliverToBoxAdapter(
-                    child: TextField(
-                      controller: nameController,
-                      onChanged: (s) => cubit.setName(s),
-                      textInputAction: TextInputAction.next,
-                      onEditingComplete: () =>
-                          FocusScope.of(context).nextFocus(),
-                      decoration: InputDecoration(
-                        labelText: AppLocalizations.of(context).name,
-                      ),
-                    ),
-                  ),
-                ),
-                SliverPadding(
-                  padding: const EdgeInsets.all(16),
-                  sliver: SliverToBoxAdapter(
-                    child: TextField(
-                      controller: descController,
-                      onChanged: (s) => cubit.setDescription(s),
-                      maxLines: null,
-                      decoration: InputDecoration(
-                        border: const OutlineInputBorder(),
-                        labelText: AppLocalizations.of(context).description,
-                        hintText:
-                            AppLocalizations.of(context).writeMarkdownHere,
-                      ),
-                    ),
-                  ),
-                ),
-                SliverPadding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  sliver: SliverToBoxAdapter(
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            AppLocalizations.of(context).items + ':',
-                            style: Theme.of(context).textTheme.headline6,
-                          ),
+                SliverList(
+                  delegate: SliverChildListDelegate([
+                    Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: TextField(
+                        controller: nameController,
+                        onChanged: (s) => cubit.setName(s),
+                        textInputAction: TextInputAction.next,
+                        onEditingComplete: () =>
+                            FocusScope.of(context).nextFocus(),
+                        decoration: InputDecoration(
+                          labelText: AppLocalizations.of(context).name,
                         ),
-                        IconButton(
-                          icon: const Icon(Icons.add),
-                          onPressed: () => _updateItems(context, false),
-                          padding: EdgeInsets.zero,
-                        )
-                      ],
+                      ),
                     ),
-                  ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                      child: TextField(
+                        controller: timeController,
+                        onChanged: (s) => cubit.setTime(int.tryParse(s)),
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly
+                        ],
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                          labelText: AppLocalizations.of(context).cookingTime,
+                          suffix:
+                              Text(AppLocalizations.of(context).minutesAbbrev),
+                        ),
+                      ),
+                    ),
+                    BlocBuilder<AddUpdateRecipeCubit, AddUpdateRecipeState>(
+                      bloc: cubit,
+                      buildWhen: (previous, current) =>
+                          !listEquals(previous.tags, current.tags) ||
+                          !listEquals(
+                              previous.selectedTags, current.selectedTags),
+                      builder: (context, state) {
+                        List<Widget> children = state.tags
+                            .map<Widget>((e) => FilterChip(
+                                  label: Text(e.name),
+                                  selected: state.selectedTags.contains(e),
+                                  onSelected: (selected) =>
+                                      cubit.selectTag(e, selected),
+                                  selectedColor:
+                                      Theme.of(context).colorScheme.secondary,
+                                ))
+                            .toList();
+                        Widget widget = Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 2),
+                            child: GestureDetector(
+                              onTap: () async {
+                                final res = await showDialog<String>(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return TextDialog(
+                                        title:
+                                            AppLocalizations.of(context).addTag,
+                                        doneText:
+                                            AppLocalizations.of(context).add,
+                                        hintText:
+                                            AppLocalizations.of(context).name,
+                                      );
+                                    });
+                                if (res != null && res.isNotEmpty) {
+                                  cubit.addTag(res);
+                                }
+                              },
+                              child: const Icon(Icons.add),
+                            ));
+
+                        if (children.isEmpty) {
+                          widget = Row(
+                            children: [
+                              Text(AppLocalizations.of(context).noTags),
+                              widget,
+                            ],
+                          );
+                        } else {
+                          widget = Wrap(
+                            runSpacing: 7,
+                            spacing: 5,
+                            children: children + [widget],
+                          );
+                        }
+
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          child: widget,
+                        );
+                      },
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
+                      child: TextField(
+                        controller: descController,
+                        onChanged: (s) => cubit.setDescription(s),
+                        maxLines: null,
+                        decoration: InputDecoration(
+                          border: const OutlineInputBorder(),
+                          labelText: AppLocalizations.of(context).description,
+                          hintText:
+                              AppLocalizations.of(context).writeMarkdownHere,
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              AppLocalizations.of(context).items + ':',
+                              style: Theme.of(context).textTheme.headline6,
+                            ),
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.add),
+                            onPressed: () => _updateItems(context, false),
+                            padding: EdgeInsets.zero,
+                          )
+                        ],
+                      ),
+                    ),
+                  ]),
                 ),
                 SliverPadding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),

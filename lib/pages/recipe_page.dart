@@ -85,20 +85,45 @@ class _RecipePageState extends State<RecipePage> {
                     slivers: [
                       SliverPadding(
                         padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-                        sliver: SliverToBoxAdapter(
-                          child: MarkdownBody(
-                            data: state.recipe.description,
-                            // imageBuilder: (uri, title, alt) => CachedNetworkImage(
-                            //   imageUrl: uri.toString(),
-                            //   placeholder: (context, url) => CircularProgressIndicator(),
-                            //   errorWidget: (context, url, error) => Icon(Icons.error),
-                            // ),
-                            onTapLink: (text, href, title) async {
-                              if (await canLaunch(href)) {
-                                await launch(href);
-                              }
-                            },
-                          ),
+                        sliver: SliverList(
+                          delegate: SliverChildListDelegate([
+                            Wrap(
+                              runSpacing: 7,
+                              spacing: 5,
+                              children: [
+                                if ((state.recipe.time ?? 0) > 0)
+                                  Chip(
+                                    avatar: const Icon(Icons.alarm_rounded),
+                                    label: Text(
+                                      state.recipe.time.toString() +
+                                          " " +
+                                          AppLocalizations.of(context)
+                                              .minutesAbbrev,
+                                    ),
+                                    backgroundColor:
+                                        Theme.of(context).colorScheme.secondary,
+                                    elevation: 3,
+                                  ),
+                                ...state.recipe.tags
+                                    .map((e) => Chip(label: Text(e.name)))
+                                    .toList()
+                              ],
+                            ),
+                            const SizedBox(height: 8),
+                            MarkdownBody(
+                              data: state.recipe.description,
+                              // imageBuilder: (uri, title, alt) => CachedNetworkImage(
+                              //   imageUrl: uri.toString(),
+                              //   placeholder: (context, url) => CircularProgressIndicator(),
+                              //   errorWidget: (context, url, error) => Icon(Icons.error),
+                              // ),
+                              onTapLink: (text, href, title) async {
+                                if (await canLaunch(href)) {
+                                  await launch(href);
+                                }
+                              },
+                            ),
+                          ]),
                         ),
                       ),
                       if (state.recipe.items

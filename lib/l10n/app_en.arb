@@ -1,5 +1,6 @@
 {
     "about": "About",
+    "add": "Add",
     "addItemTitle": "Add Items",
     "addNumberIngredients": "Add {number} ingredients",
     "@addNumberIngredients": {
@@ -9,6 +10,7 @@
     },
     "addRecipeToPlanner": "Add to meal plan",
     "address": "Address",
+    "addTag": "Add Tag",
     "admin": "Admin",
     "appDescription": "KitchenOwl helps you organize your grocery life.",
     "appLegal": "2021 The KitchenOwl Authors",
@@ -18,6 +20,7 @@
     },
     "balances": "Balances",
     "cancel": "Cancel",
+    "cookingTime": "Cooking time",
     "darkmode": "Darkmode",
     "delete": "Delete",
     "description": "Description",
@@ -45,7 +48,9 @@
     "loginTo": "Login to",
     "logout": "Logout",
     "mealPlanner": "Meal Planner",
+    "minutesAbbrev": "min",
     "name": "Name",
+    "noTags": "No Tags",
     "offlineMessage": "You're offline",
     "onboardingTitle": "Let's create a user",
     "or": "or",

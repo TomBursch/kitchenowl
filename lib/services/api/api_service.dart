@@ -13,6 +13,7 @@ export 'recipe.dart';
 export 'planner.dart';
 export 'import_export.dart';
 export 'expense.dart';
+export 'tag.dart';
 
 enum Connection {
   disconnected,

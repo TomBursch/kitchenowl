@@ -10,7 +10,7 @@ from .schemas import SearchByNameRequest, AddTag
 @app.route('/tag', methods=['GET'])
 @jwt_required()
 def getAllTags():
-    return jsonify([e.obj_to_dict() for e in Tag.all()])
+    return jsonify([e.obj_to_dict() for e in Tag.all_by_name()])
 
 
 @app.route('/tag/<id>', methods=['GET'])

@@ -1,6 +1,7 @@
 from app import db
 from app.helpers import DbModelMixin, TimestampMixin
 from .item import Item
+from .tag import Tag
 from random import randint
 
 
@@ -12,6 +13,7 @@ class Recipe(db.Model, DbModelMixin, TimestampMixin):
     description = db.Column(db.String())
     photo = db.Column(db.String())
     planned = db.Column(db.Boolean)
+    time = db.Column(db.Integer)
     suggestion_score = db.Column(db.Integer, server_default='0')
     suggestion_rank = db.Column(db.Integer, server_default='0')
 
@@ -19,6 +21,8 @@ class Recipe(db.Model, DbModelMixin, TimestampMixin):
         "RecipeHistory", back_populates="recipe", cascade="all, delete-orphan")
     items = db.relationship(
         'RecipeItems', back_populates='recipe', cascade="all, delete-orphan")
+    tags = db.relationship(
+        'RecipeTags', back_populates='recipe', cascade="all, delete-orphan")
 
     def obj_to_full_dict(self):
         res = super().obj_to_dict()
@@ -26,16 +30,25 @@ class Recipe(db.Model, DbModelMixin, TimestampMixin):
             RecipeItems.item).order_by(
             Item.name).all()
         res['items'] = [e.obj_to_item_dict() for e in items]
+        tags = RecipeTags.query.filter(RecipeTags.recipe_id == self.id).join(
+            RecipeTags.tag).order_by(
+            Tag.name).all()
+        res['tags'] = [e.obj_to_item_dict() for e in tags]
         return res
 
     def obj_to_export_dict(self):
         items = RecipeItems.query.filter(RecipeItems.recipe_id == self.id).join(
             RecipeItems.item).order_by(
             Item.name).all()
+        tags = RecipeTags.query.filter(RecipeTags.recipe_id == self.id).join(
+            RecipeTags.tag).order_by(
+            Tag.name).all()
         res = {
             "name": self.name,
             "description": self.description,
+            "time": self.time,
             "items": [{"name": e.item.name, "description": e.description, "optional": e.optional} for e in items],
+            "tags": [e.tag.name for e in tags],
         }
         return res
 
@@ -90,6 +103,12 @@ class Recipe(db.Model, DbModelMixin, TimestampMixin):
             looking_for = '%{0}%'.format(name)
         return cls.query.filter(cls.name.ilike(looking_for)).all()
 
+    @classmethod
+    def all_by_name_with_filter(cls, filter):
+        sq = db.session.query(RecipeTags.recipe_id).join(RecipeTags.tag).filter(
+            Tag.name.in_(filter)).subquery()
+        return db.session.query(cls).filter(cls.id.in_(sq)).order_by(cls.name).all()
+
 
 class RecipeItems(db.Model, DbModelMixin, TimestampMixin):
     __tablename__ = 'recipe_items'
@@ -114,3 +133,24 @@ class RecipeItems(db.Model, DbModelMixin, TimestampMixin):
     @classmethod
     def find_by_ids(cls, recipe_id, item_id):
         return cls.query.filter(cls.recipe_id == recipe_id, cls.item_id == item_id).first()
+
+
+class RecipeTags(db.Model, DbModelMixin, TimestampMixin):
+    __tablename__ = 'recipe_tags'
+
+    recipe_id = db.Column(db.Integer, db.ForeignKey(
+        'recipe.id'), primary_key=True)
+    tag_id = db.Column(db.Integer, db.ForeignKey('tag.id'), primary_key=True)
+
+    tag = db.relationship("Tag", back_populates='recipes')
+    recipe = db.relationship("Recipe", back_populates='tags')
+
+    def obj_to_item_dict(self):
+        res = self.tag.obj_to_dict()
+        res['created_at'] = getattr(self, 'created_at')
+        res['updated_at'] = getattr(self, 'updated_at')
+        return res
+
+    @classmethod
+    def find_by_ids(cls, recipe_id, tag_id):
+        return cls.query.filter(cls.recipe_id == recipe_id, cls.tag_id == tag_id).first()

@@ -5,7 +5,7 @@ from app.errors import NotFoundRequest
 from flask_jwt_extended import jwt_required
 from app import app
 from app.config import APP_DIR, SUPPORTED_LANGUAGES
-from app.models import Item, Recipe, RecipeItems
+from app.models import Item, Recipe, RecipeItems, Tag, RecipeTags
 import json
 from os.path import exists
 
@@ -63,5 +63,14 @@ def _import(args):
                         optional=recipeItem['optional']
                     )
                     con.item = item
+                    con.recipe = recipe
+                    con.save()
+            if 'tags' in args:
+                for tagName in args['tags']:
+                    tag = Tag.find_by_name(tagName)
+                    if not tag:
+                        tag = Tag.create_by_name(recipeItem['name'])
+                    con = RecipeTags()
+                    con.tag = tag
                     con.recipe = recipe
                     con.save()

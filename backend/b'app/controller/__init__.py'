@@ -8,4 +8,5 @@ from . import onboarding
 from . import exportimport
 from . import settings
 from . import expense
+from . import tag
 from . import health_controller

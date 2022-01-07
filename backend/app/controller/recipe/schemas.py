@@ -1,6 +1,10 @@
 from marshmallow import fields, Schema
 
 
+class GetAllRequest(Schema):
+    filter = fields.List(fields.String())
+
+
 class AddRecipe(Schema):
     class RecipeItem(Schema):
         name = fields.String(
@@ -18,7 +22,9 @@ class AddRecipe(Schema):
         required=True
     )
     description = fields.String()
+    time = fields.Integer()
     items = fields.List(fields.Nested(RecipeItem()))
+    tags = fields.List(fields.String())
 
 
 class UpdateRecipe(Schema):
@@ -32,7 +38,9 @@ class UpdateRecipe(Schema):
 
     name = fields.String()
     description = fields.String()
+    time = fields.Integer()
     items = fields.List(fields.Nested(RecipeItem()))
+    tags = fields.List(fields.String())
 
 
 class SearchByNameRequest(Schema):

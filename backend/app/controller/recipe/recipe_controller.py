@@ -1,17 +1,21 @@
 from app.errors import NotFoundRequest
-from app.models.recipe import RecipeItems
+from app.models.recipe import RecipeItems, RecipeTags
 from flask import jsonify
 from flask_jwt_extended import jwt_required
 from app import app
 from app.helpers import validate_args
-from app.models import Recipe, Item
-from .schemas import SearchByNameRequest, AddRecipe, UpdateRecipe
+from app.models import Recipe, Item, Tag
+from .schemas import SearchByNameRequest, AddRecipe, UpdateRecipe, GetAllRequest
 
 
 @app.route('/recipe', methods=['GET'])
 @jwt_required()
-def getAllRecipes():
-    return jsonify([e.obj_to_full_dict() for e in Recipe.all_by_name()])
+@validate_args(GetAllRequest)
+def getAllRecipes(args):
+    if "filter" in args:
+        return jsonify([e.obj_to_full_dict() for e in Recipe.all_by_name_with_filter(args["filter"])])
+    else:
+        return jsonify([e.obj_to_full_dict() for e in Recipe.all_by_name()])
 
 
 @app.route('/recipe/<id>', methods=['GET'])
@@ -30,6 +34,8 @@ def addRecipe(args):
     recipe = Recipe()
     recipe.name = args['name']
     recipe.description = args['description']
+    if 'time' in args:
+        recipe.time = args['time']
     recipe.save()
     if 'items' in args:
         for recipeItem in args['items']:
@@ -41,6 +47,15 @@ def addRecipe(args):
                 optional=recipeItem['optional']
             )
             con.item = item
+            con.recipe = recipe
+            con.save()
+    if 'tags' in args:
+        for tagName in args['tags']:
+            tag = Tag.find_by_name(tagName)
+            if not tag:
+                tag = Tag.create_by_name(tagName)
+            con = RecipeTags()
+            con.tag = tag
             con.recipe = recipe
             con.save()
     return jsonify(recipe.obj_to_dict())
@@ -57,6 +72,8 @@ def updateRecipe(args, id):  # noqa: C901
         recipe.name = args['name']
     if 'description' in args and args['description']:
         recipe.description = args['description']
+    if 'time' in args:
+        recipe.time = args['time']
     recipe.save()
     if 'items' in args:
         for con in recipe.items:
@@ -81,6 +98,20 @@ def updateRecipe(args, id):  # noqa: C901
             con.item = item
             con.recipe = recipe
             con.save()
+    if 'tags' in args:
+        for con in recipe.tags:
+            if con.tag.name not in args['tags']:
+                con.delete()
+        for recipeTag in args['tags']:
+            tag = Tag.find_by_name(recipeTag)
+            if not tag:
+                tag = Tag.create_by_name(recipeTag)
+            con = RecipeTags.find_by_ids(recipe.id, tag.id)
+            if not con:
+                con = RecipeTags()
+                con.tag = tag
+                con.recipe = recipe
+                con.save()
     return jsonify(recipe.obj_to_dict())
 
 

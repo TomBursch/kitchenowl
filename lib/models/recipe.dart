@@ -77,5 +77,6 @@ class Recipe extends Model {
       "id": id,
       "planned": isPlanned,
       "items": items.map((e) => e.toJsonWithId()).toList(),
+      "tags": tags.map((e) => e.toJsonWithId()).toList(),
     });
 }

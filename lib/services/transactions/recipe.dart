@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:kitchenowl/models/recipe.dart';
+import 'package:kitchenowl/models/tag.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
 import 'package:kitchenowl/services/storage/temp_storage.dart';
 import 'package:kitchenowl/services/transaction.dart';
@@ -11,6 +12,7 @@ class TransactionRecipeGetRecipes extends Transaction<List<Recipe>> {
 
   @override
   Future<List<Recipe>> runLocal() async {
+    debugPrint((await TempStorage.getInstance().readRecipes()).toString());
     return await TempStorage.getInstance().readRecipes();
   }
 
@@ -18,6 +20,28 @@ class TransactionRecipeGetRecipes extends Transaction<List<Recipe>> {
   Future<List<Recipe>> runOnline() async {
     final recipes = await ApiService.getInstance().getRecipes();
     if (recipes != null) TempStorage.getInstance().writeRecipes(recipes);
+    return recipes;
+  }
+}
+
+class TransactionRecipeGetRecipesFiltered extends Transaction<List<Recipe>> {
+  final List<Tag> filter;
+
+  TransactionRecipeGetRecipesFiltered({DateTime timestamp, this.filter})
+      : super.internal(
+            timestamp ?? DateTime.now(), "TransactionRecipeGetRecipesFiltered");
+
+  @override
+  Future<List<Recipe>> runLocal() async {
+    return (await TempStorage.getInstance().readRecipes())
+            ?.where((recipe) => recipe.tags.any((tag) => filter.contains(tag)))
+            ?.toList() ??
+        const [];
+  }
+
+  @override
+  Future<List<Recipe>> runOnline() async {
+    final recipes = await ApiService.getInstance().getRecipesFiltered(filter);
     return recipes;
   }
 }

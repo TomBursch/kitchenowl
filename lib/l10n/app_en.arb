@@ -78,7 +78,16 @@
     "start": "Start",
     "sortingAlphabetical": "Alphabetical",
     "sortingAlgorithmic": "Algorithmic",
+    "swipeToDeleteTag": "Swipe to delete tag",
     "swipeToDeleteUser": "Swipe to delete user",
+    "tagDelete": "Delete Tag",
+    "tagDeleteConfirmation": "Are you sure you want to delete {tag}? This will remove the tag from any recipe containing it.",
+    "@tagDeleteConfirmation": {
+        "placeholders": {
+            "tag": {}
+        }
+    },
+    "tags": "Tags",
     "underConstruction": "Under Construction",
     "unreachableMessage": "Hmmmm... coulnd't reach server",
     "unsupportedBackendMessage": "The server version is not supported, please update the app/backend",

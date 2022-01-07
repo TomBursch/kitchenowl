@@ -4,6 +4,19 @@ import 'package:kitchenowl/models/tag.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
 
 extension TagApi on ApiService {
+  Future<List<Tag>> getAllTags() async {
+    final res = await get('/tag');
+    if (res.statusCode != 200) return null;
+
+    final body = List.from(jsonDecode(res.body));
+    return body.map((e) => Tag.fromJson(e)).toList();
+  }
+
+  Future<bool> addTag(Tag tag) async {
+    final res = await post('/tag', json.encode(tag.toJson()));
+    return res.statusCode == 200;
+  }
+
   Future<Tag> getTag(Tag tag) async {
     final res = await get('/tag/${tag.id}');
     if (res.statusCode != 200) return null;
@@ -30,11 +43,6 @@ extension TagApi on ApiService {
 
   Future<bool> deleteTag(Tag tag) async {
     final res = await delete('/tag/${tag.id}');
-    return res.statusCode == 200;
-  }
-
-  Future<bool> updateTag(Tag tag) async {
-    final res = await post('/item/${tag.id}', tag.toJson());
     return res.statusCode == 200;
   }
 }

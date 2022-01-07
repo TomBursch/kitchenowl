@@ -78,7 +78,16 @@
     "start": "Start",
     "sortingAlphabetical": "Alphabetisch",
     "sortingAlgorithmic": "Algorithmisch",
+    "swipeToDeleteTag": "Wische zum löschen",
     "swipeToDeleteUser": "Wische zum löschen",
+    "tagDelete": "Tag löschen",
+    "tagDeleteConfirmation": "Bist du dir sicher, dass du {tag} löschen möchtest? Diese Aktion entfernt den Tag von allen Rezepten.",
+    "@tagDeleteConfirmation": {
+        "placeholders": {
+            "tag": {}
+        }
+    },
+    "tags": "Tags",
     "underConstruction": "Baustelle",
     "unreachableMessage": "Hmmmm... der Server wurde nicht erreicht",
     "unsupportedBackendMessage": "Die Server version wird nicht unterstützt, bitte update die/den App/Server",

@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
@@ -12,13 +11,17 @@ import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/widgets/shopping_item.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class RecipePage extends StatefulWidget {
   final Recipe recipe;
   final bool updateOnPlanningEdit;
 
-  const RecipePage({Key key, this.recipe, this.updateOnPlanningEdit = false})
-      : super(key: key);
+  const RecipePage({
+    Key key,
+    this.recipe,
+    this.updateOnPlanningEdit = false,
+  }) : super(key: key);
 
   @override
   _RecipePageState createState() => _RecipePageState();
@@ -62,9 +65,10 @@ class _RecipePageState extends State<RecipePage> {
                       onPressed: () async {
                         final res = await Navigator.of(context)
                             .push<UpdateEnum>(MaterialPageRoute(
-                                builder: (context) => AddUpdateRecipePage(
-                                      recipe: state.recipe,
-                                    )));
+                          builder: (context) => AddUpdateRecipePage(
+                            recipe: state.recipe,
+                          ),
+                        ));
                         if (res == UpdateEnum.updated) {
                           cubit.setUpdateState(UpdateEnum.updated);
                           cubit.refresh();
@@ -112,11 +116,23 @@ class _RecipePageState extends State<RecipePage> {
                             const SizedBox(height: 8),
                             MarkdownBody(
                               data: state.recipe.description,
-                              // imageBuilder: (uri, title, alt) => CachedNetworkImage(
-                              //   imageUrl: uri.toString(),
-                              //   placeholder: (context, url) => CircularProgressIndicator(),
-                              //   errorWidget: (context, url, error) => Icon(Icons.error),
-                              // ),
+                              styleSheet: MarkdownStyleSheet.fromTheme(
+                                      Theme.of(context))
+                                  .copyWith(
+                                blockquoteDecoration: BoxDecoration(
+                                  color: Theme.of(context).cardTheme.color ??
+                                      Theme.of(context).cardColor,
+                                  borderRadius: BorderRadius.circular(2.0),
+                                ),
+                              ),
+                              imageBuilder: (uri, title, alt) =>
+                                  CachedNetworkImage(
+                                imageUrl: uri.toString(),
+                                placeholder: (context, url) =>
+                                    const CircularProgressIndicator(),
+                                errorWidget: (context, url, error) =>
+                                    const Icon(Icons.error),
+                              ),
                               onTapLink: (text, href, title) async {
                                 if (await canLaunch(href)) {
                                   await launch(href);

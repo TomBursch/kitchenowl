@@ -1,15 +1,17 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kitchenowl/models/tag.dart';
 import 'package:kitchenowl/models/user.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
 
 class SettingsServerCubit extends Cubit<SettingsServerState> {
-  SettingsServerCubit() : super(const SettingsServerState([])) {
+  SettingsServerCubit() : super(const SettingsServerState([], [])) {
     refresh();
   }
 
   Future<void> refresh() async {
-    emit(SettingsServerState(await ApiService.getInstance().getAllUsers()));
+    emit(SettingsServerState(await ApiService.getInstance().getAllUsers(),
+        await ApiService.getInstance().getAllTags()));
   }
 
   Future<bool> createUser(String username, String name, String password) async {
@@ -23,13 +25,26 @@ class SettingsServerCubit extends Cubit<SettingsServerState> {
     refresh();
     return res;
   }
+
+  Future<bool> addTag(String name) async {
+    final res = ApiService.getInstance().addTag(Tag(name: name));
+    refresh();
+    return res;
+  }
+
+  Future<bool> deleteTag(Tag tag) async {
+    final res = ApiService.getInstance().deleteTag(tag);
+    refresh();
+    return res;
+  }
 }
 
 class SettingsServerState extends Equatable {
   final List<User> users;
+  final List<Tag> tags;
 
-  const SettingsServerState(this.users);
+  const SettingsServerState(this.users, this.tags);
 
   @override
-  List<Object> get props => [users];
+  List<Object> get props => [users, tags];
 }

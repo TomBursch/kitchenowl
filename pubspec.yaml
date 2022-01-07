@@ -50,7 +50,7 @@ dependencies:
   flutter_markdown: ^0.6.9
   tuple: ^2.0.0
   charts_flutter: ^0.12.0
-  # cached_network_image: ^3.0.0
+  cached_network_image: ^3.2.0
 
 dev_dependencies:
   flutter_test:

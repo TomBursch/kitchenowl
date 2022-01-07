@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/cubits/planner_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/kitchenowl.dart';
+import 'package:kitchenowl/models/recipe.dart';
 import 'package:kitchenowl/pages/recipe_page.dart';
 import 'package:kitchenowl/widgets/selectable_button_card.dart';
 import 'package:responsive_builder/responsive_builder.dart';
@@ -90,17 +91,8 @@ class _PlannerPageState extends State<PlannerPage> {
                           onPressed: () {
                             cubit.remove(state.plannedRecipes[i]);
                           },
-                          onLongPressed: () async {
-                            final res = await Navigator.of(context)
-                                .push<UpdateEnum>(MaterialPageRoute(
-                                    builder: (context) => RecipePage(
-                                          recipe: state.plannedRecipes[i],
-                                        )));
-                            if (res == UpdateEnum.updated ||
-                                res == UpdateEnum.deleted) {
-                              cubit.refresh();
-                            }
-                          },
+                          onLongPressed: () => _openRecipePage(
+                              context, cubit, state.plannedRecipes[i]),
                         ),
                         childCount: state.plannedRecipes.length,
                       ),
@@ -131,18 +123,8 @@ class _PlannerPageState extends State<PlannerPage> {
                           onPressed: () {
                             cubit.add(state.recentRecipes[i]);
                           },
-                          onLongPressed: () async {
-                            final res = await Navigator.of(context)
-                                .push<UpdateEnum>(MaterialPageRoute(
-                                    builder: (context) => RecipePage(
-                                          recipe: state.recentRecipes[i],
-                                          updateOnPlanningEdit: true,
-                                        )));
-                            if (res == UpdateEnum.updated ||
-                                res == UpdateEnum.deleted) {
-                              cubit.refresh();
-                            }
-                          },
+                          onLongPressed: () => _openRecipePage(
+                              context, cubit, state.recentRecipes[i]),
                         ),
                         childCount: state.recentRecipes.length,
                       ),
@@ -186,18 +168,8 @@ class _PlannerPageState extends State<PlannerPage> {
                           onPressed: () {
                             cubit.add(state.suggestedRecipes[i]);
                           },
-                          onLongPressed: () async {
-                            final res = await Navigator.of(context)
-                                .push<UpdateEnum>(MaterialPageRoute(
-                                    builder: (context) => RecipePage(
-                                          recipe: state.suggestedRecipes[i],
-                                          updateOnPlanningEdit: true,
-                                        )));
-                            if (res == UpdateEnum.updated ||
-                                res == UpdateEnum.deleted) {
-                              cubit.refresh();
-                            }
-                          },
+                          onLongPressed: () => _openRecipePage(
+                              context, cubit, state.suggestedRecipes[i]),
                         ),
                         childCount: state.suggestedRecipes.length,
                       ),
@@ -210,5 +182,23 @@ class _PlannerPageState extends State<PlannerPage> {
         ),
       ),
     );
+  }
+
+  Future<void> _openRecipePage(
+    BuildContext context,
+    PlannerCubit cubit,
+    Recipe recipe,
+  ) async {
+    final res = await Navigator.of(context).push<UpdateEnum>(
+      MaterialPageRoute(
+        builder: (context) => RecipePage(
+          recipe: recipe,
+          updateOnPlanningEdit: true,
+        ),
+      ),
+    );
+    if (res == UpdateEnum.updated || res == UpdateEnum.deleted) {
+      cubit.refresh();
+    }
   }
 }

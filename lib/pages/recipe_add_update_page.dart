@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/cubits/recipe_add_update_cubit.dart';
+import 'package:kitchenowl/cubits/recipe_list_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/models/recipe.dart';
@@ -16,8 +17,11 @@ import 'package:responsive_builder/responsive_builder.dart';
 
 class AddUpdateRecipePage extends StatefulWidget {
   final Recipe recipe;
-  const AddUpdateRecipePage({Key key, this.recipe = const Recipe()})
-      : super(key: key);
+
+  const AddUpdateRecipePage({
+    Key key,
+    this.recipe = const Recipe(),
+  }) : super(key: key);
 
   @override
   _AddUpdateRecipePageState createState() => _AddUpdateRecipePageState();
@@ -129,54 +133,47 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                         List<Widget> children = state.tags
                             .map<Widget>((e) => FilterChip(
                                   label: Text(e.name),
-                                  selected: state.selectedTags.contains(e),
+                                  selected: state.selectedTags
+                                      .map((e) => e.name)
+                                      .contains(e.name),
                                   onSelected: (selected) =>
                                       cubit.selectTag(e, selected),
                                   selectedColor:
                                       Theme.of(context).colorScheme.secondary,
                                 ))
                             .toList();
-                        Widget widget = Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 2),
-                            child: GestureDetector(
-                              onTap: () async {
-                                final res = await showDialog<String>(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return TextDialog(
-                                        title:
-                                            AppLocalizations.of(context).addTag,
-                                        doneText:
-                                            AppLocalizations.of(context).add,
-                                        hintText:
-                                            AppLocalizations.of(context).name,
-                                      );
-                                    });
-                                if (res != null && res.isNotEmpty) {
-                                  cubit.addTag(res);
-                                }
-                              },
-                              child: const Icon(Icons.add),
-                            ));
+                        Widget widget = GestureDetector(
+                          onTap: () async {
+                            final res = await showDialog<String>(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return TextDialog(
+                                    title: AppLocalizations.of(context).addTag,
+                                    doneText: AppLocalizations.of(context).add,
+                                    hintText: AppLocalizations.of(context).name,
+                                  );
+                                });
+                            if (res != null && res.isNotEmpty) {
+                              cubit.addTag(res);
+                            }
+                          },
+                          child: const Icon(Icons.add),
+                        );
 
                         if (children.isEmpty) {
-                          widget = Row(
-                            children: [
-                              Text(AppLocalizations.of(context).noTags),
-                              widget,
-                            ],
-                          );
-                        } else {
-                          widget = Wrap(
-                            runSpacing: 7,
-                            spacing: 5,
-                            children: children + [widget],
-                          );
+                          children = [
+                            Text(AppLocalizations.of(context).noTags)
+                          ];
                         }
 
                         return Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 16),
-                          child: widget,
+                          child: Wrap(
+                            runSpacing: 7,
+                            spacing: 5,
+                            crossAxisAlignment: WrapCrossAlignment.center,
+                            children: children + [widget],
+                          ),
                         );
                       },
                     ),

@@ -4,6 +4,8 @@ import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/models/recipe.dart';
 import 'package:kitchenowl/models/tag.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
+import 'package:kitchenowl/services/transaction_handler.dart';
+import 'package:kitchenowl/services/transactions/tag.dart';
 
 class AddUpdateRecipeCubit extends Cubit<AddUpdateRecipeState> {
   final Recipe recipe;
@@ -13,9 +15,17 @@ class AddUpdateRecipeCubit extends Cubit<AddUpdateRecipeState> {
           name: recipe.name,
           time: recipe.time,
           items: recipe.items,
-          tags: recipe.tags,
           selectedTags: recipe.tags,
-        ));
+          tags: recipe.tags,
+        )) {
+    getTags();
+  }
+
+  Future<void> getTags() async {
+    final tags = await TransactionHandler.getInstance()
+        .runTransaction(TransactionTagGetAll());
+    emit(state.copyWith(tags: tags));
+  }
 
   Future<void> saveRecipe() async {
     if (state.isValid()) {
@@ -61,7 +71,7 @@ class AddUpdateRecipeCubit extends Cubit<AddUpdateRecipeState> {
     if (selected) {
       l.add(tag);
     } else {
-      l.remove(tag);
+      l.removeWhere((e) => e.name == tag.name);
     }
     emit(state.copyWith(selectedTags: l));
   }

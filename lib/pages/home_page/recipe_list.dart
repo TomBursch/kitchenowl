@@ -2,6 +2,7 @@ import 'package:alphabet_scroll_view/alphabet_scroll_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/cubits/recipe_list_cubit.dart';
+import 'package:kitchenowl/models/tag.dart';
 import 'package:kitchenowl/widgets/recipe_item.dart';
 import 'package:kitchenowl/widgets/search_text_field.dart';
 
@@ -58,9 +59,50 @@ class _RecipeListPageState extends State<RecipeListPage> {
               ),
             ),
           ),
+          BlocBuilder<RecipeListCubit, ListRecipeCubitState>(
+              bloc: cubit,
+              builder: (context, state) {
+                if (state.tags.isEmpty || state is SearchRecipeCubitState) {
+                  return const SizedBox();
+                }
+                return Align(
+                  alignment: Alignment.centerLeft,
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 16),
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      controller: ScrollController(),
+                      child: Row(
+                        children: const <Widget>[SizedBox(width: 12)] +
+                            state.tags.map((tag) {
+                              return Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 4),
+                                child: FilterChip(
+                                  label: Text(tag.name),
+                                  selected:
+                                      (state is FilteredListRecipeCubitState) &&
+                                          state.selectedTags
+                                              .map((e) => e.id)
+                                              .contains(tag.id),
+                                  selectedColor:
+                                      Theme.of(context).colorScheme.secondary,
+                                  onSelected: (bool selected) =>
+                                      cubit.tagSelected(tag, selected),
+                                ),
+                              );
+                            }).toList()
+                          ..add(const SizedBox(width: 12)),
+                      ),
+                    ),
+                  ),
+                );
+              }),
           Expanded(
             child: BlocBuilder<RecipeListCubit, ListRecipeCubitState>(
                 bloc: cubit,
+                buildWhen: (previous, current) =>
+                    previous.recipes != current.recipes,
                 builder: (context, state) {
                   final recipes = state.recipes;
                   return Scrollbar(
@@ -91,6 +133,7 @@ class _RecipeListPageState extends State<RecipeListPage> {
                             child: RecipeItemWidget(
                               recipe: recipes[index],
                               onUpdated: cubit.refresh,
+                              tags: state.tags,
                             ),
                           );
                         },

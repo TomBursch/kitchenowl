@@ -5,11 +5,13 @@ import 'package:kitchenowl/cubits/auth_cubit.dart';
 import 'package:kitchenowl/cubits/settings_cubit.dart';
 import 'package:kitchenowl/cubits/settings_server_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
+import 'package:kitchenowl/models/tag.dart';
 import 'package:kitchenowl/models/user.dart';
 import 'package:kitchenowl/pages/settings/create_user_page.dart';
 import 'package:kitchenowl/pages/settings_user_page.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
 import 'package:kitchenowl/kitchenowl.dart';
+import 'package:kitchenowl/widgets/TextDialog.dart';
 
 class SettingsServerPage extends StatefulWidget {
   const SettingsServerPage({Key key}) : super(key: key);
@@ -107,6 +109,120 @@ class _SettingsServerPageState extends State<SettingsServerPage> {
                   children: [
                     Expanded(
                       child: Text(
+                        AppLocalizations.of(context).tags + ':',
+                        style: Theme.of(context).textTheme.headline6,
+                      ),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.add),
+                      onPressed: () async {
+                        final res = await showDialog<String>(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return TextDialog(
+                                title: AppLocalizations.of(context).addTag,
+                                doneText: AppLocalizations.of(context).add,
+                                hintText: AppLocalizations.of(context).name,
+                              );
+                            });
+                        if (res != null && res.isNotEmpty) {
+                          cubit.addTag(res);
+                        }
+                      },
+                      padding: EdgeInsets.zero,
+                    )
+                  ],
+                ),
+                BlocBuilder<SettingsServerCubit, SettingsServerState>(
+                  bloc: cubit,
+                  builder: (context, state) => ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: state.tags.length,
+                    itemBuilder: (context, i) => Dismissible(
+                      key: ValueKey<Tag>(state.tags[i]),
+                      confirmDismiss: (direction) async {
+                        return (await showDialog<bool>(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(15)),
+                                    title: Text(
+                                      AppLocalizations.of(context).tagDelete,
+                                    ),
+                                    content: Text(AppLocalizations.of(context)
+                                        .tagDeleteConfirmation(
+                                            state.tags[i].name)),
+                                    actions: <Widget>[
+                                      TextButton(
+                                        child: Text(AppLocalizations.of(context)
+                                            .cancel),
+                                        style: ButtonStyle(
+                                          foregroundColor:
+                                              MaterialStateProperty.all<Color>(
+                                            Theme.of(context).disabledColor,
+                                          ),
+                                        ),
+                                        onPressed: () =>
+                                            Navigator.of(context).pop(false),
+                                      ),
+                                      TextButton(
+                                        child: Text(AppLocalizations.of(context)
+                                            .delete),
+                                        style: ButtonStyle(
+                                          foregroundColor:
+                                              MaterialStateProperty.all<Color>(
+                                            Colors.red,
+                                          ),
+                                        ),
+                                        onPressed: () =>
+                                            Navigator.of(context).pop(true),
+                                      ),
+                                    ],
+                                  );
+                                }) ??
+                            false);
+                      },
+                      onDismissed: (direction) {
+                        cubit.deleteTag(state.tags[i]);
+                      },
+                      background: Container(
+                        alignment: Alignment.centerLeft,
+                        padding: const EdgeInsets.only(left: 16),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          color: Colors.red,
+                        ),
+                        child: const Icon(Icons.delete, color: Colors.white),
+                      ),
+                      secondaryBackground: Container(
+                        alignment: Alignment.centerRight,
+                        padding: const EdgeInsets.only(right: 16),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          color: Colors.red,
+                        ),
+                        child: const Icon(Icons.delete, color: Colors.white),
+                      ),
+                      child: Card(
+                        child: ListTile(
+                          title: Text(state.tags[i].name),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Text(
+                  AppLocalizations.of(context).swipeToDeleteTag,
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.caption,
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
                         AppLocalizations.of(context).users + ':',
                         style: Theme.of(context).textTheme.headline6,
                       ),
@@ -137,6 +253,9 @@ class _SettingsServerPageState extends State<SettingsServerPage> {
                                 context: context,
                                 builder: (BuildContext context) {
                                   return AlertDialog(
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(15)),
                                     title: Text(
                                       AppLocalizations.of(context).userDelete,
                                     ),

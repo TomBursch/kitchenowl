@@ -1,8 +1,8 @@
 import 'package:alphabet_scroll_view/alphabet_scroll_view.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/cubits/recipe_list_cubit.dart';
-import 'package:kitchenowl/models/tag.dart';
 import 'package:kitchenowl/widgets/recipe_item.dart';
 import 'package:kitchenowl/widgets/search_text_field.dart';
 
@@ -39,7 +39,7 @@ class _RecipeListPageState extends State<RecipeListPage> {
           SizedBox(
             height: 80,
             child: Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
               child: BlocListener<RecipeListCubit, ListRecipeCubitState>(
                 bloc: cubit,
                 listener: (context, state) {
@@ -68,7 +68,7 @@ class _RecipeListPageState extends State<RecipeListPage> {
                 return Align(
                   alignment: Alignment.centerLeft,
                   child: Padding(
-                    padding: const EdgeInsets.only(bottom: 16),
+                    padding: const EdgeInsets.only(bottom: 8),
                     child: SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       controller: ScrollController(),
@@ -102,7 +102,7 @@ class _RecipeListPageState extends State<RecipeListPage> {
             child: BlocBuilder<RecipeListCubit, ListRecipeCubitState>(
                 bloc: cubit,
                 buildWhen: (previous, current) =>
-                    previous.recipes != current.recipes,
+                    !listEquals(previous.recipes, current.recipes),
                 builder: (context, state) {
                   final recipes = state.recipes;
                   return Scrollbar(
@@ -123,7 +123,9 @@ class _RecipeListPageState extends State<RecipeListPage> {
                           child: Text(
                             value.toUpperCase(),
                             style: const TextStyle(
-                                fontSize: 20, color: Colors.white),
+                              fontSize: 20,
+                              color: Colors.white,
+                            ),
                           ),
                         ),
                         itemExtent: 65,
@@ -133,10 +135,12 @@ class _RecipeListPageState extends State<RecipeListPage> {
                             child: RecipeItemWidget(
                               recipe: recipes[index],
                               onUpdated: cubit.refresh,
-                              tags: state.tags,
                             ),
                           );
                         },
+                        selectedTextStyle:
+                            const TextStyle(fontWeight: FontWeight.bold),
+                        unselectedTextStyle: null,
                       ),
                     ),
                   );

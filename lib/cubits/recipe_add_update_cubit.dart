@@ -67,7 +67,7 @@ class AddUpdateRecipeCubit extends Cubit<AddUpdateRecipeState> {
   }
 
   void selectTag(Tag tag, bool selected) {
-    final l = List<Tag>.from(state.selectedTags);
+    final l = Set<Tag>.from(state.selectedTags);
     if (selected) {
       l.add(tag);
     } else {
@@ -77,8 +77,8 @@ class AddUpdateRecipeCubit extends Cubit<AddUpdateRecipeState> {
   }
 
   void addTag(String tag) {
-    final l = List<Tag>.from(state.tags);
-    final selected = List<Tag>.from(state.selectedTags);
+    final l = Set<Tag>.from(state.tags);
+    final selected = Set<Tag>.from(state.selectedTags);
     final t = Tag(name: tag);
     l.add(t);
     selected.add(t);
@@ -122,16 +122,16 @@ class AddUpdateRecipeState extends Equatable {
   final String description;
   final int time;
   final List<RecipeItem> items;
-  final List<Tag> tags;
-  final List<Tag> selectedTags;
+  final Set<Tag> tags;
+  final Set<Tag> selectedTags;
 
   const AddUpdateRecipeState({
     this.name = "",
     this.description = "",
     this.time = 0,
     this.items = const [],
-    this.tags = const [],
-    this.selectedTags = const [],
+    this.tags = const {},
+    this.selectedTags = const {},
   });
 
   AddUpdateRecipeState copyWith({
@@ -139,8 +139,8 @@ class AddUpdateRecipeState extends Equatable {
     String description,
     int time,
     List<RecipeItem> items,
-    List<Tag> tags,
-    List<Tag> selectedTags,
+    Set<Tag> tags,
+    Set<Tag> selectedTags,
   }) =>
       AddUpdateRecipeState(
         name: name ?? this.name,

@@ -11,7 +11,7 @@ import 'package:kitchenowl/pages/settings/create_user_page.dart';
 import 'package:kitchenowl/pages/settings_user_page.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
 import 'package:kitchenowl/kitchenowl.dart';
-import 'package:kitchenowl/widgets/TextDialog.dart';
+import 'package:kitchenowl/widgets/text_dialog.dart';
 
 class SettingsServerPage extends StatefulWidget {
   const SettingsServerPage({Key key}) : super(key: key);
@@ -140,7 +140,7 @@ class _SettingsServerPageState extends State<SettingsServerPage> {
                     physics: const NeverScrollableScrollPhysics(),
                     itemCount: state.tags.length,
                     itemBuilder: (context, i) => Dismissible(
-                      key: ValueKey<Tag>(state.tags[i]),
+                      key: ValueKey<Tag>(state.tags.elementAt(i)),
                       confirmDismiss: (direction) async {
                         return (await showDialog<bool>(
                                 context: context,
@@ -154,7 +154,7 @@ class _SettingsServerPageState extends State<SettingsServerPage> {
                                     ),
                                     content: Text(AppLocalizations.of(context)
                                         .tagDeleteConfirmation(
-                                            state.tags[i].name)),
+                                            state.tags.elementAt(i).name)),
                                     actions: <Widget>[
                                       TextButton(
                                         child: Text(AppLocalizations.of(context)
@@ -186,7 +186,7 @@ class _SettingsServerPageState extends State<SettingsServerPage> {
                             false);
                       },
                       onDismissed: (direction) {
-                        cubit.deleteTag(state.tags[i]);
+                        cubit.deleteTag(state.tags.elementAt(i));
                       },
                       background: Container(
                         alignment: Alignment.centerLeft,
@@ -208,7 +208,7 @@ class _SettingsServerPageState extends State<SettingsServerPage> {
                       ),
                       child: Card(
                         child: ListTile(
-                          title: Text(state.tags[i].name),
+                          title: Text(state.tags.elementAt(i).name),
                         ),
                       ),
                     ),

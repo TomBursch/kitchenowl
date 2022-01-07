@@ -4,12 +4,12 @@ import 'package:kitchenowl/models/tag.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
 
 extension TagApi on ApiService {
-  Future<List<Tag>> getAllTags() async {
+  Future<Set<Tag>> getAllTags() async {
     final res = await get('/tag');
     if (res.statusCode != 200) return null;
 
     final body = List.from(jsonDecode(res.body));
-    return body.map((e) => Tag.fromJson(e)).toList();
+    return body.map((e) => Tag.fromJson(e)).toSet();
   }
 
   Future<bool> addTag(Tag tag) async {
@@ -33,12 +33,12 @@ extension TagApi on ApiService {
     return body.map((e) => Recipe.fromJson(e)).toList();
   }
 
-  Future<List<Tag>> searchTags(String query) async {
+  Future<Set<Tag>> searchTags(String query) async {
     final res = await get('/tag/search?query=$query');
     if (res.statusCode != 200) return null;
 
     final body = List.from(jsonDecode(res.body));
-    return body.map((e) => Tag.fromJson(e)).toList();
+    return body.map((e) => Tag.fromJson(e)).toSet();
   }
 
   Future<bool> deleteTag(Tag tag) async {

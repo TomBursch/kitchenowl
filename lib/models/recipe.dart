@@ -9,7 +9,7 @@ class Recipe extends Model {
   final bool isPlanned;
   final int time;
   final List<RecipeItem> items;
-  final List<Tag> tags;
+  final Set<Tag> tags;
 
   const Recipe({
     this.id,
@@ -18,7 +18,7 @@ class Recipe extends Model {
     this.isPlanned = false,
     this.time = 0,
     this.items = const [],
-    this.tags = const [],
+    this.tags = const {},
   });
 
   factory Recipe.fromJson(Map<String, dynamic> map) {
@@ -26,9 +26,9 @@ class Recipe extends Model {
     if (map.containsKey('items')) {
       items = List.from(map['items'].map((e) => RecipeItem.fromJson(e)));
     }
-    List<Tag> tags = const [];
+    Set<Tag> tags = const {};
     if (map.containsKey('tags')) {
-      tags = List.from(map['tags'].map((e) => Tag.fromJson(e)));
+      tags = Set.from(map['tags'].map((e) => Tag.fromJson(e)));
     }
     return Recipe(
       id: map['id'],
@@ -47,7 +47,7 @@ class Recipe extends Model {
     bool isPlanned,
     int time,
     List<RecipeItem> items,
-    List<Tag> tags,
+    Set<Tag> tags,
   }) =>
       Recipe(
         id: id,

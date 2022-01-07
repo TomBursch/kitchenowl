@@ -25,7 +25,7 @@ class TransactionRecipeGetRecipes extends Transaction<List<Recipe>> {
 }
 
 class TransactionRecipeGetRecipesFiltered extends Transaction<List<Recipe>> {
-  final List<Tag> filter;
+  final Set<Tag> filter;
 
   TransactionRecipeGetRecipesFiltered({DateTime timestamp, this.filter})
       : super.internal(

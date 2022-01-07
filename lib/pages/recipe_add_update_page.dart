@@ -5,13 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/cubits/recipe_add_update_cubit.dart';
-import 'package:kitchenowl/cubits/recipe_list_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/models/recipe.dart';
 import 'package:kitchenowl/pages/item_search_page.dart';
 import 'package:kitchenowl/kitchenowl.dart';
-import 'package:kitchenowl/widgets/TextDialog.dart';
+import 'package:kitchenowl/widgets/text_dialog.dart';
 import 'package:kitchenowl/widgets/shopping_item.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
@@ -126,8 +125,8 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                     BlocBuilder<AddUpdateRecipeCubit, AddUpdateRecipeState>(
                       bloc: cubit,
                       buildWhen: (previous, current) =>
-                          !listEquals(previous.tags, current.tags) ||
-                          !listEquals(
+                          !setEquals(previous.tags, current.tags) ||
+                          !setEquals(
                               previous.selectedTags, current.selectedTags),
                       builder: (context, state) {
                         List<Widget> children = state.tags

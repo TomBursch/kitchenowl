@@ -30,20 +30,27 @@ class RecipeListCubit extends Cubit<ListRecipeCubitState> {
       } else {
         l.removeWhere((e) => e.id == tag.id);
       }
-      emit(_state.copyWith(selectedTags: l));
+      if (l.isEmpty) {
+        emit(
+            ListRecipeCubitState(recipes: _state.allRecipes, tags: state.tags));
+      } else {
+        emit(_state.copyWith(selectedTags: l));
+      }
     } else if (selected) {
-      emit(FilteredListRecipeCubitState.fromState(state, [tag]));
+      emit(FilteredListRecipeCubitState.fromState(state, {tag}));
     }
     return refresh();
   }
 
   Future<void> refresh([String query]) async {
-    List<Tag> filter = const [];
+    Set<Tag> filter = const {};
+    List<Recipe> allRecipes = const [];
     if (state is SearchRecipeCubitState) {
       query = query ?? (state as SearchRecipeCubitState).query;
     }
     if (state is FilteredListRecipeCubitState) {
       filter = (state as FilteredListRecipeCubitState).selectedTags;
+      allRecipes = (state as FilteredListRecipeCubitState).allRecipes;
     }
     if (query != null && query.isNotEmpty) {
       final items = (await TransactionHandler.getInstance()
@@ -62,6 +69,7 @@ class RecipeListCubit extends Cubit<ListRecipeCubitState> {
         recipes: shoppinglist,
         tags: tags,
         selectedTags: filter,
+        allRecipes: allRecipes,
       ));
     } else {
       shoppinglist = await TransactionHandler.getInstance()
@@ -77,27 +85,30 @@ class RecipeListCubit extends Cubit<ListRecipeCubitState> {
 
 class ListRecipeCubitState extends Equatable {
   final List<Recipe> recipes;
-  final List<Tag> tags;
+  final Set<Tag> tags;
 
-  const ListRecipeCubitState({this.recipes = const [], this.tags = const []});
+  const ListRecipeCubitState({this.recipes = const [], this.tags = const {}});
 
   @override
   List<Object> get props => <Object>[tags] + recipes;
 }
 
 class FilteredListRecipeCubitState extends ListRecipeCubitState {
-  final List<Tag> selectedTags;
+  final Set<Tag> selectedTags;
+  final List<Recipe> allRecipes;
 
   const FilteredListRecipeCubitState({
     this.selectedTags,
+    this.allRecipes,
     List<Recipe> recipes = const [],
-    List<Tag> tags = const [],
+    Set<Tag> tags = const {},
   }) : super(recipes: recipes, tags: tags);
 
   factory FilteredListRecipeCubitState.fromState(
-          ListRecipeCubitState state, List<Tag> selectedTags) =>
+          ListRecipeCubitState state, Set<Tag> selectedTags) =>
       FilteredListRecipeCubitState(
         recipes: state.recipes,
+        allRecipes: state.recipes,
         tags: state.tags,
         selectedTags: selectedTags,
       );
@@ -111,6 +122,7 @@ class FilteredListRecipeCubitState extends ListRecipeCubitState {
         recipes: recipes ?? this.recipes,
         tags: tags ?? this.tags,
         selectedTags: selectedTags ?? this.selectedTags,
+        allRecipes: allRecipes,
       );
 
   @override
@@ -121,7 +133,7 @@ class SearchRecipeCubitState extends ListRecipeCubitState {
   final String query;
 
   const SearchRecipeCubitState(
-      {this.query, List<Recipe> recipes = const [], List<Tag> tags = const []})
+      {this.query, List<Recipe> recipes = const [], Set<Tag> tags = const {}})
       : super(recipes: recipes, tags: tags);
 
   @override

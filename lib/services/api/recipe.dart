@@ -12,7 +12,7 @@ extension RecipeApi on ApiService {
     return body.map((e) => Recipe.fromJson(e)).toList();
   }
 
-  Future<List<Recipe>> getRecipesFiltered(List<Tag> filter) async {
+  Future<List<Recipe>> getRecipesFiltered(Set<Tag> filter) async {
     final res = await post('/recipe/filter',
         jsonEncode({"filter": filter.map((e) => e.toString()).toList()}));
     if (res.statusCode != 200) return null;

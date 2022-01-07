@@ -36,7 +36,7 @@ def getSupportedLanguages():
     return jsonify(SUPPORTED_LANGUAGES)
 
 
-def _import(args):
+def _import(args): # noqa
     if "items" in args:
         for importItem in args['items']:
             if not Item.find_by_name(importItem['name']):

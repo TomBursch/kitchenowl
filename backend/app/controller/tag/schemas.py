@@ -6,3 +6,9 @@ class SearchByNameRequest(Schema):
         required=True,
         validate=lambda a: len(a) > 0
     )
+
+
+class AddTag(Schema):
+    name = fields.String(
+        required=True
+    )

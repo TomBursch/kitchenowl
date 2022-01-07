@@ -5,17 +5,13 @@ from flask_jwt_extended import jwt_required
 from app import app
 from app.helpers import validate_args
 from app.models import Recipe, Item, Tag
-from .schemas import SearchByNameRequest, AddRecipe, UpdateRecipe, GetAllRequest
+from .schemas import SearchByNameRequest, AddRecipe, UpdateRecipe, GetAllFilterRequest
 
 
 @app.route('/recipe', methods=['GET'])
 @jwt_required()
-@validate_args(GetAllRequest)
-def getAllRecipes(args):
-    if "filter" in args:
-        return jsonify([e.obj_to_full_dict() for e in Recipe.all_by_name_with_filter(args["filter"])])
-    else:
-        return jsonify([e.obj_to_full_dict() for e in Recipe.all_by_name()])
+def getAllRecipes():
+    return jsonify([e.obj_to_full_dict() for e in Recipe.all_by_name()])
 
 
 @app.route('/recipe/<id>', methods=['GET'])
@@ -127,6 +123,13 @@ def deleteRecipeById(id):
 @validate_args(SearchByNameRequest)
 def searchRecipeByName(args):
     return jsonify([e.obj_to_dict() for e in Recipe.search_name(args['query'])])
+
+
+@app.route('/recipe/filter', methods=['POST'])
+@jwt_required()
+@validate_args(GetAllFilterRequest)
+def getAllFiltered(args):
+    return jsonify([e.obj_to_full_dict() for e in Recipe.all_by_name_with_filter(args["filter"])])
 
 
 # @app.route('/recipe/<id>/item', methods=['POST'])

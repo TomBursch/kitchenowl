@@ -16,6 +16,7 @@ def admin_required(func):
 
     return func_wrapper
 
+
 def owner_required(func):
     @wraps(func)
     def func_wrapper(*args, **kwargs):

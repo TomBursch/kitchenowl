@@ -4,7 +4,7 @@ from app.errors import NotFoundRequest
 from flask_jwt_extended import jwt_required
 from app import app
 from app.models import Tag, RecipeTags, Recipe
-from .schemas import SearchByNameRequest
+from .schemas import SearchByNameRequest, AddTag
 
 
 @app.route('/tag', methods=['GET'])
@@ -30,6 +30,16 @@ def getTagRecipes(id):
         RecipeTags.recipe).order_by(
         Recipe.name).all()
     return jsonify([e.recipe.obj_to_dict() for e in tags])
+
+
+@app.route('/tag', methods=['POST'])
+@jwt_required()
+@validate_args(AddTag)
+def addTag(args):
+    tag = Tag()
+    tag.name = args['name']
+    tag.save()
+    return jsonify(tag.obj_to_dict())
 
 
 @app.route('/tag/<id>', methods=['DELETE'])

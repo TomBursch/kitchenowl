@@ -8,12 +8,12 @@ import 'package:kitchenowl/models/user.dart';
 import 'package:path_provider/path_provider.dart';
 
 class TempStorage {
-  static TempStorage _instance;
+  static TempStorage? _instance;
 
   TempStorage._internal();
   static TempStorage getInstance() {
     _instance ??= TempStorage._internal();
-    return _instance;
+    return _instance!;
   }
 
   Future<String> get _localPath async {
@@ -50,7 +50,7 @@ class TempStorage {
     await clearRecipes();
   }
 
-  Future<User> readUser() async {
+  Future<User?> readUser() async {
     if (!kIsWeb) {
       try {
         final file = await _localUserFile;
@@ -61,25 +61,23 @@ class TempStorage {
     return null;
   }
 
-  Future<File> clearUser() async {
+  Future<void> clearUser() async {
     if (!kIsWeb) {
       try {
         final file = await _localUserFile;
-        if (await file.exists()) return file.delete();
+        if (await file.exists()) await file.delete();
       } catch (_) {}
     }
-    return null;
   }
 
-  Future<File> writeUser(User user) async {
-    if (!kIsWeb && user != null) {
+  Future<void> writeUser(User user) async {
+    if (!kIsWeb) {
       final file = await _localUserFile;
-      return file.writeAsString(json.encode(user.toJsonWithId()));
+      await file.writeAsString(json.encode(user.toJsonWithId()));
     }
-    return null;
   }
 
-  Future<List<User>> readUsers() async {
+  Future<List<User>?> readUsers() async {
     if (!kIsWeb) {
       try {
         final file = await _localUsersFile;
@@ -91,26 +89,24 @@ class TempStorage {
     return null;
   }
 
-  Future<File> clearUsers() async {
+  Future<void> clearUsers() async {
     if (!kIsWeb) {
       try {
         final file = await _localUsersFile;
-        if (await file.exists()) return file.delete();
+        if (await file.exists()) await file.delete();
       } catch (_) {}
     }
-    return null;
   }
 
-  Future<File> writeUsers(List<User> users) async {
+  Future<void> writeUsers(List<User> users) async {
     if (!kIsWeb) {
       final file = await _localUsersFile;
-      return file.writeAsString(
+      await file.writeAsString(
           json.encode(users.map((e) => e.toJsonWithId()).toList()));
     }
-    return null;
   }
 
-  Future<List<ShoppinglistItem>> readItems() async {
+  Future<List<ShoppinglistItem>?> readItems() async {
     if (!kIsWeb) {
       try {
         final file = await _localItemFile;
@@ -122,26 +118,24 @@ class TempStorage {
     return null;
   }
 
-  Future<File> writeItems(List<ShoppinglistItem> items) async {
+  Future<void> writeItems(List<ShoppinglistItem> items) async {
     if (!kIsWeb) {
       final file = await _localItemFile;
-      return file.writeAsString(
+      await file.writeAsString(
           json.encode(items.map((e) => e.toJsonWithId()).toList()));
     }
-    return null;
   }
 
-  Future<File> clearItems() async {
+  Future<void> clearItems() async {
     if (!kIsWeb) {
       try {
         final file = await _localItemFile;
-        if (await file.exists()) return file.delete();
+        if (await file.exists()) await file.delete();
       } catch (_) {}
     }
-    return null;
   }
 
-  Future<List<Recipe>> readRecipes() async {
+  Future<List<Recipe>?> readRecipes() async {
     if (!kIsWeb) {
       try {
         final file = await _localRecipeFile;
@@ -153,22 +147,20 @@ class TempStorage {
     return null;
   }
 
-  Future<File> writeRecipes(List<Recipe> recipes) async {
+  Future<void> writeRecipes(List<Recipe> recipes) async {
     if (!kIsWeb) {
       final file = await _localRecipeFile;
-      return file.writeAsString(
+      await file.writeAsString(
           json.encode(recipes.map((e) => e.toJsonWithId()).toList()));
     }
-    return null;
   }
 
-  Future<File> clearRecipes() async {
+  Future<void> clearRecipes() async {
     if (!kIsWeb) {
       try {
         final file = await _localRecipeFile;
-        if (await file.exists()) return file.delete();
+        if (await file.exists()) await file.delete();
       } catch (_) {}
     }
-    return null;
   }
 }

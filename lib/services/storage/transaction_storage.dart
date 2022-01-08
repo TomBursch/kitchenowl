@@ -6,12 +6,12 @@ import 'package:kitchenowl/services/transaction.dart';
 import 'package:path_provider/path_provider.dart';
 
 class TransactionStorage {
-  static TransactionStorage _instance;
+  static TransactionStorage? _instance;
 
   TransactionStorage._internal();
   static TransactionStorage getInstance() {
     _instance ??= TransactionStorage._internal();
-    return _instance;
+    return _instance!;
   }
 
   Future<String> get _localPath async {
@@ -38,24 +38,22 @@ class TransactionStorage {
     return [];
   }
 
-  Future<File> clearTransactions() async {
+  Future<void> clearTransactions() async {
     if (!kIsWeb) {
       try {
         final file = await _localFile;
-        if (await file.exists()) return file.delete();
+        if (await file.exists()) await file.delete();
       } catch (_) {}
     }
-    return null;
   }
 
-  Future<File> addTransaction(Transaction t) async {
+  Future<void> addTransaction(Transaction t) async {
     if (!kIsWeb) {
-      final transactions = await readTransactions();
+      final transactions = (await readTransactions());
       transactions.add(t);
       final file = await _localFile;
-      return file.writeAsString(
+      await file.writeAsString(
           json.encode(transactions.map((t) => t.toJson()).toList()));
     }
-    return null;
   }
 }

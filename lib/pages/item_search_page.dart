@@ -10,10 +10,10 @@ import 'package:responsive_builder/responsive_builder.dart';
 class ItemSearchPage extends StatefulWidget {
   final bool multiple;
   final List<Item> selectedItems;
-  final String title;
+  final String? title;
 
   const ItemSearchPage({
-    Key key,
+    Key? key,
     this.multiple = true,
     this.title,
     this.selectedItems = const [],
@@ -25,7 +25,7 @@ class ItemSearchPage extends StatefulWidget {
 
 class _ItemSearchPageState extends State<ItemSearchPage> {
   final TextEditingController searchController = TextEditingController();
-  ItemSearchCubit cubit;
+  late ItemSearchCubit cubit;
 
   @override
   void initState() {
@@ -48,7 +48,7 @@ class _ItemSearchPageState extends State<ItemSearchPage> {
       desktop: 9,
     );
     final appbar = AppBar(
-      title: Text(widget.title ?? AppLocalizations.of(context).itemsAdd),
+      title: Text(widget.title ?? AppLocalizations.of(context)!.itemsAdd),
       leading: BackButton(
         onPressed: () => Navigator.of(context).pop(cubit.state.selectedItems),
       ),
@@ -97,7 +97,7 @@ class _ItemSearchPageState extends State<ItemSearchPage> {
                     ),
                     padding: EdgeInsets.zero,
                   ),
-                  hintText: AppLocalizations.of(context).searchHint,
+                  hintText: AppLocalizations.of(context)!.searchHint,
                 ),
               ),
             ),

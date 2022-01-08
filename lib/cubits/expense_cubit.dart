@@ -25,12 +25,10 @@ class ExpenseCubit extends Cubit<ExpenseCubitState> {
         .runTransaction(TransactionExpenseGet(expense: state.expense));
     final users = await TransactionHandler.getInstance()
         .runTransaction(TransactionUserGetAll());
-    if (expense != null) {
-      emit(state.copyWith(
-        expense: expense,
-        users: users,
-      ));
-    }
+    emit(state.copyWith(
+      expense: expense,
+      users: users,
+    ));
   }
 }
 
@@ -40,15 +38,15 @@ class ExpenseCubitState extends Equatable {
   final UpdateEnum updateState;
 
   const ExpenseCubitState({
-    this.expense,
+    required this.expense,
     this.users = const [],
     this.updateState = UpdateEnum.unchanged,
   });
 
   ExpenseCubitState copyWith({
-    Expense expense,
-    List<User> users,
-    UpdateEnum updateState,
+    Expense? expense,
+    List<User>? users,
+    UpdateEnum? updateState,
   }) =>
       ExpenseCubitState(
         expense: expense ?? this.expense,
@@ -57,5 +55,5 @@ class ExpenseCubitState extends Equatable {
       );
 
   @override
-  List<Object> get props => [updateState, expense, users];
+  List<Object?> get props => [updateState, expense, users];
 }

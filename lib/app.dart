@@ -14,7 +14,7 @@ import 'package:kitchenowl/pages/unsupported_page.dart';
 import 'package:kitchenowl/styles/themes.dart';
 
 class App extends StatelessWidget {
-  static App _instance;
+  static App? _instance;
   final SettingsCubit _settingsCubit = SettingsCubit();
 
   static bool isOffline(BuildContext context) =>
@@ -22,9 +22,9 @@ class App extends StatelessWidget {
       isForcedOffline;
 
   static bool get isForcedOffline =>
-      _instance._settingsCubit.state.forcedOfflineMode;
+      _instance!._settingsCubit.state.forcedOfflineMode;
 
-  App({Key key}) : super(key: key) {
+  App({Key? key}) : super(key: key) {
     _instance = this;
   }
 
@@ -42,7 +42,7 @@ class App extends StatelessWidget {
         child: BlocBuilder<SettingsCubit, SettingsState>(
           builder: (context, state) => MaterialApp(
             onGenerateTitle: (BuildContext context) =>
-                AppLocalizations.of(context).appTitle,
+                AppLocalizations.of(context)!.appTitle,
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,
             theme: AppThemes.light,
@@ -85,7 +85,6 @@ class App extends StatelessWidget {
         } else {
           continue light;
         }
-        break;
       light:
       case ThemeMode.light:
         final Color backgroundColor = AppThemes.light.scaffoldBackgroundColor;

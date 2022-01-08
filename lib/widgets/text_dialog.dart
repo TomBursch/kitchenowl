@@ -7,7 +7,7 @@ class TextDialog extends StatelessWidget {
   final String doneText;
 
   TextDialog({
-    Key key,
+    Key? key,
     this.title = "",
     this.doneText = "",
     this.hintText = "",

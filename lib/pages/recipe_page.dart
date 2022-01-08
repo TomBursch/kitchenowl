@@ -18,8 +18,8 @@ class RecipePage extends StatefulWidget {
   final bool updateOnPlanningEdit;
 
   const RecipePage({
-    Key key,
-    this.recipe,
+    Key? key,
+    required this.recipe,
     this.updateOnPlanningEdit = false,
   }) : super(key: key);
 
@@ -28,7 +28,7 @@ class RecipePage extends StatefulWidget {
 }
 
 class _RecipePageState extends State<RecipePage> {
-  RecipeCubit cubit;
+  late RecipeCubit cubit;
 
   @override
   void initState() {
@@ -95,13 +95,13 @@ class _RecipePageState extends State<RecipePage> {
                               runSpacing: 7,
                               spacing: 5,
                               children: [
-                                if ((state.recipe.time ?? 0) > 0)
+                                if ((state.recipe.time) > 0)
                                   Chip(
                                     avatar: const Icon(Icons.alarm_rounded),
                                     label: Text(
                                       state.recipe.time.toString() +
                                           " " +
-                                          AppLocalizations.of(context)
+                                          AppLocalizations.of(context)!
                                               .minutesAbbrev,
                                     ),
                                     backgroundColor:
@@ -134,7 +134,7 @@ class _RecipePageState extends State<RecipePage> {
                                     const Icon(Icons.error),
                               ),
                               onTapLink: (text, href, title) async {
-                                if (await canLaunch(href)) {
+                                if (href != null && await canLaunch(href)) {
                                   await launch(href);
                                 }
                               },
@@ -149,7 +149,7 @@ class _RecipePageState extends State<RecipePage> {
                           padding: const EdgeInsets.all(16),
                           sliver: SliverToBoxAdapter(
                             child: Text(
-                              AppLocalizations.of(context).items + ':',
+                              AppLocalizations.of(context)!.items + ':',
                               style: Theme.of(context).textTheme.headline6,
                             ),
                           ),
@@ -188,7 +188,7 @@ class _RecipePageState extends State<RecipePage> {
                           padding: const EdgeInsets.all(16),
                           sliver: SliverToBoxAdapter(
                             child: Text(
-                              AppLocalizations.of(context).itemsOptional + ':',
+                              AppLocalizations.of(context)!.itemsOptional + ':',
                               style: Theme.of(context).textTheme.headline6,
                             ),
                           ),
@@ -226,7 +226,7 @@ class _RecipePageState extends State<RecipePage> {
                           child: BlocBuilder<RecipeCubit, RecipeState>(
                             bloc: cubit,
                             builder: (conext, state) => ElevatedButton(
-                              child: Text(AppLocalizations.of(context)
+                              child: Text(AppLocalizations.of(context)!
                                   .addNumberIngredients(
                                       state.selectedItems.length)),
                               onPressed: state.selectedItems.isEmpty
@@ -241,14 +241,15 @@ class _RecipePageState extends State<RecipePage> {
                         ),
                       ),
                       if (BlocProvider.of<SettingsCubit>(context)
-                          .state
-                          .serverSettings
-                          .featurePlanner)
+                              .state
+                              .serverSettings
+                              .featurePlanner ??
+                          false)
                         SliverPadding(
                           padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
                           sliver: SliverToBoxAdapter(
                             child: ElevatedButton(
-                              child: Text(AppLocalizations.of(context)
+                              child: Text(AppLocalizations.of(context)!
                                   .addRecipeToPlanner),
                               onPressed: () async {
                                 await cubit.addRecipeToPlanner();

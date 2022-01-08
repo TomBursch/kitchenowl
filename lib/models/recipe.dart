@@ -3,7 +3,7 @@ import 'package:kitchenowl/models/model.dart';
 import 'package:kitchenowl/models/tag.dart';
 
 class Recipe extends Model {
-  final int id;
+  final int? id;
   final String name;
   final String description;
   final bool isPlanned;
@@ -42,12 +42,12 @@ class Recipe extends Model {
   }
 
   Recipe copyWith({
-    String name,
-    String description,
-    bool isPlanned,
-    int time,
-    List<RecipeItem> items,
-    Set<Tag> tags,
+    String? name,
+    String? description,
+    bool? isPlanned,
+    int? time,
+    List<RecipeItem>? items,
+    Set<Tag>? tags,
   }) =>
       Recipe(
         id: id,
@@ -60,7 +60,7 @@ class Recipe extends Model {
       );
 
   @override
-  List<Object> get props => [id, name, description];
+  List<Object?> get props => [id, name, description];
 
   @override
   Map<String, dynamic> toJson() => {

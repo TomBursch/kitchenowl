@@ -6,7 +6,7 @@ import 'package:kitchenowl/services/api/api_service.dart';
 
 class AddUpdateExpenseCubit extends Cubit<AddUpdateExpenseState> {
   final Expense expense;
-  AddUpdateExpenseCubit([this.expense = const Expense()])
+  AddUpdateExpenseCubit([this.expense = const Expense(paidById: 0)])
       : super(AddUpdateExpenseState(
           amount: expense.amount,
           name: expense.name,
@@ -94,14 +94,18 @@ class AddUpdateExpenseState extends Equatable {
   final int paidBy;
   final List<PaidForModel> paidFor;
 
-  const AddUpdateExpenseState(
-      {this.name = "", this.amount, this.paidBy, this.paidFor = const []});
+  const AddUpdateExpenseState({
+    this.name = "",
+    required this.amount,
+    required this.paidBy,
+    this.paidFor = const [],
+  });
 
   AddUpdateExpenseState copyWith({
-    String name,
-    double amount,
-    int paidBy,
-    List<PaidForModel> paidFor,
+    String? name,
+    double? amount,
+    int? paidBy,
+    List<PaidForModel>? paidFor,
   }) =>
       AddUpdateExpenseState(
         name: name ?? this.name,
@@ -113,5 +117,5 @@ class AddUpdateExpenseState extends Equatable {
   bool isValid() => name.isNotEmpty && amount != 0 && paidFor.isNotEmpty;
 
   @override
-  List<Object> get props => [name, amount, paidBy] + paidFor;
+  List<Object?> get props => [name, amount, paidBy] + paidFor;
 }

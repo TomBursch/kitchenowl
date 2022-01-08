@@ -7,7 +7,7 @@ import 'package:kitchenowl/widgets/recipe_item.dart';
 import 'package:kitchenowl/widgets/search_text_field.dart';
 
 class RecipeListPage extends StatefulWidget {
-  const RecipeListPage({Key key}) : super(key: key);
+  const RecipeListPage({Key? key}) : super(key: key);
 
   @override
   _RecipeListPageState createState() => _RecipeListPageState();
@@ -20,8 +20,7 @@ class _RecipeListPageState extends State<RecipeListPage> {
   @override
   void initState() {
     super.initState();
-    searchController.text =
-        BlocProvider.of<RecipeListCubit>(context)?.query ?? "";
+    searchController.text = BlocProvider.of<RecipeListCubit>(context).query;
   }
 
   @override
@@ -39,7 +38,7 @@ class _RecipeListPageState extends State<RecipeListPage> {
           SizedBox(
             height: 80,
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+              padding: const EdgeInsets.fromLTRB(16, 16, 16, 6),
               child: BlocListener<RecipeListCubit, ListRecipeCubitState>(
                 bloc: cubit,
                 listener: (context, state) {
@@ -68,7 +67,7 @@ class _RecipeListPageState extends State<RecipeListPage> {
                 return Align(
                   alignment: Alignment.centerLeft,
                   child: Padding(
-                    padding: const EdgeInsets.only(bottom: 8),
+                    padding: const EdgeInsets.only(bottom: 6),
                     child: SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       controller: ScrollController(),
@@ -140,7 +139,7 @@ class _RecipeListPageState extends State<RecipeListPage> {
                         },
                         selectedTextStyle:
                             const TextStyle(fontWeight: FontWeight.bold),
-                        unselectedTextStyle: null,
+                        unselectedTextStyle: const TextStyle(),
                       ),
                     ),
                   );

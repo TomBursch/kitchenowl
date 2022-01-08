@@ -26,10 +26,10 @@ enum Connection {
 class ApiService {
   // ignore: constant_identifier_names
   static const Duration _TIMEOUT = Duration(seconds: 2);
-  static ApiService _instance;
+  static ApiService? _instance;
   final _client = http.Client();
   final String baseUrl;
-  String _refreshToken;
+  String? _refreshToken;
 
   static final ValueNotifier<Connection> _connectionNotifier =
       ValueNotifier<Connection>(Connection.undefined);
@@ -44,7 +44,7 @@ class ApiService {
 
   static ApiService getInstance() {
     _instance ??= ApiService._internal('');
-    return _instance;
+    return _instance!;
   }
 
   Connection get connectionStatus => _connectionNotifier.value;
@@ -80,34 +80,33 @@ class ApiService {
     _settingsNotifier.removeListener(f);
   }
 
-  static Future<void> connectTo(String url, {String refreshToken}) async {
+  static Future<void> connectTo(String url, {String? refreshToken}) async {
     getInstance().dispose();
-    _instance = ApiService._internal(
-      url ?? '',
-    );
-    _instance.refreshToken = refreshToken ?? '';
-    await _instance.refresh();
+    _instance = ApiService._internal(url);
+    _instance!.refreshToken = refreshToken ?? '';
+    await _instance!.refresh();
   }
 
   Future<void> refresh() async {
     if (baseUrl.isNotEmpty) {
-      final healthy = await _instance.healthy();
+      final healthy = await getInstance().healthy();
       if (healthy.item1) {
-        if (healthy.item2['min_frontend_version'] <=
+        if (healthy.item2 != null &&
+            healthy.item2!['min_frontend_version'] <=
                 (int.tryParse(Config.packageInfo?.buildNumber ?? '0') ?? 0) &&
-            (healthy.item2['version'] ?? 0) >= Config.MIN_BACKEND_VERSION) {
-          if (await _instance.refreshAuth()) {
-            _settingsNotifier.value = ServerSettings.fromJson(healthy.item2);
-            return _instance._setConnectionState(Connection.authenticated);
+            (healthy.item2!['version'] ?? 0) >= Config.MIN_BACKEND_VERSION) {
+          if (await getInstance().refreshAuth()) {
+            _settingsNotifier.value = ServerSettings.fromJson(healthy.item2!);
+            return getInstance()._setConnectionState(Connection.authenticated);
           } else {
-            return _instance._setConnectionState(Connection.connected);
+            return getInstance()._setConnectionState(Connection.connected);
           }
         } else {
-          return _instance._setConnectionState(Connection.unsupported);
+          return getInstance()._setConnectionState(Connection.unsupported);
         }
       }
     }
-    return _instance._setConnectionState(Connection.disconnected);
+    return getInstance()._setConnectionState(Connection.disconnected);
   }
 
   Future<http.Response> get(String url, {bool refreshOnException = true}) =>
@@ -116,11 +115,12 @@ class ApiService {
         refreshOnException: refreshOnException,
       );
 
-  Future<http.Response> post(String url, dynamic body, {Encoding encoding}) =>
+  Future<http.Response> post(String url, dynamic body, {Encoding? encoding}) =>
       _handleRequest(() => _client.post(Uri.parse(baseUrl + url),
           body: body, headers: headers, encoding: encoding));
 
-  Future<http.Response> delete(String url, {dynamic body, Encoding encoding}) =>
+  Future<http.Response> delete(String url,
+          {dynamic body, Encoding? encoding}) =>
       _handleRequest(() async {
         final request = http.Request(
           'DELETE',
@@ -155,7 +155,7 @@ class ApiService {
     _connectionNotifier.value = newState;
   }
 
-  Future<Tuple2<bool, Map<String, dynamic>>> healthy() async {
+  Future<Tuple2<bool, Map<String, dynamic>?>> healthy() async {
     try {
       final res = await get('/health/8M4F88S8ooi4sMbLBfkkV7ctWwgibW6V',
           refreshOnException: false);
@@ -171,7 +171,7 @@ class ApiService {
 
   Future<bool> refreshAuth() async {
     final _headers = Map<String, String>.from(headers);
-    _headers['Authorization'] = 'Bearer ' + _refreshToken;
+    _headers['Authorization'] = 'Bearer ' + (_refreshToken ?? '');
     final res = await _client.get(Uri.parse(baseUrl + '/auth/refresh'),
         headers: _headers);
     if (res.statusCode == 200) {
@@ -183,7 +183,7 @@ class ApiService {
     return false;
   }
 
-  Future<String> login(String username, String password) async {
+  Future<String?> login(String username, String password) async {
     final res = await post(
         '/auth', jsonEncode({'username': username, 'password': password}));
     if (res.statusCode == 200) {
@@ -203,7 +203,7 @@ class ApiService {
     return body['onboarding'] as bool;
   }
 
-  Future<String> onboarding(
+  Future<String?> onboarding(
       String username, String name, String password) async {
     if (!(await isOnboarding())) return null;
     final res = await post(
@@ -223,7 +223,7 @@ class ApiService {
     return null;
   }
 
-  Future<ServerSettings> getSettings() async {
+  Future<ServerSettings?> getSettings() async {
     final res = await get('/settings');
     if (res.statusCode != 200) return null;
     _settingsNotifier.value = ServerSettings.fromJson(jsonDecode(res.body));

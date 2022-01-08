@@ -10,7 +10,7 @@ import 'package:kitchenowl/widgets/recipe_item.dart';
 class ItemPage extends StatefulWidget {
   final Item item;
 
-  const ItemPage({Key key, this.item}) : super(key: key);
+  const ItemPage({Key? key, required this.item}) : super(key: key);
 
   @override
   _ItemPageState createState() => _ItemPageState();
@@ -19,7 +19,7 @@ class ItemPage extends StatefulWidget {
 class _ItemPageState extends State<ItemPage> {
   final TextEditingController descController = TextEditingController();
 
-  ItemEditCubit cubit;
+  late ItemEditCubit cubit;
 
   @override
   void initState() {
@@ -60,14 +60,14 @@ class _ItemPageState extends State<ItemPage> {
                           builder: (BuildContext context) {
                             return AlertDialog(
                               title: Text(
-                                AppLocalizations.of(context).userDelete,
+                                AppLocalizations.of(context)!.userDelete,
                               ),
-                              content: Text(AppLocalizations.of(context)
+                              content: Text(AppLocalizations.of(context)!
                                   .itemDeleteConfirmation(widget.item.name)),
                               actions: <Widget>[
                                 TextButton(
-                                  child:
-                                      Text(AppLocalizations.of(context).cancel),
+                                  child: Text(
+                                      AppLocalizations.of(context)!.cancel),
                                   style: ButtonStyle(
                                     foregroundColor:
                                         MaterialStateProperty.all<Color>(
@@ -78,8 +78,8 @@ class _ItemPageState extends State<ItemPage> {
                                       Navigator.of(context).pop(false),
                                 ),
                                 TextButton(
-                                  child:
-                                      Text(AppLocalizations.of(context).delete),
+                                  child: Text(
+                                      AppLocalizations.of(context)!.delete),
                                   style: ButtonStyle(
                                     foregroundColor:
                                         MaterialStateProperty.all<Color>(
@@ -116,7 +116,7 @@ class _ItemPageState extends State<ItemPage> {
                         onChanged: (s) => cubit.setDescription(s),
                         decoration: InputDecoration(
                           border: const OutlineInputBorder(),
-                          labelText: AppLocalizations.of(context).description,
+                          labelText: AppLocalizations.of(context)!.description,
                           // suffix: IconButton(
                           //   onPressed: () {
                           //     if (descController.text.isNotEmpty) {
@@ -150,7 +150,7 @@ class _ItemPageState extends State<ItemPage> {
                                 padding:
                                     const EdgeInsets.fromLTRB(13, 0, 13, 8),
                                 child: Text(
-                                  AppLocalizations.of(context).usedIn + ':',
+                                  AppLocalizations.of(context)!.usedIn + ':',
                                   style: Theme.of(context).textTheme.headline6,
                                 ),
                               );

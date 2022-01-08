@@ -8,19 +8,21 @@ import 'package:kitchenowl/models/expense.dart';
 import 'package:kitchenowl/models/user.dart';
 import 'package:kitchenowl/pages/expense_add_update_page.dart';
 import 'package:kitchenowl/kitchenowl.dart';
+import 'package:collection/collection.dart';
 
 class ExpensePage extends StatefulWidget {
   final Expense expense;
   final List<User> users;
 
-  const ExpensePage({Key key, this.expense, this.users}) : super(key: key);
+  const ExpensePage({Key? key, required this.expense, required this.users})
+      : super(key: key);
 
   @override
   _ExpensePageState createState() => _ExpensePageState();
 }
 
 class _ExpensePageState extends State<ExpensePage> {
-  ExpenseCubit cubit;
+  late ExpenseCubit cubit;
 
   @override
   void initState() {
@@ -78,7 +80,7 @@ class _ExpensePageState extends State<ExpensePage> {
                           [
                             const SizedBox(height: 16),
                             Text(
-                              AppLocalizations.of(context).expenseAmount,
+                              AppLocalizations.of(context)!.expenseAmount,
                               style: Theme.of(context).textTheme.subtitle1,
                               textAlign: TextAlign.center,
                             ),
@@ -90,16 +92,16 @@ class _ExpensePageState extends State<ExpensePage> {
                             ),
                             ListTile(
                               title: Text(
-                                AppLocalizations.of(context).expensePaidBy +
+                                AppLocalizations.of(context)!.expensePaidBy +
                                     " " +
                                     (state.users
-                                            .firstWhere(
-                                                (e) =>
-                                                    e.id ==
-                                                    state.expense.paidById,
-                                                orElse: () => null)
+                                            .firstWhereOrNull(
+                                              (e) =>
+                                                  e.id ==
+                                                  state.expense.paidById,
+                                            )
                                             ?.name ??
-                                        AppLocalizations.of(context).other),
+                                        AppLocalizations.of(context)!.other),
                               ),
                               trailing: state.expense.createdAt != null
                                   ? Text(
@@ -115,14 +117,14 @@ class _ExpensePageState extends State<ExpensePage> {
                                 children: [
                                   Expanded(
                                     child: Text(
-                                      AppLocalizations.of(context)
+                                      AppLocalizations.of(context)!
                                               .expensePaidFor +
                                           ':',
                                       style:
                                           Theme.of(context).textTheme.subtitle1,
                                     ),
                                   ),
-                                  Text(AppLocalizations.of(context)
+                                  Text(AppLocalizations.of(context)!
                                       .expenseFactor),
                                 ],
                               ),
@@ -136,14 +138,14 @@ class _ExpensePageState extends State<ExpensePage> {
                             (context, i) => ListTile(
                                   title: Text(
                                     state.users
-                                            .firstWhere(
-                                                (e) =>
-                                                    e.id ==
-                                                    state.expense.paidFor[i]
-                                                        .userId,
-                                                orElse: () => null)
+                                            .firstWhereOrNull(
+                                              (e) =>
+                                                  e.id ==
+                                                  state.expense.paidFor[i]
+                                                      .userId,
+                                            )
                                             ?.name ??
-                                        AppLocalizations.of(context).other,
+                                        AppLocalizations.of(context)!.other,
                                   ),
                                   subtitle: Text(NumberFormat.simpleCurrency()
                                       .format((state.expense.amount *

@@ -4,7 +4,7 @@ import 'package:kitchenowl/models/recipe.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
 
 extension ItemApi on ApiService {
-  Future<Item> getItem(Item item) async {
+  Future<Item?> getItem(Item item) async {
     final res = await get('/item/${item.id}');
     if (res.statusCode != 200) return null;
 
@@ -12,7 +12,7 @@ extension ItemApi on ApiService {
     return Item.fromJson(body);
   }
 
-  Future<List<Recipe>> getItemRecipes(Item item) async {
+  Future<List<Recipe>?> getItemRecipes(Item item) async {
     final res = await get('/item/${item.id}/recipes');
     if (res.statusCode != 200) return null;
 
@@ -20,7 +20,7 @@ extension ItemApi on ApiService {
     return body.map((e) => Recipe.fromJson(e)).toList();
   }
 
-  Future<List<Item>> searchItem(String query) async {
+  Future<List<Item>?> searchItem(String query) async {
     final res = await get('/item/search?query=$query');
     if (res.statusCode != 200) return null;
 

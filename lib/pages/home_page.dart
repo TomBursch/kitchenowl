@@ -17,7 +17,7 @@ import 'package:kitchenowl/kitchenowl.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key key}) : super(key: key);
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -29,9 +29,9 @@ class _HomePageState extends State<HomePage> {
   final PlannerCubit plannerCubit = PlannerCubit();
   final ExpenseListCubit expenseCubit = ExpenseListCubit();
 
-  List<Widget> pages;
+  late List<Widget> pages;
   int _selectedIndex = 0;
-  List<_HomePageMenu> _homePageMenuItems;
+  List<_HomePageMenu> _homePageMenuItems = [];
 
   @override
   void initState() {
@@ -57,7 +57,7 @@ class _HomePageState extends State<HomePage> {
 
   void _onItemTapped(int i, List<_HomePageMenu> _homePageMenuItems) {
     if (_homePageMenuItems[i].onTap != null) {
-      _homePageMenuItems[i].onTap(_selectedIndex == i);
+      _homePageMenuItems[i].onTap!(_selectedIndex == i);
     }
     setState(() {
       _selectedIndex = i;
@@ -72,8 +72,9 @@ class _HomePageState extends State<HomePage> {
           listenWhen: (prev, curr) =>
               prev.serverSettings != curr.serverSettings,
           listener: (context, state) {
-            final offset = (state.serverSettings.featurePlanner ? 0 : 1) +
-                (state.serverSettings.featureExpenses ? 0 : 1);
+            final offset =
+                (state.serverSettings.featurePlanner ?? false ? 0 : 1) +
+                    (state.serverSettings.featureExpenses ?? false ? 0 : 1);
             _selectedIndex = (_selectedIndex *
                     (pages.length - offset) /
                     _homePageMenuItems.length)
@@ -88,7 +89,7 @@ class _HomePageState extends State<HomePage> {
                 page: pages[0],
                 bottomNavigationBarItem: BottomNavigationBarItem(
                   icon: const Icon(Icons.shopping_bag_outlined),
-                  label: AppLocalizations.of(context).shoppingList,
+                  label: AppLocalizations.of(context)!.shoppingList,
                 ),
                 onTap: (equals) {
                   if (equals) {
@@ -102,7 +103,7 @@ class _HomePageState extends State<HomePage> {
                 page: pages[1],
                 bottomNavigationBarItem: BottomNavigationBarItem(
                   icon: const Icon(Icons.receipt),
-                  label: AppLocalizations.of(context).recipes,
+                  label: AppLocalizations.of(context)!.recipes,
                 ),
                 onTap: (equals) {
                   if (equals) {
@@ -147,23 +148,23 @@ class _HomePageState extends State<HomePage> {
                       )
                     : null,
               ),
-              if (state.serverSettings.featurePlanner)
+              if (state.serverSettings.featurePlanner ?? false)
                 _HomePageMenu(
                   page: pages[2],
                   bottomNavigationBarItem: BottomNavigationBarItem(
                     icon: const Icon(Icons.calendar_today_rounded),
-                    label: AppLocalizations.of(context).planner,
+                    label: AppLocalizations.of(context)!.planner,
                   ),
                   onTap: (equals) {
                     plannerCubit.refresh();
                   },
                 ),
-              if (state.serverSettings.featureExpenses)
+              if (state.serverSettings.featureExpenses ?? false)
                 _HomePageMenu(
                   page: pages[3],
                   bottomNavigationBarItem: BottomNavigationBarItem(
                     icon: const Icon(Icons.account_balance_rounded),
-                    label: AppLocalizations.of(context).balances,
+                    label: AppLocalizations.of(context)!.balances,
                   ),
                   onTap: (equals) {
                     expenseCubit.refresh();
@@ -211,7 +212,7 @@ class _HomePageState extends State<HomePage> {
                 bottomNavigationBarItem: BottomNavigationBarItem(
                   icon:
                       Icon(isOffline ? Icons.cloud_off_rounded : Icons.person),
-                  label: AppLocalizations.of(context).profile,
+                  label: AppLocalizations.of(context)!.profile,
                 ),
               ),
             ];
@@ -254,7 +255,7 @@ class _HomePageState extends State<HomePage> {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
-                          AppLocalizations.of(context).appTitle,
+                          AppLocalizations.of(context)!.appTitle,
                           style: Theme.of(context).textTheme.headline5,
                         ),
                       ),
@@ -272,7 +273,7 @@ class _HomePageState extends State<HomePage> {
                                   ? Theme.of(context).colorScheme.primary
                                   : null,
                               title:
-                                  Text(e.value.bottomNavigationBarItem.label),
+                                  Text(e.value.bottomNavigationBarItem.label!),
                               leading: e.value.bottomNavigationBarItem.icon,
                               onTap: () =>
                                   _onItemTapped(e.key, _homePageMenuItems),
@@ -314,15 +315,15 @@ class _HomePageState extends State<HomePage> {
 class _HomePageMenu extends Equatable {
   final Widget page;
   final BottomNavigationBarItem bottomNavigationBarItem;
-  final Widget floatingActionButton;
-  final Function(bool) onTap;
+  final Widget? floatingActionButton;
+  final Function(bool)? onTap;
 
   const _HomePageMenu(
-      {@required this.page,
-      @required this.bottomNavigationBarItem,
+      {required this.page,
+      required this.bottomNavigationBarItem,
       this.floatingActionButton,
       this.onTap});
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }

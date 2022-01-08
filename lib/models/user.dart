@@ -10,9 +10,9 @@ class User extends Model {
   final double balance;
 
   const User({
-    this.id,
-    this.name,
-    this.username,
+    required this.id,
+    required this.name,
+    required this.username,
     this.owner = false,
     this.admin = false,
     this.balance = 0,
@@ -28,7 +28,7 @@ class User extends Model {
       );
 
   @override
-  List<Object> get props => [id, name, username, owner, admin, balance];
+  List<Object?> get props => [id, name, username, owner, admin, balance];
 
   @override
   Map<String, dynamic> toJson() => {

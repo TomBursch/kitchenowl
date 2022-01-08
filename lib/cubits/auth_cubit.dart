@@ -15,7 +15,7 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   void setup() async {
-    String url;
+    String? url;
     if (kIsWeb) {
       url = dotenv.env['BACK_URL'];
     } else {
@@ -32,7 +32,7 @@ class AuthCubit extends Cubit<AuthState> {
   void updateState() async {
     switch (ApiService.getInstance().connectionStatus) {
       case Connection.authenticated:
-        final user = await ApiService.getInstance().getUser();
+        final user = (await ApiService.getInstance().getUser())!;
         await TempStorage.getInstance().writeUser(user);
         await TransactionHandler.getInstance().runOpenTransactions();
         emit(Authenticated(user));
@@ -83,7 +83,7 @@ class AuthCubit extends Cubit<AuthState> {
           emit(Unreachable());
         }
       } else {
-        emit(Authenticated(await ApiService.getInstance().getUser()));
+        emit(Authenticated((await ApiService.getInstance().getUser())!));
       }
     }
   }
@@ -134,8 +134,8 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   Future<void> _newConnection(
-    String url, {
-    String token,
+    String? url, {
+    String? token,
     bool storeData = true,
   }) async {
     if (url == null || url.isEmpty) return;
@@ -159,42 +159,42 @@ class Authenticated extends AuthState {
   Authenticated(this.user);
 
   @override
-  List<Object> get props => [user];
+  List<Object?> get props => [user];
 }
 
 class AuthenticatedOffline extends Authenticated {
   AuthenticatedOffline(User user) : super(user);
 
   @override
-  List<Object> get props => [user];
+  List<Object?> get props => [user];
 }
 
 class Onboarding extends AuthState {
   @override
-  List<Object> get props => ["Onboarding"];
+  List<Object?> get props => ["Onboarding"];
 }
 
 class Unauthenticated extends AuthState {
   @override
-  List<Object> get props => ["Setup"];
+  List<Object?> get props => ["Setup"];
 }
 
 class Setup extends AuthState {
   @override
-  List<Object> get props => ["Unauthenticated"];
+  List<Object?> get props => ["Unauthenticated"];
 }
 
 class Loading extends AuthState {
   @override
-  List<Object> get props => ["Initial"];
+  List<Object?> get props => ["Initial"];
 }
 
 class Unreachable extends AuthState {
   @override
-  List<Object> get props => ["Unreachable"];
+  List<Object?> get props => ["Unreachable"];
 }
 
 class Unsupported extends AuthState {
   @override
-  List<Object> get props => ["Unsupported"];
+  List<Object?> get props => ["Unsupported"];
 }

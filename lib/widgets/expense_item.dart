@@ -8,12 +8,12 @@ import 'package:intl/intl.dart';
 class ExpenseItemWidget extends StatelessWidget {
   final Expense expense;
   final List<User> users;
-  final void Function() onUpdated;
+  final void Function()? onUpdated;
 
   const ExpenseItemWidget({
-    Key key,
-    @required this.expense,
-    this.users,
+    Key? key,
+    required this.expense,
+    required this.users,
     this.onUpdated,
   }) : super(key: key);
 
@@ -35,7 +35,7 @@ class ExpenseItemWidget extends StatelessWidget {
                       )));
           if (onUpdated != null &&
               (res == UpdateEnum.updated || res == UpdateEnum.deleted)) {
-            onUpdated();
+            onUpdated!();
           }
         },
       ),

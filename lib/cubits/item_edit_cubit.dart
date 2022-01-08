@@ -10,7 +10,7 @@ import 'package:kitchenowl/services/transactions/shoppinglist.dart';
 class ItemEditCubit extends Cubit<ItemEditState> {
   final Item item;
 
-  ItemEditCubit({this.item = const ShoppinglistItem()})
+  ItemEditCubit({required this.item})
       : super(ItemEditState(
           description: (item is ItemWithDescription) ? item.description : '',
           name: item.name,
@@ -20,14 +20,9 @@ class ItemEditCubit extends Cubit<ItemEditState> {
 
   Future<void> refresh() async {
     if (item.id != null) {
-      final item = await TransactionHandler.getInstance()
-          .runTransaction(TransactionItemGet(item: this.item));
-      if (item != null) {
-        final recipes = (await TransactionHandler.getInstance()
-                .runTransaction(TransactionItemGetRecipes(item: this.item))) ??
-            [];
-        emit(state.copyWith(recipes: recipes));
-      }
+      final recipes = (await TransactionHandler.getInstance()
+          .runTransaction(TransactionItemGetRecipes(item: item)));
+      emit(state.copyWith(recipes: recipes));
     }
   }
 
@@ -40,7 +35,7 @@ class ItemEditCubit extends Cubit<ItemEditState> {
     if (item is ShoppinglistItem) {
       await TransactionHandler.getInstance().runTransaction(
           TransactionShoppingListUpdateItem(
-              item: item, description: state.description ?? ''));
+              item: item, description: state.description));
     }
   }
 
@@ -69,9 +64,9 @@ class ItemEditState extends Equatable {
       {this.name = "", this.description = "", this.recipes = const []});
 
   ItemEditState copyWith({
-    String name,
-    String description,
-    List<Recipe> recipes,
+    String? name,
+    String? description,
+    List<Recipe>? recipes,
   }) =>
       ItemEditState(
         name: name ?? this.name,
@@ -80,5 +75,5 @@ class ItemEditState extends Equatable {
       );
 
   @override
-  List<Object> get props => [name, description, recipes];
+  List<Object?> get props => [name, description, recipes];
 }

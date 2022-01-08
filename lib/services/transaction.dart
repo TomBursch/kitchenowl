@@ -32,10 +32,13 @@ abstract class Transaction<T> extends Model {
   factory Transaction.fromJson(Map<String, dynamic> map) {
     final DateTime timestamp =
         DateTime.tryParse(map['timestamp']) ?? DateTime.now();
-    if (map.containsKey('className')) {
-      return _transactionTypes[map['className']](map, timestamp);
+    if (map.containsKey('className') &&
+        _transactionTypes.containsKey(map['className'])) {
+      return _transactionTypes[map['className']]!(map, timestamp)
+          as Transaction<T>;
     }
-    return null;
+    return ErrorTransaction<T>(
+        timestamp, map.containsKey('className') ? map['className'] : "ERROR");
   }
 
   @override
@@ -46,4 +49,19 @@ abstract class Transaction<T> extends Model {
         "className": className,
         "timestamp": timestamp.toIso8601String(),
       };
+}
+
+class ErrorTransaction<T> extends Transaction<T> {
+  ErrorTransaction(DateTime timestamp, String className)
+      : super.internal(timestamp, className);
+
+  @override
+  Future<T> runLocal() {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<T> runOnline() {
+    throw UnimplementedError();
+  }
 }

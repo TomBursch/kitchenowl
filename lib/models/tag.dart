@@ -1,7 +1,7 @@
 import 'package:kitchenowl/models/model.dart';
 
 class Tag extends Model {
-  final int id;
+  final int? id;
   final String name;
 
   const Tag({
@@ -17,7 +17,7 @@ class Tag extends Model {
   }
 
   Tag copyWith({
-    String name,
+    String? name,
   }) =>
       Tag(
         id: id,
@@ -25,7 +25,7 @@ class Tag extends Model {
       );
 
   @override
-  List<Object> get props => [id, name];
+  List<Object?> get props => [id, name];
 
   @override
   String toString() {

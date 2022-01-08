@@ -5,8 +5,8 @@ import 'package:kitchenowl/cubits/settings_user_cubit.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 
 class SettingsUserPage extends StatefulWidget {
-  final int userId;
-  const SettingsUserPage({Key key, this.userId}) : super(key: key);
+  final int? userId;
+  const SettingsUserPage({Key? key, this.userId}) : super(key: key);
 
   @override
   _SettingsUserPageState createState() => _SettingsUserPageState();
@@ -16,7 +16,7 @@ class _SettingsUserPageState extends State<SettingsUserPage> {
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController nameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  SettingsUserCubit cubit;
+  late SettingsUserCubit cubit;
 
   @override
   void initState() {
@@ -36,13 +36,13 @@ class _SettingsUserPageState extends State<SettingsUserPage> {
       bloc: cubit,
       listener: (context, state) {
         if (state.user != null) {
-          usernameController.text = state.user.username;
-          nameController.text = state.user.name;
+          usernameController.text = state.user?.username ?? '';
+          nameController.text = state.user?.name ?? '';
         }
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text(AppLocalizations.of(context).user),
+          title: Text(AppLocalizations.of(context)!.user),
           leading: BackButton(
             onPressed: () => Navigator.of(context).pop(cubit.state.updateState),
           ),
@@ -67,14 +67,14 @@ class _SettingsUserPageState extends State<SettingsUserPage> {
                     textInputAction: TextInputAction.next,
                     onEditingComplete: () => FocusScope.of(context).nextFocus(),
                     decoration: InputDecoration(
-                      labelText: AppLocalizations.of(context).username,
+                      labelText: AppLocalizations.of(context)!.username,
                     ),
                   ),
                   TextField(
                     controller: nameController,
                     textInputAction: TextInputAction.done,
                     decoration: InputDecoration(
-                      labelText: AppLocalizations.of(context).name,
+                      labelText: AppLocalizations.of(context)!.name,
                     ),
                   ),
                   if (cubit.userId != null)
@@ -82,7 +82,7 @@ class _SettingsUserPageState extends State<SettingsUserPage> {
                       bloc: cubit,
                       builder: (context, state) {
                         return ListTile(
-                          title: Text(AppLocalizations.of(context).admin),
+                          title: Text(AppLocalizations.of(context)!.admin),
                           leading:
                               const Icon(Icons.admin_panel_settings_rounded),
                           contentPadding:
@@ -106,7 +106,7 @@ class _SettingsUserPageState extends State<SettingsUserPage> {
                         context: context,
                         name: nameController.text,
                       ),
-                      child: Text(AppLocalizations.of(context).save),
+                      child: Text(AppLocalizations.of(context)!.save),
                     ),
                   ),
                   TextField(
@@ -115,15 +115,15 @@ class _SettingsUserPageState extends State<SettingsUserPage> {
                     obscureText: true,
                     textInputAction: TextInputAction.done,
                     decoration: InputDecoration(
-                      labelText: AppLocalizations.of(context).password,
+                      labelText: AppLocalizations.of(context)!.password,
                     ),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 16, bottom: 8),
                     child: ElevatedButton(
-                      onPressed: () =>
-                          cubit.updateUser(password: passwordController.text),
-                      child: Text(AppLocalizations.of(context).passwordSave),
+                      onPressed: () => cubit.updateUser(
+                          context: context, password: passwordController.text),
+                      child: Text(AppLocalizations.of(context)!.passwordSave),
                     ),
                   ),
                 ],

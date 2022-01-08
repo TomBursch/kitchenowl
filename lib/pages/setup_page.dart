@@ -6,7 +6,7 @@ import 'package:kitchenowl/kitchenowl.dart';
 class SetupPage extends StatelessWidget {
   final TextEditingController urlController = TextEditingController();
 
-  SetupPage({Key key}) : super(key: key);
+  SetupPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +22,7 @@ class SetupPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(AppLocalizations.of(context).setupTitle),
+                  Text(AppLocalizations.of(context)!.setupTitle),
                   TextField(
                     controller: urlController,
                     autofillHints: const [AutofillHints.url],
@@ -31,7 +31,7 @@ class SetupPage extends StatelessWidget {
                     onSubmitted: (text) => BlocProvider.of<AuthCubit>(context)
                         .setupServer(urlController.text),
                     decoration: InputDecoration(
-                      labelText: AppLocalizations.of(context).address,
+                      labelText: AppLocalizations.of(context)!.address,
                       hintText: 'https://localhost:5000',
                     ),
                   ),
@@ -40,7 +40,7 @@ class SetupPage extends StatelessWidget {
                     child: ElevatedButton(
                       onPressed: () => BlocProvider.of<AuthCubit>(context)
                           .setupServer(urlController.text),
-                      child: Text(AppLocalizations.of(context).go),
+                      child: Text(AppLocalizations.of(context)!.go),
                     ),
                   ),
                 ],

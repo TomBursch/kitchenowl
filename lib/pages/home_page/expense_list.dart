@@ -9,7 +9,7 @@ import 'package:kitchenowl/models/user.dart';
 import 'package:kitchenowl/widgets/expense_item.dart';
 
 class ExpenseListPage extends StatefulWidget {
-  const ExpenseListPage({Key key}) : super(key: key);
+  const ExpenseListPage({Key? key}) : super(key: key);
 
   @override
   _ExpensePageState createState() => _ExpensePageState();
@@ -44,7 +44,7 @@ class _ExpensePageState extends State<ExpenseListPage> {
                       height: 80,
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        AppLocalizations.of(context).balances,
+                        AppLocalizations.of(context)!.balances,
                         style: Theme.of(context).textTheme.headline5,
                       ),
                     ),
@@ -67,7 +67,7 @@ class _ExpensePageState extends State<ExpenseListPage> {
                           children: [
                             const Icon(Icons.money_off_rounded),
                             const SizedBox(height: 16),
-                            Text(AppLocalizations.of(context).expenseEmpty),
+                            Text(AppLocalizations.of(context)!.expenseEmpty),
                           ],
                         ),
                       ),
@@ -97,7 +97,7 @@ class _ExpensePageState extends State<ExpenseListPage> {
                         children: [
                           const Icon(Icons.cloud_off),
                           const SizedBox(height: 16),
-                          Text(AppLocalizations.of(context).offlineMessage),
+                          Text(AppLocalizations.of(context)!.offlineMessage),
                         ],
                       ),
                     ),
@@ -147,9 +147,9 @@ class _ExpensePageState extends State<ExpenseListPage> {
       barRendererDecorator: charts.BarLabelDecorator<String>(
         outsideLabelStyleSpec: charts.TextStyleSpec(
           color: charts.Color(
-            r: Theme.of(context).textTheme.bodyText2.color.red,
-            g: Theme.of(context).textTheme.bodyText2.color.green,
-            b: Theme.of(context).textTheme.bodyText2.color.blue,
+            r: Theme.of(context).textTheme.bodyText2!.color!.red,
+            g: Theme.of(context).textTheme.bodyText2!.color!.green,
+            b: Theme.of(context).textTheme.bodyText2!.color!.blue,
           ),
         ),
       ),

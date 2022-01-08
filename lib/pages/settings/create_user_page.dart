@@ -8,13 +8,13 @@ class CreateUserPage extends StatelessWidget {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
-  CreateUserPage({Key key}) : super(key: key);
+  CreateUserPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context).userAdd),
+        title: Text(AppLocalizations.of(context)!.userAdd),
       ),
       body: SafeArea(
         child: Align(
@@ -36,7 +36,7 @@ class CreateUserPage extends StatelessWidget {
                         onEditingComplete: () =>
                             FocusScope.of(context).nextFocus(),
                         decoration: InputDecoration(
-                          labelText: AppLocalizations.of(context).username,
+                          labelText: AppLocalizations.of(context)!.username,
                         ),
                       ),
                       TextField(
@@ -45,7 +45,7 @@ class CreateUserPage extends StatelessWidget {
                         onEditingComplete: () =>
                             FocusScope.of(context).nextFocus(),
                         decoration: InputDecoration(
-                          labelText: AppLocalizations.of(context).name,
+                          labelText: AppLocalizations.of(context)!.name,
                         ),
                       ),
                       TextField(
@@ -54,7 +54,7 @@ class CreateUserPage extends StatelessWidget {
                         textInputAction: TextInputAction.go,
                         onSubmitted: (text) => FocusScope.of(context).unfocus(),
                         decoration: InputDecoration(
-                          labelText: AppLocalizations.of(context).password,
+                          labelText: AppLocalizations.of(context)!.password,
                         ),
                       ),
                       Padding(
@@ -69,7 +69,7 @@ class CreateUserPage extends StatelessWidget {
                             );
                             Navigator.of(context).pop();
                           },
-                          child: Text(AppLocalizations.of(context).userAdd),
+                          child: Text(AppLocalizations.of(context)!.userAdd),
                         ),
                       ),
                     ],

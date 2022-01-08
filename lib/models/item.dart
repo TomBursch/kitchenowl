@@ -2,11 +2,11 @@ import 'package:flutter/foundation.dart';
 import 'package:kitchenowl/models/model.dart';
 
 class Item extends Model {
-  final int id;
+  final int? id;
   final String name;
   final int ordering;
 
-  const Item({this.id, this.name, this.ordering = 0});
+  const Item({this.id, required this.name, this.ordering = 0});
 
   factory Item.fromJson(Map<String, dynamic> map) => Item(
         id: map['id'],
@@ -15,7 +15,7 @@ class Item extends Model {
       );
 
   @override
-  List<Object> get props => [id, name];
+  List<Object?> get props => [id, name];
 
   @override
   Map<String, dynamic> toJson() => {
@@ -34,7 +34,7 @@ class ItemWithDescription extends Item {
   final String description;
 
   const ItemWithDescription(
-      {int id, String name, int ordering, this.description})
+      {int? id, required String name, int ordering = 0, this.description = ''})
       : super(id: id, name: name, ordering: ordering);
 
   factory ItemWithDescription.fromJson(Map<String, dynamic> map) =>
@@ -45,7 +45,7 @@ class ItemWithDescription extends Item {
       );
 
   factory ItemWithDescription.fromItem({
-    @required Item item,
+    required Item item,
     String description = '',
   }) =>
       ItemWithDescription(
@@ -61,8 +61,8 @@ class ItemWithDescription extends Item {
     });
 
   ItemWithDescription copyWith({
-    String name,
-    String description,
+    String? name,
+    String? description,
   }) =>
       ItemWithDescription(
         id: id,
@@ -71,13 +71,16 @@ class ItemWithDescription extends Item {
       );
 
   @override
-  List<Object> get props => super.props + [description];
+  List<Object?> get props => super.props + [description];
 }
 
 class ShoppinglistItem extends ItemWithDescription {
-  const ShoppinglistItem(
-      {int id, String name, String description, int ordering})
-      : super(id: id, name: name, description: description, ordering: ordering);
+  const ShoppinglistItem({
+    int? id,
+    required String name,
+    String description = '',
+    int ordering = 0,
+  }) : super(id: id, name: name, description: description, ordering: ordering);
 
   factory ShoppinglistItem.fromJson(Map<String, dynamic> map) =>
       ShoppinglistItem(
@@ -88,7 +91,7 @@ class ShoppinglistItem extends ItemWithDescription {
       );
 
   factory ShoppinglistItem.fromItem({
-    @required Item item,
+    required Item item,
     String description = '',
   }) =>
       ShoppinglistItem(
@@ -99,8 +102,8 @@ class ShoppinglistItem extends ItemWithDescription {
 
   @override
   ShoppinglistItem copyWith({
-    String name,
-    String description,
+    String? name,
+    String? description,
   }) =>
       ShoppinglistItem(
         id: id,
@@ -112,9 +115,13 @@ class ShoppinglistItem extends ItemWithDescription {
 class RecipeItem extends ItemWithDescription {
   final bool optional;
 
-  const RecipeItem(
-      {int id, String name, String description, int ordering, this.optional})
-      : super(id: id, name: name, description: description, ordering: ordering);
+  const RecipeItem({
+    int? id,
+    required String name,
+    String description = '',
+    int ordering = 0,
+    this.optional = false,
+  }) : super(id: id, name: name, description: description, ordering: ordering);
 
   factory RecipeItem.fromJson(Map<String, dynamic> map) => RecipeItem(
         id: map['id'],
@@ -124,7 +131,7 @@ class RecipeItem extends ItemWithDescription {
       );
 
   factory RecipeItem.fromItem({
-    @required Item item,
+    required Item item,
     String description = '',
     bool optional = false,
   }) =>
@@ -143,9 +150,9 @@ class RecipeItem extends ItemWithDescription {
 
   @override
   RecipeItem copyWith({
-    String name,
-    String description,
-    bool optional,
+    String? name,
+    String? description,
+    bool? optional,
   }) =>
       RecipeItem(
         id: id,
@@ -163,5 +170,5 @@ class RecipeItem extends ItemWithDescription {
       ShoppinglistItem(id: id, name: name, description: description);
 
   @override
-  List<Object> get props => super.props + [optional];
+  List<Object?> get props => super.props + [optional];
 }

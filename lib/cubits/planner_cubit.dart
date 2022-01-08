@@ -21,23 +21,19 @@ class PlannerCubit extends Cubit<PlannerCubitState> {
     await refresh();
   }
 
-  Future<void> refresh([String query]) async {
+  Future<void> refresh([String? query]) async {
     final planned = await TransactionHandler.getInstance()
-            .runTransaction(TransactionPlannerGetPlannedRecipes()) ??
-        [];
+        .runTransaction(TransactionPlannerGetPlannedRecipes());
     final recent = await TransactionHandler.getInstance()
-            .runTransaction(TransactionPlannerGetRecentPlannedRecipes()) ??
-        [];
+        .runTransaction(TransactionPlannerGetRecentPlannedRecipes());
     final suggested = await TransactionHandler.getInstance()
-            .runTransaction(TransactionPlannerGetSuggestedRecipes()) ??
-        [];
+        .runTransaction(TransactionPlannerGetSuggestedRecipes());
     emit(PlannerCubitState(planned, recent, suggested));
   }
 
   Future<void> refreshSuggestions() async {
     final suggested = await TransactionHandler.getInstance()
-            .runTransaction(TransactionPlannerRefreshSuggestedRecipes()) ??
-        [];
+        .runTransaction(TransactionPlannerRefreshSuggestedRecipes());
     emit(state.copyWith(suggestedRecipes: suggested));
   }
 }
@@ -53,13 +49,13 @@ class PlannerCubitState extends Equatable {
       this.suggestedRecipes = const []]);
 
   @override
-  List<Object> get props =>
-      plannedRecipes.cast<Object>() + recentRecipes + suggestedRecipes;
+  List<Object?> get props =>
+      plannedRecipes.cast<Object?>() + recentRecipes + suggestedRecipes;
 
   PlannerCubitState copyWith({
-    List<Recipe> plannedRecipes,
-    List<Recipe> recentRecipes,
-    List<Recipe> suggestedRecipes,
+    List<Recipe>? plannedRecipes,
+    List<Recipe>? recentRecipes,
+    List<Recipe>? suggestedRecipes,
   }) =>
       PlannerCubitState(
         plannedRecipes ?? this.plannedRecipes,

@@ -5,20 +5,18 @@ import 'package:kitchenowl/app.dart';
 import 'package:kitchenowl/config.dart';
 import 'package:kitchenowl/cubits/auth_cubit.dart';
 import 'package:kitchenowl/cubits/settings_cubit.dart';
-import 'package:kitchenowl/models/user.dart';
 import 'package:kitchenowl/pages/settings_server_page.dart';
 import 'package:kitchenowl/pages/settings_shoppinglists_page.dart';
 import 'package:kitchenowl/pages/settings_user_page.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 
 class ProfilePage extends StatelessWidget {
-  const ProfilePage({Key key}) : super(key: key);
+  const ProfilePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final user =
-        (BlocProvider.of<AuthCubit>(context).state as Authenticated).user ??
-            const User(name: '', username: '');
+        (BlocProvider.of<AuthCubit>(context).state as Authenticated).user;
     final isOffline = App.isOffline(context);
     return CustomScrollView(
       physics: const ClampingScrollPhysics(),
@@ -48,7 +46,7 @@ class ProfilePage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   ListTile(
-                    title: Text(AppLocalizations.of(context).darkmode),
+                    title: Text(AppLocalizations.of(context)!.darkmode),
                     leading: const Icon(Icons.nights_stay_sharp),
                     contentPadding: const EdgeInsets.only(left: 20, right: 0),
                     trailing: Transform.scale(
@@ -64,7 +62,7 @@ class ProfilePage extends StatelessWidget {
                     ),
                   ),
                   ListTile(
-                    title: Text(AppLocalizations.of(context).forceOfflineMode),
+                    title: Text(AppLocalizations.of(context)!.forceOfflineMode),
                     leading: const Icon(Icons.mobiledata_off_outlined),
                     contentPadding: const EdgeInsets.only(left: 20, right: 0),
                     trailing: Transform.scale(
@@ -81,7 +79,8 @@ class ProfilePage extends StatelessWidget {
                   if (!isOffline)
                     Card(
                       child: ListTile(
-                        title: Text(AppLocalizations.of(context).shoppingLists),
+                        title:
+                            Text(AppLocalizations.of(context)!.shoppingLists),
                         leading: const Icon(Icons.shopping_bag),
                         trailing: const Icon(Icons.arrow_right_rounded),
                         onTap: () => Navigator.of(context).push(
@@ -93,7 +92,7 @@ class ProfilePage extends StatelessWidget {
                   if (!isOffline)
                     Card(
                       child: ListTile(
-                        title: Text(AppLocalizations.of(context).user),
+                        title: Text(AppLocalizations.of(context)!.user),
                         leading: const Icon(Icons.person),
                         trailing: const Icon(Icons.arrow_right_rounded),
                         onTap: () => Navigator.of(context).push(
@@ -105,7 +104,7 @@ class ProfilePage extends StatelessWidget {
                   if (!isOffline && user.hasAdminRights())
                     Card(
                       child: ListTile(
-                        title: Text(AppLocalizations.of(context).server),
+                        title: Text(AppLocalizations.of(context)!.server),
                         leading: const Icon(Icons.account_tree_rounded),
                         trailing: const Icon(Icons.arrow_right_rounded),
                         onTap: () => Navigator.of(context).push(
@@ -116,14 +115,14 @@ class ProfilePage extends StatelessWidget {
                     ),
                   Card(
                     child: ListTile(
-                      title: Text(AppLocalizations.of(context).about),
+                      title: Text(AppLocalizations.of(context)!.about),
                       leading: const Icon(Icons.privacy_tip_rounded),
                       trailing: const Icon(Icons.arrow_right_rounded),
                       onTap: () => showAboutDialog(
                           context: context,
                           applicationVersion: Config.packageInfo?.version,
-                          applicationLegalese:
-                              '\u{a9} ' + AppLocalizations.of(context).appLegal,
+                          applicationLegalese: '\u{a9} ' +
+                              AppLocalizations.of(context)!.appLegal,
                           applicationIcon: ConstrainedBox(
                             constraints: const BoxConstraints.expand(
                                 width: 64, height: 64),
@@ -134,7 +133,7 @@ class ProfilePage extends StatelessWidget {
                           children: [
                             const SizedBox(height: 24),
                             Text(
-                              AppLocalizations.of(context).appDescription,
+                              AppLocalizations.of(context)!.appDescription,
                             )
                           ]),
                     ),
@@ -142,7 +141,7 @@ class ProfilePage extends StatelessWidget {
                   TextButton(
                     onPressed: () =>
                         BlocProvider.of<AuthCubit>(context).logout(),
-                    child: Text(AppLocalizations.of(context).logout),
+                    child: Text(AppLocalizations.of(context)!.logout),
                   ),
                 ],
               ),

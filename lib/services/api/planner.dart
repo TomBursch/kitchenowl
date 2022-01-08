@@ -3,9 +3,9 @@ import 'package:kitchenowl/models/recipe.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
 
 extension PlannerApi on ApiService {
-  Future<List<Recipe>> getPlannedRecipes() async {
+  Future<List<Recipe>?> getPlannedRecipes() async {
     final res = await get('/planner/recipes');
-    if (res.statusCode != 200) return [];
+    if (res.statusCode != 200) return null;
 
     final body = List.from(jsonDecode(res.body));
     return body.map((e) => Recipe.fromJson(e)).toList();
@@ -22,25 +22,25 @@ extension PlannerApi on ApiService {
     return res.statusCode == 200;
   }
 
-  Future<List<Recipe>> getRecentPlannedRecipes() async {
+  Future<List<Recipe>?> getRecentPlannedRecipes() async {
     final res = await get('/planner/recent-recipes');
-    if (res.statusCode != 200) return [];
+    if (res.statusCode != 200) return null;
 
     final body = List.from(jsonDecode(res.body));
     return body.map((e) => Recipe.fromJson(e)).toList();
   }
 
-  Future<List<Recipe>> getSuggestedRecipes() async {
+  Future<List<Recipe>?> getSuggestedRecipes() async {
     final res = await get('/planner/suggested-recipes');
-    if (res.statusCode != 200) return [];
+    if (res.statusCode != 200) return null;
 
     final body = List.from(jsonDecode(res.body));
     return body.map((e) => Recipe.fromJson(e)).toList();
   }
 
-  Future<List<Recipe>> refreshSuggestedRecipes() async {
+  Future<List<Recipe>?> refreshSuggestedRecipes() async {
     final res = await get('/planner/refresh-suggested-recipes');
-    if (res.statusCode != 200) return [];
+    if (res.statusCode != 200) return null;
 
     final body = List.from(jsonDecode(res.body));
     return body.map((e) => Recipe.fromJson(e)).toList();

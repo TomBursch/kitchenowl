@@ -5,13 +5,13 @@ import 'package:kitchenowl/services/storage/temp_storage.dart';
 
 class TransactionShoppingListGetItems
     extends Transaction<List<ShoppinglistItem>> {
-  TransactionShoppingListGetItems({DateTime timestamp})
+  TransactionShoppingListGetItems({DateTime? timestamp})
       : super.internal(
             timestamp ?? DateTime.now(), "TransactionShoppingListGetItems");
 
   @override
   Future<List<ShoppinglistItem>> runLocal() async {
-    return await TempStorage.getInstance().readItems();
+    return await TempStorage.getInstance().readItems() ?? const [];
   }
 
   @override
@@ -20,13 +20,13 @@ class TransactionShoppingListGetItems
     if (shoppinglist != null) {
       TempStorage.getInstance().writeItems(shoppinglist);
     }
-    return shoppinglist;
+    return shoppinglist ?? const [];
   }
 }
 
 class TransactionShoppingListSearchItem extends Transaction<List<Item>> {
   final String query;
-  TransactionShoppingListSearchItem({this.query, DateTime timestamp})
+  TransactionShoppingListSearchItem({required this.query, DateTime? timestamp})
       : super.internal(
             timestamp ?? DateTime.now(), "TransactionShoppingListSearchItem");
 
@@ -41,12 +41,12 @@ class TransactionShoppingListSearchItem extends Transaction<List<Item>> {
 
   @override
   Future<List<Item>> runOnline() async {
-    return await ApiService.getInstance().searchItem(query);
+    return await ApiService.getInstance().searchItem(query) ?? [];
   }
 }
 
 class TransactionShoppingListGetRecentItems extends Transaction<List<Item>> {
-  TransactionShoppingListGetRecentItems({DateTime timestamp})
+  TransactionShoppingListGetRecentItems({DateTime? timestamp})
       : super.internal(timestamp ?? DateTime.now(),
             "TransactionShoppingListGetRecentItems");
 
@@ -57,7 +57,7 @@ class TransactionShoppingListGetRecentItems extends Transaction<List<Item>> {
 
   @override
   Future<List<Item>> runOnline() async {
-    return await ApiService.getInstance().getRecentItems();
+    return await ApiService.getInstance().getRecentItems() ?? const [];
   }
 }
 
@@ -65,9 +65,11 @@ class TransactionShoppingListAddItem extends Transaction<bool> {
   final String name;
   final String description;
 
-  TransactionShoppingListAddItem(
-      {this.name, this.description, DateTime timestamp})
-      : super.internal(
+  TransactionShoppingListAddItem({
+    required this.name,
+    required this.description,
+    DateTime? timestamp,
+  }) : super.internal(
             timestamp ?? DateTime.now(), "TransactionShoppingListAddItem");
 
   factory TransactionShoppingListAddItem.fromJson(
@@ -90,7 +92,7 @@ class TransactionShoppingListAddItem extends Transaction<bool> {
 
   @override
   Future<bool> runLocal() async {
-    final list = await TempStorage.getInstance().readItems();
+    final list = await TempStorage.getInstance().readItems() ?? [];
     list.add(ShoppinglistItem(name: name, description: description));
     await TempStorage.getInstance().writeItems(list);
     return true;
@@ -105,7 +107,7 @@ class TransactionShoppingListAddItem extends Transaction<bool> {
 class TransactionShoppingListDeleteItem extends Transaction<bool> {
   final ShoppinglistItem item;
 
-  TransactionShoppingListDeleteItem({DateTime timestamp, this.item})
+  TransactionShoppingListDeleteItem({DateTime? timestamp, required this.item})
       : super.internal(
             timestamp ?? DateTime.now(), "TransactionShoppingListDeleteItem");
 
@@ -127,7 +129,7 @@ class TransactionShoppingListDeleteItem extends Transaction<bool> {
 
   @override
   Future<bool> runLocal() async {
-    final list = await TempStorage.getInstance().readItems();
+    final list = await TempStorage.getInstance().readItems() ?? [];
     list.removeWhere((e) => e.name == item.name);
     await TempStorage.getInstance().writeItems(list);
     return true;
@@ -144,7 +146,7 @@ class TransactionShoppingListUpdateItem extends Transaction<bool> {
   final String description;
 
   TransactionShoppingListUpdateItem(
-      {this.item, this.description, DateTime timestamp})
+      {required this.item, required this.description, DateTime? timestamp})
       : super.internal(
             timestamp ?? DateTime.now(), "TransactionShoppingListUpdateItem");
 
@@ -169,7 +171,7 @@ class TransactionShoppingListUpdateItem extends Transaction<bool> {
   @override
   Future<bool> runLocal() async {
     if (item is ShoppinglistItem) {
-      final list = await TempStorage.getInstance().readItems();
+      final list = await TempStorage.getInstance().readItems() ?? [];
       final int i = list.indexWhere((e) => e.id == item.id);
       list.removeAt(i);
       list.insert(
@@ -184,7 +186,7 @@ class TransactionShoppingListUpdateItem extends Transaction<bool> {
   Future<bool> runOnline() async {
     if (item is ShoppinglistItem) {
       return ApiService.getInstance()
-          .updateShoppingListItemDescription(item, description ?? '');
+          .updateShoppingListItemDescription(item, description);
     }
     return false;
   }
@@ -193,7 +195,8 @@ class TransactionShoppingListUpdateItem extends Transaction<bool> {
 class TransactionShoppingListAddRecipeItems extends Transaction<bool> {
   final List<RecipeItem> items;
 
-  TransactionShoppingListAddRecipeItems({this.items, DateTime timestamp})
+  TransactionShoppingListAddRecipeItems(
+      {required this.items, DateTime? timestamp})
       : super.internal(timestamp ?? DateTime.now(),
             "TransactionShoppingListAddRecipeItems");
 
@@ -218,7 +221,7 @@ class TransactionShoppingListAddRecipeItems extends Transaction<bool> {
 
   @override
   Future<bool> runLocal() async {
-    final list = await TempStorage.getInstance().readItems();
+    final list = await TempStorage.getInstance().readItems() ?? [];
     for (final item in items) {
       final int i = list.indexWhere((e) => e.id == item.id);
       if (i >= 0) {

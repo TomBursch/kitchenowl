@@ -12,12 +12,13 @@ import 'package:kitchenowl/models/expense.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/user.dart';
 import 'package:kitchenowl/widgets/checkbox_list_tile.dart';
+import 'package:collection/collection.dart';
 
 class AddUpdateExpensePage extends StatefulWidget {
-  final Expense expense;
+  final Expense? expense;
   final List<User> users;
 
-  const AddUpdateExpensePage({Key key, this.expense, @required this.users})
+  const AddUpdateExpensePage({Key? key, this.expense, required this.users})
       : super(key: key);
 
   @override
@@ -28,7 +29,7 @@ class _AddUpdateRecipePageState extends State<AddUpdateExpensePage> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController amountController = TextEditingController();
 
-  AddUpdateExpenseCubit cubit;
+  late AddUpdateExpenseCubit cubit;
   bool isUpdate = false;
 
   @override
@@ -36,8 +37,8 @@ class _AddUpdateRecipePageState extends State<AddUpdateExpensePage> {
     super.initState();
     isUpdate = widget.expense?.id != null;
     if (isUpdate) {
-      nameController.text = widget.expense.name;
-      amountController.text = widget.expense.amount.toStringAsFixed(2);
+      nameController.text = widget.expense!.name;
+      amountController.text = widget.expense!.amount.toStringAsFixed(2);
     }
     if (widget.expense == null) {
       amountController.text = 0.toStringAsFixed(2);
@@ -49,7 +50,7 @@ class _AddUpdateRecipePageState extends State<AddUpdateExpensePage> {
             .toList(),
       ));
     } else {
-      cubit = AddUpdateExpenseCubit(widget.expense);
+      cubit = AddUpdateExpenseCubit(widget.expense!);
     }
   }
 
@@ -66,8 +67,8 @@ class _AddUpdateRecipePageState extends State<AddUpdateExpensePage> {
     return Scaffold(
         appBar: AppBar(
           title: Text(isUpdate
-              ? AppLocalizations.of(context).expenseEdit
-              : AppLocalizations.of(context).expenseAdd),
+              ? AppLocalizations.of(context)!.expenseEdit
+              : AppLocalizations.of(context)!.expenseAdd),
           actions: [
             if (!kIsWeb && (Platform.isAndroid || Platform.isIOS))
               BlocBuilder<AddUpdateExpenseCubit, AddUpdateExpenseState>(
@@ -101,7 +102,7 @@ class _AddUpdateRecipePageState extends State<AddUpdateExpensePage> {
                           onEditingComplete: () =>
                               FocusScope.of(context).nextFocus(),
                           decoration: InputDecoration(
-                            labelText: AppLocalizations.of(context).name,
+                            labelText: AppLocalizations.of(context)!.name,
                           ),
                         ),
                       ),
@@ -118,7 +119,7 @@ class _AddUpdateRecipePageState extends State<AddUpdateExpensePage> {
                           inputFormatters: [CurrencyTextInputFormater()],
                           decoration: InputDecoration(
                             labelText:
-                                AppLocalizations.of(context).expenseAmount,
+                                AppLocalizations.of(context)!.expenseAmount,
                           ),
                         ),
                       ),
@@ -131,13 +132,15 @@ class _AddUpdateRecipePageState extends State<AddUpdateExpensePage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                AppLocalizations.of(context).expensePaidBy,
+                                AppLocalizations.of(context)!.expensePaidBy,
                                 style: Theme.of(context).textTheme.caption,
                               ),
                               DropdownButton<int>(
                                 value: state.paidBy,
                                 isExpanded: true,
-                                onChanged: (id) => cubit.setPaidById(id),
+                                onChanged: (id) {
+                                  if (id != null) cubit.setPaidById(id);
+                                },
                                 items: widget.users
                                     .map(
                                       (user) => DropdownMenuItem<int>(
@@ -154,7 +157,7 @@ class _AddUpdateRecipePageState extends State<AddUpdateExpensePage> {
                       Padding(
                         padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
                         child: Text(
-                          AppLocalizations.of(context).expensePaidFor,
+                          AppLocalizations.of(context)!.expensePaidFor,
                           style: Theme.of(context).textTheme.caption,
                         ),
                       ),
@@ -169,26 +172,28 @@ class _AddUpdateRecipePageState extends State<AddUpdateExpensePage> {
                       (context, i) {
                         final controller = TextEditingController(
                             text: (cubit.state.paidFor
-                                    .firstWhere(
-                                        (e) => e.userId == widget.users[i].id,
-                                        orElse: () => null)
+                                    .firstWhereOrNull(
+                                        (e) => e.userId == widget.users[i].id)
                                     ?.factor
-                                    ?.toString()) ??
+                                    .toString()) ??
                                 "");
                         return CustomCheckboxListTile(
                           title: Text(widget.users[i].name),
                           value: cubit.containsUser(widget.users[i]),
-                          onChanged: (v) => (v
-                              ? cubit.addUser
-                              : cubit.removeUser)(widget.users[i]),
+                          onChanged: (v) {
+                            if (v != null) {
+                              if (v) {
+                                cubit.addUser(widget.users[i]);
+                              } else {
+                                cubit.removeUser(widget.users[i]);
+                              }
+                            }
+                          },
                           subtitle: Text(NumberFormat.simpleCurrency().format(
                               (state.amount *
                                   (cubit.state.paidFor
-                                          .firstWhere(
-                                              (e) =>
-                                                  e.userId ==
-                                                  widget.users[i].id,
-                                              orElse: () => null)
+                                          .firstWhereOrNull((e) =>
+                                              e.userId == widget.users[i].id)
                                           ?.factor ??
                                       0) /
                                   state.paidFor
@@ -238,7 +243,7 @@ class _AddUpdateRecipePageState extends State<AddUpdateExpensePage> {
                           await cubit.deleteExpense();
                           Navigator.of(context).pop(UpdateEnum.deleted);
                         },
-                        child: Text(AppLocalizations.of(context).delete),
+                        child: Text(AppLocalizations.of(context)!.delete),
                       ),
                     ),
                   ),
@@ -259,8 +264,9 @@ class _AddUpdateRecipePageState extends State<AddUpdateExpensePage> {
                                     : null,
                                 child: Text(
                                   isUpdate
-                                      ? AppLocalizations.of(context).save
-                                      : AppLocalizations.of(context).expenseAdd,
+                                      ? AppLocalizations.of(context)!.save
+                                      : AppLocalizations.of(context)!
+                                          .expenseAdd,
                                 ),
                               )),
                     ),

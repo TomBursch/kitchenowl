@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 
 class CustomCheckboxListTile extends StatelessWidget {
-  final Widget trailing;
-  final Widget title;
-  final Widget subtitle;
-  final Function(bool) onChanged;
+  final Widget? trailing;
+  final Widget? title;
+  final Widget? subtitle;
+  final Function(bool?)? onChanged;
   final bool value;
 
   const CustomCheckboxListTile({
-    Key key,
+    Key? key,
     this.trailing,
     this.title,
     this.subtitle,
     this.onChanged,
-    this.value,
+    required this.value,
   }) : super(key: key);
 
   @override
@@ -22,7 +22,7 @@ class CustomCheckboxListTile extends StatelessWidget {
       title: title,
       trailing: trailing,
       subtitle: subtitle,
-      onTap: () => onChanged(!value),
+      onTap: onChanged != null ? () => onChanged!(!value) : null,
       leading: Checkbox(
         value: value,
         onChanged: onChanged,

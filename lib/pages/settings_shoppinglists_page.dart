@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 
 class SettingsShoppinglistsPage extends StatelessWidget {
-  const SettingsShoppinglistsPage({Key key}) : super(key: key);
+  const SettingsShoppinglistsPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context).shoppingLists),
+        title: Text(AppLocalizations.of(context)!.shoppingLists),
       ),
       body: Align(
         alignment: Alignment.topCenter,

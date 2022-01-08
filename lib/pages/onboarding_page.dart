@@ -9,7 +9,7 @@ class OnboardingPage extends StatelessWidget {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
-  OnboardingPage({Key key}) : super(key: key);
+  OnboardingPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +25,7 @@ class OnboardingPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(AppLocalizations.of(context).onboardingTitle),
+                  Text(AppLocalizations.of(context)!.onboardingTitle),
                   TextField(
                     controller: usernameController,
                     autofocus: true,
@@ -36,7 +36,7 @@ class OnboardingPage extends StatelessWidget {
                     textInputAction: TextInputAction.next,
                     onEditingComplete: () => FocusScope.of(context).nextFocus(),
                     decoration: InputDecoration(
-                      labelText: AppLocalizations.of(context).username,
+                      labelText: AppLocalizations.of(context)!.username,
                     ),
                   ),
                   TextField(
@@ -48,7 +48,7 @@ class OnboardingPage extends StatelessWidget {
                     ],
                     onEditingComplete: () => FocusScope.of(context).nextFocus(),
                     decoration: InputDecoration(
-                      labelText: AppLocalizations.of(context).name,
+                      labelText: AppLocalizations.of(context)!.name,
                     ),
                   ),
                   TextField(
@@ -66,7 +66,7 @@ class OnboardingPage extends StatelessWidget {
                       passwordController.text,
                     ),
                     decoration: InputDecoration(
-                      labelText: AppLocalizations.of(context).password,
+                      labelText: AppLocalizations.of(context)!.password,
                     ),
                   ),
                   Padding(
@@ -78,15 +78,15 @@ class OnboardingPage extends StatelessWidget {
                         nameController.text,
                         passwordController.text,
                       ),
-                      child: Text(AppLocalizations.of(context).start),
+                      child: Text(AppLocalizations.of(context)!.start),
                     ),
                   ),
-                  if (!kIsWeb) Text(AppLocalizations.of(context).or),
+                  if (!kIsWeb) Text(AppLocalizations.of(context)!.or),
                   if (!kIsWeb)
                     TextButton(
                       onPressed: () =>
                           BlocProvider.of<AuthCubit>(context).removeServer(),
-                      child: Text(AppLocalizations.of(context).serverChange),
+                      child: Text(AppLocalizations.of(context)!.serverChange),
                     )
                 ],
               ),

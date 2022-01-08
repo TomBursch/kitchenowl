@@ -4,7 +4,7 @@ import 'package:kitchenowl/models/user.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
 
 extension UserApi on ApiService {
-  Future<User> getUser() async {
+  Future<User?> getUser() async {
     if (!isAuthenticated()) return null;
     final res = await get('/user');
     if (res.statusCode == 200) {
@@ -14,7 +14,7 @@ extension UserApi on ApiService {
     return null;
   }
 
-  Future<User> getUserById(int userId) async {
+  Future<User?> getUserById(int userId) async {
     if (!isAuthenticated()) return null;
     final res = await get('/user/$userId');
     if (res.statusCode == 200) {
@@ -24,7 +24,7 @@ extension UserApi on ApiService {
     return null;
   }
 
-  Future<List<User>> getAllUsers() async {
+  Future<List<User>?> getAllUsers() async {
     if (!isAuthenticated()) return null;
     final res = await get('/users');
     if (res.statusCode == 200) {
@@ -34,8 +34,8 @@ extension UserApi on ApiService {
     return null;
   }
 
-  Future<bool> updateUser({String name, String password}) async {
-    if (!isAuthenticated()) return null;
+  Future<bool> updateUser({String? name, String? password}) async {
+    if (!isAuthenticated()) return false;
 
     final body = {};
     if (name != null) body['name'] = name;
@@ -46,8 +46,8 @@ extension UserApi on ApiService {
   }
 
   Future<bool> updateUserById(int userId,
-      {String name, String password, bool admin}) async {
-    if (!isAuthenticated()) return null;
+      {String? name, String? password, bool? admin}) async {
+    if (!isAuthenticated()) return false;
 
     final body = {};
     if (name != null) body['name'] = name;

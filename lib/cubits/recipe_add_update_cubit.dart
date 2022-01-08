@@ -32,7 +32,7 @@ class AddUpdateRecipeCubit extends Cubit<AddUpdateRecipeState> {
       if (recipe.id == null) {
         await ApiService.getInstance().addRecipe(Recipe(
           name: state.name,
-          description: state.description ?? "",
+          description: state.description,
           time: state.time,
           items: state.items,
           tags: state.selectedTags,
@@ -135,12 +135,12 @@ class AddUpdateRecipeState extends Equatable {
   });
 
   AddUpdateRecipeState copyWith({
-    String name,
-    String description,
-    int time,
-    List<RecipeItem> items,
-    Set<Tag> tags,
-    Set<Tag> selectedTags,
+    String? name,
+    String? description,
+    int? time,
+    List<RecipeItem>? items,
+    Set<Tag>? tags,
+    Set<Tag>? selectedTags,
   }) =>
       AddUpdateRecipeState(
         name: name ?? this.name,
@@ -154,6 +154,6 @@ class AddUpdateRecipeState extends Equatable {
   bool isValid() => name.isNotEmpty;
 
   @override
-  List<Object> get props =>
+  List<Object?> get props =>
       [name, description, time, items, tags, selectedTags];
 }

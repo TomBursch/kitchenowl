@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 
 class SelectableButtonCard extends StatelessWidget {
   final String title;
-  final String description;
+  final String? description;
   final bool selected;
-  final void Function() onPressed;
-  final void Function() onLongPressed;
+  final void Function()? onPressed;
+  final void Function()? onLongPressed;
 
   const SelectableButtonCard({
-    Key key,
-    this.title,
+    Key? key,
+    required this.title,
     this.description,
     this.onPressed,
     this.onLongPressed,
@@ -41,12 +41,12 @@ class SelectableButtonCard extends StatelessWidget {
             softWrap: true,
             textAlign: TextAlign.center,
           ),
-          if (description != null && description.isNotEmpty)
+          if (description != null && description!.isNotEmpty)
             Padding(
               padding: const EdgeInsets.only(top: 2),
               child: Text(
-                description,
-                style: Theme.of(context).textTheme.caption.copyWith(
+                description!,
+                style: Theme.of(context).textTheme.caption!.copyWith(
                     color: Theme.of(context).brightness == Brightness.dark
                         ? null
                         : Colors.white70),

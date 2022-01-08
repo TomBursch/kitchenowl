@@ -1,10 +1,10 @@
 import 'package:kitchenowl/models/model.dart';
 
 class Expense extends Model {
-  final int id;
+  final int? id;
   final String name;
   final double amount;
-  final DateTime createdAt;
+  final DateTime? createdAt;
   final int paidById;
   final List<PaidForModel> paidFor;
 
@@ -12,7 +12,7 @@ class Expense extends Model {
     this.id,
     this.name = '',
     this.amount = 0,
-    this.paidById,
+    required this.paidById,
     this.paidFor = const [],
     this.createdAt,
   });
@@ -33,10 +33,10 @@ class Expense extends Model {
   }
 
   Expense copyWith({
-    String name,
-    double amount,
-    int paidById,
-    List<PaidForModel> paidFor,
+    String? name,
+    double? amount,
+    int? paidById,
+    List<PaidForModel>? paidFor,
   }) =>
       Expense(
         id: id,
@@ -47,7 +47,7 @@ class Expense extends Model {
       );
 
   @override
-  List<Object> get props => [id, name, amount, paidById] + paidFor;
+  List<Object?> get props => [id, name, amount, paidById] + paidFor;
 
   @override
   Map<String, dynamic> toJson() => {
@@ -68,10 +68,10 @@ class PaidForModel extends Model {
   final int userId;
   final int factor;
 
-  PaidForModel({this.userId, this.factor});
+  PaidForModel({required this.userId, this.factor = 1});
 
   @override
-  List<Object> get props => [userId, factor];
+  List<Object?> get props => [userId, factor];
 
   @override
   Map<String, dynamic> toJson() => {

@@ -3,7 +3,7 @@ import 'package:kitchenowl/services/api/api_service.dart';
 import 'package:kitchenowl/services/transaction.dart';
 
 class TransactionExpenseGetAll extends Transaction<List<Expense>> {
-  TransactionExpenseGetAll({DateTime timestamp})
+  TransactionExpenseGetAll({DateTime? timestamp})
       : super.internal(timestamp ?? DateTime.now(), "TransactionExpenseGetAll");
 
   @override
@@ -13,14 +13,14 @@ class TransactionExpenseGetAll extends Transaction<List<Expense>> {
 
   @override
   Future<List<Expense>> runOnline() async {
-    return await ApiService.getInstance().getAllExpenses();
+    return await ApiService.getInstance().getAllExpenses() ?? [];
   }
 }
 
 class TransactionExpenseGet extends Transaction<Expense> {
   final Expense expense;
 
-  TransactionExpenseGet({this.expense, DateTime timestamp})
+  TransactionExpenseGet({required this.expense, DateTime? timestamp})
       : super.internal(timestamp ?? DateTime.now(), "TransactionExpenseGet");
 
   @override
@@ -30,14 +30,14 @@ class TransactionExpenseGet extends Transaction<Expense> {
 
   @override
   Future<Expense> runOnline() async {
-    return await ApiService.getInstance().getExpense(expense);
+    return await ApiService.getInstance().getExpense(expense) ?? expense;
   }
 }
 
 class TransactionExpenseAdd extends Transaction<bool> {
   final Expense expense;
 
-  TransactionExpenseAdd({this.expense, DateTime timestamp})
+  TransactionExpenseAdd({required this.expense, DateTime? timestamp})
       : super.internal(timestamp ?? DateTime.now(), "TransactionExpenseAdd");
 
   @override
@@ -54,7 +54,7 @@ class TransactionExpenseAdd extends Transaction<bool> {
 class TransactionExpenseRemove extends Transaction<bool> {
   final Expense expense;
 
-  TransactionExpenseRemove({this.expense, DateTime timestamp})
+  TransactionExpenseRemove({required this.expense, DateTime? timestamp})
       : super.internal(
             timestamp ?? DateTime.now(), "TransactionPlannerRemoveRecipe");
 
@@ -88,7 +88,7 @@ class TransactionExpenseRemove extends Transaction<bool> {
 class TransactionExpenseUpdate extends Transaction<bool> {
   final Expense expense;
 
-  TransactionExpenseUpdate({this.expense, DateTime timestamp})
+  TransactionExpenseUpdate({required this.expense, DateTime? timestamp})
       : super.internal(timestamp ?? DateTime.now(), "TransactionExpenseUpdate");
 
   factory TransactionExpenseUpdate.fromJson(

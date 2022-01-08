@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/models/item.dart';
@@ -15,11 +16,14 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
     refresh();
   }
 
-  Future<void> search(String query) => refresh(query ?? '');
+  Future<void> search(String query) => refresh(query);
 
-  Future<void> add(String name, [String description]) async {
-    await TransactionHandler.getInstance().runTransaction(
-        TransactionShoppingListAddItem(name: name, description: description));
+  Future<void> add(String name, [String? description]) async {
+    await TransactionHandler.getInstance()
+        .runTransaction(TransactionShoppingListAddItem(
+      name: name,
+      description: description ?? '',
+    ));
     await refresh('');
   }
 
@@ -41,7 +45,7 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
     emit(state.copyWith(sorting: sorting));
   }
 
-  Future<void> refresh([String query]) async {
+  Future<void> refresh([String? query]) async {
     // Get required information
     final state = this.state;
     if (state is SearchShoppinglistCubitState) query = query ?? state.query;
@@ -64,10 +68,6 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
               TransactionShoppingListSearchItem(query: queryName)))
           .map((e) => ItemWithDescription.fromItem(
               item: e, description: queryDescription))
-          .toList();
-      items ??= shoppinglist
-          .where((e) => e.name.contains(queryName))
-          .cast<Item>()
           .toList();
       _mergeShoppinglistItems(items, shoppinglist);
       if (items.isEmpty ||
@@ -94,10 +94,10 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
 
   void _mergeShoppinglistItems(
       List<Item> items, List<ShoppinglistItem> shoppinglist) {
-    if (shoppinglist == null || shoppinglist.isEmpty) return;
+    if (shoppinglist.isEmpty) return;
     for (int i = 0; i < items.length; i++) {
-      final shoppinglistItem = shoppinglist
-          .firstWhere((e) => e.id == items[i].id, orElse: () => null);
+      final shoppinglistItem =
+          shoppinglist.firstWhereOrNull((e) => e.id == items[i].id);
       if (shoppinglistItem != null) {
         items.removeAt(i);
         items.insert(i, shoppinglistItem);
@@ -136,9 +136,9 @@ class ShoppinglistCubitState extends Equatable {
   ]);
 
   ShoppinglistCubitState copyWith({
-    List<ShoppinglistItem> listItems,
-    List<Item> recentItems,
-    ShoppinglistSorting sorting,
+    List<ShoppinglistItem>? listItems,
+    List<Item>? recentItems,
+    ShoppinglistSorting? sorting,
   }) =>
       ShoppinglistCubitState(
         listItems ?? this.listItems,
@@ -147,7 +147,7 @@ class ShoppinglistCubitState extends Equatable {
       );
 
   @override
-  List<Object> get props => listItems.cast<Object>() + recentItems + [sorting];
+  List<Object?> get props => listItems.cast<Object>() + recentItems + [sorting];
 }
 
 class SearchShoppinglistCubitState extends ShoppinglistCubitState {
@@ -156,7 +156,7 @@ class SearchShoppinglistCubitState extends ShoppinglistCubitState {
 
   const SearchShoppinglistCubitState({
     List<ShoppinglistItem> listItems = const [],
-    List<ShoppinglistItem> recentItems = const [],
+    List<Item> recentItems = const [],
     ShoppinglistSorting sorting = ShoppinglistSorting.alphabetical,
     this.query = "",
     this.result = const [],
@@ -164,9 +164,9 @@ class SearchShoppinglistCubitState extends ShoppinglistCubitState {
 
   @override
   ShoppinglistCubitState copyWith({
-    List<ShoppinglistItem> listItems,
-    List<Item> recentItems,
-    ShoppinglistSorting sorting,
+    List<ShoppinglistItem>? listItems,
+    List<Item>? recentItems,
+    ShoppinglistSorting? sorting,
   }) =>
       SearchShoppinglistCubitState(
         listItems: listItems ?? this.listItems,
@@ -177,5 +177,5 @@ class SearchShoppinglistCubitState extends ShoppinglistCubitState {
       );
 
   @override
-  List<Object> get props => super.props + result + <Object>[query];
+  List<Object?> get props => super.props + result + <Object>[query];
 }

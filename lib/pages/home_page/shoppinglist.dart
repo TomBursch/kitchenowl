@@ -11,7 +11,7 @@ import 'package:kitchenowl/widgets/shopping_item.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
 class ShoppinglistPage extends StatefulWidget {
-  const ShoppinglistPage({Key key}) : super(key: key);
+  const ShoppinglistPage({Key? key}) : super(key: key);
 
   @override
   _ShoppinglistPageState createState() => _ShoppinglistPageState();
@@ -23,8 +23,7 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
   @override
   void initState() {
     super.initState();
-    searchController.text =
-        BlocProvider.of<ShoppinglistCubit>(context)?.query ?? "";
+    searchController.text = BlocProvider.of<ShoppinglistCubit>(context).query;
   }
 
   @override
@@ -102,7 +101,7 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                           itemBuilder: (context, i) => ShoppingItemWidget(
                             item: state.result[i],
                             selected: state.result[i] is ShoppinglistItem,
-                            onPressed: (item) {
+                            onPressed: (Item item) {
                               if (item is ShoppinglistItem) {
                                 cubit.remove(item);
                               } else {
@@ -114,7 +113,7 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                                 );
                               }
                             },
-                            onLongPressed: (item) async {
+                            onLongPressed: (Item item) async {
                               final res =
                                   await Navigator.of(context).push<UpdateEnum>(
                                 MaterialPageRoute(
@@ -148,9 +147,9 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                                       children: [
                                         Text(state.sorting ==
                                                 ShoppinglistSorting.alphabetical
-                                            ? AppLocalizations.of(context)
+                                            ? AppLocalizations.of(context)!
                                                 .sortingAlphabetical
-                                            : AppLocalizations.of(context)
+                                            : AppLocalizations.of(context)!
                                                 .sortingAlgorithmic),
                                         const SizedBox(width: 4),
                                         const Icon(Icons.sort),
@@ -175,14 +174,14 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                                 (context, i) => ShoppingItemWidget(
                                   item: state.listItems[i],
                                   selected: true,
-                                  onPressed: (item) {
+                                  onPressed: (Item item) {
                                     if (item is ShoppinglistItem) {
                                       cubit.remove(item);
                                     } else {
                                       cubit.add(item.name);
                                     }
                                   },
-                                  onLongPressed: (item) async {
+                                  onLongPressed: (ShoppinglistItem item) async {
                                     final res = await Navigator.of(context)
                                         .push<UpdateEnum>(
                                       MaterialPageRoute(
@@ -207,7 +206,7 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                               padding: const EdgeInsets.all(16),
                               sliver: SliverToBoxAdapter(
                                 child: Text(
-                                  AppLocalizations.of(context).itemsRecent +
+                                  AppLocalizations.of(context)!.itemsRecent +
                                       ':',
                                   style: Theme.of(context).textTheme.headline6,
                                 ),
@@ -228,8 +227,9 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                                 delegate: SliverChildBuilderDelegate(
                                   (context, i) => ShoppingItemWidget(
                                     item: state.recentItems[i],
-                                    onPressed: (item) => cubit.add(item.name),
-                                    onLongPressed: (item) async {
+                                    onPressed: (Item item) =>
+                                        cubit.add(item.name),
+                                    onLongPressed: (Item item) async {
                                       final res = await Navigator.of(context)
                                           .push<UpdateEnum>(
                                         MaterialPageRoute(

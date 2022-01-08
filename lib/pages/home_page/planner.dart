@@ -9,7 +9,7 @@ import 'package:kitchenowl/widgets/selectable_button_card.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
 class PlannerPage extends StatefulWidget {
-  const PlannerPage({Key key}) : super(key: key);
+  const PlannerPage({Key? key}) : super(key: key);
 
   @override
   _PlannerPageState createState() => _PlannerPageState();
@@ -53,7 +53,7 @@ class _PlannerPageState extends State<PlannerPage> {
                       height: 80,
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        AppLocalizations.of(context).plannerTitle,
+                        AppLocalizations.of(context)!.plannerTitle,
                         style: Theme.of(context).textTheme.headline5,
                       ),
                     ),
@@ -69,7 +69,7 @@ class _PlannerPageState extends State<PlannerPage> {
                         children: [
                           const Icon(Icons.no_food_rounded),
                           const SizedBox(height: 16),
-                          Text(AppLocalizations.of(context).plannerEmpty),
+                          Text(AppLocalizations.of(context)!.plannerEmpty),
                         ],
                       ),
                     ),
@@ -103,7 +103,7 @@ class _PlannerPageState extends State<PlannerPage> {
                     padding: const EdgeInsets.all(16),
                     sliver: SliverToBoxAdapter(
                       child: Text(
-                        AppLocalizations.of(context).recipesRecent + ':',
+                        AppLocalizations.of(context)!.recipesRecent + ':',
                         style: Theme.of(context).textTheme.headline6,
                       ),
                     ),
@@ -139,7 +139,7 @@ class _PlannerPageState extends State<PlannerPage> {
                         children: [
                           Expanded(
                             child: Text(
-                              AppLocalizations.of(context).recipesSuggested +
+                              AppLocalizations.of(context)!.recipesSuggested +
                                   ':',
                               style: Theme.of(context).textTheme.headline6,
                             ),

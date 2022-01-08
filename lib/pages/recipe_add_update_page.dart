@@ -18,7 +18,7 @@ class AddUpdateRecipePage extends StatefulWidget {
   final Recipe recipe;
 
   const AddUpdateRecipePage({
-    Key key,
+    Key? key,
     this.recipe = const Recipe(),
   }) : super(key: key);
 
@@ -30,7 +30,7 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController descController = TextEditingController();
   final TextEditingController timeController = TextEditingController();
-  AddUpdateRecipeCubit cubit;
+  late AddUpdateRecipeCubit cubit;
   bool isUpdate = false;
 
   @override
@@ -40,7 +40,7 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
     if (isUpdate) {
       nameController.text = widget.recipe.name;
       descController.text = widget.recipe.description;
-      if ((widget.recipe.time ?? 0) > 0) {
+      if (widget.recipe.time > 0) {
         timeController.text = widget.recipe.time.toString();
       }
     }
@@ -67,8 +67,8 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
     return Scaffold(
         appBar: AppBar(
           title: Text(isUpdate
-              ? AppLocalizations.of(context).recipeEdit
-              : AppLocalizations.of(context).recipeNew),
+              ? AppLocalizations.of(context)!.recipeEdit
+              : AppLocalizations.of(context)!.recipeNew),
           actions: [
             if (!kIsWeb && (Platform.isAndroid || Platform.isIOS))
               BlocBuilder<AddUpdateRecipeCubit, AddUpdateRecipeState>(
@@ -102,7 +102,7 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                         onEditingComplete: () =>
                             FocusScope.of(context).nextFocus(),
                         decoration: InputDecoration(
-                          labelText: AppLocalizations.of(context).name,
+                          labelText: AppLocalizations.of(context)!.name,
                         ),
                       ),
                     ),
@@ -110,15 +110,15 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                       padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
                       child: TextField(
                         controller: timeController,
-                        onChanged: (s) => cubit.setTime(int.tryParse(s)),
+                        onChanged: (s) => cubit.setTime(int.tryParse(s) ?? 0),
                         inputFormatters: [
                           FilteringTextInputFormatter.digitsOnly
                         ],
                         keyboardType: TextInputType.number,
                         decoration: InputDecoration(
-                          labelText: AppLocalizations.of(context).cookingTime,
+                          labelText: AppLocalizations.of(context)!.cookingTime,
                           suffix:
-                              Text(AppLocalizations.of(context).minutesAbbrev),
+                              Text(AppLocalizations.of(context)!.minutesAbbrev),
                         ),
                       ),
                     ),
@@ -147,9 +147,10 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                                 context: context,
                                 builder: (BuildContext context) {
                                   return TextDialog(
-                                    title: AppLocalizations.of(context).addTag,
-                                    doneText: AppLocalizations.of(context).add,
-                                    hintText: AppLocalizations.of(context).name,
+                                    title: AppLocalizations.of(context)!.addTag,
+                                    doneText: AppLocalizations.of(context)!.add,
+                                    hintText:
+                                        AppLocalizations.of(context)!.name,
                                   );
                                 });
                             if (res != null && res.isNotEmpty) {
@@ -161,7 +162,7 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
 
                         if (children.isEmpty) {
                           children = [
-                            Text(AppLocalizations.of(context).noTags)
+                            Text(AppLocalizations.of(context)!.noTags)
                           ];
                         }
 
@@ -184,9 +185,9 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                         maxLines: null,
                         decoration: InputDecoration(
                           border: const OutlineInputBorder(),
-                          labelText: AppLocalizations.of(context).description,
+                          labelText: AppLocalizations.of(context)!.description,
                           hintText:
-                              AppLocalizations.of(context).writeMarkdownHere,
+                              AppLocalizations.of(context)!.writeMarkdownHere,
                         ),
                       ),
                     ),
@@ -196,7 +197,7 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                         children: [
                           Expanded(
                             child: Text(
-                              AppLocalizations.of(context).items + ':',
+                              AppLocalizations.of(context)!.items + ':',
                               style: Theme.of(context).textTheme.headline6,
                             ),
                           ),
@@ -230,7 +231,8 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                           item: state.items
                               .where((e) => !e.optional)
                               .elementAt(i),
-                          onPressed: (item) => cubit.removeItem(item),
+                          onPressed: (RecipeItem item) =>
+                              cubit.removeItem(item),
                           // onLongPressed: (item) => _editItem(context, item),
                         ),
                         childCount:
@@ -246,7 +248,7 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                       children: [
                         Expanded(
                           child: Text(
-                            AppLocalizations.of(context).itemsOptional + ':',
+                            AppLocalizations.of(context)!.itemsOptional + ':',
                             style: Theme.of(context).textTheme.headline6,
                           ),
                         ),
@@ -277,7 +279,8 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                         (context, i) => ShoppingItemWidget(
                           item:
                               state.items.where((e) => e.optional).elementAt(i),
-                          onPressed: (item) => cubit.removeItem(item),
+                          onPressed: (RecipeItem item) =>
+                              cubit.removeItem(item),
                           // onLongPressed: (item) => _editItem(context, item),
                         ),
                         childCount: state.items.where((e) => e.optional).length,
@@ -298,7 +301,7 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                           await cubit.removeRecipe();
                           Navigator.of(context).pop(UpdateEnum.deleted);
                         },
-                        child: Text(AppLocalizations.of(context).delete),
+                        child: Text(AppLocalizations.of(context)!.delete),
                       ),
                     ),
                   ),
@@ -318,8 +321,8 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                               : null,
                           child: Text(
                             isUpdate
-                                ? AppLocalizations.of(context).save
-                                : AppLocalizations.of(context).recipeAdd,
+                                ? AppLocalizations.of(context)!.save
+                                : AppLocalizations.of(context)!.recipeAdd,
                           ),
                         ),
                       ),
@@ -334,13 +337,14 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
   Future<void> _updateItems(BuildContext context, bool optional) async {
     final items =
         await Navigator.of(context).push<List<Item>>(MaterialPageRoute(
-            builder: (context) => ItemSearchPage(
-                  title: AppLocalizations.of(context).itemsAdd,
-                  selectedItems: cubit.state.items
-                      .where((e) => e.optional == optional)
-                      .map((e) => e.toItemWithDescription())
-                      .toList(),
-                )));
+                builder: (context) => ItemSearchPage(
+                      title: AppLocalizations.of(context)!.itemsAdd,
+                      selectedItems: cubit.state.items
+                          .where((e) => e.optional == optional)
+                          .map((e) => e.toItemWithDescription())
+                          .toList(),
+                    ))) ??
+            [];
     cubit.updateFromItemList(items, optional);
   }
 

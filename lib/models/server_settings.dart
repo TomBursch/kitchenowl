@@ -1,8 +1,8 @@
 import 'model.dart';
 
 class ServerSettings extends Model {
-  final bool featurePlanner;
-  final bool featureExpenses;
+  final bool? featurePlanner;
+  final bool? featureExpenses;
 
   const ServerSettings({this.featurePlanner, this.featureExpenses});
 
@@ -12,7 +12,7 @@ class ServerSettings extends Model {
       );
 
   @override
-  List<Object> get props => [featurePlanner, featureExpenses];
+  List<Object?> get props => [featurePlanner, featureExpenses];
 
   @override
   Map<String, dynamic> toJson() {
@@ -27,8 +27,8 @@ class ServerSettings extends Model {
   }
 
   ServerSettings copyWith({
-    bool featurePlanner,
-    bool featureExpenses,
+    bool? featurePlanner,
+    bool? featureExpenses,
   }) =>
       ServerSettings(
         featurePlanner: featurePlanner ?? this.featurePlanner,

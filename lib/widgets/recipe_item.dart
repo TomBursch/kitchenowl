@@ -5,11 +5,11 @@ import 'package:kitchenowl/pages/recipe_page.dart';
 
 class RecipeItemWidget extends StatelessWidget {
   final Recipe recipe;
-  final void Function() onUpdated;
+  final void Function()? onUpdated;
 
   const RecipeItemWidget({
-    Key key,
-    @required this.recipe,
+    Key? key,
+    required this.recipe,
     this.onUpdated,
   }) : super(key: key);
 
@@ -30,7 +30,7 @@ class RecipeItemWidget extends StatelessWidget {
           );
           if (onUpdated != null &&
               (res == UpdateEnum.updated || res == UpdateEnum.deleted)) {
-            onUpdated();
+            onUpdated!();
           }
         },
       ),

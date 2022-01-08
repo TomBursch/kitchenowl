@@ -10,8 +10,8 @@ class SettingsServerCubit extends Cubit<SettingsServerState> {
   }
 
   Future<void> refresh() async {
-    emit(SettingsServerState(await ApiService.getInstance().getAllUsers(),
-        await ApiService.getInstance().getAllTags()));
+    emit(SettingsServerState(await ApiService.getInstance().getAllUsers() ?? [],
+        await ApiService.getInstance().getAllTags() ?? {}));
   }
 
   Future<bool> createUser(String username, String name, String password) async {
@@ -46,5 +46,5 @@ class SettingsServerState extends Equatable {
   const SettingsServerState(this.users, this.tags);
 
   @override
-  List<Object> get props => [users, tags];
+  List<Object?> get props => [users, tags];
 }

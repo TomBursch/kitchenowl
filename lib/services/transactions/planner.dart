@@ -4,7 +4,7 @@ import 'package:kitchenowl/services/storage/temp_storage.dart';
 import 'package:kitchenowl/services/transaction.dart';
 
 class TransactionPlannerGetPlannedRecipes extends Transaction<List<Recipe>> {
-  TransactionPlannerGetPlannedRecipes({DateTime timestamp})
+  TransactionPlannerGetPlannedRecipes({DateTime? timestamp})
       : super.internal(
             timestamp ?? DateTime.now(), "TransactionPlannerGetPlannedRecipes");
 
@@ -17,13 +17,13 @@ class TransactionPlannerGetPlannedRecipes extends Transaction<List<Recipe>> {
 
   @override
   Future<List<Recipe>> runOnline() async {
-    return await ApiService.getInstance().getPlannedRecipes();
+    return await ApiService.getInstance().getPlannedRecipes() ?? const [];
   }
 }
 
 class TransactionPlannerGetRecentPlannedRecipes
     extends Transaction<List<Recipe>> {
-  TransactionPlannerGetRecentPlannedRecipes({DateTime timestamp})
+  TransactionPlannerGetRecentPlannedRecipes({DateTime? timestamp})
       : super.internal(timestamp ?? DateTime.now(),
             "TransactionPlannerGetRecentPlannedRecipes");
 
@@ -34,30 +34,30 @@ class TransactionPlannerGetRecentPlannedRecipes
 
   @override
   Future<List<Recipe>> runOnline() async {
-    return await ApiService.getInstance().getRecentPlannedRecipes();
+    return await ApiService.getInstance().getRecentPlannedRecipes() ?? const [];
   }
 }
 
 class TransactionPlannerGetSuggestedRecipes extends Transaction<List<Recipe>> {
-  TransactionPlannerGetSuggestedRecipes({DateTime timestamp})
+  TransactionPlannerGetSuggestedRecipes({DateTime? timestamp})
       : super.internal(timestamp ?? DateTime.now(),
             "TransactionPlannerGetSuggestedRecipes");
 
   @override
   Future<List<Recipe>> runLocal() async {
-    return [];
+    return const [];
   }
 
   @override
   Future<List<Recipe>> runOnline() async {
-    return await ApiService.getInstance().getSuggestedRecipes();
+    return await ApiService.getInstance().getSuggestedRecipes() ?? const [];
   }
 }
 
 class TransactionPlannerAddRecipe extends Transaction<bool> {
   final Recipe recipe;
 
-  TransactionPlannerAddRecipe({this.recipe, DateTime timestamp})
+  TransactionPlannerAddRecipe({required this.recipe, DateTime? timestamp})
       : super.internal(
             timestamp ?? DateTime.now(), "TransactionPlannerAddRecipe");
 
@@ -91,7 +91,7 @@ class TransactionPlannerAddRecipe extends Transaction<bool> {
 class TransactionPlannerRemoveRecipe extends Transaction<bool> {
   final Recipe recipe;
 
-  TransactionPlannerRemoveRecipe({this.recipe, DateTime timestamp})
+  TransactionPlannerRemoveRecipe({required this.recipe, DateTime? timestamp})
       : super.internal(
             timestamp ?? DateTime.now(), "TransactionPlannerRemoveRecipe");
 
@@ -124,17 +124,17 @@ class TransactionPlannerRemoveRecipe extends Transaction<bool> {
 
 class TransactionPlannerRefreshSuggestedRecipes
     extends Transaction<List<Recipe>> {
-  TransactionPlannerRefreshSuggestedRecipes({DateTime timestamp})
+  TransactionPlannerRefreshSuggestedRecipes({DateTime? timestamp})
       : super.internal(timestamp ?? DateTime.now(),
             "TransactionPlannerRefreshSuggestedRecipes");
 
   @override
   Future<List<Recipe>> runLocal() async {
-    return [];
+    return const [];
   }
 
   @override
   Future<List<Recipe>> runOnline() async {
-    return await ApiService.getInstance().refreshSuggestedRecipes();
+    return await ApiService.getInstance().refreshSuggestedRecipes() ?? const [];
   }
 }

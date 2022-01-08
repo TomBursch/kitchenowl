@@ -14,14 +14,14 @@ import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/widgets/text_dialog.dart';
 
 class SettingsServerPage extends StatefulWidget {
-  const SettingsServerPage({Key key}) : super(key: key);
+  const SettingsServerPage({Key? key}) : super(key: key);
 
   @override
   _SettingsServerPageState createState() => _SettingsServerPageState();
 }
 
 class _SettingsServerPageState extends State<SettingsServerPage> {
-  SettingsServerCubit cubit;
+  late SettingsServerCubit cubit;
 
   @override
   void initState() {
@@ -39,7 +39,7 @@ class _SettingsServerPageState extends State<SettingsServerPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context).server),
+        title: Text(AppLocalizations.of(context)!.server),
       ),
       body: Align(
         alignment: Alignment.topCenter,
@@ -51,7 +51,7 @@ class _SettingsServerPageState extends State<SettingsServerPage> {
               padding: const EdgeInsets.all(16),
               children: [
                 Text(
-                  AppLocalizations.of(context).server + ':',
+                  AppLocalizations.of(context)!.server + ':',
                   style: Theme.of(context).textTheme.headline6,
                 ),
                 const SizedBox(height: 8),
@@ -62,7 +62,7 @@ class _SettingsServerPageState extends State<SettingsServerPage> {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  AppLocalizations.of(context).features + ':',
+                  AppLocalizations.of(context)!.features + ':',
                   style: Theme.of(context).textTheme.headline6,
                 ),
                 const SizedBox(height: 8),
@@ -71,14 +71,14 @@ class _SettingsServerPageState extends State<SettingsServerPage> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       ListTile(
-                        title: Text(AppLocalizations.of(context).mealPlanner),
+                        title: Text(AppLocalizations.of(context)!.mealPlanner),
                         leading: const Icon(Icons.calendar_today_rounded),
                         contentPadding:
                             const EdgeInsets.only(left: 20, right: 0),
                         trailing: Transform.scale(
                           scale: 0.9,
                           child: CupertinoSwitch(
-                            value: state.serverSettings.featurePlanner,
+                            value: state.serverSettings.featurePlanner ?? false,
                             activeColor:
                                 Theme.of(context).colorScheme.secondary,
                             onChanged: BlocProvider.of<SettingsCubit>(context)
@@ -87,14 +87,15 @@ class _SettingsServerPageState extends State<SettingsServerPage> {
                         ),
                       ),
                       ListTile(
-                        title: Text(AppLocalizations.of(context).balances),
+                        title: Text(AppLocalizations.of(context)!.balances),
                         leading: const Icon(Icons.account_balance_rounded),
                         contentPadding:
                             const EdgeInsets.only(left: 20, right: 0),
                         trailing: Transform.scale(
                           scale: 0.9,
                           child: CupertinoSwitch(
-                            value: state.serverSettings.featureExpenses,
+                            value:
+                                state.serverSettings.featureExpenses ?? false,
                             activeColor:
                                 Theme.of(context).colorScheme.secondary,
                             onChanged: BlocProvider.of<SettingsCubit>(context)
@@ -109,7 +110,7 @@ class _SettingsServerPageState extends State<SettingsServerPage> {
                   children: [
                     Expanded(
                       child: Text(
-                        AppLocalizations.of(context).tags + ':',
+                        AppLocalizations.of(context)!.tags + ':',
                         style: Theme.of(context).textTheme.headline6,
                       ),
                     ),
@@ -120,9 +121,9 @@ class _SettingsServerPageState extends State<SettingsServerPage> {
                             context: context,
                             builder: (BuildContext context) {
                               return TextDialog(
-                                title: AppLocalizations.of(context).addTag,
-                                doneText: AppLocalizations.of(context).add,
-                                hintText: AppLocalizations.of(context).name,
+                                title: AppLocalizations.of(context)!.addTag,
+                                doneText: AppLocalizations.of(context)!.add,
+                                hintText: AppLocalizations.of(context)!.name,
                               );
                             });
                         if (res != null && res.isNotEmpty) {
@@ -150,15 +151,16 @@ class _SettingsServerPageState extends State<SettingsServerPage> {
                                         borderRadius:
                                             BorderRadius.circular(15)),
                                     title: Text(
-                                      AppLocalizations.of(context).tagDelete,
+                                      AppLocalizations.of(context)!.tagDelete,
                                     ),
-                                    content: Text(AppLocalizations.of(context)
+                                    content: Text(AppLocalizations.of(context)!
                                         .tagDeleteConfirmation(
                                             state.tags.elementAt(i).name)),
                                     actions: <Widget>[
                                       TextButton(
-                                        child: Text(AppLocalizations.of(context)
-                                            .cancel),
+                                        child: Text(
+                                            AppLocalizations.of(context)!
+                                                .cancel),
                                         style: ButtonStyle(
                                           foregroundColor:
                                               MaterialStateProperty.all<Color>(
@@ -169,8 +171,9 @@ class _SettingsServerPageState extends State<SettingsServerPage> {
                                             Navigator.of(context).pop(false),
                                       ),
                                       TextButton(
-                                        child: Text(AppLocalizations.of(context)
-                                            .delete),
+                                        child: Text(
+                                            AppLocalizations.of(context)!
+                                                .delete),
                                         style: ButtonStyle(
                                           foregroundColor:
                                               MaterialStateProperty.all<Color>(
@@ -215,7 +218,7 @@ class _SettingsServerPageState extends State<SettingsServerPage> {
                   ),
                 ),
                 Text(
-                  AppLocalizations.of(context).swipeToDeleteTag,
+                  AppLocalizations.of(context)!.swipeToDeleteTag,
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.caption,
                 ),
@@ -223,7 +226,7 @@ class _SettingsServerPageState extends State<SettingsServerPage> {
                   children: [
                     Expanded(
                       child: Text(
-                        AppLocalizations.of(context).users + ':',
+                        AppLocalizations.of(context)!.users + ':',
                         style: Theme.of(context).textTheme.headline6,
                       ),
                     ),
@@ -257,15 +260,16 @@ class _SettingsServerPageState extends State<SettingsServerPage> {
                                         borderRadius:
                                             BorderRadius.circular(15)),
                                     title: Text(
-                                      AppLocalizations.of(context).userDelete,
+                                      AppLocalizations.of(context)!.userDelete,
                                     ),
-                                    content: Text(AppLocalizations.of(context)
+                                    content: Text(AppLocalizations.of(context)!
                                         .userDeleteConfirmation(
                                             state.users[i].name)),
                                     actions: <Widget>[
                                       TextButton(
-                                        child: Text(AppLocalizations.of(context)
-                                            .cancel),
+                                        child: Text(
+                                            AppLocalizations.of(context)!
+                                                .cancel),
                                         style: ButtonStyle(
                                           foregroundColor:
                                               MaterialStateProperty.all<Color>(
@@ -276,8 +280,9 @@ class _SettingsServerPageState extends State<SettingsServerPage> {
                                             Navigator.of(context).pop(false),
                                       ),
                                       TextButton(
-                                        child: Text(AppLocalizations.of(context)
-                                            .delete),
+                                        child: Text(
+                                            AppLocalizations.of(context)!
+                                                .delete),
                                         style: ButtonStyle(
                                           foregroundColor:
                                               MaterialStateProperty.all<Color>(
@@ -322,7 +327,7 @@ class _SettingsServerPageState extends State<SettingsServerPage> {
                                               as Authenticated)
                                           .user
                                           .id)
-                                  ? ' (${AppLocalizations.of(context).you})'
+                                  ? ' (${AppLocalizations.of(context)!.you})'
                                   : '')),
                           trailing: state.users[i].hasAdminRights()
                               ? const Icon(Icons.admin_panel_settings_rounded)
@@ -343,7 +348,7 @@ class _SettingsServerPageState extends State<SettingsServerPage> {
                   ),
                 ),
                 Text(
-                  AppLocalizations.of(context).swipeToDeleteUser,
+                  AppLocalizations.of(context)!.swipeToDeleteUser,
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.caption,
                 ),

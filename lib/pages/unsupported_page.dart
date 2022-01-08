@@ -5,7 +5,7 @@ import 'package:kitchenowl/cubits/auth_cubit.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 
 class UnsupportedPage extends StatelessWidget {
-  const UnsupportedPage({Key key}) : super(key: key);
+  const UnsupportedPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +22,7 @@ class UnsupportedPage extends StatelessWidget {
               ),
               const SizedBox(height: 10),
               Text(
-                AppLocalizations.of(context).unsupportedBackendMessage,
+                AppLocalizations.of(context)!.unsupportedBackendMessage,
                 maxLines: null,
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.caption,
@@ -30,14 +30,14 @@ class UnsupportedPage extends StatelessWidget {
               const SizedBox(height: 10),
               ElevatedButton(
                 onPressed: BlocProvider.of<AuthCubit>(context).refresh,
-                child: Text(AppLocalizations.of(context).refresh),
+                child: Text(AppLocalizations.of(context)!.refresh),
               ),
-              if (!kIsWeb) Text(AppLocalizations.of(context).or),
+              if (!kIsWeb) Text(AppLocalizations.of(context)!.or),
               if (!kIsWeb)
                 TextButton(
                     onPressed: () =>
                         BlocProvider.of<AuthCubit>(context).removeServer(),
-                    child: Text(AppLocalizations.of(context).serverChange)),
+                    child: Text(AppLocalizations.of(context)!.serverChange)),
             ],
           ),
         ),

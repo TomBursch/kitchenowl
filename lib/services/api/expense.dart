@@ -4,15 +4,15 @@ import 'package:kitchenowl/models/expense.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
 
 extension ExpenseApi on ApiService {
-  Future<List<Expense>> getAllExpenses() async {
+  Future<List<Expense>?> getAllExpenses() async {
     final res = await get('/expense');
-    if (res.statusCode != 200) return [];
+    if (res.statusCode != 200) return null;
 
     final body = List.from(jsonDecode(res.body));
     return body.map((e) => Expense.fromJson(e)).toList();
   }
 
-  Future<Expense> getExpense(Expense expense) async {
+  Future<Expense?> getExpense(Expense expense) async {
     final res = await get('/expense/${expense.id}');
     if (res.statusCode != 200) return null;
 

@@ -9,7 +9,7 @@ class LoginPage extends StatelessWidget {
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
-  LoginPage({Key key}) : super(key: key);
+  LoginPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +26,7 @@ class LoginPage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(AppLocalizations.of(context).loginTo +
+                    Text(AppLocalizations.of(context)!.loginTo +
                         ' ${Uri.parse(ApiService.getInstance().baseUrl).authority}'),
                     TextField(
                       controller: usernameController,
@@ -36,7 +36,7 @@ class LoginPage extends StatelessWidget {
                       onEditingComplete: () =>
                           FocusScope.of(context).nextFocus(),
                       decoration: InputDecoration(
-                        labelText: AppLocalizations.of(context).username,
+                        labelText: AppLocalizations.of(context)!.username,
                       ),
                     ),
                     TextField(
@@ -50,7 +50,7 @@ class LoginPage extends StatelessWidget {
                         passwordController.text,
                       ),
                       decoration: InputDecoration(
-                        labelText: AppLocalizations.of(context).password,
+                        labelText: AppLocalizations.of(context)!.password,
                       ),
                     ),
                     Padding(
@@ -61,15 +61,15 @@ class LoginPage extends StatelessWidget {
                           usernameController.text,
                           passwordController.text,
                         ),
-                        child: Text(AppLocalizations.of(context).login),
+                        child: Text(AppLocalizations.of(context)!.login),
                       ),
                     ),
-                    if (!kIsWeb) Text(AppLocalizations.of(context).or),
+                    if (!kIsWeb) Text(AppLocalizations.of(context)!.or),
                     if (!kIsWeb)
                       TextButton(
                         onPressed: () =>
                             BlocProvider.of<AuthCubit>(context).removeServer(),
-                        child: Text(AppLocalizations.of(context).serverChange),
+                        child: Text(AppLocalizations.of(context)!.serverChange),
                       )
                   ],
                 ),

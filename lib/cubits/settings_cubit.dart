@@ -90,9 +90,9 @@ class SettingsState extends Equatable {
   });
 
   SettingsState copyWith({
-    ThemeMode themeMode,
-    bool forcedOfflineMode,
-    ServerSettings serverSettings,
+    ThemeMode? themeMode,
+    bool? forcedOfflineMode,
+    ServerSettings? serverSettings,
   }) =>
       SettingsState(
         themeMode: themeMode ?? this.themeMode,
@@ -101,5 +101,5 @@ class SettingsState extends Equatable {
       );
 
   @override
-  List<Object> get props => [themeMode, forcedOfflineMode, serverSettings];
+  List<Object?> get props => [themeMode, forcedOfflineMode, serverSettings];
 }

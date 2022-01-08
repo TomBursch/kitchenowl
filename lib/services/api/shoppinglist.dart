@@ -4,7 +4,7 @@ import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
 
 extension ShoppinglistApi on ApiService {
-  Future<ShoppinglistItem> getShoppingListItem(Item item) async {
+  Future<ShoppinglistItem?> getShoppingListItem(Item item) async {
     final res = await get('/shoppinglist/1/item/${item.id}');
     if (res.statusCode != 200) return null;
 
@@ -12,7 +12,7 @@ extension ShoppinglistApi on ApiService {
     return ShoppinglistItem.fromJson(body);
   }
 
-  Future<List<ShoppinglistItem>> getItems() async {
+  Future<List<ShoppinglistItem>?> getItems() async {
     final res = await get('/shoppinglist/1/items');
     if (res.statusCode != 200) return null;
 
@@ -20,7 +20,7 @@ extension ShoppinglistApi on ApiService {
     return body.map((e) => ShoppinglistItem.fromJson(e)).toList();
   }
 
-  Future<List<Item>> getRecentItems() async {
+  Future<List<Item>?> getRecentItems() async {
     final res = await get('/shoppinglist/1/recent-items');
     if (res.statusCode != 200) return null;
 
@@ -28,7 +28,7 @@ extension ShoppinglistApi on ApiService {
     return body.map((e) => Item.fromJson(e)).toList();
   }
 
-  Future<bool> addItemByName(String name, [String description]) async {
+  Future<bool> addItemByName(String name, [String? description]) async {
     final data = {'name': name};
     if (description != null) data['description'] = description;
     final res =

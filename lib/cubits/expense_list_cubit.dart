@@ -31,11 +31,9 @@ class ExpenseListCubit extends Cubit<ExpenseListCubitState> {
 
   Future<void> refresh() async {
     final users = await TransactionHandler.getInstance()
-            .runTransaction(TransactionUserGetAll()) ??
-        [];
+        .runTransaction(TransactionUserGetAll());
     final expenses = await TransactionHandler.getInstance()
-            .runTransaction(TransactionExpenseGetAll()) ??
-        [];
+        .runTransaction(TransactionExpenseGetAll());
 
     emit(ExpenseListCubitState(users, expenses));
   }
@@ -51,5 +49,5 @@ class ExpenseListCubitState extends Equatable {
   ]);
 
   @override
-  List<Object> get props => users.cast<Object>() + expenses;
+  List<Object?> get props => users.cast<Object>() + expenses;
 }

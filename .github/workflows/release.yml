@@ -55,9 +55,10 @@ jobs:
   create-build:
     name: Create ${{ matrix.target }} build
     runs-on: ${{ matrix.os }}
+    container: ${{ matrix.container }}
     strategy:
       matrix:
-        target: [macOS, Windows, Linux, Android, Debian]
+        target: [macOS, Windows, Linux, Android, Debian, Fedora]
         include:
           - os: macos-10.15 # Catalina
             target: macOS
@@ -89,6 +90,15 @@ jobs:
             build_path: build/debian/release
             asset_extension: .deb
             asset_content_type: application/vnd.debian.binary-package
+          - os: ubuntu-20.04
+            container:
+              image: fedora:latest
+              options: --group-add 135
+            target: Fedora
+            build_target: linux
+            build_path: build/fedora/release
+            asset_extension: .rpm
+            asset_content_type: application/x-rpm
       # Disable fail-fast as we want results from all even if one fails.
       fail-fast: false
     needs: draft-release
@@ -104,6 +114,11 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y libgtk-3-dev libx11-dev pkg-config cmake ninja-build libblkid-dev libsecret-1-dev libjsoncpp-dev
+      - name: Install Fedora dependencies
+        if: matrix.target == 'Fedora'
+        run: |
+          sudo dnf update
+          sudo dnf install -y gtk3-devel libX11-devel pkg-config cmake ninja-build libblkid-devel libsecret-devel jsoncpp-devel fedora-packager fedora-review
       - name: Install Android dependencies
         if: matrix.target == 'Android'
         uses: actions/setup-java@v1
@@ -175,9 +190,17 @@ jobs:
         if: matrix.target == 'Debian'
         run: ./build.sh
         working-directory: debian
-      - name: Rename build for Android
+      - name: Rename build for debian
         if: matrix.target == 'Debian'
         run: mv kitchenowl.deb $GITHUB_WORKSPACE/kitchenowl_${{ matrix.target }}.deb
+        working-directory: ${{ matrix.build_path }}
+      - name: Package build for Fedora
+        if: matrix.target == 'Fedora'
+        run: ./build.sh
+        working-directory: fedora
+      - name: Rename build for fedora
+        if: matrix.target == 'Fedora'
+        run: mv x86_64/KitchenOwl-${{ github.ref }}-1.fc35.x86_64.rpm $GITHUB_WORKSPACE/kitchenowl_${{ matrix.target }}.rpm
         working-directory: ${{ matrix.build_path }}
 
       # Upload the build.

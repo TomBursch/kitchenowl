@@ -20,7 +20,7 @@ mkdir -p build/debian/release
 cp -r debian/$NAME build/debian/release/
 mkdir build/debian/release/$NAME/usr/lib
 cp -r build/linux/x64/release/bundle/ build/debian/release/$NAME/usr/lib/$NAME/
-cp debian/icon.png build/debian/release/$NAME/usr/lib/$NAME/
+cp linux/icon.png build/debian/release/$NAME/usr/lib/$NAME/
 mkdir -p build/debian/release/$NAME/usr/share/applications/
 
 # DEB settings
@@ -33,11 +33,12 @@ cat debian/$NAME/DEBIAN/control >> $CONTROL_FILE
 
 DESKTOP_FILE="build/debian/release/$NAME/usr/share/applications/$NAME.desktop"
 echo "[Desktop Entry]" > $DESKTOP_FILE
+echo "Icon=/usr/lib/$NAME/icon.png" >> $DESKTOP_FILE
 echo "Exec=$NAME" >> $DESKTOP_FILE
 # echo "Name=$NAME" >> $DESKTOP_FILE
 echo "Comment=$DESCRIPTION" >> $DESKTOP_FILE
 echo "Version=$VERSION" >> $DESKTOP_FILE
-cat debian/$NAME.desktop >> $DESKTOP_FILE
+cat linux/$NAME.desktop >> $DESKTOP_FILE
 
 
 # Build and cleanup

@@ -10,11 +10,10 @@ class ItemSearchCubit extends Cubit<ItemSearchState> {
 
   void itemSelected(int i) {
     final List<Item> selectedItems = List.from(state.selectedItems);
-    final bool containsItem = state.selectedItems
-        .map((e) => e.name)
-        .contains(state.searchResults[i].name);
+    final bool containsItem =
+        state.selectedItems.contains(state.searchResults[i]);
     if (containsItem) {
-      selectedItems.removeWhere((e) => e.name == state.searchResults[i].name);
+      selectedItems.removeWhere((e) => e == state.searchResults[i]);
     } else {
       selectedItems.add(state.searchResults[i]);
     }

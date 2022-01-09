@@ -71,6 +71,12 @@ class AuthCubit extends Cubit<AuthState> {
     _newConnection(url);
   }
 
+  User? getUser() {
+    if (state is Authenticated) {
+      return (state as Authenticated).user;
+    }
+  }
+
   Future<void> refresh() => ApiService.getInstance().refresh();
 
   Future<void> refreshUser() async {

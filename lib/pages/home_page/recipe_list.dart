@@ -81,9 +81,7 @@ class _RecipeListPageState extends State<RecipeListPage> {
                                   label: Text(tag.name),
                                   selected:
                                       (state is FilteredListRecipeCubitState) &&
-                                          state.selectedTags
-                                              .map((e) => e.id)
-                                              .contains(tag.id),
+                                          state.selectedTags.contains(tag),
                                   selectedColor:
                                       Theme.of(context).colorScheme.secondary,
                                   onSelected: (bool selected) =>

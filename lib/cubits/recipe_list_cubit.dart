@@ -7,7 +7,7 @@ import 'package:kitchenowl/services/transactions/recipe.dart';
 import 'package:kitchenowl/services/transactions/tag.dart';
 
 class RecipeListCubit extends Cubit<ListRecipeCubitState> {
-  List<Recipe> shoppinglist = [];
+  List<Recipe> recipeList = [];
 
   RecipeListCubit() : super(const ListRecipeCubitState()) {
     refresh();
@@ -21,61 +21,66 @@ class RecipeListCubit extends Cubit<ListRecipeCubitState> {
     return refresh(query);
   }
 
-  Future<void> tagSelected(Tag tag, bool selected) {
+  void tagSelected(Tag tag, bool selected) {
     if (state is FilteredListRecipeCubitState) {
       final _state = state as FilteredListRecipeCubitState;
-      final l = Set<Tag>.from(_state.selectedTags);
+      final selectedTags = Set<Tag>.from(_state.selectedTags);
       if (selected) {
-        l.add(tag);
+        selectedTags.add(tag);
       } else {
-        l.removeWhere((e) => e.id == tag.id);
+        selectedTags.removeWhere((e) => e.id == tag.id);
       }
-      if (l.isEmpty) {
+      if (selectedTags.isEmpty) {
         emit(
             ListRecipeCubitState(recipes: _state.allRecipes, tags: state.tags));
       } else {
-        emit(_state.copyWith(selectedTags: l));
+        emit(_state.copyWith(
+            selectedTags: selectedTags,
+            recipes: _getFilteredRecipesCopy(
+              _state.allRecipes,
+              selectedTags,
+            )));
       }
     } else if (selected) {
-      emit(FilteredListRecipeCubitState.fromState(state, {tag}));
+      emit(FilteredListRecipeCubitState.fromState(state, tag));
     }
-    return refresh();
   }
 
   Future<void> refresh([String? query]) async {
     Set<Tag> filter = const {};
-    List<Recipe> allRecipes = const [];
     if (state is SearchRecipeCubitState) {
       query = query ?? (state as SearchRecipeCubitState).query;
     }
     if (state is FilteredListRecipeCubitState) {
       filter = (state as FilteredListRecipeCubitState).selectedTags;
-      allRecipes = (state as FilteredListRecipeCubitState).allRecipes;
     }
     if (query != null && query.isNotEmpty) {
       final items = (await TransactionHandler.getInstance()
           .runTransaction(TransactionRecipeSearchRecipes(query: query)));
       emit(SearchRecipeCubitState(
           query: query, recipes: items, tags: state.tags));
-    } else if (filter.isNotEmpty) {
-      shoppinglist = await TransactionHandler.getInstance()
-          .runTransaction(TransactionRecipeGetRecipesFiltered(filter: filter));
-      final tags = await TransactionHandler.getInstance()
-          .runTransaction(TransactionTagGetAll());
-      emit(FilteredListRecipeCubitState(
-        recipes: shoppinglist,
-        tags: tags,
-        selectedTags: filter,
-        allRecipes: allRecipes,
-      ));
     } else {
-      shoppinglist = await TransactionHandler.getInstance()
+      recipeList = await TransactionHandler.getInstance()
           .runTransaction(TransactionRecipeGetRecipes());
       final tags = await TransactionHandler.getInstance()
           .runTransaction(TransactionTagGetAll());
-      emit(ListRecipeCubitState(recipes: shoppinglist, tags: tags));
+      if (filter.isNotEmpty) {
+        emit(FilteredListRecipeCubitState(
+          recipes: _getFilteredRecipesCopy(recipeList, filter),
+          tags: tags,
+          selectedTags: filter,
+          allRecipes: recipeList,
+        ));
+      } else {
+        emit(ListRecipeCubitState(recipes: recipeList, tags: tags));
+      }
     }
   }
+
+  List<Recipe> _getFilteredRecipesCopy(
+          List<Recipe> allRecipes, Set<Tag> filter) =>
+      List<Recipe>.from(
+          allRecipes.where((e) => e.tags.any((tag) => filter.contains(tag))));
 }
 
 class ListRecipeCubitState extends Equatable {
@@ -100,12 +105,15 @@ class FilteredListRecipeCubitState extends ListRecipeCubitState {
   }) : super(recipes: recipes, tags: tags);
 
   factory FilteredListRecipeCubitState.fromState(
-          ListRecipeCubitState state, Set<Tag> selectedTags) =>
+    ListRecipeCubitState state,
+    Tag selectedTag,
+  ) =>
       FilteredListRecipeCubitState(
-        recipes: state.recipes,
+        recipes: List<Recipe>.from(
+            state.recipes.where((e) => e.tags.contains(selectedTag))),
         allRecipes: state.recipes,
         tags: state.tags,
-        selectedTags: selectedTags,
+        selectedTags: {selectedTag},
       );
 
   FilteredListRecipeCubitState copyWith({

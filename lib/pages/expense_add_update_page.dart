@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:kitchenowl/cubits/auth_cubit.dart';
 import 'package:kitchenowl/cubits/expense_add_update_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/helpers/currency_text_input_formatter.dart';
@@ -44,7 +45,8 @@ class _AddUpdateRecipePageState extends State<AddUpdateExpensePage> {
       amountController.text = 0.toStringAsFixed(2);
       cubit = AddUpdateExpenseCubit(Expense(
         amount: 0,
-        paidById: widget.users[0].id,
+        paidById: BlocProvider.of<AuthCubit>(context).getUser()?.id ??
+            widget.users[0].id,
         paidFor: widget.users
             .map((e) => PaidForModel(userId: e.id, factor: 1))
             .toList(),

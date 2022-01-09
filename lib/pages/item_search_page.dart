@@ -72,8 +72,7 @@ class _ItemSearchPageState extends State<ItemSearchPage> {
                 textInputAction: TextInputAction.done,
                 onSubmitted: () {
                   if (cubit.state.selectedItems
-                      .map((e) => e.name)
-                      .contains(cubit.state.searchResults.first.name)) return;
+                      .contains(cubit.state.searchResults.first)) return;
                   if (!widget.multiple) {
                     final item = cubit.state.searchResults.first;
                     Navigator.of(context).pop([item]);
@@ -122,9 +121,7 @@ class _ItemSearchPageState extends State<ItemSearchPage> {
           itemCount: state.searchResults.length,
           itemBuilder: (context, i) => ShoppingItemWidget(
             item: state.searchResults[i],
-            selected: state.selectedItems.map((e) => e.name).contains(state
-                .searchResults[i]
-                .name), //#TODO map shouldn't be necessary (Bug in equatable?)
+            selected: state.selectedItems.contains(state.searchResults[i]),
             onPressed: (item) {
               if (!widget.multiple) {
                 Navigator.of(context).pop([item]);

@@ -57,15 +57,14 @@ class RecipeListCubit extends Cubit<ListRecipeCubitState> {
       emit(SearchRecipeCubitState(
           query: query, recipes: items, tags: state.tags));
     } else {
-      Set<Tag> filter = const {};
-      if (state is FilteredListRecipeCubitState && (query == null)) {
-        filter = (state as FilteredListRecipeCubitState).selectedTags;
-      }
-
       recipeList = await TransactionHandler.getInstance()
           .runTransaction(TransactionRecipeGetRecipes());
       final tags = await TransactionHandler.getInstance()
           .runTransaction(TransactionTagGetAll());
+      Set<Tag> filter = const {};
+      if (state is FilteredListRecipeCubitState && (query == null)) {
+        filter = (state as FilteredListRecipeCubitState).selectedTags;
+      }
       if (filter.isNotEmpty) {
         emit(FilteredListRecipeCubitState(
           recipes: _getFilteredRecipesCopy(recipeList, filter),

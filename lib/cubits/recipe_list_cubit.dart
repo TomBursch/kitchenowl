@@ -47,19 +47,21 @@ class RecipeListCubit extends Cubit<ListRecipeCubitState> {
   }
 
   Future<void> refresh([String? query]) async {
-    Set<Tag> filter = const {};
     if (state is SearchRecipeCubitState) {
       query = query ?? (state as SearchRecipeCubitState).query;
     }
-    if (state is FilteredListRecipeCubitState) {
-      filter = (state as FilteredListRecipeCubitState).selectedTags;
-    }
+
     if (query != null && query.isNotEmpty) {
       final items = (await TransactionHandler.getInstance()
           .runTransaction(TransactionRecipeSearchRecipes(query: query)));
       emit(SearchRecipeCubitState(
           query: query, recipes: items, tags: state.tags));
     } else {
+      Set<Tag> filter = const {};
+      if (state is FilteredListRecipeCubitState && (query == null)) {
+        filter = (state as FilteredListRecipeCubitState).selectedTags;
+      }
+
       recipeList = await TransactionHandler.getInstance()
           .runTransaction(TransactionRecipeGetRecipes());
       final tags = await TransactionHandler.getInstance()

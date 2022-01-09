@@ -68,7 +68,7 @@ class PaidForModel extends Model {
   final int userId;
   final int factor;
 
-  PaidForModel({required this.userId, this.factor = 1});
+  const PaidForModel({required this.userId, this.factor = 1});
 
   @override
   List<Object?> get props => [userId, factor];

@@ -52,7 +52,7 @@ abstract class Transaction<T> extends Model {
 }
 
 class ErrorTransaction<T> extends Transaction<T> {
-  ErrorTransaction(DateTime timestamp, String className)
+  const ErrorTransaction(DateTime timestamp, String className)
       : super.internal(timestamp, className);
 
   @override

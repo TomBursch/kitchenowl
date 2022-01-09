@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:kitchenowl/models/recipe.dart';
 import 'package:kitchenowl/models/tag.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
@@ -12,7 +11,6 @@ class TransactionRecipeGetRecipes extends Transaction<List<Recipe>> {
 
   @override
   Future<List<Recipe>> runLocal() async {
-    debugPrint((await TempStorage.getInstance().readRecipes()).toString());
     return await TempStorage.getInstance().readRecipes() ?? [];
   }
 

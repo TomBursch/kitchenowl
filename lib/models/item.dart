@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:kitchenowl/models/model.dart';
 
 class Item extends Model {

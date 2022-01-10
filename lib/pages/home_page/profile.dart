@@ -48,17 +48,30 @@ class ProfilePage extends StatelessWidget {
                   ListTile(
                     title: Text(AppLocalizations.of(context)!.darkmode),
                     leading: const Icon(Icons.nights_stay_sharp),
-                    contentPadding: const EdgeInsets.only(left: 20, right: 0),
-                    trailing: Transform.scale(
-                      scale: 0.9,
-                      child: CupertinoSwitch(
-                        value: Theme.of(context).brightness == Brightness.dark,
-                        activeColor: Theme.of(context).colorScheme.secondary,
-                        onChanged: (value) {
-                          BlocProvider.of<SettingsCubit>(context).setTheme(
-                              value ? ThemeMode.dark : ThemeMode.light);
-                        },
-                      ),
+                    contentPadding: const EdgeInsets.only(left: 20, right: 5),
+                    trailing: DropdownButton(
+                      value: state.themeMode,
+                      items: [
+                        DropdownMenuItem(
+                          child: Text(AppLocalizations.of(context)!.themeLight),
+                          value: ThemeMode.light,
+                        ),
+                        DropdownMenuItem(
+                          child: Text(AppLocalizations.of(context)!.themeDark),
+                          value: ThemeMode.dark,
+                        ),
+                        DropdownMenuItem(
+                          child:
+                              Text(AppLocalizations.of(context)!.themeSystem),
+                          value: ThemeMode.system,
+                        ),
+                      ],
+                      onChanged: (ThemeMode? value) {
+                        if (value != null) {
+                          BlocProvider.of<SettingsCubit>(context)
+                              .setTheme(value);
+                        }
+                      },
                     ),
                   ),
                   ListTile(

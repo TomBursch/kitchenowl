@@ -36,7 +36,7 @@ class _RecipeListPageState extends State<RecipeListPage> {
       child: Column(
         children: [
           SizedBox(
-            height: 80,
+            height: 70,
             child: Padding(
               padding: const EdgeInsets.fromLTRB(16, 16, 16, 6),
               child: BlocListener<RecipeListCubit, ListRecipeCubitState>(

@@ -26,13 +26,13 @@ class SettingsCubit extends Cubit<SettingsState> {
   }
 
   Future<void> load() async {
-    final darkmode =
-        await PreferenceStorage.getInstance().readBool(key: 'darkmode');
+    final themeModeIndex =
+        await PreferenceStorage.getInstance().readInt(key: 'themeMode');
     Config.packageInfo = await PackageInfo.fromPlatform();
 
     ThemeMode themeMode = ThemeMode.system;
-    if (darkmode != null) {
-      themeMode = darkmode ? ThemeMode.dark : ThemeMode.light;
+    if (themeModeIndex != null) {
+      themeMode = ThemeMode.values[themeModeIndex];
     }
 
     ServerSettings serverSettings = ServerSettings.fromJson(jsonDecode(
@@ -52,7 +52,7 @@ class SettingsCubit extends Cubit<SettingsState> {
 
   void setTheme(ThemeMode themeMode) {
     PreferenceStorage.getInstance()
-        .writeBool(key: 'darkmode', value: themeMode == ThemeMode.dark);
+        .writeInt(key: 'themeMode', value: themeMode.index);
     emit(state.copyWith(themeMode: themeMode));
   }
 

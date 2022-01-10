@@ -88,6 +88,9 @@
         }
     },
     "tags": "Tags",
+    "themeDark": "Dunkel",
+    "themeLight": "Hell",
+    "themeSystem": "System",
     "underConstruction": "Baustelle",
     "unreachableMessage": "Hmmmm... der Server wurde nicht erreicht",
     "unsupportedBackendMessage": "Die Server version wird nicht unterstützt, bitte update die/den App/Server",

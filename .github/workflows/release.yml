@@ -103,12 +103,6 @@ jobs:
       fail-fast: false
     needs: draft-release
     steps:
-      # Set up Flutter.
-      - name: Clone Flutter repository with stable channel
-        uses: subosito/flutter-action@v2
-        with:
-          channel: stable
-
       - name: Install Linux dependencies
         if: matrix.target == 'Linux' || matrix.target == 'Debian'
         run: |
@@ -129,6 +123,23 @@ jobs:
         run: |
           sudo apt-get install -y python3
           pip3 install shyaml
+
+
+      # Set up Flutter.
+      - name: Clone Flutter repository with stable channel
+        if: matrix.target != 'Fedora'
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+      - name: Clone Flutter repository with stable channel Fedora
+        if: matrix.target == 'Fedora'
+        run: |
+          git clone https://github.com/flutter/flutter.git -b stable
+          echo "/flutter/bin" >> $GITHUB_PATH
+          flutter doctor
+        working-directory: /
+
+
       - name: Enable desktop support
         if: matrix.target != 'Android'
         run: |

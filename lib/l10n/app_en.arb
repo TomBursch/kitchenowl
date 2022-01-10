@@ -62,6 +62,13 @@
     "plannerTitle": "Your planned meals",
     "profile": "Profile",
     "recipeAdd": "Add Recipe",
+    "recipeDelete": "Delete Recipe",
+    "recipeDeleteConfirmation": "Are you sure you want to remove {recipe}?",
+    "@recipeDeleteConfirmation": {
+        "placeholders": {
+            "recipe": {}
+        }
+    },
     "recipeEdit": "Edit Recipe",
     "recipeNew": "New Recipe",
     "recipes": "Recipe",

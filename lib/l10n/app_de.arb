@@ -62,6 +62,13 @@
     "plannerTitle": "Deine geplanten Mahlzeiten",
     "profile": "Profil",
     "recipeAdd": "Rezept Hinzufügen",
+    "recipeDelete": "Rezept löschen",
+    "recipeDeleteConfirmation": "Bist du dir sicher, dass du {recipe} löschen möchtest?",
+    "@recipeDeleteConfirmation": {
+        "placeholders": {
+            "recipe": {}
+        }
+    },
     "recipeEdit": "Rezept Bearbeiten",
     "recipeNew": "Neues Rezept",
     "recipes": "Rezepte",

@@ -5,6 +5,7 @@ import 'package:kitchenowl/cubits/item_edit_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/kitchenowl.dart';
+import 'package:kitchenowl/widgets/confirmation_dialog.dart';
 import 'package:kitchenowl/widgets/recipe_item.dart';
 
 class ItemPage extends StatefulWidget {
@@ -55,45 +56,18 @@ class _ItemPageState extends State<ItemPage> {
             if (!App.isOffline(context))
               IconButton(
                 onPressed: () async {
-                  final confirmed = await showDialog<bool>(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              title: Text(
-                                AppLocalizations.of(context)!.userDelete,
-                              ),
-                              content: Text(AppLocalizations.of(context)!
-                                  .itemDeleteConfirmation(widget.item.name)),
-                              actions: <Widget>[
-                                TextButton(
-                                  child: Text(
-                                      AppLocalizations.of(context)!.cancel),
-                                  style: ButtonStyle(
-                                    foregroundColor:
-                                        MaterialStateProperty.all<Color>(
-                                      Theme.of(context).disabledColor,
-                                    ),
-                                  ),
-                                  onPressed: () =>
-                                      Navigator.of(context).pop(false),
-                                ),
-                                TextButton(
-                                  child: Text(
-                                      AppLocalizations.of(context)!.delete),
-                                  style: ButtonStyle(
-                                    foregroundColor:
-                                        MaterialStateProperty.all<Color>(
-                                      Colors.red,
-                                    ),
-                                  ),
-                                  onPressed: () =>
-                                      Navigator.of(context).pop(true),
-                                ),
-                              ],
-                            );
-                          }) ??
-                      false;
-                  if (confirmed && await cubit.deleteItem()) {
+                  final confirmed = await askForConfirmation(
+                    context: context,
+                    title: Text(
+                      AppLocalizations.of(context)!.userDelete,
+                    ),
+                    content: Text(
+                      AppLocalizations.of(context)!
+                          .itemDeleteConfirmation(widget.item.name),
+                    ),
+                  );
+                  if (confirmed) {
+                    cubit.deleteItem();
                     Navigator.of(context).pop(UpdateEnum.deleted);
                   }
                 },

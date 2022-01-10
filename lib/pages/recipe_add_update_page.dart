@@ -10,6 +10,7 @@ import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/models/recipe.dart';
 import 'package:kitchenowl/pages/item_search_page.dart';
 import 'package:kitchenowl/kitchenowl.dart';
+import 'package:kitchenowl/widgets/confirmation_dialog.dart';
 import 'package:kitchenowl/widgets/text_dialog.dart';
 import 'package:kitchenowl/widgets/shopping_item.dart';
 import 'package:responsive_builder/responsive_builder.dart';
@@ -296,8 +297,20 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                               Colors.redAccent),
                         ),
                         onPressed: () async {
-                          await cubit.removeRecipe();
-                          Navigator.of(context).pop(UpdateEnum.deleted);
+                          final confirmed = await askForConfirmation(
+                            context: context,
+                            title: Text(
+                              AppLocalizations.of(context)!.recipeDelete,
+                            ),
+                            content: Text(
+                              AppLocalizations.of(context)!
+                                  .recipeDeleteConfirmation(widget.recipe.name),
+                            ),
+                          );
+                          if (confirmed) {
+                            cubit.removeRecipe();
+                            Navigator.of(context).pop(UpdateEnum.deleted);
+                          }
                         },
                         child: Text(AppLocalizations.of(context)!.delete),
                       ),

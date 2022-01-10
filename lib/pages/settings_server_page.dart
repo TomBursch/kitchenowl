@@ -11,6 +11,7 @@ import 'package:kitchenowl/pages/settings/create_user_page.dart';
 import 'package:kitchenowl/pages/settings_user_page.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
 import 'package:kitchenowl/kitchenowl.dart';
+import 'package:kitchenowl/widgets/confirmation_dialog.dart';
 import 'package:kitchenowl/widgets/text_dialog.dart';
 
 class SettingsServerPage extends StatefulWidget {
@@ -143,50 +144,15 @@ class _SettingsServerPageState extends State<SettingsServerPage> {
                     itemBuilder: (context, i) => Dismissible(
                       key: ValueKey<Tag>(state.tags.elementAt(i)),
                       confirmDismiss: (direction) async {
-                        return (await showDialog<bool>(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return AlertDialog(
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(15)),
-                                    title: Text(
-                                      AppLocalizations.of(context)!.tagDelete,
-                                    ),
-                                    content: Text(AppLocalizations.of(context)!
-                                        .tagDeleteConfirmation(
-                                            state.tags.elementAt(i).name)),
-                                    actions: <Widget>[
-                                      TextButton(
-                                        child: Text(
-                                            AppLocalizations.of(context)!
-                                                .cancel),
-                                        style: ButtonStyle(
-                                          foregroundColor:
-                                              MaterialStateProperty.all<Color>(
-                                            Theme.of(context).disabledColor,
-                                          ),
-                                        ),
-                                        onPressed: () =>
-                                            Navigator.of(context).pop(false),
-                                      ),
-                                      TextButton(
-                                        child: Text(
-                                            AppLocalizations.of(context)!
-                                                .delete),
-                                        style: ButtonStyle(
-                                          foregroundColor:
-                                              MaterialStateProperty.all<Color>(
-                                            Colors.red,
-                                          ),
-                                        ),
-                                        onPressed: () =>
-                                            Navigator.of(context).pop(true),
-                                      ),
-                                    ],
-                                  );
-                                }) ??
-                            false);
+                        return (await askForConfirmation(
+                          context: context,
+                          title: Text(
+                            AppLocalizations.of(context)!.tagDelete,
+                          ),
+                          content: Text(AppLocalizations.of(context)!
+                              .tagDeleteConfirmation(
+                                  state.tags.elementAt(i).name)),
+                        ));
                       },
                       onDismissed: (direction) {
                         cubit.deleteTag(state.tags.elementAt(i));
@@ -252,50 +218,14 @@ class _SettingsServerPageState extends State<SettingsServerPage> {
                       key: ValueKey<User>(state.users[i]),
                       confirmDismiss: (direction) async {
                         if (state.users[i].owner) return false;
-                        return (await showDialog<bool>(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return AlertDialog(
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(15)),
-                                    title: Text(
-                                      AppLocalizations.of(context)!.userDelete,
-                                    ),
-                                    content: Text(AppLocalizations.of(context)!
-                                        .userDeleteConfirmation(
-                                            state.users[i].name)),
-                                    actions: <Widget>[
-                                      TextButton(
-                                        child: Text(
-                                            AppLocalizations.of(context)!
-                                                .cancel),
-                                        style: ButtonStyle(
-                                          foregroundColor:
-                                              MaterialStateProperty.all<Color>(
-                                            Theme.of(context).disabledColor,
-                                          ),
-                                        ),
-                                        onPressed: () =>
-                                            Navigator.of(context).pop(false),
-                                      ),
-                                      TextButton(
-                                        child: Text(
-                                            AppLocalizations.of(context)!
-                                                .delete),
-                                        style: ButtonStyle(
-                                          foregroundColor:
-                                              MaterialStateProperty.all<Color>(
-                                            Colors.red,
-                                          ),
-                                        ),
-                                        onPressed: () =>
-                                            Navigator.of(context).pop(true),
-                                      ),
-                                    ],
-                                  );
-                                }) ??
-                            false);
+                        return (await askForConfirmation(
+                          context: context,
+                          title: Text(
+                            AppLocalizations.of(context)!.userDelete,
+                          ),
+                          content: Text(AppLocalizations.of(context)!
+                              .userDeleteConfirmation(state.users[i].name)),
+                        ));
                       },
                       onDismissed: (direction) {
                         cubit.deleteUser(state.users[i]);

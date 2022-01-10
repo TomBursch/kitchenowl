@@ -46,7 +46,7 @@ class ProfilePage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   ListTile(
-                    title: Text(AppLocalizations.of(context)!.darkmode),
+                    title: Text(AppLocalizations.of(context)!.themeMode),
                     leading: const Icon(Icons.nights_stay_sharp),
                     contentPadding: const EdgeInsets.only(left: 20, right: 5),
                     trailing: DropdownButton(

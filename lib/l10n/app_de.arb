@@ -90,6 +90,7 @@
     "tags": "Tags",
     "themeDark": "Dunkel",
     "themeLight": "Hell",
+    "themeMode": "Theme",
     "themeSystem": "System",
     "underConstruction": "Baustelle",
     "unreachableMessage": "Hmmmm... der Server wurde nicht erreicht",

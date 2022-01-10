@@ -60,7 +60,8 @@ class Recipe extends Model {
       );
 
   @override
-  List<Object?> get props => [id, name, description];
+  List<Object?> get props =>
+      [id, name, description, isPlanned, time, tags, items];
 
   @override
   Map<String, dynamic> toJson() => {

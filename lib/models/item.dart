@@ -14,7 +14,7 @@ class Item extends Model {
       );
 
   @override
-  List<Object?> get props => [id, name];
+  List<Object?> get props => [id, name, ordering];
 
   @override
   Map<String, dynamic> toJson() => {

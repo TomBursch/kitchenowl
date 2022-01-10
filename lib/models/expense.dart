@@ -47,7 +47,7 @@ class Expense extends Model {
       );
 
   @override
-  List<Object?> get props => [id, name, amount, paidById] + paidFor;
+  List<Object?> get props => [id, name, amount, createdAt, paidById] + paidFor;
 
   @override
   Map<String, dynamic> toJson() => {

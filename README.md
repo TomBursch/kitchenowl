@@ -50,17 +50,21 @@ The following features have been implemented:
 - Partial offline support, so you don't lose track of what to buy even when there is no signal
 - Manage recipes and add them to your shopping list
 - Create a meal plan to know what you'll be eating
+- Manage balances and track expenses
 - Mobile/Web/Desktop apps
 
 This project is still in development, so some features may not be fully implemented yet.
 
-For a list of planned features, check out the [Roadmap](https://github.com/TomBursch/kitchenowl/wiki/Roadmap)!
+For a list of planned features, check out the [Roadmap](https://tombursch.github.io/kitchenowl/roadmap/)!
 
 ## 📱 Screenshots
 
-<img alt="Updates page" src="android/fastlane/metadata/android/en-US/images/phoneScreenshots/1_en-US.png" width="31%" hspace="5" />
-<img alt="Details page" src="android/fastlane/metadata/android/en-US/images/phoneScreenshots/2_en-US.png" width="31%" hspace="5" />
-<img alt="Search page" src="android/fastlane/metadata/android/en-US/images/phoneScreenshots/3_en-US.png" width="31%" hspace="5"/>
+<img alt="Groceries page" src="docs/img/screenshots/groceries.png" width="31%" hspace="5" />
+<img alt="Recipe page" src="docs/img/screenshots/recipe.png" width="31%" hspace="5" />
+<img alt="Balance page" src="docs/img/screenshots/balance.png" width="31%" hspace="5"/>
+<img alt="Plan page" src="docs/img/screenshots/plan.png" width="31%" hspace="5"/>
+<img alt="Theme" src="docs/img/screenshots/theme.png" width="31%" hspace="5"/>
+<img alt="Suggestions page" src="docs/img/screenshots/suggestions.png" width="31%" hspace="5"/>
 
 ## 🤖 App Install
 
@@ -68,27 +72,7 @@ Get it on [Google Play](https://play.google.com/store/apps/details?id=com.tombur
 
 ## 🗄️ Server Install
 
-You can either install only the backend or add the web-app to it. [Docker](https://docs.docker.com/engine/install/) is required.
-
-### Backend only
-
-Using docker cli:
-
-```
-docker volume create kitchenowl_data
-```
-
-```
-docker run -d -p 5000:5000 --name=kitchenowl --restart=unless-stopped -v kitchenowl_data:/data tombursch/kitchenowl:latest
-```
-
-### Backend and Web-app
-
-Recommended using [docker-compose](https://docs.docker.com/compose/):
-
-1. Download the [docker-compose.yml](https://github.com/TomBursch/kitchenowl-backend/blob/main/docker-compose.yml)
-2. Change default values such as `JWT_SECRET_KEY` and the URLs (corresponding to the ones your instance will be running on)
-3. Run `docker-compose up -d`
+Please take a look at the [docs](https://tombursch.github.io/kitchenowl/).
 
 ## 🙌 Contributing
 
@@ -96,6 +80,7 @@ From opening a bug report to creating a pull request: every contribution is appr
 
 ## 📚 Related
 
+- [Docs](https://tombursch.github.io/kitchenowl/)
 - [KitchenOwl Backend](https://github.com/TomBursch/kitchenowl-backend) Repository
 - [DockerHub](https://hub.docker.com/repository/docker/tombursch/kitchenowl)
 - Icon taken from [Those Icons](https://www.flaticon.com/authors/those-icons) and [Freepik](https://www.flaticon.com/authors/freepik)

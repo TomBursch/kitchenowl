@@ -33,9 +33,12 @@ For a list of planned features, check out the [Roadmap](roadmap.md)!
 
 ## 📱 Screenshots
 
-<img alt="Updates page" src="img/screenshots/1_en-US.png" width="31%" hspace="5" />
-<img alt="Details page" src="img/screenshots/2_en-US.png" width="31%" hspace="5" />
-<img alt="Search page" src="img/screenshots/3_en-US.png" width="31%" hspace="5"/>
+<img alt="Groceries page" src="img/screenshots/groceries.png" width="31%" hspace="5" />
+<img alt="Recipe page" src="img/screenshots/recipe.png" width="31%" hspace="5" />
+<img alt="Balance page" src="img/screenshots/balance.png" width="31%" hspace="5"/>
+<img alt="Plan page" src="img/screenshots/plan.png" width="31%" hspace="5"/>
+<img alt="Theme" src="img/screenshots/theme.png" width="31%" hspace="5"/>
+<img alt="Suggestions page" src="img/screenshots/suggestions.png" width="31%" hspace="5"/>
 
 ## 📜 License
 

@@ -55,16 +55,16 @@ The following features have been implemented:
 
 This project is still in development, so some features may not be fully implemented yet.
 
-For a list of planned features, check out the [Roadmap](https://tombursch.github.io/kitchenowl/roadmap/)!
+For a full list check out the [docs](https://tombursch.github.io/kitchenowl). For a list of planned features, take a look at the [Roadmap](https://tombursch.github.io/kitchenowl/roadmap/)!
 
 ## 📱 Screenshots
 
-<img alt="Groceries page" src="docs/img/screenshots/groceries.png" width="31%" hspace="5" />
-<img alt="Recipe page" src="docs/img/screenshots/recipe.png" width="31%" hspace="5" />
-<img alt="Balance page" src="docs/img/screenshots/balance.png" width="31%" hspace="5"/>
-<img alt="Plan page" src="docs/img/screenshots/plan.png" width="31%" hspace="5"/>
-<img alt="Theme" src="docs/img/screenshots/theme.png" width="31%" hspace="5"/>
-<img alt="Suggestions page" src="docs/img/screenshots/suggestions.png" width="31%" hspace="5"/>
+<img alt="Groceries page" src="docs/img/screenshots/groceries.png" width="30%" hspace="5" />
+<img alt="Recipe page" src="docs/img/screenshots/recipe.png" width="30%" hspace="5" />
+<img alt="Balance page" src="docs/img/screenshots/balance.png" width="30%" hspace="5"/>
+<img alt="Plan page" src="docs/img/screenshots/plan.png" width="30%" hspace="5"/>
+<img alt="Theme" src="docs/img/screenshots/theme.png" width="30%" hspace="5"/>
+<img alt="Suggestions page" src="docs/img/screenshots/suggestions.png" width="30%" hspace="5"/>
 
 ## 🤖 App Install
 
@@ -93,4 +93,4 @@ From opening a bug report to creating a pull request: every contribution is appr
 
 ## 📜 License
 
-KitchenOwl is Free Software: You can use, study share and improve it at your will. Specifically you can redistribute and/or modify it under the terms of the Apache-2.0 License.
+KitchenOwl is Free Software: You can use, study share and improve it at your will. Specifically you can redistribute and/or modify it under the terms of the AGPL-3.0 License.

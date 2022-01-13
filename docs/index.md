@@ -25,6 +25,7 @@ The following features have been implemented:
 - Partial offline support, so you don't lose track of what to buy even when there is no signal
 - Manage recipes and add them to your shopping list
 - Create a meal plan to know what you'll be eating
+- Manage balances and track expenses
 - Mobile/Web/Desktop apps
 
 This project is still in development, so some features may not be fully implemented yet.
@@ -42,5 +43,5 @@ For a list of planned features, check out the [Roadmap](roadmap.md)!
 
 ## 📜 License
 
-KitchenOwl is Free Software: You can use, study share and improve it at your will. Specifically you can redistribute and/or modify it under the terms of the Apache-2.0 License.
+KitchenOwl is Free Software: You can use, study share and improve it at your will. Specifically you can redistribute and/or modify it under the terms of the AGPL-3.0 License.
 [Read the License](about/license.md){ .md-button }

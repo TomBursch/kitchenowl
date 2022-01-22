@@ -32,7 +32,6 @@ class SecureStorage extends Storage {
     if (_platformSupportsSecureStorage()) {
       return await _storage.read(key: key);
     }
-    return '';
   }
 
   @override

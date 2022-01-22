@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl_standalone.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -9,6 +10,6 @@ Future main() async {
     await dotenv.load();
   } catch (_) {}
   await PackageInfo.fromPlatform();
-  await findSystemLocale();
+  if (!kIsWeb) await findSystemLocale(); //BUG in package for web?
   runApp(App());
 }

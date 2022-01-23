@@ -27,6 +27,7 @@ class SetupPage extends StatelessWidget {
                     controller: urlController,
                     autofillHints: const [AutofillHints.url],
                     textInputAction: TextInputAction.go,
+                    autocorrect: false,
                     keyboardType: TextInputType.url,
                     onSubmitted: (text) => BlocProvider.of<AuthCubit>(context)
                         .setupServer(urlController.text),

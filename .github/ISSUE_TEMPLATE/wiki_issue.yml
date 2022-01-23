@@ -1,0 +1,19 @@
+name: Wiki issue
+description: Report a Wiki issue
+title: "Wiki issue: "
+labels: ["documentation"]
+body:
+  - type: input
+    id: url
+    attributes:
+      label: "URL to the Wiki page"
+      placeholder: "https://tombursch.github.io/kitchenowl/get-started/"
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: "What's the issue?"
+    validations:
+      required: true
+

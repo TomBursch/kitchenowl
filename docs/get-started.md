@@ -1,6 +1,7 @@
 ## 🤖 App Install
 
 Get it on [Google Play](https://play.google.com/store/apps/details?id=com.tombursch.kitchenowl) or find the current release for your operating system on the [releases page](https://github.com/TomBursch/kitchenowl/releases).
+Please take a quick look at [Tips & Tricks](/tips-and-tricks) to get the best experience in the app.
 
 ## 🗄️ Server Install
 
@@ -32,8 +33,6 @@ You can either install only the backend or add the web-app to it. [Docker](https
         - "80:80"
         depends_on:
         - back
-        networks:
-        - default
         environment:
         - BACK_URL=http://localhost:5000
     back:
@@ -41,8 +40,6 @@ You can either install only the backend or add the web-app to it. [Docker](https
         restart: unless-stopped
         ports:
         - "5000:5000"
-        networks:
-        - default
         environment:
         - JWT_SECRET_KEY=PLEASE_CHANGE_ME
         - FRONT_URL=http://localhost
@@ -50,10 +47,7 @@ You can either install only the backend or add the web-app to it. [Docker](https
         - kitchenowl_data:/data
 
     volumes:
-    kitchenowl_data:
-
-    networks:
-    default:
+        kitchenowl_data:
     ```
     2. Change default values such as `JWT_SECRET_KEY` and the URLs (corresponding to the ones your instance will be running on)
     3. Run `docker-compose up -d`

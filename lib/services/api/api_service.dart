@@ -95,8 +95,8 @@ class ApiService {
             healthy.item2!['min_frontend_version'] <=
                 (int.tryParse(Config.packageInfo?.buildNumber ?? '0') ?? 0) &&
             (healthy.item2!['version'] ?? 0) >= Config.MIN_BACKEND_VERSION) {
+          _settingsNotifier.value = ServerSettings.fromJson(healthy.item2!);
           if (await getInstance().refreshAuth()) {
-            _settingsNotifier.value = ServerSettings.fromJson(healthy.item2!);
             return getInstance()._setConnectionState(Connection.authenticated);
           } else {
             return getInstance()._setConnectionState(Connection.connected);

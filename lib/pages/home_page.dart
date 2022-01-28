@@ -87,10 +87,8 @@ class _HomePageState extends State<HomePage> {
             _homePageMenuItems = [
               _HomePageMenu(
                 page: pages[0],
-                bottomNavigationBarItem: BottomNavigationBarItem(
-                  icon: const Icon(Icons.shopping_bag_outlined),
-                  label: AppLocalizations.of(context)!.shoppingList,
-                ),
+                icon: Icons.shopping_bag_outlined,
+                label: AppLocalizations.of(context)!.shoppingList,
                 onTap: (equals) {
                   if (equals) {
                     shoppingListCubit.refresh("");
@@ -101,10 +99,8 @@ class _HomePageState extends State<HomePage> {
               ),
               _HomePageMenu(
                 page: pages[1],
-                bottomNavigationBarItem: BottomNavigationBarItem(
-                  icon: const Icon(Icons.receipt),
-                  label: AppLocalizations.of(context)!.recipes,
-                ),
+                icon: Icons.receipt,
+                label: AppLocalizations.of(context)!.recipes,
                 onTap: (equals) {
                   if (equals) {
                     recipeListCubit.refresh("");
@@ -151,10 +147,8 @@ class _HomePageState extends State<HomePage> {
               if (state.serverSettings.featurePlanner ?? false)
                 _HomePageMenu(
                   page: pages[2],
-                  bottomNavigationBarItem: BottomNavigationBarItem(
-                    icon: const Icon(Icons.calendar_today_rounded),
-                    label: AppLocalizations.of(context)!.planner,
-                  ),
+                  icon: Icons.calendar_today_rounded,
+                  label: AppLocalizations.of(context)!.planner,
                   onTap: (equals) {
                     plannerCubit.refresh();
                   },
@@ -162,10 +156,8 @@ class _HomePageState extends State<HomePage> {
               if (state.serverSettings.featureExpenses ?? false)
                 _HomePageMenu(
                   page: pages[3],
-                  bottomNavigationBarItem: BottomNavigationBarItem(
-                    icon: const Icon(Icons.account_balance_rounded),
-                    label: AppLocalizations.of(context)!.balances,
-                  ),
+                  icon: Icons.account_balance_rounded,
+                  label: AppLocalizations.of(context)!.balances,
                   onTap: (equals) {
                     expenseCubit.refresh();
                   },
@@ -209,11 +201,8 @@ class _HomePageState extends State<HomePage> {
                 ),
               _HomePageMenu(
                 page: pages[4],
-                bottomNavigationBarItem: BottomNavigationBarItem(
-                  icon:
-                      Icon(isOffline ? Icons.cloud_off_rounded : Icons.person),
-                  label: AppLocalizations.of(context)!.profile,
-                ),
+                icon: isOffline ? Icons.cloud_off_rounded : Icons.person,
+                label: AppLocalizations.of(context)!.profile,
               ),
             ];
 
@@ -272,9 +261,19 @@ class _HomePageState extends State<HomePage> {
                               tileColor: _selectedIndex == e.key
                                   ? Theme.of(context).colorScheme.primary
                                   : null,
-                              title:
-                                  Text(e.value.bottomNavigationBarItem.label!),
-                              leading: e.value.bottomNavigationBarItem.icon,
+                              title: Text(
+                                e.value.label,
+                                style: TextStyle(
+                                    color: _selectedIndex == e.key
+                                        ? Colors.white
+                                        : null),
+                              ),
+                              leading: Icon(
+                                e.value.icon,
+                                color: _selectedIndex == e.key
+                                    ? Colors.white
+                                    : null,
+                              ),
                               onTap: () =>
                                   _onItemTapped(e.key, _homePageMenuItems),
                             ),
@@ -298,7 +297,10 @@ class _HomePageState extends State<HomePage> {
                       showSelectedLabels: true,
                       type: BottomNavigationBarType.fixed,
                       items: _homePageMenuItems
-                          .map((e) => e.bottomNavigationBarItem)
+                          .map((e) => BottomNavigationBarItem(
+                                icon: Icon(e.icon),
+                                label: e.label,
+                              ))
                           .toList(),
                       currentIndex: _selectedIndex,
                       onTap: (i) => _onItemTapped(i, _homePageMenuItems),
@@ -314,13 +316,15 @@ class _HomePageState extends State<HomePage> {
 
 class _HomePageMenu extends Equatable {
   final Widget page;
-  final BottomNavigationBarItem bottomNavigationBarItem;
+  final IconData icon;
+  final String label;
   final Widget? floatingActionButton;
   final Function(bool)? onTap;
 
   const _HomePageMenu(
       {required this.page,
-      required this.bottomNavigationBarItem,
+      required this.icon,
+      required this.label,
       this.floatingActionButton,
       this.onTap});
 

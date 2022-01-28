@@ -78,7 +78,16 @@ class _RecipeListPageState extends State<RecipeListPage> {
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 4),
                                 child: FilterChip(
-                                  label: Text(tag.name),
+                                  label: Text(
+                                    tag.name,
+                                    style: TextStyle(
+                                        color:
+                                            (state is FilteredListRecipeCubitState) &&
+                                                    state.selectedTags
+                                                        .contains(tag)
+                                                ? Colors.white
+                                                : null),
+                                  ),
                                   selected:
                                       (state is FilteredListRecipeCubitState) &&
                                           state.selectedTags.contains(tag),

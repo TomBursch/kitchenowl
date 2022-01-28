@@ -132,7 +132,13 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                       builder: (context, state) {
                         List<Widget> children = state.tags
                             .map<Widget>((e) => FilterChip(
-                                  label: Text(e.name),
+                                  label: Text(
+                                    e.name,
+                                    style: TextStyle(
+                                        color: state.selectedTags.contains(e)
+                                            ? Colors.white
+                                            : null),
+                                  ),
                                   selected: state.selectedTags.contains(e),
                                   onSelected: (selected) =>
                                       cubit.selectTag(e, selected),

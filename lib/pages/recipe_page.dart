@@ -97,12 +97,15 @@ class _RecipePageState extends State<RecipePage> {
                               children: [
                                 if ((state.recipe.time) > 0)
                                   Chip(
-                                    avatar: const Icon(Icons.alarm_rounded),
+                                    avatar: const Icon(Icons.alarm_rounded,
+                                        color: Colors.white),
                                     label: Text(
                                       state.recipe.time.toString() +
                                           " " +
                                           AppLocalizations.of(context)!
                                               .minutesAbbrev,
+                                      style:
+                                          const TextStyle(color: Colors.white),
                                     ),
                                     backgroundColor:
                                         Theme.of(context).colorScheme.secondary,

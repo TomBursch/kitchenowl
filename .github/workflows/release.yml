@@ -58,7 +58,7 @@ jobs:
     container: ${{ matrix.container }}
     strategy:
       matrix:
-        target: [macOS, Windows, Linux, Android, Debian, Fedora]
+        target: [macOS, Windows, Linux, Android, Debian]
         include:
           - os: macos-10.15 # Catalina
             target: macOS
@@ -90,15 +90,15 @@ jobs:
             build_path: build/debian/release
             asset_extension: .deb
             asset_content_type: application/vnd.debian.binary-package
-          - os: ubuntu-20.04
-            container:
-              image: fedora:latest
-              options: --group-add 135
-            target: Fedora
-            build_target: linux
-            build_path: build/fedora/release
-            asset_extension: .rpm
-            asset_content_type: application/x-rpm
+          # - os: ubuntu-20.04
+          #   container:
+          #     image: fedora:latest
+          #     options: --group-add 135
+          #   target: Fedora
+          #   build_target: linux
+          #   build_path: build/fedora/release
+          #   asset_extension: .rpm
+          #   asset_content_type: application/x-rpm
       # Disable fail-fast as we want results from all even if one fails.
       fail-fast: false
     needs: draft-release

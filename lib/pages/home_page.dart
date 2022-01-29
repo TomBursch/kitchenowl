@@ -14,6 +14,9 @@ import 'package:kitchenowl/pages/expense_add_update_page.dart';
 import 'package:kitchenowl/pages/recipe_add_update_page.dart';
 import 'package:kitchenowl/pages/home_page/home_page.dart';
 import 'package:kitchenowl/kitchenowl.dart';
+import 'package:kitchenowl/widgets/action_widget.dart';
+import 'package:kitchenowl/widgets/expandable_fab.dart';
+import 'package:kitchenowl/widgets/text_dialog.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
 class HomePage extends StatefulWidget {
@@ -111,38 +114,48 @@ class _HomePageState extends State<HomePage> {
                   }
                 },
                 floatingActionButton: !isOffline
-                    ? OpenContainer(
-                        transitionType: ContainerTransitionType.fade,
-                        openBuilder: (BuildContext context, VoidCallback _) {
-                          return const AddUpdateRecipePage();
-                        },
-                        openColor: Theme.of(context).scaffoldBackgroundColor,
-                        onClosed: (data) {
-                          if (data == UpdateEnum.updated) {
-                            recipeListCubit.refresh();
-                          }
-                        },
-                        closedElevation: 6.0,
-                        closedShape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(56 / 2),
+                    ? ExpandableFab(
+                        distance: 70,
+                        openIcon: const Icon(Icons.add),
+                        children: [
+                          ActionButton(
+                            onPressed: () async {
+                              final res = await Navigator.of(context)
+                                  .push<UpdateEnum>(MaterialPageRoute(
+                                      builder: (context) =>
+                                          const AddUpdateRecipePage()));
+                              if (res == UpdateEnum.updated) {
+                                recipeListCubit.refresh();
+                              }
+                            },
+                            icon: const Icon(Icons.add),
                           ),
-                        ),
-                        closedColor: Theme.of(context).colorScheme.secondary,
-                        closedBuilder:
-                            (BuildContext context, VoidCallback openContainer) {
-                          return SizedBox(
-                            height: 56,
-                            width: 56,
-                            child: Center(
-                              child: Icon(
-                                Icons.add,
-                                color:
-                                    Theme.of(context).colorScheme.onSecondary,
-                              ),
-                            ),
-                          );
-                        },
+                          ActionButton(
+                              onPressed: () async {
+                                final url = await showDialog<String>(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return TextDialog(
+                                        title: AppLocalizations.of(context)!
+                                            .addTag,
+                                        doneText:
+                                            AppLocalizations.of(context)!.add,
+                                        hintText:
+                                            AppLocalizations.of(context)!.name,
+                                      );
+                                    });
+                                if (url == null || url.isEmpty) return;
+
+                                final res = await Navigator.of(context)
+                                    .push<UpdateEnum>(MaterialPageRoute(
+                                        builder: (context) =>
+                                            const AddUpdateRecipePage()));
+                                if (res == UpdateEnum.updated) {
+                                  recipeListCubit.refresh();
+                                }
+                              },
+                              icon: const Icon(Icons.link_rounded)),
+                        ],
                       )
                     : null,
               ),

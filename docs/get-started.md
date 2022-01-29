@@ -1,4 +1,4 @@
-## 🤖 App Install
+## :robot: App Install
 
 Get it on [Google Play](https://play.google.com/store/apps/details?id=com.tombursch.kitchenowl) or find the current release for your operating system on the [releases page](https://github.com/TomBursch/kitchenowl/releases).
 Please take a quick look at [Tips & Tricks](/tips-and-tricks) to get the best experience in the app.
@@ -51,3 +51,5 @@ You can either install only the backend or add the web-app to it. [Docker](https
     ```
     2. Change default values such as `JWT_SECRET_KEY` and the URLs (corresponding to the ones your instance will be running on)
     3. Run `docker-compose up -d`
+
+:exclamation: We recommend running KitchenOwl behind a reverse proxy with https (e.g. [nginx](https://nginx.org/en/docs/http/configuring_https_servers.html])) :exclamation:

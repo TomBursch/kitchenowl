@@ -5,7 +5,8 @@ from flask_jwt_extended import jwt_required
 from app import app
 from app.helpers import validate_args
 from app.models import Recipe, Item, Tag
-from .schemas import SearchByNameRequest, AddRecipe, UpdateRecipe, GetAllFilterRequest
+from recipe_scrapers import scrape_me
+from .schemas import SearchByNameRequest, AddRecipe, UpdateRecipe, GetAllFilterRequest, ScrapeRecipe
 
 
 @app.route('/recipe', methods=['GET'])
@@ -130,6 +131,18 @@ def searchRecipeByName(args):
 @validate_args(GetAllFilterRequest)
 def getAllFiltered(args):
     return jsonify([e.obj_to_full_dict() for e in Recipe.all_by_name_with_filter(args["filter"])])
+
+@app.route('/recipe/scrape', methods=['GET'])
+@jwt_required()
+@validate_args(ScrapeRecipe)
+def scrapeRecipe(args):
+    scraper = scrape_me(args['url'], wild_mode=True)
+    recipe = Recipe()
+    recipe.name = scraper.title()
+    recipe.time = scraper.total_time()
+    recipe.description = scraper.description() + "\n\n" + scraper.instructions()
+    recipe.photo = scraper.image()
+    return jsonify(recipe.obj_to_dict())
 
 
 # @app.route('/recipe/<id>/item', methods=['POST'])

@@ -61,3 +61,9 @@ class RemoveItem(Schema):
     item_id = fields.Integer(
         required=True,
     )
+
+class ScrapeRecipe(Schema):
+    url = fields.String(
+        required=True,
+        validate=lambda a: len(a) > 0
+    )

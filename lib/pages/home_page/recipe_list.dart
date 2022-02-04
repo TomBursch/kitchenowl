@@ -53,7 +53,6 @@ class _RecipeListPageState extends State<RecipeListPage> {
                   clearOnSubmit: false,
                   onSearch: (s) => cubit.search(s),
                   textInputAction: TextInputAction.search,
-                  onSubmitted: () => FocusScope.of(context).unfocus(),
                 ),
               ),
             ),

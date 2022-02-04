@@ -33,8 +33,6 @@ class CreateUserPage extends StatelessWidget {
                         controller: usernameController,
                         autofocus: true,
                         textInputAction: TextInputAction.next,
-                        onEditingComplete: () =>
-                            FocusScope.of(context).nextFocus(),
                         decoration: InputDecoration(
                           labelText: AppLocalizations.of(context)!.username,
                         ),
@@ -42,8 +40,6 @@ class CreateUserPage extends StatelessWidget {
                       TextField(
                         controller: nameController,
                         textInputAction: TextInputAction.next,
-                        onEditingComplete: () =>
-                            FocusScope.of(context).nextFocus(),
                         decoration: InputDecoration(
                           labelText: AppLocalizations.of(context)!.name,
                         ),
@@ -52,7 +48,6 @@ class CreateUserPage extends StatelessWidget {
                         controller: passwordController,
                         obscureText: true,
                         textInputAction: TextInputAction.go,
-                        onSubmitted: (text) => FocusScope.of(context).unfocus(),
                         decoration: InputDecoration(
                           labelText: AppLocalizations.of(context)!.password,
                         ),

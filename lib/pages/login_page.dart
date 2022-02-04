@@ -33,8 +33,6 @@ class LoginPage extends StatelessWidget {
                       autofocus: true,
                       autofillHints: const [AutofillHints.username],
                       textInputAction: TextInputAction.next,
-                      onEditingComplete: () =>
-                          FocusScope.of(context).nextFocus(),
                       decoration: InputDecoration(
                         labelText: AppLocalizations.of(context)!.username,
                       ),

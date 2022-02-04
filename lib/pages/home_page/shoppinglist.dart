@@ -73,8 +73,6 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                               : null,
                         );
                       }
-                    } else {
-                      FocusScope.of(context).unfocus();
                     }
                   },
                 ),

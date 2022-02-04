@@ -34,7 +34,6 @@ class OnboardingPage extends StatelessWidget {
                       AutofillHints.username
                     ],
                     textInputAction: TextInputAction.next,
-                    onEditingComplete: () => FocusScope.of(context).nextFocus(),
                     decoration: InputDecoration(
                       labelText: AppLocalizations.of(context)!.username,
                     ),
@@ -46,7 +45,6 @@ class OnboardingPage extends StatelessWidget {
                       AutofillHints.name,
                       AutofillHints.nickname
                     ],
-                    onEditingComplete: () => FocusScope.of(context).nextFocus(),
                     decoration: InputDecoration(
                       labelText: AppLocalizations.of(context)!.name,
                     ),

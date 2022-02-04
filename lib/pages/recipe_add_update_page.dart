@@ -100,8 +100,6 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                         controller: nameController,
                         onChanged: (s) => cubit.setName(s),
                         textInputAction: TextInputAction.next,
-                        onEditingComplete: () =>
-                            FocusScope.of(context).nextFocus(),
                         decoration: InputDecoration(
                           labelText: AppLocalizations.of(context)!.name,
                         ),

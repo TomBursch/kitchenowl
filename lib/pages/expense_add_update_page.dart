@@ -101,8 +101,6 @@ class _AddUpdateRecipePageState extends State<AddUpdateExpensePage> {
                           controller: nameController,
                           onChanged: (s) => cubit.setName(s),
                           textInputAction: TextInputAction.next,
-                          onEditingComplete: () =>
-                              FocusScope.of(context).nextFocus(),
                           decoration: InputDecoration(
                             labelText: AppLocalizations.of(context)!.name,
                           ),
@@ -116,8 +114,6 @@ class _AddUpdateRecipePageState extends State<AddUpdateExpensePage> {
                               cubit.setAmount(double.tryParse(s) ?? 0),
                           textInputAction: TextInputAction.next,
                           keyboardType: TextInputType.number,
-                          onEditingComplete: () =>
-                              FocusScope.of(context).nextFocus(),
                           inputFormatters: [CurrencyTextInputFormater()],
                           decoration: InputDecoration(
                             labelText:
@@ -222,8 +218,6 @@ class _AddUpdateRecipePageState extends State<AddUpdateExpensePage> {
                               inputFormatters: [
                                 FilteringTextInputFormatter.digitsOnly
                               ],
-                              onEditingComplete: () =>
-                                  FocusScope.of(context).nextFocus(),
                             ),
                           ),
                         );

@@ -65,7 +65,6 @@ class _SettingsUserPageState extends State<SettingsUserPage> {
                     autofocus: true,
                     enabled: false,
                     textInputAction: TextInputAction.next,
-                    onEditingComplete: () => FocusScope.of(context).nextFocus(),
                     decoration: InputDecoration(
                       labelText: AppLocalizations.of(context)!.username,
                     ),

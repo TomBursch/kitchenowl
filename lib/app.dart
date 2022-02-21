@@ -58,9 +58,9 @@ class App extends StatelessWidget {
                 value: _getSystemUI(context, state),
                 child: BlocBuilder<AuthCubit, AuthState>(
                   builder: (context, state) {
-                    if (state is Setup) return SetupPage();
-                    if (state is Onboarding) return OnboardingPage();
-                    if (state is Unauthenticated) return LoginPage();
+                    if (state is Setup) return const SetupPage();
+                    if (state is Onboarding) return const OnboardingPage();
+                    if (state is Unauthenticated) return const LoginPage();
                     if (state is Authenticated) return const HomePage();
                     if (state is Unreachable) return const UnreachablePage();
                     if (state is Unsupported) return const UnsupportedPage();

@@ -3,10 +3,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/cubits/auth_cubit.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 
-class SetupPage extends StatelessWidget {
-  final TextEditingController urlController = TextEditingController();
+class SetupPage extends StatefulWidget {
+  const SetupPage({Key? key}) : super(key: key);
 
-  SetupPage({Key? key}) : super(key: key);
+  @override
+  State<SetupPage> createState() => _SetupPageState();
+}
+
+class _SetupPageState extends State<SetupPage> {
+  final TextEditingController urlController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {

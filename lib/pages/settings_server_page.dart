@@ -202,7 +202,7 @@ class _SettingsServerPageState extends State<SettingsServerPage> {
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (context) => BlocProvider.value(
                                     value: cubit,
-                                    child: CreateUserPage(),
+                                    child: const CreateUserPage(),
                                   ))),
                       padding: EdgeInsets.zero,
                     )

@@ -39,7 +39,7 @@ extension UserApi on ApiService {
 
     final body = {};
     if (name != null) body['name'] = name;
-    if (password != null) body['name'] = password;
+    if (password != null) body['password'] = password;
 
     final res = await post('/user', jsonEncode(body));
     return res.statusCode == 200;

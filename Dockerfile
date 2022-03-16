@@ -1,5 +1,5 @@
 # Install dependencies
-FROM debian:latest
+FROM debian:latest AS builder
 
 RUN apt-get update -y
 RUN apt-get upgrade -y
@@ -48,21 +48,19 @@ RUN flutter packages get
 # Build the app for the web
 RUN flutter build web
 
-RUN mkdir /usr/local/web/
-RUN ls
-RUN cp -r ./build/web/* ./entrypoint.sh /usr/local/web/
-WORKDIR /usr/local/web
+FROM nginx:stable-alpine
 
-# Clean up files
-RUN rm -r /usr/local/src/app
-RUN rm -r /usr/local/src/flutter
+RUN mkdir -p /var/www/web/kitchenowl
+COPY --from=builder /usr/local/src/app/build/web /var/www/web/kitchenowl
+COPY entrypoint.sh /docker-entrypoint.d/
+COPY default.conf.template /etc/nginx/templates/
 
 # Set the server startup script as executable
-RUN chmod u+x ./entrypoint.sh
+RUN chmod u+x /docker-entrypoint.d/entrypoint.sh
 
 # Set ENV
 ENV BACK_URL='http://localhost:5000'
+ENV DNS_SERVER='8.8.8.8'
 
-# Start the web server
+# Expose the web server
 EXPOSE 80
-ENTRYPOINT [ "./entrypoint.sh" ]

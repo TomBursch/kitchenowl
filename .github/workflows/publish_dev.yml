@@ -1,10 +1,8 @@
-# This is a basic workflow to help you get started with Actions
-
 name: CI Dev to Docker Hub
 
 # Controls when the workflow will run
 on:
-  # Triggers the workflow on push events but only for the stable branch
+  # Triggers the workflow on push events but for the main branch
   push:
     branches: [ main ]
 

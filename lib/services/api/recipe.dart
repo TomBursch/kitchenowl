@@ -4,8 +4,10 @@ import 'package:kitchenowl/models/tag.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
 
 extension RecipeApi on ApiService {
+  static const baseRoute = '/recipe';
+
   Future<List<Recipe>?> getRecipes() async {
-    final res = await get('/recipe');
+    final res = await get(baseRoute);
     if (res.statusCode != 200) return null;
 
     final body = List.from(jsonDecode(res.body));
@@ -15,7 +17,7 @@ extension RecipeApi on ApiService {
 
   Future<List<Recipe>?> getRecipesFiltered(Set<Tag> filter) async {
     final res = await post(
-      '/recipe/filter',
+      baseRoute + '/filter',
       jsonEncode({"filter": filter.map((e) => e.toString()).toList()}),
     );
     if (res.statusCode != 200) return null;
@@ -26,7 +28,7 @@ extension RecipeApi on ApiService {
   }
 
   Future<List<Recipe>?> searchRecipe(String query) async {
-    final res = await get('/recipe/search?query=$query');
+    final res = await get(baseRoute + '/search?query=$query');
     if (res.statusCode != 200) return null;
 
     final body = List.from(jsonDecode(res.body));
@@ -35,7 +37,7 @@ extension RecipeApi on ApiService {
   }
 
   Future<Recipe?> getRecipe(Recipe recipe) async {
-    final res = await get('/recipe/${recipe.id}');
+    final res = await get(baseRoute + '/${recipe.id}');
     if (res.statusCode != 200) return null;
 
     final body = jsonDecode(res.body);
@@ -44,19 +46,20 @@ extension RecipeApi on ApiService {
   }
 
   Future<bool> addRecipe(Recipe recipe) async {
-    final res = await post('/recipe', jsonEncode(recipe.toJson()));
+    final res = await post(baseRoute + '', jsonEncode(recipe.toJson()));
 
     return res.statusCode == 200;
   }
 
   Future<bool> updateRecipe(Recipe recipe) async {
-    final res = await post('/recipe/${recipe.id}', jsonEncode(recipe.toJson()));
+    final res =
+        await post(baseRoute + '/${recipe.id}', jsonEncode(recipe.toJson()));
 
     return res.statusCode == 200;
   }
 
   Future<bool> deleteRecipe(Recipe recipe) async {
-    final res = await delete('/recipe/${recipe.id}');
+    final res = await delete(baseRoute + '/${recipe.id}');
 
     return res.statusCode == 200;
   }

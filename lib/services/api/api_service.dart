@@ -27,7 +27,7 @@ class ApiService {
   // ignore: constant_identifier_names
   static const Duration _TIMEOUT = Duration(seconds: 2);
   // ignore: constant_identifier_names
-  static const String _API_PATH = "/api/";
+  static const String _API_PATH = "/api";
 
   static ApiService? _instance;
   final _client = http.Client();

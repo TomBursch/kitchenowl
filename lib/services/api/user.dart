@@ -4,9 +4,11 @@ import 'package:kitchenowl/models/user.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
 
 extension UserApi on ApiService {
+  static const baseRoute = '/user';
+
   Future<User?> getUser() async {
     if (!isAuthenticated()) return null;
-    final res = await get('/user');
+    final res = await get(baseRoute);
     if (res.statusCode == 200) {
       final body = jsonDecode(res.body);
 
@@ -18,7 +20,7 @@ extension UserApi on ApiService {
 
   Future<User?> getUserById(int userId) async {
     if (!isAuthenticated()) return null;
-    final res = await get('/user/$userId');
+    final res = await get(baseRoute + '/$userId');
     if (res.statusCode == 200) {
       final body = jsonDecode(res.body);
 
@@ -30,7 +32,7 @@ extension UserApi on ApiService {
 
   Future<List<User>?> getAllUsers() async {
     if (!isAuthenticated()) return null;
-    final res = await get('/users');
+    final res = await get(baseRoute + '/all');
     if (res.statusCode == 200) {
       final body = List.from(jsonDecode(res.body));
 
@@ -47,7 +49,7 @@ extension UserApi on ApiService {
     if (name != null) body['name'] = name;
     if (password != null) body['password'] = password;
 
-    final res = await post('/user', jsonEncode(body));
+    final res = await post(baseRoute + '', jsonEncode(body));
 
     return res.statusCode == 200;
   }
@@ -65,7 +67,7 @@ extension UserApi on ApiService {
     if (password != null) body['password'] = password;
     if (admin != null) body['admin'] = admin;
 
-    final res = await post('/user/$userId', jsonEncode(body));
+    final res = await post(baseRoute + '/$userId', jsonEncode(body));
 
     return res.statusCode == 200;
   }
@@ -84,7 +86,7 @@ extension UserApi on ApiService {
   }
 
   Future<bool> removeUser(User user) async {
-    final res = await delete('/user/${user.id}');
+    final res = await delete(baseRoute + '/${user.id}');
 
     return res.statusCode == 200;
   }

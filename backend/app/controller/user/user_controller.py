@@ -1,26 +1,28 @@
 from app.errors import NotFoundRequest, UnauthorizedRequest
 from app.helpers.admin_required import admin_required
 from app.helpers import validate_args
-from flask import jsonify
+from flask import jsonify, Blueprint
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from app import app
 from app.models import User
 from .schemas import CreateUser, UpdateUser
 
 
-@app.route('/users', methods=['GET'])
+user = Blueprint('user', __name__)
+
+
+@user.route('/all', methods=['GET'])
 @jwt_required()
 def getAllUsers():
     return jsonify([e.obj_to_dict(skip_columns=['password']) for e in User.all_by_name()])
 
 
-@app.route('/user', methods=['GET'])
+@user.route('', methods=['GET'])
 @jwt_required()
 def getLoggedInUser():
     return jsonify(User.find_by_username(get_jwt_identity()).obj_to_dict(skip_columns=['password']))
 
 
-@app.route('/user/<id>', methods=['GET'])
+@user.route('/<id>', methods=['GET'])
 @jwt_required()
 @admin_required
 def getUserById(id):
@@ -30,7 +32,7 @@ def getUserById(id):
     return jsonify(user.obj_to_dict(skip_columns=['password']))
 
 
-@app.route('/user/<id>', methods=['DELETE'])
+@user.route('/<id>', methods=['DELETE'])
 @jwt_required()
 @admin_required
 def deleteUserById(id):
@@ -43,7 +45,7 @@ def deleteUserById(id):
     return jsonify({'msg': 'DONE'})
 
 
-@app.route('/user', methods=['POST'])
+@user.route('', methods=['POST'])
 @jwt_required()
 @validate_args(UpdateUser)
 def updateUser(args):
@@ -58,7 +60,7 @@ def updateUser(args):
     return jsonify({'msg': 'DONE'})
 
 
-@app.route('/user/<id>', methods=['POST'])
+@user.route('/<id>', methods=['POST'])
 @jwt_required()
 @admin_required
 @validate_args(UpdateUser)
@@ -76,7 +78,7 @@ def updateUserById(args, id):
     return jsonify({'msg': 'DONE'})
 
 
-@app.route('/new-user', methods=['POST'])
+@user.route('/new', methods=['POST'])
 @jwt_required()
 @admin_required
 @validate_args(CreateUser)

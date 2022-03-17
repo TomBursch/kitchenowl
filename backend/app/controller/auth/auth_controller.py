@@ -1,13 +1,14 @@
 from app.helpers import validate_args
-from flask import jsonify
+from flask import jsonify, Blueprint
 from flask_jwt_extended import jwt_required, create_access_token, create_refresh_token, get_jwt_identity
-from app.config import app
 from app.models import User
 from app.errors import UnauthorizedRequest
 from .schemas import Login
 
+auth = Blueprint('auth', __name__)
 
-@app.route('/auth', methods=['POST'])
+
+@auth.route('', methods=['POST'])
 @validate_args(Login)
 def login(args):
     username = args['username'].lower()
@@ -21,7 +22,7 @@ def login(args):
     return jsonify(ret)
 
 
-@app.route('/auth/fresh-login', methods=['POST'])
+@auth.route('/fresh-login', methods=['POST'])
 @validate_args(Login)
 def fresh_login(args):
     username = args['username'].lower()
@@ -32,7 +33,7 @@ def fresh_login(args):
     return jsonify(ret), 200
 
 
-@app.route('/auth/refresh', methods=['GET'])
+@auth.route('/refresh', methods=['GET'])
 @jwt_required(refresh=True)
 def refresh():
     current_user = get_jwt_identity()

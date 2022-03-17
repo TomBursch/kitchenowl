@@ -1,1 +1,1 @@
-from . import tag_controller
+from .tag_controller import tag

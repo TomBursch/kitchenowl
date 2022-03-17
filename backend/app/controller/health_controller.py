@@ -1,13 +1,11 @@
-from flask import jsonify
-from app import app
+from flask import jsonify, Blueprint
 from app.config import BACKEND_VERSION, MIN_FRONTEND_VERSION
 from app.models import Settings
 
+health = Blueprint('health', __name__)
 
-@app.route(
-    '/health/8M4F88S8ooi4sMbLBfkkV7ctWwgibW6V',
-    methods=['GET']
-)
+
+@health.route('', methods=['GET'])
 def get_health():
     info = {
         'msg': "OK",

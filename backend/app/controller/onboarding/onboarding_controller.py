@@ -1,20 +1,21 @@
 from app.helpers import validate_args
-from flask import jsonify
+from flask import jsonify, Blueprint
 from flask_jwt_extended import create_access_token, create_refresh_token
-from app import app
 from app.models import User
 from .schemas import CreateUser
 
+onboarding = Blueprint('onboarding', __name__)
 
-@app.route('/onboarding', methods=['GET'])
+
+@onboarding.route('', methods=['GET'])
 def isOnboarding():
     onboarding = User.count() == 0
     return jsonify({"onboarding": onboarding})
 
 
-@app.route('/onboarding', methods=['POST'])
+@onboarding.route('', methods=['POST'])
 @validate_args(CreateUser)
-def onboarding(args):
+def onboard(args):
     if User.count() == 0:
         username = args['username'].lower()
         User.create(username, args['password'], args['name'], owner=True)

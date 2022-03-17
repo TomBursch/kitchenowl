@@ -1,21 +1,22 @@
 from app.errors import NotFoundRequest
 from app.models.recipe import RecipeItems, RecipeTags
-from flask import jsonify
+from flask import jsonify, Blueprint
 from flask_jwt_extended import jwt_required
-from app import app
 from app.helpers import validate_args
 from app.models import Recipe, Item, Tag
 from recipe_scrapers import scrape_me
 from .schemas import SearchByNameRequest, AddRecipe, UpdateRecipe, GetAllFilterRequest, ScrapeRecipe
 
+recipe = Blueprint('recipe', __name__)
 
-@app.route('/recipe', methods=['GET'])
+
+@recipe.route('', methods=['GET'])
 @jwt_required()
 def getAllRecipes():
     return jsonify([e.obj_to_full_dict() for e in Recipe.all_by_name()])
 
 
-@app.route('/recipe/<id>', methods=['GET'])
+@recipe.route('/<id>', methods=['GET'])
 @jwt_required()
 def getRecipeById(id):
     recipe = Recipe.find_by_id(id)
@@ -24,7 +25,7 @@ def getRecipeById(id):
     return jsonify(recipe.obj_to_full_dict())
 
 
-@app.route('/recipe', methods=['POST'])
+@recipe.route('', methods=['POST'])
 @jwt_required()
 @validate_args(AddRecipe)
 def addRecipe(args):
@@ -58,7 +59,7 @@ def addRecipe(args):
     return jsonify(recipe.obj_to_dict())
 
 
-@app.route('/recipe/<id>', methods=['POST'])
+@recipe.route('/<id>', methods=['POST'])
 @jwt_required()
 @validate_args(UpdateRecipe)
 def updateRecipe(args, id):  # noqa: C901
@@ -112,27 +113,28 @@ def updateRecipe(args, id):  # noqa: C901
     return jsonify(recipe.obj_to_dict())
 
 
-@app.route('/recipe/<id>', methods=['DELETE'])
+@recipe.route('/<id>', methods=['DELETE'])
 @jwt_required()
 def deleteRecipeById(id):
     Recipe.delete_by_id(id)
     return jsonify({'msg': 'DONE'})
 
 
-@app.route('/recipe/search', methods=['GET'])
+@recipe.route('/search', methods=['GET'])
 @jwt_required()
 @validate_args(SearchByNameRequest)
 def searchRecipeByName(args):
     return jsonify([e.obj_to_dict() for e in Recipe.search_name(args['query'])])
 
 
-@app.route('/recipe/filter', methods=['POST'])
+@recipe.route('/filter', methods=['POST'])
 @jwt_required()
 @validate_args(GetAllFilterRequest)
 def getAllFiltered(args):
     return jsonify([e.obj_to_full_dict() for e in Recipe.all_by_name_with_filter(args["filter"])])
 
-@app.route('/recipe/scrape', methods=['GET'])
+
+@recipe.route('/scrape', methods=['GET'])
 @jwt_required()
 @validate_args(ScrapeRecipe)
 def scrapeRecipe(args):
@@ -145,7 +147,7 @@ def scrapeRecipe(args):
     return jsonify(recipe.obj_to_dict())
 
 
-# @app.route('/recipe/<id>/item', methods=['POST'])
+# @recipe.route('/<id>/item', methods=['POST'])
 # @jwt_required()
 # @validate_args(AddItemByName)
 # def addRecipeItemByName(args, id):
@@ -164,7 +166,7 @@ def scrapeRecipe(args):
 #     return jsonify(item.obj_to_dict())
 
 
-# @app.route('/recipe/<id>/item', methods=['DELETE'])
+# @recipe.route('/<id>/item', methods=['DELETE'])
 # @jwt_required()
 # @validate_args(RemoveItem)
 # def removeRecipeItem(args, id):

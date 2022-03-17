@@ -32,7 +32,7 @@ The `description` is a descriptive summary of the change the PR will make.
 - Activate your python environment `source venv/bin/activate` (environment can be deactivated with `deactivate`)
 - Install dependencies `pip3 install -r requirements.txt`
 - Initialize/Upgrade the sqlite database with `flask db upgrade`
-- Run debug server with `python3 wsgi.py`
+- Run debug server with `python3 wsgi.py` or without debugging `flask run`
 - The backend should be reachable at `localhost:5000`
 
 ### Git Commit Message Style

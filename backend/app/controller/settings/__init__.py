@@ -1,1 +1,1 @@
-from . import settings_controller
+from .settings_controller import settings

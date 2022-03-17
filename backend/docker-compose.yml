@@ -2,24 +2,25 @@ version: "3"
 services:
   front:
     image: tombursch/kitchenowl-web:latest
+    environment:
+      - FRONT_URL=http://localhost
+      # - BACK_URL=back:5000 # Optional should not be changed unless you know what youre doing
     ports:
       - "80:80"
     depends_on:
       - back
     networks:
       - default
-    environment:
-      - BACK_URL=http://localhost:5000
   back:
     image: tombursch/kitchenowl:latest
     restart: unless-stopped
-    ports:
-      - "5000:5000"
+    # ports: # Optional and only needed when only hosting the backend
+    #   - "80:80"
     networks:
       - default
     environment:
       - JWT_SECRET_KEY=PLEASE_CHANGE_ME
-      - FRONT_URL=http://localhost
+      # - FRONT_URL=http://localhost # Optional and only needed if 
     volumes:
     - kitchenowl_data:/data
 

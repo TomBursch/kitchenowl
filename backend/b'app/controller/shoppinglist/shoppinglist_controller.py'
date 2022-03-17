@@ -1,7 +1,7 @@
-from app.models import ShoppinglistItems
-from flask import jsonify
+from app.models import ShoppinglistItems, shoppinglist
+from flask import jsonify, Blueprint
 from flask_jwt_extended import jwt_required
-from app import app, db
+from app import db
 from app.models import Item, Shoppinglist, History, Status, Association
 from app.helpers import validate_args
 from .schemas import (RemoveItem, UpdateDescription,
@@ -10,7 +10,10 @@ from app.errors import NotFoundRequest
 from datetime import datetime, timedelta
 
 
-@app.before_first_request
+shoppinglist = Blueprint('shoppinglist', __name__)
+
+
+@shoppinglist.before_app_first_request
 def before_first_request():
     # Add default shoppinglist
     if(not Shoppinglist.find_by_id(1)):
@@ -20,7 +23,7 @@ def before_first_request():
         sl.save()
 
 
-@app.route('/shoppinglist/<id>/item/<item_id>', methods=['GET'])
+@shoppinglist.route('/<id>/item/<item_id>', methods=['GET'])
 @jwt_required()
 def getShoppingListItem(id, item_id):
     item = Item.find_by_id(item_id)
@@ -29,7 +32,7 @@ def getShoppingListItem(id, item_id):
     return jsonify(item.obj_to_dict())
 
 
-@app.route('/shoppinglist/<id>/item/<item_id>', methods=['POST'])
+@shoppinglist.route('/<id>/item/<item_id>', methods=['POST'])
 @jwt_required()
 @validate_args(UpdateDescription)
 def updateItemDescription(args, id, item_id):
@@ -42,7 +45,7 @@ def updateItemDescription(args, id, item_id):
     return jsonify(con.obj_to_item_dict())
 
 
-@app.route('/shoppinglist/<id>/items', methods=['GET'])
+@shoppinglist.route('/<id>/items', methods=['GET'])
 @jwt_required()
 def getAllShoppingListItems(id):
     items = ShoppinglistItems.query.filter(
@@ -52,7 +55,7 @@ def getAllShoppingListItems(id):
     return jsonify([e.obj_to_item_dict() for e in items])
 
 
-@app.route('/shoppinglist/<id>/recent-items', methods=['GET'])
+@shoppinglist.route('/<id>/recent-items', methods=['GET'])
 @jwt_required()
 def getRecentItems(id):
     items = History.get_recent(id)
@@ -100,7 +103,7 @@ def getSuggestionsBasedOnFrequency(id, item_count):
     return suggestions
 
 
-@app.route('/shoppinglist/<id>/suggested-items', methods=['GET'])
+@shoppinglist.route('/<id>/suggested-items', methods=['GET'])
 @jwt_required()
 def getSuggestedItems(id):
     item_suggestion_count = 9
@@ -114,7 +117,7 @@ def getSuggestedItems(id):
     return jsonify([item.obj_to_dict() for item in suggestions])
 
 
-@app.route('/shoppinglist/<id>/add-item-by-name', methods=['POST'])
+@shoppinglist.route('/<id>/add-item-by-name', methods=['POST'])
 @jwt_required()
 @validate_args(AddItemByName)
 def addShoppinglistItemByName(args, id):
@@ -138,7 +141,7 @@ def addShoppinglistItemByName(args, id):
     return jsonify(item.obj_to_dict())
 
 
-@app.route('/shoppinglist/<id>/item', methods=['DELETE'])
+@shoppinglist.route('/<id>/item', methods=['DELETE'])
 @jwt_required()
 @validate_args(RemoveItem)
 def removeShoppinglistItem(args, id):
@@ -158,7 +161,7 @@ def removeShoppinglistItem(args, id):
     return jsonify({'msg': "DONE"})
 
 
-@app.route('/shoppinglist', methods=['POST'])
+@shoppinglist.route('', methods=['POST'])
 @jwt_required()
 @validate_args(CreateList)
 def createList(args):
@@ -166,7 +169,7 @@ def createList(args):
         args['name']).save().obj_to_dict())
 
 
-@app.route('/shoppinglist/<id>/recipeitems', methods=['POST'])
+@shoppinglist.route('/<id>/recipeitems', methods=['POST'])
 @jwt_required()
 @validate_args(AddRecipeItems)
 def addRecipeItems(args, id):
@@ -202,7 +205,7 @@ def addRecipeItems(args, id):
     shoppinglist.save()
     return jsonify(item.obj_to_dict())
 
-# @app.route('/shoppinglist/<id>/item', methods=['POST'])
+# @shoppinglist.route('/<id>/item', methods=['POST'])
 # @jwt_required()
 # @validate_args(UpdateDescription)
 # def updateDescription(args, id):
@@ -214,7 +217,7 @@ def addRecipeItems(args, id):
 #     return jsonify(item.obj_to_dict())
 
 
-@app.route('/shoppinglist/<id>', methods=['GET'])
+@shoppinglist.route('/<id>', methods=['GET'])
 @jwt_required()
 def getShoppinglist(id):
     shoppinglist = Shoppinglist.find_by_id(id)

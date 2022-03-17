@@ -1,1 +1,1 @@
-from . import planner_controller
+from .planner_controller import planner

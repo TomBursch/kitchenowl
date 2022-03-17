@@ -1,0 +1,11 @@
+[uwsgi]
+wsgi-file = wsgi.py
+callable = app
+http = 0.0.0.0:80
+socket = 0.0.0.0:5000
+processes = 1
+threads = 1
+master = true
+chmod-socket = 664
+vacuum = true
+die-on-term = true

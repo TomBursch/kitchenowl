@@ -1,21 +1,22 @@
 from sqlalchemy.sql.expression import desc
 from app.errors import NotFoundRequest
-from flask import jsonify
+from flask import jsonify, Blueprint
 from flask_jwt_extended import jwt_required
-from app import app
 from sqlalchemy import func
 from app.helpers import validate_args, admin_required
 from app.models import Expense, ExpensePaidFor, User
 from .schemas import AddExpense, UpdateExpense
 
+expense = Blueprint('expense', __name__)
 
-@app.route('/expense', methods=['GET'])
+
+@expense.route('', methods=['GET'])
 @jwt_required()
 def getAllExpenses():
     return jsonify([e.obj_to_full_dict() for e in Expense.query.order_by(desc(Expense.id)).limit(50).all()])
 
 
-@app.route('/expense/<id>', methods=['GET'])
+@expense.route('/<id>', methods=['GET'])
 @jwt_required()
 def getExpenseById(id):
     expense = Expense.find_by_id(id)
@@ -24,7 +25,7 @@ def getExpenseById(id):
     return jsonify(expense.obj_to_full_dict())
 
 
-@app.route('/expense', methods=['POST'])
+@expense.route('', methods=['POST'])
 @jwt_required()
 @validate_args(AddExpense)
 def addExpense(args):
@@ -57,7 +58,7 @@ def addExpense(args):
     return jsonify(expense.obj_to_dict())
 
 
-@app.route('/expense/<id>', methods=['POST'])
+@expense.route('/<id>', methods=['POST'])
 @jwt_required()
 @validate_args(UpdateExpense)
 def updateExpense(args, id):  # noqa: C901
@@ -96,7 +97,7 @@ def updateExpense(args, id):  # noqa: C901
     return jsonify(expense.obj_to_dict())
 
 
-@app.route('/expense/<id>', methods=['DELETE'])
+@expense.route('/<id>', methods=['DELETE'])
 @jwt_required()
 def deleteExpenseById(id):
     Expense.delete_by_id(id)
@@ -104,7 +105,7 @@ def deleteExpenseById(id):
     return jsonify({'msg': 'DONE'})
 
 
-@app.route('/expense/recalculate-balances')
+@expense.route('/recalculate-balances')
 @jwt_required()
 @admin_required
 def calculateBalances():

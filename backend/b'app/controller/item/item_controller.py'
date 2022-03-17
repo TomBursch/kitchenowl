@@ -1,19 +1,20 @@
 from app.helpers import validate_args
-from flask import jsonify
+from flask import jsonify, Blueprint
 from app.errors import NotFoundRequest
 from flask_jwt_extended import jwt_required
-from app import app
 from app.models import Item, RecipeItems, Recipe
 from .schemas import SearchByNameRequest
 
+item = Blueprint('item', __name__)
 
-@app.route('/item', methods=['GET'])
+
+@item.route('', methods=['GET'])
 @jwt_required()
 def getAllItems():
     return jsonify([e.obj_to_dict() for e in Item.all()])
 
 
-@app.route('/item/<id>', methods=['GET'])
+@item.route('/<id>', methods=['GET'])
 @jwt_required()
 def getItem(id):
     item = Item.find_by_id(id)
@@ -22,7 +23,7 @@ def getItem(id):
     return jsonify(item.obj_to_dict())
 
 
-@app.route('/item/<id>/recipes', methods=['GET'])
+@item.route('/<id>/recipes', methods=['GET'])
 @jwt_required()
 def getItemRecipes(id):
     items = RecipeItems.query.filter(
@@ -32,14 +33,14 @@ def getItemRecipes(id):
     return jsonify([e.recipe.obj_to_dict() for e in items])
 
 
-@app.route('/item/<id>', methods=['DELETE'])
+@item.route('/<id>', methods=['DELETE'])
 @jwt_required()
 def deleteItemById(id):
     Item.delete_by_id(id)
     return jsonify({'msg': 'DONE'})
 
 
-@app.route('/item/search', methods=['GET'])
+@item.route('/search', methods=['GET'])
 @jwt_required()
 @validate_args(SearchByNameRequest)
 def searchItemByName(args):

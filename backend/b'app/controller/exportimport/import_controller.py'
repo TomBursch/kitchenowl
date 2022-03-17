@@ -1,16 +1,17 @@
 from .schemas import ImportSchema
 from app.helpers import validate_args
-from flask import jsonify
+from flask import jsonify, Blueprint
 from app.errors import NotFoundRequest
 from flask_jwt_extended import jwt_required
-from app import app
 from app.config import APP_DIR, SUPPORTED_LANGUAGES
 from app.models import Item, Recipe, RecipeItems, Tag, RecipeTags
 import json
 from os.path import exists
 
+importBP = Blueprint('import', __name__)
 
-@app.route('/import', methods=['POST'])
+
+@importBP.route('', methods=['POST'])
 @jwt_required()
 @validate_args(ImportSchema)
 def importData(args):
@@ -18,7 +19,7 @@ def importData(args):
     return jsonify({'msg': 'DONE'})
 
 
-@app.route('/import/<lang>', methods=['GET'])
+@importBP.route('/<lang>', methods=['GET'])
 @jwt_required()
 def importLang(lang):
     file_path = f'{APP_DIR}/../templates/{lang}.json'
@@ -30,13 +31,13 @@ def importLang(lang):
     return jsonify({'msg': 'DONE'})
 
 
-@app.route('/supported-languages', methods=['GET'])
+@importBP.route('/supported-languages', methods=['GET'])
 @jwt_required()
 def getSupportedLanguages():
     return jsonify(SUPPORTED_LANGUAGES)
 
 
-def _import(args): # noqa
+def _import(args):  # noqa
     if "items" in args:
         for importItem in args['items']:
             if not Item.find_by_name(importItem['name']):

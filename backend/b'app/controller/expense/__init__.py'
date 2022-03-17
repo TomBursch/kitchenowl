@@ -1,1 +1,1 @@
-from . import expense_controller
+from .expense_controller import expense

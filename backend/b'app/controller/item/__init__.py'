@@ -1,1 +1,1 @@
-from . import item_controller
+from .item_controller import item

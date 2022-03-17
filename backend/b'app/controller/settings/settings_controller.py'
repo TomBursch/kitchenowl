@@ -1,12 +1,13 @@
 from .schemas import SetSettingsSchema
 from app.helpers import validate_args, admin_required
-from flask import jsonify
+from flask import jsonify, Blueprint
 from flask_jwt_extended import jwt_required
-from app import app
 from app.models import Settings
 
+settings = Blueprint('settings', __name__)
 
-@app.route('/settings', methods=['POST'])
+
+@settings.route('', methods=['POST'])
 @jwt_required()
 @admin_required
 @validate_args(SetSettingsSchema)
@@ -20,7 +21,7 @@ def setSettings(args):
     return jsonify(settings.obj_to_dict())
 
 
-@app.route('/settings', methods=['GET'])
+@settings.route('', methods=['GET'])
 @jwt_required()
 def getSettings():
     return jsonify(Settings.get().obj_to_dict())

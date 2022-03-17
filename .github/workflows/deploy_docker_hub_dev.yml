@@ -1,12 +1,18 @@
-# This is a basic workflow to help you get started with Actions
-
 name: CI Dev to Docker Hub
 
 # Controls when the workflow will run
 on:
-  # Triggers the workflow on push events but only for the stable branch
+  # Triggers the workflow on push events for the main branch but only when web files are affected
   push:
     branches: [ main ]
+    paths:
+      - lib/**
+      - web/**
+      - assets/**
+      - Dockerfile
+      - entrypoint.sh
+      - pubspec.yaml
+      - default.conf.template
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:

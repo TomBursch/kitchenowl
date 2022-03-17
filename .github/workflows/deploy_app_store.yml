@@ -1,4 +1,4 @@
-name: Deploy to Play Store
+name: Deploy to AppStore
 on:
   workflow_dispatch:
     # Enable manual run

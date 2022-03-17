@@ -26,6 +26,9 @@ enum Connection {
 class ApiService {
   // ignore: constant_identifier_names
   static const Duration _TIMEOUT = Duration(seconds: 2);
+  // ignore: constant_identifier_names
+  static const String _API_PATH = "/api/";
+
   static ApiService? _instance;
   final _client = http.Client();
   final String baseUrl;
@@ -82,6 +85,7 @@ class ApiService {
 
   static Future<void> connectTo(String url, {String? refreshToken}) async {
     getInstance().dispose();
+    url += _API_PATH;
     _instance = ApiService._internal(url);
     _instance!.refreshToken = refreshToken ?? '';
     await _instance!.refresh();

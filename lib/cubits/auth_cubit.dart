@@ -1,12 +1,12 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:kitchenowl/models/user.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
 import 'package:kitchenowl/services/storage/storage.dart';
 import 'package:kitchenowl/services/storage/temp_storage.dart';
 import 'package:kitchenowl/services/transaction_handler.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class AuthCubit extends Cubit<AuthState> {
   AuthCubit() : super(Loading()) {
@@ -17,7 +17,7 @@ class AuthCubit extends Cubit<AuthState> {
   void setup() async {
     String? url;
     if (kIsWeb) {
-      url = dotenv.env['BACK_URL'];
+      url = dotenv.env['FRONT_URL'] ?? "http://localhost";
     } else {
       url = await PreferenceStorage.getInstance().read(key: 'URL');
     }

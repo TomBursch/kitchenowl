@@ -30,7 +30,7 @@ def getItemRecipes(id):
         RecipeItems.item_id == id, RecipeItems.optional == False).join(  # noqa
         RecipeItems.recipe).order_by(
         Recipe.name).all()
-    return jsonify([e.recipe.obj_to_dict() for e in items])
+    return jsonify([e.obj_to_recipe_dict() for e in items])
 
 
 @item.route('/<id>', methods=['DELETE'])

@@ -130,6 +130,17 @@ class RecipeItems(db.Model, DbModelMixin, TimestampMixin):
         res['updated_at'] = getattr(self, 'updated_at')
         return res
 
+    def obj_to_recipe_dict(self):
+        res = self.recipe.obj_to_dict()
+        res['items'] = [
+            {
+                'id': getattr(self, 'item_id'),
+                'description': getattr(self, 'description'),
+                'optional': getattr(self, 'optional'),
+            }
+        ]
+        return res
+
     @classmethod
     def find_by_ids(cls, recipe_id, item_id):
         return cls.query.filter(cls.recipe_id == recipe_id, cls.item_id == item_id).first()

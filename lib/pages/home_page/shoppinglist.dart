@@ -173,6 +173,7 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                             ),
                             delegate: SliverChildBuilderDelegate(
                               (context, i) => ShoppingItemWidget(
+                                key: ObjectKey(state.listItems[i]),
                                 item: state.listItems[i],
                                 selected: true,
                                 onPressed: (Item item) {
@@ -225,6 +226,7 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                               ),
                               delegate: SliverChildBuilderDelegate(
                                 (context, i) => ShoppingItemWidget(
+                                  key: ObjectKey(state.recentItems[i]),
                                   item: state.recentItems[i],
                                   onPressed: (Item item) =>
                                       cubit.add(item.name),

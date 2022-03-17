@@ -79,6 +79,7 @@ class _ExpensePageState extends State<ExpenseListPage> {
                       sliver: SliverList(
                         delegate: SliverChildBuilderDelegate(
                           (context, i) => ExpenseItemWidget(
+                            key: ObjectKey(state.expenses[i]),
                             expense: state.expenses[i],
                             users: state.users,
                             onUpdated: cubit.refresh,

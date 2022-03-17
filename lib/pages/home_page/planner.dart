@@ -87,6 +87,7 @@ class _PlannerPageState extends State<PlannerPage> {
                       ),
                       delegate: SliverChildBuilderDelegate(
                         (context, i) => SelectableButtonCard(
+                          key: Key(state.plannedRecipes[i].name),
                           title: state.plannedRecipes[i].name,
                           selected: true,
                           onPressed: () {
@@ -123,6 +124,7 @@ class _PlannerPageState extends State<PlannerPage> {
                       ),
                       delegate: SliverChildBuilderDelegate(
                         (context, i) => SelectableButtonCard(
+                          key: Key(state.recentRecipes[i].name),
                           title: state.recentRecipes[i].name,
                           onPressed: () {
                             cubit.add(state.recentRecipes[i]);
@@ -171,6 +173,7 @@ class _PlannerPageState extends State<PlannerPage> {
                       ),
                       delegate: SliverChildBuilderDelegate(
                         (context, i) => SelectableButtonCard(
+                          key: Key(state.suggestedRecipes[i].name),
                           title: state.suggestedRecipes[i].name,
                           onPressed: () {
                             cubit.add(state.suggestedRecipes[i]);

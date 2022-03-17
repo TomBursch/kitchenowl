@@ -140,6 +140,7 @@ class _RecipeListPageState extends State<RecipeListPage> {
                       itemExtent: 65,
                       itemBuilder: (context, index, name) {
                         return Padding(
+                          key: Key(name),
                           padding: const EdgeInsets.only(left: 32, right: 16),
                           child: RecipeItemWidget(
                             recipe: recipes[index],

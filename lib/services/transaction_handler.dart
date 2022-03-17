@@ -9,6 +9,7 @@ class TransactionHandler {
   TransactionHandler._internal();
   static TransactionHandler getInstance() {
     _instance ??= TransactionHandler._internal();
+
     return _instance!;
   }
 
@@ -40,6 +41,7 @@ class TransactionHandler {
     if (t.saveTransaction) {
       await TransactionStorage.getInstance().addTransaction(t);
     }
+
     return t.runLocal();
   }
 }

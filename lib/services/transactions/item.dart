@@ -26,12 +26,15 @@ class TransactionItemGetRecipes extends Transaction<List<Recipe>> {
 
   TransactionItemGetRecipes({required this.item, DateTime? timestamp})
       : super.internal(
-            timestamp ?? DateTime.now(), "TransactionItemGetRecipes");
+          timestamp ?? DateTime.now(),
+          "TransactionItemGetRecipes",
+        );
 
   @override
   Future<List<Recipe>> runLocal() async {
     final recipes = (await TempStorage.getInstance().readRecipes()) ?? [];
     recipes.retainWhere((e) => e.items.map((e) => e.id).contains(item.id));
+
     return recipes;
   }
 

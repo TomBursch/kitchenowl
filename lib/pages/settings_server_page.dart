@@ -58,8 +58,10 @@ class _SettingsServerPageState extends State<SettingsServerPage> {
                 const SizedBox(height: 8),
                 Card(
                   child: ListTile(
-                      title: Text(Uri.parse(ApiService.getInstance().baseUrl)
-                          .authority)),
+                    title: Text(
+                      Uri.parse(ApiService.getInstance().baseUrl).authority,
+                    ),
+                  ),
                 ),
                 const SizedBox(height: 8),
                 Text(
@@ -119,20 +121,21 @@ class _SettingsServerPageState extends State<SettingsServerPage> {
                       icon: const Icon(Icons.add),
                       onPressed: () async {
                         final res = await showDialog<String>(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return TextDialog(
-                                title: AppLocalizations.of(context)!.addTag,
-                                doneText: AppLocalizations.of(context)!.add,
-                                hintText: AppLocalizations.of(context)!.name,
-                              );
-                            });
+                          context: context,
+                          builder: (BuildContext context) {
+                            return TextDialog(
+                              title: AppLocalizations.of(context)!.addTag,
+                              doneText: AppLocalizations.of(context)!.add,
+                              hintText: AppLocalizations.of(context)!.name,
+                            );
+                          },
+                        );
                         if (res != null && res.isNotEmpty) {
                           cubit.addTag(res);
                         }
                       },
                       padding: EdgeInsets.zero,
-                    )
+                    ),
                   ],
                 ),
                 BlocBuilder<SettingsServerCubit, SettingsServerState>(
@@ -151,7 +154,8 @@ class _SettingsServerPageState extends State<SettingsServerPage> {
                           ),
                           content: Text(AppLocalizations.of(context)!
                               .tagDeleteConfirmation(
-                                  state.tags.elementAt(i).name)),
+                            state.tags.elementAt(i).name,
+                          )),
                         ));
                       },
                       onDismissed: (direction) {
@@ -200,12 +204,13 @@ class _SettingsServerPageState extends State<SettingsServerPage> {
                       icon: const Icon(Icons.add),
                       onPressed: () =>
                           Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => BlocProvider.value(
-                                    value: cubit,
-                                    child: const CreateUserPage(),
-                                  ))),
+                        builder: (context) => BlocProvider.value(
+                          value: cubit,
+                          child: const CreateUserPage(),
+                        ),
+                      )),
                       padding: EdgeInsets.zero,
-                    )
+                    ),
                   ],
                 ),
                 BlocBuilder<SettingsServerCubit, SettingsServerState>(
@@ -218,6 +223,7 @@ class _SettingsServerPageState extends State<SettingsServerPage> {
                       key: ValueKey<User>(state.users[i]),
                       confirmDismiss: (direction) async {
                         if (state.users[i].owner) return false;
+
                         return (await askForConfirmation(
                           context: context,
                           title: Text(
@@ -265,9 +271,10 @@ class _SettingsServerPageState extends State<SettingsServerPage> {
                           onTap: () async {
                             final res = await Navigator.of(context)
                                 .push<UpdateEnum>(MaterialPageRoute(
-                                    builder: (context) => SettingsUserPage(
-                                          userId: state.users[i].id,
-                                        )));
+                              builder: (context) => SettingsUserPage(
+                                userId: state.users[i].id,
+                              ),
+                            ));
                             if (res == UpdateEnum.updated) {
                               cubit.refresh();
                             }

@@ -38,6 +38,7 @@ class AddUpdateExpenseCubit extends Cubit<AddUpdateExpenseState> {
     if (expense.id != null) {
       return ApiService.getInstance().deleteExpense(expense);
     }
+
     return false;
   }
 
@@ -60,11 +61,12 @@ class AddUpdateExpenseCubit extends Cubit<AddUpdateExpenseState> {
   void addUser(User user) {
     if (!containsUser(user)) {
       emit(state.copyWith(
-          paidFor: List.from(state.paidFor)
-            ..add(PaidForModel(
-              userId: user.id,
-              factor: 1,
-            ))));
+        paidFor: List.from(state.paidFor)
+          ..add(PaidForModel(
+            userId: user.id,
+            factor: 1,
+          )),
+      ));
     }
   }
 

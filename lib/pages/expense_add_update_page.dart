@@ -67,209 +67,217 @@ class _AddUpdateRecipePageState extends State<AddUpdateExpensePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text(isUpdate
-              ? AppLocalizations.of(context)!.expenseEdit
-              : AppLocalizations.of(context)!.expenseAdd),
-          actions: [
-            if (!kIsWeb && (Platform.isAndroid || Platform.isIOS))
+      appBar: AppBar(
+        title: Text(isUpdate
+            ? AppLocalizations.of(context)!.expenseEdit
+            : AppLocalizations.of(context)!.expenseAdd),
+        actions: [
+          if (!kIsWeb && (Platform.isAndroid || Platform.isIOS))
+            BlocBuilder<AddUpdateExpenseCubit, AddUpdateExpenseState>(
+              bloc: cubit,
+              builder: (context, state) => IconButton(
+                icon: const Icon(Icons.save_rounded),
+                onPressed: state.isValid()
+                    ? () async {
+                        await cubit.saveExpense();
+                        Navigator.of(context).pop(UpdateEnum.updated);
+                      }
+                    : null,
+              ),
+            ),
+        ],
+      ),
+      body: Align(
+        alignment: Alignment.topCenter,
+        child: ConstrainedBox(
+          constraints: const BoxConstraints.expand(width: 1600),
+          child: CustomScrollView(
+            slivers: [
+              SliverList(
+                delegate: SliverChildListDelegate(
+                  [
+                    Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: TextField(
+                        controller: nameController,
+                        onChanged: (s) => cubit.setName(s),
+                        textInputAction: TextInputAction.next,
+                        decoration: InputDecoration(
+                          labelText: AppLocalizations.of(context)!.name,
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: TextField(
+                        controller: amountController,
+                        onChanged: (s) =>
+                            cubit.setAmount(double.tryParse(s) ?? 0),
+                        textInputAction: TextInputAction.next,
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [CurrencyTextInputFormater()],
+                        decoration: InputDecoration(
+                          labelText:
+                              AppLocalizations.of(context)!.expenseAmount,
+                        ),
+                      ),
+                    ),
+                    BlocBuilder<AddUpdateExpenseCubit, AddUpdateExpenseState>(
+                      bloc: cubit,
+                      builder: (context, state) => Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              AppLocalizations.of(context)!.expensePaidBy,
+                              style: Theme.of(context).textTheme.caption,
+                            ),
+                            DropdownButton<int>(
+                              value: state.paidBy,
+                              isExpanded: true,
+                              onChanged: (id) {
+                                if (id != null) cubit.setPaidById(id);
+                              },
+                              items: widget.users
+                                  .map(
+                                    (user) => DropdownMenuItem<int>(
+                                      child: Text(user.name),
+                                      value: user.id,
+                                    ),
+                                  )
+                                  .toList(),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+                      child: Text(
+                        AppLocalizations.of(context)!.expensePaidFor,
+                        style: Theme.of(context).textTheme.caption,
+                      ),
+                    ),
+                    const Divider(indent: 16, endIndent: 16),
+                  ],
+                ),
+              ),
               BlocBuilder<AddUpdateExpenseCubit, AddUpdateExpenseState>(
                 bloc: cubit,
-                builder: (context, state) => IconButton(
-                    icon: const Icon(Icons.save_rounded),
-                    onPressed: state.isValid()
-                        ? () async {
-                            await cubit.saveExpense();
-                            Navigator.of(context).pop(UpdateEnum.updated);
+                builder: (context, state) => SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (context, i) {
+                      final controller = TextEditingController(
+                        text: (cubit.state.paidFor
+                                .firstWhereOrNull(
+                                  (e) => e.userId == widget.users[i].id,
+                                )
+                                ?.factor
+                                .toString()) ??
+                            "",
+                      );
+
+                      return CustomCheckboxListTile(
+                        title: Text(widget.users[i].name),
+                        value: cubit.containsUser(widget.users[i]),
+                        onChanged: (v) {
+                          if (v != null) {
+                            if (v) {
+                              cubit.addUser(widget.users[i]);
+                            } else {
+                              cubit.removeUser(widget.users[i]);
+                            }
                           }
-                        : null),
-              ),
-          ],
-        ),
-        body: Align(
-          alignment: Alignment.topCenter,
-          child: ConstrainedBox(
-            constraints: const BoxConstraints.expand(width: 1600),
-            child: CustomScrollView(
-              slivers: [
-                SliverList(
-                  delegate: SliverChildListDelegate(
-                    [
-                      Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: TextField(
-                          controller: nameController,
-                          onChanged: (s) => cubit.setName(s),
-                          textInputAction: TextInputAction.next,
-                          decoration: InputDecoration(
-                            labelText: AppLocalizations.of(context)!.name,
+                        },
+                        subtitle: Text(NumberFormat.simpleCurrency().format(
+                          (state.amount *
+                              (cubit.state.paidFor
+                                      .firstWhereOrNull(
+                                        (e) => e.userId == widget.users[i].id,
+                                      )
+                                      ?.factor ??
+                                  0) /
+                              state.paidFor.fold(0, (p, v) => p + v.factor)),
+                        )),
+                        trailing: ConstrainedBox(
+                          constraints: const BoxConstraints(
+                            minWidth: 20,
+                            maxWidth: 100,
                           ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: TextField(
-                          controller: amountController,
-                          onChanged: (s) =>
-                              cubit.setAmount(double.tryParse(s) ?? 0),
-                          textInputAction: TextInputAction.next,
-                          keyboardType: TextInputType.number,
-                          inputFormatters: [CurrencyTextInputFormater()],
-                          decoration: InputDecoration(
-                            labelText:
-                                AppLocalizations.of(context)!.expenseAmount,
-                          ),
-                        ),
-                      ),
-                      BlocBuilder<AddUpdateExpenseCubit, AddUpdateExpenseState>(
-                        bloc: cubit,
-                        builder: (context, state) => Padding(
-                          padding: const EdgeInsets.all(16),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                AppLocalizations.of(context)!.expensePaidBy,
-                                style: Theme.of(context).textTheme.caption,
-                              ),
-                              DropdownButton<int>(
-                                value: state.paidBy,
-                                isExpanded: true,
-                                onChanged: (id) {
-                                  if (id != null) cubit.setPaidById(id);
-                                },
-                                items: widget.users
-                                    .map(
-                                      (user) => DropdownMenuItem<int>(
-                                        child: Text(user.name),
-                                        value: user.id,
-                                      ),
-                                    )
-                                    .toList(),
-                              ),
+                          child: TextField(
+                            textInputAction: TextInputAction.next,
+                            keyboardType: TextInputType.number,
+                            textAlign: TextAlign.right,
+                            controller: controller,
+                            onTap: () {
+                              cubit.addUser(widget.users[i]);
+                              controller.selection = TextSelection(
+                                baseOffset: 0,
+                                extentOffset: controller.text.length,
+                              );
+                            },
+                            onChanged: (t) => cubit.setFactor(
+                              widget.users[i],
+                              int.tryParse(t) ?? 1,
+                            ),
+                            inputFormatters: [
+                              FilteringTextInputFormatter.digitsOnly,
                             ],
                           ),
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-                        child: Text(
-                          AppLocalizations.of(context)!.expensePaidFor,
-                          style: Theme.of(context).textTheme.caption,
-                        ),
-                      ),
-                      const Divider(indent: 16, endIndent: 16),
-                    ],
+                      );
+                    },
+                    childCount: widget.users.length,
                   ),
                 ),
-                BlocBuilder<AddUpdateExpenseCubit, AddUpdateExpenseState>(
-                  bloc: cubit,
-                  builder: (context, state) => SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                      (context, i) {
-                        final controller = TextEditingController(
-                            text: (cubit.state.paidFor
-                                    .firstWhereOrNull(
-                                        (e) => e.userId == widget.users[i].id)
-                                    ?.factor
-                                    .toString()) ??
-                                "");
-                        return CustomCheckboxListTile(
-                          title: Text(widget.users[i].name),
-                          value: cubit.containsUser(widget.users[i]),
-                          onChanged: (v) {
-                            if (v != null) {
-                              if (v) {
-                                cubit.addUser(widget.users[i]);
-                              } else {
-                                cubit.removeUser(widget.users[i]);
-                              }
-                            }
-                          },
-                          subtitle: Text(NumberFormat.simpleCurrency().format(
-                              (state.amount *
-                                  (cubit.state.paidFor
-                                          .firstWhereOrNull((e) =>
-                                              e.userId == widget.users[i].id)
-                                          ?.factor ??
-                                      0) /
-                                  state.paidFor
-                                      .fold(0, (p, v) => p + v.factor)))),
-                          trailing: ConstrainedBox(
-                            constraints: const BoxConstraints(
-                              minWidth: 20,
-                              maxWidth: 100,
-                            ),
-                            child: TextField(
-                              textInputAction: TextInputAction.next,
-                              keyboardType: TextInputType.number,
-                              textAlign: TextAlign.right,
-                              controller: controller,
-                              onTap: () {
-                                cubit.addUser(widget.users[i]);
-                                controller.selection = TextSelection(
-                                  baseOffset: 0,
-                                  extentOffset: controller.text.length,
-                                );
-                              },
-                              onChanged: (t) => cubit.setFactor(
-                                  widget.users[i], int.tryParse(t) ?? 1),
-                              inputFormatters: [
-                                FilteringTextInputFormatter.digitsOnly
-                              ],
-                            ),
-                          ),
-                        );
+              ),
+              if (isUpdate)
+                SliverPadding(
+                  padding: const EdgeInsets.all(16),
+                  sliver: SliverToBoxAdapter(
+                    child: ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                          Colors.redAccent,
+                        ),
+                      ),
+                      onPressed: () async {
+                        await cubit.deleteExpense();
+                        Navigator.of(context).pop(UpdateEnum.deleted);
                       },
-                      childCount: widget.users.length,
+                      child: Text(AppLocalizations.of(context)!.delete),
                     ),
                   ),
                 ),
-                if (isUpdate)
-                  SliverPadding(
-                    padding: const EdgeInsets.all(16),
-                    sliver: SliverToBoxAdapter(
-                      child: ElevatedButton(
-                        style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all<Color>(
-                              Colors.redAccent),
+              if (kIsWeb || (!(Platform.isAndroid || Platform.isIOS)))
+                SliverPadding(
+                  padding: EdgeInsets.fromLTRB(16, isUpdate ? 0 : 16, 16, 16),
+                  sliver: SliverToBoxAdapter(
+                    child: BlocBuilder<AddUpdateExpenseCubit,
+                        AddUpdateExpenseState>(
+                      bloc: cubit,
+                      builder: (context, state) => ElevatedButton(
+                        onPressed: state.isValid()
+                            ? (() async {
+                                await cubit.saveExpense();
+                                Navigator.of(context).pop(UpdateEnum.updated);
+                              })
+                            : null,
+                        child: Text(
+                          isUpdate
+                              ? AppLocalizations.of(context)!.save
+                              : AppLocalizations.of(context)!.expenseAdd,
                         ),
-                        onPressed: () async {
-                          await cubit.deleteExpense();
-                          Navigator.of(context).pop(UpdateEnum.deleted);
-                        },
-                        child: Text(AppLocalizations.of(context)!.delete),
                       ),
                     ),
                   ),
-                if (kIsWeb || (!(Platform.isAndroid || Platform.isIOS)))
-                  SliverPadding(
-                    padding: EdgeInsets.fromLTRB(16, isUpdate ? 0 : 16, 16, 16),
-                    sliver: SliverToBoxAdapter(
-                      child: BlocBuilder<AddUpdateExpenseCubit,
-                              AddUpdateExpenseState>(
-                          bloc: cubit,
-                          builder: (context, state) => ElevatedButton(
-                                onPressed: state.isValid()
-                                    ? (() async {
-                                        await cubit.saveExpense();
-                                        Navigator.of(context)
-                                            .pop(UpdateEnum.updated);
-                                      })
-                                    : null,
-                                child: Text(
-                                  isUpdate
-                                      ? AppLocalizations.of(context)!.save
-                                      : AppLocalizations.of(context)!
-                                          .expenseAdd,
-                                ),
-                              )),
-                    ),
-                  )
-              ],
-            ),
+                ),
+            ],
           ),
-        ));
+        ),
+      ),
+    );
   }
 }

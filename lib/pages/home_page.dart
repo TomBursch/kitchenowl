@@ -38,7 +38,9 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     pages = [
       BlocProvider.value(
-          value: shoppingListCubit, child: const ShoppinglistPage()),
+        value: shoppingListCubit,
+        child: const ShoppinglistPage(),
+      ),
       BlocProvider.value(value: recipeListCubit, child: const RecipeListPage()),
       BlocProvider.value(value: plannerCubit, child: const PlannerPage()),
       BlocProvider.value(value: expenseCubit, child: const ExpenseListPage()),
@@ -182,8 +184,10 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
                           closedColor: Theme.of(context).colorScheme.secondary,
-                          closedBuilder: (BuildContext context,
-                              VoidCallback openContainer) {
+                          closedBuilder: (
+                            BuildContext context,
+                            VoidCallback openContainer,
+                          ) {
                             return SizedBox(
                               height: 56,
                               width: 56,
@@ -221,8 +225,9 @@ class _HomePageState extends State<HomePage> {
               child: Align(
                 alignment: Alignment.topCenter,
                 child: ConstrainedBox(
-                    constraints: const BoxConstraints.expand(width: 1600),
-                    child: _homePageMenuItems[_selectedIndex].page),
+                  constraints: const BoxConstraints.expand(width: 1600),
+                  child: _homePageMenuItems[_selectedIndex].page,
+                ),
               ),
             );
 
@@ -256,7 +261,8 @@ class _HomePageState extends State<HomePage> {
                             (e) => ListTile(
                               shape: const RoundedRectangleBorder(
                                 borderRadius: BorderRadius.horizontal(
-                                    right: Radius.circular(5)),
+                                  right: Radius.circular(5),
+                                ),
                               ),
                               tileColor: _selectedIndex == e.key
                                   ? Theme.of(context).colorScheme.primary
@@ -264,9 +270,10 @@ class _HomePageState extends State<HomePage> {
                               title: Text(
                                 e.value.label,
                                 style: TextStyle(
-                                    color: _selectedIndex == e.key
-                                        ? Colors.white
-                                        : null),
+                                  color: _selectedIndex == e.key
+                                      ? Colors.white
+                                      : null,
+                                ),
                               ),
                               leading: Icon(
                                 e.value.icon,
@@ -321,12 +328,13 @@ class _HomePageMenu extends Equatable {
   final Widget? floatingActionButton;
   final Function(bool)? onTap;
 
-  const _HomePageMenu(
-      {required this.page,
-      required this.icon,
-      required this.label,
-      this.floatingActionButton,
-      this.onTap});
+  const _HomePageMenu({
+    required this.page,
+    required this.icon,
+    required this.label,
+    this.floatingActionButton,
+    this.onTap,
+  });
 
   @override
   List<Object?> get props => [];

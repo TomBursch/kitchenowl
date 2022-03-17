@@ -20,7 +20,7 @@ enum Connection {
   unsupported,
   connected,
   authenticated,
-  undefined
+  undefined,
 }
 
 class ApiService {
@@ -47,6 +47,7 @@ class ApiService {
 
   static ApiService getInstance() {
     _instance ??= ApiService._internal('');
+
     return _instance!;
   }
 
@@ -100,16 +101,16 @@ class ApiService {
                 (int.tryParse(Config.packageInfo?.buildNumber ?? '0') ?? 0) &&
             (healthy.item2!['version'] ?? 0) >= Config.MIN_BACKEND_VERSION) {
           _settingsNotifier.value = ServerSettings.fromJson(healthy.item2!);
-          if (await getInstance().refreshAuth()) {
-            return getInstance()._setConnectionState(Connection.authenticated);
-          } else {
-            return getInstance()._setConnectionState(Connection.connected);
-          }
+
+          return await getInstance().refreshAuth()
+              ? getInstance()._setConnectionState(Connection.authenticated)
+              : getInstance()._setConnectionState(Connection.connected);
         } else {
           return getInstance()._setConnectionState(Connection.unsupported);
         }
       }
     }
+
     return getInstance()._setConnectionState(Connection.disconnected);
   }
 
@@ -120,11 +121,18 @@ class ApiService {
       );
 
   Future<http.Response> post(String url, dynamic body, {Encoding? encoding}) =>
-      _handleRequest(() => _client.post(Uri.parse(baseUrl + url),
-          body: body, headers: headers, encoding: encoding));
+      _handleRequest(() => _client.post(
+            Uri.parse(baseUrl + url),
+            body: body,
+            headers: headers,
+            encoding: encoding,
+          ));
 
-  Future<http.Response> delete(String url,
-          {dynamic body, Encoding? encoding}) =>
+  Future<http.Response> delete(
+    String url, {
+    dynamic body,
+    Encoding? encoding,
+  }) =>
       _handleRequest(() async {
         final request = http.Request(
           'DELETE',
@@ -133,11 +141,14 @@ class ApiService {
         request.headers.addAll(headers);
         if (encoding != null) request.encoding = encoding;
         if (body != null) request.body = body;
+
         return http.Response.fromStream(await _client.send(request));
       });
 
-  Future<http.Response> _handleRequest(Future<http.Response> Function() request,
-      {bool refreshOnException = true}) async {
+  Future<http.Response> _handleRequest(
+    Future<http.Response> Function() request, {
+    bool refreshOnException = true,
+  }) async {
     try {
       http.Response response = await request().timeout(_TIMEOUT);
 
@@ -148,10 +159,12 @@ class ApiService {
           response = await request();
         }
       }
+
       return response;
     } catch (e) {
       if (refreshOnException) await refresh();
     }
+
     return http.Response('', 500);
   }
 
@@ -161,8 +174,10 @@ class ApiService {
 
   Future<Tuple2<bool, Map<String, dynamic>?>> healthy() async {
     try {
-      final res = await get('/health/8M4F88S8ooi4sMbLBfkkV7ctWwgibW6V',
-          refreshOnException: false);
+      final res = await get(
+        '/health/8M4F88S8ooi4sMbLBfkkV7ctWwgibW6V',
+        refreshOnException: false,
+      );
       if (res.statusCode == 200) {
         return Tuple2(
           jsonDecode(res.body)['msg'] == 'OK',
@@ -170,33 +185,42 @@ class ApiService {
         );
       }
     } catch (_) {}
+
     return const Tuple2(false, null);
   }
 
   Future<bool> refreshAuth() async {
     final _headers = Map<String, String>.from(headers);
     _headers['Authorization'] = 'Bearer ' + (_refreshToken ?? '');
-    final res = await _client.get(Uri.parse(baseUrl + '/auth/refresh'),
-        headers: _headers);
+    final res = await _client.get(
+      Uri.parse(baseUrl + '/auth/refresh'),
+      headers: _headers,
+    );
     if (res.statusCode == 200) {
       final body = jsonDecode(res.body);
       headers['Authorization'] = 'Bearer ' + body['access_token'];
       _setConnectionState(Connection.authenticated);
+
       return true;
     }
+
     return false;
   }
 
   Future<String?> login(String username, String password) async {
     final res = await post(
-        '/auth', jsonEncode({'username': username, 'password': password}));
+      '/auth',
+      jsonEncode({'username': username, 'password': password}),
+    );
     if (res.statusCode == 200) {
       final body = jsonDecode(res.body);
       headers['Authorization'] = 'Bearer ' + body['access_token'];
       _refreshToken = body['refresh_token'];
       _setConnectionState(Connection.authenticated);
+
       return _refreshToken;
     }
+
     return null;
   }
 
@@ -204,26 +228,33 @@ class ApiService {
     final res = await get('/onboarding');
     if (res.statusCode != 200) return false;
     final body = jsonDecode(res.body);
+
     return body['onboarding'] as bool;
   }
 
   Future<String?> onboarding(
-      String username, String name, String password) async {
+    String username,
+    String name,
+    String password,
+  ) async {
     if (!(await isOnboarding())) return null;
     final res = await post(
-        '/onboarding',
-        jsonEncode({
-          'username': username,
-          'name': name,
-          'password': password,
-        }));
+      '/onboarding',
+      jsonEncode({
+        'username': username,
+        'name': name,
+        'password': password,
+      }),
+    );
     if (res.statusCode == 200) {
       final body = jsonDecode(res.body);
       headers['Authorization'] = 'Bearer ' + body['access_token'];
       _refreshToken = body['refresh_token'];
       _setConnectionState(Connection.authenticated);
+
       return _refreshToken;
     }
+
     return null;
   }
 
@@ -231,6 +262,7 @@ class ApiService {
     final res = await get('/settings');
     if (res.statusCode != 200) return null;
     _settingsNotifier.value = ServerSettings.fromJson(jsonDecode(res.body));
+
     return _settingsNotifier.value;
   }
 
@@ -239,6 +271,7 @@ class ApiService {
     if (res.statusCode == 200) {
       _settingsNotifier.value = ServerSettings.fromJson(jsonDecode(res.body));
     }
+
     return res.statusCode == 200;
   }
 }

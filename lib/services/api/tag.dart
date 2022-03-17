@@ -9,11 +9,13 @@ extension TagApi on ApiService {
     if (res.statusCode != 200) return null;
 
     final body = List.from(jsonDecode(res.body));
+
     return body.map((e) => Tag.fromJson(e)).toSet();
   }
 
   Future<bool> addTag(Tag tag) async {
     final res = await post('/tag', json.encode(tag.toJson()));
+
     return res.statusCode == 200;
   }
 
@@ -22,6 +24,7 @@ extension TagApi on ApiService {
     if (res.statusCode != 200) return null;
 
     final body = jsonDecode(res.body);
+
     return Tag.fromJson(body);
   }
 
@@ -30,6 +33,7 @@ extension TagApi on ApiService {
     if (res.statusCode != 200) return null;
 
     final body = List.from(jsonDecode(res.body));
+
     return body.map((e) => Recipe.fromJson(e)).toList();
   }
 
@@ -38,11 +42,13 @@ extension TagApi on ApiService {
     if (res.statusCode != 200) return null;
 
     final body = List.from(jsonDecode(res.body));
+
     return body.map((e) => Tag.fromJson(e)).toSet();
   }
 
   Future<bool> deleteTag(Tag tag) async {
     final res = await delete('/tag/${tag.id}');
+
     return res.statusCode == 200;
   }
 }

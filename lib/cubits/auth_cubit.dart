@@ -16,11 +16,9 @@ class AuthCubit extends Cubit<AuthState> {
 
   void setup() async {
     String? url;
-    if (kIsWeb) {
-      url = dotenv.env['FRONT_URL'] ?? "http://localhost";
-    } else {
-      url = await PreferenceStorage.getInstance().read(key: 'URL');
-    }
+    url = kIsWeb
+        ? dotenv.env['FRONT_URL'] ?? "http://localhost"
+        : await PreferenceStorage.getInstance().read(key: 'URL');
     if (url != null && url.isNotEmpty) {
       final token = await SecureStorage.getInstance().read(key: 'TOKEN');
       _newConnection(url, token: token, storeData: false);
@@ -75,6 +73,7 @@ class AuthCubit extends Cubit<AuthState> {
     if (state is Authenticated) {
       return (state as Authenticated).user;
     }
+
     return null;
   }
 

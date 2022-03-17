@@ -38,6 +38,7 @@ class _PlannerPageState extends State<PlannerPage> {
       tablet: 6,
       desktop: 9,
     );
+
     return SafeArea(
       child: Scrollbar(
         child: RefreshIndicator(
@@ -92,7 +93,10 @@ class _PlannerPageState extends State<PlannerPage> {
                             cubit.remove(state.plannedRecipes[i]);
                           },
                           onLongPressed: () => _openRecipePage(
-                              context, cubit, state.plannedRecipes[i]),
+                            context,
+                            cubit,
+                            state.plannedRecipes[i],
+                          ),
                         ),
                         childCount: state.plannedRecipes.length,
                       ),
@@ -124,7 +128,10 @@ class _PlannerPageState extends State<PlannerPage> {
                             cubit.add(state.recentRecipes[i]);
                           },
                           onLongPressed: () => _openRecipePage(
-                              context, cubit, state.recentRecipes[i]),
+                            context,
+                            cubit,
+                            state.recentRecipes[i],
+                          ),
                         ),
                         childCount: state.recentRecipes.length,
                       ),
@@ -169,7 +176,10 @@ class _PlannerPageState extends State<PlannerPage> {
                             cubit.add(state.suggestedRecipes[i]);
                           },
                           onLongPressed: () => _openRecipePage(
-                              context, cubit, state.suggestedRecipes[i]),
+                            context,
+                            cubit,
+                            state.suggestedRecipes[i],
+                          ),
                         ),
                         childCount: state.suggestedRecipes.length,
                       ),

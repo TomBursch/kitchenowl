@@ -9,15 +9,19 @@ extension RecipeApi on ApiService {
     if (res.statusCode != 200) return null;
 
     final body = List.from(jsonDecode(res.body));
+
     return body.map((e) => Recipe.fromJson(e)).toList();
   }
 
   Future<List<Recipe>?> getRecipesFiltered(Set<Tag> filter) async {
-    final res = await post('/recipe/filter',
-        jsonEncode({"filter": filter.map((e) => e.toString()).toList()}));
+    final res = await post(
+      '/recipe/filter',
+      jsonEncode({"filter": filter.map((e) => e.toString()).toList()}),
+    );
     if (res.statusCode != 200) return null;
 
     final body = List.from(jsonDecode(res.body));
+
     return body.map((e) => Recipe.fromJson(e)).toList();
   }
 
@@ -26,6 +30,7 @@ extension RecipeApi on ApiService {
     if (res.statusCode != 200) return null;
 
     final body = List.from(jsonDecode(res.body));
+
     return body.map((e) => Recipe.fromJson(e)).toList();
   }
 
@@ -34,21 +39,25 @@ extension RecipeApi on ApiService {
     if (res.statusCode != 200) return null;
 
     final body = jsonDecode(res.body);
+
     return Recipe.fromJson(body);
   }
 
   Future<bool> addRecipe(Recipe recipe) async {
     final res = await post('/recipe', jsonEncode(recipe.toJson()));
+
     return res.statusCode == 200;
   }
 
   Future<bool> updateRecipe(Recipe recipe) async {
     final res = await post('/recipe/${recipe.id}', jsonEncode(recipe.toJson()));
+
     return res.statusCode == 200;
   }
 
   Future<bool> deleteRecipe(Recipe recipe) async {
     final res = await delete('/recipe/${recipe.id}');
+
     return res.statusCode == 200;
   }
 }

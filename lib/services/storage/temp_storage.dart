@@ -13,6 +13,7 @@ class TempStorage {
   TempStorage._internal();
   static TempStorage getInstance() {
     _instance ??= TempStorage._internal();
+
     return _instance!;
   }
 
@@ -20,26 +21,31 @@ class TempStorage {
     final temp = await getTemporaryDirectory();
     final directory = Directory(temp.path + '/kitchenowl');
     if (!await directory.exists()) directory.create();
+
     return directory.path;
   }
 
   Future<File> get _localUserFile async {
     final path = await _localPath;
+
     return File('$path/user.json');
   }
 
   Future<File> get _localUsersFile async {
     final path = await _localPath;
+
     return File('$path/users.json');
   }
 
   Future<File> get _localItemFile async {
     final path = await _localPath;
+
     return File('$path/items.json');
   }
 
   Future<File> get _localRecipeFile async {
     final path = await _localPath;
+
     return File('$path/recipes.json');
   }
 
@@ -55,9 +61,11 @@ class TempStorage {
       try {
         final file = await _localUserFile;
         final String content = await file.readAsString();
+
         return User.fromJson(json.decode(content));
       } catch (_) {}
     }
+
     return null;
   }
 
@@ -83,9 +91,11 @@ class TempStorage {
         final file = await _localUsersFile;
         final String content = await file.readAsString();
         List list = json.decode(content);
+
         return list.map((e) => User.fromJson(e)).toList();
       } catch (_) {}
     }
+
     return null;
   }
 
@@ -102,7 +112,8 @@ class TempStorage {
     if (!kIsWeb) {
       final file = await _localUsersFile;
       await file.writeAsString(
-          json.encode(users.map((e) => e.toJsonWithId()).toList()));
+        json.encode(users.map((e) => e.toJsonWithId()).toList()),
+      );
     }
   }
 
@@ -111,10 +122,13 @@ class TempStorage {
       try {
         final file = await _localItemFile;
         final String content = await file.readAsString();
+
         return List<ShoppinglistItem>.from(
-            json.decode(content).map((e) => ShoppinglistItem.fromJson(e)));
+          json.decode(content).map((e) => ShoppinglistItem.fromJson(e)),
+        );
       } catch (_) {}
     }
+
     return null;
   }
 
@@ -122,7 +136,8 @@ class TempStorage {
     if (!kIsWeb) {
       final file = await _localItemFile;
       await file.writeAsString(
-          json.encode(items.map((e) => e.toJsonWithId()).toList()));
+        json.encode(items.map((e) => e.toJsonWithId()).toList()),
+      );
     }
   }
 
@@ -140,10 +155,13 @@ class TempStorage {
       try {
         final file = await _localRecipeFile;
         final String content = await file.readAsString();
+
         return List<Recipe>.from(
-            json.decode(content).map((e) => Recipe.fromJson(e)));
+          json.decode(content).map((e) => Recipe.fromJson(e)),
+        );
       } catch (_) {}
     }
+
     return null;
   }
 
@@ -151,7 +169,8 @@ class TempStorage {
     if (!kIsWeb) {
       final file = await _localRecipeFile;
       await file.writeAsString(
-          json.encode(recipes.map((e) => e.toJsonWithId()).toList()));
+        json.encode(recipes.map((e) => e.toJsonWithId()).toList()),
+      );
     }
   }
 

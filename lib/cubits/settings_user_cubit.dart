@@ -15,11 +15,9 @@ class SettingsUserCubit extends Cubit<SettingsUserState> {
 
   Future<void> refresh() async {
     User? user;
-    if (userId != null) {
-      user = await ApiService.getInstance().getUserById(userId!);
-    } else {
-      user = await ApiService.getInstance().getUser();
-    }
+    user = userId != null
+        ? await ApiService.getInstance().getUserById(userId!)
+        : await ApiService.getInstance().getUser();
     emit(state.copyWith(user: user, setAdmin: user?.admin));
   }
 
@@ -31,19 +29,16 @@ class SettingsUserCubit extends Cubit<SettingsUserState> {
   }) async {
     if (state.user == null) return;
     bool res = false;
-    if (userId != null) {
-      res = await ApiService.getInstance().updateUserById(
-        userId!,
-        name: name,
-        password: password,
-        admin: (state.setAdmin != state.user!.admin) ? state.setAdmin : null,
-      );
-    } else {
-      res = await ApiService.getInstance().updateUser(
-        name: name,
-        password: password,
-      );
-    }
+    res = userId != null
+        ? await ApiService.getInstance().updateUserById(
+            userId!,
+            name: name,
+            password: password,
+            admin:
+                (state.setAdmin != state.user!.admin) ? state.setAdmin : null,
+          )
+        : await ApiService.getInstance()
+            .updateUser(name: name, password: password);
     if (res) {
       emit(state.copyWith(updateState: UpdateEnum.updated));
       if (userId == null) {
@@ -73,6 +68,9 @@ class SettingsUserState extends Equatable {
     bool? setAdmin,
     UpdateEnum? updateState,
   }) =>
-      SettingsUserState(user ?? this.user, setAdmin ?? this.setAdmin,
-          updateState ?? this.updateState);
+      SettingsUserState(
+        user ?? this.user,
+        setAdmin ?? this.setAdmin,
+        updateState ?? this.updateState,
+      );
 }

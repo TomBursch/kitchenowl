@@ -35,9 +35,10 @@ class UnreachablePage extends StatelessWidget {
               if (!kIsWeb) Text(AppLocalizations.of(context)!.or),
               if (!kIsWeb)
                 TextButton(
-                    onPressed: () =>
-                        BlocProvider.of<AuthCubit>(context).removeServer(),
-                    child: Text(AppLocalizations.of(context)!.serverChange)),
+                  onPressed: () =>
+                      BlocProvider.of<AuthCubit>(context).removeServer(),
+                  child: Text(AppLocalizations.of(context)!.serverChange),
+                ),
             ],
           ),
         ),

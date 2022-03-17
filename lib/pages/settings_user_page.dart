@@ -121,7 +121,9 @@ class _SettingsUserPageState extends State<SettingsUserPage> {
                     padding: const EdgeInsets.only(top: 16, bottom: 8),
                     child: ElevatedButton(
                       onPressed: () => cubit.updateUser(
-                          context: context, password: passwordController.text),
+                        context: context,
+                        password: passwordController.text,
+                      ),
                       child: Text(AppLocalizations.of(context)!.passwordSave),
                     ),
                   ),

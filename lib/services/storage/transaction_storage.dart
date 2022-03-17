@@ -11,6 +11,7 @@ class TransactionStorage {
   TransactionStorage._internal();
   static TransactionStorage getInstance() {
     _instance ??= TransactionStorage._internal();
+
     return _instance!;
   }
 
@@ -18,11 +19,13 @@ class TransactionStorage {
     final temp = await getTemporaryDirectory();
     final directory = Directory(temp.path + '/kitchenowl');
     if (!await directory.exists()) directory.create();
+
     return directory.path;
   }
 
   Future<File> get _localFile async {
     final path = await _localPath;
+
     return File('$path/transactions.json');
   }
 
@@ -31,10 +34,13 @@ class TransactionStorage {
       try {
         final file = await _localFile;
         final String content = await file.readAsString();
+
         return List<Transaction>.from(
-            json.decode(content).map((e) => Transaction.fromJson(e)));
+          json.decode(content).map((e) => Transaction.fromJson(e)),
+        );
       } catch (_) {}
     }
+
     return [];
   }
 
@@ -53,7 +59,8 @@ class TransactionStorage {
       transactions.add(t);
       final file = await _localFile;
       await file.writeAsString(
-          json.encode(transactions.map((t) => t.toJson()).toList()));
+        json.encode(transactions.map((t) => t.toJson()).toList()),
+      );
     }
   }
 }

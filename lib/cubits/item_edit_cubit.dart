@@ -33,9 +33,11 @@ class ItemEditCubit extends Cubit<ItemEditState> {
 
   Future<void> saveItem() async {
     if (item is ShoppinglistItem) {
-      await TransactionHandler.getInstance().runTransaction(
-          TransactionShoppingListUpdateItem(
-              item: item, description: state.description));
+      await TransactionHandler.getInstance()
+          .runTransaction(TransactionShoppingListUpdateItem(
+        item: item,
+        description: state.description,
+      ));
     }
   }
 
@@ -43,6 +45,7 @@ class ItemEditCubit extends Cubit<ItemEditState> {
     if (item.id != null) {
       return ApiService.getInstance().deleteItem(item);
     }
+
     return false;
   }
 
@@ -60,8 +63,11 @@ class ItemEditState extends Equatable {
   final String description;
   final List<Recipe> recipes;
 
-  const ItemEditState(
-      {this.name = "", this.description = "", this.recipes = const []});
+  const ItemEditState({
+    this.name = "",
+    this.description = "",
+    this.recipes = const [],
+  });
 
   ItemEditState copyWith({
     String? name,

@@ -32,9 +32,12 @@ class Item extends Model {
 class ItemWithDescription extends Item {
   final String description;
 
-  const ItemWithDescription(
-      {int? id, required String name, int ordering = 0, this.description = ''})
-      : super(id: id, name: name, ordering: ordering);
+  const ItemWithDescription({
+    int? id,
+    required String name,
+    int ordering = 0,
+    this.description = '',
+  }) : super(id: id, name: name, ordering: ordering);
 
   factory ItemWithDescription.fromJson(Map<String, dynamic> map) =>
       ItemWithDescription(

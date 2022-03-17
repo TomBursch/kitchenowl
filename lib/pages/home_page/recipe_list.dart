@@ -32,6 +32,7 @@ class _RecipeListPageState extends State<RecipeListPage> {
   @override
   Widget build(BuildContext context) {
     final cubit = BlocProvider.of<RecipeListCubit>(context);
+
     return SafeArea(
       child: Column(
         children: [
@@ -58,98 +59,102 @@ class _RecipeListPageState extends State<RecipeListPage> {
             ),
           ),
           BlocBuilder<RecipeListCubit, ListRecipeCubitState>(
-              bloc: cubit,
-              builder: (context, state) {
-                if (state.tags.isEmpty || state is SearchRecipeCubitState) {
-                  return const SizedBox();
-                }
-                return Align(
-                  alignment: Alignment.centerLeft,
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: 6),
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      controller: ScrollController(),
-                      child: Row(
-                        children: const <Widget>[SizedBox(width: 12)] +
-                            state.tags.map((tag) {
-                              return Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 4),
-                                child: FilterChip(
-                                  label: Text(
-                                    tag.name,
-                                    style: TextStyle(
-                                        color:
-                                            (state is FilteredListRecipeCubitState) &&
-                                                    state.selectedTags
-                                                        .contains(tag)
-                                                ? Colors.white
-                                                : null),
+            bloc: cubit,
+            builder: (context, state) {
+              if (state.tags.isEmpty || state is SearchRecipeCubitState) {
+                return const SizedBox();
+              }
+
+              return Align(
+                alignment: Alignment.centerLeft,
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 6),
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    controller: ScrollController(),
+                    child: Row(
+                      children: const <Widget>[SizedBox(width: 12)] +
+                          state.tags.map((tag) {
+                            return Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 4),
+                              child: FilterChip(
+                                label: Text(
+                                  tag.name,
+                                  style: TextStyle(
+                                    color:
+                                        (state is FilteredListRecipeCubitState) &&
+                                                state.selectedTags.contains(tag)
+                                            ? Colors.white
+                                            : null,
                                   ),
-                                  selected:
-                                      (state is FilteredListRecipeCubitState) &&
-                                          state.selectedTags.contains(tag),
-                                  selectedColor:
-                                      Theme.of(context).colorScheme.secondary,
-                                  onSelected: (bool selected) =>
-                                      cubit.tagSelected(tag, selected),
                                 ),
-                              );
-                            }).toList()
-                          ..add(const SizedBox(width: 12)),
+                                selected:
+                                    (state is FilteredListRecipeCubitState) &&
+                                        state.selectedTags.contains(tag),
+                                selectedColor:
+                                    Theme.of(context).colorScheme.secondary,
+                                onSelected: (bool selected) =>
+                                    cubit.tagSelected(tag, selected),
+                              ),
+                            );
+                          }).toList()
+                        ..add(const SizedBox(width: 12)),
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
+          Expanded(
+            child: BlocBuilder<RecipeListCubit, ListRecipeCubitState>(
+              bloc: cubit,
+              buildWhen: (previous, current) =>
+                  !listEquals(previous.recipes, current.recipes),
+              builder: (context, state) {
+                final recipes = state.recipes;
+
+                return Scrollbar(
+                  child: RefreshIndicator(
+                    onRefresh: cubit.refresh,
+                    child: AlphabetScrollView(
+                      list: recipes.map((e) => AlphaModel(e.name)).toList(),
+                      alignment: LetterAlignment.left,
+                      // isAlphabetsFiltered: state is SearchRecipeCubitState,
+                      overlayWidget: (value) => Container(
+                        height: 50,
+                        width: 50,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Theme.of(context).primaryColor,
+                        ),
+                        alignment: Alignment.center,
+                        child: Text(
+                          value.toUpperCase(),
+                          style: const TextStyle(
+                            fontSize: 20,
+                            color: Colors.white,
+                          ),
+                        ),
                       ),
+                      itemExtent: 65,
+                      itemBuilder: (context, index, name) {
+                        return Padding(
+                          padding: const EdgeInsets.only(left: 32, right: 16),
+                          child: RecipeItemWidget(
+                            recipe: recipes[index],
+                            onUpdated: cubit.refresh,
+                          ),
+                        );
+                      },
+                      selectedTextStyle:
+                          const TextStyle(fontWeight: FontWeight.bold),
+                      unselectedTextStyle: const TextStyle(),
                     ),
                   ),
                 );
-              }),
-          Expanded(
-            child: BlocBuilder<RecipeListCubit, ListRecipeCubitState>(
-                bloc: cubit,
-                buildWhen: (previous, current) =>
-                    !listEquals(previous.recipes, current.recipes),
-                builder: (context, state) {
-                  final recipes = state.recipes;
-                  return Scrollbar(
-                    child: RefreshIndicator(
-                      onRefresh: cubit.refresh,
-                      child: AlphabetScrollView(
-                        list: recipes.map((e) => AlphaModel(e.name)).toList(),
-                        alignment: LetterAlignment.left,
-                        // isAlphabetsFiltered: state is SearchRecipeCubitState,
-                        overlayWidget: (value) => Container(
-                          height: 50,
-                          width: 50,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Theme.of(context).primaryColor,
-                          ),
-                          alignment: Alignment.center,
-                          child: Text(
-                            value.toUpperCase(),
-                            style: const TextStyle(
-                              fontSize: 20,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                        itemExtent: 65,
-                        itemBuilder: (context, index, name) {
-                          return Padding(
-                            padding: const EdgeInsets.only(left: 32, right: 16),
-                            child: RecipeItemWidget(
-                              recipe: recipes[index],
-                              onUpdated: cubit.refresh,
-                            ),
-                          );
-                        },
-                        selectedTextStyle:
-                            const TextStyle(fontWeight: FontWeight.bold),
-                        unselectedTextStyle: const TextStyle(),
-                      ),
-                    ),
-                  );
-                }),
+              },
+            ),
           ),
         ],
       ),

@@ -38,13 +38,17 @@ class ItemSearchCubit extends Cubit<ItemSearchState> {
                 .firstWhereOrNull((e) => e.name == item.name)
                 ?.description ??
             queryDescription;
-        items.add(
-            ItemWithDescription.fromItem(item: item, description: description));
+        items.add(ItemWithDescription.fromItem(
+          item: item,
+          description: description,
+        ));
       }
       if (items.isEmpty ||
           items[0].name.toLowerCase() != queryName.toLowerCase()) {
         items.add(ItemWithDescription(
-            name: queryName, description: queryDescription));
+          name: queryName,
+          description: queryDescription,
+        ));
       }
       emit(ItemSearchState(state.selectedItems, query, items));
     } else {

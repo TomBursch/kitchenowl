@@ -6,7 +6,9 @@ class UsernameTextInputFormater extends TextInputFormatter {
 
   @override
   TextEditingValue formatEditUpdate(
-      TextEditingValue oldValue, TextEditingValue newValue) {
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
     return _regEx.hasMatch(newValue.text)
         ? newValue.copyWith(text: newValue.text.toLowerCase())
         : oldValue;

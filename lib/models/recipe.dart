@@ -30,6 +30,7 @@ class Recipe extends Model {
     if (map.containsKey('tags')) {
       tags = Set.from(map['tags'].map((e) => Tag.fromJson(e)));
     }
+
     return Recipe(
       id: map['id'],
       name: map['name'],

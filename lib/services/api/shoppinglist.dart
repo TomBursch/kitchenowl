@@ -9,6 +9,7 @@ extension ShoppinglistApi on ApiService {
     if (res.statusCode != 200) return null;
 
     final body = jsonDecode(res.body);
+
     return ShoppinglistItem.fromJson(body);
   }
 
@@ -17,6 +18,7 @@ extension ShoppinglistApi on ApiService {
     if (res.statusCode != 200) return null;
 
     final body = List.from(jsonDecode(res.body));
+
     return body.map((e) => ShoppinglistItem.fromJson(e)).toList();
   }
 
@@ -25,6 +27,7 @@ extension ShoppinglistApi on ApiService {
     if (res.statusCode != 200) return null;
 
     final body = List.from(jsonDecode(res.body));
+
     return body.map((e) => Item.fromJson(e)).toList();
   }
 
@@ -33,19 +36,26 @@ extension ShoppinglistApi on ApiService {
     if (description != null) data['description'] = description;
     final res =
         await post('/shoppinglist/1/add-item-by-name', jsonEncode(data));
+
     return res.statusCode == 200;
   }
 
   Future<bool> addRecipeItems(List<RecipeItem> items) async {
-    final res = await post('/shoppinglist/1/recipeitems',
-        jsonEncode({'items': items.map((e) => e.toJsonWithId()).toList()}));
+    final res = await post(
+      '/shoppinglist/1/recipeitems',
+      jsonEncode({'items': items.map((e) => e.toJsonWithId()).toList()}),
+    );
+
     return res.statusCode == 200;
   }
 
   Future<bool> updateShoppingListItemDescription(
-      Item item, String description) async {
+    Item item,
+    String description,
+  ) async {
     final data = {'description': description};
     final res = await post('/shoppinglist/1/item/${item.id}', jsonEncode(data));
+
     return res.statusCode == 200;
   }
 
@@ -54,6 +64,7 @@ extension ShoppinglistApi on ApiService {
       '/shoppinglist/1/item',
       body: jsonEncode({'item_id': item.id}),
     );
+
     return res.statusCode == 200;
   }
 }

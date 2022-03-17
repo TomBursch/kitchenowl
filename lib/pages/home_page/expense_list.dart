@@ -29,6 +29,7 @@ class _ExpensePageState extends State<ExpenseListPage> {
   @override
   Widget build(BuildContext context) {
     final cubit = BlocProvider.of<ExpenseListCubit>(context);
+
     return SafeArea(
       child: Scrollbar(
         child: RefreshIndicator(
@@ -110,6 +111,7 @@ class _ExpensePageState extends State<ExpenseListPage> {
     );
   }
 
+  // ignore: long-method
   Widget _getBarChart(BuildContext context, ExpenseListCubitState state) {
     double maxBalance = state.users
         .fold<double>(0.0, (p, e) => e.balance.abs() > p ? e.balance.abs() : p);
@@ -156,17 +158,18 @@ class _ExpensePageState extends State<ExpenseListPage> {
       customSeriesRenderers: [
         charts.BarTargetLineRendererConfig<String>(
           customRendererId: 'zero',
-        )
+        ),
       ],
       defaultInteractions: false,
       primaryMeasureAxis: charts.NumericAxisSpec(
-          showAxisLine: false,
-          renderSpec: const charts.NoneRenderSpec(),
-          tickProviderSpec: charts.StaticNumericTickProviderSpec([
-            charts.TickSpec(-maxBalance),
-            const charts.TickSpec<double>(0.0),
-            charts.TickSpec(maxBalance),
-          ])),
+        showAxisLine: false,
+        renderSpec: const charts.NoneRenderSpec(),
+        tickProviderSpec: charts.StaticNumericTickProviderSpec([
+          charts.TickSpec(-maxBalance),
+          const charts.TickSpec<double>(0.0),
+          charts.TickSpec(maxBalance),
+        ]),
+      ),
       domainAxis: const charts.OrdinalAxisSpec(
         renderSpec: charts.NoneRenderSpec(),
       ),

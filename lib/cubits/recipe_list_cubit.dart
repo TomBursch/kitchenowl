@@ -32,14 +32,16 @@ class RecipeListCubit extends Cubit<ListRecipeCubitState> {
       }
       if (selectedTags.isEmpty) {
         emit(
-            ListRecipeCubitState(recipes: _state.allRecipes, tags: state.tags));
+          ListRecipeCubitState(recipes: _state.allRecipes, tags: state.tags),
+        );
       } else {
         emit(_state.copyWith(
-            selectedTags: selectedTags,
-            recipes: _getFilteredRecipesCopy(
-              _state.allRecipes,
-              selectedTags,
-            )));
+          selectedTags: selectedTags,
+          recipes: _getFilteredRecipesCopy(
+            _state.allRecipes,
+            selectedTags,
+          ),
+        ));
       }
     } else if (selected) {
       emit(FilteredListRecipeCubitState.fromState(state, tag));
@@ -55,7 +57,10 @@ class RecipeListCubit extends Cubit<ListRecipeCubitState> {
       final items = (await TransactionHandler.getInstance()
           .runTransaction(TransactionRecipeSearchRecipes(query: query)));
       emit(SearchRecipeCubitState(
-          query: query, recipes: items, tags: state.tags));
+        query: query,
+        recipes: items,
+        tags: state.tags,
+      ));
     } else {
       recipeList = await TransactionHandler.getInstance()
           .runTransaction(TransactionRecipeGetRecipes());
@@ -79,9 +84,12 @@ class RecipeListCubit extends Cubit<ListRecipeCubitState> {
   }
 
   List<Recipe> _getFilteredRecipesCopy(
-          List<Recipe> allRecipes, Set<Tag> filter) =>
+    List<Recipe> allRecipes,
+    Set<Tag> filter,
+  ) =>
       List<Recipe>.from(
-          allRecipes.where((e) => e.tags.any((tag) => filter.contains(tag))));
+        allRecipes.where((e) => e.tags.any((tag) => filter.contains(tag))),
+      );
 }
 
 class ListRecipeCubitState extends Equatable {
@@ -111,7 +119,8 @@ class FilteredListRecipeCubitState extends ListRecipeCubitState {
   ) =>
       FilteredListRecipeCubitState(
         recipes: List<Recipe>.from(
-            state.recipes.where((e) => e.tags.contains(selectedTag))),
+          state.recipes.where((e) => e.tags.contains(selectedTag)),
+        ),
         allRecipes: state.recipes,
         tags: state.tags,
         selectedTags: {selectedTag},

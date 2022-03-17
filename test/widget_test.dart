@@ -12,4 +12,5 @@ import 'package:flutter_test/flutter_test.dart';
 // ignore: unused_import
 import 'package:kitchenowl/app.dart';
 
+// ignore: no-empty-block
 void main() {}

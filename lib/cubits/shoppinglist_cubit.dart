@@ -65,15 +65,20 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
       }
 
       List<Item> items = (await TransactionHandler.getInstance().runTransaction(
-              TransactionShoppingListSearchItem(query: queryName)))
+        TransactionShoppingListSearchItem(query: queryName),
+      ))
           .map((e) => ItemWithDescription.fromItem(
-              item: e, description: queryDescription))
+                item: e,
+                description: queryDescription,
+              ))
           .toList();
       _mergeShoppinglistItems(items, shoppinglist);
       if (items.isEmpty ||
           items[0].name.toLowerCase() != queryName.toLowerCase()) {
         items.add(ItemWithDescription(
-            name: queryName, description: queryDescription));
+          name: queryName,
+          description: queryDescription,
+        ));
       }
       emit(SearchShoppinglistCubitState(
         result: items,
@@ -93,7 +98,9 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
   }
 
   void _mergeShoppinglistItems(
-      List<Item> items, List<ShoppinglistItem> shoppinglist) {
+    List<Item> items,
+    List<ShoppinglistItem> shoppinglist,
+  ) {
     if (shoppinglist.isEmpty) return;
     for (int i = 0; i < items.length; i++) {
       final shoppinglistItem =
@@ -106,7 +113,9 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
   }
 
   void _sortShoppinglistItems(
-      List<ShoppinglistItem> shoppinglist, ShoppinglistSorting sorting) {
+    List<ShoppinglistItem> shoppinglist,
+    ShoppinglistSorting sorting,
+  ) {
     switch (sorting) {
       case ShoppinglistSorting.alphabetical:
         shoppinglist.sort((a, b) => a.name.compareTo(b.name));
@@ -117,6 +126,7 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
           // Ordering of 0 means not sortable and should be at the back
           if (ordering != 0 && a.ordering == 0) return 1;
           if (ordering != 0 && b.ordering == 0) return -1;
+
           return ordering;
         });
         break;

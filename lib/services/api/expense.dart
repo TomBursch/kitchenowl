@@ -9,6 +9,7 @@ extension ExpenseApi on ApiService {
     if (res.statusCode != 200) return null;
 
     final body = List.from(jsonDecode(res.body));
+
     return body.map((e) => Expense.fromJson(e)).toList();
   }
 
@@ -22,17 +23,20 @@ extension ExpenseApi on ApiService {
   Future<bool> addExpense(Expense expense) async {
     final body = expense.toJson();
     final res = await post('/expense', jsonEncode(body));
+
     return res.statusCode == 200;
   }
 
   Future<bool> deleteExpense(Expense expense) async {
     final res = await delete('/expense/${expense.id}');
+
     return res.statusCode == 200;
   }
 
   Future<bool> updateExpense(Expense expense) async {
     final body = expense.toJson();
     final res = await post('/expense/${expense.id}', jsonEncode(body));
+
     return res.statusCode == 200;
   }
 }

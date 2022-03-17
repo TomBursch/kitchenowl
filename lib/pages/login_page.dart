@@ -73,7 +73,7 @@ class _LoginPageState extends State<LoginPage> {
                         onPressed: () =>
                             BlocProvider.of<AuthCubit>(context).removeServer(),
                         child: Text(AppLocalizations.of(context)!.serverChange),
-                      )
+                      ),
                   ],
                 ),
               ),

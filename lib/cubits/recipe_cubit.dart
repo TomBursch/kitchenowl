@@ -41,8 +41,10 @@ class RecipeCubit extends Cubit<RecipeState> {
   }
 
   Future<void> addItemsToList() async {
-    await TransactionHandler.getInstance().runTransaction(
-        TransactionShoppingListAddRecipeItems(items: state.selectedItems));
+    await TransactionHandler.getInstance()
+        .runTransaction(TransactionShoppingListAddRecipeItems(
+      items: state.selectedItems,
+    ));
   }
 
   Future<void> addRecipeToPlanner() async {

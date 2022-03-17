@@ -7,7 +7,9 @@ import 'package:kitchenowl/services/transaction.dart';
 class TransactionRecipeGetRecipes extends Transaction<List<Recipe>> {
   TransactionRecipeGetRecipes({DateTime? timestamp})
       : super.internal(
-            timestamp ?? DateTime.now(), "TransactionRecipeGetRecipes");
+          timestamp ?? DateTime.now(),
+          "TransactionRecipeGetRecipes",
+        );
 
   @override
   Future<List<Recipe>> runLocal() async {
@@ -18,6 +20,7 @@ class TransactionRecipeGetRecipes extends Transaction<List<Recipe>> {
   Future<List<Recipe>> runOnline() async {
     final recipes = await ApiService.getInstance().getRecipes();
     if (recipes != null) TempStorage.getInstance().writeRecipes(recipes);
+
     return recipes ?? [];
   }
 }
@@ -25,10 +28,13 @@ class TransactionRecipeGetRecipes extends Transaction<List<Recipe>> {
 class TransactionRecipeGetRecipesFiltered extends Transaction<List<Recipe>> {
   final Set<Tag> filter;
 
-  TransactionRecipeGetRecipesFiltered(
-      {DateTime? timestamp, required this.filter})
-      : super.internal(
-            timestamp ?? DateTime.now(), "TransactionRecipeGetRecipesFiltered");
+  TransactionRecipeGetRecipesFiltered({
+    DateTime? timestamp,
+    required this.filter,
+  }) : super.internal(
+          timestamp ?? DateTime.now(),
+          "TransactionRecipeGetRecipesFiltered",
+        );
 
   @override
   Future<List<Recipe>> runLocal() async {
@@ -49,7 +55,9 @@ class TransactionRecipeGetRecipe extends Transaction<Recipe> {
 
   TransactionRecipeGetRecipe({required this.recipe, DateTime? timestamp})
       : super.internal(
-            timestamp ?? DateTime.now(), "TransactionRecipeGetRecipe");
+          timestamp ?? DateTime.now(),
+          "TransactionRecipeGetRecipe",
+        );
 
   @override
   Future<Recipe> runLocal() async {
@@ -66,13 +74,16 @@ class TransactionRecipeSearchRecipes extends Transaction<List<Recipe>> {
   final String query;
   TransactionRecipeSearchRecipes({required this.query, DateTime? timestamp})
       : super.internal(
-            timestamp ?? DateTime.now(), "TransactionRecipeSearchRecipes");
+          timestamp ?? DateTime.now(),
+          "TransactionRecipeSearchRecipes",
+        );
 
   @override
   Future<List<Recipe>> runLocal() async {
     final recipes = await TempStorage.getInstance().readRecipes() ?? const [];
     recipes
         .retainWhere((e) => e.name.toLowerCase().contains(query.toLowerCase()));
+
     return recipes;
   }
 

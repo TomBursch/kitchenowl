@@ -23,6 +23,7 @@ class ServerSettings extends Model {
     if (featureExpenses != null) {
       data['expenses_feature'] = featureExpenses;
     }
+
     return data;
   }
 

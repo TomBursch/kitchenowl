@@ -22,6 +22,7 @@ class Expense extends Model {
     if (map.containsKey('paid_for')) {
       paidFor = List.from(map['paid_for'].map((e) => PaidForModel.fromJson(e)));
     }
+
     return Expense(
       id: map['id'],
       name: map['name'],
@@ -54,7 +55,7 @@ class Expense extends Model {
         "name": name,
         "amount": amount,
         "paid_by": {"id": paidById},
-        "paid_for": paidFor.map((e) => e.toJson()).toList()
+        "paid_for": paidFor.map((e) => e.toJson()).toList(),
       };
 
   @override

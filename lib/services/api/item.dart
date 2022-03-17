@@ -9,6 +9,7 @@ extension ItemApi on ApiService {
     if (res.statusCode != 200) return null;
 
     final body = jsonDecode(res.body);
+
     return Item.fromJson(body);
   }
 
@@ -17,6 +18,7 @@ extension ItemApi on ApiService {
     if (res.statusCode != 200) return null;
 
     final body = List.from(jsonDecode(res.body));
+
     return body.map((e) => Recipe.fromJson(e)).toList();
   }
 
@@ -25,16 +27,19 @@ extension ItemApi on ApiService {
     if (res.statusCode != 200) return null;
 
     final body = List.from(jsonDecode(res.body));
+
     return body.map((e) => Item.fromJson(e)).toList();
   }
 
   Future<bool> deleteItem(Item item) async {
     final res = await delete('/item/${item.id}');
+
     return res.statusCode == 200;
   }
 
   Future<bool> updateItem(Item item) async {
     final res = await post('/item/${item.id}', item.toJson());
+
     return res.statusCode == 200;
   }
 }

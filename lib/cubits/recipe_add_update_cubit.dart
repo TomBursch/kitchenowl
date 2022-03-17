@@ -51,6 +51,7 @@ class AddUpdateRecipeCubit extends Cubit<AddUpdateRecipeState> {
 
   Future<bool> removeRecipe() async {
     if (recipe.id != null) return ApiService.getInstance().deleteRecipe(recipe);
+
     return false;
   }
 
@@ -109,8 +110,9 @@ class AddUpdateRecipeCubit extends Cubit<AddUpdateRecipeState> {
             orElse: () => RecipeItem.fromItem(item: item, optional: optional),
           )
           .copyWith(
-              description:
-                  (item is ItemWithDescription) ? item.description : null));
+            description:
+                (item is ItemWithDescription) ? item.description : null,
+          ));
     }
     l.addAll(state.items.where((e) => e.optional != optional));
     emit(state.copyWith(items: l));

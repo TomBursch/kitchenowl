@@ -45,8 +45,10 @@ class _ItemPageState extends State<ItemPage> {
         if (cubit.hasChanged()) {
           await cubit.saveItem();
           Navigator.of(context).pop(UpdateEnum.updated);
+
           return false;
         }
+
         return true;
       },
       child: Scaffold(
@@ -72,7 +74,7 @@ class _ItemPageState extends State<ItemPage> {
                   }
                 },
                 icon: const Icon(Icons.delete),
-              )
+              ),
           ],
         ),
         body: Scrollbar(
@@ -130,6 +132,7 @@ class _ItemPageState extends State<ItemPage> {
                               );
                             }
                             i = i - 1;
+
                             return Padding(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 13),

@@ -10,31 +10,37 @@ class SettingsServerCubit extends Cubit<SettingsServerState> {
   }
 
   Future<void> refresh() async {
-    emit(SettingsServerState(await ApiService.getInstance().getAllUsers() ?? [],
-        await ApiService.getInstance().getAllTags() ?? {}));
+    emit(SettingsServerState(
+      await ApiService.getInstance().getAllUsers() ?? [],
+      await ApiService.getInstance().getAllTags() ?? {},
+    ));
   }
 
   Future<bool> createUser(String username, String name, String password) async {
     final res = ApiService.getInstance().createUser(username, name, password);
     refresh();
+
     return res;
   }
 
   Future<bool> deleteUser(User user) async {
     final res = ApiService.getInstance().removeUser(user);
     refresh();
+
     return res;
   }
 
   Future<bool> addTag(String name) async {
     final res = ApiService.getInstance().addTag(Tag(name: name));
     refresh();
+
     return res;
   }
 
   Future<bool> deleteTag(Tag tag) async {
     final res = ApiService.getInstance().deleteTag(tag);
     refresh();
+
     return res;
   }
 }

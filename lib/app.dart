@@ -64,6 +64,7 @@ class App extends StatelessWidget {
                     if (state is Authenticated) return const HomePage();
                     if (state is Unreachable) return const UnreachablePage();
                     if (state is Unsupported) return const UnsupportedPage();
+
                     return const SplashPage();
                   },
                 ),

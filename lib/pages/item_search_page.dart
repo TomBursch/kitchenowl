@@ -104,6 +104,7 @@ class _ItemSearchPageState extends State<ItemSearchPage> {
         ),
       ),
     );
+
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(appbar.preferredSize.height + 56),

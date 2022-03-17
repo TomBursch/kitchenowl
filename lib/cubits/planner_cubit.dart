@@ -43,10 +43,11 @@ class PlannerCubitState extends Equatable {
   final List<Recipe> recentRecipes;
   final List<Recipe> suggestedRecipes;
 
-  const PlannerCubitState(
-      [this.plannedRecipes = const [],
-      this.recentRecipes = const [],
-      this.suggestedRecipes = const []]);
+  const PlannerCubitState([
+    this.plannedRecipes = const [],
+    this.recentRecipes = const [],
+    this.suggestedRecipes = const [],
+  ]);
 
   @override
   List<Object?> get props =>

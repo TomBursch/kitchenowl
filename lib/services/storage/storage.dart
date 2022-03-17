@@ -15,6 +15,7 @@ class SecureStorage extends Storage {
   SecureStorage._internal();
   static SecureStorage getInstance() {
     _instance ??= SecureStorage._internal();
+
     return _instance!;
   }
 
@@ -32,6 +33,7 @@ class SecureStorage extends Storage {
     if (_platformSupportsSecureStorage()) {
       return await _storage.read(key: key);
     }
+
     return null;
   }
 
@@ -50,6 +52,7 @@ class PreferenceStorage extends Storage {
   PreferenceStorage._internal();
   static PreferenceStorage getInstance() {
     _instance ??= PreferenceStorage._internal();
+
     return _instance!;
   }
 

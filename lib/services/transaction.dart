@@ -37,8 +37,11 @@ abstract class Transaction<T> extends Model {
       return _transactionTypes[map['className']]!(map, timestamp)
           as Transaction<T>;
     }
+
     return ErrorTransaction<T>(
-        timestamp, map.containsKey('className') ? map['className'] : "ERROR");
+      timestamp,
+      map.containsKey('className') ? map['className'] : "ERROR",
+    );
   }
 
   @override

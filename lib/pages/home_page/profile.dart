@@ -18,24 +18,26 @@ class ProfilePage extends StatelessWidget {
     final user =
         (BlocProvider.of<AuthCubit>(context).state as Authenticated).user;
     final isOffline = App.isOffline(context);
+
     return CustomScrollView(
       physics: const ClampingScrollPhysics(),
       slivers: [
         SliverPadding(
           padding: const EdgeInsets.fromLTRB(16, 64, 16, 16),
           sliver: SliverList(
-              delegate: SliverChildListDelegate([
-            Icon(
-              Icons.account_circle_rounded,
-              size: 90,
-              color: Theme.of(context).colorScheme.secondary,
-            ),
-            Text(
-              user.name,
-              style: Theme.of(context).textTheme.headline5,
-              textAlign: TextAlign.center,
-            ),
-          ])),
+            delegate: SliverChildListDelegate([
+              Icon(
+                Icons.account_circle_rounded,
+                size: 90,
+                color: Theme.of(context).colorScheme.secondary,
+              ),
+              Text(
+                user.name,
+                style: Theme.of(context).textTheme.headline5,
+                textAlign: TextAlign.center,
+              ),
+            ]),
+          ),
         ),
         BlocBuilder<SettingsCubit, SettingsState>(
           builder: (context, state) => SliverFillRemaining(
@@ -97,9 +99,11 @@ class ProfilePage extends StatelessWidget {
                         leading: const Icon(Icons.shopping_bag),
                         trailing: const Icon(Icons.arrow_right_rounded),
                         onTap: () => Navigator.of(context).push(
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    const SettingsShoppinglistsPage())),
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                const SettingsShoppinglistsPage(),
+                          ),
+                        ),
                       ),
                     ),
                   if (!isOffline)
@@ -109,9 +113,10 @@ class ProfilePage extends StatelessWidget {
                         leading: const Icon(Icons.person),
                         trailing: const Icon(Icons.arrow_right_rounded),
                         onTap: () => Navigator.of(context).push(
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    const SettingsUserPage())),
+                          MaterialPageRoute(
+                            builder: (context) => const SettingsUserPage(),
+                          ),
+                        ),
                       ),
                     ),
                   if (!isOffline && user.hasAdminRights())
@@ -121,9 +126,10 @@ class ProfilePage extends StatelessWidget {
                         leading: const Icon(Icons.account_tree_rounded),
                         trailing: const Icon(Icons.arrow_right_rounded),
                         onTap: () => Navigator.of(context).push(
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    const SettingsServerPage())),
+                          MaterialPageRoute(
+                            builder: (context) => const SettingsServerPage(),
+                          ),
+                        ),
                       ),
                     ),
                   Card(
@@ -132,23 +138,26 @@ class ProfilePage extends StatelessWidget {
                       leading: const Icon(Icons.privacy_tip_rounded),
                       trailing: const Icon(Icons.arrow_right_rounded),
                       onTap: () => showAboutDialog(
-                          context: context,
-                          applicationVersion: Config.packageInfo?.version,
-                          applicationLegalese: '\u{a9} ' +
-                              AppLocalizations.of(context)!.appLegal,
-                          applicationIcon: ConstrainedBox(
-                            constraints: const BoxConstraints.expand(
-                                width: 64, height: 64),
-                            child: Image.asset(
-                              'assets/icon/icon.png',
-                            ),
+                        context: context,
+                        applicationVersion: Config.packageInfo?.version,
+                        applicationLegalese:
+                            '\u{a9} ' + AppLocalizations.of(context)!.appLegal,
+                        applicationIcon: ConstrainedBox(
+                          constraints: const BoxConstraints.expand(
+                            width: 64,
+                            height: 64,
                           ),
-                          children: [
-                            const SizedBox(height: 24),
-                            Text(
-                              AppLocalizations.of(context)!.appDescription,
-                            )
-                          ]),
+                          child: Image.asset(
+                            'assets/icon/icon.png',
+                          ),
+                        ),
+                        children: [
+                          const SizedBox(height: 24),
+                          Text(
+                            AppLocalizations.of(context)!.appDescription,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                   TextButton(

@@ -36,7 +36,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                     autofocus: true,
                     autofillHints: const [
                       AutofillHints.newUsername,
-                      AutofillHints.username
+                      AutofillHints.username,
                     ],
                     textInputAction: TextInputAction.next,
                     decoration: InputDecoration(
@@ -48,7 +48,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                     textInputAction: TextInputAction.next,
                     autofillHints: const [
                       AutofillHints.name,
-                      AutofillHints.nickname
+                      AutofillHints.nickname,
                     ],
                     decoration: InputDecoration(
                       labelText: AppLocalizations.of(context)!.name,
@@ -59,7 +59,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                     obscureText: true,
                     autofillHints: const [
                       AutofillHints.newPassword,
-                      AutofillHints.password
+                      AutofillHints.password,
                     ],
                     textInputAction: TextInputAction.go,
                     onSubmitted: (text) =>
@@ -90,7 +90,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                       onPressed: () =>
                           BlocProvider.of<AuthCubit>(context).removeServer(),
                       child: Text(AppLocalizations.of(context)!.serverChange),
-                    )
+                    ),
                 ],
               ),
             ),

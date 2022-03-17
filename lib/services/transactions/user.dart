@@ -16,6 +16,7 @@ class TransactionUserGetAll extends Transaction<List<User>> {
   Future<List<User>> runOnline() async {
     final users = await ApiService.getInstance().getAllUsers();
     if (users != null) TempStorage.getInstance().writeUsers(users);
+
     return users ?? const [];
   }
 }

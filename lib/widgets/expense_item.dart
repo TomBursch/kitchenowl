@@ -29,10 +29,11 @@ class ExpenseItemWidget extends StatelessWidget {
         onTap: () async {
           final res =
               await Navigator.of(context).push<UpdateEnum>(MaterialPageRoute(
-                  builder: (context) => ExpensePage(
-                        expense: expense,
-                        users: users,
-                      )));
+            builder: (context) => ExpensePage(
+              expense: expense,
+              users: users,
+            ),
+          ));
           if (onUpdated != null &&
               (res == UpdateEnum.updated || res == UpdateEnum.deleted)) {
             onUpdated!();

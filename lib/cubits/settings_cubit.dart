@@ -22,7 +22,8 @@ class SettingsCubit extends Cubit<SettingsState> {
       value: jsonEncode(ApiService.getInstance().serverSettings.toJson()),
     );
     emit(state.copyWith(
-        serverSettings: ApiService.getInstance().serverSettings));
+      serverSettings: ApiService.getInstance().serverSettings,
+    ));
   }
 
   Future<void> load() async {
@@ -36,8 +37,9 @@ class SettingsCubit extends Cubit<SettingsState> {
     }
 
     ServerSettings serverSettings = ServerSettings.fromJson(jsonDecode(
-        (await PreferenceStorage.getInstance().read(key: 'serverSettings')) ??
-            "{}"));
+      (await PreferenceStorage.getInstance().read(key: 'serverSettings')) ??
+          "{}",
+    ));
 
     if (ApiService.getInstance().serverSettings.featureExpenses != null ||
         ApiService.getInstance().serverSettings.featurePlanner != null) {

@@ -14,15 +14,21 @@ extension PlannerApi on ApiService {
     return body.map((e) => Recipe.fromJson(e)).toList();
   }
 
-  Future<bool> addPlannedRecipe(Recipe recipe) async {
+  Future<bool> addPlannedRecipe(Recipe recipe, int? day) async {
     final body = {"recipe_id": recipe.id};
+    if (day != null) body['day'] = day;
     final res = await post(baseRoute + '/recipe', jsonEncode(body));
 
     return res.statusCode == 200;
   }
 
-  Future<bool> removePlannedRecipe(Recipe recipe) async {
-    final res = await delete(baseRoute + '/recipe/${recipe.id}');
+  Future<bool> removePlannedRecipe(Recipe recipe, int? day) async {
+    final body = {};
+    if (day != null) body['day'] = day;
+    final res = await delete(
+      baseRoute + '/recipe/${recipe.id}',
+      body: jsonEncode(body),
+    );
 
     return res.statusCode == 200;
   }

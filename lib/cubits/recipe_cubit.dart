@@ -47,9 +47,13 @@ class RecipeCubit extends Cubit<RecipeState> {
     ));
   }
 
-  Future<void> addRecipeToPlanner() async {
+  Future<void> addRecipeToPlanner([int? day]) async {
     await TransactionHandler.getInstance()
-        .runTransaction(TransactionPlannerAddRecipe(recipe: state.recipe));
+        .runTransaction(TransactionPlannerAddRecipe(
+      recipe: state.recipe,
+      day: day,
+    ));
+    setUpdateState(UpdateEnum.updated);
   }
 }
 

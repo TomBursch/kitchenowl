@@ -7,6 +7,7 @@ class Recipe extends Model {
   final String name;
   final String description;
   final bool isPlanned;
+  final Set<int> plannedDays;
   final int time;
   final List<RecipeItem> items;
   final Set<Tag> tags;
@@ -19,6 +20,7 @@ class Recipe extends Model {
     this.time = 0,
     this.items = const [],
     this.tags = const {},
+    this.plannedDays = const {},
   });
 
   factory Recipe.fromJson(Map<String, dynamic> map) {
@@ -30,6 +32,10 @@ class Recipe extends Model {
     if (map.containsKey('tags')) {
       tags = Set.from(map['tags'].map((e) => Tag.fromJson(e)));
     }
+    Set<int> plannedDays = const {};
+    if (map.containsKey('planned_days')) {
+      plannedDays = Set.from(map['planned_days']);
+    }
 
     return Recipe(
       id: map['id'],
@@ -39,6 +45,7 @@ class Recipe extends Model {
       time: map['time'] ?? 0,
       items: items,
       tags: tags,
+      plannedDays: plannedDays,
     );
   }
 
@@ -49,6 +56,7 @@ class Recipe extends Model {
     int? time,
     List<RecipeItem>? items,
     Set<Tag>? tags,
+    Set<int>? plannedDays,
   }) =>
       Recipe(
         id: id,
@@ -58,11 +66,12 @@ class Recipe extends Model {
         isPlanned: isPlanned ?? this.isPlanned,
         time: time ?? this.time,
         tags: tags ?? this.tags,
+        plannedDays: plannedDays ?? this.plannedDays,
       );
 
   @override
   List<Object?> get props =>
-      [id, name, description, isPlanned, time, tags, items];
+      [id, name, description, isPlanned, time, tags, items, plannedDays];
 
   @override
   Map<String, dynamic> toJson() => {
@@ -71,6 +80,7 @@ class Recipe extends Model {
         "time": time,
         "items": items.map((e) => e.toJson()).toList(),
         "tags": tags.map((e) => e.toString()).toList(),
+        "planned_days": plannedDays.map((e) => e.toString()).toList(),
       };
 
   @override

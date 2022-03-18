@@ -3,7 +3,7 @@ from flask import jsonify, Blueprint
 from flask_jwt_extended import jwt_required
 from app.helpers import validate_args
 from app.models import Recipe, RecipeHistory
-from .schemas import AddPlannedRecipe
+from .schemas import AddPlannedRecipe, RemovePlannedRecipe
 
 planner = Blueprint('planner', __name__)
 
@@ -22,21 +22,30 @@ def addPlannedRecipe(args):
     recipe = Recipe.find_by_id(args['recipe_id'])
     if not recipe:
         raise NotFoundRequest()
-    if not recipe.planned:
-        recipe.planned = True
-        recipe.save()
-        RecipeHistory.create_added(recipe)
+    if 'day' in args:
+        recipe.planned_days = recipe.planned_days.copy()
+        recipe.planned_days.add(args['day'])
+    else:
+        recipe.planned_days = set()
+    recipe.planned = True
+    recipe.save()
+    RecipeHistory.create_added(recipe)
     return jsonify(recipe.obj_to_dict())
 
 
 @planner.route('/recipe/<id>', methods=['DELETE'])
 @jwt_required()
-def removePlannedRecipeById(id):
+@validate_args(RemovePlannedRecipe)
+def removePlannedRecipeById(args, id):
     recipe = Recipe.find_by_id(id)
     if not recipe:
         raise NotFoundRequest()
     if recipe.planned:
-        recipe.planned = False
+        if 'day' in args:
+            recipe.planned_days.discard(args['day'])
+        else:
+            recipe.planned_days = {}
+        recipe.planned = len(recipe.planned_days) > 0
         recipe.save()
         RecipeHistory.create_dropped(recipe)
     return jsonify(recipe.obj_to_dict())

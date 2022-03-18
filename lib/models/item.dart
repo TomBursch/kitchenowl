@@ -127,7 +127,7 @@ class RecipeItem extends ItemWithDescription {
 
   factory RecipeItem.fromJson(Map<String, dynamic> map) => RecipeItem(
         id: map['id'],
-        name: map['name'],
+        name: map['name'] ?? '',
         description: map['description'],
         optional: map['optional'],
       );

@@ -21,7 +21,16 @@ class ItemEditCubit extends Cubit<ItemEditState> {
   Future<void> refresh() async {
     if (item.id != null) {
       final recipes = (await TransactionHandler.getInstance()
-          .runTransaction(TransactionItemGetRecipes(item: item)));
+          .runTransaction(TransactionItemGetRecipes(item: item)))
+        ..sort(((a, b) {
+          if (a.isPlanned == b.isPlanned) {
+            return 0;
+          } else if (b.isPlanned) {
+            return 1;
+          } else {
+            return -1;
+          }
+        }));
       emit(state.copyWith(recipes: recipes));
     }
   }

@@ -139,6 +139,17 @@ class _ItemPageState extends State<ItemPage> {
                               child: RecipeItemWidget(
                                 recipe: state.recipes[i],
                                 onUpdated: cubit.refresh,
+                                description: state.recipes[i].isPlanned &&
+                                        state.recipes[i].items.isNotEmpty &&
+                                        state.recipes[i].items.first.description
+                                            .isNotEmpty
+                                    ? Text(
+                                        state
+                                            .recipes[i].items.first.description,
+                                        style:
+                                            Theme.of(context).textTheme.caption,
+                                      )
+                                    : null,
                               ),
                             );
                           },

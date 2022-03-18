@@ -33,7 +33,11 @@ class TransactionItemGetRecipes extends Transaction<List<Recipe>> {
   @override
   Future<List<Recipe>> runLocal() async {
     final recipes = (await TempStorage.getInstance().readRecipes()) ?? [];
-    recipes.retainWhere((e) => e.items.map((e) => e.id).contains(item.id));
+    recipes.retainWhere((e) {
+      e.items.retainWhere((e) => e.id == item.id);
+
+      return e.items.isNotEmpty;
+    });
 
     return recipes;
   }

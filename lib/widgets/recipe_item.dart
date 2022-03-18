@@ -6,11 +6,13 @@ import 'package:kitchenowl/pages/recipe_page.dart';
 class RecipeItemWidget extends StatelessWidget {
   final Recipe recipe;
   final void Function()? onUpdated;
+  final Widget? description;
 
   const RecipeItemWidget({
     Key? key,
     required this.recipe,
     this.onUpdated,
+    this.description,
   }) : super(key: key);
 
   @override
@@ -20,6 +22,7 @@ class RecipeItemWidget extends StatelessWidget {
         title: Text(recipe.name),
         trailing: const Icon(Icons.arrow_right_rounded),
         selected: recipe.isPlanned,
+        subtitle: description,
         onTap: () async {
           final res = await Navigator.of(context).push<UpdateEnum>(
             MaterialPageRoute(

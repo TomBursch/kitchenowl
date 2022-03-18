@@ -1,10 +1,11 @@
+from __future__ import annotations
 from sqlalchemy import asc, desc
 from app import db
 
 
 class DbModelMixin(object):
 
-    def save(self):
+    def save(self) -> DbModelMixin:
         """
         Persist changes to current instance in db
         """
@@ -17,7 +18,7 @@ class DbModelMixin(object):
 
         return self
 
-    def assign(self, **kwargs):
+    def assign(self, **kwargs) -> DbModelMixin:
         """
         Update an entry
         """
@@ -48,7 +49,7 @@ class DbModelMixin(object):
             self.save()
 
     @classmethod
-    def get_column_names(cls):
+    def get_column_names(cls) -> list[str]:
         return list(cls.__table__.columns.keys())
 
     @classmethod
@@ -82,7 +83,7 @@ class DbModelMixin(object):
         db.session.delete(self)
         db.session.commit()
 
-    def obj_to_dict(self, skip_columns=None, include_columns=None):
+    def obj_to_dict(self, skip_columns=None, include_columns=None) -> dict:
         d = {}
         for column in self.__table__.columns:
             d[column.name] = getattr(self, column.name)
@@ -99,7 +100,7 @@ class DbModelMixin(object):
 
         return d
 
-    def clone(self, overrides):
+    def clone(self, overrides) -> DbModelMixin:
         new_self = self.__class__()
         new_self.assign_columns(self.obj_to_dict())
 
@@ -110,7 +111,7 @@ class DbModelMixin(object):
         return new_self
 
     @classmethod
-    def find_by_id(cls, target_id):
+    def find_by_id(cls, target_id) -> DbModelMixin:
         """
         Find the row with specified id
         """
@@ -152,7 +153,7 @@ class DbModelMixin(object):
         return cls.query.order_by(cls.name).all()
 
     @classmethod
-    def first(cls):
+    def first(cls) -> DbModelMixin:
         """
         Returns the first entry of database
         """
@@ -163,7 +164,7 @@ class DbModelMixin(object):
         return None
 
     @classmethod
-    def last(cls):
+    def last(cls) -> DbModelMixin:
         """
         Return the last entry of table in database
         """
@@ -174,5 +175,5 @@ class DbModelMixin(object):
         return None
 
     @classmethod
-    def count(cls):
+    def count(cls) -> int:
         return cls.query.count()

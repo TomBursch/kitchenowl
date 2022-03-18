@@ -9,7 +9,7 @@ class Query(BaseQuery):
     Extends flask.ext.sqlalchemy.BaseQuery to add additional helper methods.
     """
 
-    def notempty(self):
+    def notempty(self) -> bool:
         """
         Returns the equivalent of ``bool(query.count())`` but using an
         efficient SQL EXISTS function, so the database stops counting
@@ -17,7 +17,7 @@ class Query(BaseQuery):
         """
         return self.session.query(self.exists()).first()[0]
 
-    def isempty(self):
+    def isempty(self) -> bool:
         """
         Returns the equivalent of ``not bool(query.count())`` but
         using an efficient SQL EXISTS function, so the database stops

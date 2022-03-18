@@ -1,5 +1,7 @@
+from __future__ import annotations
 from app import db
 from app.helpers import DbModelMixin, TimestampMixin
+from app.helpers.db_set_type import DbSetType
 from .item import Item
 from .tag import Tag
 from random import randint
@@ -13,6 +15,7 @@ class Recipe(db.Model, DbModelMixin, TimestampMixin):
     description = db.Column(db.String())
     photo = db.Column(db.String())
     planned = db.Column(db.Boolean)
+    planned_days = db.Column(DbSetType(), default=set())
     time = db.Column(db.Integer)
     suggestion_score = db.Column(db.Integer, server_default='0')
     suggestion_rank = db.Column(db.Integer, server_default='0')
@@ -23,9 +26,14 @@ class Recipe(db.Model, DbModelMixin, TimestampMixin):
         'RecipeItems', back_populates='recipe', cascade="all, delete-orphan")
     tags = db.relationship(
         'RecipeTags', back_populates='recipe', cascade="all, delete-orphan")
-
-    def obj_to_full_dict(self):
+    
+    def obj_to_dict(self):
         res = super().obj_to_dict()
+        res['planned_days'] = list(self.planned_days)
+        return res
+
+    def obj_to_full_dict(self) -> dict:
+        res = self.obj_to_dict()
         items = RecipeItems.query.filter(RecipeItems.recipe_id == self.id).join(
             RecipeItems.item).order_by(
             Item.name).all()
@@ -36,7 +44,7 @@ class Recipe(db.Model, DbModelMixin, TimestampMixin):
         res['tags'] = [e.obj_to_item_dict() for e in tags]
         return res
 
-    def obj_to_export_dict(self):
+    def obj_to_export_dict(self) -> dict:
         items = RecipeItems.query.filter(RecipeItems.recipe_id == self.id).join(
             RecipeItems.item).order_by(
             Item.name).all()
@@ -86,11 +94,11 @@ class Recipe(db.Model, DbModelMixin, TimestampMixin):
             cls.suggestion_rank > 0).order_by(cls.suggestion_rank).limit(9).all()
 
     @classmethod
-    def find_by_name(cls, name):
+    def find_by_name(cls, name) -> Recipe:
         return cls.query.filter(cls.name == name).first()
 
     @classmethod
-    def find_by_id(cls, id):
+    def find_by_id(cls, id) -> Recipe:
         return cls.query.filter(cls.id == id).first()
 
     @classmethod

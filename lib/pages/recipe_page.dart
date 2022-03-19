@@ -245,48 +245,68 @@ class _RecipePageState extends State<RecipePage> {
                   SliverPadding(
                     padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
                     sliver: SliverToBoxAdapter(
-                      child: ElevatedButton(
-                        child: Text(
-                          AppLocalizations.of(context)!.addRecipeToPlanner,
-                        ),
-                        onPressed: () async {
-                          final weekdayMapping = {
-                            0: DateTime.monday,
-                            1: DateTime.tuesday,
-                            2: DateTime.wednesday,
-                            3: DateTime.thursday,
-                            4: DateTime.friday,
-                            5: DateTime.saturday,
-                            6: DateTime.sunday,
-                          };
-                          int? day = await showDialog<int>(
-                            context: context,
-                            builder: (context) => SelectDialog(
-                              title: AppLocalizations.of(context)!
-                                  .addRecipeToPlanner,
-                              cancelText: AppLocalizations.of(context)!.cancel,
-                              options: weekdayMapping.entries
-                                  .map(
-                                    (e) => SelectDialogOption(
-                                      e.key,
-                                      DateFormat.E()
-                                          .dateSymbols
-                                          .STANDALONEWEEKDAYS[e.value % 7],
-                                    ),
-                                  )
-                                  .toList(),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: ElevatedButton(
+                              child: Text(
+                                AppLocalizations.of(context)!
+                                    .addRecipeToPlanner,
+                              ),
+                              onPressed: () async {
+                                await cubit.addRecipeToPlanner(null);
+                                Navigator.of(context).pop(
+                                  widget.updateOnPlanningEdit
+                                      ? UpdateEnum.updated
+                                      : UpdateEnum.unchanged,
+                                );
+                              },
                             ),
-                          );
-                          if (day != null) {
-                            await cubit
-                                .addRecipeToPlanner(day >= 0 ? day : null);
-                            Navigator.of(context).pop(
-                              widget.updateOnPlanningEdit
-                                  ? UpdateEnum.updated
-                                  : UpdateEnum.unchanged,
-                            );
-                          }
-                        },
+                          ),
+                          const SizedBox(width: 8),
+                          ElevatedButton(
+                            child: const Icon(Icons.calendar_month_rounded),
+                            onPressed: () async {
+                              final weekdayMapping = {
+                                0: DateTime.monday,
+                                1: DateTime.tuesday,
+                                2: DateTime.wednesday,
+                                3: DateTime.thursday,
+                                4: DateTime.friday,
+                                5: DateTime.saturday,
+                                6: DateTime.sunday,
+                              };
+                              int? day = await showDialog<int>(
+                                context: context,
+                                builder: (context) => SelectDialog(
+                                  title: AppLocalizations.of(context)!
+                                      .addRecipeToPlanner,
+                                  cancelText:
+                                      AppLocalizations.of(context)!.cancel,
+                                  options: weekdayMapping.entries
+                                      .map(
+                                        (e) => SelectDialogOption(
+                                          e.key,
+                                          DateFormat.E()
+                                              .dateSymbols
+                                              .STANDALONEWEEKDAYS[e.value % 7],
+                                        ),
+                                      )
+                                      .toList(),
+                                ),
+                              );
+                              if (day != null) {
+                                await cubit
+                                    .addRecipeToPlanner(day >= 0 ? day : null);
+                                Navigator.of(context).pop(
+                                  widget.updateOnPlanningEdit
+                                      ? UpdateEnum.updated
+                                      : UpdateEnum.unchanged,
+                                );
+                              }
+                            },
+                          ),
+                        ],
                       ),
                     ),
                   ),

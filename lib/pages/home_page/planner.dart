@@ -6,6 +6,7 @@ import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/recipe.dart';
 import 'package:kitchenowl/pages/recipe_page.dart';
+import 'package:kitchenowl/widgets/fractionally_sized_box.dart';
 import 'package:kitchenowl/widgets/selectable_button_card.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
@@ -96,8 +97,9 @@ class _PlannerPageState extends State<PlannerPage> {
                       alignment: WrapAlignment.start,
                       children: [
                         for (final recipe in state.getPlannedWithoutDay())
-                          FractionallySizedBox(
-                            widthFactor: (1 / crossAxisCount) - 0.0019 * 3,
+                          KitchenOwlFractionallySizedBox(
+                            widthFactor: (1 / crossAxisCount),
+                            widthSubstract: (crossAxisCount - 1) * 4,
                             child: AspectRatio(
                               aspectRatio: 1,
                               child: SelectableButtonCard(
@@ -117,8 +119,9 @@ class _PlannerPageState extends State<PlannerPage> {
                           ),
                         for (int day = 0; day < 7; day++)
                           for (final recipe in state.getPlannedOfDay(day))
-                            FractionallySizedBox(
-                              widthFactor: (1 / crossAxisCount) - 0.0019 * 3,
+                            KitchenOwlFractionallySizedBox(
+                              widthFactor: (1 / crossAxisCount),
+                              widthSubstract: (crossAxisCount - 1) * 4,
                               child: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 crossAxisAlignment: CrossAxisAlignment.stretch,

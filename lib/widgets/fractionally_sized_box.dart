@@ -86,7 +86,8 @@ class KitchenOwlFractionallySizedBox extends SingleChildRenderObjectWidget {
 
   @override
   KitchenOwlRenderFractionallySizedOverflowBox createRenderObject(
-      BuildContext context) {
+    BuildContext context,
+  ) {
     return KitchenOwlRenderFractionallySizedOverflowBox(
       alignment: alignment,
       widthFactor: widthFactor,
@@ -98,8 +99,10 @@ class KitchenOwlFractionallySizedBox extends SingleChildRenderObjectWidget {
   }
 
   @override
-  void updateRenderObject(BuildContext context,
-      KitchenOwlRenderFractionallySizedOverflowBox renderObject) {
+  void updateRenderObject(
+    BuildContext context,
+    KitchenOwlRenderFractionallySizedOverflowBox renderObject,
+  ) {
     renderObject
       ..alignment = alignment
       ..widthFactor = widthFactor
@@ -117,11 +120,13 @@ class KitchenOwlFractionallySizedBox extends SingleChildRenderObjectWidget {
     properties
         .add(DoubleProperty('widthFactor', widthFactor, defaultValue: null));
     properties.add(
-        DoubleProperty('widthSubstract', heightFactor, defaultValue: null));
+      DoubleProperty('widthSubstract', heightFactor, defaultValue: null),
+    );
     properties
         .add(DoubleProperty('heightFactor', heightFactor, defaultValue: null));
     properties.add(
-        DoubleProperty('heightSubstract', heightFactor, defaultValue: null));
+      DoubleProperty('heightSubstract', heightFactor, defaultValue: null),
+    );
   }
 }
 
@@ -160,7 +165,10 @@ class KitchenOwlRenderFractionallySizedOverflowBox
         _heightFactor = heightFactor,
         _heightSubstract = heightSubstract,
         super(
-            child: child, alignment: alignment, textDirection: textDirection) {
+          child: child,
+          alignment: alignment,
+          textDirection: textDirection,
+        ) {
     assert(_widthFactor == null || _widthFactor! >= 0.0);
     assert(_widthSubstract == null || _widthSubstract! >= 0.0);
     assert(_heightFactor == null || _heightFactor! >= 0.0);
@@ -228,6 +236,7 @@ class KitchenOwlRenderFractionallySizedOverflowBox
       minHeight = height;
       maxHeight = height;
     }
+
     return BoxConstraints(
       minWidth: minWidth,
       maxWidth: maxWidth,
@@ -239,54 +248,48 @@ class KitchenOwlRenderFractionallySizedOverflowBox
   @override
   double computeMinIntrinsicWidth(double height) {
     final double result;
-    if (child == null) {
-      result = super.computeMinIntrinsicWidth(height);
-    } else {
-      // the following line relies on double.infinity absorption
-      result = child!.getMinIntrinsicWidth(height * (_heightFactor ?? 1.0));
-    }
+    result = child == null
+        ? super.computeMinIntrinsicWidth(height)
+        : child!.getMinIntrinsicWidth(height * (_heightFactor ?? 1.0));
     assert(result.isFinite);
+
     return result / (_widthFactor ?? 1.0);
   }
 
   @override
   double computeMaxIntrinsicWidth(double height) {
     final double result;
-    if (child == null) {
-      result = super.computeMaxIntrinsicWidth(height);
-    } else {
-      // the following line relies on double.infinity absorption
-      result = child!.getMaxIntrinsicWidth(
-          (height - (heightSubstract ?? 0)) * (_heightFactor ?? 1.0));
-    }
+    result = child == null
+        ? super.computeMaxIntrinsicWidth(height)
+        : child!.getMaxIntrinsicWidth(
+            (height - (heightSubstract ?? 0)) * (_heightFactor ?? 1.0),
+          );
     assert(result.isFinite);
+
     return result / (_widthFactor ?? 1.0);
   }
 
   @override
   double computeMinIntrinsicHeight(double width) {
     final double result;
-    if (child == null) {
-      result = super.computeMinIntrinsicHeight(width);
-    } else {
-      // the following line relies on double.infinity absorption
-      result = child!.getMinIntrinsicHeight(width * (_widthFactor ?? 1.0));
-    }
+    result = child == null
+        ? super.computeMinIntrinsicHeight(width)
+        : child!.getMinIntrinsicHeight(width * (_widthFactor ?? 1.0));
     assert(result.isFinite);
+
     return result / (_heightFactor ?? 1.0);
   }
 
   @override
   double computeMaxIntrinsicHeight(double width) {
     final double result;
-    if (child == null) {
-      result = super.computeMaxIntrinsicHeight(width);
-    } else {
-      // the following line relies on double.infinity absorption
-      result = child!.getMaxIntrinsicHeight(
-          (width - (widthSubstract ?? 0)) * (_widthFactor ?? 1.0));
-    }
+    result = child == null
+        ? super.computeMaxIntrinsicHeight(width)
+        : child!.getMaxIntrinsicHeight(
+            (width - (widthSubstract ?? 0)) * (_widthFactor ?? 1.0),
+          );
     assert(result.isFinite);
+
     return result / (_heightFactor ?? 1.0);
   }
 
@@ -295,8 +298,10 @@ class KitchenOwlRenderFractionallySizedOverflowBox
     if (child != null) {
       final Size childSize =
           child!.getDryLayout(_getInnerConstraints(constraints));
+
       return constraints.constrain(childSize);
     }
+
     return constraints
         .constrain(_getInnerConstraints(constraints).constrain(Size.zero));
   }
@@ -317,12 +322,20 @@ class KitchenOwlRenderFractionallySizedOverflowBox
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties.add(
-        DoubleProperty('widthFactor', _widthFactor, ifNull: 'pass-through'));
-    properties.add(DoubleProperty('widthSubstract', _widthSubstract,
-        ifNull: 'pass-through'));
+      DoubleProperty('widthFactor', _widthFactor, ifNull: 'pass-through'),
+    );
+    properties.add(DoubleProperty(
+      'widthSubstract',
+      _widthSubstract,
+      ifNull: 'pass-through',
+    ));
     properties.add(
-        DoubleProperty('heightFactor', _heightFactor, ifNull: 'pass-through'));
-    properties.add(DoubleProperty('heightSubstract', _heightSubstract,
-        ifNull: 'pass-through'));
+      DoubleProperty('heightFactor', _heightFactor, ifNull: 'pass-through'),
+    );
+    properties.add(DoubleProperty(
+      'heightSubstract',
+      _heightSubstract,
+      ifNull: 'pass-through',
+    ));
   }
 }

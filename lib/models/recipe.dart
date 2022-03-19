@@ -80,7 +80,6 @@ class Recipe extends Model {
         "time": time,
         "items": items.map((e) => e.toJson()).toList(),
         "tags": tags.map((e) => e.toString()).toList(),
-        "planned_days": plannedDays.map((e) => e.toString()).toList(),
       };
 
   @override
@@ -90,5 +89,6 @@ class Recipe extends Model {
       "planned": isPlanned,
       "items": items.map((e) => e.toJsonWithId()).toList(),
       "tags": tags.map((e) => e.toJsonWithId()).toList(),
+      "planned_days": plannedDays.map((e) => e.toString()).toList(),
     });
 }

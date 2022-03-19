@@ -63,9 +63,13 @@ class TransactionPlannerGetSuggestedRecipes extends Transaction<List<Recipe>> {
 
 class TransactionPlannerAddRecipe extends Transaction<bool> {
   final Recipe recipe;
+  final int? day;
 
-  TransactionPlannerAddRecipe({required this.recipe, DateTime? timestamp})
-      : super.internal(
+  TransactionPlannerAddRecipe({
+    required this.recipe,
+    this.day,
+    DateTime? timestamp,
+  }) : super.internal(
           timestamp ?? DateTime.now(),
           "TransactionPlannerAddRecipe",
         );
@@ -76,6 +80,7 @@ class TransactionPlannerAddRecipe extends Transaction<bool> {
   ) =>
       TransactionPlannerAddRecipe(
         recipe: Recipe.fromJson(map['recipe']),
+        day: map['day'],
         timestamp: timestamp,
       );
 
@@ -86,6 +91,7 @@ class TransactionPlannerAddRecipe extends Transaction<bool> {
   Map<String, dynamic> toJson() => super.toJson()
     ..addAll({
       "recipe": recipe.toJsonWithId(),
+      "day": day,
     });
 
   @override
@@ -95,15 +101,19 @@ class TransactionPlannerAddRecipe extends Transaction<bool> {
 
   @override
   Future<bool> runOnline() {
-    return ApiService.getInstance().addPlannedRecipe(recipe);
+    return ApiService.getInstance().addPlannedRecipe(recipe, day);
   }
 }
 
 class TransactionPlannerRemoveRecipe extends Transaction<bool> {
   final Recipe recipe;
+  final int? day;
 
-  TransactionPlannerRemoveRecipe({required this.recipe, DateTime? timestamp})
-      : super.internal(
+  TransactionPlannerRemoveRecipe({
+    required this.recipe,
+    this.day,
+    DateTime? timestamp,
+  }) : super.internal(
           timestamp ?? DateTime.now(),
           "TransactionPlannerRemoveRecipe",
         );
@@ -115,6 +125,7 @@ class TransactionPlannerRemoveRecipe extends Transaction<bool> {
       TransactionPlannerRemoveRecipe(
         recipe: Recipe.fromJson(map['recipe']),
         timestamp: timestamp,
+        day: map['day'],
       );
 
   @override
@@ -124,6 +135,7 @@ class TransactionPlannerRemoveRecipe extends Transaction<bool> {
   Map<String, dynamic> toJson() => super.toJson()
     ..addAll({
       "recipe": recipe.toJsonWithId(),
+      "day": day,
     });
 
   @override
@@ -133,7 +145,7 @@ class TransactionPlannerRemoveRecipe extends Transaction<bool> {
 
   @override
   Future<bool> runOnline() {
-    return ApiService.getInstance().removePlannedRecipe(recipe);
+    return ApiService.getInstance().removePlannedRecipe(recipe, day);
   }
 }
 

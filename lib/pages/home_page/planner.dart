@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:kitchenowl/cubits/planner_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/recipe.dart';
 import 'package:kitchenowl/pages/recipe_page.dart';
+import 'package:kitchenowl/widgets/fractionally_sized_box.dart';
 import 'package:kitchenowl/widgets/selectable_button_card.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
@@ -38,6 +40,16 @@ class _PlannerPageState extends State<PlannerPage> {
       tablet: 6,
       desktop: 9,
     );
+
+    final weekdayMapping = {
+      0: DateTime.monday,
+      1: DateTime.tuesday,
+      2: DateTime.wednesday,
+      3: DateTime.thursday,
+      4: DateTime.friday,
+      5: DateTime.saturday,
+      6: DateTime.sunday,
+    };
 
     return SafeArea(
       child: Scrollbar(
@@ -75,34 +87,87 @@ class _PlannerPageState extends State<PlannerPage> {
                       ),
                     ),
                   ),
-                if (state.plannedRecipes.isNotEmpty)
-                  SliverPadding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    sliver: SliverGrid(
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: crossAxisCount,
-                        mainAxisSpacing: 4,
-                        crossAxisSpacing: 4,
-                        childAspectRatio: 1,
-                      ),
-                      delegate: SliverChildBuilderDelegate(
-                        (context, i) => SelectableButtonCard(
-                          key: Key(state.plannedRecipes[i].name),
-                          title: state.plannedRecipes[i].name,
-                          selected: true,
-                          onPressed: () {
-                            cubit.remove(state.plannedRecipes[i]);
-                          },
-                          onLongPressed: () => _openRecipePage(
-                            context,
-                            cubit,
-                            state.plannedRecipes[i],
+                SliverPadding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  sliver: SliverToBoxAdapter(
+                    child: Wrap(
+                      crossAxisAlignment: WrapCrossAlignment.end,
+                      runSpacing: 4,
+                      spacing: 4,
+                      alignment: WrapAlignment.start,
+                      children: [
+                        for (final recipe in state.getPlannedWithoutDay())
+                          KitchenOwlFractionallySizedBox(
+                            widthFactor: (1 / crossAxisCount),
+                            widthSubstract: (crossAxisCount - 1) * 4,
+                            child: AspectRatio(
+                              aspectRatio: 1,
+                              child: SelectableButtonCard(
+                                key: Key(recipe.name),
+                                title: recipe.name,
+                                selected: true,
+                                onPressed: () {
+                                  cubit.remove(recipe);
+                                },
+                                onLongPressed: () => _openRecipePage(
+                                  context,
+                                  cubit,
+                                  recipe,
+                                ),
+                              ),
+                            ),
                           ),
-                        ),
-                        childCount: state.plannedRecipes.length,
-                      ),
+                        for (int day = 0; day < 7; day++)
+                          for (final recipe in state.getPlannedOfDay(day))
+                            KitchenOwlFractionallySizedBox(
+                              widthFactor: (1 / crossAxisCount),
+                              widthSubstract: (crossAxisCount - 1) * 4,
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  if (recipe == state.getPlannedOfDay(day)[0])
+                                    Padding(
+                                      padding: const EdgeInsets.only(bottom: 8),
+                                      child: Text(
+                                        DateFormat.E()
+                                                    .dateSymbols
+                                                    .STANDALONEWEEKDAYS[
+                                                weekdayMapping[day]! % 7] +
+                                            ':',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headline6,
+                                      ),
+                                    ),
+                                  AspectRatio(
+                                    aspectRatio: 1,
+                                    child: SelectableButtonCard(
+                                      key: Key(
+                                        recipe.name,
+                                      ),
+                                      title: recipe.name,
+                                      selected: true,
+                                      onPressed: () {
+                                        cubit.remove(
+                                          recipe,
+                                          day,
+                                        );
+                                      },
+                                      onLongPressed: () => _openRecipePage(
+                                        context,
+                                        cubit,
+                                        recipe,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                      ],
                     ),
                   ),
+                ),
                 if (state.recentRecipes.isNotEmpty) ...[
                   SliverPadding(
                     padding: const EdgeInsets.all(16),

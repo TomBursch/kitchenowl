@@ -9,9 +9,12 @@ class PlannerCubit extends Cubit<PlannerCubitState> {
     refresh();
   }
 
-  Future<void> remove(Recipe recipe) async {
+  Future<void> remove(Recipe recipe, [int? day]) async {
     await TransactionHandler.getInstance()
-        .runTransaction(TransactionPlannerRemoveRecipe(recipe: recipe));
+        .runTransaction(TransactionPlannerRemoveRecipe(
+      recipe: recipe,
+      day: day,
+    ));
     await refresh();
   }
 
@@ -21,14 +24,19 @@ class PlannerCubit extends Cubit<PlannerCubitState> {
     await refresh();
   }
 
-  Future<void> refresh([String? query]) async {
+  Future<void> refresh() async {
     final planned = await TransactionHandler.getInstance()
         .runTransaction(TransactionPlannerGetPlannedRecipes());
     final recent = await TransactionHandler.getInstance()
         .runTransaction(TransactionPlannerGetRecentPlannedRecipes());
     final suggested = await TransactionHandler.getInstance()
         .runTransaction(TransactionPlannerGetSuggestedRecipes());
-    emit(PlannerCubitState(planned, recent, suggested));
+
+    emit(PlannerCubitState(
+      planned,
+      recent,
+      suggested,
+    ));
   }
 
   Future<void> refreshSuggestions() async {
@@ -55,6 +63,7 @@ class PlannerCubitState extends Equatable {
 
   PlannerCubitState copyWith({
     List<Recipe>? plannedRecipes,
+    Map<int, List<Recipe>>? plannedRecipeDayMap,
     List<Recipe>? recentRecipes,
     List<Recipe>? suggestedRecipes,
   }) =>
@@ -63,4 +72,16 @@ class PlannerCubitState extends Equatable {
         recentRecipes ?? this.recentRecipes,
         suggestedRecipes ?? this.suggestedRecipes,
       );
+
+  List<Recipe> getPlannedWithoutDay() {
+    return plannedRecipes
+        .where((element) => element.plannedDays.isEmpty)
+        .toList();
+  }
+
+  List<Recipe> getPlannedOfDay(int day) {
+    return plannedRecipes
+        .where((element) => element.plannedDays.contains(day))
+        .toList();
+  }
 }

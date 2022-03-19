@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:intl/intl.dart';
 import 'package:kitchenowl/app.dart';
 import 'package:kitchenowl/cubits/recipe_cubit.dart';
 import 'package:kitchenowl/cubits/settings_cubit.dart';
@@ -8,6 +9,7 @@ import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/models/recipe.dart';
 import 'package:kitchenowl/pages/recipe_add_update_page.dart';
 import 'package:kitchenowl/kitchenowl.dart';
+import 'package:kitchenowl/widgets/select_dialog.dart';
 import 'package:kitchenowl/widgets/shopping_item.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -243,18 +245,68 @@ class _RecipePageState extends State<RecipePage> {
                   SliverPadding(
                     padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
                     sliver: SliverToBoxAdapter(
-                      child: ElevatedButton(
-                        child: Text(
-                          AppLocalizations.of(context)!.addRecipeToPlanner,
-                        ),
-                        onPressed: () async {
-                          await cubit.addRecipeToPlanner();
-                          Navigator.of(context).pop(
-                            widget.updateOnPlanningEdit
-                                ? UpdateEnum.updated
-                                : UpdateEnum.unchanged,
-                          );
-                        },
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: ElevatedButton(
+                              child: Text(
+                                AppLocalizations.of(context)!
+                                    .addRecipeToPlanner,
+                              ),
+                              onPressed: () async {
+                                await cubit.addRecipeToPlanner(null);
+                                Navigator.of(context).pop(
+                                  widget.updateOnPlanningEdit
+                                      ? UpdateEnum.updated
+                                      : UpdateEnum.unchanged,
+                                );
+                              },
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          ElevatedButton(
+                            child: const Icon(Icons.calendar_month_rounded),
+                            onPressed: () async {
+                              final weekdayMapping = {
+                                0: DateTime.monday,
+                                1: DateTime.tuesday,
+                                2: DateTime.wednesday,
+                                3: DateTime.thursday,
+                                4: DateTime.friday,
+                                5: DateTime.saturday,
+                                6: DateTime.sunday,
+                              };
+                              int? day = await showDialog<int>(
+                                context: context,
+                                builder: (context) => SelectDialog(
+                                  title: AppLocalizations.of(context)!
+                                      .addRecipeToPlanner,
+                                  cancelText:
+                                      AppLocalizations.of(context)!.cancel,
+                                  options: weekdayMapping.entries
+                                      .map(
+                                        (e) => SelectDialogOption(
+                                          e.key,
+                                          DateFormat.E()
+                                              .dateSymbols
+                                              .STANDALONEWEEKDAYS[e.value % 7],
+                                        ),
+                                      )
+                                      .toList(),
+                                ),
+                              );
+                              if (day != null) {
+                                await cubit
+                                    .addRecipeToPlanner(day >= 0 ? day : null);
+                                Navigator.of(context).pop(
+                                  widget.updateOnPlanningEdit
+                                      ? UpdateEnum.updated
+                                      : UpdateEnum.unchanged,
+                                );
+                              }
+                            },
+                          ),
+                        ],
                       ),
                     ),
                   ),

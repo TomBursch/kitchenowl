@@ -34,6 +34,8 @@ def addRecipe(args):
     recipe.description = args['description']
     if 'time' in args:
         recipe.time = args['time']
+    if 'source' in args:
+        recipe.source = args['source']
     recipe.save()
     if 'items' in args:
         for recipeItem in args['items']:
@@ -72,6 +74,8 @@ def updateRecipe(args, id):  # noqa: C901
         recipe.description = args['description']
     if 'time' in args:
         recipe.time = args['time']
+    if 'source' in args:
+        recipe.source = args['source']
     recipe.save()
     if 'items' in args:
         for con in recipe.items:
@@ -144,6 +148,7 @@ def scrapeRecipe(args):
     recipe.time = scraper.total_time()
     recipe.description = scraper.description() + "\n\n" + scraper.instructions()
     recipe.photo = scraper.image()
+    recipe.source = args['url']
     return jsonify(recipe.obj_to_dict())
 
 

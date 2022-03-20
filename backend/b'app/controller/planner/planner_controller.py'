@@ -42,6 +42,7 @@ def removePlannedRecipeById(args, id):
         raise NotFoundRequest()
     if recipe.planned:
         if 'day' in args:
+            recipe.planned_days = recipe.planned_days.copy()
             recipe.planned_days.discard(args['day'])
         else:
             recipe.planned_days = {}

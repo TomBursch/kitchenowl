@@ -14,6 +14,7 @@ class AddUpdateRecipeCubit extends Cubit<AddUpdateRecipeState> {
           description: recipe.description,
           name: recipe.name,
           time: recipe.time,
+          source: recipe.source,
           items: recipe.items,
           selectedTags: recipe.tags,
           tags: recipe.tags,
@@ -34,6 +35,7 @@ class AddUpdateRecipeCubit extends Cubit<AddUpdateRecipeState> {
           name: state.name,
           description: state.description,
           time: state.time,
+          source: state.source,
           items: state.items,
           tags: state.selectedTags,
         ));
@@ -42,6 +44,7 @@ class AddUpdateRecipeCubit extends Cubit<AddUpdateRecipeState> {
           name: state.name,
           description: state.description,
           time: state.time,
+          source: state.source,
           items: state.items,
           tags: state.selectedTags,
         ));
@@ -65,6 +68,10 @@ class AddUpdateRecipeCubit extends Cubit<AddUpdateRecipeState> {
 
   void setTime(int time) {
     emit(state.copyWith(time: time));
+  }
+
+  void setSource(String source) {
+    emit(state.copyWith(source: source));
   }
 
   void selectTag(Tag tag, bool selected) {
@@ -123,6 +130,7 @@ class AddUpdateRecipeState extends Equatable {
   final String name;
   final String description;
   final int time;
+  final String source;
   final List<RecipeItem> items;
   final Set<Tag> tags;
   final Set<Tag> selectedTags;
@@ -131,6 +139,7 @@ class AddUpdateRecipeState extends Equatable {
     this.name = "",
     this.description = "",
     this.time = 0,
+    this.source = '',
     this.items = const [],
     this.tags = const {},
     this.selectedTags = const {},
@@ -140,6 +149,7 @@ class AddUpdateRecipeState extends Equatable {
     String? name,
     String? description,
     int? time,
+    String? source,
     List<RecipeItem>? items,
     Set<Tag>? tags,
     Set<Tag>? selectedTags,
@@ -148,6 +158,7 @@ class AddUpdateRecipeState extends Equatable {
         name: name ?? this.name,
         description: description ?? this.description,
         time: time ?? this.time,
+        source: source ?? this.source,
         items: items ?? this.items,
         tags: tags ?? this.tags,
         selectedTags: selectedTags ?? this.selectedTags,
@@ -157,5 +168,5 @@ class AddUpdateRecipeState extends Equatable {
 
   @override
   List<Object?> get props =>
-      [name, description, time, items, tags, selectedTags];
+      [name, description, time, source, items, tags, selectedTags];
 }

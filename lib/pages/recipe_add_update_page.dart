@@ -31,6 +31,7 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController descController = TextEditingController();
   final TextEditingController timeController = TextEditingController();
+  final TextEditingController sourceController = TextEditingController();
   late AddUpdateRecipeCubit cubit;
   bool isUpdate = false;
 
@@ -44,6 +45,9 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
       if (widget.recipe.time > 0) {
         timeController.text = widget.recipe.time.toString();
       }
+      if (widget.recipe.source.isNotEmpty) {
+        sourceController.text = widget.recipe.source;
+      }
     }
     cubit = AddUpdateRecipeCubit(widget.recipe);
   }
@@ -54,6 +58,7 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
     nameController.dispose();
     descController.dispose();
     timeController.dispose();
+    sourceController.dispose();
     super.dispose();
   }
 
@@ -105,6 +110,17 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                       textInputAction: TextInputAction.next,
                       decoration: InputDecoration(
                         labelText: AppLocalizations.of(context)!.name,
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                    child: TextField(
+                      controller: sourceController,
+                      onChanged: (s) => cubit.setSource(s),
+                      textInputAction: TextInputAction.next,
+                      decoration: InputDecoration(
+                        labelText: AppLocalizations.of(context)!.recipeSource,
                       ),
                     ),
                   ),

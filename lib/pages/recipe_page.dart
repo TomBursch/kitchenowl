@@ -9,6 +9,7 @@ import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/models/recipe.dart';
 import 'package:kitchenowl/pages/recipe_add_update_page.dart';
 import 'package:kitchenowl/kitchenowl.dart';
+import 'package:kitchenowl/widgets/recipe_source_chip.dart';
 import 'package:kitchenowl/widgets/select_dialog.dart';
 import 'package:kitchenowl/widgets/shopping_item.dart';
 import 'package:responsive_builder/responsive_builder.dart';
@@ -55,7 +56,7 @@ class _RecipePageState extends State<RecipePage> {
 
     return BlocBuilder<RecipeCubit, RecipeState>(
       bloc: cubit,
-      builder: (conext, state) => Scaffold(
+      builder: (context, state) => Scaffold(
         appBar: AppBar(
           title: Text(state.recipe.name),
           leading: BackButton(
@@ -92,58 +93,65 @@ class _RecipePageState extends State<RecipePage> {
                 SliverPadding(
                   padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
                   sliver: SliverList(
-                    delegate: SliverChildListDelegate([
-                      Wrap(
-                        runSpacing: 7,
-                        spacing: 5,
-                        children: [
-                          if ((state.recipe.time) > 0)
-                            Chip(
-                              avatar: const Icon(
-                                Icons.alarm_rounded,
-                                color: Colors.white,
+                    delegate: SliverChildListDelegate(
+                      [
+                        Wrap(
+                          runSpacing: 7,
+                          spacing: 5,
+                          children: [
+                            if (state.recipe.source.isNotEmpty)
+                              RecipeSourceChip(
+                                source: state.recipe.source,
                               ),
-                              label: Text(
-                                state.recipe.time.toString() +
-                                    " " +
-                                    AppLocalizations.of(context)!.minutesAbbrev,
-                                style: const TextStyle(color: Colors.white),
+                            if ((state.recipe.time) > 0)
+                              Chip(
+                                avatar: const Icon(
+                                  Icons.alarm_rounded,
+                                  color: Colors.white,
+                                ),
+                                label: Text(
+                                  state.recipe.time.toString() +
+                                      " " +
+                                      AppLocalizations.of(context)!
+                                          .minutesAbbrev,
+                                  style: const TextStyle(color: Colors.white),
+                                ),
+                                backgroundColor:
+                                    Theme.of(context).colorScheme.secondary,
+                                elevation: 3,
                               ),
-                              backgroundColor:
-                                  Theme.of(context).colorScheme.secondary,
-                              elevation: 3,
+                            ...state.recipe.tags
+                                .map((e) => Chip(label: Text(e.name)))
+                                .toList(),
+                          ],
+                        ),
+                        const SizedBox(height: 8),
+                        MarkdownBody(
+                          data: state.recipe.description,
+                          styleSheet: MarkdownStyleSheet.fromTheme(
+                            Theme.of(context),
+                          ).copyWith(
+                            blockquoteDecoration: BoxDecoration(
+                              color: Theme.of(context).cardTheme.color ??
+                                  Theme.of(context).cardColor,
+                              borderRadius: BorderRadius.circular(2.0),
                             ),
-                          ...state.recipe.tags
-                              .map((e) => Chip(label: Text(e.name)))
-                              .toList(),
-                        ],
-                      ),
-                      const SizedBox(height: 8),
-                      MarkdownBody(
-                        data: state.recipe.description,
-                        styleSheet: MarkdownStyleSheet.fromTheme(
-                          Theme.of(context),
-                        ).copyWith(
-                          blockquoteDecoration: BoxDecoration(
-                            color: Theme.of(context).cardTheme.color ??
-                                Theme.of(context).cardColor,
-                            borderRadius: BorderRadius.circular(2.0),
                           ),
+                          imageBuilder: (uri, title, alt) => CachedNetworkImage(
+                            imageUrl: uri.toString(),
+                            placeholder: (context, url) =>
+                                const CircularProgressIndicator(),
+                            errorWidget: (context, url, error) =>
+                                const Icon(Icons.error),
+                          ),
+                          onTapLink: (text, href, title) async {
+                            if (href != null && await canLaunch(href)) {
+                              await launch(href);
+                            }
+                          },
                         ),
-                        imageBuilder: (uri, title, alt) => CachedNetworkImage(
-                          imageUrl: uri.toString(),
-                          placeholder: (context, url) =>
-                              const CircularProgressIndicator(),
-                          errorWidget: (context, url, error) =>
-                              const Icon(Icons.error),
-                        ),
-                        onTapLink: (text, href, title) async {
-                          if (href != null && await canLaunch(href)) {
-                            await launch(href);
-                          }
-                        },
-                      ),
-                    ]),
+                      ],
+                    ),
                   ),
                 ),
                 if (state.recipe.items.where((e) => !e.optional).isNotEmpty)
@@ -221,7 +229,7 @@ class _RecipePageState extends State<RecipePage> {
                   sliver: SliverToBoxAdapter(
                     child: BlocBuilder<RecipeCubit, RecipeState>(
                       bloc: cubit,
-                      builder: (conext, state) => ElevatedButton(
+                      builder: (context, state) => ElevatedButton(
                         child: Text(
                           AppLocalizations.of(context)!.addNumberIngredients(
                             state.selectedItems.length,

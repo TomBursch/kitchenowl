@@ -38,6 +38,7 @@ jobs:
           then
               echo "::set-output name=tag::latest"
           elif [$REF == /refs/tags/beta-v*]
+          then
               echo "::set-output name=tag::beta"
           else
               echo "::set-output name=tag::dev"

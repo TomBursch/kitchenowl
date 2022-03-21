@@ -1,11 +1,13 @@
-name: CI Latest to Docker Hub
+name: CI to Docker Hub
 
 # Controls when the workflow will run
 on:
   # Triggers the workflow on push events but only for tags
   push:
+    branches: [ main ]
     tags:
       - "v*"
+      - "beta-v*"
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -20,6 +22,21 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
+
+      - name: decide docker tag
+        id: dockertag
+        run: |
+          if [$REF == refs/tags/v*]
+          then
+              echo "::set-output name=tag::latest"
+          elif [$REF == /refs/tags/beta-v*]
+          then
+              echo "::set-output name=tag::beta"
+          else
+              echo "::set-output name=tag::dev"
+          fi
+        env:
+          REF: ${{ github.ref }}
 
       - name: Cache Docker layers
         uses: actions/cache@v2
@@ -50,7 +67,7 @@ jobs:
           file: ./Dockerfile
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/kitchenowl:latest
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/kitchenowl:${{ steps.dockertag.outputs.tag }}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
 

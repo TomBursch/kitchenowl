@@ -5,6 +5,7 @@ on:
   push:
     tags:
       - "v*"
+      - "beta-v*"
 
 jobs:
   generate-changelog:
@@ -47,10 +48,10 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ github.ref }}
-          release_name: KitchenOwl ${{ github.ref }}
+          release_name: KitchenOwl ${{ github.ref_name }}
           body_path: CHANGELOG.md
           draft: true
-          prerelease: false
+          prerelease: ${{ startsWith(github.ref_name,'beta-v') }}
 
   create-build:
     name: Create ${{ matrix.target }} build

@@ -1,18 +1,1 @@
-## Features
-- [ ] Recipes
-    - [ ] Recipe scraping
-    - [x] Suggestions
-    - [x] Import/export
-    - [ ] Tags
-    - [ ] Favorites
-    - [ ] Recipe steps presentation (Slideshow like)
-- [ ] Items
-    - [ ] Categories
-    - [ ] Icons
-- [ ] Multiple shopping lists
-- [ ] Generate and display statistics
-
-## Clients
-- [ ] Better large screen support
-- [ ] MacOS
-- [ ] Windows
+See the [Project Board](https://github.com/users/TomBursch/projects/1) for a full list of planned features and their current progress.

@@ -40,6 +40,10 @@ The `description` is a descriptive summary of the change the PR will make.
     - Initialize/Upgrade the sqlite database with `flask db upgrade`
     - Run debug server with `python3 wsgi.py`
     - The backend should be reachable at `localhost:5000`
+=== "Docs"
+    - [Install MkDocs](https://www.mkdocs.org/getting-started/)
+    - [Install Material for MkDocs](https://squidfunk.github.io/mkdocs-material/getting-started/)
+    - Run docs: `mkdocs serve`
 
 ### Git Commit Message Style
 

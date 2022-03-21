@@ -15,7 +15,7 @@ class AddRecipeItems(Schema):
         id = fields.Integer(required=True)
         name = fields.String(
             required=True,
-            validate=lambda a: len(a) > 0
+            validate=lambda a: a and not a.isspace()
         )
         description = fields.String(
             load_default=''

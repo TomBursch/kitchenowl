@@ -68,9 +68,9 @@ def updateRecipe(args, id):  # noqa: C901
     recipe = Recipe.find_by_id(id)
     if not recipe:
         raise NotFoundRequest()
-    if 'name' in args and args['name']:
+    if 'name' in args:
         recipe.name = args['name']
-    if 'description' in args and args['description']:
+    if 'description' in args:
         recipe.description = args['description']
     if 'time' in args:
         recipe.time = args['time']

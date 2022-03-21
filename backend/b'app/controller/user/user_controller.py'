@@ -52,9 +52,9 @@ def updateUser(args):
     user = User.find_by_username(get_jwt_identity())
     if not user:
         raise NotFoundRequest()
-    if 'name' in args and args['name']:
+    if 'name' in args:
         user.name = args['name']
-    if 'password' in args and args['password']:
+    if 'password' in args:
         user.set_password(args['password'])
     user.save()
     return jsonify({'msg': 'DONE'})
@@ -68,9 +68,9 @@ def updateUserById(args, id):
     user = User.find_by_id(id)
     if not user:
         raise NotFoundRequest()
-    if 'name' in args and args['name']:
+    if 'name' in args:
         user.name = args['name']
-    if 'password' in args and args['password']:
+    if 'password' in args:
         user.set_password(args['password'])
     if 'admin' in args:
         user.admin = args['admin'] or user.owner

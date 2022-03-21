@@ -5,14 +5,14 @@ class ImportSchema(Schema):
     class Item(Schema):
         name = fields.String(
             required=True,
-            validate=lambda a: len(a) > 0
+            validate=lambda a: a and not a.isspace()
         )
 
     class Recipe(Schema):
         class RecipeItem(Schema):
             name = fields.String(
                 required=True,
-                validate=lambda a: len(a) > 0
+                validate=lambda a: a and not a.isspace()
             )
             optional = fields.Boolean(
                 load_default=False
@@ -23,7 +23,7 @@ class ImportSchema(Schema):
 
         name = fields.String(
             required=True,
-            validate=lambda a: len(a) > 0
+            validate=lambda a: a and not a.isspace()
         )
         description = fields.String(
             load_default=''

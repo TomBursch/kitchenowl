@@ -26,14 +26,14 @@ jobs:
       - name: decide docker tag
         id: dockertag
         run: |
-          if [$REF == refs/tags/v*]
+          if [[ $REF == "refs/tags/v"* ]]
           then
-              echo "::set-output name=tag::latest"
-          elif [$REF == /refs/tags/beta-v*]
+            echo "::set-output name=tag::latest"
+          elif [[ $REF == "/refs/tags/beta-v"* ]]
           then
-              echo "::set-output name=tag::beta"
+            echo "::set-output name=tag::beta"
           else
-              echo "::set-output name=tag::dev"
+            echo "::set-output name=tag::dev"
           fi
         env:
           REF: ${{ github.ref }}

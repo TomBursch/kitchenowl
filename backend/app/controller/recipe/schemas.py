@@ -5,7 +5,7 @@ class AddRecipe(Schema):
     class RecipeItem(Schema):
         name = fields.String(
             required=True,
-            validate=lambda a: len(a) > 0
+            validate=lambda a: a and not a.isspace()
         )
         description = fields.String(
             load_default=''
@@ -15,9 +15,12 @@ class AddRecipe(Schema):
         )
 
     name = fields.String(
-        required=True
+        required=True,
+        validate=lambda a: a and not a.isspace()
     )
-    description = fields.String()
+    description = fields.String(
+        validate=lambda a: a is not None
+    )
     time = fields.Integer()
     source = fields.String()
     items = fields.List(fields.Nested(RecipeItem()))
@@ -28,13 +31,17 @@ class UpdateRecipe(Schema):
     class RecipeItem(Schema):
         name = fields.String(
             required=True,
-            validate=lambda a: len(a) > 0
+            validate=lambda a: a and not a.isspace()
         )
         description = fields.String()
         optional = fields.Boolean(load_default=True)
 
-    name = fields.String()
-    description = fields.String()
+    name = fields.String(
+        validate=lambda a: a and not a.isspace()
+    )
+    description = fields.String(
+        validate=lambda a: a is not None
+    )
     time = fields.Integer()
     source = fields.String()
     items = fields.List(fields.Nested(RecipeItem()))
@@ -44,7 +51,7 @@ class UpdateRecipe(Schema):
 class SearchByNameRequest(Schema):
     query = fields.String(
         required=True,
-        validate=lambda a: len(a) > 0
+        validate=lambda a: a and not a.isspace()
     )
 
 
@@ -67,5 +74,5 @@ class RemoveItem(Schema):
 class ScrapeRecipe(Schema):
     url = fields.String(
         required=True,
-        validate=lambda a: len(a) > 0
+        validate=lambda a: a and not a.isspace()
     )

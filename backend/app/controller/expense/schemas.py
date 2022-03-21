@@ -8,7 +8,7 @@ class AddExpense(Schema):
             validate=lambda a: a > 0
         )
         name = fields.String(
-            validate=lambda a: len(a) > 0
+            validate=lambda a: a and not a.isspace()
         )
         factor = fields.Integer(
             load_default=1
@@ -31,7 +31,7 @@ class UpdateExpense(Schema):
             validate=lambda a: a > 0
         )
         name = fields.String(
-            validate=lambda a: len(a) > 0
+            validate=lambda a: a and not a.isspace()
         )
         factor = fields.Integer(
             load_default=1

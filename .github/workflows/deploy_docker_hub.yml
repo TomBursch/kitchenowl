@@ -37,7 +37,7 @@ jobs:
           if [[ $REF == "refs/tags/v"* ]]
           then
             echo "::set-output name=tag::latest"
-          elif [[ $REF == "/refs/tags/beta-v"* ]]
+          elif [[ $REF == "refs/tags/beta-v"* ]]
           then
             echo "::set-output name=tag::beta"
           else

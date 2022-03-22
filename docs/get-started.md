@@ -6,7 +6,7 @@ Please take a quick look at [Tips & Tricks](/tips-and-tricks) to get the best ex
 ## 🗄️ Server Install
 
 You can either install only the backend or add the web-app to it. [Docker](https://docs.docker.com/engine/install/) is required.
-There are two tags available: `latest` and `dev`. The `dev` tag is directly build from the main branch and should not be used in production.
+There are three tags available: `latest`, `beta` and `dev`. `latest` is the most current stable release and is the default. `beta` corresponds to the most recent prerealese and might have some experimental features. The `dev` tag is directly build from the main branch and should not be used in production. Release notes can be found on the [releases page](https://github.com/TomBursch/kitchenowl/releases).
 
 === "Backend and Web-app (recommended)"
 
@@ -61,4 +61,4 @@ There are two tags available: `latest` and `dev`. The `dev` tag is directly buil
 :exclamation: We recommend running KitchenOwl behind a reverse proxy with https (e.g. [nginx](https://nginx.org/en/docs/http/configuring_https_servers.html])) :exclamation:
 
 ## ⏫ Migrating from Older Versions
-Starting from version 0.0.33 the frontend routes requests to the backend. Thus only one port has to be accessible. However, as before, the backend can be hosted as standalone (see legacy server install).
+Starting from version 0.0.33 the frontend routes requests to the backend. Thus only one port has to be accessible. However, the backend can be hosted in standalone mode as it was before (see legacy server install).

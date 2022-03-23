@@ -8,7 +8,7 @@ from flask_apscheduler import APScheduler
 import os
 
 MIN_FRONTEND_VERSION = 34
-BACKEND_VERSION = 21
+BACKEND_VERSION = 22
 
 APP_DIR = os.path.dirname(os.path.abspath(__file__))
 

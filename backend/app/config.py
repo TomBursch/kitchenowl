@@ -7,8 +7,8 @@ from flask_jwt_extended import JWTManager
 from flask_apscheduler import APScheduler
 import os
 
-MIN_FRONTEND_VERSION = 10
-BACKEND_VERSION = 20
+MIN_FRONTEND_VERSION = 34
+BACKEND_VERSION = 21
 
 APP_DIR = os.path.dirname(os.path.abspath(__file__))
 

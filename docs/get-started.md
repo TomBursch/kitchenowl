@@ -16,26 +16,26 @@ There are three tags available: `latest`, `beta` and `dev`. `latest` is the most
     ```
     version: "3"
     services:
-    front:
-        image: tombursch/kitchenowl-web:latest
-        environment:
-        - FRONT_URL=http://localhost # The url the instance will be access with
-        ports:
-        - "80:80"
-        depends_on:
-        - back
-        networks:
-        - default
-    back:
-        image: tombursch/kitchenowl:latest
-        restart: unless-stopped
-        networks:
-        - default
-        environment:
-        - JWT_SECRET_KEY=PLEASE_CHANGE_ME
-        - FRONT_URL=http://localhost
-        volumes:
-        - kitchenowl_data:/data
+        front:
+            image: tombursch/kitchenowl-web:latest
+            environment:
+            - FRONT_URL=http://localhost # The url the instance will be access with
+            ports:
+            - "80:80"
+            depends_on:
+            - back
+            networks:
+            - default
+        back:
+            image: tombursch/kitchenowl:latest
+            restart: unless-stopped
+            networks:
+            - default
+            environment:
+            - JWT_SECRET_KEY=PLEASE_CHANGE_ME
+            - FRONT_URL=http://localhost
+            volumes:
+            - kitchenowl_data:/data
 
     volumes:
         kitchenowl_data:

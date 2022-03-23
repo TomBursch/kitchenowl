@@ -25,6 +25,5 @@ RUN apt-get autoremove --yes gcc g++ libffi-dev \
 
 EXPOSE 80
 
-USER 1000
 CMD ["wsgi.ini"]
 ENTRYPOINT ["./entrypoint.sh"]

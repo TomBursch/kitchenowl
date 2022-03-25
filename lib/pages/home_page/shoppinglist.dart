@@ -4,6 +4,7 @@ import 'package:kitchenowl/app.dart';
 import 'package:kitchenowl/cubits/shoppinglist_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/models/item.dart';
+import 'package:kitchenowl/models/update_value.dart';
 import 'package:kitchenowl/pages/item_page.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/widgets/search_text_field.dart';
@@ -112,16 +113,17 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                             }
                           },
                           onLongPressed: (Item item) async {
-                            final res =
-                                await Navigator.of(context).push<UpdateEnum>(
+                            final res = await Navigator.of(context)
+                                .push<UpdateValue<Item>>(
                               MaterialPageRoute(
                                 builder: (BuildContext context) => ItemPage(
                                   item: item,
                                 ),
                               ),
                             );
-                            if (res == UpdateEnum.deleted ||
-                                res == UpdateEnum.updated) {
+                            if (res != null &&
+                                (res.state == UpdateEnum.deleted ||
+                                    res.state == UpdateEnum.updated)) {
                               cubit.refresh();
                             }
                           },
@@ -185,7 +187,7 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                                 },
                                 onLongPressed: (ShoppinglistItem item) async {
                                   final res = await Navigator.of(context)
-                                      .push<UpdateEnum>(
+                                      .push<UpdateValue<Item>>(
                                     MaterialPageRoute(
                                       builder: (BuildContext context) =>
                                           ItemPage(
@@ -193,8 +195,9 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                                       ),
                                     ),
                                   );
-                                  if (res == UpdateEnum.deleted ||
-                                      res == UpdateEnum.updated) {
+                                  if (res != null &&
+                                      (res.state == UpdateEnum.deleted ||
+                                          res.state == UpdateEnum.updated)) {
                                     cubit.refresh();
                                   }
                                 },
@@ -232,7 +235,7 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                                       cubit.add(item.name),
                                   onLongPressed: (Item item) async {
                                     final res = await Navigator.of(context)
-                                        .push<UpdateEnum>(
+                                        .push<UpdateValue<Item>>(
                                       MaterialPageRoute(
                                         builder: (BuildContext context) =>
                                             ItemPage(
@@ -240,8 +243,9 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                                         ),
                                       ),
                                     );
-                                    if (res == UpdateEnum.deleted ||
-                                        res == UpdateEnum.updated) {
+                                    if (res != null &&
+                                        (res.state == UpdateEnum.deleted ||
+                                            res.state == UpdateEnum.updated)) {
                                       cubit.refresh();
                                     }
                                   },

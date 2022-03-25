@@ -5,30 +5,31 @@ import 'package:kitchenowl/cubits/item_edit_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/kitchenowl.dart';
+import 'package:kitchenowl/models/update_value.dart';
 import 'package:kitchenowl/widgets/confirmation_dialog.dart';
 import 'package:kitchenowl/widgets/recipe_item.dart';
 
-class ItemPage extends StatefulWidget {
-  final Item item;
+class ItemPage<T extends Item> extends StatefulWidget {
+  final T item;
 
   const ItemPage({Key? key, required this.item}) : super(key: key);
 
   @override
-  _ItemPageState createState() => _ItemPageState();
+  _ItemPageState createState() => _ItemPageState<T>();
 }
 
-class _ItemPageState extends State<ItemPage> {
+class _ItemPageState<T extends Item> extends State<ItemPage<T>> {
   final TextEditingController descController = TextEditingController();
 
-  late ItemEditCubit cubit;
+  late ItemEditCubit<T> cubit;
 
   @override
   void initState() {
     super.initState();
-    if (widget.item is ShoppinglistItem) {
-      descController.text = (widget.item as ShoppinglistItem).description;
+    if (widget.item is ItemWithDescription) {
+      descController.text = (widget.item as ItemWithDescription).description;
     }
-    cubit = ItemEditCubit(item: widget.item);
+    cubit = ItemEditCubit<T>(item: widget.item);
   }
 
   @override
@@ -43,8 +44,9 @@ class _ItemPageState extends State<ItemPage> {
     return WillPopScope(
       onWillPop: () async {
         if (cubit.hasChanged()) {
-          await cubit.saveItem();
-          Navigator.of(context).pop(UpdateEnum.updated);
+          if (widget.item is ShoppinglistItem) await cubit.saveItem();
+          Navigator.of(context)
+              .pop(UpdateValue<T>(UpdateEnum.updated, cubit.item));
 
           return false;
         }
@@ -55,7 +57,7 @@ class _ItemPageState extends State<ItemPage> {
         appBar: AppBar(
           title: Text(widget.item.name),
           actions: [
-            if (!App.isOffline(context))
+            if (widget.item is! RecipeItem && !App.isOffline(context))
               IconButton(
                 onPressed: () async {
                   final confirmed = await askForConfirmation(
@@ -70,7 +72,8 @@ class _ItemPageState extends State<ItemPage> {
                   );
                   if (confirmed) {
                     cubit.deleteItem();
-                    Navigator.of(context).pop(UpdateEnum.deleted);
+                    Navigator.of(context)
+                        .pop(const UpdateValue<Item>(UpdateEnum.deleted));
                   }
                 },
                 icon: const Icon(Icons.delete),
@@ -82,7 +85,7 @@ class _ItemPageState extends State<ItemPage> {
             onRefresh: cubit.refresh,
             child: CustomScrollView(
               slivers: [
-                if (widget.item is ShoppinglistItem)
+                if (widget.item is ItemWithDescription)
                   SliverPadding(
                     padding: const EdgeInsets.all(16),
                     sliver: SliverToBoxAdapter(
@@ -110,55 +113,58 @@ class _ItemPageState extends State<ItemPage> {
                       ),
                     ),
                   ),
-                BlocBuilder<ItemEditCubit, ItemEditState>(
-                  bloc: cubit,
-                  builder: (context, state) {
-                    return SliverPadding(
-                      padding: EdgeInsets.only(
-                        top: (widget.item is ShoppinglistItem) ? 0 : 16,
-                        bottom: 16,
-                      ),
-                      sliver: SliverList(
-                        delegate: SliverChildBuilderDelegate(
-                          (context, i) {
-                            if (i == 0) {
+                if (widget.item is! RecipeItem)
+                  BlocBuilder<ItemEditCubit, ItemEditState>(
+                    bloc: cubit,
+                    builder: (context, state) {
+                      return SliverPadding(
+                        padding: EdgeInsets.only(
+                          top: (widget.item is ShoppinglistItem) ? 0 : 16,
+                          bottom: 16,
+                        ),
+                        sliver: SliverList(
+                          delegate: SliverChildBuilderDelegate(
+                            (context, i) {
+                              if (i == 0) {
+                                return Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(13, 0, 13, 8),
+                                  child: Text(
+                                    AppLocalizations.of(context)!.usedIn + ':',
+                                    style:
+                                        Theme.of(context).textTheme.headline6,
+                                  ),
+                                );
+                              }
+                              i = i - 1;
+
                               return Padding(
                                 padding:
-                                    const EdgeInsets.fromLTRB(13, 0, 13, 8),
-                                child: Text(
-                                  AppLocalizations.of(context)!.usedIn + ':',
-                                  style: Theme.of(context).textTheme.headline6,
+                                    const EdgeInsets.symmetric(horizontal: 13),
+                                child: RecipeItemWidget(
+                                  recipe: state.recipes[i],
+                                  onUpdated: cubit.refresh,
+                                  description: state.recipes[i].isPlanned &&
+                                          state.recipes[i].items.isNotEmpty &&
+                                          state.recipes[i].items.first
+                                              .description.isNotEmpty
+                                      ? Text(
+                                          state.recipes[i].items.first
+                                              .description,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .caption,
+                                        )
+                                      : null,
                                 ),
                               );
-                            }
-                            i = i - 1;
-
-                            return Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 13),
-                              child: RecipeItemWidget(
-                                recipe: state.recipes[i],
-                                onUpdated: cubit.refresh,
-                                description: state.recipes[i].isPlanned &&
-                                        state.recipes[i].items.isNotEmpty &&
-                                        state.recipes[i].items.first.description
-                                            .isNotEmpty
-                                    ? Text(
-                                        state
-                                            .recipes[i].items.first.description,
-                                        style:
-                                            Theme.of(context).textTheme.caption,
-                                      )
-                                    : null,
-                              ),
-                            );
-                          },
-                          childCount: state.recipes.length + 1,
+                            },
+                            childCount: state.recipes.length + 1,
+                          ),
                         ),
-                      ),
-                    );
-                  },
-                ),
+                      );
+                    },
+                  ),
               ],
             ),
           ),

@@ -124,6 +124,14 @@ class AddUpdateRecipeCubit extends Cubit<AddUpdateRecipeState> {
     l.addAll(state.items.where((e) => e.optional != optional));
     emit(state.copyWith(items: l));
   }
+
+  void updateItem(RecipeItem item) {
+    final int i = state.items.indexWhere((e) => e.name == item.name);
+    if (i < 0) return;
+    final l = List.of(state.items);
+    l[i] = item;
+    emit(state.copyWith(items: l));
+  }
 }
 
 class AddUpdateRecipeState extends Equatable {

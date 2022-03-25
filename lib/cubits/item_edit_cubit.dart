@@ -7,11 +7,21 @@ import 'package:kitchenowl/services/transaction_handler.dart';
 import 'package:kitchenowl/services/transactions/item.dart';
 import 'package:kitchenowl/services/transactions/shoppinglist.dart';
 
-class ItemEditCubit extends Cubit<ItemEditState> {
-  final Item item;
+class ItemEditCubit<T extends Item> extends Cubit<ItemEditState> {
+  final T _item;
 
-  ItemEditCubit({required this.item})
-      : super(ItemEditState(
+  T get item {
+    if (_item is ItemWithDescription) {
+      return (((_item as ItemWithDescription)
+          .copyWith(description: state.description)) as T);
+    }
+
+    return _item;
+  }
+
+  ItemEditCubit({required T item})
+      : _item = item,
+        super(ItemEditState(
           description: (item is ItemWithDescription) ? item.description : '',
           name: item.name,
         )) {
@@ -19,9 +29,9 @@ class ItemEditCubit extends Cubit<ItemEditState> {
   }
 
   Future<void> refresh() async {
-    if (item.id != null) {
+    if (_item.id != null) {
       final recipes = (await TransactionHandler.getInstance()
-          .runTransaction(TransactionItemGetRecipes(item: item)))
+          .runTransaction(TransactionItemGetRecipes(item: _item)))
         ..sort(((a, b) {
           if (a.isPlanned == b.isPlanned) {
             return 0;
@@ -36,23 +46,23 @@ class ItemEditCubit extends Cubit<ItemEditState> {
   }
 
   bool hasChanged() {
-    return item is ItemWithDescription &&
-        (item as ItemWithDescription).description != state.description;
+    return _item is ItemWithDescription &&
+        (_item as ItemWithDescription).description != state.description;
   }
 
   Future<void> saveItem() async {
-    if (item is ShoppinglistItem) {
+    if (_item is ShoppinglistItem) {
       await TransactionHandler.getInstance()
           .runTransaction(TransactionShoppingListUpdateItem(
-        item: item,
+        item: _item,
         description: state.description,
       ));
     }
   }
 
   Future<bool> deleteItem() async {
-    if (item.id != null) {
-      return ApiService.getInstance().deleteItem(item);
+    if (_item.id != null) {
+      return ApiService.getInstance().deleteItem(_item);
     }
 
     return false;

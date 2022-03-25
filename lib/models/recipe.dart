@@ -1,8 +1,9 @@
+import 'package:azlistview/azlistview.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/models/model.dart';
 import 'package:kitchenowl/models/tag.dart';
 
-class Recipe extends Model {
+class Recipe extends Model implements ISuspensionBean {
   final int? id;
   final String name;
   final String description;
@@ -106,4 +107,13 @@ class Recipe extends Model {
       "tags": tags.map((e) => e.toJsonWithId()).toList(),
       "planned_days": plannedDays.map((e) => e.toString()).toList(),
     });
+
+  @override
+  bool get isShowSuspension => true;
+
+  @override
+  String getSuspensionTag() => name[0].toUpperCase();
+
+  @override
+  set isShowSuspension(bool _isShowSuspension) {}
 }

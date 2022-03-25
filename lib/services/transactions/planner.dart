@@ -12,7 +12,9 @@ class TransactionPlannerGetPlannedRecipes extends Transaction<List<Recipe>> {
 
   @override
   Future<List<Recipe>> runLocal() async {
-    final recipes = await TempStorage.getInstance().readRecipes() ?? const [];
+    final recipes = List<Recipe>.from(
+      await TempStorage.getInstance().readRecipes() ?? const [],
+    );
     recipes.retainWhere((e) => e.isPlanned);
 
     return recipes;

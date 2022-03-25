@@ -1,10 +1,11 @@
-import 'package:alphabet_scroll_view/alphabet_scroll_view.dart';
+import 'package:azlistview/azlistview.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/cubits/recipe_list_cubit.dart';
 import 'package:kitchenowl/widgets/recipe_item.dart';
 import 'package:kitchenowl/widgets/search_text_field.dart';
+import 'package:responsive_builder/responsive_builder.dart';
 
 class RecipeListPage extends StatefulWidget {
   const RecipeListPage({Key? key}) : super(key: key);
@@ -14,7 +15,6 @@ class RecipeListPage extends StatefulWidget {
 }
 
 class _RecipeListPageState extends State<RecipeListPage> {
-  final List<Widget> favouriteList = [];
   final TextEditingController searchController = TextEditingController();
 
   @override
@@ -32,6 +32,13 @@ class _RecipeListPageState extends State<RecipeListPage> {
   @override
   Widget build(BuildContext context) {
     final cubit = BlocProvider.of<RecipeListCubit>(context);
+
+    final bool useBottomNavigationBar = getValueForScreenType<bool>(
+      context: context,
+      mobile: true,
+      tablet: false,
+      desktop: false,
+    );
 
     return SafeArea(
       child: Column(
@@ -117,40 +124,52 @@ class _RecipeListPageState extends State<RecipeListPage> {
                 return Scrollbar(
                   child: RefreshIndicator(
                     onRefresh: cubit.refresh,
-                    child: AlphabetScrollView(
-                      list: recipes.map((e) => AlphaModel(e.name)).toList(),
-                      alignment: LetterAlignment.left,
-                      // isAlphabetsFiltered: state is SearchRecipeCubitState,
-                      overlayWidget: (value) => Container(
-                        height: 50,
-                        width: 50,
-                        decoration: BoxDecoration(
+                    child: AzListView(
+                      itemCount: recipes.length,
+                      data: recipes,
+                      indexBarData: SuspensionUtil.getTagIndexList(recipes),
+                      indexBarAlignment: Alignment.centerLeft,
+                      indexBarOptions: IndexBarOptions(
+                        needRebuild: true,
+                        selectTextStyle: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                        selectItemDecoration: const BoxDecoration(),
+                        indexHintWidth: 50,
+                        indexHintHeight: 50,
+                        indexHintDecoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: Theme.of(context).primaryColor,
+                          color: Theme.of(context)
+                                  .chipTheme
+                                  .backgroundColor
+                                  ?.withOpacity(1) ??
+                              Theme.of(context).cardColor,
+                          boxShadow: const [
+                            BoxShadow(
+                              color: Colors.black54,
+                              offset: Offset(1, 1),
+                              blurRadius: 6,
+                              spreadRadius: -2,
+                            ),
+                          ],
                         ),
-                        alignment: Alignment.center,
-                        child: Text(
-                          value.toUpperCase(),
-                          style: const TextStyle(
-                            fontSize: 20,
-                            color: Colors.white,
-                          ),
-                        ),
+                        indexHintTextStyle:
+                            const TextStyle(fontSize: 20, color: Colors.white),
+                        indexHintAlignment: Alignment.centerLeft,
+                        indexHintOffset:
+                            Offset(useBottomNavigationBar ? 0 : 216, 0),
                       ),
-                      itemExtent: 65,
-                      itemBuilder: (context, index, name) {
+                      hapticFeedback: true,
+                      itemBuilder: (context, i) {
                         return Padding(
-                          key: Key(name),
+                          key: Key(recipes[i].name),
                           padding: const EdgeInsets.only(left: 32, right: 16),
                           child: RecipeItemWidget(
-                            recipe: recipes[index],
+                            recipe: recipes[i],
                             onUpdated: cubit.refresh,
                           ),
                         );
                       },
-                      selectedTextStyle:
-                          const TextStyle(fontWeight: FontWeight.bold),
-                      unselectedTextStyle: const TextStyle(),
                     ),
                   ),
                 );

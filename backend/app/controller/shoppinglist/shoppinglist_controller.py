@@ -1,8 +1,7 @@
-from app.models import ShoppinglistItems, shoppinglist
 from flask import jsonify, Blueprint
 from flask_jwt_extended import jwt_required
 from app import db
-from app.models import Item, Shoppinglist, History, Status, Association
+from app.models import Item, Shoppinglist, History, Status, Association, ShoppinglistItems
 from app.helpers import validate_args
 from .schemas import (RemoveItem, UpdateDescription,
                       AddItemByName, CreateList, AddRecipeItems)

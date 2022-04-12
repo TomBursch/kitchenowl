@@ -71,6 +71,7 @@ class RemoveItem(Schema):
         required=True,
     )
 
+
 class ScrapeRecipe(Schema):
     url = fields.String(
         required=True,

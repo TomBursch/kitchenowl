@@ -27,7 +27,7 @@ class Recipe(db.Model, DbModelMixin, TimestampMixin):
         'RecipeItems', back_populates='recipe', cascade="all, delete-orphan")
     tags = db.relationship(
         'RecipeTags', back_populates='recipe', cascade="all, delete-orphan")
-    
+
     def obj_to_dict(self):
         res = super().obj_to_dict()
         res['planned_days'] = list(self.planned_days)

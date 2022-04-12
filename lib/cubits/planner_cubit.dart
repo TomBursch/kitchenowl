@@ -1,8 +1,10 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/models/recipe.dart';
 import 'package:kitchenowl/services/transaction_handler.dart';
 import 'package:kitchenowl/services/transactions/planner.dart';
+import 'package:kitchenowl/services/transactions/shoppinglist.dart';
 
 class PlannerCubit extends Cubit<PlannerCubitState> {
   PlannerCubit() : super(const PlannerCubitState()) {
@@ -43,6 +45,13 @@ class PlannerCubit extends Cubit<PlannerCubitState> {
     final suggested = await TransactionHandler.getInstance()
         .runTransaction(TransactionPlannerRefreshSuggestedRecipes());
     emit(state.copyWith(suggestedRecipes: suggested));
+  }
+
+  Future<void> addItemsToList(List<RecipeItem> items) async {
+    await TransactionHandler.getInstance()
+        .runTransaction(TransactionShoppingListAddRecipeItems(
+      items: items,
+    ));
   }
 }
 

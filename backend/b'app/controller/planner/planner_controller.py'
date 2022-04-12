@@ -12,7 +12,7 @@ planner = Blueprint('planner', __name__)
 @jwt_required()
 def getAllPlannedRecipes():
     recipes = Recipe.query.filter(Recipe.planned).order_by(Recipe.name).all()
-    return jsonify([e.obj_to_dict() for e in recipes])
+    return jsonify([e.obj_to_full_dict() for e in recipes])
 
 
 @planner.route('/recipe', methods=['POST'])

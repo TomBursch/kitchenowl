@@ -304,10 +304,7 @@ class _PlannerPageState extends State<PlannerPage> {
       MaterialPageRoute(
         builder: (context) => ItemSelectionPage(
           selectText: AppLocalizations.of(context)!.addNumberIngredients,
-          items: cubit.state.plannedRecipes.fold<List<RecipeItem>>(
-            [],
-            (prev, e) => prev + e.items,
-          ),
+          recipes: cubit.state.plannedRecipes,
           title: AppLocalizations.of(context)!.addItemTitle,
         ),
       ),

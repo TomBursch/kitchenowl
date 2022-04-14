@@ -1,69 +1,60 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/models/item.dart';
+import 'package:kitchenowl/models/recipe.dart';
 
-class ItemSelectionCubit<T extends Item> extends Cubit<ItemSelectionState<T>> {
-  ItemSelectionCubit(List<T> items) : super(ItemSelectionState<T>(items));
+class ItemSelectionCubit extends Cubit<ItemSelectionState> {
+  ItemSelectionCubit(List<Recipe> recipes)
+      : super(
+          ItemSelectionState(
+            Map.fromEntries(recipes.map((e) => MapEntry(e, e.items))),
+          ),
+        );
 
-  void toggleItem(T item) {
-    final l = List<T>.from(state.selectedItems);
+  void toggleItem(Recipe recipe, RecipeItem item) {
+    final s = Map.of(state.selectedItems);
+    if (!s.containsKey(recipe)) return;
+    final l = Set.of(s[recipe]!);
     if (l.contains(item)) {
       l.remove(item);
     } else {
       l.add(item);
     }
-    emit(state.copyWith(selectedItems: l));
+    s[recipe] = l;
+    emit(state.copyWith(selectedItems: s));
   }
 
-  List<T> getResult() {
-    return state.selectedItems;
+  List<RecipeItem> getResult() {
+    return state.getResult();
   }
 }
 
-class ItemSelectionState<T extends Item> extends Equatable {
-  final List<T> allItems;
-  final List<T> selectedItems;
-  final List<RecipeItem> optionalItems;
-  final List<T> items;
+class ItemSelectionState extends Equatable {
+  final Map<Recipe, Set<RecipeItem>> selectedItems;
 
-  ItemSelectionState(List<T> allItems)
+  ItemSelectionState(Map<Recipe, List<RecipeItem>> items)
       : this.withSelection(
-          allItems,
-          allItems
-              .where(
-                (e) => !(e is RecipeItem && e.optional),
-              )
-              .toList(),
+          items.map((key, value) =>
+              MapEntry(key, value.where((e) => !e.optional).toSet())),
         );
 
-  ItemSelectionState.withSelection(this.allItems, this.selectedItems)
-      : optionalItems = allItems
-            .where((e) => e is RecipeItem && e.optional)
-            .cast<RecipeItem>()
-            .toList(),
-        items =
-            allItems.where((e) => !(e is RecipeItem && e.optional)).toList();
+  const ItemSelectionState.withSelection(this.selectedItems);
 
   const ItemSelectionState._all({
-    required this.allItems,
-    required this.items,
     required this.selectedItems,
-    required this.optionalItems,
   });
 
-  ItemSelectionState<T> copyWith({
-    List<T>? allItems,
-    List<T>? selectedItems,
-    List<RecipeItem>? optionalItems,
-    List<T>? items,
+  ItemSelectionState copyWith({
+    Map<Recipe, Set<RecipeItem>>? selectedItems,
   }) =>
       ItemSelectionState._all(
-        allItems: allItems ?? this.allItems,
-        items: items ?? this.items,
         selectedItems: selectedItems ?? this.selectedItems,
-        optionalItems: optionalItems ?? this.optionalItems,
       );
 
   @override
-  List<Object?> get props => [allItems, items, selectedItems, optionalItems];
+  List<Object?> get props => selectedItems.values.toList();
+
+  List<RecipeItem> getResult() {
+    return selectedItems.values.expand((e) => e).toList();
+  }
 }

@@ -121,6 +121,12 @@ class _ItemSelectionPageState extends State<ItemSelectionPage> {
                     ),
                   ),
                 ),
+                const SliverPadding(
+                  padding: EdgeInsets.fromLTRB(16, 16, 16, 0),
+                  sliver: SliverToBoxAdapter(
+                    child: Divider(),
+                  ),
+                ),
               ],
               SliverPadding(
                 padding: const EdgeInsets.all(16),

@@ -5,7 +5,8 @@ import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/services/transactions/shoppinglist.dart';
 import 'package:kitchenowl/services/transaction_handler.dart';
 
-enum ShoppinglistSorting { alphabetical, algorithmic }
+enum ShoppinglistSorting { alphabetical, algorithmic, category }
+enum ShoppinglistStyle { grid, list }
 
 class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
   String get query => (state is SearchShoppinglistCubitState)
@@ -34,8 +35,12 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
   }
 
   void incrementSorting() {
-    setSorting(ShoppinglistSorting
-        .values[(state.sorting.index + 1) % ShoppinglistSorting.values.length]);
+    setSorting(ShoppinglistSorting.values[(state.sorting.index + 1) % 2]);
+  }
+
+  void incrementStyle() {
+    setStyle(ShoppinglistStyle
+        .values[(state.style.index + 1) % ShoppinglistStyle.values.length]);
   }
 
   void setSorting(ShoppinglistSorting sorting) {
@@ -43,6 +48,10 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
       _sortShoppinglistItems(state.listItems, sorting);
     }
     emit(state.copyWith(sorting: sorting));
+  }
+
+  void setStyle(ShoppinglistStyle style) {
+    emit(state.copyWith(style: style));
   }
 
   Future<void> refresh([String? query]) async {
@@ -84,6 +93,8 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
         result: items,
         query: query,
         listItems: shoppinglist,
+        style: state.style,
+        sorting: state.sorting,
       ));
     } else {
       // Sort if needed
@@ -93,7 +104,7 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
 
       final recent = await TransactionHandler.getInstance()
           .runTransaction(TransactionShoppingListGetRecentItems());
-      emit(ShoppinglistCubitState(shoppinglist, recent, sorting));
+      emit(ShoppinglistCubitState(shoppinglist, recent, sorting, state.style));
     }
   }
 
@@ -130,6 +141,9 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
           return ordering;
         });
         break;
+      case ShoppinglistSorting.category:
+        // TODO: Handle this case.
+        break;
     }
   }
 }
@@ -138,26 +152,31 @@ class ShoppinglistCubitState extends Equatable {
   final List<ShoppinglistItem> listItems;
   final List<Item> recentItems;
   final ShoppinglistSorting sorting;
+  final ShoppinglistStyle style;
 
   const ShoppinglistCubitState([
     this.listItems = const [],
     this.recentItems = const [],
     this.sorting = ShoppinglistSorting.alphabetical,
+    this.style = ShoppinglistStyle.grid,
   ]);
 
   ShoppinglistCubitState copyWith({
     List<ShoppinglistItem>? listItems,
     List<Item>? recentItems,
     ShoppinglistSorting? sorting,
+    ShoppinglistStyle? style,
   }) =>
       ShoppinglistCubitState(
         listItems ?? this.listItems,
         recentItems ?? this.recentItems,
         sorting ?? this.sorting,
+        style ?? this.style,
       );
 
   @override
-  List<Object?> get props => listItems.cast<Object>() + recentItems + [sorting];
+  List<Object?> get props =>
+      listItems.cast<Object>() + recentItems + [sorting, style];
 }
 
 class SearchShoppinglistCubitState extends ShoppinglistCubitState {
@@ -168,20 +187,23 @@ class SearchShoppinglistCubitState extends ShoppinglistCubitState {
     List<ShoppinglistItem> listItems = const [],
     List<Item> recentItems = const [],
     ShoppinglistSorting sorting = ShoppinglistSorting.alphabetical,
+    ShoppinglistStyle style = ShoppinglistStyle.grid,
     this.query = "",
     this.result = const [],
-  }) : super(listItems, recentItems, sorting);
+  }) : super(listItems, recentItems, sorting, style);
 
   @override
   ShoppinglistCubitState copyWith({
     List<ShoppinglistItem>? listItems,
     List<Item>? recentItems,
     ShoppinglistSorting? sorting,
+    ShoppinglistStyle? style,
   }) =>
       SearchShoppinglistCubitState(
         listItems: listItems ?? this.listItems,
         recentItems: recentItems ?? this.recentItems,
         sorting: sorting ?? this.sorting,
+        style: style ?? this.style,
         query: query,
         result: result,
       );

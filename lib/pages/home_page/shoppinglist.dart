@@ -48,9 +48,9 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
       child: Column(
         children: [
           SizedBox(
-            height: 80,
+            height: 70,
             child: Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.fromLTRB(16, 16, 16, 6),
               child: BlocListener<ShoppinglistCubit, ShoppinglistCubitState>(
                 bloc: cubit,
                 listener: (context, state) {
@@ -131,41 +131,39 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                       );
                     }
 
-                    return CustomScrollView(
-                      slivers: [
-                        SliverPadding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                          sliver: SliverToBoxAdapter(
-                            child: Align(
-                              alignment: Alignment.centerRight,
-                              child: TextButton(
-                                onPressed: cubit.incrementSorting,
-                                child: Padding(
-                                  padding: const EdgeInsets.only(
-                                    left: 4,
-                                    right: 1,
-                                  ),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Text(state.sorting ==
-                                              ShoppinglistSorting.alphabetical
-                                          ? AppLocalizations.of(context)!
-                                              .sortingAlphabetical
-                                          : AppLocalizations.of(context)!
-                                              .sortingAlgorithmic),
-                                      const SizedBox(width: 4),
-                                      const Icon(Icons.sort),
-                                    ],
-                                  ),
-                                ),
-                              ),
+                    dynamic body = SliverChildBuilderDelegate(
+                      (context, i) => ShoppingItemWidget(
+                        key: ObjectKey(state.listItems[i]),
+                        item: state.listItems[i],
+                        selected: true,
+                        gridStyle: state.style == ShoppinglistStyle.grid,
+                        onPressed: (Item item) {
+                          if (item is ShoppinglistItem) {
+                            cubit.remove(item);
+                          } else {
+                            cubit.add(item.name);
+                          }
+                        },
+                        onLongPressed: (ShoppinglistItem item) async {
+                          final res = await Navigator.of(context)
+                              .push<UpdateValue<Item>>(
+                            MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                                  ItemPage(item: item),
                             ),
-                          ),
-                        ),
-                        SliverPadding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                          sliver: SliverGrid(
+                          );
+                          if (res != null &&
+                              (res.state == UpdateEnum.deleted ||
+                                  res.state == UpdateEnum.updated)) {
+                            cubit.refresh();
+                          }
+                        },
+                      ),
+                      childCount: state.listItems.length,
+                    );
+
+                    body = state.style == ShoppinglistStyle.grid
+                        ? SliverGrid(
                             gridDelegate:
                                 SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: crossAxisCount,
@@ -173,39 +171,79 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                               crossAxisSpacing: 4,
                               childAspectRatio: 1,
                             ),
-                            delegate: SliverChildBuilderDelegate(
-                              (context, i) => ShoppingItemWidget(
-                                key: ObjectKey(state.listItems[i]),
-                                item: state.listItems[i],
-                                selected: true,
-                                onPressed: (Item item) {
-                                  if (item is ShoppinglistItem) {
-                                    cubit.remove(item);
-                                  } else {
-                                    cubit.add(item.name);
-                                  }
-                                },
-                                onLongPressed: (ShoppinglistItem item) async {
-                                  final res = await Navigator.of(context)
-                                      .push<UpdateValue<Item>>(
-                                    MaterialPageRoute(
-                                      builder: (BuildContext context) =>
-                                          ItemPage(
-                                        item: item,
-                                      ),
+                            delegate: body,
+                          )
+                        : SliverList(delegate: body);
+
+                    body = SliverPadding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      sliver: body,
+                    );
+
+                    return CustomScrollView(
+                      slivers: [
+                        SliverPadding(
+                          padding: const EdgeInsets.fromLTRB(16, 0, 16, 6),
+                          sliver: SliverToBoxAdapter(
+                            child: Row(
+                              children: [
+                                TextButton(
+                                  onPressed: cubit.incrementStyle,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                      right: 4,
+                                      left: 1,
                                     ),
-                                  );
-                                  if (res != null &&
-                                      (res.state == UpdateEnum.deleted ||
-                                          res.state == UpdateEnum.updated)) {
-                                    cubit.refresh();
-                                  }
-                                },
-                              ),
-                              childCount: state.listItems.length,
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Icon(state.style ==
+                                                ShoppinglistStyle.grid
+                                            ? Icons.grid_view_rounded
+                                            : Icons.view_list_rounded),
+                                        const SizedBox(width: 4),
+                                        Text(state.style ==
+                                                ShoppinglistStyle.grid
+                                            ? AppLocalizations.of(context)!.grid
+                                            : AppLocalizations.of(context)!
+                                                .list),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                const Spacer(),
+                                TextButton(
+                                  onPressed: cubit.incrementSorting,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                      left: 4,
+                                      right: 1,
+                                    ),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Text(state.sorting ==
+                                                ShoppinglistSorting.alphabetical
+                                            ? AppLocalizations.of(context)!
+                                                .sortingAlphabetical
+                                            : state.sorting ==
+                                                    ShoppinglistSorting
+                                                        .algorithmic
+                                                ? AppLocalizations.of(context)!
+                                                    .sortingAlgorithmic
+                                                : AppLocalizations.of(context)!
+                                                    .category),
+                                        const SizedBox(width: 4),
+                                        const Icon(Icons.sort),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ),
+                        body,
                         if (!isOffline)
                           SliverPadding(
                             padding: const EdgeInsets.all(16),

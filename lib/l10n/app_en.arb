@@ -19,6 +19,7 @@
         "description": "The title of the app"
     },
     "balances": "Balances",
+    "camera": "Camera",
     "cancel": "Cancel",
     "category": "Category",
     "cookingTime": "Cooking time",
@@ -34,6 +35,7 @@
     "expensePaidFor": "Paid for",
     "features": "Features",
     "forceOfflineMode": "Force offline mode",
+    "gallery": "Gallery",
     "grid": "Grid",
     "go": "Go",
     "items": "Items",

@@ -11,6 +11,7 @@ class Recipe extends Model implements ISuspensionBean {
   final Set<int> plannedDays;
   final int time;
   final String source;
+  final String? image;
   final List<RecipeItem> items;
   final Set<Tag> tags;
 
@@ -21,6 +22,7 @@ class Recipe extends Model implements ISuspensionBean {
     this.isPlanned = false,
     this.time = 0,
     this.source = '',
+    this.image,
     this.items = const [],
     this.tags = const {},
     this.plannedDays = const {},
@@ -47,6 +49,7 @@ class Recipe extends Model implements ISuspensionBean {
       isPlanned: map['planned'] ?? false,
       time: map['time'] ?? 0,
       source: map['source'] ?? '',
+      image: map['photo'],
       items: items,
       tags: tags,
       plannedDays: plannedDays,
@@ -59,6 +62,7 @@ class Recipe extends Model implements ISuspensionBean {
     bool? isPlanned,
     int? time,
     String? source,
+    String? image,
     List<RecipeItem>? items,
     Set<Tag>? tags,
     Set<int>? plannedDays,
@@ -71,6 +75,7 @@ class Recipe extends Model implements ISuspensionBean {
         isPlanned: isPlanned ?? this.isPlanned,
         time: time ?? this.time,
         source: source ?? this.source,
+        image: image ?? this.image,
         tags: tags ?? this.tags,
         plannedDays: plannedDays ?? this.plannedDays,
       );
@@ -83,20 +88,28 @@ class Recipe extends Model implements ISuspensionBean {
         isPlanned,
         time,
         source,
+        image,
         tags,
         items,
         plannedDays,
       ];
 
   @override
-  Map<String, dynamic> toJson() => {
-        "name": name,
-        "description": description,
-        "time": time,
-        "source": source,
-        "items": items.map((e) => e.toJson()).toList(),
-        "tags": tags.map((e) => e.toString()).toList(),
-      };
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> json = {
+      "name": name,
+      "description": description,
+      "time": time,
+      "source": source,
+      "items": items.map((e) => e.toJson()).toList(),
+      "tags": tags.map((e) => e.toString()).toList(),
+    };
+    if (image != null) {
+      json["photo"] = image!;
+    }
+
+    return json;
+  }
 
   @override
   Map<String, dynamic> toJsonWithId() => toJson()

@@ -7,8 +7,10 @@ import 'package:kitchenowl/cubits/recipe_cubit.dart';
 import 'package:kitchenowl/cubits/settings_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/models/recipe.dart';
+import 'package:kitchenowl/pages/photo_view_page.dart';
 import 'package:kitchenowl/pages/recipe_add_update_page.dart';
 import 'package:kitchenowl/kitchenowl.dart';
+import 'package:kitchenowl/widgets/image_provider.dart';
 import 'package:kitchenowl/widgets/recipe_source_chip.dart';
 import 'package:kitchenowl/widgets/select_dialog.dart';
 import 'package:kitchenowl/widgets/shopping_item.dart';
@@ -57,39 +59,68 @@ class _RecipePageState extends State<RecipePage> {
     return BlocBuilder<RecipeCubit, RecipeState>(
       bloc: cubit,
       builder: (context, state) => Scaffold(
-        appBar: AppBar(
-          title: Text(state.recipe.name),
-          leading: BackButton(
-            onPressed: () => Navigator.of(context).pop(cubit.state.updateState),
-          ),
-          actions: [
-            if (!App.isOffline(context))
-              IconButton(
-                onPressed: () async {
-                  final res = await Navigator.of(context)
-                      .push<UpdateEnum>(MaterialPageRoute(
-                    builder: (context) => AddUpdateRecipePage(
-                      recipe: state.recipe,
-                    ),
-                  ));
-                  if (res == UpdateEnum.updated) {
-                    cubit.setUpdateState(UpdateEnum.updated);
-                    cubit.refresh();
-                  }
-                  if (res == UpdateEnum.deleted) {
-                    Navigator.of(context).pop(UpdateEnum.deleted);
-                  }
-                },
-                icon: const Icon(Icons.edit),
-              ),
-          ],
-        ),
         body: Align(
           alignment: Alignment.topCenter,
           child: ConstrainedBox(
             constraints: const BoxConstraints.expand(width: 1600),
             child: CustomScrollView(
               slivers: [
+                SliverAppBar(
+                  flexibleSpace: FlexibleSpaceBar(
+                    title: Text(state.recipe.name),
+                    background: state.recipe.image != null
+                        ? GestureDetector(
+                            onTap: () =>
+                                Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => PhotoViewPage(
+                                imageProvider: getImageProvider(
+                                  context,
+                                  state.recipe.image!,
+                                ),
+                                heroTag: state.recipe.image!,
+                              ),
+                            )),
+                            child: Hero(
+                              tag: state.recipe.image!,
+                              child: Image(
+                                image: getImageProvider(
+                                  context,
+                                  state.recipe.image!,
+                                ),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          )
+                        : null,
+                  ),
+                  leading: BackButton(
+                    onPressed: () =>
+                        Navigator.of(context).pop(cubit.state.updateState),
+                  ),
+                  expandedHeight: 160,
+                  pinned: true,
+                  actions: [
+                    if (!App.isOffline(context))
+                      IconButton(
+                        onPressed: () async {
+                          final res = await Navigator.of(context)
+                              .push<UpdateEnum>(MaterialPageRoute(
+                            builder: (context) => AddUpdateRecipePage(
+                              recipe: state.recipe,
+                            ),
+                          ));
+                          if (res == UpdateEnum.updated) {
+                            cubit.setUpdateState(UpdateEnum.updated);
+                            cubit.refresh();
+                          }
+                          if (res == UpdateEnum.deleted) {
+                            Navigator.of(context).pop(UpdateEnum.deleted);
+                          }
+                        },
+                        icon: const Icon(Icons.edit),
+                      ),
+                  ],
+                ),
                 SliverPadding(
                   padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
                   sliver: SliverList(

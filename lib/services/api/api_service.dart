@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:kitchenowl/config.dart';
@@ -14,6 +15,7 @@ export 'planner.dart';
 export 'import_export.dart';
 export 'expense.dart';
 export 'tag.dart';
+export 'upload.dart';
 
 enum Connection {
   disconnected,
@@ -127,6 +129,20 @@ class ApiService {
             headers: headers,
             encoding: encoding,
           ));
+
+  Future<http.Response> postFile(String url, File file) =>
+      _handleRequest(() async {
+        final request = http.MultipartRequest('POST', Uri.parse(baseUrl + url));
+        request.headers.addAll(headers);
+        request.files.add(http.MultipartFile(
+          'file',
+          file.readAsBytes().asStream(),
+          file.lengthSync(),
+          filename: file.uri.pathSegments.last,
+        ));
+
+        return http.Response.fromStream(await _client.send(request));
+      });
 
   Future<http.Response> delete(
     String url, {

@@ -112,7 +112,10 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                         previous.image != current.image,
                     builder: (context, state) => Container(
                       child: IconButton(
-                        icon: const Icon(Icons.edit),
+                        icon:
+                            (state.image != null || cubit.recipe.image != null)
+                                ? const Icon(Icons.edit)
+                                : const Icon(Icons.add_photo_alternate_rounded),
                         color: Theme.of(context).colorScheme.secondary,
                         onPressed: () async {
                           File? file = await selectFile(context);

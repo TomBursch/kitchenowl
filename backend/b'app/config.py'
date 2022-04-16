@@ -11,13 +11,19 @@ MIN_FRONTEND_VERSION = 34
 BACKEND_VERSION = 22
 
 APP_DIR = os.path.dirname(os.path.abspath(__file__))
+PROJECT_DIR = os.path.dirname(APP_DIR)
+
+UPLOAD_FOLDER = os.getenv('STORAGE_PATH', PROJECT_DIR) + '/upload'
+ALLOWED_FILE_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 
 SUPPORTED_LANGUAGES = ['en', 'de']
 
 app = Flask(__name__)
 
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['MAX_CONTENT_LENGTH'] = 64 * 1000 * 1000  # 64MB max upload
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + \
-    os.getenv('STORAGE_PATH', '..') + '/database.db'
+    os.getenv('STORAGE_PATH', PROJECT_DIR) + '/database.db'
 app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY', 'super-secret')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 

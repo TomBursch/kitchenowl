@@ -9,4 +9,5 @@ from .exportimport import *
 from .settings import *
 from .expense import *
 from .tag import *
+from .upload import *
 from .health_controller import health

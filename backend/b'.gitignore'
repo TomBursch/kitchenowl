@@ -1,5 +1,6 @@
 *.db
 *.db-journal
+upload/
 
 # Visual Studio Code related
 .classpath

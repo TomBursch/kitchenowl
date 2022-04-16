@@ -36,6 +36,8 @@ def addRecipe(args):
         recipe.time = args['time']
     if 'source' in args:
         recipe.source = args['source']
+    if 'photo' in args:
+        recipe.photo = args['photo']
     recipe.save()
     if 'items' in args:
         for recipeItem in args['items']:
@@ -76,6 +78,8 @@ def updateRecipe(args, id):  # noqa: C901
         recipe.time = args['time']
     if 'source' in args:
         recipe.source = args['source']
+    if 'photo' in args:
+        recipe.photo = args['photo']
     recipe.save()
     if 'items' in args:
         for con in recipe.items:

@@ -23,6 +23,7 @@ class AddRecipe(Schema):
     )
     time = fields.Integer()
     source = fields.String()
+    photo = fields.String()
     items = fields.List(fields.Nested(RecipeItem()))
     tags = fields.List(fields.String())
 
@@ -44,6 +45,7 @@ class UpdateRecipe(Schema):
     )
     time = fields.Integer()
     source = fields.String()
+    photo = fields.String()
     items = fields.List(fields.Nested(RecipeItem()))
     tags = fields.List(fields.String())
 

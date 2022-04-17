@@ -130,4 +130,8 @@ class Recipe extends Model implements ISuspensionBean {
   @override
   // ignore: no-empty-block
   set isShowSuspension(bool _isShowSuspension) {}
+
+  List<RecipeItem> get optionalItems => items.where((e) => e.optional).toList();
+  List<RecipeItem> get mandatoryItems =>
+      items.where((e) => !e.optional).toList();
 }

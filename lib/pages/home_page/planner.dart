@@ -4,7 +4,9 @@ import 'package:intl/intl.dart';
 import 'package:kitchenowl/cubits/planner_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/kitchenowl.dart';
+import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/models/recipe.dart';
+import 'package:kitchenowl/pages/item_selection_page.dart';
 import 'package:kitchenowl/pages/recipe_page.dart';
 import 'package:kitchenowl/widgets/fractionally_sized_box.dart';
 import 'package:kitchenowl/widgets/selectable_button_card.dart';
@@ -65,9 +67,23 @@ class _PlannerPageState extends State<PlannerPage> {
                     child: Container(
                       height: 80,
                       alignment: Alignment.centerLeft,
-                      child: Text(
-                        AppLocalizations.of(context)!.plannerTitle,
-                        style: Theme.of(context).textTheme.headline5,
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              AppLocalizations.of(context)!.plannerTitle,
+                              style: Theme.of(context).textTheme.headline5,
+                            ),
+                          ),
+                          if (state.plannedRecipes.isNotEmpty)
+                            InkWell(
+                              borderRadius: BorderRadius.circular(50),
+                              child:
+                                  const Icon(Icons.add_shopping_cart_rounded),
+                              onTap: () =>
+                                  _openItemSelectionPage(context, cubit),
+                            ),
+                        ],
                       ),
                     ),
                   ),
@@ -277,6 +293,24 @@ class _PlannerPageState extends State<PlannerPage> {
     );
     if (res == UpdateEnum.updated || res == UpdateEnum.deleted) {
       cubit.refresh();
+    }
+  }
+
+  Future<void> _openItemSelectionPage(
+    BuildContext context,
+    PlannerCubit cubit,
+  ) async {
+    final res = await Navigator.of(context).push<List<RecipeItem>>(
+      MaterialPageRoute(
+        builder: (context) => ItemSelectionPage(
+          selectText: AppLocalizations.of(context)!.addNumberIngredients,
+          recipes: cubit.state.plannedRecipes,
+          title: AppLocalizations.of(context)!.addItemTitle,
+        ),
+      ),
+    );
+    if (res != null && res.isNotEmpty) {
+      cubit.addItemsToList(res);
     }
   }
 }

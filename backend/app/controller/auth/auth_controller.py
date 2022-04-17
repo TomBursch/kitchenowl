@@ -36,8 +36,10 @@ def fresh_login(args):
 @auth.route('/refresh', methods=['GET'])
 @jwt_required(refresh=True)
 def refresh():
-    current_user = get_jwt_identity()
+    user = User.find_by_username(get_jwt_identity())
+    if not user:
+        raise UnauthorizedRequest(message='Unauthorized')
     ret = {
-        'access_token': create_access_token(identity=current_user)
+        'access_token': create_access_token(identity=user.username)
     }
     return jsonify(ret)

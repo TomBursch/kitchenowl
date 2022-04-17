@@ -19,7 +19,10 @@ def getAllUsers():
 @user.route('', methods=['GET'])
 @jwt_required()
 def getLoggedInUser():
-    return jsonify(User.find_by_username(get_jwt_identity()).obj_to_dict(skip_columns=['password']))
+    user = User.find_by_username(get_jwt_identity())
+    if not user:
+        raise UnauthorizedRequest(message='Unauthorized')
+    return jsonify(user.obj_to_dict(skip_columns=['password']))
 
 
 @user.route('/<id>', methods=['GET'])

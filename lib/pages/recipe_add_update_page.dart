@@ -13,6 +13,8 @@ import 'package:kitchenowl/pages/item_page.dart';
 import 'package:kitchenowl/pages/item_search_page.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/widgets/confirmation_dialog.dart';
+import 'package:kitchenowl/widgets/image_provider.dart';
+import 'package:kitchenowl/widgets/select_file.dart';
 import 'package:kitchenowl/widgets/text_dialog.dart';
 import 'package:kitchenowl/widgets/shopping_item.dart';
 import 'package:responsive_builder/responsive_builder.dart';
@@ -104,6 +106,48 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
             slivers: [
               SliverList(
                 delegate: SliverChildListDelegate([
+                  BlocBuilder<AddUpdateRecipeCubit, AddUpdateRecipeState>(
+                    bloc: cubit,
+                    buildWhen: (previous, current) =>
+                        previous.image != current.image,
+                    builder: (context, state) => Container(
+                      child: IconButton(
+                        icon:
+                            (state.image != null || cubit.recipe.image != null)
+                                ? const Icon(Icons.edit)
+                                : const Icon(Icons.add_photo_alternate_rounded),
+                        color: Theme.of(context).colorScheme.secondary,
+                        onPressed: () async {
+                          File? file = await selectFile(context);
+                          if (file != null) {
+                            cubit.setImage(file);
+                          }
+                        },
+                      ),
+                      margin: const EdgeInsets.all(16),
+                      constraints: const BoxConstraints.expand(height: 80),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
+                        border: Border.all(
+                          color: Theme.of(context).colorScheme.secondary,
+                          width: 2,
+                        ),
+                        image: (state.image != null ||
+                                cubit.recipe.image != null)
+                            ? DecorationImage(
+                                fit: BoxFit.cover,
+                                opacity: .5,
+                                image: state.image != null
+                                    ? FileImage(state.image!) as ImageProvider
+                                    : getImageProvider(
+                                        context,
+                                        cubit.recipe.image!,
+                                      ),
+                              )
+                            : null,
+                      ),
+                    ),
+                  ),
                   Padding(
                     padding: const EdgeInsets.all(16),
                     child: TextField(

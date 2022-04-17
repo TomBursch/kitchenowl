@@ -19,6 +19,7 @@
         "description": "The title of the app"
     },
     "balances": "Bilanz",
+    "camera": "Kamera",
     "cancel": "Abbrechen",
     "category": "Kategorie",
     "cookingTime": "Kochzeit",
@@ -40,6 +41,7 @@
         }
     },
     "forceOfflineMode": "Erzwinge offline Modus",
+    "gallery": "Gallerie",
     "grid": "Gitter",
     "go": "Los",
     "items": "Artikel",

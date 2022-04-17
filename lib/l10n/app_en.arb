@@ -19,6 +19,7 @@
         "description": "The title of the app"
     },
     "balances": "Balances",
+    "camera": "Camera",
     "cancel": "Cancel",
     "category": "Category",
     "cookingTime": "Cooking time",
@@ -40,6 +41,7 @@
         }
     },
     "forceOfflineMode": "Force offline mode",
+    "gallery": "Gallery",
     "grid": "Grid",
     "go": "Go",
     "items": "Items",

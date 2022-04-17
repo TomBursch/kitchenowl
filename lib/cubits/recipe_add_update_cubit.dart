@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/models/item.dart';
@@ -29,24 +31,31 @@ class AddUpdateRecipeCubit extends Cubit<AddUpdateRecipeState> {
   }
 
   Future<void> saveRecipe() async {
+    final AddUpdateRecipeState _state = state;
     if (state.isValid()) {
+      String? image;
+      if (state.image != null) {
+        image = await ApiService.getInstance().uploadFile(_state.image!);
+      }
       if (recipe.id == null) {
         await ApiService.getInstance().addRecipe(Recipe(
-          name: state.name,
-          description: state.description,
-          time: state.time,
-          source: state.source,
-          items: state.items,
-          tags: state.selectedTags,
+          name: _state.name,
+          description: _state.description,
+          time: _state.time,
+          source: _state.source,
+          image: image,
+          items: _state.items,
+          tags: _state.selectedTags,
         ));
       } else {
         await ApiService.getInstance().updateRecipe(recipe.copyWith(
-          name: state.name,
-          description: state.description,
-          time: state.time,
-          source: state.source,
-          items: state.items,
-          tags: state.selectedTags,
+          name: _state.name,
+          description: _state.description,
+          time: _state.time,
+          source: _state.source,
+          image: image,
+          items: _state.items,
+          tags: _state.selectedTags,
         ));
       }
     }
@@ -60,6 +69,10 @@ class AddUpdateRecipeCubit extends Cubit<AddUpdateRecipeState> {
 
   void setName(String name) {
     emit(state.copyWith(name: name));
+  }
+
+  void setImage(File image) {
+    emit(state.copyWith(image: image));
   }
 
   void setDescription(String desc) {
@@ -139,6 +152,7 @@ class AddUpdateRecipeState extends Equatable {
   final String description;
   final int time;
   final String source;
+  final File? image;
   final List<RecipeItem> items;
   final Set<Tag> tags;
   final Set<Tag> selectedTags;
@@ -148,6 +162,7 @@ class AddUpdateRecipeState extends Equatable {
     this.description = "",
     this.time = 0,
     this.source = '',
+    this.image,
     this.items = const [],
     this.tags = const {},
     this.selectedTags = const {},
@@ -158,6 +173,7 @@ class AddUpdateRecipeState extends Equatable {
     String? description,
     int? time,
     String? source,
+    File? image,
     List<RecipeItem>? items,
     Set<Tag>? tags,
     Set<Tag>? selectedTags,
@@ -167,6 +183,7 @@ class AddUpdateRecipeState extends Equatable {
         description: description ?? this.description,
         time: time ?? this.time,
         source: source ?? this.source,
+        image: image ?? this.image,
         items: items ?? this.items,
         tags: tags ?? this.tags,
         selectedTags: selectedTags ?? this.selectedTags,
@@ -176,5 +193,5 @@ class AddUpdateRecipeState extends Equatable {
 
   @override
   List<Object?> get props =>
-      [name, description, time, source, items, tags, selectedTags];
+      [name, description, time, source, image, items, tags, selectedTags];
 }

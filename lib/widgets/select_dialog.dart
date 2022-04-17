@@ -23,7 +23,12 @@ class SelectDialog extends StatelessWidget {
             .map(
               (option) => TextButton(
                 onPressed: () => Navigator.of(context).pop(option.id),
-                child: Text(option.name),
+                child: Row(
+                  children: [
+                    if (option.icon != null) Icon(option.icon),
+                    Expanded(child: Text(option.name)),
+                  ],
+                ),
               ),
             )
             .toList(),
@@ -41,6 +46,7 @@ class SelectDialog extends StatelessWidget {
 class SelectDialogOption {
   final int id;
   final String name;
+  final IconData? icon;
 
-  SelectDialogOption(this.id, this.name);
+  SelectDialogOption(this.id, this.name, [this.icon]);
 }

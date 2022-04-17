@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://github.com/TomBursch/kitchenowl">
-    <img alt="KitchenOwl" src="https://raw.githubusercontent.com/TomBursch/kitchenowl/main/docs/icon.png" width="128" />
+    <img alt="KitchenOwl" src="https://raw.githubusercontent.com/TomBursch/kitchenowl/main/docs/img/icon.png" width="128" />
   </a>
 </p>
 <p align="center">

@@ -33,6 +33,12 @@
     "expensePaidBy": "Paid by",
     "expensePaidFor": "Paid for",
     "features": "Features",
+    "fieldCannotBeEmpty": "{field} cannot be empty.",
+    "@fieldCannotBeEmpty": {
+        "placeholders": {
+            "field": {}
+        }
+    },
     "forceOfflineMode": "Force offline mode",
     "grid": "Grid",
     "go": "Go",
@@ -46,6 +52,7 @@
     },
     "itemsOptional": "Optional Items",
     "itemsRecent": "Recent Items",
+    "language": "Language",
     "list": "List",
     "login": "Login",
     "loginTo": "Login to",
@@ -53,8 +60,15 @@
     "mealPlanner": "Meal Planner",
     "minutesAbbrev": "min",
     "name": "Name",
+    "next": "Next",
     "noTags": "No Tags",
     "offlineMessage": "You're offline",
+    "onboardingSettingsTitle": "Hi {name}, let's setup the server!",
+    "@onboardingSettingsTitle": {
+        "placeholders": {
+            "name": {}
+        }
+    },
     "onboardingTitle": "Let's create a user",
     "or": "or",
     "other": "other",

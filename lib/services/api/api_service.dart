@@ -232,19 +232,35 @@ class ApiService {
     return body['onboarding'] as bool;
   }
 
+  // ignore: long-parameter-list
   Future<String?> onboarding(
     String username,
     String name,
     String password,
+    ServerSettings? settings,
+    String? language,
   ) async {
     if (!(await isOnboarding())) return null;
+    final Map<String, dynamic> sendBody = {
+      'username': username,
+      'name': name,
+      'password': password,
+    };
+    if (settings != null) {
+      if (settings.featurePlanner != null) {
+        sendBody['planner_feature'] = settings.featurePlanner!;
+      }
+      if (settings.featureExpenses != null) {
+        sendBody['expenses_feature'] = settings.featureExpenses!;
+      }
+    }
+    if (language != null) {
+      sendBody['language'] = language;
+    }
+
     final res = await post(
       '/onboarding',
-      jsonEncode({
-        'username': username,
-        'name': name,
-        'password': password,
-      }),
+      jsonEncode(sendBody),
     );
     if (res.statusCode == 200) {
       final body = jsonDecode(res.body);

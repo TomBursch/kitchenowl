@@ -5,7 +5,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:kitchenowl/cubits/auth_cubit.dart';
 import 'package:kitchenowl/cubits/settings_cubit.dart';
 import 'package:kitchenowl/pages/login_page.dart';
-import 'package:kitchenowl/pages/onboarding_page.dart';
+import 'package:kitchenowl/pages/onboarding_user_page.dart';
 import 'package:kitchenowl/pages/setup_page.dart';
 import 'package:kitchenowl/pages/splash_page.dart';
 import 'package:kitchenowl/pages/unreachable_page.dart';
@@ -59,7 +59,7 @@ class App extends StatelessWidget {
                 child: BlocBuilder<AuthCubit, AuthState>(
                   builder: (context, state) {
                     if (state is Setup) return const SetupPage();
-                    if (state is Onboarding) return const OnboardingPage();
+                    if (state is Onboarding) return const OnboardingUserPage();
                     if (state is Unauthenticated) return const LoginPage();
                     if (state is Authenticated) return const HomePage();
                     if (state is Unreachable) return const UnreachablePage();

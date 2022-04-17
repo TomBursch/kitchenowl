@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:kitchenowl/models/server_settings.dart';
 import 'package:kitchenowl/models/user.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
 import 'package:kitchenowl/services/storage/storage.dart';
@@ -94,11 +95,18 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
-  void createUser(String username, String name, String password) async {
+  // ignore: long-parameter-list
+  void onboard({
+    required String username,
+    required String name,
+    required String password,
+    ServerSettings? settings,
+    String? language,
+  }) async {
     emit(Loading());
     if (await ApiService.getInstance().isOnboarding()) {
-      final token =
-          await ApiService.getInstance().onboarding(username, name, password);
+      final token = await ApiService.getInstance()
+          .onboarding(username, name, password, settings, language);
       if (token != null && ApiService.getInstance().isAuthenticated()) {
         await SecureStorage.getInstance().write(key: 'TOKEN', value: token);
       } else {

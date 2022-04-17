@@ -1,7 +1,8 @@
 from marshmallow import fields, Schema
+from app.config import SUPPORTED_LANGUAGES
 
 
-class CreateUser(Schema):
+class OnboardSchema(Schema):
     name = fields.String(
         required=True,
         validate=lambda a: a and not a.isspace()
@@ -13,4 +14,9 @@ class CreateUser(Schema):
     password = fields.String(
         required=True,
         validate=lambda a: a and not a.isspace()
+    )
+    planner_feature = fields.Boolean()
+    expenses_feature = fields.Boolean()
+    language = fields.String(
+        validate=lambda a: a and not a.isspace() and a in SUPPORTED_LANGUAGES
     )

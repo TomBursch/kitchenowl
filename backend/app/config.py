@@ -16,7 +16,10 @@ PROJECT_DIR = os.path.dirname(APP_DIR)
 UPLOAD_FOLDER = os.getenv('STORAGE_PATH', PROJECT_DIR) + '/upload'
 ALLOWED_FILE_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 
-SUPPORTED_LANGUAGES = ['en', 'de']
+SUPPORTED_LANGUAGES = {
+    'en': 'English',
+    'de': 'Deutsch'
+}
 
 app = Flask(__name__)
 

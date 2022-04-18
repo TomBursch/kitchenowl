@@ -2,6 +2,13 @@
     "about": "About",
     "add": "Add",
     "addItemTitle": "Add Items",
+    "addLanguage": "Add Language",
+    "addLanguageConfirm": "Are you sure you want to add language '{lang}'? This (right now) cannot be undone.",
+    "@addLanguageConfirm": {
+        "placeholders": {
+            "lang": {}
+        }
+    },
     "addNumberIngredients": "Add {number} ingredients",
     "@addNumberIngredients": {
         "placeholders": {
@@ -55,6 +62,7 @@
     "itemsOptional": "Optional Items",
     "itemsRecent": "Recent Items",
     "language": "Language",
+    "languageSelect": "Select a language",
     "list": "List",
     "login": "Login",
     "loginTo": "Login to",

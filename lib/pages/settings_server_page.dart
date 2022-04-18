@@ -12,6 +12,7 @@ import 'package:kitchenowl/pages/settings_user_page.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/widgets/confirmation_dialog.dart';
+import 'package:kitchenowl/widgets/language_dialog.dart';
 import 'package:kitchenowl/widgets/text_dialog.dart';
 
 class SettingsServerPage extends StatefulWidget {
@@ -107,6 +108,38 @@ class _SettingsServerPageState extends State<SettingsServerPage> {
                         ),
                       ),
                     ],
+                  ),
+                ),
+                ListTile(
+                  title: Text(AppLocalizations.of(context)!.language),
+                  leading: const Icon(Icons.language_rounded),
+                  contentPadding: const EdgeInsets.only(left: 20, right: 5),
+                  trailing: ElevatedButton(
+                    child: Text(AppLocalizations.of(context)!.add),
+                    onPressed: () async {
+                      final language = await showDialog<String>(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return LanguageDialog(
+                            title: AppLocalizations.of(context)!.language,
+                            doneText: AppLocalizations.of(context)!.add,
+                            cancelText: AppLocalizations.of(context)!.cancel,
+                          );
+                        },
+                      );
+                      if (language == null) return;
+                      final confirm = await askForConfirmation(
+                        context: context,
+                        confirmText: AppLocalizations.of(context)!.add,
+                        title: Text(
+                          AppLocalizations.of(context)!.addLanguage,
+                        ),
+                        content: Text(AppLocalizations.of(context)!
+                            .addLanguageConfirm(language)),
+                      );
+                      if (!confirm) return;
+                      ApiService.getInstance().importLanguage(language);
+                    },
                   ),
                 ),
                 Row(

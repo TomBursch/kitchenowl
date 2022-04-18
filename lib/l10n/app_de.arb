@@ -2,6 +2,13 @@
     "about": "About",
     "add": "Hinzufügen",
     "addItemTitle": "Artikel Hinzufügen",
+    "addLanguage": "Sprache Hinzufügen",
+    "addLanguageConfirm": "Bist du dir sicher, dass du Sprache '{lang}' hinzufügen möchtest? Das kann (zurzeit) nicht rückgängig gemacht werden.",
+    "@addLanguageConfirm": {
+        "placeholders": {
+            "lang": {}
+        }
+    },
     "addNumberIngredients": "Füge {number} Produkte hinzu",
     "@addNumberIngredients": {
         "placeholders": {
@@ -55,6 +62,7 @@
     "itemsOptional": "Optionale Artikel",
     "itemsRecent": "Zuletzt benutzt",
     "language": "Sprache",
+    "languageSelect": "Wähle eine Sprache",
     "list": "Liste",
     "login": "Login",
     "loginTo": "Login bei",

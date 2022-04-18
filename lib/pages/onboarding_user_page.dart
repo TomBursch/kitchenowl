@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/cubits/auth_cubit.dart';
 import 'package:kitchenowl/kitchenowl.dart';
-import 'package:kitchenowl/pages/onboard_settings_page.dart';
+import 'package:kitchenowl/pages/onboarding_settings_page.dart';
 
 class OnboardingUserPage extends StatefulWidget {
   const OnboardingUserPage({Key? key}) : super(key: key);

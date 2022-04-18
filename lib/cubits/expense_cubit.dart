@@ -8,6 +8,8 @@ import 'package:kitchenowl/services/transactions/expense.dart';
 import 'package:kitchenowl/services/transactions/user.dart';
 
 class ExpenseCubit extends Cubit<ExpenseCubitState> {
+  bool _refreshLock = false;
+
   ExpenseCubit(Expense expense, List<User> users)
       : super(ExpenseCubitState(
           expense: expense,
@@ -21,6 +23,8 @@ class ExpenseCubit extends Cubit<ExpenseCubitState> {
   }
 
   void refresh() async {
+    if (_refreshLock) return;
+    _refreshLock = true;
     final expense = await TransactionHandler.getInstance()
         .runTransaction(TransactionExpenseGet(expense: state.expense));
     final users = await TransactionHandler.getInstance()
@@ -29,6 +33,7 @@ class ExpenseCubit extends Cubit<ExpenseCubitState> {
       expense: expense,
       users: users,
     ));
+    _refreshLock = false;
   }
 }
 

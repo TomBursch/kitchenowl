@@ -9,6 +9,8 @@ enum ShoppinglistSorting { alphabetical, algorithmic, category }
 enum ShoppinglistStyle { grid, list }
 
 class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
+  bool _refreshLock = false;
+
   String get query => (state is SearchShoppinglistCubitState)
       ? (state as SearchShoppinglistCubitState).query
       : "";
@@ -55,6 +57,8 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
   }
 
   Future<void> refresh([String? query]) async {
+    if (_refreshLock) return;
+    _refreshLock = true;
     // Get required information
     final state = this.state;
     if (state is SearchShoppinglistCubitState) query = query ?? state.query;
@@ -106,6 +110,7 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
           .runTransaction(TransactionShoppingListGetRecentItems());
       emit(ShoppinglistCubitState(shoppinglist, recent, sorting, state.style));
     }
+    _refreshLock = false;
   }
 
   void _mergeShoppinglistItems(

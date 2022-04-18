@@ -8,6 +8,7 @@ import 'package:kitchenowl/services/transactions/tag.dart';
 
 class RecipeListCubit extends Cubit<ListRecipeCubitState> {
   List<Recipe> recipeList = [];
+  bool _refreshLock = false;
 
   RecipeListCubit() : super(const ListRecipeCubitState()) {
     refresh();
@@ -49,6 +50,8 @@ class RecipeListCubit extends Cubit<ListRecipeCubitState> {
   }
 
   Future<void> refresh([String? query]) async {
+    if (_refreshLock) return;
+    _refreshLock = true;
     if (state is SearchRecipeCubitState) {
       query = query ?? (state as SearchRecipeCubitState).query;
     }
@@ -81,6 +84,7 @@ class RecipeListCubit extends Cubit<ListRecipeCubitState> {
         emit(ListRecipeCubitState(recipes: recipeList, tags: tags));
       }
     }
+    _refreshLock = false;
   }
 
   List<Recipe> _getFilteredRecipesCopy(

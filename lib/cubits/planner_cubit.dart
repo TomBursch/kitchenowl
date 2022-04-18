@@ -7,6 +7,8 @@ import 'package:kitchenowl/services/transactions/planner.dart';
 import 'package:kitchenowl/services/transactions/shoppinglist.dart';
 
 class PlannerCubit extends Cubit<PlannerCubitState> {
+  bool _refreshLock = false;
+
   PlannerCubit() : super(const PlannerCubitState()) {
     refresh();
   }
@@ -27,6 +29,8 @@ class PlannerCubit extends Cubit<PlannerCubitState> {
   }
 
   Future<void> refresh() async {
+    if (_refreshLock) return;
+    _refreshLock = true;
     final planned = await TransactionHandler.getInstance()
         .runTransaction(TransactionPlannerGetPlannedRecipes());
     final recent = await TransactionHandler.getInstance()
@@ -39,6 +43,7 @@ class PlannerCubit extends Cubit<PlannerCubitState> {
       recent,
       suggested,
     ));
+    _refreshLock = false;
   }
 
   Future<void> refreshSuggestions() async {

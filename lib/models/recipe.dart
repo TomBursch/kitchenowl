@@ -112,7 +112,7 @@ class Recipe extends Model implements ISuspensionBean {
       "planned": isPlanned,
       "items": items.map((e) => e.toJsonWithId()).toList(),
       "tags": tags.map((e) => e.toJsonWithId()).toList(),
-      "planned_days": plannedDays.map((e) => e.toString()).toList(),
+      "planned_days": plannedDays.toList(),
     });
 
   @override

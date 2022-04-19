@@ -13,6 +13,7 @@ class SettingsServerCubit extends Cubit<SettingsServerState> {
     emit(SettingsServerState(
       await ApiService.getInstance().getAllUsers() ?? [],
       await ApiService.getInstance().getAllTags() ?? {},
+      await ApiService.getInstance().getExpenseCategories() ?? [],
     ));
   }
 
@@ -43,14 +44,26 @@ class SettingsServerCubit extends Cubit<SettingsServerState> {
 
     return res;
   }
+
+  Future<bool> deleteExpenseCategory(String name) async {
+    final res = ApiService.getInstance().deleteExpenseCategory(name);
+    refresh();
+
+    return res;
+  }
 }
 
 class SettingsServerState extends Equatable {
   final List<User> users;
   final Set<Tag> tags;
+  final List<String> expenseCategories;
 
-  const SettingsServerState(this.users, this.tags);
+  const SettingsServerState(
+    this.users,
+    this.tags, [
+    this.expenseCategories = const [],
+  ]);
 
   @override
-  List<Object?> get props => [users, tags];
+  List<Object?> get props => [users, tags, expenseCategories];
 }

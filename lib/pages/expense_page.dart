@@ -90,6 +90,14 @@ class _ExpensePageState extends State<ExpensePage> {
                         style: Theme.of(context).textTheme.headline2,
                         textAlign: TextAlign.center,
                       ),
+                      if (state.expense.category != null)
+                        ListTile(
+                          title: Text(
+                            AppLocalizations.of(context)!.category +
+                                " " +
+                                state.expense.category!,
+                          ),
+                        ),
                       ListTile(
                         title: Text(
                           AppLocalizations.of(context)!.expensePaidBy +

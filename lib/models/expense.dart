@@ -5,6 +5,7 @@ class Expense extends Model {
   final String name;
   final double amount;
   final DateTime? createdAt;
+  final String? category;
   final int paidById;
   final List<PaidForModel> paidFor;
 
@@ -15,6 +16,7 @@ class Expense extends Model {
     required this.paidById,
     this.paidFor = const [],
     this.createdAt,
+    this.category,
   });
 
   factory Expense.fromJson(Map<String, dynamic> map) {
@@ -27,6 +29,7 @@ class Expense extends Model {
       id: map['id'],
       name: map['name'],
       amount: map['amount'],
+      category: map['category'],
       createdAt: null,
       paidById: map['paid_by_id'],
       paidFor: paidFor,
@@ -36,24 +39,29 @@ class Expense extends Model {
   Expense copyWith({
     String? name,
     double? amount,
+    String? category,
     int? paidById,
     List<PaidForModel>? paidFor,
+    bool overrideCategory = false,
   }) =>
       Expense(
         id: id,
         name: name ?? this.name,
         amount: amount ?? this.amount,
+        category: overrideCategory ? category : (category ?? this.category),
         paidById: paidById ?? this.paidById,
         paidFor: paidFor ?? this.paidFor,
       );
 
   @override
-  List<Object?> get props => [id, name, amount, createdAt, paidById] + paidFor;
+  List<Object?> get props =>
+      [id, name, amount, category, createdAt, paidById] + paidFor;
 
   @override
   Map<String, dynamic> toJson() => {
         "name": name,
         "amount": amount,
+        'category': category,
         "paid_by": {"id": paidById},
         "paid_for": paidFor.map((e) => e.toJson()).toList(),
       };

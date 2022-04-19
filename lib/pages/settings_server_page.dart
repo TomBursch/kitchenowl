@@ -173,6 +173,7 @@ class _SettingsServerPageState extends State<SettingsServerPage> {
                 ),
                 BlocBuilder<SettingsServerCubit, SettingsServerState>(
                   bloc: cubit,
+                  buildWhen: (prev, curr) => prev.tags != curr.tags,
                   builder: (context, state) => ListView.builder(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
@@ -221,9 +222,110 @@ class _SettingsServerPageState extends State<SettingsServerPage> {
                   ),
                 ),
                 Text(
-                  AppLocalizations.of(context)!.swipeToDeleteTag,
+                  AppLocalizations.of(context)!
+                      .swipeToDeleteType(AppLocalizations.of(context)!.tags),
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.caption,
+                ),
+                BlocBuilder<SettingsCubit, SettingsState>(
+                  buildWhen: (prev, curr) =>
+                      prev.serverSettings.featureExpenses !=
+                      curr.serverSettings.featureExpenses,
+                  builder: (context, settingsState) =>
+                      BlocBuilder<SettingsServerCubit, SettingsServerState>(
+                    bloc: cubit,
+                    buildWhen: (prev, curr) =>
+                        prev.expenseCategories != curr.expenseCategories,
+                    builder: (context, state) => Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: (settingsState.serverSettings.featureExpenses ??
+                                  false) &&
+                              state.expenseCategories.isNotEmpty
+                          ? [
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      AppLocalizations.of(context)!.categories +
+                                          ':',
+                                      style:
+                                          Theme.of(context).textTheme.headline6,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              ListView.builder(
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemCount: state.expenseCategories.length,
+                                itemBuilder: (context, i) => Dismissible(
+                                  key: ValueKey<String>(
+                                    state.expenseCategories.elementAt(i),
+                                  ),
+                                  confirmDismiss: (direction) async {
+                                    return (await askForConfirmation(
+                                      context: context,
+                                      title: Text(
+                                        AppLocalizations.of(context)!
+                                            .categoryDelete,
+                                      ),
+                                      content: Text(
+                                        AppLocalizations.of(context)!
+                                            .categoryExpenseDeleteConfirmation(
+                                          state.expenseCategories.elementAt(i),
+                                        ),
+                                      ),
+                                    ));
+                                  },
+                                  onDismissed: (direction) {
+                                    cubit.deleteExpenseCategory(
+                                      state.expenseCategories.elementAt(i),
+                                    );
+                                  },
+                                  background: Container(
+                                    alignment: Alignment.centerLeft,
+                                    padding: const EdgeInsets.only(left: 16),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(5),
+                                      color: Colors.red,
+                                    ),
+                                    child: const Icon(
+                                      Icons.delete,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  secondaryBackground: Container(
+                                    alignment: Alignment.centerRight,
+                                    padding: const EdgeInsets.only(right: 16),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(5),
+                                      color: Colors.red,
+                                    ),
+                                    child: const Icon(
+                                      Icons.delete,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  child: Card(
+                                    child: ListTile(
+                                      title: Text(
+                                        state.expenseCategories.elementAt(i),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Text(
+                                AppLocalizations.of(context)!.swipeToDeleteType(
+                                  AppLocalizations.of(context)!.categories,
+                                ),
+                                textAlign: TextAlign.center,
+                                style: Theme.of(context).textTheme.caption,
+                              ),
+                            ]
+                          : const [],
+                    ),
+                  ),
                 ),
                 Row(
                   children: [
@@ -248,6 +350,7 @@ class _SettingsServerPageState extends State<SettingsServerPage> {
                 ),
                 BlocBuilder<SettingsServerCubit, SettingsServerState>(
                   bloc: cubit,
+                  buildWhen: (prev, curr) => prev.users != curr.users,
                   builder: (context, state) => ListView.builder(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
@@ -318,7 +421,9 @@ class _SettingsServerPageState extends State<SettingsServerPage> {
                   ),
                 ),
                 Text(
-                  AppLocalizations.of(context)!.swipeToDeleteUser,
+                  AppLocalizations.of(context)!.swipeToDeleteType(
+                    AppLocalizations.of(context)!.users,
+                  ),
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.caption,
                 ),

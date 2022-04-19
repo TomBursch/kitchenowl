@@ -1,6 +1,7 @@
 {
     "about": "About",
     "add": "Hinzufügen",
+    "addCategory": "Kategorie Hinzufügen",
     "addItemTitle": "Artikel Hinzufügen",
     "addLanguage": "Sprache Hinzufügen",
     "addLanguageConfirm": "Bist du dir sicher, dass du Sprache '{lang}' hinzufügen möchtest? Das kann (zurzeit) nicht rückgängig gemacht werden.",
@@ -28,7 +29,15 @@
     "balances": "Bilanz",
     "camera": "Kamera",
     "cancel": "Abbrechen",
+    "categories": "Kategorien",
     "category": "Kategorie",
+    "categoryDelete": "Lösche Kategorie",
+    "categoryExpenseDeleteConfirmation": "Bist du dir sicher, dass du {category} löschen möchtest? Diese Aktion entfernt die Kategorie von allen Ausgaben.",
+    "@categoryExpenseDeleteConfirmation": {
+        "placeholders": {
+            "category": {}
+        }
+    },
     "cookingTime": "Kochzeit",
     "darkmode": "Nachtmodus",
     "delete": "Löschen",
@@ -71,6 +80,7 @@
     "minutesAbbrev": "Min",
     "name": "Name",
     "next": "Weiter",
+    "none": "Keine",
     "noTags": "Keine Tags",
     "offlineMessage": "Du bist offline",
     "onboardingSettingsTitle": "Hi {name}, lass uns den Server aufsetzen!",
@@ -113,8 +123,13 @@
     "start": "Start",
     "sortingAlphabetical": "Alphabetisch",
     "sortingAlgorithmic": "Algorithmisch",
-    "swipeToDeleteTag": "Wische zum löschen",
-    "swipeToDeleteUser": "Wische zum löschen",
+    "swipeToDelete": "Wische zum löschen",
+    "swipeToDeleteType": "Wische zum löschen von {type}",
+    "@swipeToDeleteType": {
+        "placeholders": {
+            "type": {}
+        }
+    },
     "tagDelete": "Tag löschen",
     "tagDeleteConfirmation": "Bist du dir sicher, dass du {tag} löschen möchtest? Diese Aktion entfernt den Tag von allen Rezepten.",
     "@tagDeleteConfirmation": {

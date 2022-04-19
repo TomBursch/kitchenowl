@@ -1,6 +1,7 @@
 {
     "about": "About",
     "add": "Add",
+    "addCategory": "Add Category",
     "addItemTitle": "Add Items",
     "addLanguage": "Add Language",
     "addLanguageConfirm": "Are you sure you want to add language '{lang}'? This (right now) cannot be undone.",
@@ -28,7 +29,15 @@
     "balances": "Balances",
     "camera": "Camera",
     "cancel": "Cancel",
+    "categories": "Categories",
     "category": "Category",
+    "categoryDelete": "Delete Category",
+    "categoryExpenseDeleteConfirmation": "Are you sure you want to delete {category}? This will remove the category from all expenses.",
+    "@categoryExpenseDeleteConfirmation": {
+        "placeholders": {
+            "category": {}
+        }
+    },
     "cookingTime": "Cooking time",
     "darkmode": "Darkmode",
     "delete": "Delete",
@@ -71,6 +80,7 @@
     "minutesAbbrev": "min",
     "name": "Name",
     "next": "Next",
+    "none": "None",
     "noTags": "No Tags",
     "offlineMessage": "You're offline",
     "onboardingSettingsTitle": "Hi {name}, let's setup the server!",
@@ -113,8 +123,13 @@
     "start": "Start",
     "sortingAlphabetical": "Alphabetical",
     "sortingAlgorithmic": "Algorithmic",
-    "swipeToDeleteTag": "Swipe to delete tag",
-    "swipeToDeleteUser": "Swipe to delete user",
+    "swipeToDelete": "Swipe to delete",
+    "swipeToDeleteType": "Swipe to delete {type}",
+    "@swipeToDeleteType": {
+        "placeholders": {
+            "type": {}
+        }
+    },
     "tagDelete": "Delete Tag",
     "tagDeleteConfirmation": "Are you sure you want to delete {tag}? This will remove the tag from any recipe containing it.",
     "@tagDeleteConfirmation": {

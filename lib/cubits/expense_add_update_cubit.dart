@@ -12,7 +12,11 @@ class AddUpdateExpenseCubit extends Cubit<AddUpdateExpenseState> {
           name: expense.name,
           paidBy: expense.paidById,
           paidFor: expense.paidFor,
-        ));
+          category: expense.category,
+          categories: expense.category == null ? const [] : [expense.category!],
+        )) {
+    _getCategories();
+  }
 
   Future<void> saveExpense() async {
     if (state.isValid()) {
@@ -22,6 +26,7 @@ class AddUpdateExpenseCubit extends Cubit<AddUpdateExpenseState> {
           name: state.name,
           paidById: state.paidBy,
           paidFor: state.paidFor,
+          category: state.category,
         ));
       } else {
         await ApiService.getInstance().updateExpense(expense.copyWith(
@@ -29,6 +34,8 @@ class AddUpdateExpenseCubit extends Cubit<AddUpdateExpenseState> {
           amount: state.amount,
           paidById: state.paidBy,
           paidFor: state.paidFor,
+          category: state.category,
+          overrideCategory: true,
         ));
       }
     }
@@ -56,6 +63,17 @@ class AddUpdateExpenseCubit extends Cubit<AddUpdateExpenseState> {
 
   void setPaidById(int userId) {
     emit(state.copyWith(paidBy: userId));
+  }
+
+  void setCategory(String? category) {
+    List<String>? categories;
+    if (category != null && !state.categories.contains(category)) {
+      categories = List.of(state.categories)..add(category);
+    }
+    emit(state.copyWithCategory(
+      category: category,
+      categories: categories,
+    ));
   }
 
   void addUser(User user) {
@@ -88,6 +106,16 @@ class AddUpdateExpenseCubit extends Cubit<AddUpdateExpenseState> {
       emit(state.copyWith(paidFor: l));
     }
   }
+
+  Future<void> _getCategories() async {
+    final categories =
+        (await ApiService.getInstance().getExpenseCategories()) ?? const [];
+    final category = state.category;
+    if (category != null && !categories.contains(category)) {
+      categories.add(category);
+    }
+    emit(state.copyWith(categories: categories, category: category));
+  }
 }
 
 class AddUpdateExpenseState extends Equatable {
@@ -95,12 +123,16 @@ class AddUpdateExpenseState extends Equatable {
   final double amount;
   final int paidBy;
   final List<PaidForModel> paidFor;
+  final String? category;
+  final List<String> categories;
 
   const AddUpdateExpenseState({
     this.name = "",
     required this.amount,
     required this.paidBy,
+    this.category,
     this.paidFor = const [],
+    this.categories = const [],
   });
 
   AddUpdateExpenseState copyWith({
@@ -108,16 +140,34 @@ class AddUpdateExpenseState extends Equatable {
     double? amount,
     int? paidBy,
     List<PaidForModel>? paidFor,
+    String? category,
+    List<String>? categories,
   }) =>
       AddUpdateExpenseState(
         name: name ?? this.name,
         amount: amount ?? this.amount,
+        category: category ?? this.category,
         paidBy: paidBy ?? this.paidBy,
         paidFor: paidFor ?? this.paidFor,
+        categories: categories ?? this.categories,
+      );
+
+  AddUpdateExpenseState copyWithCategory({
+    required String? category,
+    required List<String>? categories,
+  }) =>
+      AddUpdateExpenseState(
+        name: name,
+        amount: amount,
+        category: category,
+        paidBy: paidBy,
+        paidFor: paidFor,
+        categories: categories ?? this.categories,
       );
 
   bool isValid() => name.isNotEmpty && amount != 0 && paidFor.isNotEmpty;
 
   @override
-  List<Object?> get props => [name, amount, paidBy] + paidFor;
+  List<Object?> get props =>
+      [name, amount, paidBy, category, categories] + paidFor;
 }

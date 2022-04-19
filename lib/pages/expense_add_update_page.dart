@@ -14,6 +14,7 @@ import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/user.dart';
 import 'package:kitchenowl/widgets/checkbox_list_tile.dart';
 import 'package:collection/collection.dart';
+import 'package:kitchenowl/widgets/text_dialog.dart';
 
 class AddUpdateExpensePage extends StatefulWidget {
   final Expense? expense;
@@ -120,6 +121,72 @@ class _AddUpdateRecipePageState extends State<AddUpdateExpensePage> {
                           labelText:
                               AppLocalizations.of(context)!.expenseAmount,
                         ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            AppLocalizations.of(context)!.category,
+                            style: Theme.of(context).textTheme.caption,
+                          ),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: BlocBuilder<AddUpdateExpenseCubit,
+                                    AddUpdateExpenseState>(
+                                  bloc: cubit,
+                                  buildWhen: (prev, curr) =>
+                                      prev.categories != curr.categories ||
+                                      prev.category != curr.category,
+                                  builder: (context, state) =>
+                                      DropdownButton<String?>(
+                                    value: state.category,
+                                    isExpanded: true,
+                                    items: [
+                                      for (final e in (state.categories))
+                                        DropdownMenuItem(
+                                          child: Text(e),
+                                          value: e,
+                                        ),
+                                      DropdownMenuItem(
+                                        child: Text(
+                                          AppLocalizations.of(context)!.none,
+                                        ),
+                                        value: null,
+                                      ),
+                                    ],
+                                    onChanged: cubit.setCategory,
+                                  ),
+                                ),
+                              ),
+                              IconButton(
+                                onPressed: () async {
+                                  final res = await showDialog<String>(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return TextDialog(
+                                        title: AppLocalizations.of(context)!
+                                            .addCategory,
+                                        doneText:
+                                            AppLocalizations.of(context)!.add,
+                                        hintText:
+                                            AppLocalizations.of(context)!.name,
+                                      );
+                                    },
+                                  );
+                                  if (res != null && res.isNotEmpty) {
+                                    cubit.setCategory(res);
+                                  }
+                                },
+                                icon: const Icon(Icons.add),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
                     ),
                     BlocBuilder<AddUpdateExpenseCubit, AddUpdateExpenseState>(

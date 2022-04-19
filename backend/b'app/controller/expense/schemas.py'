@@ -20,8 +20,13 @@ class AddExpense(Schema):
     amount = fields.Float(
         required=True
     )
+    category = fields.String(
+        validate=lambda a: not a or (
+            a and not a.isspace()), allow_none=True
+    )
     paid_by = fields.Nested(User(), required=True)
-    paid_for = fields.List(fields.Nested(User()), required=True, validate=lambda a: len(a) > 0)
+    paid_for = fields.List(fields.Nested(
+        User()), required=True, validate=lambda a: len(a) > 0)
 
 
 class UpdateExpense(Schema):
@@ -39,5 +44,16 @@ class UpdateExpense(Schema):
 
     name = fields.String()
     amount = fields.Float()
+    category = fields.String(
+        validate=lambda a: not a or (
+            a and not a.isspace()), allow_none=True
+    )
     paid_by = fields.Nested(User())
     paid_for = fields.List(fields.Nested(User()))
+
+
+class DeleteExpenseCategory(Schema):
+    name = fields.String(
+        required=True,
+        validate=lambda a: a and not a.isspace()
+    )

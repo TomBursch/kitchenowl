@@ -8,9 +8,11 @@ class Expense(db.Model, DbModelMixin, TimestampMixin):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(128))
     amount = db.Column(db.Float())
+    category_id = db.Column(db.Integer, db.ForeignKey('expense_category.id'))
     photo = db.Column(db.String())
     paid_by_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
+    category = db.relationship("ExpenseCategory")
     paid_by = db.relationship("User")
     paid_for = db.relationship(
         'ExpensePaidFor', back_populates='expense', cascade="all, delete-orphan")
@@ -21,6 +23,8 @@ class Expense(db.Model, DbModelMixin, TimestampMixin):
             ExpensePaidFor.user).order_by(
             ExpensePaidFor.expense_id).all()
         res['paid_for'] = [e.obj_to_dict() for e in paidFor]
+        if (self.category):
+            res['category'] = self.category.name
         return res
 
     @classmethod
@@ -29,7 +33,7 @@ class Expense(db.Model, DbModelMixin, TimestampMixin):
 
     @classmethod
     def find_by_id(cls, id):
-        return cls.query.filter(cls.id == id).first()
+        return cls.query.filter(cls.id == id).join(Expense.category, isouter=True).first()
 
 
 class ExpensePaidFor(db.Model, DbModelMixin, TimestampMixin):

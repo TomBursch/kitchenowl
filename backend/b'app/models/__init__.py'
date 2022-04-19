@@ -8,3 +8,4 @@ from .recipe import RecipeTags, RecipeItems, Recipe
 from .tag import Tag
 from .shoppinglist import ShoppinglistItems, Shoppinglist
 from .recipe_history import RecipeHistory
+from .expense_category import ExpenseCategory

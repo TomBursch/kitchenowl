@@ -107,6 +107,7 @@
         }
     },
     "recipeEdit": "Rezept Bearbeiten",
+    "recipeImageSelect": "Wähle ein Rezeptbild",
     "recipeNew": "Neues Rezept",
     "recipes": "Rezepte",
     "recipeSource": "Rezept Quelle",

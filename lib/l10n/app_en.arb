@@ -107,6 +107,7 @@
         }
     },
     "recipeEdit": "Edit Recipe",
+    "recipeImageSelect": "Select a recipe image",
     "recipeNew": "New Recipe",
     "recipes": "Recipe",
     "recipeSource": "Recipe Source",

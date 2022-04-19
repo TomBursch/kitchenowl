@@ -112,13 +112,23 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                         previous.image != current.image,
                     builder: (context, state) => Container(
                       child: IconButton(
-                        icon:
-                            (state.image != null || cubit.recipe.image != null)
-                                ? const Icon(Icons.edit)
-                                : const Icon(Icons.add_photo_alternate_rounded),
+                        icon: (state.image != null &&
+                                    state.image!.path.isNotEmpty ||
+                                state.image == null &&
+                                    cubit.recipe.image.isNotEmpty)
+                            ? const Icon(Icons.edit)
+                            : const Icon(Icons.add_photo_alternate_rounded),
                         color: Theme.of(context).colorScheme.secondary,
                         onPressed: () async {
-                          File? file = await selectFile(context);
+                          File? file = await selectFile(
+                            context: context,
+                            title:
+                                AppLocalizations.of(context)!.recipeImageSelect,
+                            deleteOption: (state.image != null &&
+                                    state.image!.path.isNotEmpty ||
+                                state.image == null &&
+                                    cubit.recipe.image.isNotEmpty),
+                          );
                           if (file != null) {
                             cubit.setImage(file);
                           }
@@ -132,8 +142,10 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                           color: Theme.of(context).colorScheme.secondary,
                           width: 2,
                         ),
-                        image: (state.image != null ||
-                                cubit.recipe.image != null)
+                        image: (state.image != null &&
+                                    state.image!.path.isNotEmpty ||
+                                state.image == null &&
+                                    cubit.recipe.image.isNotEmpty)
                             ? DecorationImage(
                                 fit: BoxFit.cover,
                                 opacity: .5,
@@ -141,7 +153,7 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                                     ? FileImage(state.image!) as ImageProvider
                                     : getImageProvider(
                                         context,
-                                        cubit.recipe.image!,
+                                        cubit.recipe.image,
                                       ),
                               )
                             : null,

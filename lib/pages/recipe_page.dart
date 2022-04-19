@@ -68,24 +68,24 @@ class _RecipePageState extends State<RecipePage> {
                 SliverAppBar(
                   flexibleSpace: FlexibleSpaceBar(
                     title: Text(state.recipe.name),
-                    background: state.recipe.image != null
+                    background: state.recipe.image.isNotEmpty
                         ? GestureDetector(
                             onTap: () =>
                                 Navigator.of(context).push(MaterialPageRoute(
                               builder: (context) => PhotoViewPage(
                                 imageProvider: getImageProvider(
                                   context,
-                                  state.recipe.image!,
+                                  state.recipe.image,
                                 ),
-                                heroTag: state.recipe.image!,
+                                heroTag: state.recipe.image,
                               ),
                             )),
                             child: Hero(
-                              tag: state.recipe.image!,
+                              tag: state.recipe.image,
                               child: Image(
                                 image: getImageProvider(
                                   context,
-                                  state.recipe.image!,
+                                  state.recipe.image,
                                 ),
                                 fit: BoxFit.cover,
                               ),

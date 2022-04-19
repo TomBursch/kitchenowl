@@ -11,7 +11,7 @@ class Recipe extends Model implements ISuspensionBean {
   final Set<int> plannedDays;
   final int time;
   final String source;
-  final String? image;
+  final String image;
   final List<RecipeItem> items;
   final Set<Tag> tags;
 
@@ -22,7 +22,7 @@ class Recipe extends Model implements ISuspensionBean {
     this.isPlanned = false,
     this.time = 0,
     this.source = '',
-    this.image,
+    this.image = '',
     this.items = const [],
     this.tags = const {},
     this.plannedDays = const {},
@@ -49,7 +49,7 @@ class Recipe extends Model implements ISuspensionBean {
       isPlanned: map['planned'] ?? false,
       time: map['time'] ?? 0,
       source: map['source'] ?? '',
-      image: map['photo'],
+      image: map['photo'] ?? '',
       items: items,
       tags: tags,
       plannedDays: plannedDays,
@@ -95,21 +95,15 @@ class Recipe extends Model implements ISuspensionBean {
       ];
 
   @override
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> json = {
-      "name": name,
-      "description": description,
-      "time": time,
-      "source": source,
-      "items": items.map((e) => e.toJson()).toList(),
-      "tags": tags.map((e) => e.toString()).toList(),
-    };
-    if (image != null) {
-      json["photo"] = image!;
-    }
-
-    return json;
-  }
+  Map<String, dynamic> toJson() => {
+        "name": name,
+        "description": description,
+        "time": time,
+        "source": source,
+        "photo": image,
+        "items": items.map((e) => e.toJson()).toList(),
+        "tags": tags.map((e) => e.toString()).toList(),
+      };
 
   @override
   Map<String, dynamic> toJsonWithId() => toJson()

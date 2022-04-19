@@ -26,6 +26,7 @@ class SelectDialog extends StatelessWidget {
                 child: Row(
                   children: [
                     if (option.icon != null) Icon(option.icon),
+                    if (option.icon != null) const SizedBox(width: 8),
                     Expanded(child: Text(option.name)),
                   ],
                 ),

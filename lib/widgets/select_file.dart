@@ -8,14 +8,19 @@ import 'package:kitchenowl/kitchenowl.dart';
 
 import 'select_dialog.dart';
 
-Future<File?> selectFile(BuildContext context) async {
+// ignore: long-method
+Future<File?> selectFile({
+  required BuildContext context,
+  required String title,
+  bool deleteOption = false,
+}) async {
   final ImagePicker _picker = ImagePicker();
 
   if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
     int? i = await showDialog<int>(
       context: context,
       builder: (context) => SelectDialog(
-        title: AppLocalizations.of(context)!.addRecipeToPlanner,
+        title: title,
         cancelText: AppLocalizations.of(context)!.cancel,
         options: [
           SelectDialogOption(
@@ -28,11 +33,17 @@ Future<File?> selectFile(BuildContext context) async {
             AppLocalizations.of(context)!.gallery,
             Icons.photo_library_rounded,
           ),
+          if (deleteOption)
+            SelectDialogOption(
+              -1,
+              AppLocalizations.of(context)!.delete,
+              Icons.delete,
+            ),
         ],
       ),
     );
     if (i == null) return null;
-
+    if (i == -1) return File('');
     XFile? result = await _picker.pickImage(
       source: ImageSource.values[i],
     );
@@ -40,6 +51,29 @@ Future<File?> selectFile(BuildContext context) async {
       return File(result.path);
     }
   } else {
+    if (deleteOption) {
+      int? i = await showDialog<int>(
+        context: context,
+        builder: (context) => SelectDialog(
+          title: title,
+          cancelText: AppLocalizations.of(context)!.cancel,
+          options: [
+            SelectDialogOption(
+              0,
+              AppLocalizations.of(context)!.gallery,
+              Icons.folder_open_rounded,
+            ),
+            SelectDialogOption(
+              -1,
+              AppLocalizations.of(context)!.delete,
+              Icons.delete,
+            ),
+          ],
+        ),
+      );
+      if (i == null) return null;
+      if (i == -1) return File('');
+    }
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
       allowedExtensions: ['jpg', 'jpeg', 'png', 'gif'],

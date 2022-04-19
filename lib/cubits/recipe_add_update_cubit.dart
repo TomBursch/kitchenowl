@@ -34,8 +34,12 @@ class AddUpdateRecipeCubit extends Cubit<AddUpdateRecipeState> {
     final AddUpdateRecipeState _state = state;
     if (state.isValid()) {
       String? image;
-      if (state.image != null) {
-        image = await ApiService.getInstance().uploadFile(_state.image!);
+      if (_state.image != null) {
+        if (_state.image!.path.isEmpty) {
+          image = '';
+        } else if (await _state.image!.exists()) {
+          image = await ApiService.getInstance().uploadFile(_state.image!);
+        }
       }
       if (recipe.id == null) {
         await ApiService.getInstance().addRecipe(Recipe(
@@ -43,7 +47,7 @@ class AddUpdateRecipeCubit extends Cubit<AddUpdateRecipeState> {
           description: _state.description,
           time: _state.time,
           source: _state.source,
-          image: image,
+          image: image ?? '',
           items: _state.items,
           tags: _state.selectedTags,
         ));

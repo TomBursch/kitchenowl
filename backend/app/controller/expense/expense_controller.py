@@ -142,6 +142,15 @@ def calculateBalances():
 def getExpenseCategories():
     return jsonify([e.name for e in ExpenseCategory.all_by_name()])
 
+
+@expense.route('/categories', methods=['POST'])
+@jwt_required()
+@validate_args(AddExpenseCategory)
+def addExpenseCategory(args):
+    ExpenseCategory.create_by_name(args['name'])
+    return jsonify(ExpenseCategory.obj_to_dict())
+
+
 @expense.route('/categories', methods=['DELETE'])
 @jwt_required()
 @admin_required

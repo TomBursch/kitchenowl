@@ -25,7 +25,7 @@ SUPPORTED_LANGUAGES = {
 app = Flask(__name__)
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-app.config['MAX_CONTENT_LENGTH'] = 64 * 1000 * 1000  # 64MB max upload
+app.config['MAX_CONTENT_LENGTH'] = 32 * 1000 * 1000  # 32MB max upload
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + \
     os.getenv('STORAGE_PATH', PROJECT_DIR) + '/database.db'
 app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY', 'super-secret')

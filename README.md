@@ -7,8 +7,14 @@
   <a href="https://github.com/TomBursch/kitchenowl">
     <img alt="Stars" src="https://img.shields.io/github/stars/tombursch/kitchenowl" />
   </a>
+  <a href="https://matrix.to/#/#kitchenowl:matrix.org">
+    <img alt="Matrix" src="https://img.shields.io/matrix/kitchenowl:matrix.org">
+  </a>
   <a href="LICENSE">
     <img alt="License" src="https://img.shields.io/github/license/TomBursch/kitchenowl" />
+  </a>
+  <a href="https://github.com/TomBursch/kitchenowl/releases">
+    <img alt="GitHub release (latest by date)" src="https://img.shields.io/github/v/release/tombursch/kitchenowl">
   </a>
   <a href="https://hub.docker.com/repository/docker/tombursch/kitchenowl">
     <img alt="Docker pulls" src="https://img.shields.io/docker/pulls/tombursch/kitchenowl" />
@@ -35,7 +41,7 @@
   A grocery list and recipe manager
 </h3>
 <p align="center">
-  KitchenOwl is a self-hosted grocery list and recipe manager. The backend is made with Flask and the frontend with Flutter. Easily add items to your shopping list before you go shopping. You can also create recipes and add items based on what you want to cook.
+  KitchenOwl is a smart self-hosted grocery list and recipe manager. Easily add items to your shopping list before you go shopping. You can also create recipes and get suggestions on what you want to cook. Track your expenses so you know how much you've spend.
 </p>
 
 <h3 align="center">
@@ -59,12 +65,18 @@ For a full list check out the [docs](https://tombursch.github.io/kitchenowl). Fo
 
 ## 📱 Screenshots
 
-<img alt="Groceries page" src="docs/img/screenshots/groceries.png" width="30%" hspace="5" />
-<img alt="Recipe page" src="docs/img/screenshots/recipe.png" width="30%" hspace="5" />
-<img alt="Balance page" src="docs/img/screenshots/balance.png" width="30%" hspace="5"/>
-<img alt="Plan page" src="docs/img/screenshots/plan.png" width="30%" hspace="5"/>
-<img alt="Theme" src="docs/img/screenshots/theme.png" width="30%" hspace="5"/>
-<img alt="Suggestions page" src="docs/img/screenshots/suggestions.png" width="30%" hspace="5"/>
+<table>
+  <tr>
+    <td><img alt="Groceries page" src="docs/img/screenshots/groceries.png"/></td>
+    <td><img alt="Recipe page" src="docs/img/screenshots/recipe.png"/></td>
+    <td><img alt="Balance page" src="docs/img/screenshots/balance.png"/></td>
+   </tr> 
+   <tr>
+      <td><img alt="Plan page" src="docs/img/screenshots/plan.png"/></td>
+      <td><img alt="Theme" src="docs/img/screenshots/theme.png"/></td>
+      <td><img alt="Suggestions page" src="docs/img/screenshots/suggestions.png"/></td>
+  </tr>
+</table>
 
 ## 🤖 App Install
 
@@ -76,7 +88,7 @@ Please take a look at the [docs](https://tombursch.github.io/kitchenowl/).
 
 ## 🙌 Contributing
 
-From opening a bug report to creating a pull request: every contribution is appreciated and welcomed. If you're planning to implement a new feature or change the API please create an issue first. This way, we can ensure your work is not in vain. For more information see [Contributing](CONTRIBUTING.md)
+From opening a bug report to creating a pull request: every contribution is appreciated and welcomed. If you're planning to implement a new feature or change the API please create an issue first. This way, we can ensure your work is not in vain. For more information see [Contributing](CONTRIBUTING.md) or get in contact by joining our [Matrix space](https://matrix.to/#/#kitchenowl:matrix.org).
 
 ## 📚 Related
 

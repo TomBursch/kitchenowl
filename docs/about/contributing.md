@@ -4,7 +4,7 @@ Thanks for wanting to contribute to KitchenOwl!
 
 So you want to contribute to KitchenOwl? Great!
 
-If you have noticed a bug, please [create an issue](https://github.com/TomBursch/KitchenOwl/issues/new) for it before starting any work on a pull request.
+If you have noticed a bug, please [create an issue](https://github.com/TomBursch/KitchenOwl/issues/new) before starting any work on a pull request or get in contact by joining our [Matrix space](https://matrix.to/#/#kitchenowl:matrix.org).
 
 ### Fork & create a branch
 

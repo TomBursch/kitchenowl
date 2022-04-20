@@ -3,7 +3,7 @@
   A grocery list and recipe manager
 </h3>
 <p align="center">
-  KitchenOwl is a self-hosted grocery list and recipe manager. The backend is made with Flask and the frontend with Flutter. Easily add items to your shopping list before you go shopping. You can also create recipes and add items based on what you want to cook.
+  KitchenOwl is a smart self-hosted grocery list and recipe manager. Easily add items to your shopping list before you go shopping. You can also create recipes and get suggestions on what you want to cook. Track your expenses so you know how much you've spend.
 </p>
 <h3 align="center">
  🍫 🥘 🍽
@@ -40,6 +40,9 @@ For a list of planned features, check out the [Roadmap](roadmap.md)!
 <img alt="Plan page" src="img/screenshots/plan.png" width="31%" hspace="5"/>
 <img alt="Theme" src="img/screenshots/theme.png" width="31%" hspace="5"/>
 <img alt="Suggestions page" src="img/screenshots/suggestions.png" width="31%" hspace="5"/>
+
+## 📟 Social
+Join our [Matrix Space](https://matrix.to/#/#kitchenowl:matrix.org) and get involved!
 
 ## 📜 License
 

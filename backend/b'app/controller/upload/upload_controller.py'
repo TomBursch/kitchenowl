@@ -1,6 +1,5 @@
 from app.config import ALLOWED_FILE_EXTENSIONS, UPLOAD_FOLDER
-from app.helpers import validate_args
-from flask import jsonify, Blueprint, send_from_directory, request, url_for
+from flask import jsonify, Blueprint, send_from_directory, request
 from flask_jwt_extended import jwt_required
 from werkzeug.utils import secure_filename
 import os
@@ -22,7 +21,8 @@ def upload_file():
         return jsonify({'msg': 'missing filename'})
 
     if file and allowed_file(file.filename):
-        filename = str(uuid.uuid4()) + '.' + file.filename.rsplit('.', 1)[1].lower()
+        filename = secure_filename(str(uuid.uuid4()) + '.' +
+                                   file.filename.rsplit('.', 1)[1].lower())
         file.save(os.path.join(UPLOAD_FOLDER, filename))
         return jsonify({'name': filename})
 

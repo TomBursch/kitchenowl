@@ -5,6 +5,7 @@ import json
 from app.errors import NotFoundRequest
 from app.models import Item, Recipe, RecipeItems, Tag, RecipeTags
 
+
 def importFromLanguage(lang):
     file_path = f'{APP_DIR}/../templates/{lang}.json'
     if lang not in SUPPORTED_LANGUAGES or not exists(file_path):
@@ -12,6 +13,7 @@ def importFromLanguage(lang):
     with open(file_path, 'r') as f:
         data = json.load(f)
     importFromDict(data)
+
 
 def importFromDict(args):  # noqa
     if "items" in args:

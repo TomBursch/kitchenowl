@@ -52,6 +52,13 @@ class UpdateExpense(Schema):
     paid_for = fields.List(fields.Nested(User()))
 
 
+class AddExpenseCategory(Schema):
+    name = fields.String(
+        required=True,
+        validate=lambda a: a and not a.isspace()
+    )
+
+
 class DeleteExpenseCategory(Schema):
     name = fields.String(
         required=True,

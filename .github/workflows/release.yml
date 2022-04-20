@@ -113,7 +113,7 @@ jobs:
         if: matrix.target == 'Fedora'
         run: |
           sudo dnf update -y
-          sudo dnf install -y gcc gcc-c++ clang gtk3-devel libX11-devel pkg-config cmake ninja-build libblkid-devel libsecret-devel jsoncpp-devel fedora-packager fedora-review
+          sudo dnf install -y gcc gcc-c++ clang gtk3-devel libX11-devel pkg-config cmake ninja-build libblkid-devel libsecret-devel jsoncpp-devel fedora-packager fedora-review shyaml
       - name: Install Android dependencies
         if: matrix.target == 'Android'
         uses: actions/setup-java@v1

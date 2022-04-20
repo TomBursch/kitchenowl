@@ -176,6 +176,7 @@ class _SettingsServerPageState extends State<SettingsServerPage> {
                   buildWhen: (prev, curr) => prev.tags != curr.tags,
                   builder: (context, state) => ListView.builder(
                     shrinkWrap: true,
+                    padding: EdgeInsets.zero,
                     physics: const NeverScrollableScrollPhysics(),
                     itemCount: state.tags.length,
                     itemBuilder: (context, i) => Dismissible(
@@ -252,11 +253,36 @@ class _SettingsServerPageState extends State<SettingsServerPage> {
                                           Theme.of(context).textTheme.headline6,
                                     ),
                                   ),
+                                  IconButton(
+                                    icon: const Icon(Icons.add),
+                                    onPressed: () async {
+                                      final res = await showDialog<String>(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return TextDialog(
+                                            title: AppLocalizations.of(context)!
+                                                .addCategory,
+                                            doneText:
+                                                AppLocalizations.of(context)!
+                                                    .add,
+                                            hintText:
+                                                AppLocalizations.of(context)!
+                                                    .name,
+                                          );
+                                        },
+                                      );
+                                      if (res != null && res.isNotEmpty) {
+                                        cubit.addExpenseCategory(res);
+                                      }
+                                    },
+                                    padding: EdgeInsets.zero,
+                                  ),
                                 ],
                               ),
                               ListView.builder(
                                 shrinkWrap: true,
                                 physics: const NeverScrollableScrollPhysics(),
+                                padding: EdgeInsets.zero,
                                 itemCount: state.expenseCategories.length,
                                 itemBuilder: (context, i) => Dismissible(
                                   key: ValueKey<String>(
@@ -353,6 +379,7 @@ class _SettingsServerPageState extends State<SettingsServerPage> {
                   buildWhen: (prev, curr) => prev.users != curr.users,
                   builder: (context, state) => ListView.builder(
                     shrinkWrap: true,
+                    padding: EdgeInsets.zero,
                     physics: const NeverScrollableScrollPhysics(),
                     itemCount: state.users.length,
                     itemBuilder: (context, i) => Dismissible(
@@ -427,6 +454,7 @@ class _SettingsServerPageState extends State<SettingsServerPage> {
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.caption,
                 ),
+                SizedBox(height: MediaQuery.of(context).padding.bottom),
               ],
             ),
           ),

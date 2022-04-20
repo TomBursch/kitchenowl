@@ -341,6 +341,9 @@ class _AddUpdateRecipePageState extends State<AddUpdateExpensePage> {
                     ),
                   ),
                 ),
+              SliverToBoxAdapter(
+                child: SizedBox(height: MediaQuery.of(context).padding.bottom),
+              ),
             ],
           ),
         ),

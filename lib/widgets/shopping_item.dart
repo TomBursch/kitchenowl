@@ -32,6 +32,7 @@ class ShoppingItemWidget<T extends Item> extends StatelessWidget {
                 onLongPressed != null ? () => onLongPressed!(item) : null,
           )
         : Card(
+            margin: const EdgeInsets.symmetric(vertical: 4),
             child: ListTile(
               title:
                   Text(item.name, maxLines: 1, overflow: TextOverflow.ellipsis),

@@ -52,101 +52,98 @@ class _ItemSelectionPageState extends State<ItemSelectionPage> {
       appBar: AppBar(
         title: Text(widget.title ?? AppLocalizations.of(context)!.itemsAdd),
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: BlocBuilder<ItemSelectionCubit, ItemSelectionState>(
-          bloc: cubit,
-          builder: (context, state) => CustomScrollView(
-            slivers: [
-              for (final recipe in widget.recipes) ...[
-                if (recipe.items.isNotEmpty)
-                  SliverPadding(
-                    padding: const EdgeInsets.all(16),
-                    sliver: SliverToBoxAdapter(
-                      child: Text(
-                        recipe.name + ':',
-                        style: Theme.of(context).textTheme.headline5,
-                      ),
-                    ),
-                  ),
+      body: BlocBuilder<ItemSelectionCubit, ItemSelectionState>(
+        bloc: cubit,
+        builder: (context, state) => CustomScrollView(
+          slivers: [
+            for (final recipe in widget.recipes) ...[
+              if (recipe.items.isNotEmpty)
                 SliverPadding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  sliver: SliverGrid(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: crossAxisCount,
-                      mainAxisSpacing: 4,
-                      crossAxisSpacing: 4,
-                      childAspectRatio: 1,
-                    ),
-                    delegate: SliverChildBuilderDelegate(
-                      (context, i) => ShoppingItemWidget<RecipeItem>(
-                        onPressed: (item) => cubit.toggleItem(recipe, item),
-                        selected: state.selectedItems[recipe]!.contains(
-                          recipe.mandatoryItems.elementAt(i),
-                        ),
-                        item: recipe.mandatoryItems.elementAt(i),
-                      ),
-                      childCount: recipe.mandatoryItems.length,
-                    ),
-                  ),
-                ),
-                if (recipe.optionalItems.isNotEmpty)
-                  SliverPadding(
-                    padding: const EdgeInsets.all(16),
-                    sliver: SliverToBoxAdapter(
-                      child: Text(
-                        AppLocalizations.of(context)!.itemsOptional + ':',
-                        style: Theme.of(context).textTheme.headline6,
-                      ),
-                    ),
-                  ),
-                SliverPadding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  sliver: SliverGrid(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: crossAxisCount,
-                      mainAxisSpacing: 4,
-                      crossAxisSpacing: 4,
-                      childAspectRatio: 1,
-                    ),
-                    delegate: SliverChildBuilderDelegate(
-                      (context, i) => ShoppingItemWidget<RecipeItem>(
-                        onPressed: (item) => cubit.toggleItem(recipe, item),
-                        selected: state.selectedItems[recipe]!.contains(
-                          recipe.optionalItems.elementAt(i),
-                        ),
-                        item: recipe.optionalItems.elementAt(i),
-                      ),
-                      childCount: recipe.optionalItems.length,
-                    ),
-                  ),
-                ),
-                const SliverPadding(
-                  padding: EdgeInsets.fromLTRB(16, 16, 16, 0),
+                  padding: const EdgeInsets.all(16),
                   sliver: SliverToBoxAdapter(
-                    child: Divider(),
+                    child: Text(
+                      recipe.name + ':',
+                      style: Theme.of(context).textTheme.headline5,
+                    ),
                   ),
                 ),
-              ],
               SliverPadding(
-                padding: const EdgeInsets.all(16),
-                sliver: SliverToBoxAdapter(
-                  child: ElevatedButton(
-                    child: Text(
-                      AppLocalizations.of(context)!.addNumberIngredients(
-                        state.getResult().length,
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                sliver: SliverGrid(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: crossAxisCount,
+                    mainAxisSpacing: 4,
+                    crossAxisSpacing: 4,
+                    childAspectRatio: 1,
+                  ),
+                  delegate: SliverChildBuilderDelegate(
+                    (context, i) => ShoppingItemWidget<RecipeItem>(
+                      onPressed: (item) => cubit.toggleItem(recipe, item),
+                      selected: state.selectedItems[recipe]!.contains(
+                        recipe.mandatoryItems.elementAt(i),
                       ),
+                      item: recipe.mandatoryItems.elementAt(i),
                     ),
-                    onPressed: state.getResult().isEmpty
-                        ? null
-                        : () async {
-                            Navigator.of(context).pop(cubit.getResult());
-                          },
+                    childCount: recipe.mandatoryItems.length,
                   ),
                 ),
               ),
+              if (recipe.optionalItems.isNotEmpty)
+                SliverPadding(
+                  padding: const EdgeInsets.all(16),
+                  sliver: SliverToBoxAdapter(
+                    child: Text(
+                      AppLocalizations.of(context)!.itemsOptional + ':',
+                      style: Theme.of(context).textTheme.headline6,
+                    ),
+                  ),
+                ),
+              SliverPadding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                sliver: SliverGrid(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: crossAxisCount,
+                    mainAxisSpacing: 4,
+                    crossAxisSpacing: 4,
+                    childAspectRatio: 1,
+                  ),
+                  delegate: SliverChildBuilderDelegate(
+                    (context, i) => ShoppingItemWidget<RecipeItem>(
+                      onPressed: (item) => cubit.toggleItem(recipe, item),
+                      selected: state.selectedItems[recipe]!.contains(
+                        recipe.optionalItems.elementAt(i),
+                      ),
+                      item: recipe.optionalItems.elementAt(i),
+                    ),
+                    childCount: recipe.optionalItems.length,
+                  ),
+                ),
+              ),
+              const SliverPadding(
+                padding: EdgeInsets.fromLTRB(16, 16, 16, 0),
+                sliver: SliverToBoxAdapter(
+                  child: Divider(),
+                ),
+              ),
             ],
-          ),
+            SliverPadding(
+              padding: const EdgeInsets.all(16),
+              sliver: SliverToBoxAdapter(
+                child: ElevatedButton(
+                  child: Text(
+                    AppLocalizations.of(context)!.addNumberIngredients(
+                      state.getResult().length,
+                    ),
+                  ),
+                  onPressed: state.getResult().isEmpty
+                      ? null
+                      : () async {
+                          Navigator.of(context).pop(cubit.getResult());
+                        },
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

@@ -67,7 +67,11 @@ class _RecipePageState extends State<RecipePage> {
               slivers: [
                 SliverAppBar(
                   flexibleSpace: FlexibleSpaceBar(
-                    title: Text(state.recipe.name),
+                    title: Text(
+                      state.recipe.name,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                     background: state.recipe.image.isNotEmpty
                         ? GestureDetector(
                             onTap: () =>
@@ -349,6 +353,10 @@ class _RecipePageState extends State<RecipePage> {
                       ),
                     ),
                   ),
+                SliverToBoxAdapter(
+                  child:
+                      SizedBox(height: MediaQuery.of(context).padding.bottom),
+                ),
               ],
             ),
           ),

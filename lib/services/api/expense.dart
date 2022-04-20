@@ -49,6 +49,15 @@ extension ExpenseApi on ApiService {
     return List<String>.from(jsonDecode(res.body));
   }
 
+  Future<bool> addExpenseCategory(String name) async {
+    final res = await post(
+      baseRoute + '/categories',
+      jsonEncode({'name': name}),
+    );
+
+    return res.statusCode == 200;
+  }
+
   Future<bool> deleteExpenseCategory(String name) async {
     final res = await delete(
       baseRoute + '/categories',

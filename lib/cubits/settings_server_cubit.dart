@@ -51,6 +51,13 @@ class SettingsServerCubit extends Cubit<SettingsServerState> {
 
     return res;
   }
+
+  Future<bool> addExpenseCategory(String name) async {
+    final res = ApiService.getInstance().addExpenseCategory(name);
+    refresh();
+
+    return res;
+  }
 }
 
 class SettingsServerState extends Equatable {

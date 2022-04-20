@@ -161,7 +161,7 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.all(16),
+                    padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
                     child: TextField(
                       controller: nameController,
                       onChanged: (s) => cubit.setName(s),
@@ -419,6 +419,9 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                     ),
                   ),
                 ),
+              SliverToBoxAdapter(
+                child: SizedBox(height: MediaQuery.of(context).padding.bottom),
+              ),
             ],
           ),
         ),

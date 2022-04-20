@@ -160,6 +160,10 @@ class _ExpensePageState extends State<ExpensePage> {
                     childCount: state.expense.paidFor.length,
                   ),
                 ),
+                SliverToBoxAdapter(
+                  child:
+                      SizedBox(height: MediaQuery.of(context).padding.bottom),
+                ),
               ],
             ),
           ),

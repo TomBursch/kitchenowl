@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
@@ -131,7 +134,13 @@ class _RecipePageState extends State<RecipePage> {
                     delegate: SliverChildListDelegate(
                       [
                         Wrap(
-                          runSpacing: 7,
+                          runSpacing: (kIsWeb ||
+                                  Platform.isLinux ||
+                                  Platform.isMacOS ||
+                                  Platform.isWindows ||
+                                  Platform.isIOS)
+                              ? 7
+                              : -8, // TODO: Find fix?
                           spacing: 5,
                           children: [
                             if (state.recipe.source.isNotEmpty)
@@ -199,31 +208,32 @@ class _RecipePageState extends State<RecipePage> {
                       ),
                     ),
                   ),
-                SliverPadding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  sliver: SliverGrid(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: crossAxisCount,
-                      mainAxisSpacing: 4,
-                      crossAxisSpacing: 4,
-                      childAspectRatio: 1,
-                    ),
-                    delegate: SliverChildBuilderDelegate(
-                      (context, i) => ShoppingItemWidget(
-                        onPressed: cubit.itemSelected,
-                        selected: state.selectedItems.contains(state
-                            .recipe.items
-                            .where((e) => !e.optional)
-                            .elementAt(i)),
-                        item: state.recipe.items
-                            .where((e) => !e.optional)
-                            .elementAt(i),
+                if (state.recipe.items.where((e) => !e.optional).isNotEmpty)
+                  SliverPadding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    sliver: SliverGrid(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: crossAxisCount,
+                        mainAxisSpacing: 4,
+                        crossAxisSpacing: 4,
+                        childAspectRatio: 1,
                       ),
-                      childCount:
-                          state.recipe.items.where((e) => !e.optional).length,
+                      delegate: SliverChildBuilderDelegate(
+                        (context, i) => ShoppingItemWidget(
+                          onPressed: cubit.itemSelected,
+                          selected: state.selectedItems.contains(state
+                              .recipe.items
+                              .where((e) => !e.optional)
+                              .elementAt(i)),
+                          item: state.recipe.items
+                              .where((e) => !e.optional)
+                              .elementAt(i),
+                        ),
+                        childCount:
+                            state.recipe.items.where((e) => !e.optional).length,
+                      ),
                     ),
                   ),
-                ),
                 if (state.recipe.items.where((e) => e.optional).isNotEmpty)
                   SliverPadding(
                     padding: const EdgeInsets.all(16),
@@ -234,31 +244,32 @@ class _RecipePageState extends State<RecipePage> {
                       ),
                     ),
                   ),
-                SliverPadding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  sliver: SliverGrid(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: crossAxisCount,
-                      mainAxisSpacing: 4,
-                      crossAxisSpacing: 4,
-                      childAspectRatio: 1,
-                    ),
-                    delegate: SliverChildBuilderDelegate(
-                      (context, i) => ShoppingItemWidget(
-                        onPressed: cubit.itemSelected,
-                        selected: state.selectedItems.contains(state
-                            .recipe.items
-                            .where((e) => e.optional)
-                            .elementAt(i)),
-                        item: state.recipe.items
-                            .where((e) => e.optional)
-                            .elementAt(i),
+                if (state.recipe.items.where((e) => e.optional).isNotEmpty)
+                  SliverPadding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    sliver: SliverGrid(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: crossAxisCount,
+                        mainAxisSpacing: 4,
+                        crossAxisSpacing: 4,
+                        childAspectRatio: 1,
                       ),
-                      childCount:
-                          state.recipe.items.where((e) => e.optional).length,
+                      delegate: SliverChildBuilderDelegate(
+                        (context, i) => ShoppingItemWidget(
+                          onPressed: cubit.itemSelected,
+                          selected: state.selectedItems.contains(state
+                              .recipe.items
+                              .where((e) => e.optional)
+                              .elementAt(i)),
+                          item: state.recipe.items
+                              .where((e) => e.optional)
+                              .elementAt(i),
+                        ),
+                        childCount:
+                            state.recipe.items.where((e) => e.optional).length,
+                      ),
                     ),
                   ),
-                ),
                 SliverPadding(
                   padding: const EdgeInsets.all(16),
                   sliver: SliverToBoxAdapter(

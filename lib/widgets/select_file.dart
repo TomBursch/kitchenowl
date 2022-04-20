@@ -46,6 +46,9 @@ Future<File?> selectFile({
     if (i == -1) return File('');
     XFile? result = await _picker.pickImage(
       source: ImageSource.values[i],
+      imageQuality: 90,
+      maxHeight: 2048,
+      maxWidth: 2048,
     );
     if (result != null) {
       return File(result.path);

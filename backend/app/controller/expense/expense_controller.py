@@ -5,7 +5,7 @@ from flask_jwt_extended import jwt_required
 from sqlalchemy import func
 from app.helpers import validate_args, admin_required
 from app.models import Expense, ExpensePaidFor, User, ExpenseCategory
-from .schemas import AddExpense, UpdateExpense, DeleteExpenseCategory
+from .schemas import AddExpense, UpdateExpense, AddExpenseCategory, DeleteExpenseCategory
 
 expense = Blueprint('expense', __name__)
 
@@ -13,7 +13,10 @@ expense = Blueprint('expense', __name__)
 @expense.route('', methods=['GET'])
 @jwt_required()
 def getAllExpenses():
-    return jsonify([e.obj_to_full_dict() for e in Expense.query.order_by(desc(Expense.id)).join(Expense.category, isouter=True).limit(50).all()])
+    return jsonify([e.obj_to_full_dict() for e
+                    in Expense.query.order_by(desc(Expense.id))
+                    .join(Expense.category, isouter=True).limit(50).all()
+                    ])
 
 
 @expense.route('/<id>', methods=['GET'])

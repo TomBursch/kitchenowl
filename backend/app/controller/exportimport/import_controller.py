@@ -26,6 +26,3 @@ def importLang(lang):
 @importBP.route('/supported-languages', methods=['GET'])
 def getSupportedLanguages():
     return jsonify(SUPPORTED_LANGUAGES)
-
-
-

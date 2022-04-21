@@ -80,6 +80,7 @@ class _RecipePageState extends State<RecipePage> {
                             onTap: () =>
                                 Navigator.of(context).push(MaterialPageRoute(
                               builder: (context) => PhotoViewPage(
+                                title: state.recipe.name,
                                 imageProvider: getImageProvider(
                                   context,
                                   state.recipe.image,
@@ -89,6 +90,20 @@ class _RecipePageState extends State<RecipePage> {
                             )),
                             child: Hero(
                               tag: state.recipe.image,
+                              flightShuttleBuilder: (
+                                BuildContext flightContext,
+                                Animation<double> animation,
+                                HeroFlightDirection flightDirection,
+                                BuildContext fromHeroContext,
+                                BuildContext toHeroContext,
+                              ) {
+                                final Hero hero =
+                                    flightDirection == HeroFlightDirection.push
+                                        ? fromHeroContext.widget as Hero
+                                        : toHeroContext.widget as Hero;
+
+                                return hero.child;
+                              },
                               child: Image(
                                 image: getImageProvider(
                                   context,
@@ -104,7 +119,7 @@ class _RecipePageState extends State<RecipePage> {
                     onPressed: () =>
                         Navigator.of(context).pop(cubit.state.updateState),
                   ),
-                  expandedHeight: 160,
+                  expandedHeight: state.recipe.image.isNotEmpty ? 160 : null,
                   pinned: true,
                   actions: [
                     if (!App.isOffline(context))

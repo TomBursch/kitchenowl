@@ -187,30 +187,30 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                           sliver: SliverToBoxAdapter(
                             child: Row(
                               children: [
-                                TextButton(
-                                  onPressed: cubit.incrementStyle,
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(
-                                      right: 4,
-                                      left: 1,
-                                    ),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Icon(state.style ==
-                                                ShoppinglistStyle.grid
-                                            ? Icons.grid_view_rounded
-                                            : Icons.view_list_rounded),
-                                        const SizedBox(width: 4),
-                                        Text(state.style ==
-                                                ShoppinglistStyle.grid
-                                            ? AppLocalizations.of(context)!.grid
-                                            : AppLocalizations.of(context)!
-                                                .list),
-                                      ],
-                                    ),
-                                  ),
-                                ),
+                                // TextButton(
+                                //   onPressed: cubit.incrementStyle,
+                                //   child: Padding(
+                                //     padding: const EdgeInsets.only(
+                                //       right: 4,
+                                //       left: 1,
+                                //     ),
+                                //     child: Row(
+                                //       mainAxisSize: MainAxisSize.min,
+                                //       children: [
+                                //         Icon(state.style ==
+                                //                 ShoppinglistStyle.grid
+                                //             ? Icons.grid_view_rounded
+                                //             : Icons.view_list_rounded),
+                                //         const SizedBox(width: 4),
+                                //         Text(state.style ==
+                                //                 ShoppinglistStyle.grid
+                                //             ? AppLocalizations.of(context)!.grid
+                                //             : AppLocalizations.of(context)!
+                                //                 .list),
+                                //       ],
+                                //     ),
+                                //   ),
+                                // ),
                                 const Spacer(),
                                 TextButton(
                                   onPressed: cubit.incrementSorting,

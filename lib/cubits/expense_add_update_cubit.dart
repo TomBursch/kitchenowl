@@ -101,7 +101,7 @@ class AddUpdateExpenseCubit extends Cubit<AddUpdateExpenseState> {
   void setFactor(User user, int factor) {
     final l = List<PaidForModel>.from(state.paidFor);
     final i = l.indexWhere((e) => e.userId == user.id);
-    if (i > 0) {
+    if (i >= 0) {
       l[i] = PaidForModel(userId: user.id, factor: factor);
       emit(state.copyWith(paidFor: l));
     }

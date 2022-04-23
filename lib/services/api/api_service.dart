@@ -283,6 +283,9 @@ class ApiService {
       headers['Authorization'] = 'Bearer ' + body['access_token'];
       _refreshToken = body['refresh_token'];
       _setConnectionState(Connection.authenticated);
+      if (settings != null) {
+        _settingsNotifier.value = settings;
+      }
 
       return _refreshToken;
     }

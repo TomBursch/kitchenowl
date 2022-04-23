@@ -10,7 +10,7 @@ import 'package:kitchenowl/services/storage/temp_storage.dart';
 import 'package:kitchenowl/services/transaction_handler.dart';
 
 class AuthCubit extends Cubit<AuthState> {
-  AuthCubit() : super(Loading()) {
+  AuthCubit() : super(const Loading()) {
     ApiService.getInstance().addListener(updateState);
     setup();
   }
@@ -42,31 +42,31 @@ class AuthCubit extends Cubit<AuthState> {
           if (user != null) {
             emit(AuthenticatedOffline(user));
           } else {
-            emit(Unreachable());
+            emit(const Unreachable());
           }
         } else {
-          emit(Setup());
+          emit(const Setup());
         }
         break;
       case Connection.connected:
         if (await ApiService.getInstance().isOnboarding()) {
-          emit(Onboarding());
+          emit(const Onboarding());
         } else {
-          emit(Unauthenticated());
+          emit(const Unauthenticated());
         }
         break;
       case Connection.unsupported:
-        emit(Unsupported());
+        emit(const Unsupported());
         break;
       case Connection.undefined:
-        emit(Loading());
+        emit(const Loading());
         break;
     }
   }
 
   void setupServer(String url) async {
     if (kIsWeb) return;
-    emit(Loading());
+    emit(const Loading());
     _newConnection(url);
   }
 
@@ -87,7 +87,7 @@ class AuthCubit extends Cubit<AuthState> {
         if (user != null) {
           emit(AuthenticatedOffline(user));
         } else {
-          emit(Unreachable());
+          emit(const Unreachable());
         }
       } else {
         emit(Authenticated((await ApiService.getInstance().getUser())!));
@@ -103,7 +103,7 @@ class AuthCubit extends Cubit<AuthState> {
     ServerSettings? settings,
     String? language,
   }) async {
-    emit(Loading());
+    emit(const Loading());
     if (await ApiService.getInstance().isOnboarding()) {
       final token = await ApiService.getInstance()
           .onboarding(username, name, password, settings, language);
@@ -116,7 +116,7 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   void login(String username, String password) async {
-    emit(Loading());
+    emit(const Loading());
     final token = await ApiService.getInstance().login(username, password);
     if (token != null && ApiService.getInstance().isAuthenticated()) {
       await SecureStorage.getInstance().write(key: 'TOKEN', value: token);
@@ -126,12 +126,12 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   void logout() async {
-    emit(Loading());
+    emit(const Loading());
     await SecureStorage.getInstance().delete(key: 'TOKEN');
     await TempStorage.getInstance().clearAll();
     ApiService.getInstance().refreshToken = '';
     if (ApiService.getInstance().connectionStatus == Connection.disconnected) {
-      emit(Unreachable());
+      emit(const Unreachable());
     }
     refresh();
   }
@@ -139,7 +139,7 @@ class AuthCubit extends Cubit<AuthState> {
   void removeServer() async {
     if (kIsWeb) return logout(); //Cannot remove server on WEB
 
-    emit(Loading());
+    emit(const Loading());
     await PreferenceStorage.getInstance().delete(key: 'URL');
     await SecureStorage.getInstance().delete(key: 'TOKEN');
     await TempStorage.getInstance().clearAll();
@@ -165,50 +165,66 @@ class AuthCubit extends Cubit<AuthState> {
   }
 }
 
-abstract class AuthState extends Equatable {}
+abstract class AuthState extends Equatable {
+  final int orderId; // used by the ui
+
+  const AuthState(this.orderId);
+}
 
 class Authenticated extends AuthState {
   final User user;
 
-  Authenticated(this.user);
+  const Authenticated(this.user) : super(3);
 
   @override
   List<Object?> get props => [user];
 }
 
 class AuthenticatedOffline extends Authenticated {
-  AuthenticatedOffline(User user) : super(user);
+  const AuthenticatedOffline(User user) : super(user);
 
   @override
   List<Object?> get props => [user];
 }
 
 class Onboarding extends AuthState {
+  const Onboarding() : super(1);
+
   @override
   List<Object?> get props => ["Onboarding"];
 }
 
 class Unauthenticated extends AuthState {
+  const Unauthenticated() : super(2);
+
   @override
   List<Object?> get props => ["Setup"];
 }
 
 class Setup extends AuthState {
+  const Setup() : super(0);
+
   @override
   List<Object?> get props => ["Unauthenticated"];
 }
 
 class Loading extends AuthState {
+  const Loading() : super(3);
+
   @override
   List<Object?> get props => ["Initial"];
 }
 
 class Unreachable extends AuthState {
+  const Unreachable() : super(4);
+
   @override
   List<Object?> get props => ["Unreachable"];
 }
 
 class Unsupported extends AuthState {
+  const Unsupported() : super(5);
+
   @override
   List<Object?> get props => ["Unsupported"];
 }

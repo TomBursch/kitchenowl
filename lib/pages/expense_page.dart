@@ -38,133 +38,141 @@ class _ExpensePageState extends State<ExpensePage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ExpenseCubit, ExpenseCubitState>(
-      bloc: cubit,
-      builder: (conext, state) => Scaffold(
-        appBar: AppBar(
-          title: Text(state.expense.name),
-          leading: BackButton(
-            onPressed: () => Navigator.of(context).pop(cubit.state.updateState),
+    return WillPopScope(
+      onWillPop: () async {
+        Navigator.of(context).pop(cubit.state.updateState);
+
+        return false;
+      },
+      child: BlocBuilder<ExpenseCubit, ExpenseCubitState>(
+        bloc: cubit,
+        builder: (conext, state) => Scaffold(
+          appBar: AppBar(
+            title: Text(state.expense.name),
+            leading: BackButton(
+              onPressed: () =>
+                  Navigator.of(context).pop(cubit.state.updateState),
+            ),
+            actions: [
+              if (!App.isOffline)
+                IconButton(
+                  onPressed: () async {
+                    final res = await Navigator.of(context)
+                        .push<UpdateEnum>(MaterialPageRoute(
+                      builder: (context) => AddUpdateExpensePage(
+                        expense: state.expense,
+                        users: state.users,
+                      ),
+                    ));
+                    if (res == UpdateEnum.updated) {
+                      cubit.setUpdateState(UpdateEnum.updated);
+                      cubit.refresh();
+                    }
+                    if (res == UpdateEnum.deleted) {
+                      Navigator.of(context).pop(UpdateEnum.deleted);
+                    }
+                  },
+                  icon: const Icon(Icons.edit),
+                ),
+            ],
           ),
-          actions: [
-            if (!App.isOffline(context))
-              IconButton(
-                onPressed: () async {
-                  final res = await Navigator.of(context)
-                      .push<UpdateEnum>(MaterialPageRoute(
-                    builder: (context) => AddUpdateExpensePage(
-                      expense: state.expense,
-                      users: state.users,
-                    ),
-                  ));
-                  if (res == UpdateEnum.updated) {
-                    cubit.setUpdateState(UpdateEnum.updated);
-                    cubit.refresh();
-                  }
-                  if (res == UpdateEnum.deleted) {
-                    Navigator.of(context).pop(UpdateEnum.deleted);
-                  }
-                },
-                icon: const Icon(Icons.edit),
-              ),
-          ],
-        ),
-        body: Align(
-          alignment: Alignment.topCenter,
-          child: ConstrainedBox(
-            constraints: const BoxConstraints.expand(width: 1600),
-            child: CustomScrollView(
-              slivers: [
-                SliverList(
-                  delegate: SliverChildListDelegate(
-                    [
-                      const SizedBox(height: 16),
-                      Text(
-                        AppLocalizations.of(context)!.expenseAmount,
-                        style: Theme.of(context).textTheme.subtitle1,
-                        textAlign: TextAlign.center,
-                      ),
-                      Text(
-                        NumberFormat.simpleCurrency()
-                            .format(state.expense.amount),
-                        style: Theme.of(context).textTheme.headline2,
-                        textAlign: TextAlign.center,
-                      ),
-                      if (state.expense.category != null)
+          body: Align(
+            alignment: Alignment.topCenter,
+            child: ConstrainedBox(
+              constraints: const BoxConstraints.expand(width: 1600),
+              child: CustomScrollView(
+                slivers: [
+                  SliverList(
+                    delegate: SliverChildListDelegate(
+                      [
+                        const SizedBox(height: 16),
+                        Text(
+                          AppLocalizations.of(context)!.expenseAmount,
+                          style: Theme.of(context).textTheme.subtitle1,
+                          textAlign: TextAlign.center,
+                        ),
+                        Text(
+                          NumberFormat.simpleCurrency()
+                              .format(state.expense.amount),
+                          style: Theme.of(context).textTheme.headline2,
+                          textAlign: TextAlign.center,
+                        ),
+                        if (state.expense.category != null)
+                          ListTile(
+                            title: Text(
+                              AppLocalizations.of(context)!.category +
+                                  " " +
+                                  state.expense.category!,
+                            ),
+                          ),
                         ListTile(
                           title: Text(
-                            AppLocalizations.of(context)!.category +
+                            AppLocalizations.of(context)!.expensePaidBy +
                                 " " +
-                                state.expense.category!,
+                                (state.users
+                                        .firstWhereOrNull(
+                                          (e) => e.id == state.expense.paidById,
+                                        )
+                                        ?.name ??
+                                    AppLocalizations.of(context)!.other),
+                          ),
+                          trailing: state.expense.createdAt != null
+                              ? Text(
+                                  state.expense.createdAt.toString(),
+                                )
+                              : null,
+                        ),
+                        const SizedBox(height: 24),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  AppLocalizations.of(context)!.expensePaidFor +
+                                      ':',
+                                  style: Theme.of(context).textTheme.subtitle1,
+                                ),
+                              ),
+                              Text(AppLocalizations.of(context)!.expenseFactor),
+                            ],
                           ),
                         ),
-                      ListTile(
-                        title: Text(
-                          AppLocalizations.of(context)!.expensePaidBy +
-                              " " +
-                              (state.users
-                                      .firstWhereOrNull(
-                                        (e) => e.id == state.expense.paidById,
-                                      )
-                                      ?.name ??
-                                  AppLocalizations.of(context)!.other),
-                        ),
-                        trailing: state.expense.createdAt != null
-                            ? Text(
-                                state.expense.createdAt.toString(),
-                              )
-                            : null,
-                      ),
-                      const SizedBox(height: 24),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: Text(
-                                AppLocalizations.of(context)!.expensePaidFor +
-                                    ':',
-                                style: Theme.of(context).textTheme.subtitle1,
-                              ),
-                            ),
-                            Text(AppLocalizations.of(context)!.expenseFactor),
-                          ],
-                        ),
-                      ),
-                      const Divider(indent: 16, endIndent: 16),
-                    ],
-                  ),
-                ),
-                SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (context, i) => ListTile(
-                      title: Text(
-                        state.users
-                                .firstWhereOrNull(
-                                  (e) =>
-                                      e.id == state.expense.paidFor[i].userId,
-                                )
-                                ?.name ??
-                            AppLocalizations.of(context)!.other,
-                      ),
-                      subtitle: Text(NumberFormat.simpleCurrency().format(
-                        (state.expense.amount *
-                            state.expense.paidFor[i].factor /
-                            state.expense.paidFor
-                                .fold(0, (p, v) => p + v.factor)),
-                      )),
-                      trailing: Text(
-                        state.expense.paidFor[i].factor.toString(),
-                      ),
+                        const Divider(indent: 16, endIndent: 16),
+                      ],
                     ),
-                    childCount: state.expense.paidFor.length,
                   ),
-                ),
-                SliverToBoxAdapter(
-                  child:
-                      SizedBox(height: MediaQuery.of(context).padding.bottom),
-                ),
-              ],
+                  SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      (context, i) => ListTile(
+                        title: Text(
+                          state.users
+                                  .firstWhereOrNull(
+                                    (e) =>
+                                        e.id == state.expense.paidFor[i].userId,
+                                  )
+                                  ?.name ??
+                              AppLocalizations.of(context)!.other,
+                        ),
+                        subtitle: Text(NumberFormat.simpleCurrency().format(
+                          (state.expense.amount *
+                              state.expense.paidFor[i].factor /
+                              state.expense.paidFor
+                                  .fold(0, (p, v) => p + v.factor)),
+                        )),
+                        trailing: Text(
+                          state.expense.paidFor[i].factor.toString(),
+                        ),
+                      ),
+                      childCount: state.expense.paidFor.length,
+                    ),
+                  ),
+                  SliverToBoxAdapter(
+                    child:
+                        SizedBox(height: MediaQuery.of(context).padding.bottom),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

@@ -107,6 +107,7 @@
         }
     },
     "recipeEdit": "Edit Recipe",
+    "recipeEmpty": "No recipes, start by adding one!",
     "recipeImageSelect": "Select a recipe image",
     "recipeNew": "New Recipe",
     "recipes": "Recipe",

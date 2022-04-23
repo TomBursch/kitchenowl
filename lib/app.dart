@@ -1,3 +1,4 @@
+import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -5,7 +6,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:kitchenowl/cubits/auth_cubit.dart';
 import 'package:kitchenowl/cubits/settings_cubit.dart';
 import 'package:kitchenowl/pages/login_page.dart';
-import 'package:kitchenowl/pages/onboarding_user_page.dart';
+import 'package:kitchenowl/pages/onboarding_page.dart';
 import 'package:kitchenowl/pages/setup_page.dart';
 import 'package:kitchenowl/pages/splash_page.dart';
 import 'package:kitchenowl/pages/unreachable_page.dart';
@@ -16,10 +17,10 @@ import 'package:kitchenowl/styles/themes.dart';
 class App extends StatelessWidget {
   static App? _instance;
   final SettingsCubit _settingsCubit = SettingsCubit();
+  final AuthCubit _authCubit = AuthCubit();
 
-  static bool isOffline(BuildContext context) =>
-      BlocProvider.of<AuthCubit>(context).state is AuthenticatedOffline ||
-      isForcedOffline;
+  static bool get isOffline =>
+      _instance!._authCubit.state is AuthenticatedOffline || isForcedOffline;
 
   static bool get isForcedOffline =>
       _instance!._settingsCubit.state.forcedOfflineMode;
@@ -39,7 +40,7 @@ class App extends StatelessWidget {
       },
       child: MultiBlocProvider(
         providers: [
-          BlocProvider(create: (BuildContext context) => AuthCubit()),
+          BlocProvider.value(value: _authCubit),
           BlocProvider.value(value: _settingsCubit),
         ],
         child: BlocBuilder<SettingsCubit, SettingsState>(
@@ -57,16 +58,38 @@ class App extends StatelessWidget {
               builder: (context) => AnnotatedRegion<SystemUiOverlayStyle>(
                 value: _getSystemUI(context, state),
                 child: BlocBuilder<AuthCubit, AuthState>(
-                  builder: (context, state) {
-                    if (state is Setup) return const SetupPage();
-                    if (state is Onboarding) return const OnboardingUserPage();
-                    if (state is Unauthenticated) return const LoginPage();
-                    if (state is Authenticated) return const HomePage();
-                    if (state is Unreachable) return const UnreachablePage();
-                    if (state is Unsupported) return const UnsupportedPage();
+                  bloc: _authCubit,
+                  builder: (context, state) => PageTransitionSwitcher(
+                    transitionBuilder: (
+                      Widget child,
+                      Animation<double> animation,
+                      Animation<double> secondaryAnimation,
+                    ) {
+                      return SharedAxisTransition(
+                        child: child,
+                        animation: animation,
+                        secondaryAnimation: secondaryAnimation,
+                        transitionType: SharedAxisTransitionType.horizontal,
+                      );
+                    },
+                    child: Builder(
+                      key: ValueKey(state.orderId),
+                      builder: (context) {
+                        if (state is Setup) return const SetupPage();
+                        if (state is Onboarding) return const OnboardingPage();
+                        if (state is Unauthenticated) return const LoginPage();
+                        if (state is Authenticated) return const HomePage();
+                        if (state is Unreachable) {
+                          return const UnreachablePage();
+                        }
+                        if (state is Unsupported) {
+                          return const UnsupportedPage();
+                        }
 
-                    return const SplashPage();
-                  },
+                        return const SplashPage();
+                      },
+                    ),
+                  ),
                 ),
               ),
             ),

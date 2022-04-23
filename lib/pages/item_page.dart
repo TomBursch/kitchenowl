@@ -6,7 +6,6 @@ import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/update_value.dart';
-import 'package:kitchenowl/widgets/confirmation_dialog.dart';
 import 'package:kitchenowl/widgets/recipe_item.dart';
 
 class ItemPage<T extends Item> extends StatefulWidget {
@@ -57,7 +56,7 @@ class _ItemPageState<T extends Item> extends State<ItemPage<T>> {
         appBar: AppBar(
           title: Text(widget.item.name),
           actions: [
-            if (widget.item is! RecipeItem && !App.isOffline(context))
+            if (widget.item is! RecipeItem && !App.isOffline)
               IconButton(
                 onPressed: () async {
                   final confirmed = await askForConfirmation(

@@ -23,12 +23,15 @@ class SelectDialog extends StatelessWidget {
             .map(
               (option) => TextButton(
                 onPressed: () => Navigator.of(context).pop(option.id),
-                child: Row(
-                  children: [
-                    if (option.icon != null) Icon(option.icon),
-                    if (option.icon != null) const SizedBox(width: 8),
-                    Expanded(child: Text(option.name)),
-                  ],
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  child: Row(
+                    children: [
+                      if (option.icon != null) Icon(option.icon),
+                      if (option.icon != null) const SizedBox(width: 8),
+                      Expanded(child: Text(option.name)),
+                    ],
+                  ),
                 ),
               ),
             )

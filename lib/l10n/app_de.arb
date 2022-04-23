@@ -107,6 +107,7 @@
         }
     },
     "recipeEdit": "Rezept Bearbeiten",
+    "recipeEmpty": "Keine Rezepte, fange and welche zu erstellen!",
     "recipeImageSelect": "Wähle ein Rezeptbild",
     "recipeNew": "Neues Rezept",
     "recipes": "Rezepte",

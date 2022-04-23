@@ -1,6 +1,3 @@
-import 'dart:io';
-
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,9 +9,8 @@ import 'package:kitchenowl/helpers/currency_text_input_formatter.dart';
 import 'package:kitchenowl/models/expense.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/user.dart';
-import 'package:kitchenowl/widgets/checkbox_list_tile.dart';
 import 'package:collection/collection.dart';
-import 'package:kitchenowl/widgets/text_dialog.dart';
+import 'package:responsive_builder/responsive_builder.dart';
 
 class AddUpdateExpensePage extends StatefulWidget {
   final Expense? expense;
@@ -67,16 +63,22 @@ class _AddUpdateRecipePageState extends State<AddUpdateExpensePage> {
 
   @override
   Widget build(BuildContext context) {
+    final bool mobileLayout = getValueForScreenType<bool>(
+      context: context,
+      mobile: true,
+      desktop: false,
+    );
+
     return Scaffold(
       appBar: AppBar(
         title: Text(isUpdate
             ? AppLocalizations.of(context)!.expenseEdit
             : AppLocalizations.of(context)!.expenseAdd),
         actions: [
-          if (!kIsWeb && (Platform.isAndroid || Platform.isIOS))
+          if (mobileLayout)
             BlocBuilder<AddUpdateExpenseCubit, AddUpdateExpenseState>(
               bloc: cubit,
-              builder: (context, state) => IconButton(
+              builder: (context, state) => LoadingIconButton(
                 icon: const Icon(Icons.save_rounded),
                 onPressed: state.isValid()
                     ? () async {
@@ -304,7 +306,7 @@ class _AddUpdateRecipePageState extends State<AddUpdateExpensePage> {
                 SliverPadding(
                   padding: const EdgeInsets.all(16),
                   sliver: SliverToBoxAdapter(
-                    child: ElevatedButton(
+                    child: LoadingElevatedButton(
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all<Color>(
                           Colors.redAccent,
@@ -318,14 +320,14 @@ class _AddUpdateRecipePageState extends State<AddUpdateExpensePage> {
                     ),
                   ),
                 ),
-              if (kIsWeb || (!(Platform.isAndroid || Platform.isIOS)))
+              if (!mobileLayout)
                 SliverPadding(
                   padding: EdgeInsets.fromLTRB(16, isUpdate ? 0 : 16, 16, 16),
                   sliver: SliverToBoxAdapter(
                     child: BlocBuilder<AddUpdateExpenseCubit,
                         AddUpdateExpenseState>(
                       bloc: cubit,
-                      builder: (context, state) => ElevatedButton(
+                      builder: (context, state) => LoadingElevatedButton(
                         onPressed: state.isValid()
                             ? (() async {
                                 await cubit.saveExpense();

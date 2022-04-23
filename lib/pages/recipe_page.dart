@@ -13,9 +13,7 @@ import 'package:kitchenowl/models/recipe.dart';
 import 'package:kitchenowl/pages/photo_view_page.dart';
 import 'package:kitchenowl/pages/recipe_add_update_page.dart';
 import 'package:kitchenowl/kitchenowl.dart';
-import 'package:kitchenowl/widgets/image_provider.dart';
 import 'package:kitchenowl/widgets/recipe_source_chip.dart';
-import 'package:kitchenowl/widgets/select_dialog.dart';
 import 'package:kitchenowl/widgets/shopping_item.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -59,319 +57,161 @@ class _RecipePageState extends State<RecipePage> {
       desktop: 9,
     );
 
-    return BlocBuilder<RecipeCubit, RecipeState>(
-      bloc: cubit,
-      builder: (context, state) => Scaffold(
-        body: Align(
-          alignment: Alignment.topCenter,
-          child: ConstrainedBox(
-            constraints: const BoxConstraints.expand(width: 1600),
-            child: CustomScrollView(
-              slivers: [
-                SliverAppBar(
-                  flexibleSpace: FlexibleSpaceBar(
-                    title: Text(
-                      state.recipe.name,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    background: state.recipe.image.isNotEmpty
-                        ? GestureDetector(
-                            onTap: () =>
-                                Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => PhotoViewPage(
-                                title: state.recipe.name,
-                                imageProvider: getImageProvider(
-                                  context,
-                                  state.recipe.image,
-                                ),
-                                heroTag: state.recipe.image,
-                              ),
-                            )),
-                            child: Hero(
-                              tag: state.recipe.image,
-                              flightShuttleBuilder: (
-                                BuildContext flightContext,
-                                Animation<double> animation,
-                                HeroFlightDirection flightDirection,
-                                BuildContext fromHeroContext,
-                                BuildContext toHeroContext,
-                              ) {
-                                final Hero hero =
-                                    flightDirection == HeroFlightDirection.push
-                                        ? fromHeroContext.widget as Hero
-                                        : toHeroContext.widget as Hero;
+    return WillPopScope(
+      onWillPop: () async {
+        Navigator.of(context).pop(cubit.state.updateState);
 
-                                return hero.child;
-                              },
-                              child: Image(
+        return false;
+      },
+      child: BlocBuilder<RecipeCubit, RecipeState>(
+        bloc: cubit,
+        builder: (context, state) => Scaffold(
+          body: Align(
+            alignment: Alignment.topCenter,
+            child: ConstrainedBox(
+              constraints: const BoxConstraints.expand(width: 1600),
+              child: CustomScrollView(
+                slivers: [
+                  SliverAppBar(
+                    flexibleSpace: FlexibleSpaceBar(
+                      title: Text(
+                        state.recipe.name,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      background: state.recipe.image.isNotEmpty
+                          ? GestureDetector(
+                              onTap: () =>
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => PhotoViewPage(
+                                  title: state.recipe.name,
+                                  imageProvider: getImageProvider(
+                                    context,
+                                    state.recipe.image,
+                                  ),
+                                  // heroTag: state.recipe.image, # TODO cannot use Hero inside OpenContainer
+                                ),
+                              )),
+                              child:
+                                  // Hero(
+                                  // tag: state.recipe.image,
+                                  // flightShuttleBuilder: (
+                                  //   BuildContext flightContext,
+                                  //   Animation<double> animation,
+                                  //   HeroFlightDirection flightDirection,
+                                  //   BuildContext fromHeroContext,
+                                  //   BuildContext toHeroContext,
+                                  // ) {
+                                  //   final Hero hero = flightDirection ==
+                                  //           HeroFlightDirection.push
+                                  //       ? fromHeroContext.widget as Hero
+                                  //       : toHeroContext.widget as Hero;
+
+                                  //   return hero.child;
+                                  // },
+                                  Image(
                                 image: getImageProvider(
                                   context,
                                   state.recipe.image,
                                 ),
                                 fit: BoxFit.cover,
                               ),
-                            ),
-                          )
-                        : null,
-                  ),
-                  leading: BackButton(
-                    onPressed: () =>
-                        Navigator.of(context).pop(cubit.state.updateState),
-                  ),
-                  expandedHeight: state.recipe.image.isNotEmpty ? 160 : null,
-                  pinned: true,
-                  actions: [
-                    if (!App.isOffline(context))
-                      IconButton(
-                        onPressed: () async {
-                          final res = await Navigator.of(context)
-                              .push<UpdateEnum>(MaterialPageRoute(
-                            builder: (context) => AddUpdateRecipePage(
-                              recipe: state.recipe,
-                            ),
-                          ));
-                          if (res == UpdateEnum.updated) {
-                            cubit.setUpdateState(UpdateEnum.updated);
-                            cubit.refresh();
-                          }
-                          if (res == UpdateEnum.deleted) {
-                            Navigator.of(context).pop(UpdateEnum.deleted);
-                          }
-                        },
-                        icon: const Icon(Icons.edit),
-                      ),
-                  ],
-                ),
-                SliverPadding(
-                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-                  sliver: SliverList(
-                    delegate: SliverChildListDelegate(
-                      [
-                        Wrap(
-                          runSpacing: (kIsWeb ||
-                                  Platform.isLinux ||
-                                  Platform.isMacOS ||
-                                  Platform.isWindows ||
-                                  Platform.isIOS)
-                              ? 7
-                              : -8, // TODO: Find fix?
-                          spacing: 5,
-                          children: [
-                            if (state.recipe.source.isNotEmpty)
-                              RecipeSourceChip(
-                                source: state.recipe.source,
+                              // ),
+                            )
+                          : null,
+                    ),
+                    leading: BackButton(
+                      onPressed: () =>
+                          Navigator.of(context).pop(cubit.state.updateState),
+                    ),
+                    expandedHeight: state.recipe.image.isNotEmpty ? 160 : null,
+                    pinned: true,
+                    actions: [
+                      if (!App.isOffline)
+                        IconButton(
+                          onPressed: () async {
+                            final res = await Navigator.of(context)
+                                .push<UpdateEnum>(MaterialPageRoute(
+                              builder: (context) => AddUpdateRecipePage(
+                                recipe: state.recipe,
                               ),
-                            if ((state.recipe.time) > 0)
-                              Chip(
-                                avatar: const Icon(
-                                  Icons.alarm_rounded,
-                                  color: Colors.white,
-                                ),
-                                label: Text(
-                                  state.recipe.time.toString() +
-                                      " " +
-                                      AppLocalizations.of(context)!
-                                          .minutesAbbrev,
-                                  style: const TextStyle(color: Colors.white),
-                                ),
-                                backgroundColor:
-                                    Theme.of(context).colorScheme.secondary,
-                                elevation: 3,
-                              ),
-                            ...state.recipe.tags
-                                .map((e) => Chip(label: Text(e.name)))
-                                .toList(),
-                          ],
-                        ),
-                        const SizedBox(height: 8),
-                        MarkdownBody(
-                          data: state.recipe.description,
-                          styleSheet: MarkdownStyleSheet.fromTheme(
-                            Theme.of(context),
-                          ).copyWith(
-                            blockquoteDecoration: BoxDecoration(
-                              color: Theme.of(context).cardTheme.color ??
-                                  Theme.of(context).cardColor,
-                              borderRadius: BorderRadius.circular(2.0),
-                            ),
-                          ),
-                          imageBuilder: (uri, title, alt) => CachedNetworkImage(
-                            imageUrl: uri.toString(),
-                            placeholder: (context, url) =>
-                                const CircularProgressIndicator(),
-                            errorWidget: (context, url, error) =>
-                                const Icon(Icons.error),
-                          ),
-                          onTapLink: (text, href, title) async {
-                            if (href != null && await canLaunch(href)) {
-                              await launch(href);
+                            ));
+                            if (res == UpdateEnum.updated) {
+                              cubit.setUpdateState(UpdateEnum.updated);
+                              cubit.refresh();
+                            }
+                            if (res == UpdateEnum.deleted) {
+                              Navigator.of(context).pop(UpdateEnum.deleted);
                             }
                           },
+                          icon: const Icon(Icons.edit),
                         ),
-                      ],
-                    ),
+                    ],
                   ),
-                ),
-                if (state.recipe.items.where((e) => !e.optional).isNotEmpty)
                   SliverPadding(
-                    padding: const EdgeInsets.all(16),
-                    sliver: SliverToBoxAdapter(
-                      child: Text(
-                        AppLocalizations.of(context)!.items + ':',
-                        style: Theme.of(context).textTheme.headline6,
-                      ),
-                    ),
-                  ),
-                if (state.recipe.items.where((e) => !e.optional).isNotEmpty)
-                  SliverPadding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    sliver: SliverGrid(
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: crossAxisCount,
-                        mainAxisSpacing: 4,
-                        crossAxisSpacing: 4,
-                        childAspectRatio: 1,
-                      ),
-                      delegate: SliverChildBuilderDelegate(
-                        (context, i) => ShoppingItemWidget(
-                          onPressed: cubit.itemSelected,
-                          selected: state.selectedItems.contains(state
-                              .recipe.items
-                              .where((e) => !e.optional)
-                              .elementAt(i)),
-                          item: state.recipe.items
-                              .where((e) => !e.optional)
-                              .elementAt(i),
-                        ),
-                        childCount:
-                            state.recipe.items.where((e) => !e.optional).length,
-                      ),
-                    ),
-                  ),
-                if (state.recipe.items.where((e) => e.optional).isNotEmpty)
-                  SliverPadding(
-                    padding: const EdgeInsets.all(16),
-                    sliver: SliverToBoxAdapter(
-                      child: Text(
-                        AppLocalizations.of(context)!.itemsOptional + ':',
-                        style: Theme.of(context).textTheme.headline6,
-                      ),
-                    ),
-                  ),
-                if (state.recipe.items.where((e) => e.optional).isNotEmpty)
-                  SliverPadding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    sliver: SliverGrid(
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: crossAxisCount,
-                        mainAxisSpacing: 4,
-                        crossAxisSpacing: 4,
-                        childAspectRatio: 1,
-                      ),
-                      delegate: SliverChildBuilderDelegate(
-                        (context, i) => ShoppingItemWidget(
-                          onPressed: cubit.itemSelected,
-                          selected: state.selectedItems.contains(state
-                              .recipe.items
-                              .where((e) => e.optional)
-                              .elementAt(i)),
-                          item: state.recipe.items
-                              .where((e) => e.optional)
-                              .elementAt(i),
-                        ),
-                        childCount:
-                            state.recipe.items.where((e) => e.optional).length,
-                      ),
-                    ),
-                  ),
-                SliverPadding(
-                  padding: const EdgeInsets.all(16),
-                  sliver: SliverToBoxAdapter(
-                    child: BlocBuilder<RecipeCubit, RecipeState>(
-                      bloc: cubit,
-                      builder: (context, state) => ElevatedButton(
-                        child: Text(
-                          AppLocalizations.of(context)!.addNumberIngredients(
-                            state.selectedItems.length,
-                          ),
-                        ),
-                        onPressed: state.selectedItems.isEmpty
-                            ? null
-                            : () async {
-                                await cubit.addItemsToList();
-                                Navigator.of(context).pop(UpdateEnum.unchanged);
-                              },
-                      ),
-                    ),
-                  ),
-                ),
-                if (BlocProvider.of<SettingsCubit>(context)
-                        .state
-                        .serverSettings
-                        .featurePlanner ??
-                    false)
-                  SliverPadding(
-                    padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-                    sliver: SliverToBoxAdapter(
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: ElevatedButton(
-                              child: Text(
-                                AppLocalizations.of(context)!
-                                    .addRecipeToPlanner,
-                              ),
-                              onPressed: () async {
-                                await cubit.addRecipeToPlanner(null);
-                                Navigator.of(context).pop(
-                                  widget.updateOnPlanningEdit
-                                      ? UpdateEnum.updated
-                                      : UpdateEnum.unchanged,
-                                );
-                              },
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          ElevatedButton(
-                            child: const Icon(Icons.calendar_month_rounded),
-                            onPressed: () async {
-                              final weekdayMapping = {
-                                0: DateTime.monday,
-                                1: DateTime.tuesday,
-                                2: DateTime.wednesday,
-                                3: DateTime.thursday,
-                                4: DateTime.friday,
-                                5: DateTime.saturday,
-                                6: DateTime.sunday,
-                              };
-                              int? day = await showDialog<int>(
-                                context: context,
-                                builder: (context) => SelectDialog(
-                                  title: AppLocalizations.of(context)!
-                                      .addRecipeToPlanner,
-                                  cancelText:
-                                      AppLocalizations.of(context)!.cancel,
-                                  options: weekdayMapping.entries
-                                      .map(
-                                        (e) => SelectDialogOption(
-                                          e.key,
-                                          DateFormat.E()
-                                              .dateSymbols
-                                              .STANDALONEWEEKDAYS[e.value % 7],
-                                        ),
-                                      )
-                                      .toList(),
+                    padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+                    sliver: SliverList(
+                      delegate: SliverChildListDelegate(
+                        [
+                          Wrap(
+                            runSpacing: (kIsWeb ||
+                                    Platform.isLinux ||
+                                    Platform.isMacOS ||
+                                    Platform.isWindows ||
+                                    Platform.isIOS)
+                                ? 7
+                                : -8, // TODO: Find fix?
+                            spacing: 5,
+                            children: [
+                              if (state.recipe.source.isNotEmpty)
+                                RecipeSourceChip(
+                                  source: state.recipe.source,
                                 ),
-                              );
-                              if (day != null) {
-                                await cubit
-                                    .addRecipeToPlanner(day >= 0 ? day : null);
-                                Navigator.of(context).pop(
-                                  widget.updateOnPlanningEdit
-                                      ? UpdateEnum.updated
-                                      : UpdateEnum.unchanged,
-                                );
+                              if ((state.recipe.time) > 0)
+                                Chip(
+                                  avatar: const Icon(
+                                    Icons.alarm_rounded,
+                                    color: Colors.white,
+                                  ),
+                                  label: Text(
+                                    state.recipe.time.toString() +
+                                        " " +
+                                        AppLocalizations.of(context)!
+                                            .minutesAbbrev,
+                                    style: const TextStyle(color: Colors.white),
+                                  ),
+                                  backgroundColor:
+                                      Theme.of(context).colorScheme.secondary,
+                                  elevation: 3,
+                                ),
+                              ...state.recipe.tags
+                                  .map((e) => Chip(label: Text(e.name)))
+                                  .toList(),
+                            ],
+                          ),
+                          const SizedBox(height: 8),
+                          MarkdownBody(
+                            data: state.recipe.description,
+                            styleSheet: MarkdownStyleSheet.fromTheme(
+                              Theme.of(context),
+                            ).copyWith(
+                              blockquoteDecoration: BoxDecoration(
+                                color: Theme.of(context).cardTheme.color ??
+                                    Theme.of(context).cardColor,
+                                borderRadius: BorderRadius.circular(2.0),
+                              ),
+                            ),
+                            imageBuilder: (uri, title, alt) =>
+                                CachedNetworkImage(
+                              imageUrl: uri.toString(),
+                              placeholder: (context, url) =>
+                                  const CircularProgressIndicator(),
+                              errorWidget: (context, url, error) =>
+                                  const Icon(Icons.error),
+                            ),
+                            onTapLink: (text, href, title) async {
+                              if (href != null && await canLaunch(href)) {
+                                await launch(href);
                               }
                             },
                           ),
@@ -379,11 +219,177 @@ class _RecipePageState extends State<RecipePage> {
                       ),
                     ),
                   ),
-                SliverToBoxAdapter(
-                  child:
-                      SizedBox(height: MediaQuery.of(context).padding.bottom),
-                ),
-              ],
+                  if (state.recipe.items.where((e) => !e.optional).isNotEmpty)
+                    SliverPadding(
+                      padding: const EdgeInsets.all(16),
+                      sliver: SliverToBoxAdapter(
+                        child: Text(
+                          AppLocalizations.of(context)!.items + ':',
+                          style: Theme.of(context).textTheme.headline6,
+                        ),
+                      ),
+                    ),
+                  if (state.recipe.items.where((e) => !e.optional).isNotEmpty)
+                    SliverPadding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      sliver: SliverGrid(
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: crossAxisCount,
+                          mainAxisSpacing: 4,
+                          crossAxisSpacing: 4,
+                          childAspectRatio: 1,
+                        ),
+                        delegate: SliverChildBuilderDelegate(
+                          (context, i) => ShoppingItemWidget(
+                            onPressed: cubit.itemSelected,
+                            selected: state.selectedItems.contains(state
+                                .recipe.items
+                                .where((e) => !e.optional)
+                                .elementAt(i)),
+                            item: state.recipe.items
+                                .where((e) => !e.optional)
+                                .elementAt(i),
+                          ),
+                          childCount: state.recipe.items
+                              .where((e) => !e.optional)
+                              .length,
+                        ),
+                      ),
+                    ),
+                  if (state.recipe.items.where((e) => e.optional).isNotEmpty)
+                    SliverPadding(
+                      padding: const EdgeInsets.all(16),
+                      sliver: SliverToBoxAdapter(
+                        child: Text(
+                          AppLocalizations.of(context)!.itemsOptional + ':',
+                          style: Theme.of(context).textTheme.headline6,
+                        ),
+                      ),
+                    ),
+                  if (state.recipe.items.where((e) => e.optional).isNotEmpty)
+                    SliverPadding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      sliver: SliverGrid(
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: crossAxisCount,
+                          mainAxisSpacing: 4,
+                          crossAxisSpacing: 4,
+                          childAspectRatio: 1,
+                        ),
+                        delegate: SliverChildBuilderDelegate(
+                          (context, i) => ShoppingItemWidget(
+                            onPressed: cubit.itemSelected,
+                            selected: state.selectedItems.contains(state
+                                .recipe.items
+                                .where((e) => e.optional)
+                                .elementAt(i)),
+                            item: state.recipe.items
+                                .where((e) => e.optional)
+                                .elementAt(i),
+                          ),
+                          childCount: state.recipe.items
+                              .where((e) => e.optional)
+                              .length,
+                        ),
+                      ),
+                    ),
+                  SliverPadding(
+                    padding: const EdgeInsets.all(16),
+                    sliver: SliverToBoxAdapter(
+                      child: BlocBuilder<RecipeCubit, RecipeState>(
+                        bloc: cubit,
+                        builder: (context, state) => LoadingElevatedButton(
+                          child: Text(
+                            AppLocalizations.of(context)!.addNumberIngredients(
+                              state.selectedItems.length,
+                            ),
+                          ),
+                          onPressed: state.selectedItems.isEmpty
+                              ? null
+                              : cubit.addItemsToList,
+                        ),
+                      ),
+                    ),
+                  ),
+                  if (BlocProvider.of<SettingsCubit>(context)
+                          .state
+                          .serverSettings
+                          .featurePlanner ??
+                      false)
+                    SliverPadding(
+                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                      sliver: SliverToBoxAdapter(
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: LoadingElevatedButton(
+                                child: Text(
+                                  AppLocalizations.of(context)!
+                                      .addRecipeToPlanner,
+                                ),
+                                onPressed: () async {
+                                  await cubit.addRecipeToPlanner(
+                                    updateOnAdd: widget.updateOnPlanningEdit,
+                                  );
+                                  Navigator.of(context).pop(
+                                    widget.updateOnPlanningEdit
+                                        ? UpdateEnum.updated
+                                        : UpdateEnum.unchanged,
+                                  );
+                                },
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            LoadingElevatedButton(
+                              child: const Icon(Icons.calendar_month_rounded),
+                              onPressed: () async {
+                                final weekdayMapping = {
+                                  0: DateTime.monday,
+                                  1: DateTime.tuesday,
+                                  2: DateTime.wednesday,
+                                  3: DateTime.thursday,
+                                  4: DateTime.friday,
+                                  5: DateTime.saturday,
+                                  6: DateTime.sunday,
+                                };
+                                int? day = await showDialog<int>(
+                                  context: context,
+                                  builder: (context) => SelectDialog(
+                                    title: AppLocalizations.of(context)!
+                                        .addRecipeToPlanner,
+                                    cancelText:
+                                        AppLocalizations.of(context)!.cancel,
+                                    options: weekdayMapping.entries
+                                        .map(
+                                          (e) => SelectDialogOption(
+                                            e.key,
+                                            DateFormat.E()
+                                                    .dateSymbols
+                                                    .STANDALONEWEEKDAYS[
+                                                e.value % 7],
+                                          ),
+                                        )
+                                        .toList(),
+                                  ),
+                                );
+                                if (day != null) {
+                                  await cubit.addRecipeToPlanner(
+                                    day: day >= 0 ? day : null,
+                                    updateOnAdd: widget.updateOnPlanningEdit,
+                                  );
+                                }
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  SliverToBoxAdapter(
+                    child:
+                        SizedBox(height: MediaQuery.of(context).padding.bottom),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

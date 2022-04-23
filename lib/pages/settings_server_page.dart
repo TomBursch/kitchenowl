@@ -11,9 +11,7 @@ import 'package:kitchenowl/pages/settings/create_user_page.dart';
 import 'package:kitchenowl/pages/settings_user_page.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
 import 'package:kitchenowl/kitchenowl.dart';
-import 'package:kitchenowl/widgets/confirmation_dialog.dart';
 import 'package:kitchenowl/widgets/language_dialog.dart';
-import 'package:kitchenowl/widgets/text_dialog.dart';
 
 class SettingsServerPage extends StatefulWidget {
   const SettingsServerPage({Key? key}) : super(key: key);

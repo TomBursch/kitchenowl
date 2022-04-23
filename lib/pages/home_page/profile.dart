@@ -17,7 +17,7 @@ class ProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final user =
         (BlocProvider.of<AuthCubit>(context).state as Authenticated).user;
-    final isOffline = App.isOffline(context);
+    final isOffline = App.isOffline;
 
     return CustomScrollView(
       physics: const ClampingScrollPhysics(),
@@ -43,7 +43,7 @@ class ProfilePage extends StatelessWidget {
           builder: (context, state) => SliverFillRemaining(
             hasScrollBody: false,
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+              padding: const EdgeInsets.fromLTRB(16, 0, 16, 4),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [

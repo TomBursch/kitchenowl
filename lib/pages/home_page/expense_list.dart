@@ -58,7 +58,7 @@ class _ExpensePageState extends State<ExpenseListPage> {
                       child: _getBarChart(context, state),
                     ),
                   ),
-                  if (state.expenses.isEmpty && !App.isOffline(context))
+                  if (state.expenses.isEmpty && !App.isOffline)
                     SliverToBoxAdapter(
                       child: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 16),
@@ -89,7 +89,7 @@ class _ExpensePageState extends State<ExpenseListPage> {
                       ),
                     ),
                 ],
-                if (state.expenses.isEmpty && App.isOffline(context))
+                if (state.expenses.isEmpty && App.isOffline)
                   SliverToBoxAdapter(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 16),

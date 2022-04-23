@@ -7,7 +7,6 @@ import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/models/update_value.dart';
 import 'package:kitchenowl/pages/item_page.dart';
 import 'package:kitchenowl/kitchenowl.dart';
-import 'package:kitchenowl/widgets/search_text_field.dart';
 import 'package:kitchenowl/widgets/shopping_item.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
@@ -42,7 +41,7 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
       tablet: 6,
       desktop: 9,
     );
-    final isOffline = App.isOffline(context);
+    final isOffline = App.isOffline;
 
     return SafeArea(
       child: Column(

@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/cubits/item_search_cubit.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/kitchenowl.dart';
-import 'package:kitchenowl/widgets/search_text_field.dart';
 import 'package:kitchenowl/widgets/shopping_item.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
@@ -105,31 +104,38 @@ class _ItemSearchPageState extends State<ItemSearchPage> {
       ),
     );
 
-    return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(appbar.preferredSize.height + 56),
-        child: appbar,
-      ),
-      body: BlocBuilder<ItemSearchCubit, ItemSearchState>(
-        bloc: cubit,
-        builder: (context, state) => GridView.builder(
-          padding: const EdgeInsets.all(16),
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: crossAxisCount,
-            crossAxisSpacing: 4,
-            mainAxisSpacing: 4,
-          ),
-          itemCount: state.searchResults.length,
-          itemBuilder: (context, i) => ShoppingItemWidget(
-            item: state.searchResults[i],
-            selected: state.selectedItems.contains(state.searchResults[i]),
-            onPressed: (item) {
-              if (!widget.multiple) {
-                Navigator.of(context).pop([item]);
-              } else {
-                cubit.itemSelected(i);
-              }
-            },
+    return WillPopScope(
+      onWillPop: () async {
+        Navigator.of(context).pop(cubit.state.selectedItems);
+
+        return false;
+      },
+      child: Scaffold(
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(appbar.preferredSize.height + 56),
+          child: appbar,
+        ),
+        body: BlocBuilder<ItemSearchCubit, ItemSearchState>(
+          bloc: cubit,
+          builder: (context, state) => GridView.builder(
+            padding: const EdgeInsets.all(16),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: crossAxisCount,
+              crossAxisSpacing: 4,
+              mainAxisSpacing: 4,
+            ),
+            itemCount: state.searchResults.length,
+            itemBuilder: (context, i) => ShoppingItemWidget(
+              item: state.searchResults[i],
+              selected: state.selectedItems.contains(state.searchResults[i]),
+              onPressed: (item) {
+                if (!widget.multiple) {
+                  Navigator.of(context).pop([item]);
+                } else {
+                  cubit.itemSelected(i);
+                }
+              },
+            ),
           ),
         ),
       ),

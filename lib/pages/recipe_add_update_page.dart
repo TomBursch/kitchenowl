@@ -12,10 +12,6 @@ import 'package:kitchenowl/models/update_value.dart';
 import 'package:kitchenowl/pages/item_page.dart';
 import 'package:kitchenowl/pages/item_search_page.dart';
 import 'package:kitchenowl/kitchenowl.dart';
-import 'package:kitchenowl/widgets/confirmation_dialog.dart';
-import 'package:kitchenowl/widgets/image_provider.dart';
-import 'package:kitchenowl/widgets/select_file.dart';
-import 'package:kitchenowl/widgets/text_dialog.dart';
 import 'package:kitchenowl/widgets/shopping_item.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
@@ -74,6 +70,11 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
       tablet: 6,
       desktop: 9,
     );
+    final bool mobileLayout = getValueForScreenType<bool>(
+      context: context,
+      mobile: true,
+      desktop: false,
+    );
 
     return Scaffold(
       appBar: AppBar(
@@ -81,11 +82,11 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
             ? AppLocalizations.of(context)!.recipeEdit
             : AppLocalizations.of(context)!.recipeNew),
         actions: [
-          if (!kIsWeb && (Platform.isAndroid || Platform.isIOS))
+          if (mobileLayout)
             BlocBuilder<AddUpdateRecipeCubit, AddUpdateRecipeState>(
               bloc: cubit,
               builder: (context, state) {
-                return IconButton(
+                return LoadingIconButton(
                   icon: const Icon(Icons.save_rounded),
                   onPressed: state.isValid()
                       ? () async {
@@ -306,25 +307,33 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                   bloc: cubit,
                   buildWhen: (previous, current) =>
                       !listEquals(previous.items, current.items),
-                  builder: (context, state) => SliverGrid(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: crossAxisCount,
-                      mainAxisSpacing: 4,
-                      crossAxisSpacing: 4,
-                      childAspectRatio: 1,
-                    ),
-                    delegate: SliverChildBuilderDelegate(
-                      (context, i) => ShoppingItemWidget(
-                        selected: true,
-                        item:
-                            state.items.where((e) => !e.optional).elementAt(i),
-                        onPressed: (RecipeItem item) => cubit.removeItem(item),
-                        onLongPressed: (RecipeItem item) =>
-                            _editItem(context, item),
-                      ),
-                      childCount: state.items.where((e) => !e.optional).length,
-                    ),
-                  ),
+                  builder: (context, state) => (state.items
+                          .where((e) => !e.optional)
+                          .isNotEmpty)
+                      ? SliverGrid(
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: crossAxisCount,
+                            mainAxisSpacing: 4,
+                            crossAxisSpacing: 4,
+                            childAspectRatio: 1,
+                          ),
+                          delegate: SliverChildBuilderDelegate(
+                            (context, i) => ShoppingItemWidget(
+                              selected: true,
+                              item: state.items
+                                  .where((e) => !e.optional)
+                                  .elementAt(i),
+                              onPressed: (RecipeItem item) =>
+                                  cubit.removeItem(item),
+                              onLongPressed: (RecipeItem item) =>
+                                  _editItem(context, item),
+                            ),
+                            childCount:
+                                state.items.where((e) => !e.optional).length,
+                          ),
+                        )
+                      : const SliverToBoxAdapter(child: SizedBox(height: 0)),
                 ),
               ),
               SliverPadding(
@@ -353,23 +362,32 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                   bloc: cubit,
                   buildWhen: (previous, current) =>
                       !listEquals(previous.items, current.items),
-                  builder: (context, state) => SliverGrid(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: crossAxisCount,
-                      mainAxisSpacing: 4,
-                      crossAxisSpacing: 4,
-                      childAspectRatio: 1,
-                    ),
-                    delegate: SliverChildBuilderDelegate(
-                      (context, i) => ShoppingItemWidget(
-                        item: state.items.where((e) => e.optional).elementAt(i),
-                        onPressed: (RecipeItem item) => cubit.removeItem(item),
-                        onLongPressed: (RecipeItem item) =>
-                            _editItem(context, item),
-                      ),
-                      childCount: state.items.where((e) => e.optional).length,
-                    ),
-                  ),
+                  builder: (context, state) => (state.items
+                          .where((e) => e.optional)
+                          .isNotEmpty)
+                      ? SliverGrid(
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: crossAxisCount,
+                            mainAxisSpacing: 4,
+                            crossAxisSpacing: 4,
+                            childAspectRatio: 1,
+                          ),
+                          delegate: SliverChildBuilderDelegate(
+                            (context, i) => ShoppingItemWidget(
+                              item: state.items
+                                  .where((e) => e.optional)
+                                  .elementAt(i),
+                              onPressed: (RecipeItem item) =>
+                                  cubit.removeItem(item),
+                              onLongPressed: (RecipeItem item) =>
+                                  _editItem(context, item),
+                            ),
+                            childCount:
+                                state.items.where((e) => e.optional).length,
+                          ),
+                        )
+                      : const SliverToBoxAdapter(child: SizedBox(height: 0)),
                 ),
               ),
               if (isUpdate)
@@ -402,14 +420,14 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                     ),
                   ),
                 ),
-              if (kIsWeb || (!(Platform.isAndroid || Platform.isIOS)))
+              if (!mobileLayout)
                 SliverPadding(
                   padding: EdgeInsets.fromLTRB(16, isUpdate ? 0 : 16, 16, 16),
                   sliver: SliverToBoxAdapter(
                     child:
                         BlocBuilder<AddUpdateRecipeCubit, AddUpdateRecipeState>(
                       bloc: cubit,
-                      builder: (context, state) => ElevatedButton(
+                      builder: (context, state) => LoadingElevatedButton(
                         onPressed: state.isValid()
                             ? () async {
                                 await cubit.saveRecipe();

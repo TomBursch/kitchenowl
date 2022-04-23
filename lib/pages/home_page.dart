@@ -84,7 +84,7 @@ class _HomePageState extends State<HomePage> {
                 .round();
           },
           builder: (context, state) {
-            final bool isOffline = App.isOffline(context);
+            final bool isOffline = App.isOffline;
 
             _homePageMenuItems = [
               _HomePageMenu(
@@ -223,6 +223,7 @@ class _HomePageState extends State<HomePage> {
                 );
               },
               child: Align(
+                key: ValueKey<int>(_selectedIndex),
                 alignment: Alignment.topCenter,
                 child: ConstrainedBox(
                   constraints: const BoxConstraints.expand(width: 1600),

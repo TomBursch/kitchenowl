@@ -6,8 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 
-import 'select_dialog.dart';
-
 // ignore: long-method
 Future<File?> selectFile({
   required BuildContext context,

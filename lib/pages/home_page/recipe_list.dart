@@ -3,8 +3,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/cubits/recipe_list_cubit.dart';
+import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/widgets/recipe_item.dart';
-import 'package:kitchenowl/widgets/search_text_field.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
 class RecipeListPage extends StatefulWidget {
@@ -120,6 +120,18 @@ class _RecipeListPageState extends State<RecipeListPage> {
                   !listEquals(previous.recipes, current.recipes),
               builder: (context, state) {
                 final recipes = state.recipes;
+
+                if (recipes.isEmpty) {
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const Icon(Icons.no_food_rounded),
+                      const SizedBox(height: 16),
+                      Text(AppLocalizations.of(context)!.recipeEmpty),
+                    ],
+                  );
+                }
 
                 return Scrollbar(
                   child: RefreshIndicator(

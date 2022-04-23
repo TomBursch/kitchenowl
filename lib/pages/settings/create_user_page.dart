@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/cubits/settings_server_cubit.dart';
+import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 
 class CreateUserPage extends StatefulWidget {
@@ -14,6 +15,7 @@ class _CreateUserPageState extends State<CreateUserPage> {
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController nameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -29,50 +31,89 @@ class _CreateUserPageState extends State<CreateUserPage> {
             child: SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.all(16),
-                child: AutofillGroup(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      TextField(
-                        controller: usernameController,
-                        autofocus: true,
-                        textInputAction: TextInputAction.next,
-                        decoration: InputDecoration(
-                          labelText: AppLocalizations.of(context)!.username,
+                child: Form(
+                  key: _formKey,
+                  child: AutofillGroup(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        TextFormField(
+                          controller: usernameController,
+                          autofocus: true,
+                          autofillHints: const [
+                            AutofillHints.newUsername,
+                            AutofillHints.username,
+                          ],
+                          textInputAction: TextInputAction.next,
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          decoration: InputDecoration(
+                            labelText: AppLocalizations.of(context)!.username,
+                          ),
+                          validator: (s) => s == null || s.isEmpty
+                              ? AppLocalizations.of(context)!
+                                  .fieldCannotBeEmpty(
+                                  AppLocalizations.of(context)!.username,
+                                )
+                              : null,
                         ),
-                      ),
-                      TextField(
-                        controller: nameController,
-                        textInputAction: TextInputAction.next,
-                        decoration: InputDecoration(
-                          labelText: AppLocalizations.of(context)!.name,
+                        TextFormField(
+                          controller: nameController,
+                          textInputAction: TextInputAction.next,
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          autofillHints: const [
+                            AutofillHints.name,
+                            AutofillHints.nickname,
+                          ],
+                          decoration: InputDecoration(
+                            labelText: AppLocalizations.of(context)!.name,
+                          ),
+                          validator: (s) => s == null || s.isEmpty
+                              ? AppLocalizations.of(context)!
+                                  .fieldCannotBeEmpty(
+                                  AppLocalizations.of(context)!.name,
+                                )
+                              : null,
                         ),
-                      ),
-                      TextField(
-                        controller: passwordController,
-                        obscureText: true,
-                        textInputAction: TextInputAction.go,
-                        decoration: InputDecoration(
-                          labelText: AppLocalizations.of(context)!.password,
+                        TextFormField(
+                          controller: passwordController,
+                          obscureText: true,
+                          autofillHints: const [
+                            AutofillHints.newPassword,
+                            AutofillHints.password,
+                          ],
+                          textInputAction: TextInputAction.next,
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          decoration: InputDecoration(
+                            labelText: AppLocalizations.of(context)!.password,
+                          ),
+                          validator: (s) => s == null || s.isEmpty
+                              ? AppLocalizations.of(context)!
+                                  .fieldCannotBeEmpty(
+                                  AppLocalizations.of(context)!.password,
+                                )
+                              : null,
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 16),
-                        child: ElevatedButton(
-                          onPressed: () {
-                            BlocProvider.of<SettingsServerCubit>(context)
-                                .createUser(
-                              usernameController.text,
-                              nameController.text,
-                              passwordController.text,
-                            );
-                            Navigator.of(context).pop();
-                          },
-                          child: Text(AppLocalizations.of(context)!.userAdd),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 16),
+                          child: LoadingElevatedButton(
+                            onPressed: () async {
+                              if (_formKey.currentState!.validate()) {
+                                await BlocProvider.of<SettingsServerCubit>(
+                                  context,
+                                ).createUser(
+                                  usernameController.text,
+                                  nameController.text,
+                                  passwordController.text,
+                                );
+                                Navigator.of(context).pop(UpdateEnum.updated);
+                              }
+                            },
+                            child: Text(AppLocalizations.of(context)!.userAdd),
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),

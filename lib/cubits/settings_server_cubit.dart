@@ -18,10 +18,14 @@ class SettingsServerCubit extends Cubit<SettingsServerState> {
   }
 
   Future<bool> createUser(String username, String name, String password) async {
-    final res = ApiService.getInstance().createUser(username, name, password);
-    refresh();
+    if (username.isNotEmpty && name.isNotEmpty && password.isNotEmpty) {
+      final res = ApiService.getInstance().createUser(username, name, password);
+      refresh();
 
-    return res;
+      return res;
+    }
+
+    return false;
   }
 
   Future<bool> deleteUser(User user) async {

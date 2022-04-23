@@ -74,7 +74,7 @@ extension UserApi on ApiService {
 
   Future<bool> createUser(String username, String name, String password) async {
     final res = await post(
-      '/new-user',
+      baseRoute + '/new',
       jsonEncode({
         'username': username,
         'name': name,

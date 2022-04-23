@@ -361,13 +361,18 @@ class _SettingsServerPageState extends State<SettingsServerPage> {
                     ),
                     IconButton(
                       icon: const Icon(Icons.add),
-                      onPressed: () =>
-                          Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => BlocProvider.value(
-                          value: cubit,
-                          child: const CreateUserPage(),
-                        ),
-                      )),
+                      onPressed: () async {
+                        final res = await Navigator.of(context)
+                            .push<UpdateEnum>(MaterialPageRoute(
+                          builder: (context) => BlocProvider.value(
+                            value: cubit,
+                            child: const CreateUserPage(),
+                          ),
+                        ));
+                        if (res == UpdateEnum.updated) {
+                          cubit.refresh();
+                        }
+                      },
                       padding: EdgeInsets.zero,
                     ),
                   ],

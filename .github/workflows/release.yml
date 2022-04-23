@@ -213,7 +213,7 @@ jobs:
         working-directory: fedora
       - name: Rename build for fedora
         if: matrix.target == 'Fedora'
-        run: mv x86_64/KitchenOwl-${{ github.ref }}-1.fc35.x86_64.rpm $GITHUB_WORKSPACE/kitchenowl_${{ matrix.target }}.rpm
+        run: mv KitchenOwl.x86_64.rpm $GITHUB_WORKSPACE/kitchenowl_${{ matrix.target }}.rpm
         working-directory: ${{ matrix.build_path }}
 
       # Upload the build.

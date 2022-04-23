@@ -37,3 +37,4 @@ cat linux/$NAME.desktop >> $DESKTOP_FILE
 # Build and cleanup
 cd build/fedora/release/
 QA_RPATHS=0x0002 fedpkg --release f35 local
+cp x86_64/KitchenOwl-v$VERSION-1.fc35.x86_64.rpm KitchenOwl.x86_64.rpm

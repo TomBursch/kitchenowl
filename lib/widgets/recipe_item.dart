@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:animations/animations.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
@@ -38,7 +37,7 @@ class RecipeItemWidget extends StatelessWidget {
               ? toggle
               : () async {
                   final res = await Navigator.of(context)
-                      .push<UpdateEnum>(CupertinoPageRoute(
+                      .push<UpdateEnum>(MaterialPageRoute(
                     builder: (context) => RecipePage(
                       recipe: recipe,
                     ),

@@ -93,7 +93,7 @@ class Recipe(db.Model, DbModelMixin, TimestampMixin):
     @classmethod
     def find_suggestions(cls):
         return cls.query.filter(cls.planned == False).filter(  # noqa
-            cls.suggestion_rank > 0).order_by(cls.suggestion_rank).limit(9).all()
+            cls.suggestion_rank > 0).order_by(cls.suggestion_rank).all()
 
     @classmethod
     def find_by_name(cls, name) -> Recipe:

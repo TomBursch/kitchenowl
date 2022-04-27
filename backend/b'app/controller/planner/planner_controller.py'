@@ -62,7 +62,14 @@ def getRecentRecipes():
 @planner.route('/suggested-recipes', methods=['GET'])
 @jwt_required()
 def getSuggestedRecipes():
+    # all suggestions
     suggested_recipes = Recipe.find_suggestions()
+    # remove recipes on recent list
+    recents = [e.recipe.id for e in RecipeHistory.get_recent()]
+    suggested_recipes = [s for s in suggested_recipes if s.id not in recents]
+    # limit suggestions number to maximally 9 
+    if len(suggested_recipes) > 9:
+        suggested_recipes = suggested_recipes[:9]
     return jsonify([r.obj_to_dict() for r in suggested_recipes])
 
 
@@ -72,5 +79,4 @@ def getRefreshedSuggestedRecipes():
     # re-compute suggestion ranking
     Recipe.compute_suggestion_ranking()
     # return suggested recipes
-    suggested_recipes = Recipe.find_suggestions()
-    return jsonify([r.obj_to_dict() for r in suggested_recipes])
+    return getSuggestedRecipes()

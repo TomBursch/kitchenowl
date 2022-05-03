@@ -27,7 +27,7 @@ class _LoadingElevatedButtonState extends State<LoadingElevatedButton> {
           ? const SizedBox(
               height: 16,
               width: 16,
-              child: CircularProgressIndicator.adaptive(),
+              child: CircularProgressIndicator(),
             )
           : widget.child,
       onPressed: widget.onPressed != null && !isLoading

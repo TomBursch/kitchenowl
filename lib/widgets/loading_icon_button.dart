@@ -2,10 +2,15 @@ import 'package:flutter/material.dart';
 
 class LoadingIconButton extends StatefulWidget {
   final Widget icon;
+  final Color? loadingColor;
   final Future Function()? onPressed;
 
-  const LoadingIconButton({Key? key, required this.icon, this.onPressed})
-      : super(key: key);
+  const LoadingIconButton({
+    Key? key,
+    required this.icon,
+    this.loadingColor,
+    this.onPressed,
+  }) : super(key: key);
 
   @override
   State<LoadingIconButton> createState() => _LoadingIconButtonState();
@@ -30,11 +35,13 @@ class _LoadingIconButtonState extends State<LoadingIconButton> {
               : null,
           icon: widget.icon,
         )
-      : const Padding(
-          padding: EdgeInsets.all(16),
+      : Padding(
+          padding: const EdgeInsets.all(16),
           child: AspectRatio(
             aspectRatio: 1,
-            child: CircularProgressIndicator.adaptive(),
+            child: CircularProgressIndicator(
+              color: widget.loadingColor,
+            ),
           ),
         );
 }

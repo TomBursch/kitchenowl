@@ -88,6 +88,9 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
               builder: (context, state) {
                 return LoadingIconButton(
                   icon: const Icon(Icons.save_rounded),
+                  loadingColor: Theme.of(context).brightness == Brightness.light
+                      ? Colors.white
+                      : null,
                   onPressed: state.isValid()
                       ? () async {
                           await cubit.saveRecipe();

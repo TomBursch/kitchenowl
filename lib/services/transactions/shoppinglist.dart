@@ -1,5 +1,6 @@
 import 'package:kitchenowl/enums/shoppinglist_sorting.dart';
 import 'package:kitchenowl/models/item.dart';
+import 'package:kitchenowl/services/storage/transaction_storage.dart';
 import 'package:kitchenowl/services/transaction.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
 import 'package:kitchenowl/services/storage/temp_storage.dart';
@@ -66,7 +67,14 @@ class TransactionShoppingListGetRecentItems
 
   @override
   Future<List<ItemWithDescription>> runLocal() async {
-    return const [];
+    final shoppinglist =
+        await TempStorage.getInstance().readItems() ?? const [];
+
+    return (await TransactionStorage.getInstance().readTransactions())
+        .whereType<TransactionShoppingListDeleteItem>()
+        .map((e) => e.item)
+        .where((e) => !shoppinglist.contains(e))
+        .toList();
   }
 
   @override

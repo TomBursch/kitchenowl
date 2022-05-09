@@ -67,7 +67,7 @@ def getSuggestedRecipes():
     # remove recipes on recent list
     recents = [e.recipe.id for e in RecipeHistory.get_recent()]
     suggested_recipes = [s for s in suggested_recipes if s.id not in recents]
-    # limit suggestions number to maximally 9 
+    # limit suggestions number to maximally 9
     if len(suggested_recipes) > 9:
         suggested_recipes = suggested_recipes[:9]
     return jsonify([r.obj_to_dict() for r in suggested_recipes])

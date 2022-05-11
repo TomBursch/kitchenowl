@@ -51,7 +51,7 @@ class _SettingsServerPageState extends State<SettingsServerPage> {
               padding: const EdgeInsets.all(16),
               children: [
                 Text(
-                  AppLocalizations.of(context)!.server + ':',
+                  '${AppLocalizations.of(context)!.server}:',
                   style: Theme.of(context).textTheme.headline6,
                 ),
                 const SizedBox(height: 8),
@@ -64,7 +64,7 @@ class _SettingsServerPageState extends State<SettingsServerPage> {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  AppLocalizations.of(context)!.features + ':',
+                  '${AppLocalizations.of(context)!.features}:',
                   style: Theme.of(context).textTheme.headline6,
                 ),
                 const SizedBox(height: 8),
@@ -144,7 +144,7 @@ class _SettingsServerPageState extends State<SettingsServerPage> {
                   children: [
                     Expanded(
                       child: Text(
-                        AppLocalizations.of(context)!.tags + ':',
+                        '${AppLocalizations.of(context)!.tags}:',
                         style: Theme.of(context).textTheme.headline6,
                       ),
                     ),
@@ -245,8 +245,7 @@ class _SettingsServerPageState extends State<SettingsServerPage> {
                                 children: [
                                   Expanded(
                                     child: Text(
-                                      AppLocalizations.of(context)!.categories +
-                                          ':',
+                                      '${AppLocalizations.of(context)!.categories}:',
                                       style:
                                           Theme.of(context).textTheme.headline6,
                                     ),
@@ -355,7 +354,7 @@ class _SettingsServerPageState extends State<SettingsServerPage> {
                   children: [
                     Expanded(
                       child: Text(
-                        AppLocalizations.of(context)!.users + ':',
+                        '${AppLocalizations.of(context)!.users}:',
                         style: Theme.of(context).textTheme.headline6,
                       ),
                     ),

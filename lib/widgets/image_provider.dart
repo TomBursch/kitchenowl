@@ -4,7 +4,7 @@ import 'package:kitchenowl/services/api/api_service.dart';
 
 String buildUrl(String url) {
   if (_urlIsLocal(url)) {
-    return ApiService.getInstance().baseUrl + '/upload/' + url;
+    return '${ApiService.getInstance().baseUrl}/upload/$url';
   }
 
   return url;

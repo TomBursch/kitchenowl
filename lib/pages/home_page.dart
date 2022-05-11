@@ -57,9 +57,9 @@ class _HomePageState extends State<HomePage> {
     super.dispose();
   }
 
-  void _onItemTapped(int i, List<_HomePageMenu> _homePageMenuItems) {
-    if (_homePageMenuItems[i].onTap != null) {
-      _homePageMenuItems[i].onTap!(_selectedIndex == i);
+  void _onItemTapped(int i, List<_HomePageMenu> homePageMenuItems) {
+    if (homePageMenuItems[i].onTap != null) {
+      homePageMenuItems[i].onTap!(_selectedIndex == i);
     }
     setState(() {
       _selectedIndex = i;

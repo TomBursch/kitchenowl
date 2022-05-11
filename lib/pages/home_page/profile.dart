@@ -55,17 +55,17 @@ class ProfilePage extends StatelessWidget {
                       value: state.themeMode,
                       items: [
                         DropdownMenuItem(
-                          child: Text(AppLocalizations.of(context)!.themeLight),
                           value: ThemeMode.light,
+                          child: Text(AppLocalizations.of(context)!.themeLight),
                         ),
                         DropdownMenuItem(
-                          child: Text(AppLocalizations.of(context)!.themeDark),
                           value: ThemeMode.dark,
+                          child: Text(AppLocalizations.of(context)!.themeDark),
                         ),
                         DropdownMenuItem(
+                          value: ThemeMode.system,
                           child:
                               Text(AppLocalizations.of(context)!.themeSystem),
-                          value: ThemeMode.system,
                         ),
                       ],
                       onChanged: (ThemeMode? value) {
@@ -141,7 +141,7 @@ class ProfilePage extends StatelessWidget {
                         context: context,
                         applicationVersion: Config.packageInfo?.version,
                         applicationLegalese:
-                            '\u{a9} ' + AppLocalizations.of(context)!.appLegal,
+                            '\u{a9} ${AppLocalizations.of(context)!.appLegal}',
                         applicationIcon: ConstrainedBox(
                           constraints: const BoxConstraints.expand(
                             width: 64,

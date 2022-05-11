@@ -6,7 +6,7 @@ extension PlannerApi on ApiService {
   static const baseRoute = '/planner';
 
   Future<List<Recipe>?> getPlannedRecipes() async {
-    final res = await get(baseRoute + '/recipes');
+    final res = await get('$baseRoute/recipes');
     if (res.statusCode != 200) return null;
 
     final body = List.from(jsonDecode(res.body));
@@ -17,7 +17,7 @@ extension PlannerApi on ApiService {
   Future<bool> addPlannedRecipe(Recipe recipe, int? day) async {
     final body = {"recipe_id": recipe.id};
     if (day != null) body['day'] = day;
-    final res = await post(baseRoute + '/recipe', jsonEncode(body));
+    final res = await post('$baseRoute/recipe', jsonEncode(body));
 
     return res.statusCode == 200;
   }
@@ -26,7 +26,7 @@ extension PlannerApi on ApiService {
     final body = {};
     if (day != null) body['day'] = day;
     final res = await delete(
-      baseRoute + '/recipe/${recipe.id}',
+      '$baseRoute/recipe/${recipe.id}',
       body: jsonEncode(body),
     );
 
@@ -34,7 +34,7 @@ extension PlannerApi on ApiService {
   }
 
   Future<List<Recipe>?> getRecentPlannedRecipes() async {
-    final res = await get(baseRoute + '/recent-recipes');
+    final res = await get('$baseRoute/recent-recipes');
     if (res.statusCode != 200) return null;
 
     final body = List.from(jsonDecode(res.body));
@@ -43,7 +43,7 @@ extension PlannerApi on ApiService {
   }
 
   Future<List<Recipe>?> getSuggestedRecipes() async {
-    final res = await get(baseRoute + '/suggested-recipes');
+    final res = await get('$baseRoute/suggested-recipes');
     if (res.statusCode != 200) return null;
 
     final body = List.from(jsonDecode(res.body));
@@ -52,7 +52,7 @@ extension PlannerApi on ApiService {
   }
 
   Future<List<Recipe>?> refreshSuggestedRecipes() async {
-    final res = await get(baseRoute + '/refresh-suggested-recipes');
+    final res = await get('$baseRoute/refresh-suggested-recipes');
     if (res.statusCode != 200) return null;
 
     final body = List.from(jsonDecode(res.body));

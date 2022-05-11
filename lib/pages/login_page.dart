@@ -31,8 +31,8 @@ class _LoginPageState extends State<LoginPage> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(AppLocalizations.of(context)!.loginTo +
-                        ' ${Uri.parse(ApiService.getInstance().baseUrl).authority}'),
+                    Text(
+                        '${AppLocalizations.of(context)!.loginTo} ${Uri.parse(ApiService.getInstance().baseUrl).authority}'),
                     TextField(
                       controller: usernameController,
                       autofocus: true,

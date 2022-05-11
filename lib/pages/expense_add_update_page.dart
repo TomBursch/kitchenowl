@@ -86,6 +86,7 @@ class _AddUpdateRecipePageState extends State<AddUpdateExpensePage> {
                 onPressed: state.isValid()
                     ? () async {
                         await cubit.saveExpense();
+                        if (!mounted) return;
                         Navigator.of(context).pop(UpdateEnum.updated);
                       }
                     : null,
@@ -154,14 +155,14 @@ class _AddUpdateRecipePageState extends State<AddUpdateExpensePage> {
                                     items: [
                                       for (final e in (state.categories))
                                         DropdownMenuItem(
-                                          child: Text(e),
                                           value: e,
+                                          child: Text(e),
                                         ),
                                       DropdownMenuItem(
+                                        value: null,
                                         child: Text(
                                           AppLocalizations.of(context)!.none,
                                         ),
-                                        value: null,
                                       ),
                                     ],
                                     onChanged: cubit.setCategory,
@@ -215,8 +216,8 @@ class _AddUpdateRecipePageState extends State<AddUpdateExpensePage> {
                               items: widget.users
                                   .map(
                                     (user) => DropdownMenuItem<int>(
-                                      child: Text(user.name),
                                       value: user.id,
+                                      child: Text(user.name),
                                     ),
                                   )
                                   .toList(),
@@ -317,6 +318,7 @@ class _AddUpdateRecipePageState extends State<AddUpdateExpensePage> {
                       ),
                       onPressed: () async {
                         await cubit.deleteExpense();
+                        if (!mounted) return;
                         Navigator.of(context).pop(UpdateEnum.deleted);
                       },
                       child: Text(AppLocalizations.of(context)!.delete),
@@ -334,6 +336,7 @@ class _AddUpdateRecipePageState extends State<AddUpdateExpensePage> {
                         onPressed: state.isValid()
                             ? (() async {
                                 await cubit.saveExpense();
+                                if (!mounted) return;
                                 Navigator.of(context).pop(UpdateEnum.updated);
                               })
                             : null,

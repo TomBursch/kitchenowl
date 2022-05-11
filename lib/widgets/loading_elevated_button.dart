@@ -23,13 +23,6 @@ class _LoadingElevatedButtonState extends State<LoadingElevatedButton> {
   Widget build(BuildContext context) {
     return ElevatedButton(
       style: widget.style,
-      child: isLoading
-          ? const SizedBox(
-              height: 16,
-              width: 16,
-              child: CircularProgressIndicator(),
-            )
-          : widget.child,
       onPressed: widget.onPressed != null && !isLoading
           ? () async {
               setState(() {
@@ -41,6 +34,13 @@ class _LoadingElevatedButtonState extends State<LoadingElevatedButton> {
               });
             }
           : null,
+      child: isLoading
+          ? const SizedBox(
+              height: 16,
+              width: 16,
+              child: CircularProgressIndicator(),
+            )
+          : widget.child,
     );
   }
 }

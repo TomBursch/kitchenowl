@@ -69,6 +69,7 @@ class _ExpensePageState extends State<ExpensePage> {
                       cubit.refresh();
                     }
                     if (res == UpdateEnum.deleted) {
+                      if (!mounted) return;
                       Navigator.of(context).pop(UpdateEnum.deleted);
                     }
                   },
@@ -100,21 +101,14 @@ class _ExpensePageState extends State<ExpensePage> {
                         if (state.expense.category != null)
                           ListTile(
                             title: Text(
-                              AppLocalizations.of(context)!.category +
-                                  " " +
-                                  state.expense.category!,
+                              "${AppLocalizations.of(context)!.category} ${state.expense.category!}",
                             ),
                           ),
                         ListTile(
                           title: Text(
-                            AppLocalizations.of(context)!.expensePaidBy +
-                                " " +
-                                (state.users
-                                        .firstWhereOrNull(
-                                          (e) => e.id == state.expense.paidById,
-                                        )
-                                        ?.name ??
-                                    AppLocalizations.of(context)!.other),
+                            "${AppLocalizations.of(context)!.expensePaidBy} ${state.users.firstWhereOrNull(
+                                  (e) => e.id == state.expense.paidById,
+                                )?.name ?? AppLocalizations.of(context)!.other}",
                           ),
                           trailing: state.expense.createdAt != null
                               ? Text(
@@ -129,8 +123,7 @@ class _ExpensePageState extends State<ExpensePage> {
                             children: [
                               Expanded(
                                 child: Text(
-                                  AppLocalizations.of(context)!.expensePaidFor +
-                                      ':',
+                                  '${AppLocalizations.of(context)!.expensePaidFor}:',
                                   style: Theme.of(context).textTheme.subtitle1,
                                 ),
                               ),

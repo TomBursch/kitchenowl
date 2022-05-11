@@ -6,6 +6,7 @@ import 'package:kitchenowl/services/transactions/shoppinglist.dart';
 import 'package:kitchenowl/services/transaction_handler.dart';
 
 enum ShoppinglistSorting { alphabetical, algorithmic, category }
+
 enum ShoppinglistStyle { grid, list }
 
 class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
@@ -63,9 +64,9 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
     final state = this.state;
     if (state is SearchShoppinglistCubitState) query = query ?? state.query;
     final sorting = state.sorting;
-    List<ShoppinglistItem> shoppinglist = await TransactionHandler.getInstance()
-            .runTransaction(TransactionShoppingListGetItems()) ??
-        const [];
+    Future<List<ShoppinglistItem>> shoppinglist =
+        TransactionHandler.getInstance()
+            .runTransaction(TransactionShoppingListGetItems());
 
     if (query != null && query.isNotEmpty) {
       // Split query into name and description
@@ -77,38 +78,48 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
         queryDescription = query.substring(splitIndex + 1).trim();
       }
 
-      List<Item> items = (await TransactionHandler.getInstance().runTransaction(
-        TransactionShoppingListSearchItem(query: queryName),
-      ))
-          .map((e) => ItemWithDescription.fromItem(
-                item: e,
-                description: queryDescription,
-              ))
-          .toList();
-      _mergeShoppinglistItems(items, shoppinglist);
-      if (items.isEmpty ||
-          items[0].name.toLowerCase() != queryName.toLowerCase()) {
-        items.add(ItemWithDescription(
+      Future<List<Item>> items = TransactionHandler.getInstance()
+          .runTransaction(
+            TransactionShoppingListSearchItem(query: queryName),
+          )
+          .then((items) => items
+              .map((e) => ItemWithDescription.fromItem(
+                    item: e,
+                    description: queryDescription,
+                  ))
+              .toList());
+
+      List<Item> loadedItems = await items;
+      List<ShoppinglistItem> loadedShoppinglist = await shoppinglist;
+
+      _mergeShoppinglistItems(loadedItems, loadedShoppinglist);
+      if (loadedItems.isEmpty ||
+          loadedItems[0].name.toLowerCase() != queryName.toLowerCase()) {
+        loadedItems.add(ItemWithDescription(
           name: queryName,
           description: queryDescription,
         ));
       }
       emit(SearchShoppinglistCubitState(
-        result: items,
+        result: loadedItems,
         query: query,
-        listItems: shoppinglist,
+        listItems: loadedShoppinglist,
         style: state.style,
         sorting: state.sorting,
       ));
     } else {
       // Sort if needed
       if (sorting != ShoppinglistSorting.alphabetical) {
-        _sortShoppinglistItems(shoppinglist, sorting);
+        shoppinglist = shoppinglist.then((shoppinglist) {
+          _sortShoppinglistItems(shoppinglist, sorting);
+          return shoppinglist;
+        });
       }
 
-      final recent = await TransactionHandler.getInstance()
+      final recent = TransactionHandler.getInstance()
           .runTransaction(TransactionShoppingListGetRecentItems());
-      emit(ShoppinglistCubitState(shoppinglist, recent, sorting, state.style));
+      emit(ShoppinglistCubitState(
+          await shoppinglist, await recent, sorting, state.style));
     }
     _refreshLock = false;
   }

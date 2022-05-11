@@ -38,8 +38,8 @@ class _LanguageDialogState extends State<LanguageDialog> {
               for (final e in (snapshot.data?.entries ??
                   const <MapEntry<String, String>>[]))
                 DropdownMenuItem(
-                  child: Text(e.value),
                   value: e.key,
+                  child: Text(e.value),
                 ),
             ],
             onChanged: (String? value) {
@@ -52,10 +52,10 @@ class _LanguageDialogState extends State<LanguageDialog> {
       ),
       actions: [
         TextButton(
-          child: Text(widget.doneText),
           onPressed: language != null
               ? () => Navigator.of(context).pop(language)
               : null,
+          child: Text(widget.doneText),
         ),
         // TextButton(
         //   child: Text(widget.cancelText),

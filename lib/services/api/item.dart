@@ -7,7 +7,7 @@ extension ItemApi on ApiService {
   static const baseRoute = '/item';
 
   Future<Item?> getItem(Item item) async {
-    final res = await get(baseRoute + '/${item.id}');
+    final res = await get('$baseRoute/${item.id}');
     if (res.statusCode != 200) return null;
 
     final body = jsonDecode(res.body);
@@ -16,7 +16,7 @@ extension ItemApi on ApiService {
   }
 
   Future<List<Recipe>?> getItemRecipes(Item item) async {
-    final res = await get(baseRoute + '/${item.id}/recipes');
+    final res = await get('$baseRoute/${item.id}/recipes');
     if (res.statusCode != 200) return null;
 
     final body = List.from(jsonDecode(res.body));
@@ -25,7 +25,7 @@ extension ItemApi on ApiService {
   }
 
   Future<List<Item>?> searchItem(String query) async {
-    final res = await get(baseRoute + '/search?query=$query');
+    final res = await get('$baseRoute/search?query=$query');
     if (res.statusCode != 200) return null;
 
     final body = List.from(jsonDecode(res.body));
@@ -34,13 +34,13 @@ extension ItemApi on ApiService {
   }
 
   Future<bool> deleteItem(Item item) async {
-    final res = await delete(baseRoute + '/${item.id}');
+    final res = await delete('$baseRoute/${item.id}');
 
     return res.statusCode == 200;
   }
 
   Future<bool> updateItem(Item item) async {
-    final res = await post(baseRoute + '/${item.id}', item.toJson());
+    final res = await post('$baseRoute/${item.id}', item.toJson());
 
     return res.statusCode == 200;
   }

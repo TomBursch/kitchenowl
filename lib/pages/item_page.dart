@@ -44,6 +44,7 @@ class _ItemPageState<T extends Item> extends State<ItemPage<T>> {
       onWillPop: () async {
         if (cubit.hasChanged()) {
           if (widget.item is ShoppinglistItem) await cubit.saveItem();
+          if (!mounted) return false;
           Navigator.of(context)
               .pop(UpdateValue<T>(UpdateEnum.updated, cubit.item));
 
@@ -71,6 +72,7 @@ class _ItemPageState<T extends Item> extends State<ItemPage<T>> {
                   );
                   if (confirmed) {
                     cubit.deleteItem();
+                    if (!mounted) return;
                     Navigator.of(context)
                         .pop(const UpdateValue<Item>(UpdateEnum.deleted));
                   }
@@ -129,7 +131,7 @@ class _ItemPageState<T extends Item> extends State<ItemPage<T>> {
                                   padding:
                                       const EdgeInsets.fromLTRB(13, 0, 13, 8),
                                   child: Text(
-                                    AppLocalizations.of(context)!.usedIn + ':',
+                                    '${AppLocalizations.of(context)!.usedIn}:',
                                     style:
                                         Theme.of(context).textTheme.headline6,
                                   ),

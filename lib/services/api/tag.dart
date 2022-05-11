@@ -22,7 +22,7 @@ extension TagApi on ApiService {
   }
 
   Future<Tag?> getTag(Tag tag) async {
-    final res = await get(baseRoute + '/${tag.id}');
+    final res = await get('$baseRoute/${tag.id}');
     if (res.statusCode != 200) return null;
 
     final body = jsonDecode(res.body);
@@ -31,7 +31,7 @@ extension TagApi on ApiService {
   }
 
   Future<List<Recipe>?> getTagRecipes(Tag tag) async {
-    final res = await get(baseRoute + '/${tag.id}/recipes');
+    final res = await get('$baseRoute/${tag.id}/recipes');
     if (res.statusCode != 200) return null;
 
     final body = List.from(jsonDecode(res.body));
@@ -40,7 +40,7 @@ extension TagApi on ApiService {
   }
 
   Future<Set<Tag>?> searchTags(String query) async {
-    final res = await get(baseRoute + '/search?query=$query');
+    final res = await get('$baseRoute/search?query=$query');
     if (res.statusCode != 200) return null;
 
     final body = List.from(jsonDecode(res.body));
@@ -49,7 +49,7 @@ extension TagApi on ApiService {
   }
 
   Future<bool> deleteTag(Tag tag) async {
-    final res = await delete(baseRoute + '/${tag.id}');
+    final res = await delete('$baseRoute/${tag.id}');
 
     return res.statusCode == 200;
   }

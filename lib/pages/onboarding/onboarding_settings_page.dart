@@ -96,12 +96,12 @@ class _OnboardingSettingsPageState extends State<OnboardingSettingsPage> {
                   for (final e in (snapshot.data?.entries ??
                       const <MapEntry<String, String>>[]))
                     DropdownMenuItem(
-                      child: Text(e.value),
                       value: e.key,
+                      child: Text(e.value),
                     ),
                   DropdownMenuItem(
-                    child: Text(AppLocalizations.of(context)!.other),
                     value: null,
+                    child: Text(AppLocalizations.of(context)!.other),
                   ),
                 ],
                 onChanged: (String? value) {

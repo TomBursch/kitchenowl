@@ -7,7 +7,7 @@ extension ShoppinglistApi on ApiService {
   static const baseRoute = '/shoppinglist/1';
 
   Future<ShoppinglistItem?> getShoppingListItem(Item item) async {
-    final res = await get(baseRoute + '/item/${item.id}');
+    final res = await get('$baseRoute/item/${item.id}');
     if (res.statusCode != 200) return null;
 
     final body = jsonDecode(res.body);
@@ -16,7 +16,7 @@ extension ShoppinglistApi on ApiService {
   }
 
   Future<List<ShoppinglistItem>?> getItems() async {
-    final res = await get(baseRoute + '/items');
+    final res = await get('$baseRoute/items');
     if (res.statusCode != 200) return null;
 
     final body = List.from(jsonDecode(res.body));
@@ -25,7 +25,7 @@ extension ShoppinglistApi on ApiService {
   }
 
   Future<List<Item>?> getRecentItems() async {
-    final res = await get(baseRoute + '/recent-items');
+    final res = await get('$baseRoute/recent-items');
     if (res.statusCode != 200) return null;
 
     final body = List.from(jsonDecode(res.body));
@@ -36,14 +36,14 @@ extension ShoppinglistApi on ApiService {
   Future<bool> addItemByName(String name, [String? description]) async {
     final data = {'name': name};
     if (description != null) data['description'] = description;
-    final res = await post(baseRoute + '/add-item-by-name', jsonEncode(data));
+    final res = await post('$baseRoute/add-item-by-name', jsonEncode(data));
 
     return res.statusCode == 200;
   }
 
   Future<bool> addRecipeItems(List<RecipeItem> items) async {
     final res = await post(
-      baseRoute + '/recipeitems',
+      '$baseRoute/recipeitems',
       jsonEncode({'items': items.map((e) => e.toJsonWithId()).toList()}),
     );
 
@@ -55,14 +55,14 @@ extension ShoppinglistApi on ApiService {
     String description,
   ) async {
     final data = {'description': description};
-    final res = await post(baseRoute + '/item/${item.id}', jsonEncode(data));
+    final res = await post('$baseRoute/item/${item.id}', jsonEncode(data));
 
     return res.statusCode == 200;
   }
 
   Future<bool> removeItem(ShoppinglistItem item) async {
     final res = await delete(
-      baseRoute + '/item',
+      '$baseRoute/item',
       body: jsonEncode({'item_id': item.id}),
     );
 

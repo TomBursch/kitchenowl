@@ -16,7 +16,7 @@ extension ExpenseApi on ApiService {
   }
 
   Future<Expense?> getExpense(Expense expense) async {
-    final res = await get(baseRoute + '/${expense.id}');
+    final res = await get('$baseRoute/${expense.id}');
     if (res.statusCode != 200) return null;
 
     return Expense.fromJson(jsonDecode(res.body));
@@ -30,20 +30,20 @@ extension ExpenseApi on ApiService {
   }
 
   Future<bool> deleteExpense(Expense expense) async {
-    final res = await delete(baseRoute + '/${expense.id}');
+    final res = await delete('$baseRoute/${expense.id}');
 
     return res.statusCode == 200;
   }
 
   Future<bool> updateExpense(Expense expense) async {
     final body = expense.toJson();
-    final res = await post(baseRoute + '/${expense.id}', jsonEncode(body));
+    final res = await post('$baseRoute/${expense.id}', jsonEncode(body));
 
     return res.statusCode == 200;
   }
 
   Future<List<String>?> getExpenseCategories() async {
-    final res = await get(baseRoute + '/categories');
+    final res = await get('$baseRoute/categories');
     if (res.statusCode != 200) return null;
 
     return List<String>.from(jsonDecode(res.body));
@@ -51,7 +51,7 @@ extension ExpenseApi on ApiService {
 
   Future<bool> addExpenseCategory(String name) async {
     final res = await post(
-      baseRoute + '/categories',
+      '$baseRoute/categories',
       jsonEncode({'name': name}),
     );
 
@@ -60,7 +60,7 @@ extension ExpenseApi on ApiService {
 
   Future<bool> deleteExpenseCategory(String name) async {
     final res = await delete(
-      baseRoute + '/categories',
+      '$baseRoute/categories',
       body: jsonEncode({'name': name}),
     );
 

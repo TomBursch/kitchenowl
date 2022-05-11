@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class RecipeSourceChip extends StatelessWidget {
   final String source;
@@ -8,7 +8,7 @@ class RecipeSourceChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: canLaunch(source),
+      future: canLaunchUrlString(source),
       initialData: false,
       builder: (
         context,
@@ -31,10 +31,10 @@ class RecipeSourceChip extends StatelessWidget {
                   backgroundColor: Theme.of(context).colorScheme.secondary,
                   elevation: 3,
                   onPressed: () async {
-                    if (await canLaunch(
+                    if (await canLaunchUrlString(
                       source,
                     )) {
-                      await launch(
+                      await launchUrlString(
                         source,
                       );
                     }

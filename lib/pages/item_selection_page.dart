@@ -62,7 +62,7 @@ class _ItemSelectionPageState extends State<ItemSelectionPage> {
                   padding: const EdgeInsets.all(16),
                   sliver: SliverToBoxAdapter(
                     child: Text(
-                      recipe.name + ':',
+                      '${recipe.name}:',
                       style: Theme.of(context).textTheme.headline5,
                     ),
                   ),
@@ -93,7 +93,7 @@ class _ItemSelectionPageState extends State<ItemSelectionPage> {
                   padding: const EdgeInsets.all(16),
                   sliver: SliverToBoxAdapter(
                     child: Text(
-                      AppLocalizations.of(context)!.itemsOptional + ':',
+                      '${AppLocalizations.of(context)!.itemsOptional}:',
                       style: Theme.of(context).textTheme.headline6,
                     ),
                   ),
@@ -130,16 +130,16 @@ class _ItemSelectionPageState extends State<ItemSelectionPage> {
               padding: const EdgeInsets.all(16),
               sliver: SliverToBoxAdapter(
                 child: ElevatedButton(
-                  child: Text(
-                    AppLocalizations.of(context)!.addNumberIngredients(
-                      state.getResult().length,
-                    ),
-                  ),
                   onPressed: state.getResult().isEmpty
                       ? null
                       : () async {
                           Navigator.of(context).pop(cubit.getResult());
                         },
+                  child: Text(
+                    AppLocalizations.of(context)!.addNumberIngredients(
+                      state.getResult().length,
+                    ),
+                  ),
                 ),
               ),
             ),

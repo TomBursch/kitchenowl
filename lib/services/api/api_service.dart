@@ -207,14 +207,14 @@ class ApiService {
 
   Future<bool> refreshAuth() async {
     final _headers = Map<String, String>.from(headers);
-    _headers['Authorization'] = 'Bearer ' + (_refreshToken ?? '');
+    _headers['Authorization'] = 'Bearer ${_refreshToken ?? ''}';
     final res = await _client.get(
-      Uri.parse(baseUrl + '/auth/refresh'),
+      Uri.parse('$baseUrl/auth/refresh'),
       headers: _headers,
     );
     if (res.statusCode == 200) {
       final body = jsonDecode(res.body);
-      headers['Authorization'] = 'Bearer ' + body['access_token'];
+      headers['Authorization'] = 'Bearer ${body['access_token']}';
       _setConnectionState(Connection.authenticated);
 
       return true;
@@ -230,7 +230,7 @@ class ApiService {
     );
     if (res.statusCode == 200) {
       final body = jsonDecode(res.body);
-      headers['Authorization'] = 'Bearer ' + body['access_token'];
+      headers['Authorization'] = 'Bearer ${body['access_token']}';
       _refreshToken = body['refresh_token'];
       _setConnectionState(Connection.authenticated);
 
@@ -280,7 +280,7 @@ class ApiService {
     );
     if (res.statusCode == 200) {
       final body = jsonDecode(res.body);
-      headers['Authorization'] = 'Bearer ' + body['access_token'];
+      headers['Authorization'] = 'Bearer ${body['access_token']}';
       _refreshToken = body['refresh_token'];
       _setConnectionState(Connection.authenticated);
       if (settings != null) {

@@ -144,11 +144,7 @@ class _PlannerPageState extends State<PlannerPage> {
                                     Padding(
                                       padding: const EdgeInsets.only(bottom: 8),
                                       child: Text(
-                                        DateFormat.E()
-                                                    .dateSymbols
-                                                    .STANDALONEWEEKDAYS[
-                                                weekdayMapping[day]! % 7] +
-                                            ':',
+                                        '${DateFormat.E().dateSymbols.STANDALONEWEEKDAYS[weekdayMapping[day]! % 7]}:',
                                         style: Theme.of(context)
                                             .textTheme
                                             .headline6,
@@ -187,7 +183,7 @@ class _PlannerPageState extends State<PlannerPage> {
                     padding: const EdgeInsets.all(16),
                     sliver: SliverToBoxAdapter(
                       child: Text(
-                        AppLocalizations.of(context)!.recipesRecent + ':',
+                        '${AppLocalizations.of(context)!.recipesRecent}:',
                         style: Theme.of(context).textTheme.headline6,
                       ),
                     ),
@@ -227,15 +223,14 @@ class _PlannerPageState extends State<PlannerPage> {
                         children: [
                           Expanded(
                             child: Text(
-                              AppLocalizations.of(context)!.recipesSuggested +
-                                  ':',
+                              '${AppLocalizations.of(context)!.recipesSuggested}:',
                               style: Theme.of(context).textTheme.headline6,
                             ),
                           ),
                           InkWell(
                             borderRadius: BorderRadius.circular(50),
-                            child: const Icon(Icons.refresh),
                             onTap: cubit.refreshSuggestions,
+                            child: const Icon(Icons.refresh),
                           ),
                         ],
                       ),

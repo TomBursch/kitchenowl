@@ -106,6 +106,7 @@ class _CreateUserPageState extends State<CreateUserPage> {
                                   nameController.text,
                                   passwordController.text,
                                 );
+                                if (!mounted) return;
                                 Navigator.of(context).pop(UpdateEnum.updated);
                               }
                             },

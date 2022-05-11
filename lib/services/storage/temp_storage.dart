@@ -19,7 +19,7 @@ class TempStorage {
 
   Future<String> get _localPath async {
     final temp = await getTemporaryDirectory();
-    final directory = Directory(temp.path + '/kitchenowl');
+    final directory = Directory('${temp.path}/kitchenowl');
     if (!await directory.exists()) directory.create();
 
     return directory.path;

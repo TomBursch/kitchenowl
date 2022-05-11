@@ -12,7 +12,7 @@ Future<File?> selectFile({
   required String title,
   bool deleteOption = false,
 }) async {
-  final ImagePicker _picker = ImagePicker();
+  final ImagePicker picker = ImagePicker();
 
   if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
     int? i = await showDialog<int>(
@@ -42,7 +42,7 @@ Future<File?> selectFile({
     );
     if (i == null) return null;
     if (i == -1) return File('');
-    XFile? result = await _picker.pickImage(
+    XFile? result = await picker.pickImage(
       source: ImageSource.values[i],
       imageQuality: 90,
       maxHeight: 2048,

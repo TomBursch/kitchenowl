@@ -94,6 +94,7 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                   onPressed: state.isValid()
                       ? () async {
                           await cubit.saveRecipe();
+                          if (!mounted) return;
                           Navigator.of(context).pop(UpdateEnum.updated);
                         }
                       : null,
@@ -115,29 +116,6 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                     buildWhen: (previous, current) =>
                         previous.image != current.image,
                     builder: (context, state) => Container(
-                      child: IconButton(
-                        icon: (state.image != null &&
-                                    state.image!.path.isNotEmpty ||
-                                state.image == null &&
-                                    cubit.recipe.image.isNotEmpty)
-                            ? const Icon(Icons.edit)
-                            : const Icon(Icons.add_photo_alternate_rounded),
-                        color: Theme.of(context).colorScheme.secondary,
-                        onPressed: () async {
-                          File? file = await selectFile(
-                            context: context,
-                            title:
-                                AppLocalizations.of(context)!.recipeImageSelect,
-                            deleteOption: (state.image != null &&
-                                    state.image!.path.isNotEmpty ||
-                                state.image == null &&
-                                    cubit.recipe.image.isNotEmpty),
-                          );
-                          if (file != null) {
-                            cubit.setImage(file);
-                          }
-                        },
-                      ),
                       margin: const EdgeInsets.all(16),
                       constraints: const BoxConstraints.expand(height: 80),
                       decoration: BoxDecoration(
@@ -161,6 +139,29 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                                       ),
                               )
                             : null,
+                      ),
+                      child: IconButton(
+                        icon: (state.image != null &&
+                                    state.image!.path.isNotEmpty ||
+                                state.image == null &&
+                                    cubit.recipe.image.isNotEmpty)
+                            ? const Icon(Icons.edit)
+                            : const Icon(Icons.add_photo_alternate_rounded),
+                        color: Theme.of(context).colorScheme.secondary,
+                        onPressed: () async {
+                          File? file = await selectFile(
+                            context: context,
+                            title:
+                                AppLocalizations.of(context)!.recipeImageSelect,
+                            deleteOption: (state.image != null &&
+                                    state.image!.path.isNotEmpty ||
+                                state.image == null &&
+                                    cubit.recipe.image.isNotEmpty),
+                          );
+                          if (file != null) {
+                            cubit.setImage(file);
+                          }
+                        },
                       ),
                     ),
                   ),
@@ -290,7 +291,7 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                       children: [
                         Expanded(
                           child: Text(
-                            AppLocalizations.of(context)!.items + ':',
+                            '${AppLocalizations.of(context)!.items}:',
                             style: Theme.of(context).textTheme.headline6,
                           ),
                         ),
@@ -346,7 +347,7 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                     children: [
                       Expanded(
                         child: Text(
-                          AppLocalizations.of(context)!.itemsOptional + ':',
+                          '${AppLocalizations.of(context)!.itemsOptional}:',
                           style: Theme.of(context).textTheme.headline6,
                         ),
                       ),
@@ -416,6 +417,7 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                         );
                         if (confirmed) {
                           cubit.removeRecipe();
+                          if (!mounted) return;
                           Navigator.of(context).pop(UpdateEnum.deleted);
                         }
                       },
@@ -434,6 +436,7 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                         onPressed: state.isValid()
                             ? () async {
                                 await cubit.saveRecipe();
+                                if (!mounted) return;
                                 Navigator.of(context).pop(UpdateEnum.updated);
                               }
                             : null,

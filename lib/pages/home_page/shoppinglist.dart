@@ -248,7 +248,7 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                             padding: const EdgeInsets.all(16),
                             sliver: SliverToBoxAdapter(
                               child: Text(
-                                AppLocalizations.of(context)!.itemsRecent + ':',
+                                '${AppLocalizations.of(context)!.itemsRecent}:',
                                 style: Theme.of(context).textTheme.headline6,
                               ),
                             ),

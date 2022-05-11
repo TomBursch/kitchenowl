@@ -16,8 +16,8 @@ import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/widgets/recipe_source_chip.dart';
 import 'package:kitchenowl/widgets/shopping_item.dart';
 import 'package:responsive_builder/responsive_builder.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class RecipePage extends StatefulWidget {
   final Recipe recipe;
@@ -141,6 +141,7 @@ class _RecipePageState extends State<RecipePage> {
                               cubit.refresh();
                             }
                             if (res == UpdateEnum.deleted) {
+                              if (!mounted) return;
                               Navigator.of(context).pop(UpdateEnum.deleted);
                             }
                           },
@@ -174,10 +175,7 @@ class _RecipePageState extends State<RecipePage> {
                                     color: Colors.white,
                                   ),
                                   label: Text(
-                                    state.recipe.time.toString() +
-                                        " " +
-                                        AppLocalizations.of(context)!
-                                            .minutesAbbrev,
+                                    "${state.recipe.time} ${AppLocalizations.of(context)!.minutesAbbrev}",
                                     style: const TextStyle(color: Colors.white),
                                   ),
                                   backgroundColor:
@@ -210,8 +208,9 @@ class _RecipePageState extends State<RecipePage> {
                                   const Icon(Icons.error),
                             ),
                             onTapLink: (text, href, title) async {
-                              if (href != null && await canLaunch(href)) {
-                                await launch(href);
+                              if (href != null &&
+                                  await canLaunchUrlString(href)) {
+                                await launchUrlString(href);
                               }
                             },
                           ),
@@ -224,7 +223,7 @@ class _RecipePageState extends State<RecipePage> {
                       padding: const EdgeInsets.all(16),
                       sliver: SliverToBoxAdapter(
                         child: Text(
-                          AppLocalizations.of(context)!.items + ':',
+                          '${AppLocalizations.of(context)!.items}:',
                           style: Theme.of(context).textTheme.headline6,
                         ),
                       ),
@@ -261,7 +260,7 @@ class _RecipePageState extends State<RecipePage> {
                       padding: const EdgeInsets.all(16),
                       sliver: SliverToBoxAdapter(
                         child: Text(
-                          AppLocalizations.of(context)!.itemsOptional + ':',
+                          '${AppLocalizations.of(context)!.itemsOptional}:',
                           style: Theme.of(context).textTheme.headline6,
                         ),
                       ),
@@ -299,14 +298,14 @@ class _RecipePageState extends State<RecipePage> {
                       child: BlocBuilder<RecipeCubit, RecipeState>(
                         bloc: cubit,
                         builder: (context, state) => LoadingElevatedButton(
+                          onPressed: state.selectedItems.isEmpty
+                              ? null
+                              : cubit.addItemsToList,
                           child: Text(
                             AppLocalizations.of(context)!.addNumberIngredients(
                               state.selectedItems.length,
                             ),
                           ),
-                          onPressed: state.selectedItems.isEmpty
-                              ? null
-                              : cubit.addItemsToList,
                         ),
                       ),
                     ),
@@ -331,6 +330,7 @@ class _RecipePageState extends State<RecipePage> {
                                   await cubit.addRecipeToPlanner(
                                     updateOnAdd: widget.updateOnPlanningEdit,
                                   );
+                                  if (!mounted) return;
                                   Navigator.of(context).pop(
                                     widget.updateOnPlanningEdit
                                         ? UpdateEnum.updated

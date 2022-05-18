@@ -3,8 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/cubits/item_search_cubit.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/kitchenowl.dart';
-import 'package:kitchenowl/widgets/shopping_item.dart';
-import 'package:responsive_builder/responsive_builder.dart';
 
 class ItemSearchPage extends StatefulWidget {
   final bool multiple;
@@ -40,12 +38,6 @@ class _ItemSearchPageState extends State<ItemSearchPage> {
 
   @override
   Widget build(BuildContext context) {
-    final int crossAxisCount = getValueForScreenType<int>(
-      context: context,
-      mobile: 3,
-      tablet: 6,
-      desktop: 9,
-    );
     final appbar = AppBar(
       title: Text(widget.title ?? AppLocalizations.of(context)!.itemsAdd),
       leading: BackButton(
@@ -76,7 +68,7 @@ class _ItemSearchPageState extends State<ItemSearchPage> {
                     final item = cubit.state.searchResults.first;
                     Navigator.of(context).pop([item]);
                   } else {
-                    cubit.itemSelected(0);
+                    cubit.itemSelected(cubit.state.searchResults.first);
                   }
                 },
                 decoration: InputDecoration(
@@ -117,25 +109,21 @@ class _ItemSearchPageState extends State<ItemSearchPage> {
         ),
         body: BlocBuilder<ItemSearchCubit, ItemSearchState>(
           bloc: cubit,
-          builder: (context, state) => GridView.builder(
-            padding: const EdgeInsets.all(16),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: crossAxisCount,
-              crossAxisSpacing: 4,
-              mainAxisSpacing: 4,
-            ),
-            itemCount: state.searchResults.length,
-            itemBuilder: (context, i) => ShoppingItemWidget(
-              item: state.searchResults[i],
-              selected: state.selectedItems.contains(state.searchResults[i]),
-              onPressed: (item) {
-                if (!widget.multiple) {
-                  Navigator.of(context).pop([item]);
-                } else {
-                  cubit.itemSelected(i);
-                }
-              },
-            ),
+          builder: (context, state) => CustomScrollView(
+            slivers: [
+              SliverItemGridList(
+                items: state.searchResults,
+                selected: (item) => state.selectedItems.contains(item),
+                onLongPressed: (_) {},
+                onPressed: (item) {
+                  if (!widget.multiple) {
+                    Navigator.of(context).pop([item]);
+                  } else {
+                    cubit.itemSelected(item);
+                  }
+                },
+              ),
+            ],
           ),
         ),
       ),

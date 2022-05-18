@@ -21,6 +21,23 @@ class TransactionItemGet extends Transaction<Item> {
   }
 }
 
+class TransactionItemUpdate extends Transaction<bool> {
+  final Item item;
+
+  TransactionItemUpdate({required this.item, DateTime? timestamp})
+      : super.internal(timestamp ?? DateTime.now(), "TransactionItemUpdate");
+
+  @override
+  Future<bool> runLocal() async {
+    return false;
+  }
+
+  @override
+  Future<bool> runOnline() async {
+    return await ApiService.getInstance().updateItem(item);
+  }
+}
+
 class TransactionItemGetRecipes extends Transaction<List<Recipe>> {
   final Item item;
 

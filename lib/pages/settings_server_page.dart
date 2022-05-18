@@ -144,6 +144,107 @@ class _SettingsServerPageState extends State<SettingsServerPage> {
                   children: [
                     Expanded(
                       child: Text(
+                        '${AppLocalizations.of(context)!.categories}:',
+                        style: Theme.of(context).textTheme.headline6,
+                      ),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.add),
+                      onPressed: () async {
+                        final res = await showDialog<String>(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return TextDialog(
+                              title: AppLocalizations.of(context)!.addCategory,
+                              doneText: AppLocalizations.of(context)!.add,
+                              hintText: AppLocalizations.of(context)!.name,
+                            );
+                          },
+                        );
+                        if (res != null && res.isNotEmpty) {
+                          cubit.addCategory(res);
+                        }
+                      },
+                      padding: EdgeInsets.zero,
+                    ),
+                  ],
+                ),
+                BlocBuilder<SettingsServerCubit, SettingsServerState>(
+                  bloc: cubit,
+                  buildWhen: (prev, curr) => prev.categories != curr.categories,
+                  builder: (context, state) => ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    padding: EdgeInsets.zero,
+                    itemCount: state.categories.length,
+                    itemBuilder: (context, i) => Dismissible(
+                      key: ValueKey<String>(
+                        state.categories.elementAt(i).name,
+                      ),
+                      confirmDismiss: (direction) async {
+                        return (await askForConfirmation(
+                          context: context,
+                          title: Text(
+                            AppLocalizations.of(context)!.categoryDelete,
+                          ),
+                          content: Text(
+                            AppLocalizations.of(context)!
+                                .categoryDeleteConfirmation(
+                              state.categories.elementAt(i).name,
+                            ),
+                          ),
+                        ));
+                      },
+                      onDismissed: (direction) {
+                        cubit.deleteCategory(
+                          state.categories.elementAt(i),
+                        );
+                      },
+                      background: Container(
+                        alignment: Alignment.centerLeft,
+                        padding: const EdgeInsets.only(left: 16),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          color: Colors.red,
+                        ),
+                        child: const Icon(
+                          Icons.delete,
+                          color: Colors.white,
+                        ),
+                      ),
+                      secondaryBackground: Container(
+                        alignment: Alignment.centerRight,
+                        padding: const EdgeInsets.only(right: 16),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          color: Colors.red,
+                        ),
+                        child: const Icon(
+                          Icons.delete,
+                          color: Colors.white,
+                        ),
+                      ),
+                      child: Card(
+                        child: ListTile(
+                          title: Text(
+                            state.categories.elementAt(i).name,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Text(
+                  AppLocalizations.of(context)!.swipeToDeleteType(
+                    AppLocalizations.of(context)!.categories,
+                  ),
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.caption,
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
                         '${AppLocalizations.of(context)!.tags}:',
                         style: Theme.of(context).textTheme.headline6,
                       ),
@@ -245,7 +346,7 @@ class _SettingsServerPageState extends State<SettingsServerPage> {
                                 children: [
                                   Expanded(
                                     child: Text(
-                                      '${AppLocalizations.of(context)!.categories}:',
+                                      '${AppLocalizations.of(context)!.expenseCategories}:',
                                       style:
                                           Theme.of(context).textTheme.headline6,
                                     ),

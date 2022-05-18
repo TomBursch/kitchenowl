@@ -32,6 +32,12 @@
     "categories": "Categories",
     "category": "Category",
     "categoryDelete": "Delete Category",
+    "categoryDeleteConfirmation": "Are you sure you want to delete {category}? This will remove the category from all items.",
+    "@categoryDeleteConfirmation": {
+        "placeholders": {
+            "category": {}
+        }
+    },
     "categoryExpenseDeleteConfirmation": "Are you sure you want to delete {category}? This will remove the category from all expenses.",
     "@categoryExpenseDeleteConfirmation": {
         "placeholders": {
@@ -44,6 +50,7 @@
     "description": "Description",
     "expenseAdd": "Add Expense",
     "expenseAmount": "Amount",
+    "expenseCategories": "Expense Categories",
     "expenseEdit": "Edit Expense",
     "expenseEmpty": "No expenses, start by creating one!",
     "expenseFactor": "Factor",

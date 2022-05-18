@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/app.dart';
 import 'package:kitchenowl/cubits/item_edit_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
+import 'package:kitchenowl/models/category.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/update_value.dart';
@@ -10,8 +11,10 @@ import 'package:kitchenowl/widgets/recipe_item.dart';
 
 class ItemPage<T extends Item> extends StatefulWidget {
   final T item;
+  final List<Category> categories;
 
-  const ItemPage({Key? key, required this.item}) : super(key: key);
+  const ItemPage({Key? key, required this.item, this.categories = const []})
+      : super(key: key);
 
   @override
   _ItemPageState createState() => _ItemPageState<T>();
@@ -43,7 +46,7 @@ class _ItemPageState<T extends Item> extends State<ItemPage<T>> {
     return WillPopScope(
       onWillPop: () async {
         if (cubit.hasChanged()) {
-          if (widget.item is ShoppinglistItem) await cubit.saveItem();
+          await cubit.saveItem();
           if (!mounted) return false;
           Navigator.of(context)
               .pop(UpdateValue<T>(UpdateEnum.updated, cubit.item));
@@ -115,21 +118,69 @@ class _ItemPageState<T extends Item> extends State<ItemPage<T>> {
                     ),
                   ),
                 if (widget.item is! RecipeItem)
+                  SliverPadding(
+                    padding: EdgeInsets.only(
+                      top: (widget.item is ItemWithDescription) ? 0 : 16,
+                      bottom: 16,
+                      left: 16,
+                      right: 16,
+                    ),
+                    sliver: SliverList(
+                      delegate: SliverChildListDelegate(
+                        [
+                          Text(
+                            AppLocalizations.of(context)!.category,
+                            style: Theme.of(context).textTheme.caption,
+                          ),
+                          Row(
+                            children: [
+                              Expanded(
+                                child:
+                                    BlocBuilder<ItemEditCubit, ItemEditState>(
+                                  bloc: cubit,
+                                  buildWhen: (prev, curr) =>
+                                      prev.category != curr.category,
+                                  builder: (context, state) =>
+                                      DropdownButton<Category?>(
+                                    value: state.category,
+                                    isExpanded: true,
+                                    items: [
+                                      for (final e in widget.categories)
+                                        DropdownMenuItem(
+                                          value: e,
+                                          child: Text(e.name),
+                                        ),
+                                      DropdownMenuItem(
+                                        value: null,
+                                        child: Text(
+                                          AppLocalizations.of(context)!.none,
+                                        ),
+                                      ),
+                                    ],
+                                    onChanged: !App.isOffline
+                                        ? cubit.setCategory
+                                        : null,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                if (widget.item is! RecipeItem)
                   BlocBuilder<ItemEditCubit, ItemEditState>(
                     bloc: cubit,
                     builder: (context, state) {
                       return SliverPadding(
-                        padding: EdgeInsets.only(
-                          top: (widget.item is ShoppinglistItem) ? 0 : 16,
-                          bottom: 16,
-                        ),
+                        padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
                         sliver: SliverList(
                           delegate: SliverChildBuilderDelegate(
                             (context, i) {
                               if (i == 0) {
                                 return Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(13, 0, 13, 8),
+                                  padding: const EdgeInsets.only(bottom: 8),
                                   child: Text(
                                     '${AppLocalizations.of(context)!.usedIn}:',
                                     style:
@@ -139,25 +190,20 @@ class _ItemPageState<T extends Item> extends State<ItemPage<T>> {
                               }
                               i = i - 1;
 
-                              return Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 13),
-                                child: RecipeItemWidget(
-                                  recipe: state.recipes[i],
-                                  onUpdated: cubit.refresh,
-                                  description: state.recipes[i].isPlanned &&
-                                          state.recipes[i].items.isNotEmpty &&
-                                          state.recipes[i].items.first
-                                              .description.isNotEmpty
-                                      ? Text(
-                                          state.recipes[i].items.first
-                                              .description,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .caption,
-                                        )
-                                      : null,
-                                ),
+                              return RecipeItemWidget(
+                                recipe: state.recipes[i],
+                                onUpdated: cubit.refresh,
+                                description: state.recipes[i].isPlanned &&
+                                        state.recipes[i].items.isNotEmpty &&
+                                        state.recipes[i].items.first.description
+                                            .isNotEmpty
+                                    ? Text(
+                                        state
+                                            .recipes[i].items.first.description,
+                                        style:
+                                            Theme.of(context).textTheme.caption,
+                                      )
+                                    : null,
                               );
                             },
                             childCount: state.recipes.length + 1,

@@ -8,14 +8,13 @@ class ItemSearchCubit extends Cubit<ItemSearchState> {
   ItemSearchCubit(List<Item> selectedItems)
       : super(ItemSearchState(selectedItems, '', const []));
 
-  void itemSelected(int i) {
+  void itemSelected(Item item) {
     final List<Item> selectedItems = List.from(state.selectedItems);
-    final bool containsItem =
-        state.selectedItems.contains(state.searchResults[i]);
+    final bool containsItem = state.selectedItems.contains(item);
     if (containsItem) {
-      selectedItems.removeWhere((e) => e == state.searchResults[i]);
+      selectedItems.removeWhere((e) => e == item);
     } else {
-      selectedItems.add(state.searchResults[i]);
+      selectedItems.add(item);
     }
     emit(ItemSearchState(selectedItems, '', state.searchResults));
   }

@@ -3,7 +3,7 @@ from os.path import exists
 import json
 
 from app.errors import NotFoundRequest
-from app.models import Item, Recipe, RecipeItems, Tag, RecipeTags
+from app.models import Item, Recipe, RecipeItems, Tag, RecipeTags, Category
 
 
 def importFromLanguage(lang):
@@ -12,14 +12,23 @@ def importFromLanguage(lang):
         raise NotFoundRequest('Language code not supported')
     with open(file_path, 'r') as f:
         data = json.load(f)
-    importFromDict(data)
+    importFromDict(data, True)
 
 
-def importFromDict(args):  # noqa
+def importFromDict(args, default=False):  # noqa
     if "items" in args:
         for importItem in args['items']:
             if not Item.find_by_name(importItem['name']):
-                Item.create_by_name(importItem['name'])
+                item = Item()
+                item.name = importItem['name']
+                item.default = default
+                if "category" in importItem:
+                    category = Category.find_by_name(importItem['category'])
+                    if not category:
+                        category = Category.create_by_name(
+                            importItem['category'], default)
+                    item.category = category
+                item.save()
     if "recipes" in args:
         for importRecipe in args['recipes']:
             recipeNameCount = 0
@@ -36,7 +45,7 @@ def importFromDict(args):  # noqa
                 for recipeItem in importRecipe['items']:
                     item = Item.find_by_name(recipeItem['name'])
                     if not item:
-                        item = Item.create_by_name(recipeItem['name'])
+                        item = Item.create_by_name(recipeItem['name'], default)
                     con = RecipeItems(
                         description=recipeItem['description'],
                         optional=recipeItem['optional']

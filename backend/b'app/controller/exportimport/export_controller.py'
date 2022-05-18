@@ -9,7 +9,7 @@ export = Blueprint('export', __name__)
 @jwt_required()
 def getExportAll():
     return jsonify({
-        "items": [e.obj_to_export_dict() for e in Item.all()],
+        "items": [e.obj_to_export_dict() for e in Item.allByName()],
         "recipes": [e.obj_to_export_dict() for e in Recipe.all()]
     })
 
@@ -17,7 +17,7 @@ def getExportAll():
 @export.route('/items', methods=['GET'])
 @jwt_required()
 def getExportItems():
-    return jsonify({"items": [e.obj_to_export_dict() for e in Item.all()]})
+    return jsonify({"items": [e.obj_to_export_dict() for e in Item.allByName()]})
 
 
 @export.route('/recipes', methods=['GET'])

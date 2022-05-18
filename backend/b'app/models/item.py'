@@ -1,5 +1,7 @@
+from __future__ import annotations
 from app import db
 from app.helpers import DbModelMixin, TimestampMixin
+from app.models.category import Category
 
 
 class Item(db.Model, DbModelMixin, TimestampMixin):
@@ -7,6 +9,10 @@ class Item(db.Model, DbModelMixin, TimestampMixin):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(128), unique=True)
+    category_id = db.Column(db.Integer, db.ForeignKey('category.id'))
+    default = db.Column(db.Boolean, default=False)
+
+    category = db.relationship("Category")
 
     recipes = db.relationship(
         'RecipeItems', back_populates='item', cascade="all, delete-orphan")
@@ -25,24 +31,41 @@ class Item(db.Model, DbModelMixin, TimestampMixin):
     consequents = db.relationship(
         "Association", back_populates="consequent", foreign_keys='Association.consequent_id')
 
+    def obj_to_dict(self):
+        res = super().obj_to_dict()
+        if self.category_id:
+            category = Category.find_by_id(self.category_id)
+            res['category'] = category.obj_to_dict()
+        return res
+
     def obj_to_export_dict(self):
         res = {
             "name": self.name,
         }
+        if self.category:
+            res["category"] = self.category.name
         return res
 
     @classmethod
-    def create_by_name(cls, name):
+    def create_by_name(cls, name, default=False) -> Item:
         return cls(
             name=name,
+            default=default,
         ).save()
 
     @classmethod
-    def find_by_name(cls, name):
+    def allByName(cls):
+        """
+        Return all instances of Item ordered by name
+        """
+        return cls.query.order_by(cls.name).all()
+
+    @classmethod
+    def find_by_name(cls, name) -> Item:
         return cls.query.filter(cls.name == name).first()
 
     @classmethod
-    def find_by_id(cls, id):
+    def find_by_id(cls, id) -> Item:
         return cls.query.filter(cls.id == id).first()
 
     @classmethod

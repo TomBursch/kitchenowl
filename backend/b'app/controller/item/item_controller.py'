@@ -2,8 +2,8 @@ from app.helpers import validate_args
 from flask import jsonify, Blueprint
 from app.errors import NotFoundRequest
 from flask_jwt_extended import jwt_required
-from app.models import Item, RecipeItems, Recipe
-from .schemas import SearchByNameRequest
+from app.models import Item, RecipeItems, Recipe, Category
+from .schemas import SearchByNameRequest, UpdateItem
 
 item = Blueprint('item', __name__)
 
@@ -45,3 +45,22 @@ def deleteItemById(id):
 @validate_args(SearchByNameRequest)
 def searchItemByName(args):
     return jsonify([e.obj_to_dict() for e in Item.search_name(args['query'])])
+
+
+@item.route('/<id>', methods=['POST'])
+@jwt_required()
+@validate_args(UpdateItem)
+def updateItem(args, id):
+    item = Item.find_by_id(id)
+    if not item:
+        raise NotFoundRequest()
+    if 'category' in args:
+        if not args['category']:
+            item.category = None
+        else:
+            category = Category.find_by_name(args['category'])
+            if not category:
+                category = Category.create_by_name(args['category'])
+            item.category = category
+    item.save()
+    return jsonify(item.obj_to_dict())

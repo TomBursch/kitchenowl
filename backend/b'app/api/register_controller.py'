@@ -5,6 +5,7 @@ import app.controller as api
 app.register_blueprint(
     api.health, url_prefix='/api/health/8M4F88S8ooi4sMbLBfkkV7ctWwgibW6V')
 app.register_blueprint(api.auth,       url_prefix='/api/auth')
+app.register_blueprint(api.category,   url_prefix='/api/category')
 app.register_blueprint(api.expense,    url_prefix='/api/expense')
 app.register_blueprint(api.export,     url_prefix='/api/export')
 app.register_blueprint(api.importBP,   url_prefix='/api/import')

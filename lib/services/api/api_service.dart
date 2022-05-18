@@ -16,6 +16,7 @@ export 'import_export.dart';
 export 'expense.dart';
 export 'tag.dart';
 export 'upload.dart';
+export 'category.dart';
 
 enum Connection {
   disconnected,
@@ -100,7 +101,8 @@ class ApiService {
       if (healthy.item1) {
         if (healthy.item2 != null &&
             healthy.item2!['min_frontend_version'] <=
-                (int.tryParse(Config.packageInfo?.buildNumber ?? '0') ?? 0) &&
+                (int.tryParse((await Config.packageInfo)?.buildNumber ?? '0') ??
+                    0) &&
             (healthy.item2!['version'] ?? 0) >= Config.MIN_BACKEND_VERSION) {
           _settingsNotifier.value = ServerSettings.fromJson(healthy.item2!);
 

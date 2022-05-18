@@ -29,7 +29,7 @@ class SettingsCubit extends Cubit<SettingsState> {
   Future<void> load() async {
     final themeModeIndex =
         await PreferenceStorage.getInstance().readInt(key: 'themeMode');
-    Config.packageInfo = await PackageInfo.fromPlatform();
+    Config.packageInfo = PackageInfo.fromPlatform();
 
     ThemeMode themeMode = ThemeMode.system;
     if (themeModeIndex != null) {

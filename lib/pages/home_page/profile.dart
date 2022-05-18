@@ -139,7 +139,7 @@ class ProfilePage extends StatelessWidget {
                       trailing: const Icon(Icons.arrow_right_rounded),
                       onTap: () => showAboutDialog(
                         context: context,
-                        applicationVersion: Config.packageInfo?.version,
+                        applicationVersion: Config.packageInfoSync?.version,
                         applicationLegalese:
                             '\u{a9} ${AppLocalizations.of(context)!.appLegal}',
                         applicationIcon: ConstrainedBox(

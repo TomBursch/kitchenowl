@@ -117,6 +117,7 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                               MaterialPageRoute(
                                 builder: (BuildContext context) => ItemPage(
                                   item: item,
+                                  categories: state.categories,
                                 ),
                               ),
                             );
@@ -147,8 +148,10 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                           final res = await Navigator.of(context)
                               .push<UpdateValue<Item>>(
                             MaterialPageRoute(
-                              builder: (BuildContext context) =>
-                                  ItemPage(item: item),
+                              builder: (BuildContext context) => ItemPage(
+                                item: item,
+                                categories: state.categories,
+                              ),
                             ),
                           );
                           if (res != null &&
@@ -277,6 +280,7 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                                         builder: (BuildContext context) =>
                                             ItemPage(
                                           item: item,
+                                          categories: state.categories,
                                         ),
                                       ),
                                     );

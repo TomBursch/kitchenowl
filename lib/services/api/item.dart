@@ -40,7 +40,8 @@ extension ItemApi on ApiService {
   }
 
   Future<bool> updateItem(Item item) async {
-    final res = await post('$baseRoute/${item.id}', item.toJson());
+    final res =
+        await post('$baseRoute/${item.id}', jsonEncode(item.toJsonWithId()));
 
     return res.statusCode == 200;
   }

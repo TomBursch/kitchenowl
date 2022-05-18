@@ -5,7 +5,6 @@ import 'package:kitchenowl/cubits/shoppinglist_cubit.dart';
 import 'package:kitchenowl/models/category.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/kitchenowl.dart';
-import 'package:responsive_builder/responsive_builder.dart';
 
 class ShoppinglistPage extends StatefulWidget {
   const ShoppinglistPage({Key? key}) : super(key: key);

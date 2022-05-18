@@ -3,8 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/cubits/item_search_cubit.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/kitchenowl.dart';
-import 'package:kitchenowl/widgets/shopping_item.dart';
-import 'package:responsive_builder/responsive_builder.dart';
 
 class ItemSearchPage extends StatefulWidget {
   final bool multiple;

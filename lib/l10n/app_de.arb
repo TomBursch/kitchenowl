@@ -60,6 +60,7 @@
     "gallery": "Gallerie",
     "grid": "Gitter",
     "go": "Los",
+    "itemDelete": "Artikel Löschen",
     "items": "Artikel",
     "itemsAdd": "Hinzufügen",
     "itemDeleteConfirmation": "Bist du dir sicher, dass du {item} löschen möchtest? Diese Aktion entfernt den Artikel von allen Rezepten.",

@@ -30,6 +30,7 @@ class SearchTextField extends StatelessWidget {
       onEditingComplete: clearOnSubmit ? () => onSearch('') : null,
       onSubmitted: onSubmitted != null ? (_) => onSubmitted!() : null,
       autofocus: autofocus,
+      scrollPadding: EdgeInsets.zero,
       decoration: decoration?.applyDefaults(InputDecorationTheme(
             border: const OutlineInputBorder(),
             fillColor: Theme.of(context).scaffoldBackgroundColor,

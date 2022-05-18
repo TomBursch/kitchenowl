@@ -60,6 +60,7 @@
     "gallery": "Gallery",
     "grid": "Grid",
     "go": "Go",
+    "itemDelete": "Delete Item",
     "items": "Items",
     "itemsAdd": "Add Items",
     "itemDeleteConfirmation": "Are you sure you want to delete {item}? This will remove the item from any recipe containing it.",

@@ -63,7 +63,7 @@ class _ItemPageState<T extends Item> extends State<ItemPage<T>> {
                   final confirmed = await askForConfirmation(
                     context: context,
                     title: Text(
-                      AppLocalizations.of(context)!.userDelete,
+                      AppLocalizations.of(context)!.itemDelete,
                     ),
                     content: Text(
                       AppLocalizations.of(context)!

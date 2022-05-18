@@ -51,8 +51,8 @@ dependencies:
   flutter_markdown: ^0.6.10
   tuple: ^2.0.0
   charts_flutter: ^0.12.0
-  cached_network_image: ^3.2.0
-  image_picker: ^0.8.5+2
+  cached_network_image: ^3.2.1
+  image_picker: ^0.8.5+3
   file_picker: ^4.5.1
   photo_view: ^0.13.0
 

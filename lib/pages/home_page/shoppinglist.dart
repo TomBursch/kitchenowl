@@ -88,6 +88,8 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                 child: BlocBuilder<ShoppinglistCubit, ShoppinglistCubitState>(
                   bloc: cubit,
                   builder: (context, state) {
+                    // TODO: clean up whatever this method is...
+
                     if (state is SearchShoppinglistCubitState) {
                       return GridView.builder(
                         padding: const EdgeInsets.symmetric(horizontal: 16),

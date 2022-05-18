@@ -2,13 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/app.dart';
 import 'package:kitchenowl/cubits/shoppinglist_cubit.dart';
-import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/models/category.dart';
 import 'package:kitchenowl/models/item.dart';
-import 'package:kitchenowl/models/update_value.dart';
-import 'package:kitchenowl/pages/item_page.dart';
 import 'package:kitchenowl/kitchenowl.dart';
-import 'package:kitchenowl/widgets/shopping_item.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
 class ShoppinglistPage extends StatefulWidget {
@@ -36,12 +32,6 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
   @override
   Widget build(BuildContext context) {
     final cubit = BlocProvider.of<ShoppinglistCubit>(context);
-    final int crossAxisCount = getValueForScreenType<int>(
-      context: context,
-      mobile: 3,
-      tablet: 6,
-      desktop: 9,
-    );
     final isOffline = App.isOffline;
 
     return SafeArea(
@@ -88,357 +78,132 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                 child: BlocBuilder<ShoppinglistCubit, ShoppinglistCubitState>(
                   bloc: cubit,
                   builder: (context, state) {
-                    // TODO: clean up whatever this method is...
-
                     if (state is SearchShoppinglistCubitState) {
-                      return GridView.builder(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: crossAxisCount,
-                          crossAxisSpacing: 3,
-                          mainAxisSpacing: 4,
-                        ),
-                        itemCount: state.result.length,
-                        itemBuilder: (context, i) => ShoppingItemWidget(
-                          item: state.result[i],
-                          selected: state.result[i] is ShoppinglistItem,
-                          onPressed: (Item item) {
-                            if (item is ShoppinglistItem) {
-                              cubit.remove(item);
-                            } else {
-                              cubit.add(
-                                item.name,
-                                (item is ItemWithDescription)
-                                    ? item.description
-                                    : null,
-                              );
-                            }
-                          },
-                          onLongPressed: (Item item) async {
-                            final res = await Navigator.of(context)
-                                .push<UpdateValue<Item>>(
-                              MaterialPageRoute(
-                                builder: (BuildContext context) => ItemPage(
-                                  item: item,
-                                  categories: state.categories,
-                                ),
-                              ),
-                            );
-                            if (res != null &&
-                                (res.state == UpdateEnum.deleted ||
-                                    res.state == UpdateEnum.updated)) {
-                              cubit.refresh();
-                            }
-                          },
-                        ),
+                      return CustomScrollView(
+                        slivers: [
+                          SliverItemGridList(
+                            items: state.result,
+                            categories: state.categories,
+                            onRefresh: cubit.refresh,
+                            selected: (item) => item is ShoppinglistItem,
+                            onPressed: (Item item) {
+                              if (item is ShoppinglistItem) {
+                                cubit.remove(item);
+                              } else {
+                                cubit.add(
+                                  item.name,
+                                  (item is ItemWithDescription)
+                                      ? item.description
+                                      : null,
+                                );
+                              }
+                            },
+                          ),
+                        ],
                       );
                     }
 
                     dynamic body;
 
                     if (state.sorting != ShoppinglistSorting.category) {
-                      body = SliverChildBuilderDelegate(
-                        (context, i) => ShoppingItemWidget(
-                          key: ObjectKey(state.listItems[i]),
-                          item: state.listItems[i],
-                          selected: true,
-                          gridStyle: state.style == ShoppinglistStyle.grid,
-                          onPressed: (Item item) {
-                            if (item is ShoppinglistItem) {
-                              cubit.remove(item);
-                            } else {
-                              cubit.add(item.name);
-                            }
-                          },
-                          onLongPressed: (ShoppinglistItem item) async {
-                            final res = await Navigator.of(context)
-                                .push<UpdateValue<Item>>(
-                              MaterialPageRoute(
-                                builder: (BuildContext context) => ItemPage(
-                                  item: item,
-                                  categories: state.categories,
-                                ),
-                              ),
-                            );
-                            if (res != null &&
-                                (res.state == UpdateEnum.deleted ||
-                                    res.state == UpdateEnum.updated)) {
-                              cubit.refresh();
-                            }
-                          },
-                        ),
-                        childCount: state.listItems.length,
-                      );
-
-                      body = state.style == ShoppinglistStyle.grid
-                          ? SliverGrid(
-                              gridDelegate:
-                                  SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: crossAxisCount,
-                                mainAxisSpacing: 4,
-                                crossAxisSpacing: 4,
-                                childAspectRatio: 1,
-                              ),
-                              delegate: body,
-                            )
-                          : SliverList(delegate: body);
-
-                      body = SliverPadding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        sliver: body,
+                      body = SliverItemGridList(
+                        items: state.listItems,
+                        categories: state.categories,
+                        isList: state.style == ShoppinglistStyle.list,
+                        selected: (item) => item is ShoppinglistItem,
+                        onRefresh: cubit.refresh,
+                        onPressed: (Item item) {
+                          if (item is ShoppinglistItem) {
+                            cubit.remove(item);
+                          } else {
+                            cubit.add(item.name);
+                          }
+                        },
                       );
                     } else {
                       List<Widget> grids = [];
                       // add items from categories
-                      for (Category category in state.categories) {
+                      for (int i = 0; i < state.categories.length + 1; i++) {
+                        Category? category = i < state.categories.length
+                            ? state.categories[i]
+                            : null;
                         final List<ShoppinglistItem> items = state.listItems
                             .where((e) => e.category == category)
                             .toList();
                         if (items.isNotEmpty) {
                           grids.add(
-                            SliverPadding(
-                              padding: const EdgeInsets.symmetric(vertical: 8),
-                              sliver: SliverToBoxAdapter(
-                                  child: Text(
-                                category.name,
-                                style: Theme.of(context).textTheme.headline6,
-                              )),
+                            SliverText(
+                              category?.name ??
+                                  AppLocalizations.of(context)!.uncategorized,
+                              padding: i != 0
+                                  ? const EdgeInsets.symmetric(
+                                      horizontal: 16, vertical: 8)
+                                  : const EdgeInsets.fromLTRB(16, 0, 16, 8),
+                              style: Theme.of(context).textTheme.headline6,
                             ),
-                          );
-                          final delegate = SliverChildBuilderDelegate(
-                            (context, i) => ShoppingItemWidget(
-                              key: ObjectKey(items[i]),
-                              item: items[i],
-                              selected: true,
-                              gridStyle: state.style == ShoppinglistStyle.grid,
-                              onPressed: (Item item) {
-                                if (item is ShoppinglistItem) {
-                                  cubit.remove(item);
-                                } else {
-                                  cubit.add(item.name);
-                                }
-                              },
-                              onLongPressed: (ShoppinglistItem item) async {
-                                final res = await Navigator.of(context)
-                                    .push<UpdateValue<Item>>(
-                                  MaterialPageRoute(
-                                    builder: (BuildContext context) => ItemPage(
-                                      item: item,
-                                      categories: state.categories,
-                                    ),
-                                  ),
-                                );
-                                if (res != null &&
-                                    (res.state == UpdateEnum.deleted ||
-                                        res.state == UpdateEnum.updated)) {
-                                  cubit.refresh();
-                                }
-                              },
-                            ),
-                            childCount: items.length,
                           );
 
-                          grids.add(state.style == ShoppinglistStyle.grid
-                              ? SliverGrid(
-                                  gridDelegate:
-                                      SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: crossAxisCount,
-                                    mainAxisSpacing: 4,
-                                    crossAxisSpacing: 4,
-                                    childAspectRatio: 1,
-                                  ),
-                                  delegate: delegate,
-                                )
-                              : SliverList(delegate: delegate));
+                          grids.add(SliverItemGridList(
+                            items: items,
+                            categories: state.categories,
+                            isList: state.style == ShoppinglistStyle.list,
+                            selected: (item) => item is ShoppinglistItem,
+                            onRefresh: cubit.refresh,
+                            onPressed: (Item item) {
+                              if (item is ShoppinglistItem) {
+                                cubit.remove(item);
+                              } else {
+                                cubit.add(item.name);
+                              }
+                            },
+                          ));
                         }
                       }
-                      // add remaining
-                      final List<ShoppinglistItem> items = state.listItems
-                          .where((e) => e.category == null)
-                          .toList();
-                      final delegate = SliverChildBuilderDelegate(
-                        (context, i) => ShoppingItemWidget(
-                          key: ObjectKey(items[i]),
-                          item: items[i],
-                          selected: true,
-                          gridStyle: state.style == ShoppinglistStyle.grid,
-                          onPressed: (Item item) {
-                            if (item is ShoppinglistItem) {
-                              cubit.remove(item);
-                            } else {
-                              cubit.add(item.name);
-                            }
-                          },
-                          onLongPressed: (ShoppinglistItem item) async {
-                            final res = await Navigator.of(context)
-                                .push<UpdateValue<Item>>(
-                              MaterialPageRoute(
-                                builder: (BuildContext context) => ItemPage(
-                                  item: item,
-                                  categories: state.categories,
-                                ),
-                              ),
-                            );
-                            if (res != null &&
-                                (res.state == UpdateEnum.deleted ||
-                                    res.state == UpdateEnum.updated)) {
-                              cubit.refresh();
-                            }
-                          },
-                        ),
-                        childCount: items.length,
-                      );
-
-                      if (grids.isNotEmpty) {
-                        grids.add(
-                          SliverPadding(
-                            padding: const EdgeInsets.symmetric(vertical: 8),
-                            sliver: SliverToBoxAdapter(
-                                child: Text(
-                              AppLocalizations.of(context)!.uncategorized,
-                              style: Theme.of(context).textTheme.headline6,
-                            )),
-                          ),
-                        );
-                      }
-
-                      grids.add(state.style == ShoppinglistStyle.grid
-                          ? SliverGrid(
-                              gridDelegate:
-                                  SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: crossAxisCount,
-                                mainAxisSpacing: 4,
-                                crossAxisSpacing: 4,
-                                childAspectRatio: 1,
-                              ),
-                              delegate: delegate,
-                            )
-                          : SliverList(delegate: delegate));
-
-                      body = grids
-                          .map(
-                            (e) => SliverPadding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 16),
-                              sliver: e,
-                            ),
-                          )
-                          .toList();
+                      body = grids;
                     }
 
                     return CustomScrollView(
                       slivers: [
-                        SliverPadding(
-                          padding: const EdgeInsets.fromLTRB(16, 0, 16, 6),
-                          sliver: SliverToBoxAdapter(
-                            child: Row(
-                              children: [
-                                // TextButton(
-                                //   onPressed: cubit.incrementStyle,
-                                //   child: Padding(
-                                //     padding: const EdgeInsets.only(
-                                //       right: 4,
-                                //       left: 1,
-                                //     ),
-                                //     child: Row(
-                                //       mainAxisSize: MainAxisSize.min,
-                                //       children: [
-                                //         Icon(state.style ==
-                                //                 ShoppinglistStyle.grid
-                                //             ? Icons.grid_view_rounded
-                                //             : Icons.view_list_rounded),
-                                //         const SizedBox(width: 4),
-                                //         Text(state.style ==
-                                //                 ShoppinglistStyle.grid
-                                //             ? AppLocalizations.of(context)!.grid
-                                //             : AppLocalizations.of(context)!
-                                //                 .list),
-                                //       ],
-                                //     ),
-                                //   ),
-                                // ),
-                                const Spacer(),
-                                TextButton(
-                                  onPressed: cubit.incrementSorting,
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(
-                                      left: 4,
-                                      right: 1,
-                                    ),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Text(state.sorting ==
-                                                ShoppinglistSorting.alphabetical
-                                            ? AppLocalizations.of(context)!
-                                                .sortingAlphabetical
-                                            : state.sorting ==
-                                                    ShoppinglistSorting
-                                                        .algorithmic
-                                                ? AppLocalizations.of(context)!
-                                                    .sortingAlgorithmic
-                                                : AppLocalizations.of(context)!
-                                                    .category),
-                                        const SizedBox(width: 4),
-                                        const Icon(Icons.sort),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
+                        SliverOptionsHeader(
+                          // left: HeaderButton(
+                          //     text: state.style == ShoppinglistStyle.grid
+                          //         ? AppLocalizations.of(context)!.grid
+                          //         : AppLocalizations.of(context)!.list,
+                          //     icon: Icon(
+                          //       state.style == ShoppinglistStyle.grid
+                          //           ? Icons.grid_view_rounded
+                          //           : Icons.view_list_rounded,
+                          //     ),
+                          //     onPressed: cubit.incrementStyle),
+                          right: HeaderButton(
+                            text: state.sorting ==
+                                    ShoppinglistSorting.alphabetical
+                                ? AppLocalizations.of(context)!
+                                    .sortingAlphabetical
+                                : state.sorting ==
+                                        ShoppinglistSorting.algorithmic
+                                    ? AppLocalizations.of(context)!
+                                        .sortingAlgorithmic
+                                    : AppLocalizations.of(context)!.category,
+                            icon: const Icon(Icons.sort),
+                            onPressed: cubit.incrementSorting,
                           ),
                         ),
                         if (body is List) ...body,
                         if (body is! List) body,
                         if (!isOffline)
-                          SliverPadding(
+                          SliverText(
                             padding: const EdgeInsets.all(16),
-                            sliver: SliverToBoxAdapter(
-                              child: Text(
-                                '${AppLocalizations.of(context)!.itemsRecent}:',
-                                style: Theme.of(context).textTheme.headline6,
-                              ),
-                            ),
+                            '${AppLocalizations.of(context)!.itemsRecent}:',
+                            style: Theme.of(context).textTheme.headline6,
                           ),
                         if (!isOffline)
-                          SliverPadding(
-                            padding: const EdgeInsets.symmetric(horizontal: 16),
-                            sliver: SliverGrid(
-                              gridDelegate:
-                                  SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: crossAxisCount,
-                                mainAxisSpacing: 4,
-                                crossAxisSpacing: 4,
-                                childAspectRatio: 1,
-                              ),
-                              delegate: SliverChildBuilderDelegate(
-                                (context, i) => ShoppingItemWidget(
-                                  key: ObjectKey(state.recentItems[i]),
-                                  item: state.recentItems[i],
-                                  onPressed: (Item item) =>
-                                      cubit.add(item.name),
-                                  onLongPressed: (Item item) async {
-                                    final res = await Navigator.of(context)
-                                        .push<UpdateValue<Item>>(
-                                      MaterialPageRoute(
-                                        builder: (BuildContext context) =>
-                                            ItemPage(
-                                          item: item,
-                                          categories: state.categories,
-                                        ),
-                                      ),
-                                    );
-                                    if (res != null &&
-                                        (res.state == UpdateEnum.deleted ||
-                                            res.state == UpdateEnum.updated)) {
-                                      cubit.refresh();
-                                    }
-                                  },
-                                ),
-                                childCount: state.recentItems.length,
-                              ),
-                            ),
+                          SliverItemGridList(
+                            items: state.recentItems,
+                            onPressed: (Item item) => cubit.add(item.name),
+                            categories: state.categories,
+                            onRefresh: cubit.refresh,
+                            isList: state.style == ShoppinglistStyle.list,
                           ),
                       ],
                     );

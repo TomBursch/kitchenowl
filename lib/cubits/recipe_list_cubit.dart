@@ -113,9 +113,9 @@ class FilteredListRecipeCubitState extends ListRecipeCubitState {
   const FilteredListRecipeCubitState({
     this.selectedTags = const {},
     this.allRecipes = const [],
-    List<Recipe> recipes = const [],
-    Set<Tag> tags = const {},
-  }) : super(recipes: recipes, tags: tags);
+    super.recipes = const [],
+    super.tags = const {},
+  });
 
   factory FilteredListRecipeCubitState.fromState(
     ListRecipeCubitState state,
@@ -151,9 +151,9 @@ class SearchRecipeCubitState extends ListRecipeCubitState {
 
   const SearchRecipeCubitState({
     required this.query,
-    List<Recipe> recipes = const [],
-    Set<Tag> tags = const {},
-  }) : super(recipes: recipes, tags: tags);
+    super.recipes = const [],
+    super.tags = const {},
+  });
 
   @override
   List<Object?> get props => super.props + [query];

@@ -115,7 +115,7 @@ class _ItemSearchPageState extends State<ItemSearchPage> {
                 items: state.searchResults,
                 selected: (item) => state.selectedItems.contains(item),
                 onLongPressed: (_) {},
-                onPressed: (item) {
+                onPressed: (Item item) {
                   if (!widget.multiple) {
                     Navigator.of(context).pop([item]);
                   } else {

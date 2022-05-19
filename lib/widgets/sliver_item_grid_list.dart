@@ -7,14 +7,14 @@ import 'package:kitchenowl/pages/item_page.dart';
 import 'package:kitchenowl/widgets/shopping_item.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
-class SliverItemGridList extends StatelessWidget {
+class SliverItemGridList<T extends Item> extends StatelessWidget {
   final void Function()? onRefresh;
-  final void Function(Item)? onPressed;
-  final void Function(Item)? onLongPressed;
-  final List<Item> items;
+  final void Function(T)? onPressed;
+  final void Function(T)? onLongPressed;
+  final List<T> items;
   final List<Category>? categories; // forwared to item page on long press
   final bool isList;
-  final bool Function(Item)? selected;
+  final bool Function(T)? selected;
 
   const SliverItemGridList({
     Key? key,
@@ -29,6 +29,10 @@ class SliverItemGridList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (items.isEmpty) {
+      return const SliverToBoxAdapter(child: SizedBox(height: 0));
+    }
+
     final int crossAxisCount = getValueForScreenType<int>(
       context: context,
       mobile: 3,
@@ -38,7 +42,7 @@ class SliverItemGridList extends StatelessWidget {
 
     final delegate = SliverChildBuilderDelegate(
       childCount: items.length,
-      (context, i) => ShoppingItemWidget(
+      (context, i) => ShoppingItemWidget<T>(
         key: ObjectKey(items[i]),
         item: items[i],
         selected: selected?.call(items[i]) ?? false,

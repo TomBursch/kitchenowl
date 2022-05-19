@@ -14,8 +14,6 @@ import 'package:kitchenowl/pages/photo_view_page.dart';
 import 'package:kitchenowl/pages/recipe_add_update_page.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/widgets/recipe_source_chip.dart';
-import 'package:kitchenowl/widgets/shopping_item.dart';
-import 'package:responsive_builder/responsive_builder.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
@@ -50,13 +48,6 @@ class _RecipePageState extends State<RecipePage> {
 
   @override
   Widget build(BuildContext context) {
-    final int crossAxisCount = getValueForScreenType<int>(
-      context: context,
-      mobile: 3,
-      tablet: 6,
-      desktop: 9,
-    );
-
     return WillPopScope(
       onWillPop: () async {
         Navigator.of(context).pop(cubit.state.updateState);
@@ -229,31 +220,12 @@ class _RecipePageState extends State<RecipePage> {
                       ),
                     ),
                   if (state.recipe.items.where((e) => !e.optional).isNotEmpty)
-                    SliverPadding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      sliver: SliverGrid(
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: crossAxisCount,
-                          mainAxisSpacing: 4,
-                          crossAxisSpacing: 4,
-                          childAspectRatio: 1,
-                        ),
-                        delegate: SliverChildBuilderDelegate(
-                          (context, i) => ShoppingItemWidget(
-                            onPressed: cubit.itemSelected,
-                            selected: state.selectedItems.contains(state
-                                .recipe.items
-                                .where((e) => !e.optional)
-                                .elementAt(i)),
-                            item: state.recipe.items
-                                .where((e) => !e.optional)
-                                .elementAt(i),
-                          ),
-                          childCount: state.recipe.items
-                              .where((e) => !e.optional)
-                              .length,
-                        ),
-                      ),
+                    SliverItemGridList(
+                      items:
+                          state.recipe.items.where((e) => !e.optional).toList(),
+                      selected: (item) => state.selectedItems.contains(item),
+                      onPressed: cubit.itemSelected,
+                      onLongPressed: (_) {},
                     ),
                   if (state.recipe.items.where((e) => e.optional).isNotEmpty)
                     SliverPadding(
@@ -266,31 +238,12 @@ class _RecipePageState extends State<RecipePage> {
                       ),
                     ),
                   if (state.recipe.items.where((e) => e.optional).isNotEmpty)
-                    SliverPadding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      sliver: SliverGrid(
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: crossAxisCount,
-                          mainAxisSpacing: 4,
-                          crossAxisSpacing: 4,
-                          childAspectRatio: 1,
-                        ),
-                        delegate: SliverChildBuilderDelegate(
-                          (context, i) => ShoppingItemWidget(
-                            onPressed: cubit.itemSelected,
-                            selected: state.selectedItems.contains(state
-                                .recipe.items
-                                .where((e) => e.optional)
-                                .elementAt(i)),
-                            item: state.recipe.items
-                                .where((e) => e.optional)
-                                .elementAt(i),
-                          ),
-                          childCount: state.recipe.items
-                              .where((e) => e.optional)
-                              .length,
-                        ),
-                      ),
+                    SliverItemGridList(
+                      items:
+                          state.recipe.items.where((e) => e.optional).toList(),
+                      selected: (item) => state.selectedItems.contains(item),
+                      onPressed: cubit.itemSelected,
+                      onLongPressed: (_) {},
                     ),
                   SliverPadding(
                     padding: const EdgeInsets.all(16),

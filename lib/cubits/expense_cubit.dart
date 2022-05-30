@@ -22,7 +22,7 @@ class ExpenseCubit extends Cubit<ExpenseCubitState> {
     emit(state.copyWith(updateState: updateState));
   }
 
-  void refresh() async {
+  Future<void> refresh() async {
     if (_refreshLock) return;
     _refreshLock = true;
     final expense = await TransactionHandler.getInstance()

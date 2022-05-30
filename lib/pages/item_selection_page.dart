@@ -9,12 +9,14 @@ class ItemSelectionPage extends StatefulWidget {
   final List<Recipe> recipes;
   final String? title;
   final String Function(Object) selectText;
+  final Future<List<RecipeItem>> Function(List<RecipeItem>)? handleResult;
 
   const ItemSelectionPage({
     Key? key,
     this.title,
     this.recipes = const [],
     required this.selectText,
+    this.handleResult,
   }) : super(key: key);
 
   @override
@@ -90,11 +92,17 @@ class _ItemSelectionPageState extends State<ItemSelectionPage> {
             SliverPadding(
               padding: const EdgeInsets.all(16),
               sliver: SliverToBoxAdapter(
-                child: ElevatedButton(
+                child: LoadingElevatedButton(
                   onPressed: state.getResult().isEmpty
                       ? null
                       : () async {
-                          Navigator.of(context).pop(cubit.getResult());
+                          if (widget.handleResult != null) {
+                            Navigator.of(context).pop(
+                              await widget.handleResult!(cubit.getResult()),
+                            );
+                          } else {
+                            Navigator.of(context).pop(cubit.getResult());
+                          }
                         },
                   child: Text(
                     AppLocalizations.of(context)!.addNumberIngredients(

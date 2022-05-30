@@ -293,17 +293,21 @@ class _PlannerPageState extends State<PlannerPage> {
     BuildContext context,
     PlannerCubit cubit,
   ) async {
-    final res = await Navigator.of(context).push<List<RecipeItem>>(
+    await Navigator.of(context).push<List<RecipeItem>>(
       MaterialPageRoute(
         builder: (context) => ItemSelectionPage(
           selectText: AppLocalizations.of(context)!.addNumberIngredients,
           recipes: cubit.state.plannedRecipes,
           title: AppLocalizations.of(context)!.addItemTitle,
+          handleResult: (res) async {
+            if (res.isNotEmpty) {
+              await cubit.addItemsToList(res);
+            }
+
+            return res;
+          },
         ),
       ),
     );
-    if (res != null && res.isNotEmpty) {
-      cubit.addItemsToList(res);
-    }
   }
 }

@@ -55,7 +55,7 @@ class _ExpensePageState extends State<ExpensePage> {
             ),
             actions: [
               if (!App.isOffline)
-                IconButton(
+                LoadingIconButton(
                   onPressed: () async {
                     final res = await Navigator.of(context)
                         .push<UpdateEnum>(MaterialPageRoute(
@@ -66,7 +66,7 @@ class _ExpensePageState extends State<ExpensePage> {
                     ));
                     if (res == UpdateEnum.updated) {
                       cubit.setUpdateState(UpdateEnum.updated);
-                      cubit.refresh();
+                      await cubit.refresh();
                     }
                     if (res == UpdateEnum.deleted) {
                       if (!mounted) return;

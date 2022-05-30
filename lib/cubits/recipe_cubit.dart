@@ -31,7 +31,7 @@ class RecipeCubit extends Cubit<RecipeState> {
     emit(state.copyWith(updateState: updateState));
   }
 
-  void refresh() async {
+  Future<void> refresh() async {
     final recipe = await TransactionHandler.getInstance()
         .runTransaction(TransactionRecipeGetRecipe(recipe: state.recipe));
     emit(state.copyWith(

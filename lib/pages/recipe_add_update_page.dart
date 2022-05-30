@@ -352,7 +352,7 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                 SliverPadding(
                   padding: const EdgeInsets.all(16),
                   sliver: SliverToBoxAdapter(
-                    child: ElevatedButton(
+                    child: LoadingElevatedButton(
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all<Color>(
                           Colors.redAccent,

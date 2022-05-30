@@ -107,7 +107,7 @@ class _SettingsUserPageState extends State<SettingsUserPage> {
                       ),
                     Padding(
                       padding: const EdgeInsets.only(top: 16, bottom: 8),
-                      child: ElevatedButton(
+                      child: LoadingElevatedButton(
                         onPressed: () => cubit.updateUser(
                           context: context,
                           name: nameController.text,
@@ -126,7 +126,7 @@ class _SettingsUserPageState extends State<SettingsUserPage> {
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 16, bottom: 8),
-                      child: ElevatedButton(
+                      child: LoadingElevatedButton(
                         onPressed: () => cubit.updateUser(
                           context: context,
                           password: passwordController.text,

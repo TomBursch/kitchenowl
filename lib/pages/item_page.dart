@@ -61,7 +61,7 @@ class _ItemPageState<T extends Item> extends State<ItemPage<T>> {
           title: Text(widget.item.name),
           actions: [
             if (widget.item is! RecipeItem && !App.isOffline)
-              IconButton(
+              LoadingIconButton(
                 onPressed: () async {
                   final confirmed = await askForConfirmation(
                     context: context,
@@ -74,7 +74,7 @@ class _ItemPageState<T extends Item> extends State<ItemPage<T>> {
                     ),
                   );
                   if (confirmed) {
-                    cubit.deleteItem();
+                    await cubit.deleteItem();
                     if (!mounted) return;
                     Navigator.of(context)
                         .pop(const UpdateValue<Item>(UpdateEnum.deleted));

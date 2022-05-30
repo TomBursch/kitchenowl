@@ -112,7 +112,7 @@ class _SettingsServerPageState extends State<SettingsServerPage> {
                   title: Text(AppLocalizations.of(context)!.language),
                   leading: const Icon(Icons.language_rounded),
                   contentPadding: const EdgeInsets.only(left: 20, right: 5),
-                  trailing: ElevatedButton(
+                  trailing: LoadingElevatedButton(
                     child: Text(AppLocalizations.of(context)!.add),
                     onPressed: () async {
                       final language = await showDialog<String>(
@@ -136,7 +136,7 @@ class _SettingsServerPageState extends State<SettingsServerPage> {
                             .addLanguageConfirm(language)),
                       );
                       if (!confirm) return;
-                      ApiService.getInstance().importLanguage(language);
+                      await ApiService.getInstance().importLanguage(language);
                     },
                   ),
                 ),

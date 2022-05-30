@@ -136,7 +136,9 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                                   AppLocalizations.of(context)!.uncategorized,
                               padding: i != 0
                                   ? const EdgeInsets.symmetric(
-                                      horizontal: 16, vertical: 8)
+                                      horizontal: 16,
+                                      vertical: 8,
+                                    )
                                   : const EdgeInsets.fromLTRB(16, 0, 16, 8),
                               style: Theme.of(context).textTheme.headline6,
                             ),

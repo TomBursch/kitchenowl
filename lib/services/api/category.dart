@@ -10,8 +10,9 @@ extension CategoryApi on ApiService {
     final res = await get(baseRoute);
     if (res.statusCode != 200) return null;
 
-    return List<Category>.from(
-        jsonDecode(res.body).map((e) => Category.fromJson(e)));
+    return List<Category>.from(jsonDecode(res.body).map(
+      (e) => Category.fromJson(e),
+    ));
   }
 
   Future<bool> addCategory(Category category) async {

@@ -60,6 +60,7 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
     emit(state.copyWith(style: style));
   }
 
+  // ignore: long-method
   Future<void> refresh([String? query]) async {
     if (_refreshLock) return;
     _refreshLock = true;
@@ -119,6 +120,7 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
       if (sorting != ShoppinglistSorting.alphabetical) {
         shoppinglist = shoppinglist.then((shoppinglist) {
           _sortShoppinglistItems(shoppinglist, sorting);
+
           return shoppinglist;
         });
       }
@@ -175,6 +177,7 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
           final int ordering =
               a.category?.name.compareTo(b.category!.name) ?? 0;
           if (ordering == 0) return a.name.compareTo(b.name);
+
           return ordering;
         });
         break;

@@ -5,13 +5,15 @@ class TextDialog extends StatelessWidget {
   final String title;
   final String hintText;
   final String doneText;
+  final TextInputType? textInputType;
 
   TextDialog({
-    Key? key,
+    super.key,
     this.title = "",
     this.doneText = "",
     this.hintText = "",
-  }) : super(key: key);
+    this.textInputType,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +25,7 @@ class TextDialog extends StatelessWidget {
         autofocus: true,
         onSubmitted: (t) => Navigator.of(context).pop(t),
         decoration: InputDecoration(hintText: hintText),
+        keyboardType: textInputType,
       ),
       actions: [
         TextButton(

@@ -11,12 +11,9 @@ import 'package:kitchenowl/cubits/settings_cubit.dart';
 import 'package:kitchenowl/cubits/shoppinglist_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/pages/expense_add_update_page.dart';
-import 'package:kitchenowl/pages/recipe_add_update_page.dart';
 import 'package:kitchenowl/pages/home_page/home_page.dart';
 import 'package:kitchenowl/kitchenowl.dart';
-import 'package:kitchenowl/widgets/action_widget.dart';
-import 'package:kitchenowl/widgets/expandable_fab.dart';
-import 'package:kitchenowl/widgets/text_dialog.dart';
+import 'package:kitchenowl/widgets/recipe_create_fab.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
 class HomePage extends StatefulWidget {
@@ -114,48 +111,8 @@ class _HomePageState extends State<HomePage> {
                   }
                 },
                 floatingActionButton: !isOffline
-                    ? ExpandableFab(
-                        distance: 70,
-                        openIcon: const Icon(Icons.add),
-                        children: [
-                          ActionButton(
-                            onPressed: () async {
-                              final res = await Navigator.of(context)
-                                  .push<UpdateEnum>(MaterialPageRoute(
-                                      builder: (context) =>
-                                          const AddUpdateRecipePage()));
-                              if (res == UpdateEnum.updated) {
-                                recipeListCubit.refresh();
-                              }
-                            },
-                            icon: const Icon(Icons.add),
-                          ),
-                          ActionButton(
-                              onPressed: () async {
-                                final url = await showDialog<String>(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return TextDialog(
-                                        title: AppLocalizations.of(context)!
-                                            .addTag,
-                                        doneText:
-                                            AppLocalizations.of(context)!.add,
-                                        hintText:
-                                            AppLocalizations.of(context)!.name,
-                                      );
-                                    });
-                                if (url == null || url.isEmpty) return;
-
-                                final res = await Navigator.of(context)
-                                    .push<UpdateEnum>(MaterialPageRoute(
-                                        builder: (context) =>
-                                            const AddUpdateRecipePage()));
-                                if (res == UpdateEnum.updated) {
-                                  recipeListCubit.refresh();
-                                }
-                              },
-                              icon: const Icon(Icons.link_rounded)),
-                        ],
+                    ? RecipeCreateFab(
+                        recipeListCubit: recipeListCubit,
                       )
                     : null,
               ),

@@ -90,6 +90,7 @@ class _ExpandableFabState extends State<ExpandableFab>
         ),
       );
     }
+
     return children;
   }
 
@@ -167,6 +168,7 @@ class _ExpandingActionButton extends StatelessWidget {
           directionInDegrees * (math.pi / 180.0),
           progress.value * maxDistance,
         );
+
         return Positioned(
           right: 4.0 + offset.dx,
           bottom: 4.0 + offset.dy,

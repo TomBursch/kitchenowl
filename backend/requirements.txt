@@ -62,7 +62,7 @@ pytz==2022.1
 pytz-deprecation-shim==0.1.0.post0
 rdflib==6.1.1
 rdflib-jsonld==0.6.2
-recipe-scrapers==14.1.0
+recipe-scrapers==14.2.0
 regex==2022.4.24
 requests==2.27.1
 scikit-learn==1.1.1

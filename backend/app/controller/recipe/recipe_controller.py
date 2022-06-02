@@ -149,11 +149,17 @@ def scrapeRecipe(args):
     scraper = scrape_me(args['url'], wild_mode=True)
     recipe = Recipe()
     recipe.name = scraper.title()
-    recipe.time = scraper.total_time()
+    recipe.time = int(scraper.total_time())
     recipe.description = scraper.description() + "\n\n" + scraper.instructions()
     recipe.photo = scraper.image()
     recipe.source = args['url']
-    return jsonify(recipe.obj_to_dict())
+    items = {}
+    for ingredient in scraper.ingredients():
+        items[ingredient] = None
+    return jsonify({
+        'recipe': recipe.obj_to_dict(),
+        'items': items,
+    })
 
 
 # @recipe.route('/<id>/item', methods=['POST'])

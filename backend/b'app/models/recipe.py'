@@ -30,7 +30,7 @@ class Recipe(db.Model, DbModelMixin, TimestampMixin):
 
     def obj_to_dict(self):
         res = super().obj_to_dict()
-        res['planned_days'] = list(self.planned_days)
+        res['planned_days'] = list(self.planned_days or set())
         return res
 
     def obj_to_full_dict(self) -> dict:

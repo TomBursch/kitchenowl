@@ -10,7 +10,6 @@ export 'confirmation_dialog.dart';
 export 'select_dialog.dart';
 export 'select_file.dart';
 export 'expandable_fab.dart';
-export 'action_widget.dart';
 export 'sliver_item_grid_list.dart';
 export 'sliver_text.dart';
 export 'sliver_options_header.dart';

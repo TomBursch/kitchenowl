@@ -48,6 +48,7 @@
     "darkmode": "Nachtmodus",
     "delete": "Löschen",
     "description": "Beschreibung",
+    "error": "Ein Fehler ist aufgetreten",
     "expenseAdd": "Ausgabe Hinzufügen",
     "expenseAmount": "Betrag",
     "expenseCategories": "Ausgaben Kategorien",
@@ -98,6 +99,7 @@
         }
     },
     "onboardingTitle": "Lass uns einen Nutzer erstellen",
+    "optional": "Optional",
     "or": "oder",
     "other": "Anderer",
     "password": "Passwort",
@@ -107,6 +109,7 @@
     "plannerTitle": "Deine geplanten Mahlzeiten",
     "profile": "Profil",
     "recipeAdd": "Rezept Hinzufügen",
+    "recipeAddUrl": "Rezept von URL Hinzufügen",
     "recipeDelete": "Rezept löschen",
     "recipeDeleteConfirmation": "Bist du dir sicher, dass du {recipe} löschen möchtest?",
     "@recipeDeleteConfirmation": {

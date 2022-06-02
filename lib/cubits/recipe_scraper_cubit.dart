@@ -22,6 +22,15 @@ class RecipeScraperCubit extends Cubit<RecipeScraperState> {
     }
   }
 
+  void updateItem(String key, RecipeItem? item) {
+    final _state = state;
+    if (_state is RecipeScraperLoadedState) {
+      final map = Map.of(_state.items);
+      map[key] = item;
+      emit(_state.copyWith(items: map));
+    }
+  }
+
   bool hasValidRecipe() {
     return state is RecipeScraperLoadedState &&
         (state as RecipeScraperLoadedState).isValid();
@@ -29,14 +38,18 @@ class RecipeScraperCubit extends Cubit<RecipeScraperState> {
 
   Recipe? getRecipe() {
     if (!hasValidRecipe()) return null;
+    final items = (state as RecipeScraperLoadedState)
+        .items
+        .values
+        .where((e) => e != null)
+        .cast<RecipeItem>()
+        .fold<List<RecipeItem>>(
+      [],
+      (l, e) => l.map((o) => o.name).contains(e.name) ? l : l + [e],
+    ).toList();
 
     return (state as RecipeScraperLoadedState).recipe.copyWith(
-          items: (state as RecipeScraperLoadedState)
-              .items
-              .values
-              .where((e) => e != null)
-              .cast<RecipeItem>()
-              .toList(),
+          items: items,
         );
   }
 }
@@ -74,7 +87,7 @@ class RecipeScraperLoadedState extends RecipeScraperState {
         items: items ?? this.items,
       );
 
-  bool isValid() => false;
+  bool isValid() => true;
 
   @override
   List<Object?> get props => [recipe, items];

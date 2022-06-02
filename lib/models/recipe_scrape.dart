@@ -13,7 +13,10 @@ class RecipeScrape extends Equatable {
 
   factory RecipeScrape.fromJson(Map<String, dynamic> map) => RecipeScrape(
         recipe: Recipe.fromJson(map['recipe']),
-        items: map['items'],
+        items: (map['items'] as Map<String, dynamic>).map<String, RecipeItem?>(
+          (key, value) =>
+              MapEntry(key, value != null ? RecipeItem.fromJson(value) : null),
+        ),
       );
 
   @override

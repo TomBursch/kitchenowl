@@ -19,7 +19,7 @@ class RecipeCreateFab extends StatelessWidget {
       distance: 70,
       openIcon: const Icon(Icons.add),
       children: [
-        ActionButton(
+        FloatingActionButton(
           onPressed: () async {
             final res =
                 await Navigator.of(context).push<UpdateEnum>(MaterialPageRoute(
@@ -29,15 +29,16 @@ class RecipeCreateFab extends StatelessWidget {
               recipeListCubit.refresh();
             }
           },
-          icon: const Icon(Icons.note_add_rounded),
+          elevation: 4.0,
+          child: const Icon(Icons.note_add_rounded),
         ),
-        ActionButton(
+        FloatingActionButton(
           onPressed: () async {
             final url = await showDialog<String>(
               context: context,
               builder: (BuildContext context) {
                 return TextDialog(
-                  title: AppLocalizations.of(context)!.addTag,
+                  title: AppLocalizations.of(context)!.recipeAddUrl,
                   doneText: AppLocalizations.of(context)!.add,
                   hintText: 'https://recipepage.com/spaghetti',
                   textInputType: TextInputType.url,
@@ -56,7 +57,8 @@ class RecipeCreateFab extends StatelessWidget {
               recipeListCubit.refresh();
             }
           },
-          icon: const Icon(Icons.link_rounded),
+          elevation: 4.0,
+          child: const Icon(Icons.link_rounded),
         ),
       ],
     );

@@ -48,6 +48,7 @@
     "darkmode": "Darkmode",
     "delete": "Delete",
     "description": "Description",
+    "error": "An error occured",
     "expenseAdd": "Add Expense",
     "expenseAmount": "Amount",
     "expenseCategories": "Expense Categories",
@@ -98,6 +99,7 @@
         }
     },
     "onboardingTitle": "Let's create a user",
+    "optional": "Optional",
     "or": "or",
     "other": "other",
     "password": "Password",
@@ -107,6 +109,7 @@
     "plannerTitle": "Your planned meals",
     "profile": "Profile",
     "recipeAdd": "Add Recipe",
+    "recipeAddUrl": "Add Recipe from URL",
     "recipeDelete": "Delete Recipe",
     "recipeDeleteConfirmation": "Are you sure you want to remove {recipe}?",
     "@recipeDeleteConfirmation": {

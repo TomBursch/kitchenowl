@@ -178,7 +178,8 @@ class RecipeItem extends ItemWithDescription {
       RecipeItem(
         id: item.id,
         name: item.name,
-        description: description,
+        description:
+            item is ItemWithDescription ? item.description : description,
         optional: optional,
       );
 

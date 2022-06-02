@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/cubits/recipe_scraper_cubit.dart';
+import 'package:kitchenowl/enums/update_enum.dart';
+import 'package:kitchenowl/kitchenowl.dart';
+import 'package:kitchenowl/pages/recipe_add_update_page.dart';
+import 'package:kitchenowl/widgets/string_item_match.dart';
 
 class RecipeScraperPage extends StatefulWidget {
   final String url;
@@ -15,39 +19,101 @@ class RecipeScraperPage extends StatefulWidget {
 }
 
 class _RecipeScraperPageState extends State<RecipeScraperPage> {
-  late RecipeScraperCubit bloc;
+  late RecipeScraperCubit cubit;
 
   @override
   void initState() {
     super.initState();
-    bloc = RecipeScraperCubit(widget.url);
+    cubit = RecipeScraperCubit(widget.url);
   }
 
   @override
   void dispose() {
-    bloc.close();
+    cubit.close();
     super.dispose();
   }
 
   @override
-  Widget build(BuildContext context) =>
-      BlocBuilder<RecipeScraperCubit, RecipeScraperState>(
-        bloc: bloc,
-        builder: (context, state) {
-          if (state is! RecipeScraperLoadedState) {
+  Widget build(BuildContext context) => BlocProvider.value(
+        value: cubit,
+        child: BlocBuilder<RecipeScraperCubit, RecipeScraperState>(
+          bloc: cubit,
+          builder: (context, state) {
+            if (state is! RecipeScraperLoadedState) {
+              return Scaffold(
+                appBar: AppBar(
+                  title: Text(widget.url),
+                ),
+                body: Center(
+                  child: state is RecipeScraperErrorState
+                      ? Text(AppLocalizations.of(context)!.error)
+                      : const CircularProgressIndicator(),
+                ),
+              );
+            }
+
             return Scaffold(
               appBar: AppBar(
-                title: Text(widget.url),
+                title: Text(state.recipe.name),
               ),
-              body: const Center(child: CircularProgressIndicator()),
-            );
-          }
+              body: ConstrainedBox(
+                constraints: const BoxConstraints.expand(width: 1600),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: CustomScrollView(
+                    slivers: [
+                      SliverList(
+                        delegate: SliverChildBuilderDelegate(
+                          childCount: state.items.length,
+                          (context, i) {
+                            final entry = state.items.entries.elementAt(i);
 
-          return Scaffold(
-            appBar: AppBar(
-              title: Text(state.recipe.name),
-            ),
-          );
-        },
+                            return StringItemMatch(
+                              string: entry.key,
+                              item: entry.value,
+                              itemSelected: (item) {
+                                cubit.updateItem(entry.key, item);
+                              },
+                            );
+                          },
+                        ),
+                      ),
+                      SliverPadding(
+                        padding: const EdgeInsets.only(top: 8),
+                        sliver: SliverToBoxAdapter(
+                          child: ElevatedButton(
+                            onPressed: state.isValid()
+                                ? () async {
+                                    if (!cubit.hasValidRecipe()) return;
+                                    final res = await Navigator.of(context)
+                                        .push<UpdateEnum>(MaterialPageRoute(
+                                      builder: (context) => AddUpdateRecipePage(
+                                        recipe: cubit.getRecipe()!,
+                                      ),
+                                    ));
+                                    if (res == UpdateEnum.updated) {
+                                      Navigator.of(context)
+                                          .pop(UpdateEnum.updated);
+                                    }
+                                  }
+                                : null,
+                            child: Text(
+                              AppLocalizations.of(context)!.next,
+                            ),
+                          ),
+                        ),
+                      ),
+                      SliverToBoxAdapter(
+                        child: SizedBox(
+                          height: MediaQuery.of(context).padding.bottom,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          },
+        ),
       );
 }

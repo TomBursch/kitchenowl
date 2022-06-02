@@ -38,15 +38,13 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
   void initState() {
     super.initState();
     isUpdate = widget.recipe.id != null;
-    if (isUpdate) {
-      nameController.text = widget.recipe.name;
-      descController.text = widget.recipe.description;
-      if (widget.recipe.time > 0) {
-        timeController.text = widget.recipe.time.toString();
-      }
-      if (widget.recipe.source.isNotEmpty) {
-        sourceController.text = widget.recipe.source;
-      }
+    nameController.text = widget.recipe.name;
+    descController.text = widget.recipe.description;
+    if (widget.recipe.time > 0) {
+      timeController.text = widget.recipe.time.toString();
+    }
+    if (widget.recipe.source.isNotEmpty) {
+      sourceController.text = widget.recipe.source;
     }
     cubit = AddUpdateRecipeCubit(widget.recipe);
   }
@@ -298,19 +296,15 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                   ),
                 ]),
               ),
-              SliverPadding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                sliver: BlocBuilder<AddUpdateRecipeCubit, AddUpdateRecipeState>(
-                  bloc: cubit,
-                  buildWhen: (previous, current) =>
-                      !listEquals(previous.items, current.items),
-                  builder: (context, state) => SliverItemGridList(
-                    items: state.items.where((e) => !e.optional).toList(),
-                    selected: (item) => true,
-                    onPressed: (RecipeItem item) => cubit.removeItem(item),
-                    onLongPressed: (RecipeItem item) =>
-                        _editItem(context, item),
-                  ),
+              BlocBuilder<AddUpdateRecipeCubit, AddUpdateRecipeState>(
+                bloc: cubit,
+                buildWhen: (previous, current) =>
+                    !listEquals(previous.items, current.items),
+                builder: (context, state) => SliverItemGridList(
+                  items: state.items.where((e) => !e.optional).toList(),
+                  selected: (item) => true,
+                  onPressed: (RecipeItem item) => cubit.removeItem(item),
+                  onLongPressed: (RecipeItem item) => _editItem(context, item),
                 ),
               ),
               SliverPadding(
@@ -333,19 +327,15 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                   ),
                 ),
               ),
-              SliverPadding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                sliver: BlocBuilder<AddUpdateRecipeCubit, AddUpdateRecipeState>(
-                  bloc: cubit,
-                  buildWhen: (previous, current) =>
-                      !listEquals(previous.items, current.items),
-                  builder: (context, state) => SliverItemGridList(
-                    items: state.items.where((e) => e.optional).toList(),
-                    selected: (item) => true,
-                    onPressed: (RecipeItem item) => cubit.removeItem(item),
-                    onLongPressed: (RecipeItem item) =>
-                        _editItem(context, item),
-                  ),
+              BlocBuilder<AddUpdateRecipeCubit, AddUpdateRecipeState>(
+                bloc: cubit,
+                buildWhen: (previous, current) =>
+                    !listEquals(previous.items, current.items),
+                builder: (context, state) => SliverItemGridList(
+                  items: state.items.where((e) => e.optional).toList(),
+                  selected: (item) => true,
+                  onPressed: (RecipeItem item) => cubit.removeItem(item),
+                  onLongPressed: (RecipeItem item) => _editItem(context, item),
                 ),
               ),
               if (isUpdate)
@@ -370,7 +360,7 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                           ),
                         );
                         if (confirmed) {
-                          cubit.removeRecipe();
+                          await cubit.removeRecipe();
                           if (!mounted) return;
                           Navigator.of(context).pop(UpdateEnum.deleted);
                         }

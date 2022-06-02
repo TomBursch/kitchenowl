@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:kitchenowl/models/recipe.dart';
+import 'package:kitchenowl/models/recipe_scrape.dart';
 import 'package:kitchenowl/models/tag.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
 
@@ -62,5 +63,14 @@ extension RecipeApi on ApiService {
     final res = await delete('$baseRoute/${recipe.id}');
 
     return res.statusCode == 200;
+  }
+
+  Future<RecipeScrape?> scrapeRecipe(String url) async {
+    final res = await get('/recipe/scrape?url=$url');
+    if (res.statusCode != 200) return null;
+
+    final body = jsonDecode(res.body);
+
+    return RecipeScrape.fromJson(body);
   }
 }

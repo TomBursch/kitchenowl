@@ -11,9 +11,9 @@ import 'package:kitchenowl/cubits/settings_cubit.dart';
 import 'package:kitchenowl/cubits/shoppinglist_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/pages/expense_add_update_page.dart';
-import 'package:kitchenowl/pages/recipe_add_update_page.dart';
 import 'package:kitchenowl/pages/home_page/home_page.dart';
 import 'package:kitchenowl/kitchenowl.dart';
+import 'package:kitchenowl/widgets/recipe_create_fab.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
 class HomePage extends StatefulWidget {
@@ -111,38 +111,8 @@ class _HomePageState extends State<HomePage> {
                   }
                 },
                 floatingActionButton: !isOffline
-                    ? OpenContainer(
-                        transitionType: ContainerTransitionType.fade,
-                        openBuilder: (BuildContext context, VoidCallback _) {
-                          return const AddUpdateRecipePage();
-                        },
-                        openColor: Theme.of(context).scaffoldBackgroundColor,
-                        onClosed: (data) {
-                          if (data == UpdateEnum.updated) {
-                            recipeListCubit.refresh();
-                          }
-                        },
-                        closedElevation: 6.0,
-                        closedShape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(56 / 2),
-                          ),
-                        ),
-                        closedColor: Theme.of(context).colorScheme.secondary,
-                        closedBuilder:
-                            (BuildContext context, VoidCallback openContainer) {
-                          return SizedBox(
-                            height: 56,
-                            width: 56,
-                            child: Center(
-                              child: Icon(
-                                Icons.add,
-                                color:
-                                    Theme.of(context).colorScheme.onSecondary,
-                              ),
-                            ),
-                          );
-                        },
+                    ? RecipeCreateFab(
+                        recipeListCubit: recipeListCubit,
                       )
                     : null,
               ),

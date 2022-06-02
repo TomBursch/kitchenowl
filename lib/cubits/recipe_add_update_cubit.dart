@@ -47,7 +47,7 @@ class AddUpdateRecipeCubit extends Cubit<AddUpdateRecipeState> {
           description: _state.description,
           time: _state.time,
           source: _state.source,
-          image: image ?? '',
+          image: image ?? recipe.image,
           items: _state.items,
           tags: _state.selectedTags,
         ));

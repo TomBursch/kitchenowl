@@ -150,7 +150,12 @@ def scrapeRecipe(args):
     recipe = Recipe()
     recipe.name = scraper.title()
     recipe.time = int(scraper.total_time())
-    recipe.description = scraper.description() + "\n\n" + scraper.instructions()
+    description = ''
+    try:
+        description = scraper.description()
+    except NotImplementedError:
+        pass
+    recipe.description = description + "\n\n" + scraper.instructions()
     recipe.photo = scraper.image()
     recipe.source = args['url']
     items = {}

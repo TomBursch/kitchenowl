@@ -9,6 +9,7 @@ import 'package:kitchenowl/services/transactions/tag.dart';
 class RecipeListCubit extends Cubit<ListRecipeCubitState> {
   List<Recipe> recipeList = [];
   bool _refreshLock = false;
+  String? _refreshCurrentQuery;
 
   RecipeListCubit() : super(const ListRecipeCubitState()) {
     refresh();
@@ -50,41 +51,45 @@ class RecipeListCubit extends Cubit<ListRecipeCubitState> {
   }
 
   Future<void> refresh([String? query]) async {
-    if (_refreshLock) return;
-    _refreshLock = true;
     if (state is SearchRecipeCubitState) {
       query = query ?? (state as SearchRecipeCubitState).query;
     }
+    if (_refreshLock && query == _refreshCurrentQuery) return;
+    _refreshLock = true;
+    _refreshCurrentQuery = query;
+    late ListRecipeCubitState _state;
 
     if (query != null && query.isNotEmpty) {
       final items = (await TransactionHandler.getInstance()
           .runTransaction(TransactionRecipeSearchRecipes(query: query)));
-      emit(SearchRecipeCubitState(
+
+      _state = SearchRecipeCubitState(
         query: query,
         recipes: items,
         tags: state.tags,
-      ));
+      );
     } else {
+      final tags = TransactionHandler.getInstance()
+          .runTransaction(TransactionTagGetAll());
       recipeList = await TransactionHandler.getInstance()
           .runTransaction(TransactionRecipeGetRecipes());
-      final tags = await TransactionHandler.getInstance()
-          .runTransaction(TransactionTagGetAll());
       Set<Tag> filter = const {};
       if (state is FilteredListRecipeCubitState && (query == null)) {
         filter = (state as FilteredListRecipeCubitState).selectedTags;
       }
-      if (filter.isNotEmpty) {
-        emit(FilteredListRecipeCubitState(
-          recipes: _getFilteredRecipesCopy(recipeList, filter),
-          tags: tags,
-          selectedTags: filter,
-          allRecipes: recipeList,
-        ));
-      } else {
-        emit(ListRecipeCubitState(recipes: recipeList, tags: tags));
-      }
+      _state = filter.isNotEmpty
+          ? FilteredListRecipeCubitState(
+              recipes: _getFilteredRecipesCopy(recipeList, filter),
+              tags: await tags,
+              selectedTags: filter,
+              allRecipes: recipeList,
+            )
+          : ListRecipeCubitState(recipes: recipeList, tags: await tags);
     }
-    _refreshLock = false;
+    if (query == _refreshCurrentQuery) {
+      emit(_state);
+      _refreshLock = false;
+    }
   }
 
   List<Recipe> _getFilteredRecipesCopy(

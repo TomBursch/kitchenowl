@@ -106,7 +106,7 @@ class TransactionShoppingListAddItem extends Transaction<bool> {
   Future<bool> runLocal() async {
     final list = await TempStorage.getInstance().readItems() ?? [];
     list.add(ShoppinglistItem(name: name, description: description));
-    await TempStorage.getInstance().writeItems(list);
+    TempStorage.getInstance().writeItems(list);
 
     return true;
   }
@@ -148,7 +148,7 @@ class TransactionShoppingListDeleteItem extends Transaction<bool> {
   Future<bool> runLocal() async {
     final list = await TempStorage.getInstance().readItems() ?? [];
     list.removeWhere((e) => e.name == item.name);
-    await TempStorage.getInstance().writeItems(list);
+    TempStorage.getInstance().writeItems(list);
 
     return true;
   }
@@ -202,7 +202,7 @@ class TransactionShoppingListUpdateItem extends Transaction<bool> {
         i,
         (item as ShoppinglistItem).copyWith(description: description),
       );
-      await TempStorage.getInstance().writeItems(list);
+      TempStorage.getInstance().writeItems(list);
 
       return true;
     }
@@ -266,7 +266,7 @@ class TransactionShoppingListAddRecipeItems extends Transaction<bool> {
         list.add(item.toShoppingListItem());
       }
     }
-    await TempStorage.getInstance().writeItems(list);
+    TempStorage.getInstance().writeItems(list);
 
     return true;
   }

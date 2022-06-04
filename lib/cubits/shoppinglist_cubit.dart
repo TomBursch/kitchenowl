@@ -235,6 +235,7 @@ class SearchShoppinglistCubitState extends ShoppinglistCubitState {
   });
 
   @override
+  // ignore: long-parameter-list
   ShoppinglistCubitState copyWith({
     List<ShoppinglistItem>? listItems,
     List<Item>? recentItems,

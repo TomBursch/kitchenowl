@@ -31,17 +31,17 @@ class PlannerCubit extends Cubit<PlannerCubitState> {
   Future<void> refresh() async {
     if (_refreshLock) return;
     _refreshLock = true;
-    final planned = await TransactionHandler.getInstance()
+    final planned = TransactionHandler.getInstance()
         .runTransaction(TransactionPlannerGetPlannedRecipes());
-    final recent = await TransactionHandler.getInstance()
+    final recent = TransactionHandler.getInstance()
         .runTransaction(TransactionPlannerGetRecentPlannedRecipes());
-    final suggested = await TransactionHandler.getInstance()
+    final suggested = TransactionHandler.getInstance()
         .runTransaction(TransactionPlannerGetSuggestedRecipes());
 
     emit(PlannerCubitState(
-      planned,
-      recent,
-      suggested,
+      await planned,
+      await recent,
+      await suggested,
     ));
     _refreshLock = false;
   }

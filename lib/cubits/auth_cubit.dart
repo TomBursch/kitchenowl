@@ -32,7 +32,7 @@ class AuthCubit extends Cubit<AuthState> {
     switch (ApiService.getInstance().connectionStatus) {
       case Connection.authenticated:
         final user = (await ApiService.getInstance().getUser())!;
-        await TempStorage.getInstance().writeUser(user);
+        TempStorage.getInstance().writeUser(user);
         await TransactionHandler.getInstance().runOpenTransactions();
         emit(Authenticated(user));
         break;

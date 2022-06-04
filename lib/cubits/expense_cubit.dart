@@ -25,13 +25,13 @@ class ExpenseCubit extends Cubit<ExpenseCubitState> {
   Future<void> refresh() async {
     if (_refreshLock) return;
     _refreshLock = true;
-    final expense = await TransactionHandler.getInstance()
+    final expense = TransactionHandler.getInstance()
         .runTransaction(TransactionExpenseGet(expense: state.expense));
-    final users = await TransactionHandler.getInstance()
+    final users = TransactionHandler.getInstance()
         .runTransaction(TransactionUserGetAll());
     emit(state.copyWith(
-      expense: expense,
-      users: users,
+      expense: await expense,
+      users: await users,
     ));
     _refreshLock = false;
   }

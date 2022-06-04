@@ -4,9 +4,14 @@
       "name": "Aioli"
     },
     {
+      "name": "Amaretto"
+    },
+    {
+      "category": "🥬 Obst & Gemüse",
       "name": "Ananas"
     },
     {
+      "category": "🥬 Obst & Gemüse",
       "name": "Apfel"
     },
     {
@@ -43,12 +48,14 @@
       "name": "Badreiniger"
     },
     {
+      "category": "🍞 Brotwaren",
       "name": "Baguettes"
     },
     {
       "name": "Balsamico Essig"
     },
     {
+      "category": "🥬 Obst & Gemüse",
       "name": "Bananen"
     },
     {
@@ -67,6 +74,10 @@
       "name": "Bier"
     },
     {
+      "category": "🥬 Obst & Gemüse",
+      "name": "Bio-Zitrone"
+    },
+    {
       "name": "Birnen"
     },
     {
@@ -82,33 +93,48 @@
       "name": "Blätterteig"
     },
     {
+      "category": "🥬 Obst & Gemüse",
       "name": "Brokkoli"
     },
     {
+      "category": "🍞 Brotwaren",
       "name": "Brot"
     },
     {
+      "category": "🍞 Brotwaren",
       "name": "Brötchen"
     },
     {
+      "category": "🥛 Milchprodukte",
       "name": "Buko"
     },
     {
+      "category": "🍞 Brotwaren",
       "name": "Burgerbuns"
     },
     {
       "name": "Burgersaucen"
     },
     {
+      "category": "🥛 Milchprodukte",
       "name": "Butter"
+    },
+    {
+      "category": "🥛 Milchprodukte",
+      "name": "Börek Käse"
+    },
+    {
+      "name": "Büffelmozzarella"
     },
     {
       "name": "Cannelloni"
     },
     {
+      "category": "🥬 Obst & Gemüse",
       "name": "Champignons"
     },
     {
+      "category": "🥛 Milchprodukte",
       "name": "Cheddar"
     },
     {
@@ -121,21 +147,27 @@
       "name": "Cocktailsauce"
     },
     {
+      "category": "🥬 Obst & Gemüse",
       "name": "Cocktailtomaten"
     },
     {
       "name": "Couscous"
     },
     {
+      "category": "🥛 Milchprodukte",
       "name": "Creme fraiche"
     },
     {
       "name": "Crepesband"
     },
     {
+      "name": "Cumin"
+    },
+    {
       "name": "Currypaste"
     },
     {
+      "category": "🚽 Hygiene",
       "name": "Deodorant"
     },
     {
@@ -151,9 +183,11 @@
       "name": "Duschgel"
     },
     {
+      "category": "🥛 Milchprodukte",
       "name": "Eier"
     },
     {
+      "category": "🥬 Obst & Gemüse",
       "name": "Eisbergsalat"
     },
     {
@@ -169,6 +203,10 @@
       "name": "Erdnuss-Butter"
     },
     {
+      "name": "Erdnussöl"
+    },
+    {
+      "category": "🥜 Snacks",
       "name": "Erdnüsse"
     },
     {
@@ -187,12 +225,20 @@
       "name": "Feta"
     },
     {
+      "name": "Filoteig"
+    },
+    {
+      "name": "Fleischersatzprodukt"
+    },
+    {
       "name": "Frischkäse"
     },
     {
+      "category": "🥬 Obst & Gemüse",
       "name": "Frühlingszwiebeln"
     },
     {
+      "category": "🥫 Konserven",
       "name": "Ganze Dosentomaten"
     },
     {
@@ -202,21 +248,39 @@
       "name": "Gehackte Tomaten"
     },
     {
+      "name": "Gemischtes Gemüse"
+    },
+    {
+      "category": "🥬 Obst & Gemüse",
       "name": "Gemüse"
     },
     {
       "name": "Gemüsebrühe"
     },
     {
+      "category": "🥬 Obst & Gemüse",
+      "name": "Gemüsezwiebel"
+    },
+    {
+      "name": "Geschenkpapier"
+    },
+    {
       "name": "Getrocknete Tomaten"
+    },
+    {
+      "name": "Gewürze"
     },
     {
       "name": "Gewürzgurken"
     },
     {
+      "name": "Gluten"
+    },
+    {
       "name": "Glühwein"
     },
     {
+      "category": "💧 Kühltheke",
       "name": "Gnocchi"
     },
     {
@@ -238,9 +302,11 @@
       "name": "Grüne Chili"
     },
     {
+      "category": "🥬 Obst & Gemüse",
       "name": "Grüner Spargel"
     },
     {
+      "category": "🥬 Obst & Gemüse",
       "name": "Gurke"
     },
     {
@@ -253,6 +319,7 @@
       "name": "Haferkekse"
     },
     {
+      "category": "🥛 Milchprodukte",
       "name": "Hafermilch"
     },
     {
@@ -268,10 +335,16 @@
       "name": "Hefe"
     },
     {
+      "name": "Hefeflocken"
+    },
+    {
       "name": "Himbeersirup"
     },
     {
       "name": "Honig"
+    },
+    {
+      "name": "Hustenbonbons"
     },
     {
       "name": "Ingwer"
@@ -283,9 +356,14 @@
       "name": "Kardamom"
     },
     {
+      "name": "Kartoffelkloßteig"
+    },
+    {
+      "category": "🥬 Obst & Gemüse",
       "name": "Kartoffeln"
     },
     {
+      "category": "🥜 Snacks",
       "name": "Katjes"
     },
     {
@@ -301,21 +379,28 @@
       "name": "Kidneybohnen"
     },
     {
+      "category": "🥬 Obst & Gemüse",
       "name": "Kirschtomaten"
     },
     {
+      "category": "🥬 Obst & Gemüse",
       "name": "Knoblauch"
     },
     {
       "name": "Knoblauch Dip"
     },
     {
+      "name": "Knoblauch Granulat"
+    },
+    {
       "name": "Knopfzellen"
     },
     {
+      "category": "🍞 Brotwaren",
       "name": "Knäckebrot"
     },
     {
+      "category": "🥬 Obst & Gemüse",
       "name": "Kohlrabi"
     },
     {
@@ -358,9 +443,14 @@
       "name": "Kürbiskerne"
     },
     {
+      "category": "🥜 Snacks",
+      "name": "Lachgummi"
+    },
+    {
       "name": "Lasagnenudeln"
     },
     {
+      "category": "🥬 Obst & Gemüse",
       "name": "Lauch"
     },
     {
@@ -373,12 +463,18 @@
       "name": "Linsen"
     },
     {
+      "category": "🥜 Snacks",
+      "name": "Linsenchips"
+    },
+    {
       "name": "Lorbeerblatt"
     },
     {
+      "category": "🥛 Milchprodukte",
       "name": "Magerquark"
     },
     {
+      "category": "🥫 Konserven",
       "name": "Mais"
     },
     {
@@ -394,6 +490,10 @@
       "name": "Marmelade"
     },
     {
+      "name": "Maske"
+    },
+    {
+      "category": "💧 Kühltheke",
       "name": "Maultaschen"
     },
     {
@@ -406,12 +506,17 @@
       "name": "Mikrofasertuch"
     },
     {
+      "category": "🥛 Milchprodukte",
       "name": "Milch"
+    },
+    {
+      "name": "Milram Scheibenkäse"
     },
     {
       "name": "Minze"
     },
     {
+      "category": "🥛 Milchprodukte",
       "name": "Mozzarella"
     },
     {
@@ -421,6 +526,7 @@
       "name": "Muskatnuss"
     },
     {
+      "category": "🥬 Obst & Gemüse",
       "name": "Möhren"
     },
     {
@@ -433,9 +539,17 @@
       "name": "Müsli-Riegel"
     },
     {
+      "category": "🥜 Snacks",
+      "name": "Nachos"
+    },
+    {
+      "name": "Natron"
+    },
+    {
       "name": "Nori Blätter"
     },
     {
+      "category": "🥟 Teigwaren",
       "name": "Nudeln"
     },
     {
@@ -445,6 +559,7 @@
       "name": "Olivenöl"
     },
     {
+      "category": "🥬 Obst & Gemüse",
       "name": "Orangen"
     },
     {
@@ -460,9 +575,14 @@
       "name": "Paniermehl"
     },
     {
+      "category": "🥬 Obst & Gemüse",
       "name": "Paprika"
     },
     {
+      "name": "Paprikapulver"
+    },
+    {
+      "category": "🥛 Milchprodukte",
       "name": "Parmesan"
     },
     {
@@ -475,6 +595,7 @@
       "name": "Pesto"
     },
     {
+      "category": "❄️ Tk",
       "name": "Petersilie"
     },
     {
@@ -499,6 +620,13 @@
       "name": "Pitatasche"
     },
     {
+      "name": "Pommersche"
+    },
+    {
+      "category": "🥛 Milchprodukte",
+      "name": "Quark"
+    },
+    {
       "name": "Quinoa"
     },
     {
@@ -508,6 +636,7 @@
       "name": "Radieschen"
     },
     {
+      "category": "❄️ Tk",
       "name": "Rahmspinat"
     },
     {
@@ -559,6 +688,7 @@
       "name": "Rote Linsen"
     },
     {
+      "category": "🥬 Obst & Gemüse",
       "name": "Rote Zwiebeln"
     },
     {
@@ -568,6 +698,7 @@
       "name": "Rotweinessig"
     },
     {
+      "category": "🥬 Obst & Gemüse",
       "name": "Rucola"
     },
     {
@@ -577,6 +708,7 @@
       "name": "Safranfäden"
     },
     {
+      "category": "🥛 Milchprodukte",
       "name": "Sahne"
     },
     {
@@ -601,21 +733,29 @@
       "name": "Sambal Olek"
     },
     {
-      "name": "Sambal Oelek"
-    },
-    {
+      "category": "🥬 Obst & Gemüse",
       "name": "Schalotte"
     },
     {
+      "name": "Schawarma-Gewürz"
+    },
+    {
+      "category": "🥛 Milchprodukte",
       "name": "Scheibenkäse"
     },
     {
+      "name": "Schlemmerfilet"
+    },
+    {
+      "category": "🥛 Milchprodukte",
       "name": "Schmand"
     },
     {
+      "category": "🥛 Milchprodukte",
       "name": "Schmelzkäse"
     },
     {
+      "category": "🥬 Obst & Gemüse",
       "name": "Schnittlauch"
     },
     {
@@ -634,6 +774,7 @@
       "name": "Schwämme"
     },
     {
+      "category": "🚽 Hygiene",
       "name": "Seife"
     },
     {
@@ -643,22 +784,33 @@
       "name": "Senf"
     },
     {
+      "name": "Senfsaat"
+    },
+    {
       "name": "Sesam"
     },
     {
       "name": "Sesamöl"
     },
     {
+      "category": "🚽 Hygiene",
       "name": "Shampoo"
     },
     {
       "name": "Shiitakepilz"
     },
     {
+      "name": "Smoked Paprika"
+    },
+    {
+      "category": "🥜 Snacks",
       "name": "Snacks"
     },
     {
       "name": "Softdrinks"
+    },
+    {
+      "name": "Soja Schnetzel"
     },
     {
       "name": "Sojahack"
@@ -682,6 +834,7 @@
       "name": "Speisestärke"
     },
     {
+      "category": "❄️ Tk",
       "name": "Spinat"
     },
     {
@@ -709,12 +862,14 @@
       "name": "Steinpilze"
     },
     {
+      "category": "🥛 Milchprodukte",
       "name": "Streukäse"
     },
     {
       "name": "Sushi Reis"
     },
     {
+      "category": "🥬 Obst & Gemüse",
       "name": "Süßkartoffel"
     },
     {
@@ -739,15 +894,18 @@
       "name": "Thymian"
     },
     {
+      "category": "🍞 Brotwaren",
       "name": "Toast"
     },
     {
       "name": "Tofu"
     },
     {
+      "category": "🚽 Hygiene",
       "name": "Toilettenpapier"
     },
     {
+      "category": "🥬 Obst & Gemüse",
       "name": "Tomaten"
     },
     {
@@ -760,6 +918,7 @@
       "name": "Tonic Water"
     },
     {
+      "category": "💧 Kühltheke",
       "name": "Tortellini"
     },
     {
@@ -793,6 +952,7 @@
       "name": "Wirsing"
     },
     {
+      "category": "🍞 Brotwaren",
       "name": "Wraps"
     },
     {
@@ -802,9 +962,11 @@
       "name": "Würstchen"
     },
     {
+      "category": "🚽 Hygiene",
       "name": "Zahnpasta"
     },
     {
+      "category": "🚽 Hygiene",
       "name": "Zahnseide"
     },
     {
@@ -817,6 +979,7 @@
       "name": "Zimtstange"
     },
     {
+      "category": "🥬 Obst & Gemüse",
       "name": "Zitrone"
     },
     {
@@ -826,13 +989,19 @@
       "name": "Zitronensaft"
     },
     {
+      "category": "🥬 Obst & Gemüse",
       "name": "Zucchini"
     },
     {
       "name": "Zucker"
     },
     {
+      "category": "🥬 Obst & Gemüse",
       "name": "Zwiebel"
+    },
+    {
+      "category": "💧 Kühltheke",
+      "name": "vegetarischer Aufschnitt"
     }
   ]
 }

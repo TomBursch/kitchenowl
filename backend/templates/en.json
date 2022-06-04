@@ -31,6 +31,7 @@
       "name": "Beer"
     },
     {
+      "category": "🥬 Fruits & Vegetables",
       "name": "Beetroot"
     },
     {
@@ -43,6 +44,7 @@
       "name": "Broccoli"
     },
     {
+      "category": "🍞 Bread Goods",
       "name": "Buns"
     },
     {
@@ -64,6 +66,7 @@
       "name": "Cereal bar"
     },
     {
+      "category": "🥛 Dairy",
       "name": "Cheddar"
     },
     {
@@ -103,6 +106,7 @@
       "name": "Couscous"
     },
     {
+      "category": "🥛 Dairy",
       "name": "Cream"
     },
     {
@@ -115,9 +119,11 @@
       "name": "Curry paste"
     },
     {
+      "category": "🚽 Hygiene",
       "name": "Deodorant"
     },
     {
+      "category": "🚽 Hygiene",
       "name": "Detergent"
     },
     {
@@ -127,6 +133,7 @@
       "name": "Dishwasher tabs"
     },
     {
+      "category": "🥫 Canned Food",
       "name": "Dried tomatoes"
     },
     {
@@ -151,6 +158,7 @@
       "name": "Garlic"
     },
     {
+      "category": "💧 Refrigerated",
       "name": "Gnocchi"
     },
     {
@@ -160,6 +168,7 @@
       "name": "Green chili"
     },
     {
+      "category": "🚽 Hygiene",
       "name": "Hair gel"
     },
     {
@@ -181,6 +190,7 @@
       "name": "Kohlrabi"
     },
     {
+      "category": "🥟 Pasta",
       "name": "Lasagna"
     },
     {
@@ -202,12 +212,14 @@
       "name": "Lime"
     },
     {
+      "category": "🥟 Pasta",
       "name": "Linguine"
     },
     {
       "name": "Mayonnaise"
     },
     {
+      "category": "🥛 Dairy",
       "name": "Milk"
     },
     {
@@ -217,6 +229,7 @@
       "name": "Mouth wash"
     },
     {
+      "category": "🥛 Dairy",
       "name": "Mozzarella"
     },
     {
@@ -256,12 +269,14 @@
       "name": "Peanutbutter"
     },
     {
+      "category": "🥜 Snacks",
       "name": "Peanuts"
     },
     {
       "name": "Peas"
     },
     {
+      "category": "🥟 Pasta",
       "name": "Penne pasta"
     },
     {
@@ -370,6 +385,7 @@
       "name": "Spaghetti"
     },
     {
+      "category": "❄️ Freezer",
       "name": "Spinach"
     },
     {
@@ -397,6 +413,7 @@
       "name": "Sweet potatoes"
     },
     {
+      "category": "🥟 Pasta",
       "name": "Tagliatelle"
     },
     {
@@ -430,6 +447,7 @@
       "name": "Toothpaste"
     },
     {
+      "category": "🥟 Pasta",
       "name": "Tortellini"
     },
     {

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/cubits/auth_cubit.dart';
 import 'package:kitchenowl/kitchenowl.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 
 class UnreachablePage extends StatelessWidget {
   const UnreachablePage({Key? key}) : super(key: key);
@@ -39,21 +38,6 @@ class UnreachablePage extends StatelessWidget {
                   onPressed: () =>
                       BlocProvider.of<AuthCubit>(context).removeServer(),
                   child: Text(AppLocalizations.of(context)!.serverChange),
-                ),
-              if (!kIsWeb)
-                const SizedBox(
-                  height: 45,
-                ),
-              if (!kIsWeb)
-                TextButton(
-                  child: const Text(
-                    "If you are seeing this page after updating the app please click here for a migration guide",
-                    maxLines: null,
-                    textAlign: TextAlign.center,
-                  ),
-                  onPressed: () => launchUrlString(
-                    "https://tombursch.github.io/kitchenowl/get-started/#migrating-from-older-versions",
-                  ),
                 ),
             ],
           ),

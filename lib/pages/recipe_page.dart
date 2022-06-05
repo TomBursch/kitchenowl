@@ -65,6 +65,11 @@ class _RecipePageState extends State<RecipePage> {
                 slivers: [
                   SliverAppBar(
                     flexibleSpace: FlexibleSpaceBar(
+                      titlePadding: const EdgeInsetsDirectional.only(
+                        start: 60,
+                        bottom: 8,
+                        end: 36,
+                      ),
                       title: Text(
                         state.recipe.name,
                         maxLines: 2,

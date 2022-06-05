@@ -53,7 +53,7 @@ class StringItemMatch extends StatelessWidget {
             child: item != null
                 ? ShoppingItemWidget(
                     item: item!,
-                    selected: !optional,
+                    selected: true,
                     onPressed: (_) => _onPressed(context),
                     onLongPressed: (_) => _onLongPressed(context),
                   )
@@ -64,23 +64,20 @@ class StringItemMatch extends StatelessWidget {
           ),
         ),
         if (item != null)
-          FractionallySizedBox(
-            widthFactor: 1 / crossAxisCount,
-            child: Row(
-              children: [
-                Expanded(
-                  child: Text(AppLocalizations.of(context)!.optional),
+          Row(
+            children: [
+              Expanded(
+                child: Text(AppLocalizations.of(context)!.optional),
+              ),
+              Transform.scale(
+                scale: 0.9,
+                child: CupertinoSwitch(
+                  value: optional,
+                  activeColor: Theme.of(context).colorScheme.secondary,
+                  onChanged: _setOptional,
                 ),
-                Transform.scale(
-                  scale: 0.9,
-                  child: CupertinoSwitch(
-                    value: optional,
-                    activeColor: Theme.of(context).colorScheme.secondary,
-                    onChanged: _setOptional,
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
       ],
     );

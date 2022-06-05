@@ -1,4 +1,5 @@
-from app.config import APP_DIR, SUPPORTED_LANGUAGES
+import time
+from app.config import app, APP_DIR, SUPPORTED_LANGUAGES
 from os.path import exists
 import json
 
@@ -16,6 +17,7 @@ def importFromLanguage(lang):
 
 
 def importFromDict(args, default=False):  # noqa
+    t0 = time.time()
     if "items" in args:
         for importItem in args['items']:
             if not Item.find_by_name(importItem['name']):
@@ -62,3 +64,4 @@ def importFromDict(args, default=False):  # noqa
                     con.tag = tag
                     con.recipe = recipe
                     con.save()
+    app.logger.info(f"Import took: {(time.time() - t0):.3f}s")

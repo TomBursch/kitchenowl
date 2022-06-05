@@ -30,6 +30,10 @@ class ApiService {
   // ignore: constant_identifier_names
   static const Duration _TIMEOUT = Duration(seconds: 2);
   // ignore: constant_identifier_names
+  static const Duration _TIMEOUT_FILE_UPLOAD = Duration(seconds: 5);
+  // ignore: constant_identifier_names
+  static const Duration _TIMEOUT_ONBOARDING = Duration(minutes: 7);
+  // ignore: constant_identifier_names
   static const String _API_PATH = "/api";
 
   static ApiService? _instance;
@@ -124,27 +128,38 @@ class ApiService {
         refreshOnException: refreshOnException,
       );
 
-  Future<http.Response> post(String url, dynamic body, {Encoding? encoding}) =>
-      _handleRequest(() => _client.post(
-            Uri.parse(baseUrl + url),
-            body: body,
-            headers: headers,
-            encoding: encoding,
+  Future<http.Response> post(
+    String url,
+    dynamic body, {
+    Encoding? encoding,
+    Duration? timeout,
+  }) =>
+      _handleRequest(
+        timeout: timeout,
+        () => _client.post(
+          Uri.parse(baseUrl + url),
+          body: body,
+          headers: headers,
+          encoding: encoding,
+        ),
+      );
+
+  Future<http.Response> postFile(String url, File file) => _handleRequest(
+        timeout: _TIMEOUT_FILE_UPLOAD,
+        () async {
+          final request =
+              http.MultipartRequest('POST', Uri.parse(baseUrl + url));
+          request.headers.addAll(headers);
+          request.files.add(http.MultipartFile(
+            'file',
+            file.readAsBytes().asStream(),
+            file.lengthSync(),
+            filename: file.uri.pathSegments.last,
           ));
 
-  Future<http.Response> postFile(String url, File file) =>
-      _handleRequest(() async {
-        final request = http.MultipartRequest('POST', Uri.parse(baseUrl + url));
-        request.headers.addAll(headers);
-        request.files.add(http.MultipartFile(
-          'file',
-          file.readAsBytes().asStream(),
-          file.lengthSync(),
-          filename: file.uri.pathSegments.last,
-        ));
-
-        return http.Response.fromStream(await _client.send(request));
-      });
+          return http.Response.fromStream(await _client.send(request));
+        },
+      );
 
   Future<http.Response> delete(
     String url, {
@@ -166,9 +181,10 @@ class ApiService {
   Future<http.Response> _handleRequest(
     Future<http.Response> Function() request, {
     bool refreshOnException = true,
+    Duration? timeout,
   }) async {
     try {
-      http.Response response = await request().timeout(_TIMEOUT);
+      http.Response response = await request().timeout(timeout ?? _TIMEOUT);
 
       if ((!isConnected() && refreshOnException) ||
           response.statusCode == 401) {
@@ -279,6 +295,7 @@ class ApiService {
     final res = await post(
       '/onboarding',
       jsonEncode(sendBody),
+      timeout: _TIMEOUT_ONBOARDING,
     );
     if (res.statusCode == 200) {
       final body = jsonDecode(res.body);

@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:kitchenowl/cubits/auth_cubit.dart';
 import 'package:kitchenowl/cubits/settings_cubit.dart';
+import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/pages/login_page.dart';
 import 'package:kitchenowl/pages/onboarding_page.dart';
 import 'package:kitchenowl/pages/setup_page.dart';
@@ -84,6 +85,12 @@ class App extends StatelessWidget {
                         }
                         if (state is Unsupported) {
                           return const UnsupportedPage();
+                        }
+                        if (state is LoadingOnboard) {
+                          return SplashPage(
+                            message:
+                                AppLocalizations.of(context)!.onboardingLoading,
+                          );
                         }
 
                         return const SplashPage();

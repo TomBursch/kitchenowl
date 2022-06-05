@@ -92,6 +92,7 @@
     "none": "Keine",
     "noTags": "Keine Tags",
     "offlineMessage": "Du bist offline",
+    "onboardingLoading": "Importiere Sprache, das kann etwas dauern. Bitte sei geduldig :)",
     "onboardingSettingsTitle": "Hi {name}, lass uns den Server aufsetzen!",
     "@onboardingSettingsTitle": {
         "placeholders": {

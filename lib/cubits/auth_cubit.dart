@@ -105,6 +105,9 @@ class AuthCubit extends Cubit<AuthState> {
   }) async {
     emit(const Loading());
     if (await ApiService.getInstance().isOnboarding()) {
+      if (language != null) {
+        emit(const LoadingOnboard());
+      }
       final token = await ApiService.getInstance()
           .onboarding(username, name, password, settings, language);
       if (token != null && ApiService.getInstance().isAuthenticated()) {
@@ -215,15 +218,22 @@ class Loading extends AuthState {
   List<Object?> get props => ["Initial"];
 }
 
+class LoadingOnboard extends AuthState {
+  const LoadingOnboard() : super(4);
+
+  @override
+  List<Object?> get props => ["LoadingOnboarding"];
+}
+
 class Unreachable extends AuthState {
-  const Unreachable() : super(4);
+  const Unreachable() : super(5);
 
   @override
   List<Object?> get props => ["Unreachable"];
 }
 
 class Unsupported extends AuthState {
-  const Unsupported() : super(5);
+  const Unsupported() : super(6);
 
   @override
   List<Object?> get props => ["Unsupported"];

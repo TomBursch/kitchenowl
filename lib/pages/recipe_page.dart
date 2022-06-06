@@ -67,7 +67,7 @@ class _RecipePageState extends State<RecipePage> {
                     flexibleSpace: FlexibleSpaceBar(
                       titlePadding: const EdgeInsetsDirectional.only(
                         start: 60,
-                        bottom: 8,
+                        bottom: 16,
                         end: 36,
                       ),
                       title: Text(

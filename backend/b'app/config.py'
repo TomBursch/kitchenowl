@@ -1,3 +1,4 @@
+from datetime import timedelta
 from sqlalchemy import MetaData
 from app.errors import NotFoundRequest
 from flask import Flask, jsonify, request
@@ -8,6 +9,7 @@ from flask_jwt_extended import JWTManager
 from flask_apscheduler import APScheduler
 import os
 
+
 MIN_FRONTEND_VERSION = 34
 BACKEND_VERSION = 28
 
@@ -16,6 +18,9 @@ PROJECT_DIR = os.path.dirname(APP_DIR)
 
 UPLOAD_FOLDER = os.getenv('STORAGE_PATH', PROJECT_DIR) + '/upload'
 ALLOWED_FILE_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
+
+JWT_ACCESS_TOKEN_EXPIRES = timedelta(minutes=15)
+JWT_REFRESH_TOKEN_EXPIRES = timedelta(days=30)
 
 SUPPORTED_LANGUAGES = {
     'en': 'English',
@@ -26,10 +31,14 @@ app = Flask(__name__)
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 32 * 1000 * 1000  # 32MB max upload
+# SQLAlchemy
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + \
     os.getenv('STORAGE_PATH', PROJECT_DIR) + '/database.db'
-app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY', 'super-secret')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+# JWT
+app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY', 'super-secret')
+app.config["JWT_ACCESS_TOKEN_EXPIRES"] = JWT_ACCESS_TOKEN_EXPIRES
+app.config["JWT_REFRESH_TOKEN_EXPIRES"] = JWT_REFRESH_TOKEN_EXPIRES
 
 convention = {
     "ix": 'ix_%(column_0_label)s',

@@ -128,11 +128,11 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
-  void logout() async {
+  Future<void> logout() async {
     emit(const Loading());
     await SecureStorage.getInstance().delete(key: 'TOKEN');
     await TempStorage.getInstance().clearAll();
-    ApiService.getInstance().refreshToken = '';
+    await ApiService.getInstance().logout();
     if (ApiService.getInstance().connectionStatus == Connection.disconnected) {
       emit(const Unreachable());
     }

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -28,12 +29,13 @@ class SettingsCubit extends Cubit<SettingsState> {
 
   Future<void> load() async {
     final themeModeIndex =
-        await PreferenceStorage.getInstance().readInt(key: 'themeMode');
+        PreferenceStorage.getInstance().readInt(key: 'themeMode');
+    Config.deviceInfo = DeviceInfoPlugin().deviceInfo;
     Config.packageInfo = PackageInfo.fromPlatform();
 
     ThemeMode themeMode = ThemeMode.system;
-    if (themeModeIndex != null) {
-      themeMode = ThemeMode.values[themeModeIndex];
+    if (await themeModeIndex != null) {
+      themeMode = ThemeMode.values[(await themeModeIndex)!];
     }
 
     ServerSettings serverSettings = ServerSettings.fromJson(jsonDecode(

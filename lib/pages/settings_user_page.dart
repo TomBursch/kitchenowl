@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/cubits/settings_user_cubit.dart';
+import 'package:kitchenowl/enums/token_type_enum.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 
 class SettingsUserPage extends StatefulWidget {
@@ -125,7 +126,7 @@ class _SettingsUserPageState extends State<SettingsUserPage> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(top: 16, bottom: 8),
+                      padding: const EdgeInsets.only(top: 16, bottom: 16),
                       child: LoadingElevatedButton(
                         onPressed: () => cubit.updateUser(
                           context: context,
@@ -134,6 +135,36 @@ class _SettingsUserPageState extends State<SettingsUserPage> {
                         child: Text(AppLocalizations.of(context)!.passwordSave),
                       ),
                     ),
+                    Text(
+                      '${AppLocalizations.of(context)!.sessions}:',
+                      style: Theme.of(context).textTheme.headline6,
+                    ),
+                    const SizedBox(height: 8),
+                    BlocBuilder<SettingsUserCubit, SettingsUserState>(
+                      bloc: cubit,
+                      buildWhen: (prev, curr) =>
+                          prev.user?.tokens != curr.user?.tokens,
+                      builder: (context, state) => ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        padding: EdgeInsets.zero,
+                        itemCount: state.user?.tokens
+                                ?.where((e) => e.type != TokenTypeEnum.access)
+                                .length ??
+                            0,
+                        itemBuilder: (context, i) => Card(
+                          child: ListTile(
+                            title: Text(
+                              state.user!.tokens!
+                                  .where((e) => e.type != TokenTypeEnum.access)
+                                  .elementAt(i)
+                                  .name,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: MediaQuery.of(context).padding.bottom),
                   ],
                 ),
               ),

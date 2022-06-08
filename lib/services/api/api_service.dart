@@ -244,7 +244,11 @@ class ApiService {
   Future<String?> login(String username, String password) async {
     final res = await post(
       '/auth',
-      jsonEncode({'username': username, 'password': password}),
+      jsonEncode({
+        'username': username,
+        'password': password,
+        if (await Config.deviceName != null) 'device': await Config.deviceName,
+      }),
     );
     if (res.statusCode == 200) {
       final body = jsonDecode(res.body);
@@ -256,6 +260,17 @@ class ApiService {
     }
 
     return null;
+  }
+
+  Future<bool> logout() async {
+    if (isAuthenticated()) {
+      final res = await delete('/auth');
+      if (res.statusCode == 200) refreshToken = '';
+
+      return res.statusCode == 200;
+    }
+
+    return true;
   }
 
   Future<bool> isOnboarding() async {
@@ -290,6 +305,10 @@ class ApiService {
     }
     if (language != null) {
       sendBody['language'] = language;
+    }
+
+    if (await Config.deviceName != null) {
+      sendBody['device'] = await Config.deviceName;
     }
 
     final res = await post(

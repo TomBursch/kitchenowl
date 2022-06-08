@@ -160,9 +160,8 @@ class ProfilePage extends StatelessWidget {
                       ),
                     ),
                   ),
-                  TextButton(
-                    onPressed: () =>
-                        BlocProvider.of<AuthCubit>(context).logout(),
+                  LoadingTextButton(
+                    onPressed: BlocProvider.of<AuthCubit>(context).logout,
                     child: Text(AppLocalizations.of(context)!.logout),
                   ),
                 ],

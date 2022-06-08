@@ -11,3 +11,16 @@ class Login(Schema):
         validate=lambda a: a and not a.isspace(),
         load_only=True,
     )
+    device = fields.String(
+        required=False,
+        validate=lambda a: a and not a.isspace(),
+        load_only=True,
+    )
+
+
+class CreateLongLivedToken(Schema):
+    device = fields.String(
+        required=True,
+        validate=lambda a: a and not a.isspace(),
+        load_only=True,
+    )

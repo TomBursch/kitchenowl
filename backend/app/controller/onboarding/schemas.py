@@ -20,3 +20,8 @@ class OnboardSchema(Schema):
     language = fields.String(
         validate=lambda a: a and not a.isspace() and a in SUPPORTED_LANGUAGES
     )
+    device = fields.String(
+        required=False,
+        validate=lambda a: a and not a.isspace(),
+        load_only=True,
+    )

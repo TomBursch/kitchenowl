@@ -16,6 +16,9 @@ class User(db.Model, DbModelMixin, TimestampMixin):
 
     expense_balance = db.Column(db.Float(), default=0)
 
+    tokens = db.relationship(
+        'Token', back_populates='user', cascade="all, delete-orphan")
+
     expenses_paid = db.relationship(
         'Expense', back_populates='paid_by', cascade="all, delete-orphan")
     expenses_paid_for = db.relationship(
@@ -27,13 +30,26 @@ class User(db.Model, DbModelMixin, TimestampMixin):
     def set_password(self, password):
         self.password = bcrypt.generate_password_hash(password).decode('utf-8')
 
+    def obj_to_dict(self, skip_columns=None, include_columns=None) -> dict:
+        if skip_columns:
+            skip_columns = skip_columns + ['password']
+        else:
+            skip_columns = ['password']
+        return super().obj_to_dict(skip_columns=skip_columns, include_columns=include_columns)
+
+    def obj_to_full_dict(self) -> dict:
+        res = self.obj_to_dict()
+        tokens = self.tokens
+        res['tokens'] = [e.obj_to_dict(skip_columns=['user_id']) for e in tokens]
+        return res
+
     @classmethod
     def find_by_username(cls, username):
         return cls.query.filter(cls.username == username).first()
 
     @classmethod
     def create(cls, username, password, name, owner=False):
-        cls(
+        return cls(
             username=username,
             password=bcrypt.generate_password_hash(password).decode('utf-8'),
             name=name,

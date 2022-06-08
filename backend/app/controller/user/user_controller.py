@@ -13,7 +13,7 @@ user = Blueprint('user', __name__)
 @user.route('/all', methods=['GET'])
 @jwt_required()
 def getAllUsers():
-    return jsonify([e.obj_to_dict(skip_columns=['password']) for e in User.all_by_name()])
+    return jsonify([e.obj_to_dict() for e in User.all_by_name()])
 
 
 @user.route('', methods=['GET'])
@@ -22,7 +22,7 @@ def getLoggedInUser():
     user = User.find_by_username(get_jwt_identity())
     if not user:
         raise UnauthorizedRequest(message='Unauthorized')
-    return jsonify(user.obj_to_dict(skip_columns=['password']))
+    return jsonify(user.obj_to_full_dict())
 
 
 @user.route('/<id>', methods=['GET'])
@@ -32,7 +32,7 @@ def getUserById(id):
     user = User.find_by_id(id)
     if not user:
         raise NotFoundRequest()
-    return jsonify(user.obj_to_dict(skip_columns=['password']))
+    return jsonify(user.obj_to_dict())
 
 
 @user.route('/<id>', methods=['DELETE'])

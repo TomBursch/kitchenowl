@@ -1,5 +1,6 @@
 from app.jobs.recipe_suggestions import findMealInstancesFromHistory, computeRecipeSuggestions
 from app import app, scheduler
+from app.models import Token
 from .item_ordering import findItemOrdering
 from .item_suggestions import findItemSuggestions
 from .cluster_shoppings import clusterShoppings
@@ -27,3 +28,9 @@ def load_jobs():
         meal_instances = findMealInstancesFromHistory()
         computeRecipeSuggestions(meal_instances)
         app.logger.info("--- daily analysis is completed ---")
+
+    @scheduler.task('interval', id='every30min', minutes=30)
+    def halfHourly():
+        # Remove expired Tokens
+        Token.delete_expired_access()
+        Token.delete_expired_refresh()

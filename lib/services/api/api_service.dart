@@ -40,10 +40,13 @@ class ApiService {
   final _client = http.Client();
   final String baseUrl;
   String? _refreshToken;
+  Map<String, String> headers = {};
+  Future<void>? _refreshThread;
+
+  void Function(String)? _handleTokenRotation;
 
   static final ValueNotifier<Connection> _connectionNotifier =
       ValueNotifier<Connection>(Connection.undefined);
-  Map<String, String> headers = {};
 
   static final ValueNotifier<ServerSettings> _settingsNotifier =
       ValueNotifier<ServerSettings>(const ServerSettings());
@@ -91,6 +94,10 @@ class ApiService {
     _settingsNotifier.removeListener(f);
   }
 
+  void setTokenRotationHandler(void Function(String) handler) {
+    _handleTokenRotation = handler;
+  }
+
   static Future<void> connectTo(String url, {String? refreshToken}) async {
     getInstance().dispose();
     url += _API_PATH;
@@ -99,7 +106,14 @@ class ApiService {
     await _instance!.refresh();
   }
 
-  Future<void> refresh() async {
+  Future<void> refresh() {
+    _refreshThread ??= _refresh();
+
+    return _refreshThread!;
+  }
+
+  Future<void> _refresh() async {
+    Connection status = Connection.disconnected;
     if (baseUrl.isNotEmpty) {
       final healthy = await getInstance().healthy();
       if (healthy.item1) {
@@ -110,16 +124,17 @@ class ApiService {
             (healthy.item2!['version'] ?? 0) >= Config.MIN_BACKEND_VERSION) {
           _settingsNotifier.value = ServerSettings.fromJson(healthy.item2!);
 
-          return await getInstance().refreshAuth()
-              ? getInstance()._setConnectionState(Connection.authenticated)
-              : getInstance()._setConnectionState(Connection.connected);
+          await getInstance().refreshAuth()
+              ? status = Connection.authenticated
+              : status = Connection.connected;
         } else {
-          return getInstance()._setConnectionState(Connection.unsupported);
+          status = Connection.unsupported;
         }
       }
     }
 
-    return getInstance()._setConnectionState(Connection.disconnected);
+    getInstance()._setConnectionState(status);
+    _refreshThread = null;
   }
 
   Future<http.Response> get(String url, {bool refreshOnException = true}) =>
@@ -233,6 +248,10 @@ class ApiService {
     if (res.statusCode == 200) {
       final body = jsonDecode(res.body);
       headers['Authorization'] = 'Bearer ${body['access_token']}';
+      _refreshToken = body['refresh_token'];
+      if (_handleTokenRotation != null) {
+        _handleTokenRotation!(_refreshToken!);
+      }
       _setConnectionState(Connection.authenticated);
 
       return true;

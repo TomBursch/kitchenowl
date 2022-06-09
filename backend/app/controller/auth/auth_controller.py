@@ -81,11 +81,15 @@ def refresh():
         raise UnauthorizedRequest(message='Unauthorized')
 
     refreshModel = Token.find_by_jti(get_jwt()['jti'])
+    # Refresh token rotation
+    refreshToken, refreshModel = Token.create_refresh_token(user, oldRefreshToken=refreshModel)
+
     # Create access token
     accesssToken, _ = Token.create_access_token(user, refreshModel)
 
     return jsonify({
-        'access_token': accesssToken
+        'access_token': accesssToken,
+        'refresh_token': refreshToken
     })
 
 

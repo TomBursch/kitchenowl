@@ -3,6 +3,7 @@ from datetime import datetime
 from typing import Tuple
 from app import db
 from app.config import JWT_REFRESH_TOKEN_EXPIRES, JWT_ACCESS_TOKEN_EXPIRES
+from app.errors import UnauthorizedRequest
 from app.helpers import DbModelMixin, TimestampMixin
 from flask_jwt_extended import create_access_token, create_refresh_token, get_jti
 from app.models.user import User
@@ -39,8 +40,7 @@ class Token(db.Model, DbModelMixin, TimestampMixin):
     @classmethod
     def delete_expired_refresh(cls):
         filter_before = datetime.utcnow() - JWT_REFRESH_TOKEN_EXPIRES
-        db.session.query(cls).filter(cls.created_at <=
-                                     filter_before, cls.type == 'refresh').delete()
+        db.session.query(cls).filter(cls.created_at <= filter_before, cls.type == 'refresh', ~cls.created_tokens.any()).delete(synchronize_session=False)
         db.session.commit()
 
     @classmethod
@@ -48,6 +48,28 @@ class Token(db.Model, DbModelMixin, TimestampMixin):
         filter_before = datetime.utcnow() - JWT_ACCESS_TOKEN_EXPIRES
         db.session.query(cls).filter(cls.created_at <=
                                      filter_before, cls.type == 'access').delete()
+        db.session.commit()
+
+    # Delete oldest refresh token -> log out device
+    # Used e.g. when a refresh token is used twice
+    def delete_token_familiy(self):
+        if (self.type != 'refresh'):
+            return
+        token = self
+        while token:
+            if token.refresh_token:
+                token = token.refresh_token
+            else:
+                token.delete()
+                token = None
+
+    def has_created_refresh_token(self) -> bool:
+        return db.session.query(Token).filter(Token.refresh_token_id == self.id, Token.type == 'refresh').count() > 0
+
+    def delete_created_access_tokens(self):
+        if (self.type != 'refresh'):
+            return
+        db.session.query(Token).filter(Token.refresh_token_id == self.id, Token.type == 'access').delete()
         db.session.commit()
 
     @classmethod
@@ -63,13 +85,21 @@ class Token(db.Model, DbModelMixin, TimestampMixin):
         return accesssToken, model
 
     @classmethod
-    def create_refresh_token(cls, user: User, device: str) -> Tuple[any, Token]:
+    def create_refresh_token(cls, user: User, device: str = None, oldRefreshToken: Token = None) -> Tuple[any, Token]:
+        assert device or oldRefreshToken
+        if (oldRefreshToken and (oldRefreshToken.type != 'refresh' or oldRefreshToken.has_created_refresh_token())):
+            oldRefreshToken.delete_token_familiy()
+            raise UnauthorizedRequest()
+
         refreshToken = create_refresh_token(identity=user)
         model = Token()
         model.jti = get_jti(refreshToken)
         model.type = 'refresh'
-        model.name = device
+        model.name = device or oldRefreshToken.name
         model.user = user
+        if (oldRefreshToken):
+            oldRefreshToken.delete_created_access_tokens()
+            model.refresh_token = oldRefreshToken
         model.save()
         return refreshToken, model
 

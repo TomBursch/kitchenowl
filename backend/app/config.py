@@ -1,6 +1,6 @@
 from datetime import timedelta
 from sqlalchemy import MetaData
-from app.errors import NotFoundRequest
+from app.errors import NotFoundRequest, UnauthorizedRequest
 from flask import Flask, jsonify, request
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
@@ -10,7 +10,7 @@ from flask_apscheduler import APScheduler
 import os
 
 
-MIN_FRONTEND_VERSION = 34
+MIN_FRONTEND_VERSION = 46
 BACKEND_VERSION = 28
 
 APP_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -83,8 +83,12 @@ def add_cors_headers(response):
 
 @app.errorhandler(Exception)
 def unhandled_exception(e):
-    if e is NotFoundRequest:
-        return "Requested resource not found", 404
+    if type(e) is NotFoundRequest:
+        app.logger.info(e)
+        return jsonify(message="Requested resource not found"), 404
+    if type(e) is UnauthorizedRequest:
+        app.logger.warn(e)
+        return jsonify(message="Request unauthorized"), 401
     app.logger.error(e)
     return jsonify(message="Something went wrong"), 500
 

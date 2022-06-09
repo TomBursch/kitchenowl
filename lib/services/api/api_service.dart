@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:kitchenowl/config.dart';
 import 'package:kitchenowl/models/server_settings.dart';
+import 'package:kitchenowl/models/token.dart';
 import 'package:tuple/tuple.dart';
 
 // Export extensions
@@ -363,6 +364,23 @@ class ApiService {
     if (res.statusCode == 200) {
       _settingsNotifier.value = ServerSettings.fromJson(jsonDecode(res.body));
     }
+
+    return res.statusCode == 200;
+  }
+
+  Future<String?> createLongLivedToken(String name) async {
+    final res = await post('/auth/llt', jsonEncode({'device': name}));
+    if (res.statusCode == 200) {
+      final body = jsonDecode(res.body);
+
+      return body['longlived_token'];
+    }
+
+    return null;
+  }
+
+  Future<bool> deleteLongLivedToken(Token token) async {
+    final res = await delete('/auth/llt/${token.id}');
 
     return res.statusCode == 200;
   }

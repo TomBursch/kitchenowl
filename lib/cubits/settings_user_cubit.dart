@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/cubits/auth_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
+import 'package:kitchenowl/models/token.dart';
 import 'package:kitchenowl/models/user.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
 
@@ -52,6 +53,18 @@ class SettingsUserCubit extends Cubit<SettingsUserState> {
 
   void setAdmin(bool newAdmin) {
     emit(state.copyWith(setAdmin: newAdmin));
+  }
+
+  Future<String?> addLongLivedToken(String name) async {
+    final token = await ApiService.getInstance().createLongLivedToken(name);
+    if (token != null) refresh();
+
+    return token;
+  }
+
+  Future<void> deleteLongLivedToken(Token token) async {
+    final success = await ApiService.getInstance().deleteLongLivedToken(token);
+    if (success) refresh();
   }
 }
 

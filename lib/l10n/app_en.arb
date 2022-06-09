@@ -45,9 +45,11 @@
         }
     },
     "cookingTime": "Cooking time",
+    "copied": "Copied",
     "darkmode": "Darkmode",
     "delete": "Delete",
     "description": "Description",
+    "done": "Done",
     "error": "An error occured",
     "expenseAdd": "Add Expense",
     "expenseAmount": "Amount",
@@ -82,6 +84,18 @@
     "language": "Language",
     "languageSelect": "Select a language",
     "list": "List",
+    "lltCreate": "Create long-lived token",
+    "llts": "Long-lived tokens",
+    "lltDelete": "Delete long-lived token",
+    "lltDeleteConfirmation": "Are you sure you want to delete long-lived token '{token}'? This cannot be undone.",
+    "@lltDeleteConfirmation": {
+        "placeholders": {
+            "token": {}
+        }
+    },
+    "lltNotShownAgain": "Save the token, you won't be able to see it again",
+    "lltWarningContent": "Are you sure you want to create a long-lived token? This could potentially be a security risk. The token does not expire and gives full access to your account.",
+    "lltWarningTitle": "Do you know what you're doing?",
     "login": "Login",
     "loginTo": "Login to",
     "logout": "Logout",
@@ -92,6 +106,7 @@
     "none": "None",
     "noTags": "No Tags",
     "offlineMessage": "You're offline",
+    "okay": "Okay",
     "onboardingLoading": "Importing language, this could take a while. Please be patient :)",
     "onboardingSettingsTitle": "Hi {name}, let's setup the server!",
     "@onboardingSettingsTitle": {

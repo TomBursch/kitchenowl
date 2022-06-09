@@ -45,9 +45,11 @@
         }
     },
     "cookingTime": "Kochzeit",
+    "copied": "Kopiert",
     "darkmode": "Nachtmodus",
     "delete": "Löschen",
     "description": "Beschreibung",
+    "done": "Fertig",
     "error": "Ein Fehler ist aufgetreten",
     "expenseAdd": "Ausgabe Hinzufügen",
     "expenseAmount": "Betrag",
@@ -82,6 +84,18 @@
     "language": "Sprache",
     "languageSelect": "Wähle eine Sprache",
     "list": "Liste",
+    "lltCreate": "Long-lived Token erstellen",
+    "llts": "Long-lived Tokens",
+    "lltDelete": "Lösche Long-lived Token",
+    "lltDeleteConfirmation": "Bist du sicher, dass du den Long-lived Token '{token}' löschen möchtest? Das kann nicht Rückgängig gemacht werden.",
+    "@lltDeleteConfirmation": {
+        "placeholders": {
+            "token": {}
+        }
+    },
+    "lltNotShownAgain": "Speichere den token, du kannst ihn dir nicht nochmal anzeigen lassen",
+    "lltWarningContent": "Bist du sicher, dass du einen long-lived token erstellen möchstest? Das stellt ein potentielles Sicherheitsrisiko dar. Der Token verfällt nicht und gibt vollen Zugang zu deinem Account.",
+    "lltWarningTitle": "Weißt du was du machst?",
     "login": "Login",
     "loginTo": "Login bei",
     "logout": "Logout",
@@ -92,6 +106,7 @@
     "none": "Keine",
     "noTags": "Keine Tags",
     "offlineMessage": "Du bist offline",
+    "okay": "Okay",
     "onboardingLoading": "Importiere Sprache, das kann etwas dauern. Bitte sei geduldig :)",
     "onboardingSettingsTitle": "Hi {name}, lass uns den Server aufsetzen!",
     "@onboardingSettingsTitle": {

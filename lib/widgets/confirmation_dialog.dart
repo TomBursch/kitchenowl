@@ -8,6 +8,7 @@ Future<bool> askForConfirmation({
   Widget? title,
   String? confirmText,
   String? cancelText,
+  bool showCancel = true,
 }) async =>
     await showDialog<bool>(
       context: context,
@@ -15,18 +16,22 @@ Future<bool> askForConfirmation({
         return AlertDialog(
           title: title,
           content: content,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+          ),
           actions: <Widget>[
-            TextButton(
-              style: ButtonStyle(
-                foregroundColor: MaterialStateProperty.all<Color>(
-                  Theme.of(context).disabledColor,
+            if (showCancel)
+              TextButton(
+                style: ButtonStyle(
+                  foregroundColor: MaterialStateProperty.all<Color>(
+                    Theme.of(context).disabledColor,
+                  ),
+                ),
+                onPressed: () => Navigator.of(context).pop(false),
+                child: Text(
+                  cancelText ?? AppLocalizations.of(context)!.cancel,
                 ),
               ),
-              onPressed: () => Navigator.of(context).pop(false),
-              child: Text(cancelText ?? AppLocalizations.of(context)!.cancel),
-            ),
             TextButton(
               style: ButtonStyle(
                 foregroundColor: MaterialStateProperty.all<Color>(

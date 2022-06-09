@@ -87,7 +87,7 @@ def unhandled_exception(e):
         app.logger.info(e)
         return jsonify(message="Requested resource not found"), 404
     if type(e) is UnauthorizedRequest:
-        app.logger.warn(e)
+        app.logger.warning(e)
         return jsonify(message="Request unauthorized"), 401
     app.logger.error(e)
     return jsonify(message="Something went wrong"), 500

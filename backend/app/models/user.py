@@ -38,9 +38,12 @@ class User(db.Model, DbModelMixin, TimestampMixin):
         return super().obj_to_dict(skip_columns=skip_columns, include_columns=include_columns)
 
     def obj_to_full_dict(self) -> dict:
+        from .token import Token
         res = self.obj_to_dict()
-        tokens = self.tokens
-        res['tokens'] = [e.obj_to_dict(skip_columns=['user_id']) for e in tokens]
+        tokens = Token.query.filter(Token.user_id == self.id, Token.type !=
+                                    'access', ~Token.created_tokens.any(Token.type == 'refresh')).all()
+        res['tokens'] = [e.obj_to_dict(
+            skip_columns=['user_id']) for e in tokens]
         return res
 
     @classmethod

@@ -12,7 +12,7 @@ import 'package:kitchenowl/services/transaction_handler.dart';
 class AuthCubit extends Cubit<AuthState> {
   AuthCubit() : super(const Loading()) {
     ApiService.getInstance().addListener(updateState);
-    ApiService.getInstance().setTokenRotationHandler((token) =>
+    ApiService.setTokenRotationHandler((token) =>
         SecureStorage.getInstance().write(key: 'TOKEN', value: token));
     setup();
   }

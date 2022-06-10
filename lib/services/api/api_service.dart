@@ -44,7 +44,7 @@ class ApiService {
   Map<String, String> headers = {};
   Future<void>? _refreshThread;
 
-  void Function(String)? _handleTokenRotation;
+  static void Function(String)? _handleTokenRotation;
 
   static final ValueNotifier<Connection> _connectionNotifier =
       ValueNotifier<Connection>(Connection.undefined);
@@ -95,7 +95,7 @@ class ApiService {
     _settingsNotifier.removeListener(f);
   }
 
-  void setTokenRotationHandler(void Function(String) handler) {
+  static void setTokenRotationHandler(void Function(String) handler) {
     _handleTokenRotation = handler;
   }
 

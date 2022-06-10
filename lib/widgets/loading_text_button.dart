@@ -29,9 +29,11 @@ class _LoadingTextButtonState extends State<LoadingTextButton> {
                 isLoading = true;
               });
               await widget.onPressed!();
-              setState(() {
-                isLoading = false;
-              });
+              if (mounted) {
+                setState(() {
+                  isLoading = false;
+                });
+              }
             }
           : null,
       child: isLoading

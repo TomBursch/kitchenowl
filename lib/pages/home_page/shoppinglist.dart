@@ -85,6 +85,7 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                             categories: state.categories,
                             onRefresh: cubit.refresh,
                             selected: (item) => item is ShoppinglistItem,
+                            isLoading: state is LoadingShoppinglistCubitState,
                             onPressed: (Item item) {
                               if (item is ShoppinglistItem) {
                                 cubit.remove(item);
@@ -110,6 +111,7 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                         categories: state.categories,
                         isList: state.style == ShoppinglistStyle.list,
                         selected: (item) => item is ShoppinglistItem,
+                        isLoading: state is LoadingShoppinglistCubitState,
                         onRefresh: cubit.refresh,
                         onPressed: (Item item) {
                           if (item is ShoppinglistItem) {
@@ -149,6 +151,7 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                             categories: state.categories,
                             isList: state.style == ShoppinglistStyle.list,
                             selected: (item) => item is ShoppinglistItem,
+                            isLoading: state is LoadingShoppinglistCubitState,
                             onRefresh: cubit.refresh,
                             onPressed: (Item item) {
                               if (item is ShoppinglistItem) {
@@ -204,6 +207,7 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                             onPressed: (Item item) => cubit.add(item.name),
                             categories: state.categories,
                             onRefresh: cubit.refresh,
+                            isLoading: state is LoadingShoppinglistCubitState,
                             isList: state.style == ShoppinglistStyle.list,
                           ),
                       ],

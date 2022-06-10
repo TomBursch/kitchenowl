@@ -135,6 +135,7 @@
     },
     "recipeEdit": "Edit Recipe",
     "recipeEmpty": "No recipes, start by adding one!",
+    "recipeEmptySearch": "No recipes found :(",
     "recipeImageSelect": "Select a recipe image",
     "recipeNew": "New Recipe",
     "recipes": "Recipe",

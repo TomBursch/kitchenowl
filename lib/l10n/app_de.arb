@@ -135,6 +135,7 @@
     },
     "recipeEdit": "Rezept Bearbeiten",
     "recipeEmpty": "Keine Rezepte, fange and welche zu erstellen!",
+    "recipeEmptySearch": "Keine Rezepte gefunden :(",
     "recipeImageSelect": "Wähle ein Rezeptbild",
     "recipeNew": "Neues Rezept",
     "recipes": "Rezepte",

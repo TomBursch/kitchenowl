@@ -47,10 +47,10 @@ class _RecipeListPageState extends State<RecipeListPage> {
             height: 70,
             child: Padding(
               padding: const EdgeInsets.fromLTRB(16, 16, 16, 6),
-              child: BlocListener<RecipeListCubit, ListRecipeCubitState>(
+              child: BlocListener<RecipeListCubit, RecipeListState>(
                 bloc: cubit,
                 listener: (context, state) {
-                  if (state is! SearchRecipeCubitState) {
+                  if (state is! SearchRecipeListState) {
                     if (searchController.text.isNotEmpty) {
                       searchController.clear();
                     }
@@ -65,10 +65,12 @@ class _RecipeListPageState extends State<RecipeListPage> {
               ),
             ),
           ),
-          BlocBuilder<RecipeListCubit, ListRecipeCubitState>(
+          BlocBuilder<RecipeListCubit, RecipeListState>(
             bloc: cubit,
             builder: (context, state) {
-              if (state.tags.isEmpty || state is SearchRecipeCubitState) {
+              if (state is! ListRecipeListState ||
+                  state.tags.isEmpty ||
+                  state is SearchRecipeListState) {
                 return const SizedBox();
               }
 
@@ -90,14 +92,14 @@ class _RecipeListPageState extends State<RecipeListPage> {
                                   tag.name,
                                   style: TextStyle(
                                     color:
-                                        (state is FilteredListRecipeCubitState) &&
+                                        (state is FilteredListRecipeListState) &&
                                                 state.selectedTags.contains(tag)
                                             ? Colors.white
                                             : null,
                                   ),
                                 ),
                                 selected:
-                                    (state is FilteredListRecipeCubitState) &&
+                                    (state is FilteredListRecipeListState) &&
                                         state.selectedTags.contains(tag),
                                 selectedColor:
                                     Theme.of(context).colorScheme.secondary,
@@ -114,11 +116,25 @@ class _RecipeListPageState extends State<RecipeListPage> {
             },
           ),
           Expanded(
-            child: BlocBuilder<RecipeListCubit, ListRecipeCubitState>(
+            child: BlocBuilder<RecipeListCubit, RecipeListState>(
               bloc: cubit,
               buildWhen: (previous, current) =>
+                  previous is! ListRecipeListState ||
+                  current is! ListRecipeListState ||
                   !listEquals(previous.recipes, current.recipes),
               builder: (context, state) {
+                if (state is! ListRecipeListState) {
+                  return Padding(
+                    padding: const EdgeInsets.only(left: 28, right: 12),
+                    child: Column(
+                      children: const [
+                        ShimmerCard(),
+                        ShimmerCard(),
+                        ShimmerCard(),
+                      ],
+                    ),
+                  );
+                }
                 final recipes = state.recipes;
 
                 if (recipes.isEmpty) {
@@ -128,7 +144,9 @@ class _RecipeListPageState extends State<RecipeListPage> {
                     children: [
                       const Icon(Icons.no_food_rounded),
                       const SizedBox(height: 16),
-                      Text(AppLocalizations.of(context)!.recipeEmpty),
+                      Text(state is SearchRecipeListState
+                          ? AppLocalizations.of(context)!.recipeEmptySearch
+                          : AppLocalizations.of(context)!.recipeEmpty),
                     ],
                   );
                 }

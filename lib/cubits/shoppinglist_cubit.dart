@@ -18,7 +18,7 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
       ? (state as SearchShoppinglistCubitState).query
       : "";
 
-  ShoppinglistCubit() : super(const ShoppinglistCubitState()) {
+  ShoppinglistCubit() : super(const LoadingShoppinglistCubitState()) {
     refresh();
   }
 
@@ -218,6 +218,10 @@ class ShoppinglistCubitState extends Equatable {
   @override
   List<Object?> get props =>
       listItems.cast<Object>() + recentItems + categories + [sorting, style];
+}
+
+class LoadingShoppinglistCubitState extends ShoppinglistCubitState {
+  const LoadingShoppinglistCubitState();
 }
 
 class SearchShoppinglistCubitState extends ShoppinglistCubitState {

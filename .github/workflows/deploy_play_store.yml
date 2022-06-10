@@ -16,6 +16,10 @@ jobs:
   fastlane-deploy:
     runs-on: ubuntu-18.04
     steps:
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: '11'
       # Set up Flutter.
       - name: Clone Flutter repository with stable channel
         uses: subosito/flutter-action@v1
@@ -23,7 +27,7 @@ jobs:
           channel: stable
       - run: flutter doctor -v
 
-      # Checkout gallery code and get packages.
+      # Checkout code and get packages.
       - name: Checkout code
         uses: actions/checkout@v2
       - run: flutter packages get
@@ -32,7 +36,7 @@ jobs:
       - name: Setup Fastlane
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: "2.7"
+          ruby-version: "3.1.2"
           bundler-cache: true
           working-directory: android
 

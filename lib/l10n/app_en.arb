@@ -2,6 +2,7 @@
     "about": "About",
     "add": "Add",
     "addCategory": "Add Category",
+    "addDescriptionFromSource": "Add description from source",
     "addItemTitle": "Add Items",
     "addLanguage": "Add Language",
     "addLanguageConfirm": "Are you sure you want to add language '{lang}'? This (right now) cannot be undone.",

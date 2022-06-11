@@ -13,6 +13,7 @@ import 'package:kitchenowl/pages/item_page.dart';
 import 'package:kitchenowl/pages/item_search_page.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:responsive_builder/responsive_builder.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class AddUpdateRecipePage extends StatefulWidget {
   final Recipe recipe;
@@ -262,19 +263,51 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                       );
                     },
                   ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
-                    child: TextField(
-                      controller: descController,
-                      onChanged: (s) => cubit.setDescription(s),
-                      maxLines: null,
-                      decoration: InputDecoration(
-                        border: const OutlineInputBorder(),
-                        labelText: AppLocalizations.of(context)!.description,
-                        hintText:
-                            AppLocalizations.of(context)!.writeMarkdownHere,
+                  BlocListener<AddUpdateRecipeCubit, AddUpdateRecipeState>(
+                    bloc: cubit,
+                    listenWhen: (previous, current) =>
+                        previous.description != current.description,
+                    listener: (context, state) {
+                      if (descController.text != state.description) {
+                        descController.text = state.description;
+                      }
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+                      child: TextField(
+                        controller: descController,
+                        onChanged: (s) => cubit.setDescription(s),
+                        maxLines: null,
+                        decoration: InputDecoration(
+                          border: const OutlineInputBorder(),
+                          labelText: AppLocalizations.of(context)!.description,
+                          hintText:
+                              AppLocalizations.of(context)!.writeMarkdownHere,
+                        ),
                       ),
                     ),
+                  ),
+                  BlocBuilder<AddUpdateRecipeCubit, AddUpdateRecipeState>(
+                    bloc: cubit,
+                    buildWhen: (previous, current) =>
+                        previous.description != current.description ||
+                        previous.source != current.source,
+                    builder: (context, state) => state.description.isEmpty &&
+                            (Uri.tryParse(state.source)?.isAbsolute ?? false)
+                        ? Padding(
+                            padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+                            child: Align(
+                              alignment: Alignment.centerRight,
+                              child: LoadingElevatedButton(
+                                onPressed: cubit.setDescriptionFromSource,
+                                child: Text(
+                                  AppLocalizations.of(context)!
+                                      .addDescriptionFromSource,
+                                ),
+                              ),
+                            ),
+                          )
+                        : const SizedBox(height: 16),
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),

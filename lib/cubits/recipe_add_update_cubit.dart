@@ -83,6 +83,14 @@ class AddUpdateRecipeCubit extends Cubit<AddUpdateRecipeState> {
     emit(state.copyWith(description: desc));
   }
 
+  Future<void> setDescriptionFromSource() async {
+    final source = state.source;
+    final scrape = await ApiService.getInstance().scrapeRecipe(source);
+    if (scrape != null && scrape.recipe.description.isNotEmpty) {
+      setDescription(scrape.recipe.description);
+    }
+  }
+
   void setTime(int time) {
     emit(state.copyWith(time: time));
   }

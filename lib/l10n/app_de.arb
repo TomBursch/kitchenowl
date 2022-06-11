@@ -2,6 +2,7 @@
     "about": "About",
     "add": "Hinzufügen",
     "addCategory": "Kategorie Hinzufügen",
+    "addDescriptionFromSource": "Füge die Beschreibung der Quelle ein.",
     "addItemTitle": "Artikel Hinzufügen",
     "addLanguage": "Sprache Hinzufügen",
     "addLanguageConfirm": "Bist du dir sicher, dass du Sprache '{lang}' hinzufügen möchtest? Das kann (zurzeit) nicht rückgängig gemacht werden.",

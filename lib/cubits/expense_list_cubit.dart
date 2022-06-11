@@ -7,7 +7,7 @@ import 'package:kitchenowl/services/transactions/expense.dart';
 import 'package:kitchenowl/services/transactions/user.dart';
 
 class ExpenseListCubit extends Cubit<ExpenseListCubitState> {
-  ExpenseListCubit() : super(const ExpenseListCubitState()) {
+  ExpenseListCubit() : super(const LoadingExpenseListCubitState()) {
     refresh();
   }
 
@@ -50,4 +50,8 @@ class ExpenseListCubitState extends Equatable {
 
   @override
   List<Object?> get props => users.cast<Object>() + expenses;
+}
+
+class LoadingExpenseListCubitState extends ExpenseListCubitState {
+  const LoadingExpenseListCubitState();
 }

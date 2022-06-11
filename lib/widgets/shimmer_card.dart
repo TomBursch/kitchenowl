@@ -14,21 +14,32 @@ class ShimmerCard extends StatelessWidget {
         child: ListTile(
           trailing: trailing ?? const Icon(Icons.arrow_right_rounded),
           title: Row(
-            children: [
-              Container(
-                constraints: BoxConstraints(
-                  maxHeight: Theme.of(context).textTheme.bodyText1!.fontSize!,
-                  maxWidth: 200,
-                ),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
-                  color: Colors.white,
-                ),
-              ),
-              const Spacer(),
+            children: const [
+              ShimmerText(),
+              Spacer(),
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class ShimmerText extends StatelessWidget {
+  final double maxWidth;
+
+  const ShimmerText({super.key, this.maxWidth = 200});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      constraints: BoxConstraints(
+        maxHeight: Theme.of(context).textTheme.bodyText1!.fontSize!,
+        maxWidth: maxWidth,
+      ),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(15),
+        color: Colors.white,
       ),
     );
   }

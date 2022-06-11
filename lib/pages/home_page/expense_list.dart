@@ -51,6 +51,26 @@ class _ExpensePageState extends State<ExpenseListPage> {
                     ),
                   ),
                 ),
+                if (state is LoadingExpenseListCubitState && !App.isOffline)
+                  SliverList(
+                    delegate: SliverChildListDelegate([
+                      SizedBox(
+                        height: (2 * 60 + 30).toDouble(),
+                      ),
+                      for (int i = 0; i < 3; i++)
+                        const Padding(
+                          padding: EdgeInsets.symmetric(
+                            vertical: 4,
+                            horizontal: 16,
+                          ),
+                          child: ShimmerCard(
+                            trailing: ShimmerText(
+                              maxWidth: 50,
+                            ),
+                          ),
+                        ),
+                    ]),
+                  ),
                 if (state.users.isNotEmpty) ...[
                   SliverToBoxAdapter(
                     child: SizedBox(

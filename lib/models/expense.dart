@@ -1,5 +1,7 @@
 import 'package:kitchenowl/models/model.dart';
 
+import 'nullable.dart';
+
 class Expense extends Model {
   final int? id;
   final String name;
@@ -39,16 +41,15 @@ class Expense extends Model {
   Expense copyWith({
     String? name,
     double? amount,
-    String? category,
+    Nullable<String>? category,
     int? paidById,
     List<PaidForModel>? paidFor,
-    bool overrideCategory = false,
   }) =>
       Expense(
         id: id,
         name: name ?? this.name,
         amount: amount ?? this.amount,
-        category: overrideCategory ? category : (category ?? this.category),
+        category: (category ?? Nullable(this.category)).value,
         paidById: paidById ?? this.paidById,
         paidFor: paidFor ?? this.paidFor,
       );

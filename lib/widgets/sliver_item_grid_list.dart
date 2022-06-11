@@ -11,7 +11,7 @@ import 'package:responsive_builder/responsive_builder.dart';
 class SliverItemGridList<T extends Item> extends StatelessWidget {
   final void Function()? onRefresh;
   final void Function(T)? onPressed;
-  final void Function(T)? onLongPressed;
+  final Nullable<void Function(T)>? onLongPressed;
   final List<T> items;
   final List<Category>? categories; // forwared to item page on long press
   final bool isList;
@@ -59,24 +59,25 @@ class SliverItemGridList<T extends Item> extends StatelessWidget {
               selected: selected?.call(items[i]) ?? false,
               gridStyle: !isList,
               onPressed: onPressed,
-              onLongPressed: onLongPressed ??
-                  (Item item) async {
-                    final res =
-                        await Navigator.of(context).push<UpdateValue<Item>>(
-                      MaterialPageRoute(
-                        builder: (BuildContext context) => ItemPage(
-                          item: item,
-                          categories: categories ?? const [],
-                        ),
-                      ),
-                    );
-                    if (onRefresh != null &&
-                        res != null &&
-                        (res.state == UpdateEnum.deleted ||
-                            res.state == UpdateEnum.updated)) {
-                      onRefresh!();
-                    }
-                  },
+              onLongPressed: (onLongPressed ??
+                      Nullable((Item item) async {
+                        final res =
+                            await Navigator.of(context).push<UpdateValue<Item>>(
+                          MaterialPageRoute(
+                            builder: (BuildContext context) => ItemPage(
+                              item: item,
+                              categories: categories ?? const [],
+                            ),
+                          ),
+                        );
+                        if (onRefresh != null &&
+                            res != null &&
+                            (res.state == UpdateEnum.deleted ||
+                                res.state == UpdateEnum.updated)) {
+                          onRefresh!();
+                        }
+                      }))
+                  .value,
             ),
           );
 

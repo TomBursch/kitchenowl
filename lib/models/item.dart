@@ -1,6 +1,8 @@
 import 'package:kitchenowl/models/category.dart';
 import 'package:kitchenowl/models/model.dart';
 
+import 'nullable.dart';
+
 class Item extends Model {
   final int? id;
   final String name;
@@ -24,13 +26,12 @@ class Item extends Model {
 
   Item copyWith({
     String? name,
-    Category? category,
-    bool overrideCategory = false,
+    Nullable<Category>? category,
   }) =>
       ItemWithDescription(
         id: id,
         name: name ?? this.name,
-        category: overrideCategory ? category : (category ?? this.category),
+        category: (category ?? Nullable(this.category)).value,
       );
 
   @override
@@ -89,14 +90,13 @@ class ItemWithDescription extends Item {
   @override
   ItemWithDescription copyWith({
     String? name,
-    Category? category,
-    bool overrideCategory = false,
+    Nullable<Category>? category,
     String? description,
   }) =>
       ItemWithDescription(
         id: id,
         name: name ?? this.name,
-        category: overrideCategory ? category : (category ?? this.category),
+        category: (category ?? Nullable(this.category)).value,
         description: description ?? this.description,
       );
 
@@ -137,14 +137,13 @@ class ShoppinglistItem extends ItemWithDescription {
   @override
   ShoppinglistItem copyWith({
     String? name,
-    Category? category,
-    bool overrideCategory = false,
+    Nullable<Category>? category,
     String? description,
   }) =>
       ShoppinglistItem(
         id: id,
         name: name ?? this.name,
-        category: overrideCategory ? category : (category ?? this.category),
+        category: (category ?? Nullable(this.category)).value,
         description: description ?? this.description,
       );
 }
@@ -192,15 +191,14 @@ class RecipeItem extends ItemWithDescription {
   @override
   RecipeItem copyWith({
     String? name,
-    Category? category,
-    bool overrideCategory = false,
+    Nullable<Category>? category,
     String? description,
     bool? optional,
   }) =>
       RecipeItem(
         id: id,
         name: name ?? this.name,
-        category: overrideCategory ? category : (category ?? this.category),
+        category: (category ?? Nullable(this.category)).value,
         description: description ?? this.description,
         optional: optional ?? this.optional,
       );

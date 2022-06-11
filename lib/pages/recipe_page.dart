@@ -9,6 +9,7 @@ import 'package:kitchenowl/app.dart';
 import 'package:kitchenowl/cubits/recipe_cubit.dart';
 import 'package:kitchenowl/cubits/settings_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
+import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/models/recipe.dart';
 import 'package:kitchenowl/pages/photo_view_page.dart';
 import 'package:kitchenowl/pages/recipe_add_update_page.dart';
@@ -230,7 +231,8 @@ class _RecipePageState extends State<RecipePage> {
                           state.recipe.items.where((e) => !e.optional).toList(),
                       selected: (item) => state.selectedItems.contains(item),
                       onPressed: cubit.itemSelected,
-                      onLongPressed: (_) {},
+                      onLongPressed:
+                          const Nullable<void Function(RecipeItem)>.empty(),
                     ),
                   if (state.recipe.items.where((e) => e.optional).isNotEmpty)
                     SliverPadding(
@@ -248,7 +250,8 @@ class _RecipePageState extends State<RecipePage> {
                           state.recipe.items.where((e) => e.optional).toList(),
                       selected: (item) => state.selectedItems.contains(item),
                       onPressed: cubit.itemSelected,
-                      onLongPressed: (_) {},
+                      onLongPressed:
+                          const Nullable<void Function(RecipeItem)>.empty(),
                     ),
                   SliverPadding(
                     padding: const EdgeInsets.all(16),

@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/category.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/models/recipe.dart';
@@ -15,14 +16,12 @@ class ItemEditCubit<T extends Item> extends Cubit<ItemEditState> {
     if (_item is ItemWithDescription) {
       return (((_item as ItemWithDescription).copyWith(
         description: state.description,
-        category: state.category,
-        overrideCategory: true,
+        category: Nullable(state.category),
       )) as T);
     }
 
     return _item.copyWith(
-      category: state.category,
-      overrideCategory: true,
+      category: Nullable(state.category),
     ) as T;
   }
 

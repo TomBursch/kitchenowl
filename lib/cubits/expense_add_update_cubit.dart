@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/expense.dart';
 import 'package:kitchenowl/models/user.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
@@ -34,8 +35,7 @@ class AddUpdateExpenseCubit extends Cubit<AddUpdateExpenseState> {
           amount: state.amount,
           paidById: state.paidBy,
           paidFor: state.paidFor,
-          category: state.category,
-          overrideCategory: true,
+          category: Nullable(state.category),
         ));
       }
     }

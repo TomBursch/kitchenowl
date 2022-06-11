@@ -304,7 +304,8 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                   items: state.items.where((e) => !e.optional).toList(),
                   selected: (item) => true,
                   onPressed: (RecipeItem item) => cubit.removeItem(item),
-                  onLongPressed: (RecipeItem item) => _editItem(context, item),
+                  onLongPressed:
+                      Nullable((RecipeItem item) => _editItem(context, item)),
                 ),
               ),
               SliverPadding(
@@ -335,7 +336,8 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                   items: state.items.where((e) => e.optional).toList(),
                   selected: (item) => true,
                   onPressed: (RecipeItem item) => cubit.removeItem(item),
-                  onLongPressed: (RecipeItem item) => _editItem(context, item),
+                  onLongPressed:
+                      Nullable((RecipeItem item) => _editItem(context, item)),
                 ),
               ),
               if (isUpdate)

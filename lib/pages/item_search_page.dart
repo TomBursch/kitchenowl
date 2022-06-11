@@ -114,7 +114,7 @@ class _ItemSearchPageState extends State<ItemSearchPage> {
               SliverItemGridList(
                 items: state.searchResults,
                 selected: (item) => state.selectedItems.contains(item),
-                onLongPressed: (_) {},
+                onLongPressed: const Nullable<void Function(Item)>.empty(),
                 onPressed: (Item item) {
                   if (!widget.multiple) {
                     Navigator.of(context).pop([item]);

@@ -64,7 +64,8 @@ class _ItemSelectionPageState extends State<ItemSelectionPage> {
                 items: recipe.mandatoryItems,
                 onPressed: (RecipeItem item) => cubit.toggleItem(recipe, item),
                 selected: (item) => state.selectedItems[recipe]!.contains(item),
-                onLongPressed: (_) {},
+                onLongPressed:
+                    const Nullable<void Function(RecipeItem)>.empty(),
               ),
               if (recipe.optionalItems.isNotEmpty)
                 SliverPadding(
@@ -80,7 +81,8 @@ class _ItemSelectionPageState extends State<ItemSelectionPage> {
                 items: recipe.optionalItems,
                 onPressed: (RecipeItem item) => cubit.toggleItem(recipe, item),
                 selected: (item) => state.selectedItems[recipe]!.contains(item),
-                onLongPressed: (_) {},
+                onLongPressed:
+                    const Nullable<void Function(RecipeItem)>.empty(),
               ),
               const SliverPadding(
                 padding: EdgeInsets.fromLTRB(16, 16, 16, 0),

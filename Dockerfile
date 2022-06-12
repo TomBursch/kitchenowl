@@ -29,6 +29,7 @@ ENV PATH="${PATH}:/usr/local/src/flutter/bin"
 
 # Enable flutter web
 RUN flutter config --enable-web
+RUN flutter config --no-analytics
 RUN flutter upgrade
 
 # Run flutter doctor

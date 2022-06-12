@@ -148,6 +148,7 @@ jobs:
           flutter config --enable-linux-desktop
           flutter config --enable-macos-desktop
           flutter config --enable-windows-desktop
+      - run: flutter config --no-analytics
       - run: flutter doctor -v
       # Checkout code, recreate missing files, and get packages.
       - name: Checkout code

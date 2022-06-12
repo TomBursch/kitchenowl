@@ -84,7 +84,9 @@ class App extends StatelessWidget {
                           return const UnreachablePage();
                         }
                         if (state is Unsupported) {
-                          return const UnsupportedPage();
+                          return UnsupportedPage(
+                            unsupportedBackend: state.unsupportedBackend,
+                          );
                         }
                         if (state is LoadingOnboard) {
                           return SplashPage(

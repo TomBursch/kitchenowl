@@ -13,7 +13,6 @@ import 'package:kitchenowl/pages/item_page.dart';
 import 'package:kitchenowl/pages/item_search_page.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:responsive_builder/responsive_builder.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 
 class AddUpdateRecipePage extends StatefulWidget {
   final Recipe recipe;

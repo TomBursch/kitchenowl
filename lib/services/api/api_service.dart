@@ -21,7 +21,8 @@ export 'category.dart';
 
 enum Connection {
   disconnected,
-  unsupported,
+  unsupportedBackend,
+  unsupportedFrontend,
   connected,
   authenticated,
   undefined,
@@ -129,7 +130,10 @@ class ApiService {
               ? status = Connection.authenticated
               : status = Connection.connected;
         } else {
-          status = Connection.unsupported;
+          status = healthy.item2 == null ||
+                  (healthy.item2!['version'] ?? 0) >= Config.MIN_BACKEND_VERSION
+              ? Connection.unsupportedBackend
+              : Connection.unsupportedFrontend;
         }
       }
     }

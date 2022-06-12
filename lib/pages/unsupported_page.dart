@@ -5,7 +5,10 @@ import 'package:kitchenowl/cubits/auth_cubit.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 
 class UnsupportedPage extends StatelessWidget {
-  const UnsupportedPage({Key? key}) : super(key: key);
+  final bool unsupportedBackend;
+
+  const UnsupportedPage({Key? key, required this.unsupportedBackend})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +25,9 @@ class UnsupportedPage extends StatelessWidget {
               ),
               const SizedBox(height: 10),
               Text(
-                AppLocalizations.of(context)!.unsupportedBackendMessage,
+                unsupportedBackend
+                    ? AppLocalizations.of(context)!.unsupportedBackendMessage
+                    : AppLocalizations.of(context)!.unsupportedFrontendMessage,
                 maxLines: null,
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.caption,

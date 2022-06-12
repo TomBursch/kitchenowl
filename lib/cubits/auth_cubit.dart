@@ -57,8 +57,11 @@ class AuthCubit extends Cubit<AuthState> {
           emit(const Unauthenticated());
         }
         break;
-      case Connection.unsupported:
-        emit(const Unsupported());
+      case Connection.unsupportedBackend:
+        emit(const Unsupported(true));
+        break;
+      case Connection.unsupportedFrontend:
+        emit(const Unsupported(false));
         break;
       case Connection.undefined:
         emit(const Loading());
@@ -235,8 +238,9 @@ class Unreachable extends AuthState {
 }
 
 class Unsupported extends AuthState {
-  const Unsupported() : super(6);
+  final bool unsupportedBackend;
+  const Unsupported(this.unsupportedBackend) : super(6);
 
   @override
-  List<Object?> get props => ["Unsupported"];
+  List<Object?> get props => ["Unsupported", unsupportedBackend];
 }

@@ -36,16 +36,16 @@ jobs:
         run: |
           if [[ $REF == "refs/tags/v"* ]]
           then
-            echo "::set-output name=tags::[$DOCKER_HUB_USERNAME/kitchenowl-web:latest, $DOCKER_HUB_USERNAME/kitchenowl-web:beta]"
+            echo "::set-output name=tags::$BASE_TAG:latest, $BASE_TAG:beta"
           elif [[ $REF == "refs/tags/beta-v"* ]]
           then
-            echo "::set-output name=tags::[$DOCKER_HUB_USERNAME/kitchenowl-web:beta]"
+            echo "::set-output name=tags::$BASE_TAG:beta"
           else
-            echo "::set-output name=tags::[$DOCKER_HUB_USERNAME/kitchenowl-web:dev]"
+            echo "::set-output name=tags::$BASE_TAG:dev"
           fi
         env:
           REF: ${{ github.ref }}
-          DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
+          BASE_TAG: ${{ secrets.DOCKER_HUB_USERNAME }}/kitchenowl-web
 
       - name: Cache Docker layers
         uses: actions/cache@v2
@@ -76,7 +76,7 @@ jobs:
           file: ./Dockerfile
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: ${{ fromJson(steps.dockertag.outputs.tags) }}
+          tags: ${{ steps.dockertag.outputs.tags }}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
 

@@ -1,4 +1,4 @@
-alembic==1.7.7
+alembic==1.8.0
 appdirs==1.4.4
 APScheduler==3.9.1
 attrs==21.4.0
@@ -17,7 +17,7 @@ flake8==4.0.1
 Flask==2.1.2
 Flask-APScheduler==1.12.3
 Flask-Bcrypt==1.0.1
-Flask-JWT-Extended==4.4.0
+Flask-JWT-Extended==4.4.1
 Flask-Migrate==3.1.0
 Flask-SQLAlchemy==2.5.1
 fonttools==4.33.3
@@ -32,7 +32,7 @@ Jinja2==3.1.2
 joblib==1.1.0
 jstyleson==0.0.2
 kiwisolver==1.4.2
-lxml==4.8.0
+lxml==4.9.0
 Mako==1.2.0
 MarkupSafe==2.1.1
 marshmallow==3.16.0
@@ -62,15 +62,15 @@ pytz==2022.1
 pytz-deprecation-shim==0.1.0.post0
 rdflib==6.1.1
 rdflib-jsonld==0.6.2
-recipe-scrapers==14.2.0
-regex==2022.4.24
-requests==2.27.1
+recipe-scrapers==14.3.0
+regex==2022.6.2
+requests==2.28.0
 scikit-learn==1.1.1
 scipy==1.8.1
 setuptools-scm==6.4.2
 six==1.16.0
 soupsieve==2.3.2
-SQLAlchemy==1.4.36
+SQLAlchemy==1.4.37
 threadpoolctl==3.1.0
 toml==0.10.2
 tomli==1.2.3

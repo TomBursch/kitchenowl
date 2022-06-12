@@ -47,9 +47,9 @@ class Item(db.Model, DbModelMixin, TimestampMixin):
         return res
 
     @classmethod
-    def create_by_name(cls, name, default=False) -> Item:
+    def create_by_name(cls, name: str, default=False) -> Item:
         return cls(
-            name=name,
+            name=name.strip(),
             default=default,
         ).save()
 
@@ -61,7 +61,8 @@ class Item(db.Model, DbModelMixin, TimestampMixin):
         return cls.query.order_by(cls.name).all()
 
     @classmethod
-    def find_by_name(cls, name) -> Item:
+    def find_by_name(cls, name: str) -> Item:
+        name = name.strip()
         return cls.query.filter(cls.name == name).first()
 
     @classmethod
@@ -69,7 +70,7 @@ class Item(db.Model, DbModelMixin, TimestampMixin):
         return cls.query.filter(cls.id == id).first()
 
     @classmethod
-    def search_name(cls, name):
+    def search_name(cls, name: str):
         item_count = 9
         found = []
 

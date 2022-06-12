@@ -23,20 +23,21 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
-      - name: decide docker tag
+      - name: decide docker tags
         id: dockertag
         run: |
           if [[ $REF == "refs/tags/v"* ]]
           then
-            echo "::set-output name=tag::latest"
+            echo "::set-output name=tags::$BASE_TAG:latest, $BASE_TAG:beta"
           elif [[ $REF == "refs/tags/beta-v"* ]]
           then
-            echo "::set-output name=tag::beta"
+            echo "::set-output name=tags::$BASE_TAG:beta"
           else
-            echo "::set-output name=tag::dev"
+            echo "::set-output name=tags::$BASE_TAG:dev"
           fi
         env:
           REF: ${{ github.ref }}
+          BASE_TAG: ${{ secrets.DOCKER_HUB_USERNAME }}/kitchenowl
 
       - name: Cache Docker layers
         uses: actions/cache@v2
@@ -67,7 +68,7 @@ jobs:
           file: ./Dockerfile
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/kitchenowl:${{ steps.dockertag.outputs.tag }}
+          tags: ${{ steps.dockertag.outputs.tags }}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
 

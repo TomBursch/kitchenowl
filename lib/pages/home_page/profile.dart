@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/app.dart';
@@ -80,19 +79,16 @@ class ProfilePage extends StatelessWidget {
                     title: Text(AppLocalizations.of(context)!.forceOfflineMode),
                     leading: const Icon(Icons.mobiledata_off_outlined),
                     contentPadding: const EdgeInsets.only(left: 20, right: 0),
-                    trailing: Transform.scale(
-                      scale: 0.9,
-                      child: CupertinoSwitch(
-                        value: state.forcedOfflineMode,
-                        activeColor: Theme.of(context).colorScheme.secondary,
-                        onChanged: (value) =>
-                            BlocProvider.of<SettingsCubit>(context)
-                                .setForcedOfflineMode(value),
-                      ),
+                    trailing: KitchenOwlSwitch(
+                      value: state.forcedOfflineMode,
+                      onChanged: (value) =>
+                          BlocProvider.of<SettingsCubit>(context)
+                              .setForcedOfflineMode(value),
                     ),
                   ),
                   if (!isOffline)
                     Card(
+                      clipBehavior: Clip.antiAlias,
                       child: ListTile(
                         title:
                             Text(AppLocalizations.of(context)!.shoppingLists),
@@ -109,6 +105,7 @@ class ProfilePage extends StatelessWidget {
                   if (!isOffline)
                     Card(
                       child: ListTile(
+                        shape: Theme.of(context).cardTheme.shape,
                         title: Text(AppLocalizations.of(context)!.user),
                         leading: const Icon(Icons.person),
                         trailing: const Icon(Icons.arrow_right_rounded),

@@ -17,7 +17,7 @@ Future<bool> askForConfirmation({
           title: title,
           content: content,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15),
+            borderRadius: BorderRadius.circular(14),
           ),
           actions: <Widget>[
             if (showCancel)

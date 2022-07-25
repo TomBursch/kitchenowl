@@ -22,7 +22,7 @@ class ShimmerShoppingItemWidget extends StatelessWidget {
             child: Material(
               color: color,
               shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(4)),
+                borderRadius: BorderRadius.all(Radius.circular(14)),
               ),
             ),
           )

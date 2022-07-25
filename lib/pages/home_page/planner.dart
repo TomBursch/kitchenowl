@@ -8,6 +8,7 @@ import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/models/recipe.dart';
 import 'package:kitchenowl/pages/item_selection_page.dart';
 import 'package:kitchenowl/pages/recipe_page.dart';
+import 'package:kitchenowl/widgets/recipe_card.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
 class PlannerPage extends StatefulWidget {
@@ -188,19 +189,13 @@ class _PlannerPageState extends State<PlannerPage> {
                       ),
                     ),
                   ),
-                  SliverPadding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    sliver: SliverGrid(
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: crossAxisCount,
-                        mainAxisSpacing: 4,
-                        crossAxisSpacing: 4,
-                        childAspectRatio: 1,
-                      ),
-                      delegate: SliverChildBuilderDelegate(
-                        (context, i) => SelectableButtonCard(
-                          key: Key(state.recentRecipes[i].name),
-                          title: state.recentRecipes[i].name,
+                  SliverToBoxAdapter(
+                    child: SizedBox(
+                      height: 250,
+                      child: ListView.builder(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        itemBuilder: (context, i) => RecipeCard(
+                          recipe: state.recentRecipes[i],
                           onPressed: () {
                             cubit.add(state.recentRecipes[i]);
                           },
@@ -210,7 +205,8 @@ class _PlannerPageState extends State<PlannerPage> {
                             state.recentRecipes[i],
                           ),
                         ),
-                        childCount: state.recentRecipes.length,
+                        itemCount: state.recentRecipes.length,
+                        scrollDirection: Axis.horizontal,
                       ),
                     ),
                   ),
@@ -236,30 +232,21 @@ class _PlannerPageState extends State<PlannerPage> {
                       ),
                     ),
                   ),
-                  SliverPadding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    sliver: SliverGrid(
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: crossAxisCount,
-                        mainAxisSpacing: 4,
-                        crossAxisSpacing: 4,
-                        childAspectRatio: 1,
-                      ),
-                      delegate: SliverChildBuilderDelegate(
-                        (context, i) => SelectableButtonCard(
-                          key: Key(state.suggestedRecipes[i].name),
-                          title: state.suggestedRecipes[i].name,
-                          onPressed: () {
-                            cubit.add(state.suggestedRecipes[i]);
-                          },
-                          onLongPressed: () => _openRecipePage(
-                            context,
-                            cubit,
-                            state.suggestedRecipes[i],
-                          ),
+                  SliverToBoxAdapter(
+                    child: ListView.builder(
+                      itemBuilder: (context, i) => RecipeCard(
+                        recipe: state.suggestedRecipes[i],
+                        onPressed: () {
+                          cubit.add(state.suggestedRecipes[i]);
+                        },
+                        onLongPressed: () => _openRecipePage(
+                          context,
+                          cubit,
+                          state.suggestedRecipes[i],
                         ),
-                        childCount: state.suggestedRecipes.length,
                       ),
+                      itemCount: state.suggestedRecipes.length,
+                      scrollDirection: Axis.horizontal,
                     ),
                   ),
                 ],

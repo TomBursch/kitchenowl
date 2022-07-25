@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/cubits/auth_cubit.dart';
@@ -77,15 +76,10 @@ class _SettingsServerPageState extends State<SettingsServerPage> {
                         leading: const Icon(Icons.calendar_today_rounded),
                         contentPadding:
                             const EdgeInsets.only(left: 20, right: 0),
-                        trailing: Transform.scale(
-                          scale: 0.9,
-                          child: CupertinoSwitch(
-                            value: state.serverSettings.featurePlanner ?? false,
-                            activeColor:
-                                Theme.of(context).colorScheme.secondary,
-                            onChanged: BlocProvider.of<SettingsCubit>(context)
-                                .setFeaturePlanner,
-                          ),
+                        trailing: KitchenOwlSwitch(
+                          value: state.serverSettings.featurePlanner ?? false,
+                          onChanged: BlocProvider.of<SettingsCubit>(context)
+                              .setFeaturePlanner,
                         ),
                       ),
                       ListTile(
@@ -93,16 +87,10 @@ class _SettingsServerPageState extends State<SettingsServerPage> {
                         leading: const Icon(Icons.account_balance_rounded),
                         contentPadding:
                             const EdgeInsets.only(left: 20, right: 0),
-                        trailing: Transform.scale(
-                          scale: 0.9,
-                          child: CupertinoSwitch(
-                            value:
-                                state.serverSettings.featureExpenses ?? false,
-                            activeColor:
-                                Theme.of(context).colorScheme.secondary,
-                            onChanged: BlocProvider.of<SettingsCubit>(context)
-                                .setFeatureExpenses,
-                          ),
+                        trailing: KitchenOwlSwitch(
+                          value: state.serverSettings.featureExpenses ?? false,
+                          onChanged: BlocProvider.of<SettingsCubit>(context)
+                              .setFeatureExpenses,
                         ),
                       ),
                     ],

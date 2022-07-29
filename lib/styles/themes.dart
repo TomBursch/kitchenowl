@@ -53,6 +53,11 @@ abstract class AppThemes {
       color: lightScheme.surface,
       surfaceTintColor: lightScheme.surfaceTint,
     ),
+    floatingActionButtonTheme: FloatingActionButtonThemeData(
+      backgroundColor: lightScheme.primary,
+      foregroundColor: lightScheme.onPrimary,
+      elevation: 0,
+    ),
   );
 
   static ThemeData dark = ThemeData.from(
@@ -79,6 +84,16 @@ abstract class AppThemes {
         onPrimary: darkScheme.onSurfaceVariant,
         primary: darkScheme.surfaceVariant,
       ).copyWith(elevation: ButtonStyleButton.allOrNull(0.0)),
+    ),
+    floatingActionButtonTheme: FloatingActionButtonThemeData(
+      backgroundColor: darkScheme.inversePrimary,
+      foregroundColor: darkScheme.onPrimary,
+      elevation: 0,
+    ),
+    chipTheme: ChipThemeData.fromDefaults(
+      primaryColor: darkScheme.primary,
+      secondaryColor: darkScheme.onPrimary,
+      labelStyle: const TextStyle(color: Colors.white),
     ),
     visualDensity: VisualDensity.adaptivePlatformDensity,
   );

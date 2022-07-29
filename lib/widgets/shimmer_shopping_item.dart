@@ -11,9 +11,11 @@ class ShimmerShoppingItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = Theme.of(context).brightness == Brightness.dark
-        ? Theme.of(context).cardColor
-        : Theme.of(context).disabledColor;
+    final color = ElevationOverlay.applySurfaceTint(
+      Theme.of(context).cardTheme.color ?? Theme.of(context).cardColor,
+      Theme.of(context).cardTheme.surfaceTintColor,
+      1,
+    );
 
     return (gridStyle ?? true)
         ? Shimmer.fromColors(

@@ -107,14 +107,11 @@ class _PlannerPageState extends State<PlannerPage> {
                   sliver: SliverToBoxAdapter(
                     child: Wrap(
                       crossAxisAlignment: WrapCrossAlignment.end,
-                      runSpacing: 4,
-                      spacing: 4,
                       alignment: WrapAlignment.start,
                       children: [
                         for (final recipe in state.getPlannedWithoutDay())
                           KitchenOwlFractionallySizedBox(
                             widthFactor: (1 / crossAxisCount),
-                            widthSubstract: (crossAxisCount - 1) * 4,
                             child: AspectRatio(
                               aspectRatio: 1,
                               child: SelectableButtonCard(
@@ -191,15 +188,26 @@ class _PlannerPageState extends State<PlannerPage> {
                   ),
                   SliverToBoxAdapter(
                     child: SizedBox(
-                      height: 250,
+                      height: getValueForScreenType(
+                        context: context,
+                        mobile: 240,
+                        tablet: 250,
+                        desktop: 300,
+                      ),
                       child: ListView.builder(
                         padding: const EdgeInsets.symmetric(horizontal: 16),
+                        itemExtent: getValueForScreenType(
+                          context: context,
+                          mobile: 190,
+                          tablet: 200,
+                          desktop: 250,
+                        ),
                         itemBuilder: (context, i) => RecipeCard(
                           recipe: state.recentRecipes[i],
-                          onPressed: () {
+                          onLongPressed: () {
                             cubit.add(state.recentRecipes[i]);
                           },
-                          onLongPressed: () => _openRecipePage(
+                          onPressed: () => _openRecipePage(
                             context,
                             cubit,
                             state.recentRecipes[i],
@@ -236,10 +244,10 @@ class _PlannerPageState extends State<PlannerPage> {
                     child: ListView.builder(
                       itemBuilder: (context, i) => RecipeCard(
                         recipe: state.suggestedRecipes[i],
-                        onPressed: () {
+                        onLongPressed: () {
                           cubit.add(state.suggestedRecipes[i]);
                         },
-                        onLongPressed: () => _openRecipePage(
+                        onPressed: () => _openRecipePage(
                           context,
                           cubit,
                           state.suggestedRecipes[i],

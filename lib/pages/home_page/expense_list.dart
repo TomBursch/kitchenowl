@@ -138,15 +138,17 @@ class _ExpensePageState extends State<ExpenseListPage> {
         .fold<double>(0.0, (p, e) => e.balance.abs() > p ? e.balance.abs() : p);
     maxBalance = maxBalance > 0 ? maxBalance : 1;
 
+    final zeroDividerColor = Theme.of(context).colorScheme.onBackground;
+
     return charts.BarChart(
       [
         charts.Series<User, String>(
           id: 'Balance',
           data: state.users,
           colorFn: (user, _) => charts.Color(
-            r: Theme.of(context).colorScheme.secondary.red,
-            g: Theme.of(context).colorScheme.secondary.green,
-            b: Theme.of(context).colorScheme.secondary.blue,
+            r: Theme.of(context).colorScheme.primary.red,
+            g: Theme.of(context).colorScheme.primary.green,
+            b: Theme.of(context).colorScheme.primary.blue,
           ),
           domainFn: (user, _) => user.username,
           measureFn: (user, _) => user.balance,
@@ -159,9 +161,9 @@ class _ExpensePageState extends State<ExpenseListPage> {
           measureFn: (user, _) => 0,
           data: state.users,
           colorFn: (user, _) => charts.Color(
-            r: Theme.of(context).disabledColor.red,
-            g: Theme.of(context).disabledColor.green,
-            b: Theme.of(context).disabledColor.blue,
+            r: zeroDividerColor.red,
+            g: zeroDividerColor.green,
+            b: zeroDividerColor.blue,
           ),
           strokeWidthPxFn: (user, _) => 5,
         )..setAttribute(charts.rendererIdKey, 'zero'),
@@ -170,9 +172,9 @@ class _ExpensePageState extends State<ExpenseListPage> {
       barRendererDecorator: charts.BarLabelDecorator<String>(
         outsideLabelStyleSpec: charts.TextStyleSpec(
           color: charts.Color(
-            r: Theme.of(context).textTheme.bodyText2!.color!.red,
-            g: Theme.of(context).textTheme.bodyText2!.color!.green,
-            b: Theme.of(context).textTheme.bodyText2!.color!.blue,
+            r: Theme.of(context).colorScheme.onBackground.red,
+            g: Theme.of(context).colorScheme.onBackground.green,
+            b: Theme.of(context).colorScheme.onBackground.blue,
           ),
         ),
       ),

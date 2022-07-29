@@ -31,13 +31,15 @@ class RecipeCreateFab extends StatelessWidget {
               recipeListCubit.refresh();
             }
           },
-          closedElevation: 4.0,
+          closedElevation: 4,
           closedShape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(
-              Radius.circular(56 / 2),
+              Radius.circular(14),
             ),
           ),
-          closedColor: Theme.of(context).colorScheme.secondary,
+          closedColor:
+              Theme.of(context).floatingActionButtonTheme.backgroundColor ??
+                  Theme.of(context).colorScheme.secondary,
           closedBuilder: (BuildContext context, VoidCallback openContainer) {
             return SizedBox(
               height: 56,
@@ -76,7 +78,6 @@ class RecipeCreateFab extends StatelessWidget {
               recipeListCubit.refresh();
             }
           },
-          elevation: 4.0,
           child: const Icon(Icons.link_rounded),
         ),
       ],

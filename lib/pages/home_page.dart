@@ -147,13 +147,16 @@ class _HomePageState extends State<HomePage> {
                               expenseCubit.refresh();
                             }
                           },
-                          closedElevation: 6.0,
+                          closedElevation: 4.0,
                           closedShape: const RoundedRectangleBorder(
                             borderRadius: BorderRadius.all(
-                              Radius.circular(56 / 2),
+                              Radius.circular(14),
                             ),
                           ),
-                          closedColor: Theme.of(context).colorScheme.secondary,
+                          closedColor: Theme.of(context)
+                                  .floatingActionButtonTheme
+                                  .backgroundColor ??
+                              Theme.of(context).colorScheme.secondary,
                           closedBuilder: (
                             BuildContext context,
                             VoidCallback openContainer,
@@ -210,10 +213,17 @@ class _HomePageState extends State<HomePage> {
             );
 
             if (!useBottomNavigationBar) {
+              final bool extendedRail = getValueForScreenType<bool>(
+                context: context,
+                mobile: false,
+                tablet: false,
+                desktop: true,
+              );
               body = Row(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   NavigationRail(
+                    extended: extendedRail,
                     destinations: _homePageMenuItems
                         .map((e) => NavigationRailDestination(
                               icon: Icon(e.icon),

@@ -22,7 +22,7 @@ ScaffoldFeatureController<SnackBar, SnackBarClosedReason> showSnackbar({
         ),
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(14),
         ),
         clipBehavior: Clip.none,
         backgroundColor: Theme.of(context).cardColor,

@@ -8,6 +8,7 @@ import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/models/recipe.dart';
 import 'package:kitchenowl/pages/item_selection_page.dart';
 import 'package:kitchenowl/pages/recipe_page.dart';
+import 'package:kitchenowl/widgets/recipe_card.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
 class PlannerPage extends StatefulWidget {
@@ -106,14 +107,11 @@ class _PlannerPageState extends State<PlannerPage> {
                   sliver: SliverToBoxAdapter(
                     child: Wrap(
                       crossAxisAlignment: WrapCrossAlignment.end,
-                      runSpacing: 4,
-                      spacing: 4,
                       alignment: WrapAlignment.start,
                       children: [
                         for (final recipe in state.getPlannedWithoutDay())
                           KitchenOwlFractionallySizedBox(
                             widthFactor: (1 / crossAxisCount),
-                            widthSubstract: (crossAxisCount - 1) * 4,
                             child: AspectRatio(
                               aspectRatio: 1,
                               child: SelectableButtonCard(
@@ -188,29 +186,35 @@ class _PlannerPageState extends State<PlannerPage> {
                       ),
                     ),
                   ),
-                  SliverPadding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    sliver: SliverGrid(
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: crossAxisCount,
-                        mainAxisSpacing: 4,
-                        crossAxisSpacing: 4,
-                        childAspectRatio: 1,
+                  SliverToBoxAdapter(
+                    child: SizedBox(
+                      height: getValueForScreenType(
+                        context: context,
+                        mobile: 240,
+                        tablet: 250,
+                        desktop: 300,
                       ),
-                      delegate: SliverChildBuilderDelegate(
-                        (context, i) => SelectableButtonCard(
-                          key: Key(state.recentRecipes[i].name),
-                          title: state.recentRecipes[i].name,
-                          onPressed: () {
+                      child: ListView.builder(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        itemExtent: getValueForScreenType(
+                          context: context,
+                          mobile: 190,
+                          tablet: 200,
+                          desktop: 250,
+                        ),
+                        itemBuilder: (context, i) => RecipeCard(
+                          recipe: state.recentRecipes[i],
+                          onLongPressed: () {
                             cubit.add(state.recentRecipes[i]);
                           },
-                          onLongPressed: () => _openRecipePage(
+                          onPressed: () => _openRecipePage(
                             context,
                             cubit,
                             state.recentRecipes[i],
                           ),
                         ),
-                        childCount: state.recentRecipes.length,
+                        itemCount: state.recentRecipes.length,
+                        scrollDirection: Axis.horizontal,
                       ),
                     ),
                   ),
@@ -236,30 +240,21 @@ class _PlannerPageState extends State<PlannerPage> {
                       ),
                     ),
                   ),
-                  SliverPadding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    sliver: SliverGrid(
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: crossAxisCount,
-                        mainAxisSpacing: 4,
-                        crossAxisSpacing: 4,
-                        childAspectRatio: 1,
-                      ),
-                      delegate: SliverChildBuilderDelegate(
-                        (context, i) => SelectableButtonCard(
-                          key: Key(state.suggestedRecipes[i].name),
-                          title: state.suggestedRecipes[i].name,
-                          onPressed: () {
-                            cubit.add(state.suggestedRecipes[i]);
-                          },
-                          onLongPressed: () => _openRecipePage(
-                            context,
-                            cubit,
-                            state.suggestedRecipes[i],
-                          ),
+                  SliverToBoxAdapter(
+                    child: ListView.builder(
+                      itemBuilder: (context, i) => RecipeCard(
+                        recipe: state.suggestedRecipes[i],
+                        onLongPressed: () {
+                          cubit.add(state.suggestedRecipes[i]);
+                        },
+                        onPressed: () => _openRecipePage(
+                          context,
+                          cubit,
+                          state.suggestedRecipes[i],
                         ),
-                        childCount: state.suggestedRecipes.length,
                       ),
+                      itemCount: state.suggestedRecipes.length,
+                      scrollDirection: Axis.horizontal,
                     ),
                   ),
                 ],

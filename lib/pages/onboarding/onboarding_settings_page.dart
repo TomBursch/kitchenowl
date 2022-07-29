@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/cubits/auth_cubit.dart';
@@ -56,30 +55,22 @@ class _OnboardingSettingsPageState extends State<OnboardingSettingsPage> {
           title: Text(AppLocalizations.of(context)!.mealPlanner),
           leading: const Icon(Icons.calendar_today_rounded),
           contentPadding: const EdgeInsets.only(left: 20, right: 0),
-          trailing: Transform.scale(
-            scale: 0.9,
-            child: CupertinoSwitch(
-              value: featurePlanner,
-              activeColor: Theme.of(context).colorScheme.secondary,
-              onChanged: (value) => setState(() {
-                featurePlanner = value;
-              }),
-            ),
+          trailing: KitchenOwlSwitch(
+            value: featurePlanner,
+            onChanged: (value) => setState(() {
+              featurePlanner = value;
+            }),
           ),
         ),
         ListTile(
           title: Text(AppLocalizations.of(context)!.balances),
           leading: const Icon(Icons.account_balance_rounded),
           contentPadding: const EdgeInsets.only(left: 20, right: 0),
-          trailing: Transform.scale(
-            scale: 0.9,
-            child: CupertinoSwitch(
-              value: featureExpenses,
-              activeColor: Theme.of(context).colorScheme.secondary,
-              onChanged: (value) => setState(() {
-                featureExpenses = value;
-              }),
-            ),
+          trailing: KitchenOwlSwitch(
+            value: featureExpenses,
+            onChanged: (value) => setState(() {
+              featureExpenses = value;
+            }),
           ),
         ),
         ListTile(

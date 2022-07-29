@@ -147,13 +147,16 @@ class _HomePageState extends State<HomePage> {
                               expenseCubit.refresh();
                             }
                           },
-                          closedElevation: 6.0,
+                          closedElevation: 4.0,
                           closedShape: const RoundedRectangleBorder(
                             borderRadius: BorderRadius.all(
-                              Radius.circular(56 / 2),
+                              Radius.circular(14),
                             ),
                           ),
-                          closedColor: Theme.of(context).colorScheme.secondary,
+                          closedColor: Theme.of(context)
+                                  .floatingActionButtonTheme
+                                  .backgroundColor ??
+                              Theme.of(context).colorScheme.secondary,
                           closedBuilder: (
                             BuildContext context,
                             VoidCallback openContainer,
@@ -210,56 +213,27 @@ class _HomePageState extends State<HomePage> {
             );
 
             if (!useBottomNavigationBar) {
+              final bool extendedRail = getValueForScreenType<bool>(
+                context: context,
+                mobile: false,
+                tablet: false,
+                desktop: true,
+              );
               body = Row(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  SizedBox(
-                    width: 200,
-                    child: ListView(children: [
-                      // Image.asset('assets/images/header.png'),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          AppLocalizations.of(context)!.appTitle,
-                          style: Theme.of(context).textTheme.headline5,
-                        ),
-                      ),
-                      const Divider(),
-                      ..._homePageMenuItems
-                          .asMap()
-                          .entries
-                          .map(
-                            (e) => ListTile(
-                              shape: const RoundedRectangleBorder(
-                                borderRadius: BorderRadius.horizontal(
-                                  right: Radius.circular(5),
-                                ),
-                              ),
-                              tileColor: _selectedIndex == e.key
-                                  ? Theme.of(context).colorScheme.primary
-                                  : null,
-                              title: Text(
-                                e.value.label,
-                                style: TextStyle(
-                                  color: _selectedIndex == e.key
-                                      ? Colors.white
-                                      : null,
-                                ),
-                              ),
-                              leading: Icon(
-                                e.value.icon,
-                                color: _selectedIndex == e.key
-                                    ? Colors.white
-                                    : null,
-                              ),
-                              onTap: () =>
-                                  _onItemTapped(e.key, _homePageMenuItems),
-                            ),
-                          )
-                          .toList(),
-                    ]),
+                  NavigationRail(
+                    extended: extendedRail,
+                    destinations: _homePageMenuItems
+                        .map((e) => NavigationRailDestination(
+                              icon: Icon(e.icon),
+                              label: Text(e.label),
+                            ))
+                        .toList(),
+                    selectedIndex: _selectedIndex,
+                    onDestinationSelected: (i) =>
+                        _onItemTapped(i, _homePageMenuItems),
                   ),
-                  const VerticalDivider(),
                   Expanded(child: body),
                 ],
               );
@@ -270,18 +244,18 @@ class _HomePageState extends State<HomePage> {
               floatingActionButton:
                   _homePageMenuItems[_selectedIndex].floatingActionButton,
               bottomNavigationBar: useBottomNavigationBar
-                  ? BottomNavigationBar(
-                      showUnselectedLabels: false,
-                      showSelectedLabels: true,
-                      type: BottomNavigationBarType.fixed,
-                      items: _homePageMenuItems
-                          .map((e) => BottomNavigationBarItem(
+                  ? NavigationBar(
+                      labelBehavior:
+                          NavigationDestinationLabelBehavior.onlyShowSelected,
+                      destinations: _homePageMenuItems
+                          .map((e) => NavigationDestination(
                                 icon: Icon(e.icon),
                                 label: e.label,
                               ))
                           .toList(),
-                      currentIndex: _selectedIndex,
-                      onTap: (i) => _onItemTapped(i, _homePageMenuItems),
+                      selectedIndex: _selectedIndex,
+                      onDestinationSelected: (i) =>
+                          _onItemTapped(i, _homePageMenuItems),
                     )
                   : null,
             );

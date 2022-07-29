@@ -32,11 +32,16 @@ class SearchTextField extends StatelessWidget {
       autofocus: autofocus,
       scrollPadding: EdgeInsets.zero,
       decoration: decoration?.applyDefaults(InputDecorationTheme(
-            border: const OutlineInputBorder(),
-            fillColor: Theme.of(context).scaffoldBackgroundColor,
+            border: const OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(14)),
+            ),
+            fillColor: Theme.of(context).colorScheme.background,
           )) ??
           InputDecoration(
-            border: const OutlineInputBorder(),
+            fillColor: Theme.of(context).colorScheme.background,
+            border: const OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(14)),
+            ),
             prefixIcon: const Icon(Icons.search),
             suffix: IconButton(
               onPressed: () {

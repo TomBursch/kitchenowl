@@ -399,7 +399,10 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                           Navigator.of(context).pop(UpdateEnum.deleted);
                         }
                       },
-                      child: Text(AppLocalizations.of(context)!.delete),
+                      child: Text(
+                        AppLocalizations.of(context)!.delete,
+                        style: const TextStyle(color: Colors.white),
+                      ),
                     ),
                   ),
                 ),

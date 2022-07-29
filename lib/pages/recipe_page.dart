@@ -75,6 +75,9 @@ class _RecipePageState extends State<RecipePage> {
                         state.recipe.name,
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.onBackground,
+                        ),
                       ),
                       background: state.recipe.image.isNotEmpty
                           ? GestureDetector(
@@ -167,16 +170,21 @@ class _RecipePageState extends State<RecipePage> {
                                 ),
                               if ((state.recipe.time) > 0)
                                 Chip(
-                                  avatar: const Icon(
+                                  avatar: Icon(
                                     Icons.alarm_rounded,
-                                    color: Colors.white,
+                                    color:
+                                        Theme.of(context).colorScheme.onPrimary,
                                   ),
                                   label: Text(
                                     "${state.recipe.time} ${AppLocalizations.of(context)!.minutesAbbrev}",
-                                    style: const TextStyle(color: Colors.white),
+                                    style: TextStyle(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onPrimary,
+                                    ),
                                   ),
                                   backgroundColor:
-                                      Theme.of(context).colorScheme.secondary,
+                                      Theme.of(context).colorScheme.primary,
                                   elevation: 3,
                                 ),
                               ...state.recipe.tags

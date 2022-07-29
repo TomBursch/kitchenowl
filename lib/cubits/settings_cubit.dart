@@ -30,6 +30,8 @@ class SettingsCubit extends Cubit<SettingsState> {
   Future<void> load() async {
     final themeModeIndex =
         PreferenceStorage.getInstance().readInt(key: 'themeMode');
+    final dynamicAccentColor =
+        PreferenceStorage.getInstance().readBool(key: 'dynamicAccentColor');
     Config.deviceInfo = DeviceInfoPlugin().deviceInfo;
     Config.packageInfo = PackageInfo.fromPlatform();
 
@@ -51,6 +53,7 @@ class SettingsCubit extends Cubit<SettingsState> {
     emit(SettingsState(
       themeMode: themeMode,
       serverSettings: serverSettings,
+      dynamicAccentColor: await dynamicAccentColor ?? false,
     ));
   }
 
@@ -65,6 +68,12 @@ class SettingsCubit extends Cubit<SettingsState> {
     if (!forcedOfflineMode) {
       TransactionHandler.getInstance().runOpenTransactions();
     }
+  }
+
+  void setUseDynamicAccentColor(bool dynamicAccentColor) {
+    PreferenceStorage.getInstance()
+        .writeBool(key: 'dynamicAccentColor', value: dynamicAccentColor);
+    emit(state.copyWith(dynamicAccentColor: dynamicAccentColor));
   }
 
   void setFeaturePlanner(bool featurePlanner) {
@@ -86,24 +95,29 @@ class SettingsState extends Equatable {
   final ThemeMode themeMode;
   final bool forcedOfflineMode;
   final ServerSettings serverSettings;
+  final bool dynamicAccentColor;
 
   const SettingsState({
     this.themeMode = ThemeMode.system,
     this.forcedOfflineMode = false,
     this.serverSettings = const ServerSettings(),
+    this.dynamicAccentColor = false,
   });
 
   SettingsState copyWith({
     ThemeMode? themeMode,
     bool? forcedOfflineMode,
     ServerSettings? serverSettings,
+    bool? dynamicAccentColor,
   }) =>
       SettingsState(
         themeMode: themeMode ?? this.themeMode,
         forcedOfflineMode: forcedOfflineMode ?? this.forcedOfflineMode,
         serverSettings: serverSettings ?? this.serverSettings,
+        dynamicAccentColor: dynamicAccentColor ?? this.dynamicAccentColor,
       );
 
   @override
-  List<Object?> get props => [themeMode, forcedOfflineMode, serverSettings];
+  List<Object?> get props =>
+      [themeMode, forcedOfflineMode, serverSettings, dynamicAccentColor];
 }

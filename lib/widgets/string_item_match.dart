@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/kitchenowl.dart';
@@ -69,13 +68,9 @@ class StringItemMatch extends StatelessWidget {
               Expanded(
                 child: Text(AppLocalizations.of(context)!.optional),
               ),
-              Transform.scale(
-                scale: 0.9,
-                child: CupertinoSwitch(
-                  value: optional,
-                  activeColor: Theme.of(context).colorScheme.secondary,
-                  onChanged: _setOptional,
-                ),
+              KitchenOwlSwitch(
+                value: optional,
+                onChanged: _setOptional,
               ),
             ],
           ),

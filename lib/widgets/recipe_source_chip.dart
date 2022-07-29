@@ -16,19 +16,19 @@ class RecipeSourceChip extends StatelessWidget {
       ) =>
           snapshot.data!
               ? ActionChip(
-                  avatar: const Icon(
+                  avatar: Icon(
                     Icons.link,
-                    color: Colors.white,
+                    color: Theme.of(context).colorScheme.onPrimary,
                   ),
                   label: Text(
                     snapshot.data!
                         ? Uri.tryParse(source)?.host ?? source
                         : source,
-                    style: const TextStyle(
-                      color: Colors.white,
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onPrimary,
                     ),
                   ),
-                  backgroundColor: Theme.of(context).colorScheme.secondary,
+                  backgroundColor: Theme.of(context).colorScheme.primary,
                   elevation: 3,
                   onPressed: () async {
                     if (await canLaunchUrlString(
@@ -41,17 +41,17 @@ class RecipeSourceChip extends StatelessWidget {
                   },
                 )
               : Chip(
-                  avatar: const Icon(
+                  avatar: Icon(
                     Icons.book_rounded,
-                    color: Colors.white,
+                    color: Theme.of(context).colorScheme.onPrimary,
                   ),
                   label: Text(
                     source,
-                    style: const TextStyle(
-                      color: Colors.white,
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onPrimary,
                     ),
                   ),
-                  backgroundColor: Theme.of(context).colorScheme.secondary,
+                  backgroundColor: Theme.of(context).colorScheme.primary,
                   elevation: 3,
                 ),
     );

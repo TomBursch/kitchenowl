@@ -18,46 +18,52 @@ class SelectableButtonCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.all<Color>(
-          selected
-              ? Theme.of(context).colorScheme.secondary
-              : Theme.of(context).brightness == Brightness.dark
-                  ? Theme.of(context).cardColor
-                  : Theme.of(context).disabledColor,
-        ),
-        elevation: MaterialStateProperty.all<double>(0),
-      ),
-      onPressed: onPressed,
-      onLongPress: onLongPressed,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            title,
-            maxLines: 3,
-            overflow: TextOverflow.ellipsis,
-            softWrap: true,
-            textAlign: TextAlign.center,
-          ),
-          if (description != null && description!.isNotEmpty)
-            Padding(
-              padding: const EdgeInsets.only(top: 2),
-              child: Text(
-                description!,
-                style: Theme.of(context).textTheme.caption!.copyWith(
-                      color: Theme.of(context).brightness == Brightness.dark
-                          ? null
-                          : Colors.white70,
-                    ),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                softWrap: true,
-                textAlign: TextAlign.center,
+    return Card(
+      elevation: 0,
+      color: selected
+          ? Theme.of(context).colorScheme.secondary
+          : ElevationOverlay.applySurfaceTint(
+              Theme.of(context).cardTheme.color ?? Theme.of(context).cardColor,
+              Theme.of(context).cardTheme.surfaceTintColor,
+              1,
+            ),
+      child: InkWell(
+        onTap: onPressed,
+        onLongPress: onLongPressed,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              title,
+              maxLines: 3,
+              overflow: TextOverflow.ellipsis,
+              softWrap: true,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color:
+                    selected ? Theme.of(context).colorScheme.onPrimary : null,
               ),
             ),
-        ],
+            if (description != null && description!.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.only(top: 2),
+                child: Text(
+                  description!,
+                  style: Theme.of(context).textTheme.caption!.copyWith(
+                        color: selected &&
+                                Theme.of(context).brightness == Brightness.light
+                            ? Colors.white70
+                            : null,
+                      ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  softWrap: true,
+                  textAlign: TextAlign.center,
+                ),
+              ),
+          ],
+        ),
       ),
     );
   }

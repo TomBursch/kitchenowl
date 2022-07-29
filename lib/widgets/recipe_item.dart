@@ -21,14 +21,21 @@ class RecipeItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: Theme.of(context).cardTheme.margin ??
-          const EdgeInsets.symmetric(vertical: 4),
-      child: OpenContainer<UpdateEnum>(
-        closedColor: Theme.of(context).cardColor,
-        openColor: Theme.of(context).scaffoldBackgroundColor,
-        onClosed: _handleUpdate,
-        closedBuilder: (context, toggle) => ListTile(
+    return OpenContainer<UpdateEnum>(
+      closedColor: ElevationOverlay.applySurfaceTint(
+        Theme.of(context).colorScheme.surface,
+        Theme.of(context).colorScheme.surfaceTint,
+        1,
+      ).withAlpha(0),
+      closedShape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(
+          Radius.circular(14),
+        ),
+      ),
+      openColor: Theme.of(context).scaffoldBackgroundColor,
+      onClosed: _handleUpdate,
+      closedBuilder: (context, toggle) => Card(
+        child: ListTile(
           title: Text(recipe.name),
           trailing: const Icon(Icons.arrow_right_rounded),
           selected: recipe.isPlanned,
@@ -45,13 +52,13 @@ class RecipeItemWidget extends StatelessWidget {
                   _handleUpdate(res);
                 },
         ),
-        openBuilder: (
-          BuildContext context,
-          toggle,
-        ) =>
-            RecipePage(
-          recipe: recipe,
-        ),
+      ),
+      openBuilder: (
+        BuildContext context,
+        toggle,
+      ) =>
+          RecipePage(
+        recipe: recipe,
       ),
     );
   }

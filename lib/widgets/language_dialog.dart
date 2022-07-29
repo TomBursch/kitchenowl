@@ -24,7 +24,7 @@ class _LanguageDialogState extends State<LanguageDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
       title: Text(widget.title),
       content: FutureBuilder<Map<String, String>?>(
         initialData: const {},

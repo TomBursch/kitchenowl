@@ -23,13 +23,20 @@ class ExpenseItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: Theme.of(context).cardTheme.margin ??
-          const EdgeInsets.symmetric(vertical: 4),
-      child: OpenContainer<UpdateEnum>(
-        closedColor: Theme.of(context).cardColor,
-        openColor: Theme.of(context).scaffoldBackgroundColor,
-        closedBuilder: (context, toggle) => ListTile(
+    return OpenContainer<UpdateEnum>(
+      closedColor: ElevationOverlay.applySurfaceTint(
+        Theme.of(context).colorScheme.surface,
+        Theme.of(context).colorScheme.surfaceTint,
+        1,
+      ).withAlpha(0),
+      openColor: Theme.of(context).scaffoldBackgroundColor,
+      closedShape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(
+          Radius.circular(14),
+        ),
+      ),
+      closedBuilder: (context, toggle) => Card(
+        child: ListTile(
           title: Text(expense.name),
           trailing: Text(NumberFormat.simpleCurrency().format(expense.amount)),
           subtitle: (expense.createdAt != null)
@@ -48,11 +55,11 @@ class ExpenseItemWidget extends StatelessWidget {
                   _handleUpdate(res);
                 },
         ),
-        onClosed: _handleUpdate,
-        openBuilder: (context, toggle) => ExpensePage(
-          expense: expense,
-          users: users,
-        ),
+      ),
+      onClosed: _handleUpdate,
+      openBuilder: (context, toggle) => ExpensePage(
+        expense: expense,
+        users: users,
       ),
     );
   }

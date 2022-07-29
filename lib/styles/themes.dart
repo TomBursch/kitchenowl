@@ -24,77 +24,85 @@ abstract class AppThemes {
     brightness: Brightness.dark,
   );
 
-  static ThemeData light = ThemeData.from(
-    colorScheme: lightScheme,
-    useMaterial3: true,
-  ).copyWith(
-    visualDensity: VisualDensity.adaptivePlatformDensity,
-    chipTheme: ChipThemeData.fromDefaults(
-      primaryColor: lightScheme.primary,
-      secondaryColor: ElevationOverlay.applySurfaceTint(
-        lightScheme.surface,
-        lightScheme.surfaceTint,
-        1,
-      ),
-      labelStyle: const TextStyle(color: Colors.white),
-    ),
-    appBarTheme: AppBarTheme(
-      color: lightScheme.background,
-      surfaceTintColor: lightScheme.background,
-    ),
-    navigationRailTheme: NavigationRailThemeData(
-      backgroundColor: lightScheme.background,
-    ),
-    navigationBarTheme: NavigationBarThemeData(
-      backgroundColor: lightScheme.background,
-    ),
-    cardTheme: CardTheme(
-      clipBehavior: Clip.antiAlias,
-      color: lightScheme.surface,
-      surfaceTintColor: lightScheme.surfaceTint,
-    ),
-    floatingActionButtonTheme: FloatingActionButtonThemeData(
-      backgroundColor: lightScheme.primary,
-      foregroundColor: lightScheme.onPrimary,
-      elevation: 0,
-    ),
-  );
+  static ThemeData light([ColorScheme? colorScheme]) {
+    colorScheme ??= lightScheme;
 
-  static ThemeData dark = ThemeData.from(
-    colorScheme: darkScheme,
-    useMaterial3: true,
-  ).copyWith(
-    cardTheme: CardTheme(
-      clipBehavior: Clip.antiAlias,
-      elevation: 0,
-      color: darkScheme.surfaceVariant,
-    ),
-    navigationRailTheme: NavigationRailThemeData(
-      backgroundColor: darkScheme.background,
-    ),
-    navigationBarTheme: NavigationBarThemeData(
-      backgroundColor: darkScheme.background,
-    ),
-    appBarTheme: AppBarTheme(
-      color: darkScheme.background,
-      surfaceTintColor: darkScheme.background,
-    ),
-    elevatedButtonTheme: ElevatedButtonThemeData(
-      style: ElevatedButton.styleFrom(
-        onPrimary: darkScheme.onSurfaceVariant,
-        primary: darkScheme.surfaceVariant,
-      ).copyWith(elevation: ButtonStyleButton.allOrNull(0.0)),
-    ),
-    floatingActionButtonTheme: FloatingActionButtonThemeData(
-      backgroundColor: darkScheme.inversePrimary,
-      foregroundColor: darkScheme.onPrimary,
-      elevation: 0,
-    ),
-    chipTheme: ChipThemeData.fromDefaults(
-      primaryColor: darkScheme.primary,
-      secondaryColor: darkScheme.onPrimary,
-      labelStyle: const TextStyle(color: Colors.white),
-    ),
-    visualDensity: VisualDensity.adaptivePlatformDensity,
-  );
+    return ThemeData.from(
+      colorScheme: colorScheme,
+      useMaterial3: true,
+    ).copyWith(
+      visualDensity: VisualDensity.adaptivePlatformDensity,
+      chipTheme: ChipThemeData.fromDefaults(
+        primaryColor: colorScheme.primary,
+        secondaryColor: ElevationOverlay.applySurfaceTint(
+          colorScheme.surface,
+          colorScheme.surfaceTint,
+          1,
+        ),
+        labelStyle: const TextStyle(color: Colors.white),
+      ),
+      appBarTheme: AppBarTheme(
+        color: colorScheme.background,
+        surfaceTintColor: colorScheme.background,
+      ),
+      navigationRailTheme: NavigationRailThemeData(
+        backgroundColor: colorScheme.background,
+      ),
+      navigationBarTheme: NavigationBarThemeData(
+        backgroundColor: colorScheme.background,
+      ),
+      cardTheme: CardTheme(
+        clipBehavior: Clip.antiAlias,
+        color: colorScheme.surface,
+        surfaceTintColor: colorScheme.surfaceTint,
+      ),
+      floatingActionButtonTheme: FloatingActionButtonThemeData(
+        backgroundColor: colorScheme.primary,
+        foregroundColor: colorScheme.onPrimary,
+        elevation: 0,
+      ),
+    );
+  }
+
+  static ThemeData dark([ColorScheme? colorScheme]) {
+    colorScheme ??= darkScheme;
+
+    return ThemeData.from(
+      colorScheme: colorScheme,
+      useMaterial3: true,
+    ).copyWith(
+      cardTheme: CardTheme(
+        clipBehavior: Clip.antiAlias,
+        elevation: 0,
+        color: colorScheme.surfaceVariant,
+      ),
+      navigationRailTheme: NavigationRailThemeData(
+        backgroundColor: colorScheme.background,
+      ),
+      navigationBarTheme: NavigationBarThemeData(
+        backgroundColor: colorScheme.background,
+      ),
+      appBarTheme: AppBarTheme(
+        color: colorScheme.background,
+        surfaceTintColor: colorScheme.background,
+      ),
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ElevatedButton.styleFrom(
+          onPrimary: colorScheme.onSurfaceVariant,
+          primary: colorScheme.surfaceVariant,
+        ).copyWith(elevation: ButtonStyleButton.allOrNull(0.0)),
+      ),
+      floatingActionButtonTheme: FloatingActionButtonThemeData(
+        backgroundColor: colorScheme.inversePrimary,
+        foregroundColor: colorScheme.onPrimary,
+        elevation: 0,
+      ),
+      chipTheme: ChipThemeData.fromDefaults(
+        primaryColor: colorScheme.primary,
+        secondaryColor: colorScheme.onPrimary,
+        labelStyle: const TextStyle(color: Colors.white),
+      ),
+      visualDensity: VisualDensity.adaptivePlatformDensity,
+    );
+  }
 }

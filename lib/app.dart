@@ -1,4 +1,5 @@
 import 'package:animations/animations.dart';
+import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -45,64 +46,83 @@ class App extends StatelessWidget {
           BlocProvider.value(value: _settingsCubit),
         ],
         child: BlocBuilder<SettingsCubit, SettingsState>(
-          builder: (context, state) => MaterialApp(
-            onGenerateTitle: (BuildContext context) =>
-                AppLocalizations.of(context)!.appTitle,
-            localizationsDelegates: AppLocalizations.localizationsDelegates,
-            supportedLocales: AppLocalizations.supportedLocales,
-            theme: AppThemes.light,
-            darkTheme: AppThemes.dark,
-            themeMode: state.themeMode,
-            debugShowCheckedModeBanner: false,
-            restorationScopeId: "com.tombursch.kitchenowl",
-            home: Builder(
-              builder: (context) => AnnotatedRegion<SystemUiOverlayStyle>(
-                value: _getSystemUI(context, state),
-                child: BlocBuilder<AuthCubit, AuthState>(
-                  bloc: _authCubit,
-                  builder: (context, state) => PageTransitionSwitcher(
-                    transitionBuilder: (
-                      Widget child,
-                      Animation<double> animation,
-                      Animation<double> secondaryAnimation,
-                    ) {
-                      return SharedAxisTransition(
-                        animation: animation,
-                        secondaryAnimation: secondaryAnimation,
-                        transitionType: SharedAxisTransitionType.horizontal,
-                        child: child,
-                      );
-                    },
-                    child: Builder(
-                      key: ValueKey(state.orderId),
-                      builder: (context) {
-                        if (state is Setup) return const SetupPage();
-                        if (state is Onboarding) return const OnboardingPage();
-                        if (state is Unauthenticated) return const LoginPage();
-                        if (state is Authenticated) return const HomePage();
-                        if (state is Unreachable) {
-                          return const UnreachablePage();
-                        }
-                        if (state is Unsupported) {
-                          return UnsupportedPage(
-                            unsupportedBackend: state.unsupportedBackend,
-                          );
-                        }
-                        if (state is LoadingOnboard) {
-                          return SplashPage(
-                            message:
-                                AppLocalizations.of(context)!.onboardingLoading,
-                          );
-                        }
+          builder: (context, state) =>
+              DynamicColorBuilder(builder: (lightDynamic, darkDynamic) {
+            ColorScheme lightColorScheme = AppThemes.lightScheme;
+            ColorScheme darkColorScheme = AppThemes.darkScheme;
 
-                        return const SplashPage();
+            if (state.dynamicAccentColor &&
+                lightDynamic != null &&
+                darkDynamic != null) {
+              // On Android S+ devices, use the provided dynamic color scheme.
+              // (Recommended) Harmonize the dynamic color scheme' built-in semantic colors.
+              lightColorScheme = lightDynamic.harmonized();
+              darkColorScheme = darkDynamic.harmonized();
+            }
+
+            return MaterialApp(
+              onGenerateTitle: (BuildContext context) =>
+                  AppLocalizations.of(context)!.appTitle,
+              localizationsDelegates: AppLocalizations.localizationsDelegates,
+              supportedLocales: AppLocalizations.supportedLocales,
+              theme: AppThemes.light(lightColorScheme),
+              darkTheme: AppThemes.dark(darkColorScheme),
+              themeMode: state.themeMode,
+              debugShowCheckedModeBanner: false,
+              restorationScopeId: "com.tombursch.kitchenowl",
+              home: Builder(
+                builder: (context) => AnnotatedRegion<SystemUiOverlayStyle>(
+                  value: _getSystemUI(context, state),
+                  child: BlocBuilder<AuthCubit, AuthState>(
+                    bloc: _authCubit,
+                    builder: (context, state) => PageTransitionSwitcher(
+                      transitionBuilder: (
+                        Widget child,
+                        Animation<double> animation,
+                        Animation<double> secondaryAnimation,
+                      ) {
+                        return SharedAxisTransition(
+                          animation: animation,
+                          secondaryAnimation: secondaryAnimation,
+                          transitionType: SharedAxisTransitionType.horizontal,
+                          child: child,
+                        );
                       },
+                      child: Builder(
+                        key: ValueKey(state.orderId),
+                        builder: (context) {
+                          if (state is Setup) return const SetupPage();
+                          if (state is Onboarding) {
+                            return const OnboardingPage();
+                          }
+                          if (state is Unauthenticated) {
+                            return const LoginPage();
+                          }
+                          if (state is Authenticated) return const HomePage();
+                          if (state is Unreachable) {
+                            return const UnreachablePage();
+                          }
+                          if (state is Unsupported) {
+                            return UnsupportedPage(
+                              unsupportedBackend: state.unsupportedBackend,
+                            );
+                          }
+                          if (state is LoadingOnboard) {
+                            return SplashPage(
+                              message: AppLocalizations.of(context)!
+                                  .onboardingLoading,
+                            );
+                          }
+
+                          return const SplashPage();
+                        },
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-          ),
+            );
+          }),
         ),
       ),
     );
@@ -123,7 +143,7 @@ class App extends StatelessWidget {
         }
       light:
       case ThemeMode.light:
-        final Color backgroundColor = AppThemes.light.scaffoldBackgroundColor;
+        final Color backgroundColor = Theme.of(context).colorScheme.background;
         return SystemUiOverlayStyle.dark.copyWith(
           statusBarColor: Colors.transparent,
           statusBarIconBrightness: Brightness.dark,
@@ -134,7 +154,7 @@ class App extends StatelessWidget {
         );
       dark:
       case ThemeMode.dark:
-        final Color backgroundColor = AppThemes.dark.scaffoldBackgroundColor;
+        final Color backgroundColor = Theme.of(context).colorScheme.background;
         return SystemUiOverlayStyle.light.copyWith(
           statusBarColor: Colors.transparent,
           statusBarIconBrightness: Brightness.light,

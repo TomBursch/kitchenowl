@@ -1,3 +1,4 @@
+import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/app.dart';
@@ -75,6 +76,26 @@ class ProfilePage extends StatelessWidget {
                       },
                     ),
                   ),
+                  DynamicColorBuilder(builder: (dynamicLight, dynamicDark) {
+                    if (dynamicLight != null && dynamicDark != null) {
+                      return ListTile(
+                        title: Text(
+                          AppLocalizations.of(context)!.dynamicAccentColor,
+                        ),
+                        leading: const Icon(Icons.color_lens_rounded),
+                        contentPadding:
+                            const EdgeInsets.only(left: 20, right: 0),
+                        trailing: KitchenOwlSwitch(
+                          value: state.dynamicAccentColor,
+                          onChanged: (value) =>
+                              BlocProvider.of<SettingsCubit>(context)
+                                  .setUseDynamicAccentColor(value),
+                        ),
+                      );
+                    }
+
+                    return const SizedBox();
+                  }),
                   ListTile(
                     title: Text(AppLocalizations.of(context)!.forceOfflineMode),
                     leading: const Icon(Icons.mobiledata_off_outlined),

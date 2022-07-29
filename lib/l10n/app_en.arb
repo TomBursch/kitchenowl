@@ -51,6 +51,7 @@
     "delete": "Delete",
     "description": "Description",
     "done": "Done",
+    "dynamicAccentColor": "Dynamic Accent Color",
     "error": "An error occured",
     "expenseAdd": "Add Expense",
     "expenseAmount": "Amount",

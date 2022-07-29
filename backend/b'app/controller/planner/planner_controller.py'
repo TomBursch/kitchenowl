@@ -56,7 +56,7 @@ def removePlannedRecipeById(args, id):
 @jwt_required()
 def getRecentRecipes():
     recipes = RecipeHistory.get_recent()
-    return jsonify([e.recipe.obj_to_dict() for e in recipes])
+    return jsonify([e.recipe.obj_to_full_dict() for e in recipes])
 
 
 @planner.route('/suggested-recipes', methods=['GET'])
@@ -70,7 +70,7 @@ def getSuggestedRecipes():
     # limit suggestions number to maximally 9
     if len(suggested_recipes) > 9:
         suggested_recipes = suggested_recipes[:9]
-    return jsonify([r.obj_to_dict() for r in suggested_recipes])
+    return jsonify([r.obj_to_full_dict() for r in suggested_recipes])
 
 
 @planner.route('/refresh-suggested-recipes', methods=['GET'])

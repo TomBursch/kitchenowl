@@ -15,6 +15,7 @@ VOLUME ["/data"]
 ENV STORAGE_PATH='/data'
 ENV JWT_SECRET_KEY='PLEASE_CHANGE_ME'
 ENV DEBUG='False'
+ENV HTTP_PORT=80
 
 RUN pip3 install -r requirements.txt && rm requirements.txt
 RUN chmod u+x ./entrypoint.sh
@@ -22,8 +23,6 @@ RUN chmod u+x ./entrypoint.sh
 # Cleanup
 RUN apt-get autoremove --yes gcc g++ libffi-dev \
     && rm -rf /var/lib/apt/lists/*
-
-EXPOSE 80
 
 CMD ["wsgi.ini"]
 ENTRYPOINT ["./entrypoint.sh"]

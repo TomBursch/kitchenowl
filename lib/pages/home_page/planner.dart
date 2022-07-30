@@ -133,19 +133,18 @@ class _PlannerPageState extends State<PlannerPage> {
                           for (final recipe in state.getPlannedOfDay(day))
                             KitchenOwlFractionallySizedBox(
                               widthFactor: (1 / crossAxisCount),
-                              widthSubstract: (crossAxisCount - 1) * 4,
                               child: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 crossAxisAlignment: CrossAxisAlignment.stretch,
                                 children: [
                                   if (recipe == state.getPlannedOfDay(day)[0])
                                     Padding(
-                                      padding: const EdgeInsets.only(bottom: 8),
+                                      padding: const EdgeInsets.only(bottom: 6),
                                       child: Text(
                                         '${DateFormat.E().dateSymbols.STANDALONEWEEKDAYS[weekdayMapping[day]! % 7]}:',
                                         style: Theme.of(context)
                                             .textTheme
-                                            .headline6,
+                                            .bodyLarge,
                                       ),
                                     ),
                                   AspectRatio(
@@ -190,16 +189,16 @@ class _PlannerPageState extends State<PlannerPage> {
                     child: SizedBox(
                       height: getValueForScreenType(
                         context: context,
-                        mobile: 240,
-                        tablet: 250,
+                        mobile: 250,
+                        tablet: 275,
                         desktop: 300,
                       ),
                       child: ListView.builder(
                         padding: const EdgeInsets.symmetric(horizontal: 16),
                         itemExtent: getValueForScreenType(
                           context: context,
-                          mobile: 190,
-                          tablet: 200,
+                          mobile: 200,
+                          tablet: 225,
                           desktop: 250,
                         ),
                         itemBuilder: (context, i) => RecipeCard(
@@ -241,20 +240,35 @@ class _PlannerPageState extends State<PlannerPage> {
                     ),
                   ),
                   SliverToBoxAdapter(
-                    child: ListView.builder(
-                      itemBuilder: (context, i) => RecipeCard(
-                        recipe: state.suggestedRecipes[i],
-                        onLongPressed: () {
-                          cubit.add(state.suggestedRecipes[i]);
-                        },
-                        onPressed: () => _openRecipePage(
-                          context,
-                          cubit,
-                          state.suggestedRecipes[i],
-                        ),
+                    child: SizedBox(
+                      height: getValueForScreenType(
+                        context: context,
+                        mobile: 250,
+                        tablet: 275,
+                        desktop: 300,
                       ),
-                      itemCount: state.suggestedRecipes.length,
-                      scrollDirection: Axis.horizontal,
+                      child: ListView.builder(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        itemExtent: getValueForScreenType(
+                          context: context,
+                          mobile: 200,
+                          tablet: 225,
+                          desktop: 250,
+                        ),
+                        itemBuilder: (context, i) => RecipeCard(
+                          recipe: state.suggestedRecipes[i],
+                          onLongPressed: () {
+                            cubit.add(state.suggestedRecipes[i]);
+                          },
+                          onPressed: () => _openRecipePage(
+                            context,
+                            cubit,
+                            state.suggestedRecipes[i],
+                          ),
+                        ),
+                        itemCount: state.suggestedRecipes.length,
+                        scrollDirection: Axis.horizontal,
+                      ),
                     ),
                   ),
                 ],

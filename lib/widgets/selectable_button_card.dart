@@ -51,9 +51,11 @@ class SelectableButtonCard extends StatelessWidget {
                 child: Text(
                   description!,
                   style: Theme.of(context).textTheme.caption!.copyWith(
-                        color: selected &&
-                                Theme.of(context).brightness == Brightness.light
-                            ? Colors.white70
+                        color: selected
+                            ? Theme.of(context)
+                                .colorScheme
+                                .onPrimary
+                                .withOpacity(.7)
                             : null,
                       ),
                   maxLines: 2,

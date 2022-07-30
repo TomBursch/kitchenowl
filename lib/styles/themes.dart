@@ -93,7 +93,7 @@ abstract class AppThemes {
         ).copyWith(elevation: ButtonStyleButton.allOrNull(0.0)),
       ),
       floatingActionButtonTheme: FloatingActionButtonThemeData(
-        backgroundColor: colorScheme.inversePrimary,
+        backgroundColor: colorScheme.primary,
         foregroundColor: colorScheme.onPrimary,
         elevation: 0,
       ),

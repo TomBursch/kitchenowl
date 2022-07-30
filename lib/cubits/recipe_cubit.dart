@@ -80,5 +80,5 @@ class RecipeState extends Equatable {
       );
 
   @override
-  List<Object?> get props => [recipe, selectedItems];
+  List<Object?> get props => [recipe, selectedItems, updateState];
 }

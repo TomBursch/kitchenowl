@@ -22,6 +22,7 @@ class RecipeCard extends StatelessWidget {
         onTap: onPressed,
         onLongPress: onLongPressed,
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             if (recipe.image.isNotEmpty)
               Expanded(

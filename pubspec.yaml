@@ -39,7 +39,7 @@ dependencies:
   animations: ^2.0.3
   shimmer: ^2.0.0
   equatable: ^2.0.3
-  url_launcher: ^6.1.4
+  url_launcher: ^6.1.5
   package_info_plus: ^1.4.3
   device_info_plus: ^4.0.1
   http: ^0.13.4

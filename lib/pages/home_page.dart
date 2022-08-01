@@ -222,17 +222,19 @@ class _HomePageState extends State<HomePage> {
               body = Row(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  NavigationRail(
-                    extended: extendedRail,
-                    destinations: _homePageMenuItems
-                        .map((e) => NavigationRailDestination(
-                              icon: Icon(e.icon),
-                              label: Text(e.label),
-                            ))
-                        .toList(),
-                    selectedIndex: _selectedIndex,
-                    onDestinationSelected: (i) =>
-                        _onItemTapped(i, _homePageMenuItems),
+                  SafeArea(
+                    child: NavigationRail(
+                      extended: extendedRail,
+                      destinations: _homePageMenuItems
+                          .map((e) => NavigationRailDestination(
+                                icon: Icon(e.icon),
+                                label: Text(e.label),
+                              ))
+                          .toList(),
+                      selectedIndex: _selectedIndex,
+                      onDestinationSelected: (i) =>
+                          _onItemTapped(i, _homePageMenuItems),
+                    ),
                   ),
                   Expanded(child: body),
                 ],

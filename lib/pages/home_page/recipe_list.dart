@@ -170,10 +170,9 @@ class _RecipeListPageState extends State<RecipeListPage> {
                         indexHintDecoration: BoxDecoration(
                           shape: BoxShape.circle,
                           color: Theme.of(context)
-                                  .chipTheme
-                                  .backgroundColor
-                                  ?.withOpacity(1) ??
-                              Theme.of(context).cardColor,
+                              .colorScheme
+                              .primary
+                              .withOpacity(1),
                           boxShadow: const [
                             BoxShadow(
                               color: Colors.black54,
@@ -183,8 +182,10 @@ class _RecipeListPageState extends State<RecipeListPage> {
                             ),
                           ],
                         ),
-                        indexHintTextStyle:
-                            const TextStyle(fontSize: 20, color: Colors.white),
+                        indexHintTextStyle: TextStyle(
+                          fontSize: 20,
+                          color: Theme.of(context).colorScheme.onPrimary,
+                        ),
                         indexHintAlignment: Alignment.centerLeft,
                         indexHintOffset:
                             Offset(useBottomNavigationBar ? 0 : 216, 0),

@@ -190,8 +190,8 @@ class _PlannerPageState extends State<PlannerPage> {
                       height: getValueForScreenType(
                         context: context,
                         mobile: 250,
-                        tablet: 275,
-                        desktop: 300,
+                        tablet: 300,
+                        desktop: 325,
                       ),
                       child: ListView.builder(
                         padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -244,8 +244,8 @@ class _PlannerPageState extends State<PlannerPage> {
                       height: getValueForScreenType(
                         context: context,
                         mobile: 250,
-                        tablet: 275,
-                        desktop: 300,
+                        tablet: 300,
+                        desktop: 325,
                       ),
                       child: ListView.builder(
                         padding: const EdgeInsets.symmetric(horizontal: 16),

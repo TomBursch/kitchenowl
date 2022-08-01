@@ -119,9 +119,10 @@ class ProfilePage extends StatelessWidget {
                             child: ListTile(
                               title: Text(
                                 AppLocalizations.of(context)!.shoppingLists,
+                                maxLines: 1,
                               ),
                               leading: const Icon(Icons.shopping_bag),
-                              trailing: const Icon(Icons.arrow_right_rounded),
+                              minLeadingWidth: 16,
                               onTap: () => Navigator.of(context).push(
                                 MaterialPageRoute(
                                   builder: (context) =>
@@ -136,7 +137,7 @@ class ProfilePage extends StatelessWidget {
                             child: ListTile(
                               title: Text(AppLocalizations.of(context)!.server),
                               leading: const Icon(Icons.account_tree_rounded),
-                              trailing: const Icon(Icons.arrow_right_rounded),
+                              minLeadingWidth: 16,
                               onTap: () => Navigator.of(context).push(
                                 MaterialPageRoute(
                                   builder: (context) =>
@@ -157,7 +158,7 @@ class ProfilePage extends StatelessWidget {
                               shape: Theme.of(context).cardTheme.shape,
                               title: Text(AppLocalizations.of(context)!.user),
                               leading: const Icon(Icons.person),
-                              trailing: const Icon(Icons.arrow_right_rounded),
+                              minLeadingWidth: 16,
                               onTap: () => Navigator.of(context).push(
                                 MaterialPageRoute(
                                   builder: (context) =>
@@ -172,7 +173,7 @@ class ProfilePage extends StatelessWidget {
                           child: ListTile(
                             title: Text(AppLocalizations.of(context)!.about),
                             leading: const Icon(Icons.privacy_tip_rounded),
-                            trailing: const Icon(Icons.arrow_right_rounded),
+                            minLeadingWidth: 16,
                             onTap: () => showAboutDialog(
                               context: context,
                               applicationVersion:

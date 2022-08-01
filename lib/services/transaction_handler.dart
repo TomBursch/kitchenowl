@@ -32,7 +32,7 @@ class TransactionHandler {
 
   Future<T> runTransaction<T>(Transaction<T> t) async {
     if (!ApiService.getInstance().isConnected()) {
-      ApiService.getInstance().refresh();
+      await ApiService.getInstance().refresh();
     }
     if (!App.isForcedOffline && ApiService.getInstance().isConnected()) {
       Future<T> res = t.runOnline();

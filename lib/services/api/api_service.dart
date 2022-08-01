@@ -30,11 +30,11 @@ enum Connection {
 
 class ApiService {
   // ignore: constant_identifier_names
-  static const Duration _TIMEOUT = Duration(seconds: 2);
+  static const Duration _TIMEOUT = Duration(seconds: 10);
   // ignore: constant_identifier_names
-  static const Duration _TIMEOUT_FILE_UPLOAD = Duration(seconds: 5);
+  static const Duration _TIMEOUT_FILE_UPLOAD = Duration(seconds: 10);
   // ignore: constant_identifier_names
-  static const Duration _TIMEOUT_ONBOARDING = Duration(minutes: 7);
+  static const Duration _TIMEOUT_ONBOARDING = Duration(minutes: 10);
   // ignore: constant_identifier_names
   static const String _API_PATH = "/api";
 

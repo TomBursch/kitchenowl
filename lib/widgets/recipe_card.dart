@@ -85,7 +85,14 @@ class RecipeCard extends StatelessWidget {
                           physics: const NeverScrollableScrollPhysics(),
                           child: Row(
                             children: recipe.tags
-                                .map((e) => Chip(label: Text(e.name)))
+                                .map((e) => Padding(
+                                      padding: const EdgeInsets.only(right: 4),
+                                      child: Chip(
+                                        materialTapTargetSize:
+                                            MaterialTapTargetSize.shrinkWrap,
+                                        label: Text(e.name),
+                                      ),
+                                    ))
                                 .toList(),
                           ),
                         ),

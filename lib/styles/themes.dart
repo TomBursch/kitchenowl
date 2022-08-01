@@ -41,6 +41,7 @@ abstract class AppThemes {
         ),
         labelStyle: const TextStyle(color: Colors.white),
       ),
+      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
       appBarTheme: AppBarTheme(
         color: colorScheme.background,
         surfaceTintColor: colorScheme.background,
@@ -86,6 +87,7 @@ abstract class AppThemes {
         color: colorScheme.background,
         surfaceTintColor: colorScheme.background,
       ),
+      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           onPrimary: colorScheme.onSurfaceVariant,

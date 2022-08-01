@@ -169,14 +169,24 @@ class _ExpensePageState extends State<ExpenseListPage> {
         )..setAttribute(charts.rendererIdKey, 'zero'),
       ],
       vertical: false,
-      barRendererDecorator: charts.BarLabelDecorator<String>(
-        outsideLabelStyleSpec: charts.TextStyleSpec(
-          color: charts.Color(
-            r: Theme.of(context).colorScheme.onBackground.red,
-            g: Theme.of(context).colorScheme.onBackground.green,
-            b: Theme.of(context).colorScheme.onBackground.blue,
+      defaultRenderer: charts.BarRendererConfig(
+        barRendererDecorator: charts.BarLabelDecorator<String>(
+          insideLabelStyleSpec: charts.TextStyleSpec(
+            color: charts.Color(
+              r: Theme.of(context).colorScheme.onPrimary.red,
+              g: Theme.of(context).colorScheme.onPrimary.green,
+              b: Theme.of(context).colorScheme.onPrimary.blue,
+            ),
+          ),
+          outsideLabelStyleSpec: charts.TextStyleSpec(
+            color: charts.Color(
+              r: Theme.of(context).colorScheme.onBackground.red,
+              g: Theme.of(context).colorScheme.onBackground.green,
+              b: Theme.of(context).colorScheme.onBackground.blue,
+            ),
           ),
         ),
+        cornerStrategy: const charts.ConstCornerStrategy(14),
       ),
       customSeriesRenderers: [
         charts.BarTargetLineRendererConfig<String>(

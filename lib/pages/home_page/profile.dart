@@ -1,4 +1,5 @@
 import 'package:dynamic_color/dynamic_color.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/app.dart';
@@ -96,87 +97,108 @@ class ProfilePage extends StatelessWidget {
 
                     return const SizedBox();
                   }),
-                  ListTile(
-                    title: Text(AppLocalizations.of(context)!.forceOfflineMode),
-                    leading: const Icon(Icons.mobiledata_off_outlined),
-                    contentPadding: const EdgeInsets.only(left: 20, right: 0),
-                    trailing: KitchenOwlSwitch(
-                      value: state.forcedOfflineMode,
-                      onChanged: (value) =>
-                          BlocProvider.of<SettingsCubit>(context)
-                              .setForcedOfflineMode(value),
-                    ),
-                  ),
-                  if (!isOffline)
-                    Card(
-                      clipBehavior: Clip.antiAlias,
-                      child: ListTile(
-                        title:
-                            Text(AppLocalizations.of(context)!.shoppingLists),
-                        leading: const Icon(Icons.shopping_bag),
-                        trailing: const Icon(Icons.arrow_right_rounded),
-                        onTap: () => Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                const SettingsShoppinglistsPage(),
-                          ),
-                        ),
-                      ),
-                    ),
-                  if (!isOffline)
-                    Card(
-                      child: ListTile(
-                        shape: Theme.of(context).cardTheme.shape,
-                        title: Text(AppLocalizations.of(context)!.user),
-                        leading: const Icon(Icons.person),
-                        trailing: const Icon(Icons.arrow_right_rounded),
-                        onTap: () => Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => const SettingsUserPage(),
-                          ),
-                        ),
+                  if (!kIsWeb)
+                    ListTile(
+                      title:
+                          Text(AppLocalizations.of(context)!.forceOfflineMode),
+                      leading: const Icon(Icons.mobiledata_off_outlined),
+                      contentPadding: const EdgeInsets.only(left: 20, right: 0),
+                      trailing: KitchenOwlSwitch(
+                        value: state.forcedOfflineMode,
+                        onChanged: (value) =>
+                            BlocProvider.of<SettingsCubit>(context)
+                                .setForcedOfflineMode(value),
                       ),
                     ),
                   if (!isOffline && user.hasAdminRights())
-                    Card(
-                      child: ListTile(
-                        title: Text(AppLocalizations.of(context)!.server),
-                        leading: const Icon(Icons.account_tree_rounded),
-                        trailing: const Icon(Icons.arrow_right_rounded),
-                        onTap: () => Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => const SettingsServerPage(),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Card(
+                            clipBehavior: Clip.antiAlias,
+                            child: ListTile(
+                              title: Text(
+                                AppLocalizations.of(context)!.shoppingLists,
+                              ),
+                              leading: const Icon(Icons.shopping_bag),
+                              trailing: const Icon(Icons.arrow_right_rounded),
+                              onTap: () => Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const SettingsShoppinglistsPage(),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Card(
+                            child: ListTile(
+                              title: Text(AppLocalizations.of(context)!.server),
+                              leading: const Icon(Icons.account_tree_rounded),
+                              trailing: const Icon(Icons.arrow_right_rounded),
+                              onTap: () => Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const SettingsServerPage(),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  Row(
+                    children: [
+                      if (!isOffline)
+                        Expanded(
+                          child: Card(
+                            child: ListTile(
+                              shape: Theme.of(context).cardTheme.shape,
+                              title: Text(AppLocalizations.of(context)!.user),
+                              leading: const Icon(Icons.person),
+                              trailing: const Icon(Icons.arrow_right_rounded),
+                              onTap: () => Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const SettingsUserPage(),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      Expanded(
+                        child: Card(
+                          child: ListTile(
+                            title: Text(AppLocalizations.of(context)!.about),
+                            leading: const Icon(Icons.privacy_tip_rounded),
+                            trailing: const Icon(Icons.arrow_right_rounded),
+                            onTap: () => showAboutDialog(
+                              context: context,
+                              applicationVersion:
+                                  Config.packageInfoSync?.version,
+                              applicationLegalese:
+                                  '\u{a9} ${AppLocalizations.of(context)!.appLegal}',
+                              applicationIcon: ConstrainedBox(
+                                constraints: const BoxConstraints.expand(
+                                  width: 64,
+                                  height: 64,
+                                ),
+                                child: Image.asset(
+                                  'assets/icon/icon.png',
+                                ),
+                              ),
+                              children: [
+                                const SizedBox(height: 24),
+                                Text(
+                                  AppLocalizations.of(context)!.appDescription,
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  Card(
-                    child: ListTile(
-                      title: Text(AppLocalizations.of(context)!.about),
-                      leading: const Icon(Icons.privacy_tip_rounded),
-                      trailing: const Icon(Icons.arrow_right_rounded),
-                      onTap: () => showAboutDialog(
-                        context: context,
-                        applicationVersion: Config.packageInfoSync?.version,
-                        applicationLegalese:
-                            '\u{a9} ${AppLocalizations.of(context)!.appLegal}',
-                        applicationIcon: ConstrainedBox(
-                          constraints: const BoxConstraints.expand(
-                            width: 64,
-                            height: 64,
-                          ),
-                          child: Image.asset(
-                            'assets/icon/icon.png',
-                          ),
-                        ),
-                        children: [
-                          const SizedBox(height: 24),
-                          Text(
-                            AppLocalizations.of(context)!.appDescription,
-                          ),
-                        ],
-                      ),
-                    ),
+                    ],
                   ),
                   LoadingTextButton(
                     onPressed: BlocProvider.of<AuthCubit>(context).logout,

@@ -1,6 +1,3 @@
-import 'dart:io';
-
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
@@ -155,13 +152,7 @@ class _RecipePageState extends State<RecipePage> {
                       delegate: SliverChildListDelegate(
                         [
                           Wrap(
-                            runSpacing: (kIsWeb ||
-                                    Platform.isLinux ||
-                                    Platform.isMacOS ||
-                                    Platform.isWindows ||
-                                    Platform.isIOS)
-                                ? 7
-                                : -8, // TODO: Find fix?
+                            runSpacing: 8,
                             spacing: 5,
                             children: [
                               if (state.recipe.source.isNotEmpty)

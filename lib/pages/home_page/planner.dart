@@ -139,7 +139,7 @@ class _PlannerPageState extends State<PlannerPage> {
                                 children: [
                                   if (recipe == state.getPlannedOfDay(day)[0])
                                     Padding(
-                                      padding: const EdgeInsets.only(bottom: 6),
+                                      padding: const EdgeInsets.only(top: 5),
                                       child: Text(
                                         '${DateFormat.E().dateSymbols.STANDALONEWEEKDAYS[weekdayMapping[day]! % 7]}:',
                                         style: Theme.of(context)

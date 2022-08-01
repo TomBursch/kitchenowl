@@ -248,13 +248,7 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                       return Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16),
                         child: Wrap(
-                          runSpacing: (kIsWeb ||
-                                  Platform.isLinux ||
-                                  Platform.isMacOS ||
-                                  Platform.isWindows ||
-                                  Platform.isIOS)
-                              ? 7
-                              : -8, // TODO: Find fix?
+                          runSpacing: 8,
                           spacing: 5,
                           crossAxisAlignment: WrapCrossAlignment.center,
                           children: children + [widget],

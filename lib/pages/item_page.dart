@@ -98,7 +98,9 @@ class _ItemPageState<T extends Item> extends State<ItemPage<T>> {
                         controller: descController,
                         onChanged: (s) => cubit.setDescription(s),
                         decoration: InputDecoration(
-                          border: const OutlineInputBorder(),
+                          border: const OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(14)),
+                          ),
                           labelText: AppLocalizations.of(context)!.description,
                           // suffix: IconButton(
                           //   onPressed: () {

@@ -110,7 +110,7 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                       margin: const EdgeInsets.all(16),
                       constraints: const BoxConstraints.expand(height: 80),
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
+                        borderRadius: BorderRadius.circular(14),
                         border: Border.all(
                           color: Theme.of(context).colorScheme.secondary,
                           width: 2,
@@ -272,7 +272,9 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                         onChanged: (s) => cubit.setDescription(s),
                         maxLines: null,
                         decoration: InputDecoration(
-                          border: const OutlineInputBorder(),
+                          border: const OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(14)),
+                          ),
                           labelText: AppLocalizations.of(context)!.description,
                           hintText:
                               AppLocalizations.of(context)!.writeMarkdownHere,

@@ -68,14 +68,22 @@ class _RecipePageState extends State<RecipePage> {
                         bottom: 16,
                         end: 36,
                       ),
-                      title: Text(
-                        state.recipe.name,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.onBackground,
-                        ),
-                      ),
+                      title: LayoutBuilder(builder: (context, constraints) {
+                        final isCollapsed = constraints.biggest.height <=
+                            MediaQuery.of(context).padding.top +
+                                kToolbarHeight -
+                                16 +
+                                32;
+
+                        return Text(
+                          state.recipe.name,
+                          maxLines: isCollapsed ? 1 : 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.onBackground,
+                          ),
+                        );
+                      }),
                       background: state.recipe.image.isNotEmpty
                           ? GestureDetector(
                               onTap: () =>

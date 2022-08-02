@@ -248,7 +248,7 @@ class _HomePageState extends State<HomePage> {
               bottomNavigationBar: useBottomNavigationBar
                   ? NavigationBar(
                       labelBehavior:
-                          NavigationDestinationLabelBehavior.alwaysHide,
+                          NavigationDestinationLabelBehavior.onlyShowSelected,
                       destinations: _homePageMenuItems
                           .map((e) => NavigationDestination(
                                 icon: Icon(e.icon),

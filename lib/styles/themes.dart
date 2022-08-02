@@ -102,7 +102,7 @@ abstract class AppThemes {
       chipTheme: ChipThemeData.fromDefaults(
         primaryColor: colorScheme.primary,
         secondaryColor: colorScheme.onPrimary,
-        labelStyle: const TextStyle(color: Colors.white),
+        labelStyle: TextStyle(color: colorScheme.onPrimary),
       ),
       visualDensity: VisualDensity.adaptivePlatformDensity,
     );

@@ -32,7 +32,7 @@ class Expense extends Model {
       name: map['name'],
       amount: map['amount'],
       category: map['category'],
-      createdAt: null,
+      createdAt: DateTime.fromMillisecondsSinceEpoch(map['created_at']),
       paidById: map['paid_by_id'],
       paidFor: paidFor,
     );

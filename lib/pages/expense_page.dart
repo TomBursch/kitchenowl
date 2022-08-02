@@ -112,7 +112,8 @@ class _ExpensePageState extends State<ExpensePage> {
                           ),
                           trailing: state.expense.createdAt != null
                               ? Text(
-                                  state.expense.createdAt.toString(),
+                                  DateFormat.yMMMMEEEEd()
+                                      .format(state.expense.createdAt!),
                                 )
                               : null,
                         ),

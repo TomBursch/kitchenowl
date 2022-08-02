@@ -40,7 +40,7 @@ class ExpenseItemWidget extends StatelessWidget {
           title: Text(expense.name),
           trailing: Text(NumberFormat.simpleCurrency().format(expense.amount)),
           subtitle: (expense.createdAt != null)
-              ? Text(expense.createdAt.toString())
+              ? Text(DateFormat.yMMMd().format(expense.createdAt!))
               : null,
           onTap: (kIsWeb || !Platform.isIOS)
               ? toggle

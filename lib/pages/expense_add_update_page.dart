@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -126,6 +127,78 @@ class _AddUpdateRecipePageState extends State<AddUpdateExpensePage> {
                         decoration: InputDecoration(
                           labelText:
                               AppLocalizations.of(context)!.expenseAmount,
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: BlocBuilder<AddUpdateExpenseCubit,
+                          AddUpdateExpenseState>(
+                        bloc: cubit,
+                        buildWhen: (prev, curr) =>
+                            prev.isIncome != curr.isIncome,
+                        builder: (context, state) => Row(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Expanded(
+                              child: ElevatedButton(
+                                style: ButtonStyle(
+                                  backgroundColor: !state.isIncome
+                                      ? MaterialStateProperty.all(
+                                          Theme.of(context).colorScheme.primary,
+                                        )
+                                      : null,
+                                  foregroundColor: !state.isIncome
+                                      ? MaterialStateProperty.all(
+                                          Theme.of(context)
+                                              .colorScheme
+                                              .onPrimary,
+                                        )
+                                      : null,
+                                  shape: MaterialStateProperty.all(
+                                    const RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.horizontal(
+                                        left: Radius.circular(14),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                onPressed: () => cubit.setIncome(false),
+                                child: Text(
+                                  AppLocalizations.of(context)!.expense,
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child: ElevatedButton(
+                                style: ButtonStyle(
+                                  backgroundColor: state.isIncome
+                                      ? MaterialStateProperty.all(
+                                          Theme.of(context).colorScheme.primary,
+                                        )
+                                      : null,
+                                  foregroundColor: state.isIncome
+                                      ? MaterialStateProperty.all(
+                                          Theme.of(context)
+                                              .colorScheme
+                                              .onPrimary,
+                                        )
+                                      : null,
+                                  shape: MaterialStateProperty.all(
+                                    const RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.horizontal(
+                                        right: Radius.circular(14),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                onPressed: () => cubit.setIncome(true),
+                                child: Text(
+                                  AppLocalizations.of(context)!.income,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ),

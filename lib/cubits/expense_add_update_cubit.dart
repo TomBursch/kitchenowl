@@ -21,9 +21,10 @@ class AddUpdateExpenseCubit extends Cubit<AddUpdateExpenseState> {
 
   Future<void> saveExpense() async {
     if (state.isValid()) {
+      final amount = state.amount * (state.isIncome ? -1 : 1);
       if (expense.id == null) {
         await ApiService.getInstance().addExpense(Expense(
-          amount: state.amount,
+          amount: amount,
           name: state.name,
           paidById: state.paidBy,
           paidFor: state.paidFor,
@@ -32,7 +33,7 @@ class AddUpdateExpenseCubit extends Cubit<AddUpdateExpenseState> {
       } else {
         await ApiService.getInstance().updateExpense(expense.copyWith(
           name: state.name,
-          amount: state.amount,
+          amount: amount,
           paidById: state.paidBy,
           paidFor: state.paidFor,
           category: Nullable(state.category),
@@ -55,6 +56,10 @@ class AddUpdateExpenseCubit extends Cubit<AddUpdateExpenseState> {
 
   void setAmount(double amount) {
     emit(state.copyWith(amount: amount));
+  }
+
+  void setIncome(bool isIncome) {
+    emit(state.copyWith(isIncome: isIncome));
   }
 
   void setPaidBy(User user) {
@@ -121,6 +126,7 @@ class AddUpdateExpenseCubit extends Cubit<AddUpdateExpenseState> {
 class AddUpdateExpenseState extends Equatable {
   final String name;
   final double amount;
+  final bool isIncome;
   final int paidBy;
   final List<PaidForModel> paidFor;
   final String? category;
@@ -129,6 +135,7 @@ class AddUpdateExpenseState extends Equatable {
   const AddUpdateExpenseState({
     this.name = "",
     required this.amount,
+    this.isIncome = false,
     required this.paidBy,
     this.category,
     this.paidFor = const [],
@@ -139,6 +146,7 @@ class AddUpdateExpenseState extends Equatable {
     String? name,
     double? amount,
     int? paidBy,
+    bool? isIncome,
     List<PaidForModel>? paidFor,
     String? category,
     List<String>? categories,
@@ -146,6 +154,7 @@ class AddUpdateExpenseState extends Equatable {
       AddUpdateExpenseState(
         name: name ?? this.name,
         amount: amount ?? this.amount,
+        isIncome: isIncome ?? this.isIncome,
         category: category ?? this.category,
         paidBy: paidBy ?? this.paidBy,
         paidFor: paidFor ?? this.paidFor,
@@ -159,6 +168,7 @@ class AddUpdateExpenseState extends Equatable {
       AddUpdateExpenseState(
         name: name,
         amount: amount,
+        isIncome: isIncome,
         category: category,
         paidBy: paidBy,
         paidFor: paidFor,
@@ -169,5 +179,5 @@ class AddUpdateExpenseState extends Equatable {
 
   @override
   List<Object?> get props =>
-      [name, amount, paidBy, category, categories] + paidFor;
+      [name, amount, isIncome, paidBy, category, categories] + paidFor;
 }

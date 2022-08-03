@@ -4,12 +4,16 @@ import 'package:kitchenowl/models/model.dart';
 class Token extends Model {
   final int id;
   final String name;
+  final DateTime? createdAt;
+  final DateTime? lastUsedAt;
   final TokenTypeEnum type;
 
   const Token({
     required this.id,
     this.name = '',
     required this.type,
+    this.createdAt,
+    this.lastUsedAt,
   });
 
   factory Token.fromJson(Map<String, dynamic> map) {
@@ -22,10 +26,26 @@ class Token extends Model {
       type = TokenTypeEnum.access;
     }
 
+    DateTime? createdAt;
+    if (map.containsKey('created_at') && map['created_at'] != null) {
+      createdAt =
+          DateTime.fromMillisecondsSinceEpoch(map['created_at'], isUtc: true)
+              .toLocal();
+    }
+
+    DateTime? lastUsedAt;
+    if (map.containsKey('last_used_at') && map['last_used_at'] != null) {
+      lastUsedAt =
+          DateTime.fromMillisecondsSinceEpoch(map['last_used_at'], isUtc: true)
+              .toLocal();
+    }
+
     return Token(
       id: map['id'],
       name: map['name'],
       type: type,
+      createdAt: createdAt,
+      lastUsedAt: lastUsedAt,
     );
   }
 
@@ -36,10 +56,12 @@ class Token extends Model {
         id: id,
         name: name ?? this.name,
         type: type,
+        createdAt: createdAt,
+        lastUsedAt: lastUsedAt,
       );
 
   @override
-  List<Object?> get props => [id, name, type];
+  List<Object?> get props => [id, name, type, createdAt, lastUsedAt];
 
   @override
   String toString() {

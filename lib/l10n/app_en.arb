@@ -87,6 +87,7 @@
     "itemsRecent": "Recent Items",
     "language": "Language",
     "languageSelect": "Select a language",
+    "lastUsed": "Last used",
     "list": "List",
     "lltCreate": "Create long-lived token",
     "llts": "Long-lived tokens",

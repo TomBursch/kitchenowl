@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:kitchenowl/cubits/settings_user_cubit.dart';
 import 'package:kitchenowl/enums/token_type_enum.dart';
 import 'package:kitchenowl/kitchenowl.dart';
@@ -196,85 +197,80 @@ class _SettingsUserPageState extends State<SettingsUserPage> {
                                           )
                                           .length ??
                                       0,
-                                  itemBuilder: (context, i) => Dismissible(
-                                    key: ValueKey<Token>(state.user!.tokens!
+                                  itemBuilder: (context, i) {
+                                    final token = state.user!.tokens!
                                         .where(
                                           (e) =>
                                               e.type == TokenTypeEnum.longlived,
                                         )
-                                        .elementAt(i)),
-                                    confirmDismiss: (direction) async {
-                                      return (await askForConfirmation(
-                                        context: context,
-                                        title: Text(
-                                          AppLocalizations.of(context)!
-                                              .lltDelete,
-                                        ),
-                                        content: Text(
-                                          AppLocalizations.of(context)!
-                                              .lltDeleteConfirmation(
-                                            state.user!.tokens!
-                                                .where(
-                                                  (e) =>
-                                                      e.type ==
-                                                      TokenTypeEnum.longlived,
-                                                )
-                                                .elementAt(i)
-                                                .name,
+                                        .elementAt(i);
+
+                                    return Dismissible(
+                                      key: ValueKey<Token>(token),
+                                      confirmDismiss: (direction) async {
+                                        return (await askForConfirmation(
+                                          context: context,
+                                          title: Text(
+                                            AppLocalizations.of(context)!
+                                                .lltDelete,
                                           ),
+                                          content: Text(
+                                            AppLocalizations.of(context)!
+                                                .lltDeleteConfirmation(
+                                              token.name,
+                                            ),
+                                          ),
+                                        ));
+                                      },
+                                      onDismissed: (direction) {
+                                        cubit.deleteLongLivedToken(
+                                          token,
+                                        );
+                                      },
+                                      background: Container(
+                                        alignment: Alignment.centerLeft,
+                                        padding:
+                                            const EdgeInsets.only(left: 16),
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(14),
+                                          color: Colors.redAccent,
                                         ),
-                                      ));
-                                    },
-                                    onDismissed: (direction) {
-                                      cubit.deleteLongLivedToken(
-                                        state.user!.tokens!
-                                            .where(
-                                              (e) =>
-                                                  e.type ==
-                                                  TokenTypeEnum.longlived,
-                                            )
-                                            .elementAt(i),
-                                      );
-                                    },
-                                    background: Container(
-                                      alignment: Alignment.centerLeft,
-                                      padding: const EdgeInsets.only(left: 16),
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(5),
-                                        color: Colors.red,
-                                      ),
-                                      child: const Icon(
-                                        Icons.delete,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    secondaryBackground: Container(
-                                      alignment: Alignment.centerRight,
-                                      padding: const EdgeInsets.only(right: 16),
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(5),
-                                        color: Colors.red,
-                                      ),
-                                      child: const Icon(
-                                        Icons.delete,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    child: Card(
-                                      child: ListTile(
-                                        title: Text(
-                                          state.user!.tokens!
-                                              .where(
-                                                (e) =>
-                                                    e.type ==
-                                                    TokenTypeEnum.longlived,
-                                              )
-                                              .elementAt(i)
-                                              .name,
+                                        child: const Icon(
+                                          Icons.delete,
+                                          color: Colors.white,
                                         ),
                                       ),
-                                    ),
-                                  ),
+                                      secondaryBackground: Container(
+                                        alignment: Alignment.centerRight,
+                                        padding:
+                                            const EdgeInsets.only(right: 16),
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(14),
+                                          color: Colors.redAccent,
+                                        ),
+                                        child: const Icon(
+                                          Icons.delete,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                      child: Card(
+                                        child: ListTile(
+                                          title: Text(
+                                            token.name,
+                                          ),
+                                          subtitle: token.lastUsedAt != null
+                                              ? Text(
+                                                  "${AppLocalizations.of(context)!.lastUsed}: ${DateFormat.yMMMEd().add_jm().format(
+                                                        token.lastUsedAt!,
+                                                      )}",
+                                                )
+                                              : null,
+                                        ),
+                                      ),
+                                    );
+                                  },
                                 ),
                               ],
                       ),

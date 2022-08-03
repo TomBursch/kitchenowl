@@ -35,7 +35,7 @@ Future<bool> askForConfirmation({
             TextButton(
               style: ButtonStyle(
                 foregroundColor: MaterialStateProperty.all<Color>(
-                  Colors.red,
+                  Colors.redAccent,
                 ),
               ),
               onPressed: () => Navigator.of(context).pop(true),

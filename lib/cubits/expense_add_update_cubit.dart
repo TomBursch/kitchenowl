@@ -9,7 +9,8 @@ class AddUpdateExpenseCubit extends Cubit<AddUpdateExpenseState> {
   final Expense expense;
   AddUpdateExpenseCubit([this.expense = const Expense(paidById: 0)])
       : super(AddUpdateExpenseState(
-          amount: expense.amount,
+          amount: expense.amount.abs(),
+          isIncome: expense.amount < 0,
           name: expense.name,
           paidBy: expense.paidById,
           paidFor: expense.paidFor,

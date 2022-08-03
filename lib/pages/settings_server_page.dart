@@ -192,8 +192,8 @@ class _SettingsServerPageState extends State<SettingsServerPage> {
                         alignment: Alignment.centerLeft,
                         padding: const EdgeInsets.only(left: 16),
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          color: Colors.red,
+                          borderRadius: BorderRadius.circular(14),
+                          color: Colors.redAccent,
                         ),
                         child: const Icon(
                           Icons.delete,
@@ -204,8 +204,8 @@ class _SettingsServerPageState extends State<SettingsServerPage> {
                         alignment: Alignment.centerRight,
                         padding: const EdgeInsets.only(right: 16),
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          color: Colors.red,
+                          borderRadius: BorderRadius.circular(14),
+                          color: Colors.redAccent,
                         ),
                         child: const Icon(
                           Icons.delete,
@@ -287,8 +287,8 @@ class _SettingsServerPageState extends State<SettingsServerPage> {
                         alignment: Alignment.centerLeft,
                         padding: const EdgeInsets.only(left: 16),
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          color: Colors.red,
+                          borderRadius: BorderRadius.circular(14),
+                          color: Colors.redAccent,
                         ),
                         child: const Icon(Icons.delete, color: Colors.white),
                       ),
@@ -296,8 +296,8 @@ class _SettingsServerPageState extends State<SettingsServerPage> {
                         alignment: Alignment.centerRight,
                         padding: const EdgeInsets.only(right: 16),
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          color: Colors.red,
+                          borderRadius: BorderRadius.circular(14),
+                          color: Colors.redAccent,
                         ),
                         child: const Icon(Icons.delete, color: Colors.white),
                       ),
@@ -398,8 +398,8 @@ class _SettingsServerPageState extends State<SettingsServerPage> {
                                     alignment: Alignment.centerLeft,
                                     padding: const EdgeInsets.only(left: 16),
                                     decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(5),
-                                      color: Colors.red,
+                                      borderRadius: BorderRadius.circular(14),
+                                      color: Colors.redAccent,
                                     ),
                                     child: const Icon(
                                       Icons.delete,
@@ -410,8 +410,8 @@ class _SettingsServerPageState extends State<SettingsServerPage> {
                                     alignment: Alignment.centerRight,
                                     padding: const EdgeInsets.only(right: 16),
                                     decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(5),
-                                      color: Colors.red,
+                                      borderRadius: BorderRadius.circular(14),
+                                      color: Colors.redAccent,
                                     ),
                                     child: const Icon(
                                       Icons.delete,
@@ -494,8 +494,8 @@ class _SettingsServerPageState extends State<SettingsServerPage> {
                         alignment: Alignment.centerLeft,
                         padding: const EdgeInsets.only(left: 16),
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          color: Colors.red,
+                          borderRadius: BorderRadius.circular(14),
+                          color: Colors.redAccent,
                         ),
                         child: const Icon(Icons.delete, color: Colors.white),
                       ),
@@ -503,8 +503,8 @@ class _SettingsServerPageState extends State<SettingsServerPage> {
                         alignment: Alignment.centerRight,
                         padding: const EdgeInsets.only(right: 16),
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          color: Colors.red,
+                          borderRadius: BorderRadius.circular(14),
+                          color: Colors.redAccent,
                         ),
                         child: const Icon(Icons.delete, color: Colors.white),
                       ),

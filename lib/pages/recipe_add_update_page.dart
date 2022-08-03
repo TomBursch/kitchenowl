@@ -79,9 +79,6 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
               builder: (context, state) {
                 return LoadingIconButton(
                   icon: const Icon(Icons.save_rounded),
-                  loadingColor: Theme.of(context).brightness == Brightness.light
-                      ? Colors.white
-                      : null,
                   onPressed: state.isValid()
                       ? () async {
                           await cubit.saveRecipe();
@@ -209,7 +206,9 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                                   e.name,
                                   style: TextStyle(
                                     color: state.selectedTags.contains(e)
-                                        ? Colors.white
+                                        ? Theme.of(context)
+                                            .colorScheme
+                                            .onPrimary
                                         : null,
                                   ),
                                 ),
@@ -377,6 +376,9 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                         backgroundColor: MaterialStateProperty.all<Color>(
                           Colors.redAccent,
                         ),
+                        foregroundColor: MaterialStateProperty.all<Color>(
+                          Colors.white,
+                        ),
                       ),
                       onPressed: () async {
                         final confirmed = await askForConfirmation(
@@ -395,10 +397,7 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                           Navigator.of(context).pop(UpdateEnum.deleted);
                         }
                       },
-                      child: Text(
-                        AppLocalizations.of(context)!.delete,
-                        style: const TextStyle(color: Colors.white),
-                      ),
+                      child: Text(AppLocalizations.of(context)!.delete),
                     ),
                   ),
                 ),

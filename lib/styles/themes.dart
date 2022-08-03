@@ -39,7 +39,7 @@ abstract class AppThemes {
           colorScheme.surfaceTint,
           1,
         ),
-        labelStyle: const TextStyle(color: Colors.white),
+        labelStyle: TextStyle(color: colorScheme.onPrimary),
       ),
       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
       appBarTheme: AppBarTheme(

@@ -37,7 +37,7 @@ class _AddUpdateRecipePageState extends State<AddUpdateExpensePage> {
     isUpdate = widget.expense?.id != null;
     if (isUpdate) {
       nameController.text = widget.expense!.name;
-      amountController.text = widget.expense!.amount.toStringAsFixed(2);
+      amountController.text = widget.expense!.amount.abs().toStringAsFixed(2);
     }
     if (widget.expense == null) {
       amountController.text = 0.toStringAsFixed(2);
@@ -81,9 +81,6 @@ class _AddUpdateRecipePageState extends State<AddUpdateExpensePage> {
               bloc: cubit,
               builder: (context, state) => LoadingIconButton(
                 icon: const Icon(Icons.save_rounded),
-                loadingColor: Theme.of(context).brightness == Brightness.light
-                    ? Colors.white
-                    : null,
                 onPressed: state.isValid()
                     ? () async {
                         await cubit.saveExpense();
@@ -387,6 +384,9 @@ class _AddUpdateRecipePageState extends State<AddUpdateExpensePage> {
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all<Color>(
                           Colors.redAccent,
+                        ),
+                        foregroundColor: MaterialStateProperty.all<Color>(
+                          Colors.white,
                         ),
                       ),
                       onPressed: () async {

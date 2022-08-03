@@ -131,7 +131,7 @@ class ApiService {
               : status = Connection.connected;
         } else {
           status = healthy.item2 == null ||
-                  (healthy.item2!['version'] ?? 0) >= Config.MIN_BACKEND_VERSION
+                  (healthy.item2!['version'] ?? 0) < Config.MIN_BACKEND_VERSION
               ? Connection.unsupportedBackend
               : Connection.unsupportedFrontend;
         }

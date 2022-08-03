@@ -94,7 +94,9 @@ class _RecipeListPageState extends State<RecipeListPage> {
                                     color:
                                         (state is FilteredListRecipeListState) &&
                                                 state.selectedTags.contains(tag)
-                                            ? Colors.white
+                                            ? Theme.of(context)
+                                                .colorScheme
+                                                .onPrimary
                                             : null,
                                   ),
                                 ),

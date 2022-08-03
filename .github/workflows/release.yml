@@ -61,37 +61,37 @@ jobs:
       matrix:
         target: [macOS, Windows, Linux, Android, Debian, Fedora]
         include:
-          - os: macos-10.15 # Catalina
+          - os: macos-latest
             target: macOS
             build_target: macos
             build_path: build/macos/Build/Products/Release
             asset_extension: .zip
             asset_content_type: application/zip
-          - os: windows-2019
+          - os: windows-latest
             target: Windows
             build_target: windows
             build_path: build\windows\runner\Release
             asset_extension: .zip
             asset_content_type: application/zip
-          - os: ubuntu-20.04
+          - os: ubuntu-latest
             target: Linux
             build_target: linux
             build_path: build/linux/x64/release/bundle
             asset_extension: .tar.gz
             asset_content_type: application/gzip
-          - os: ubuntu-20.04
+          - os: ubuntu-latest
             target: Android
             build_target: apk
             build_path: build/app/outputs/flutter-apk
             asset_extension: .apk
             asset_content_type: application/vnd.android.package-archive
-          - os: ubuntu-20.04
+          - os: ubuntu-latest
             target: Debian
             build_target: linux
             build_path: build/debian/release
             asset_extension: .deb
             asset_content_type: application/vnd.debian.binary-package
-          - os: ubuntu-20.04
+          - os: ubuntu-latest
             container:
               image: fedora:latest
               options: --group-add 135

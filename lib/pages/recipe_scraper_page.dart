@@ -34,86 +34,93 @@ class _RecipeScraperPageState extends State<RecipeScraperPage> {
   }
 
   @override
-  Widget build(BuildContext context) => BlocProvider.value(
-        value: cubit,
-        child: BlocBuilder<RecipeScraperCubit, RecipeScraperState>(
-          bloc: cubit,
-          builder: (context, state) {
-            if (state is! RecipeScraperLoadedState) {
-              return Scaffold(
-                appBar: AppBar(
-                  title: Text(widget.url),
-                ),
-                body: Center(
-                  child: state is RecipeScraperErrorState
-                      ? Text(AppLocalizations.of(context)!.error)
-                      : const CircularProgressIndicator(),
-                ),
-              );
-            }
-
+  Widget build(BuildContext context) {
+    return BlocProvider.value(
+      value: cubit,
+      child: BlocBuilder<RecipeScraperCubit, RecipeScraperState>(
+        bloc: cubit,
+        builder: (context, state) {
+          if (state is! RecipeScraperLoadedState) {
             return Scaffold(
               appBar: AppBar(
-                title: Text(state.recipe.name),
+                title: Text(widget.url),
               ),
-              body: ConstrainedBox(
-                constraints: const BoxConstraints.expand(width: 1600),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: CustomScrollView(
-                    slivers: [
-                      SliverList(
-                        delegate: SliverChildBuilderDelegate(
-                          childCount: state.items.length,
-                          (context, i) {
-                            final entry = state.items.entries.elementAt(i);
+              body: Center(
+                child: state is RecipeScraperErrorState
+                    ? Text(AppLocalizations.of(context)!.error)
+                    : const CircularProgressIndicator(),
+              ),
+            );
+          }
 
-                            return StringItemMatch(
-                              string: entry.key,
-                              item: entry.value,
-                              itemSelected: (item) {
-                                cubit.updateItem(entry.key, item);
-                              },
-                            );
-                          },
+          return Scaffold(
+            appBar: AppBar(
+              title: Text(state.recipe.name),
+            ),
+            body: Align(
+              alignment: Alignment.topCenter,
+              child: ConstrainedBox(
+                constraints: const BoxConstraints.expand(width: 1600),
+                child: CustomScrollView(
+                  slivers: [
+                    SliverPadding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      sliver: SliverToBoxAdapter(
+                        child: Wrap(
+                          children: state.items.entries.map(
+                            (entry) {
+                              return StringItemMatch(
+                                string: entry.key,
+                                item: entry.value,
+                                itemSelected: (item) {
+                                  cubit.updateItem(entry.key, item);
+                                },
+                              );
+                            },
+                          ).toList(),
                         ),
                       ),
-                      SliverPadding(
-                        padding: const EdgeInsets.only(top: 8),
-                        sliver: SliverToBoxAdapter(
-                          child: ElevatedButton(
-                            onPressed: state.isValid()
-                                ? () async {
-                                    if (!cubit.hasValidRecipe()) return;
-                                    final res = await Navigator.of(context)
-                                        .push<UpdateEnum>(MaterialPageRoute(
-                                      builder: (context) => AddUpdateRecipePage(
-                                        recipe: cubit.getRecipe()!,
-                                      ),
-                                    ));
-                                    if (res == UpdateEnum.updated) {
-                                      Navigator.of(context)
-                                          .pop(UpdateEnum.updated);
-                                    }
+                    ),
+                    SliverPadding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
+                      ),
+                      sliver: SliverToBoxAdapter(
+                        child: ElevatedButton(
+                          onPressed: state.isValid()
+                              ? () async {
+                                  if (!cubit.hasValidRecipe()) return;
+                                  final res = await Navigator.of(context)
+                                      .push<UpdateEnum>(MaterialPageRoute(
+                                    builder: (context) => AddUpdateRecipePage(
+                                      recipe: cubit.getRecipe()!,
+                                    ),
+                                  ));
+                                  if (res == UpdateEnum.updated) {
+                                    Navigator.of(context)
+                                        .pop(UpdateEnum.updated);
                                   }
-                                : null,
-                            child: Text(
-                              AppLocalizations.of(context)!.next,
-                            ),
+                                }
+                              : null,
+                          child: Text(
+                            AppLocalizations.of(context)!.next,
                           ),
                         ),
                       ),
-                      SliverToBoxAdapter(
-                        child: SizedBox(
-                          height: MediaQuery.of(context).padding.bottom,
-                        ),
+                    ),
+                    SliverToBoxAdapter(
+                      child: SizedBox(
+                        height: MediaQuery.of(context).padding.bottom,
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
-            );
-          },
-        ),
-      );
+            ),
+          );
+        },
+      ),
+    );
+  }
 }

@@ -1,22 +1,29 @@
+import 'dart:async';
+import 'dart:io';
+
 import 'package:animations/animations.dart';
 import 'package:dynamic_color/dynamic_color.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:kitchenowl/cubits/auth_cubit.dart';
 import 'package:kitchenowl/cubits/settings_cubit.dart';
+import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/pages/login_page.dart';
 import 'package:kitchenowl/pages/onboarding_page.dart';
+import 'package:kitchenowl/pages/recipe_scraper_page.dart';
 import 'package:kitchenowl/pages/setup_page.dart';
 import 'package:kitchenowl/pages/splash_page.dart';
 import 'package:kitchenowl/pages/unreachable_page.dart';
 import 'package:kitchenowl/pages/home_page.dart';
 import 'package:kitchenowl/pages/unsupported_page.dart';
 import 'package:kitchenowl/styles/themes.dart';
+import 'package:share_handler/share_handler.dart';
 
-class App extends StatelessWidget {
+class App extends StatefulWidget {
   static App? _instance;
   final SettingsCubit _settingsCubit = SettingsCubit();
   final AuthCubit _authCubit = AuthCubit();
@@ -32,6 +39,30 @@ class App extends StatelessWidget {
   }
 
   @override
+  State<App> createState() => _AppState();
+}
+
+class _AppState extends State<App> {
+  StreamSubscription? _intentDataStreamSubscription;
+
+  @override
+  void initState() {
+    super.initState();
+
+    if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
+      final handler = ShareHandlerPlatform.instance;
+      _intentDataStreamSubscription =
+          handler.sharedMediaStream.listen(_handleSharedMedia);
+    }
+  }
+
+  @override
+  void dispose() {
+    _intentDataStreamSubscription?.cancel();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
@@ -42,8 +73,8 @@ class App extends StatelessWidget {
       },
       child: MultiBlocProvider(
         providers: [
-          BlocProvider.value(value: _authCubit),
-          BlocProvider.value(value: _settingsCubit),
+          BlocProvider.value(value: widget._authCubit),
+          BlocProvider.value(value: widget._settingsCubit),
         ],
         child: BlocBuilder<SettingsCubit, SettingsState>(
           builder: (context, state) =>
@@ -74,7 +105,7 @@ class App extends StatelessWidget {
                 builder: (context) => AnnotatedRegion<SystemUiOverlayStyle>(
                   value: _getSystemUI(context, state),
                   child: BlocBuilder<AuthCubit, AuthState>(
-                    bloc: _authCubit,
+                    bloc: widget._authCubit,
                     builder: (context, state) => PageTransitionSwitcher(
                       transitionBuilder: (
                         Widget child,
@@ -129,7 +160,6 @@ class App extends StatelessWidget {
   }
 
   // Method always returns a value
-  // ignore: missing_return
   SystemUiOverlayStyle _getSystemUI(BuildContext context, SettingsState state) {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
     switch (state.themeMode) {
@@ -163,6 +193,16 @@ class App extends StatelessWidget {
           systemNavigationBarIconBrightness: Brightness.light,
           systemNavigationBarContrastEnforced: false,
         );
+    }
+  }
+
+  void _handleSharedMedia(SharedMedia media) {
+    if (mounted && media.content != null) {
+      Navigator.of(context).push<UpdateEnum>(MaterialPageRoute(
+        builder: (context) => RecipeScraperPage(
+          url: media.content!,
+        ),
+      ));
     }
   }
 }

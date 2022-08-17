@@ -26,55 +26,66 @@ class StringItemMatch extends StatelessWidget {
   Widget build(BuildContext context) {
     final int crossAxisCount = getValueForScreenType<int>(
       context: context,
-      mobile: 3,
-      tablet: 6,
-      desktop: 9,
+      mobile: 2,
+      tablet: 3,
+      desktop: 6,
     );
 
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        ListTile(
-          title: Text(string),
-          contentPadding: const EdgeInsets.only(left: 0, right: 0),
-          trailing: item != null
-              ? IconButton(
-                  onPressed: () => itemSelected(null),
-                  icon: const Icon(Icons.close),
-                )
-              : null,
-        ),
-        FractionallySizedBox(
-          widthFactor: 1 / crossAxisCount,
-          child: AspectRatio(
-            aspectRatio: 1,
-            child: item != null
-                ? ShoppingItemWidget(
-                    item: item!,
-                    selected: true,
-                    onPressed: (_) => _onPressed(context),
-                    onLongPressed: (_) => _onLongPressed(context),
-                  )
-                : OutlinedButton(
-                    onPressed: () => _onPressed(context),
-                    child: const Icon(Icons.add),
-                  ),
+    return FractionallySizedBox(
+      widthFactor: 1 / crossAxisCount,
+      alignment: Alignment.topCenter,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            height: 50,
+            child: ListTile(
+              title: Text(string),
+              contentPadding: const EdgeInsets.only(left: 0, right: 0),
+              trailing: item != null
+                  ? IconButton(
+                      onPressed: () => itemSelected(null),
+                      icon: const Icon(Icons.close),
+                    )
+                  : null,
+            ),
           ),
-        ),
-        if (item != null)
-          Row(
-            children: [
-              Expanded(
-                child: Text(AppLocalizations.of(context)!.optional),
-              ),
-              KitchenOwlSwitch(
-                value: optional,
-                onChanged: _setOptional,
-              ),
-            ],
+          Padding(
+            padding: const EdgeInsets.only(top: 6),
+            child: AspectRatio(
+              aspectRatio: 1,
+              child: item != null
+                  ? ShoppingItemWidget(
+                      item: item!,
+                      selected: true,
+                      onPressed: (_) => _onPressed(context),
+                      onLongPressed: (_) => _onLongPressed(context),
+                    )
+                  : Padding(
+                      padding: const EdgeInsets.all(32.0),
+                      child: OutlinedButton(
+                        onPressed: () => _onPressed(context),
+                        child: const Icon(Icons.add),
+                      ),
+                    ),
+            ),
           ),
-      ],
+          if (item != null)
+            Row(
+              children: [
+                Expanded(
+                  child: Text(AppLocalizations.of(context)!.optional),
+                ),
+                KitchenOwlSwitch(
+                  value: optional,
+                  onChanged: _setOptional,
+                ),
+              ],
+            ),
+          if (item == null) const SizedBox(height: 40),
+        ],
+      ),
     );
   }
 

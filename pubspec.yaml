@@ -58,6 +58,7 @@ dependencies:
   image_picker: ^0.8.5+3
   file_picker: ^5.0.1
   photo_view: ^0.14.0
+  share_handler: ^0.0.16
 
 dev_dependencies:
   flutter_test:

@@ -1,7 +1,7 @@
 from datetime import timedelta
 from sqlalchemy import MetaData
 from app.errors import NotFoundRequest, UnauthorizedRequest
-from app.util import KitchenOwlJSONEncoder
+from app.util import KitchenOwlJSONProvider
 from flask import Flask, jsonify, request
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
@@ -28,6 +28,8 @@ SUPPORTED_LANGUAGES = {
     'de': 'Deutsch'
 }
 
+Flask.json_provider_class = KitchenOwlJSONProvider
+
 app = Flask(__name__)
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -41,7 +43,6 @@ app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY', 'super-secret')
 app.config["JWT_ACCESS_TOKEN_EXPIRES"] = JWT_ACCESS_TOKEN_EXPIRES
 app.config["JWT_REFRESH_TOKEN_EXPIRES"] = JWT_REFRESH_TOKEN_EXPIRES
 
-app.json_encoder = KitchenOwlJSONEncoder
 
 convention = {
     "ix": 'ix_%(column_0_label)s',

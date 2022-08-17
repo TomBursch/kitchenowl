@@ -1,8 +1,8 @@
-from flask.json import JSONEncoder
+from flask.json.provider import DefaultJSONProvider
 from datetime import date, timezone
 
 
-class KitchenOwlJSONEncoder(JSONEncoder):
+class KitchenOwlJSONProvider(DefaultJSONProvider):
     def default(self, o):
         if isinstance(o, date):
             return int(round(o.replace(tzinfo=timezone.utc).timestamp() * 1000))

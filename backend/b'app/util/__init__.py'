@@ -1,1 +1,1 @@
-from .kitchenowl_json_encoder import KitchenOwlJSONEncoder
+from .kitchenowl_json_provider import KitchenOwlJSONProvider

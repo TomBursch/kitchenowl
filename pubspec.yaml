@@ -33,16 +33,16 @@ dependencies:
   collection: ^1.15.0
   path_provider: ^2.0.11
   flutter_dotenv: ^5.0.2
-  flutter_secure_storage: ^5.0.2
+  flutter_secure_storage: ^6.0.0
   shared_preferences: ^2.0.15
-  flutter_bloc: ^8.0.1
+  flutter_bloc: ^8.1.1
   animations: ^2.0.3
   shimmer: ^2.0.0
   equatable: ^2.0.3
   url_launcher: ^6.1.5
   package_info_plus: ^1.4.3
-  device_info_plus: ^4.0.1
-  http: ^0.13.4
+  device_info_plus: ^4.1.2
+  http: ^0.13.5
 
   # reorderables: ^0.3.2
   # fluttertoast: ^8.0.3
@@ -62,9 +62,9 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_launcher_icons: ^0.9.3
+  flutter_launcher_icons: ^0.10.0
   flutter_lints: ^2.0.1
-  dart_code_metrics: ^4.16.0
+  dart_code_metrics: ^4.17.0
 
 # The following section is specific to Flutter.
 flutter:

@@ -6,6 +6,7 @@ import 'package:kitchenowl/app.dart';
 import 'package:kitchenowl/cubits/expense_list_cubit.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/user.dart';
+import 'package:kitchenowl/pages/expense_overview_page.dart';
 import 'package:kitchenowl/widgets/expense_item.dart';
 
 class ExpenseListPage extends StatefulWidget {
@@ -44,9 +45,26 @@ class _ExpensePageState extends State<ExpenseListPage> {
                     child: Container(
                       height: 80,
                       alignment: Alignment.centerLeft,
-                      child: Text(
-                        AppLocalizations.of(context)!.balances,
-                        style: Theme.of(context).textTheme.headline5,
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              AppLocalizations.of(context)!.balances,
+                              style: Theme.of(context).textTheme.headline5,
+                            ),
+                          ),
+                          if (state.expenses.isNotEmpty)
+                            InkWell(
+                              borderRadius: BorderRadius.circular(50),
+                              child: const Icon(Icons.bar_chart_rounded),
+                              onTap: () => Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const ExpenseOverviewPage(),
+                                ),
+                              ),
+                            ),
+                        ],
                       ),
                     ),
                   ),

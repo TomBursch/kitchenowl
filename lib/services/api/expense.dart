@@ -66,4 +66,15 @@ extension ExpenseApi on ApiService {
 
     return res.statusCode == 200;
   }
+
+  Future<Map<String, Map<String, double>>?> getExpenseOverview() async {
+    final res = await get(
+      '$baseRoute/overview',
+    );
+    if (res.statusCode != 200) return null;
+
+    final body = jsonDecode(res.body);
+
+    return Map.from(body).map((key, value) => MapEntry(key, Map.from(value)));
+  }
 }

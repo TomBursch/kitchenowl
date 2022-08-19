@@ -66,6 +66,10 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
     _refreshLock = true;
     // Get required information
     final state = this.state;
+    if (state.recentItems.isEmpty && state.listItems.isEmpty) {
+      emit(const LoadingShoppinglistCubitState());
+    }
+
     if (state is SearchShoppinglistCubitState) query = query ?? state.query;
     final sorting = state.sorting;
     Future<List<ShoppinglistItem>> shoppinglist =

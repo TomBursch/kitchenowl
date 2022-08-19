@@ -26,6 +26,8 @@ class PhotoViewPage extends StatelessWidget {
           minScale: PhotoViewComputedScale.contained,
           heroAttributes:
               heroTag != null ? PhotoViewHeroAttributes(tag: heroTag!) : null,
+          backgroundDecoration:
+              BoxDecoration(color: Theme.of(context).backgroundColor),
         ),
       ),
     );

@@ -119,6 +119,10 @@ class _RecipePageState extends State<RecipePage> {
                                   context,
                                   state.recipe.image,
                                 ),
+                                color: Theme.of(context)
+                                    .backgroundColor
+                                    .withOpacity(.25),
+                                colorBlendMode: BlendMode.srcATop,
                                 fit: BoxFit.cover,
                               ),
                               // ),

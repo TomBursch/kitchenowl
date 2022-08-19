@@ -54,13 +54,20 @@ class RecipeListCubit extends Cubit<RecipeListState> {
   }
 
   Future<void> refresh([String? query]) async {
+    final state = this.state;
     if (state is SearchRecipeListState) {
-      query = query ?? (state as SearchRecipeListState).query;
+      query = query ?? state.query;
     }
     if (_refreshLock && query == _refreshCurrentQuery) return;
     _refreshLock = true;
     _refreshCurrentQuery = query;
     late ListRecipeListState _state;
+    if (state is ListRecipeListState &&
+        state is! SearchRecipeListState &&
+        state is! FilteredListRecipeListState &&
+        state.recipes.isEmpty) {
+      emit(const LoadingRecipeListState());
+    }
 
     if (query != null && query.isNotEmpty) {
       final tags = TransactionHandler.getInstance()
@@ -80,7 +87,7 @@ class RecipeListCubit extends Cubit<RecipeListState> {
           .runTransaction(TransactionRecipeGetRecipes());
       Set<Tag> filter = const {};
       if (state is FilteredListRecipeListState && (query == null)) {
-        filter = (state as FilteredListRecipeListState).selectedTags;
+        filter = state.selectedTags;
       }
       _state = filter.isNotEmpty
           ? FilteredListRecipeListState(

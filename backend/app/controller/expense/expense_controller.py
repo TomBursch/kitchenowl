@@ -1,3 +1,5 @@
+import calendar
+from datetime import datetime
 from sqlalchemy.sql.expression import desc
 from app.errors import NotFoundRequest
 from flask import jsonify, Blueprint
@@ -144,6 +146,30 @@ def calculateBalances():
 @jwt_required()
 def getExpenseCategories():
     return jsonify([e.name for e in ExpenseCategory.all_by_name()])
+
+
+@expense.route('/overview', methods=['GET'])
+@jwt_required()
+def getExpenseOverview():
+    categories = list(map(lambda x: x.name, ExpenseCategory.all_by_name()))
+    categories.append("")
+    thisMonthStart = datetime.utcnow().date().replace(day=1)
+
+    def getOverviewForMonthAgo(monthAgo: int):
+        monthStart = thisMonthStart.replace(
+            month=(thisMonthStart.month - monthAgo))
+        monthEnd = monthStart.replace(day=calendar.monthrange(
+            monthStart.year, monthStart.month)[1])
+        return {
+            (e.name or ""): (float(e.balance) or 0) for e in Expense.query.with_entities(ExpenseCategory.name.label("name"), func.sum(
+                Expense.amount).label("balance")).group_by(Expense.category_id).join(Expense.category, isouter=True).filter(Expense.created_at >= monthStart, Expense.created_at <= monthEnd).all()
+        }
+
+    value = [getOverviewForMonthAgo(i) for i in range(0, 5)]
+
+    return jsonify({category: {
+        i: (value[i][category] if category in value[i] else 0.0) for i in range(0, 5)
+    } for category in categories})
 
 
 @expense.route('/categories', methods=['POST'])

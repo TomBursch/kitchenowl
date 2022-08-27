@@ -42,18 +42,15 @@ class ExpenseItemWidget extends StatelessWidget {
           subtitle: (expense.createdAt != null)
               ? Text(DateFormat.yMMMd().format(expense.createdAt!))
               : null,
-          onTap: (kIsWeb || !Platform.isIOS)
-              ? toggle
-              : () async {
-                  final res = await Navigator.of(context)
-                      .push<UpdateEnum>(MaterialPageRoute(
-                    builder: (context) => ExpensePage(
-                      expense: expense,
-                      users: users,
-                    ),
-                  ));
+          onTap: (kIsWeb || Platform.isIOS)
+              ? () async {
+                  final res = await Navigator.of(context).pushNamed<UpdateEnum>(
+                    "/expense/${expense.id}",
+                    arguments: [expense, users],
+                  );
                   _handleUpdate(res);
-                },
+                }
+              : toggle,
         ),
       ),
       onClosed: _handleUpdate,

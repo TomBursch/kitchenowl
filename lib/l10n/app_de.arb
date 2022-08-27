@@ -27,6 +27,7 @@
     "@appTitle": {
         "description": "The title of the app"
     },
+    "back": "Zurück",
     "balances": "Bilanz",
     "camera": "Kamera",
     "cancel": "Abbrechen",
@@ -123,6 +124,7 @@
     "optional": "Optional",
     "or": "oder",
     "other": "Anderer",
+    "pageNotFound": "Diese Seite konnte nicht gefunden werden",
     "password": "Passwort",
     "passwordSave": "Passwort Speichern",
     "planner": "Planer",

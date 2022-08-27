@@ -40,17 +40,15 @@ class RecipeItemWidget extends StatelessWidget {
           trailing: const Icon(Icons.arrow_right_rounded),
           selected: recipe.isPlanned,
           subtitle: description,
-          onTap: (kIsWeb || !Platform.isIOS)
-              ? toggle
-              : () async {
-                  final res = await Navigator.of(context)
-                      .push<UpdateEnum>(MaterialPageRoute(
-                    builder: (context) => RecipePage(
-                      recipe: recipe,
-                    ),
-                  ));
+          onTap: (kIsWeb || Platform.isIOS)
+              ? () async {
+                  final res = await Navigator.of(context).pushNamed<UpdateEnum>(
+                    "/recipe/${recipe.id}",
+                    arguments: recipe,
+                  );
                   _handleUpdate(res);
-                },
+                }
+              : toggle,
         ),
       ),
       openBuilder: (

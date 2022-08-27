@@ -47,42 +47,42 @@ class _ExpensePageState extends State<ExpensePage> {
       child: BlocBuilder<ExpenseCubit, ExpenseCubitState>(
         bloc: cubit,
         builder: (conext, state) => Scaffold(
-          appBar: AppBar(
-            title: Text(state.expense.name),
-            leading: BackButton(
-              onPressed: () =>
-                  Navigator.of(context).pop(cubit.state.updateState),
-            ),
-            actions: [
-              if (!App.isOffline)
-                LoadingIconButton(
-                  onPressed: () async {
-                    final res = await Navigator.of(context)
-                        .push<UpdateEnum>(MaterialPageRoute(
-                      builder: (context) => AddUpdateExpensePage(
-                        expense: state.expense,
-                        users: state.users,
-                      ),
-                    ));
-                    if (res == UpdateEnum.updated) {
-                      cubit.setUpdateState(UpdateEnum.updated);
-                      await cubit.refresh();
-                    }
-                    if (res == UpdateEnum.deleted) {
-                      if (!mounted) return;
-                      Navigator.of(context).pop(UpdateEnum.deleted);
-                    }
-                  },
-                  icon: const Icon(Icons.edit),
-                ),
-            ],
-          ),
           body: Align(
             alignment: Alignment.topCenter,
             child: ConstrainedBox(
               constraints: const BoxConstraints.expand(width: 1600),
               child: CustomScrollView(
                 slivers: [
+                  SliverAppBar(
+                    title: Text(state.expense.name),
+                    leading: BackButton(
+                      onPressed: () =>
+                          Navigator.of(context).pop(cubit.state.updateState),
+                    ),
+                    actions: [
+                      if (!App.isOffline)
+                        LoadingIconButton(
+                          onPressed: () async {
+                            final res = await Navigator.of(context)
+                                .push<UpdateEnum>(MaterialPageRoute(
+                              builder: (context) => AddUpdateExpensePage(
+                                expense: state.expense,
+                                users: state.users,
+                              ),
+                            ));
+                            if (res == UpdateEnum.updated) {
+                              cubit.setUpdateState(UpdateEnum.updated);
+                              await cubit.refresh();
+                            }
+                            if (res == UpdateEnum.deleted) {
+                              if (!mounted) return;
+                              Navigator.of(context).pop(UpdateEnum.deleted);
+                            }
+                          },
+                          icon: const Icon(Icons.edit),
+                        ),
+                    ],
+                  ),
                   SliverList(
                     delegate: SliverChildListDelegate(
                       [

@@ -138,7 +138,7 @@ class _ExpensePageState extends State<ExpenseListPage> {
         .fold<double>(0.0, (p, e) => e.balance.abs() > p ? e.balance.abs() : p);
     maxBalance = maxBalance > 0 ? maxBalance : 1;
 
-    final zeroDividerColor = Theme.of(context).colorScheme.onBackground;
+    final zeroDividerColor = Theme.of(context).colorScheme.onPrimary;
 
     return charts.BarChart(
       [

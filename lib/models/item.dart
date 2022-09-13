@@ -66,7 +66,7 @@ class ItemWithDescription extends Item {
       ItemWithDescription(
         id: map['id'],
         name: map['name'],
-        description: map['description'],
+        description: map['description'] ?? "",
         category:
             map['category'] != null ? Category.fromJson(map['category']) : null,
       );

@@ -204,7 +204,8 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                         if (!isOffline)
                           SliverItemGridList(
                             items: state.recentItems,
-                            onPressed: (Item item) => cubit.add(item.name),
+                            onPressed: (ItemWithDescription item) =>
+                                cubit.add(item.name, item.description),
                             categories: state.categories,
                             onRefresh: cubit.refresh,
                             isLoading: state is LoadingShoppinglistCubitState,

@@ -51,7 +51,8 @@ class TransactionShoppingListSearchItem extends Transaction<List<Item>> {
   }
 }
 
-class TransactionShoppingListGetRecentItems extends Transaction<List<Item>> {
+class TransactionShoppingListGetRecentItems
+    extends Transaction<List<ItemWithDescription>> {
   TransactionShoppingListGetRecentItems({DateTime? timestamp})
       : super.internal(
           timestamp ?? DateTime.now(),
@@ -59,12 +60,12 @@ class TransactionShoppingListGetRecentItems extends Transaction<List<Item>> {
         );
 
   @override
-  Future<List<Item>> runLocal() async {
+  Future<List<ItemWithDescription>> runLocal() async {
     return [];
   }
 
   @override
-  Future<List<Item>> runOnline() async {
+  Future<List<ItemWithDescription>> runOnline() async {
     return await ApiService.getInstance().getRecentItems() ?? const [];
   }
 }

@@ -24,13 +24,13 @@ extension ShoppinglistApi on ApiService {
     return body.map((e) => ShoppinglistItem.fromJson(e)).toList();
   }
 
-  Future<List<Item>?> getRecentItems() async {
+  Future<List<ItemWithDescription>?> getRecentItems() async {
     final res = await get('$baseRoute/recent-items');
     if (res.statusCode != 200) return null;
 
     final body = List.from(jsonDecode(res.body));
 
-    return body.map((e) => Item.fromJson(e)).toList();
+    return body.map((e) => ItemWithDescription.fromJson(e)).toList();
   }
 
   Future<bool> addItemByName(String name, [String? description]) async {

@@ -191,7 +191,7 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
 
 class ShoppinglistCubitState extends Equatable {
   final List<ShoppinglistItem> listItems;
-  final List<Item> recentItems;
+  final List<ItemWithDescription> recentItems;
   final List<Category> categories;
   final ShoppinglistSorting sorting;
   final ShoppinglistStyle style;
@@ -206,7 +206,7 @@ class ShoppinglistCubitState extends Equatable {
 
   ShoppinglistCubitState copyWith({
     List<ShoppinglistItem>? listItems,
-    List<Item>? recentItems,
+    List<ItemWithDescription>? recentItems,
     List<Category>? categories,
     ShoppinglistSorting? sorting,
     ShoppinglistStyle? style,
@@ -246,7 +246,7 @@ class SearchShoppinglistCubitState extends ShoppinglistCubitState {
   // ignore: long-parameter-list
   ShoppinglistCubitState copyWith({
     List<ShoppinglistItem>? listItems,
-    List<Item>? recentItems,
+    List<ItemWithDescription>? recentItems,
     List<Category>? categories,
     ShoppinglistSorting? sorting,
     ShoppinglistStyle? style,

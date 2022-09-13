@@ -15,7 +15,7 @@ shoppinglist = Blueprint('shoppinglist', __name__)
 @shoppinglist.before_app_first_request
 def before_first_request():
     # Add default shoppinglist
-    if(not Shoppinglist.find_by_id(1)):
+    if (not Shoppinglist.find_by_id(1)):
         sl = Shoppinglist(
             name='Default'
         )
@@ -58,7 +58,7 @@ def getAllShoppingListItems(id):
 @jwt_required()
 def getRecentItems(id):
     items = History.get_recent(id)
-    return jsonify([e.item.obj_to_dict() for e in items])
+    return jsonify([e.item.obj_to_dict() | {'description': e.description} for e in items])
 
 
 def getSuggestionsBasedOnLastAddedItems(id, item_count):
@@ -135,7 +135,7 @@ def addShoppinglistItemByName(args, id):
         con.shoppinglist = shoppinglist
         con.save()
 
-    History.create_added(shoppinglist, item)
+        History.create_added(shoppinglist, item, description)
 
     return jsonify(item.obj_to_dict())
 
@@ -153,9 +153,10 @@ def removeShoppinglistItem(args, id):
     if not item:
         raise NotFoundRequest()
     con = ShoppinglistItems.find_by_ids(id, args['item_id'])
+    description = con.description
     con.delete()
 
-    History.create_dropped(shoppinglist, item)
+    History.create_dropped(shoppinglist, item, description)
 
     return jsonify({'msg': "DONE"})
 

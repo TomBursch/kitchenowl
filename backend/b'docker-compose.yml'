@@ -14,13 +14,13 @@ services:
   back:
     image: tombursch/kitchenowl:latest
     restart: unless-stopped
-    # ports: # Optional and only needed when only hosting the backend
+    # ports: # Optional and only needed when only hosting the http backend
     #   - "80:80"
     networks:
       - default
     environment:
       - JWT_SECRET_KEY=PLEASE_CHANGE_ME
-      # - FRONT_URL=http://localhost # Optional and only needed if 
+      - FRONT_URL=http://localhost
     volumes:
     - kitchenowl_data:/data
 

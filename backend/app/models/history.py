@@ -23,21 +23,24 @@ class History(db.Model, DbModelMixin, TimestampMixin):
     item = db.relationship("Item", uselist=False, back_populates="history")
 
     status = db.Column(db.Enum(Status))
+    description = db.Column('description', db.String())
 
     @classmethod
-    def create_added(cls, shoppinglist, item):
+    def create_added(cls, shoppinglist, item, description=''):
         return cls(
             shoppinglist_id=shoppinglist.id,
             item_id=item.id,
-            status=Status.ADDED
+            status=Status.ADDED,
+            description=description
         ).save()
 
     @classmethod
-    def create_dropped(cls, shoppinglist, item):
+    def create_dropped(cls, shoppinglist, item, description=''):
         return cls(
             shoppinglist_id=shoppinglist.id,
             item_id=item.id,
-            status=Status.DROPPED
+            status=Status.DROPPED,
+            description=description
         ).save()
 
     def obj_to_item_dict(self):

@@ -27,6 +27,9 @@ The `description` is a descriptive summary of the change the PR will make.
 - All PRs should be rebased (with main) and commits squashed prior to the final merge process
 - One PR per fix or feature
 
+### Requirements
+- Python 3.9+
+
 ### Setup & Install
 - Create a python environment `python3 -m venv venv`
 - Activate your python environment `source venv/bin/activate` (environment can be deactivated with `deactivate`)

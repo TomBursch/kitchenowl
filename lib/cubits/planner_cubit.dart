@@ -9,7 +9,7 @@ import 'package:kitchenowl/services/transactions/shoppinglist.dart';
 class PlannerCubit extends Cubit<PlannerCubitState> {
   bool _refreshLock = false;
 
-  PlannerCubit() : super(const PlannerCubitState()) {
+  PlannerCubit() : super(const LoadingPlannerCubitState()) {
     refresh();
   }
 
@@ -22,9 +22,9 @@ class PlannerCubit extends Cubit<PlannerCubitState> {
     await refresh();
   }
 
-  Future<void> add(Recipe recipe) async {
+  Future<void> add(Recipe recipe, [int? day]) async {
     await TransactionHandler.getInstance()
-        .runTransaction(TransactionPlannerAddRecipe(recipe: recipe));
+        .runTransaction(TransactionPlannerAddRecipe(recipe: recipe, day: day));
     await refresh();
   }
 
@@ -38,7 +38,7 @@ class PlannerCubit extends Cubit<PlannerCubitState> {
     final suggested = TransactionHandler.getInstance()
         .runTransaction(TransactionPlannerGetSuggestedRecipes());
 
-    emit(PlannerCubitState(
+    emit(LoadedPlannerCubitState(
       await planned,
       await recent,
       await suggested,
@@ -47,9 +47,12 @@ class PlannerCubit extends Cubit<PlannerCubitState> {
   }
 
   Future<void> refreshSuggestions() async {
-    final suggested = await TransactionHandler.getInstance()
-        .runTransaction(TransactionPlannerRefreshSuggestedRecipes());
-    emit(state.copyWith(suggestedRecipes: suggested));
+    if (state is LoadedPlannerCubitState) {
+      final suggested = await TransactionHandler.getInstance()
+          .runTransaction(TransactionPlannerRefreshSuggestedRecipes());
+      emit((state as LoadedPlannerCubitState)
+          .copyWith(suggestedRecipes: suggested));
+    }
   }
 
   Future<void> addItemsToList(List<RecipeItem> items) async {
@@ -60,12 +63,23 @@ class PlannerCubit extends Cubit<PlannerCubitState> {
   }
 }
 
-class PlannerCubitState extends Equatable {
+abstract class PlannerCubitState extends Equatable {
+  const PlannerCubitState();
+}
+
+class LoadingPlannerCubitState extends PlannerCubitState {
+  const LoadingPlannerCubitState();
+
+  @override
+  List<Object?> get props => [];
+}
+
+class LoadedPlannerCubitState extends PlannerCubitState {
   final List<Recipe> plannedRecipes;
   final List<Recipe> recentRecipes;
   final List<Recipe> suggestedRecipes;
 
-  const PlannerCubitState([
+  const LoadedPlannerCubitState([
     this.plannedRecipes = const [],
     this.recentRecipes = const [],
     this.suggestedRecipes = const [],
@@ -75,13 +89,13 @@ class PlannerCubitState extends Equatable {
   List<Object?> get props =>
       plannedRecipes.cast<Object?>() + recentRecipes + suggestedRecipes;
 
-  PlannerCubitState copyWith({
+  LoadedPlannerCubitState copyWith({
     List<Recipe>? plannedRecipes,
     Map<int, List<Recipe>>? plannedRecipeDayMap,
     List<Recipe>? recentRecipes,
     List<Recipe>? suggestedRecipes,
   }) =>
-      PlannerCubitState(
+      LoadedPlannerCubitState(
         plannedRecipes ?? this.plannedRecipes,
         recentRecipes ?? this.recentRecipes,
         suggestedRecipes ?? this.suggestedRecipes,

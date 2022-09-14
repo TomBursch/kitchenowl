@@ -18,4 +18,9 @@ class Category extends Model {
   Map<String, dynamic> toJson() => {
         "name": name,
       };
+
+  Category copyWith({String? name}) => Category(
+        id: id,
+        name: name ?? this.name,
+      );
 }

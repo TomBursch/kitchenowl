@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class TextDialog extends StatelessWidget {
-  final TextEditingController controller = TextEditingController();
+  final TextEditingController controller;
   final String title;
   final String hintText;
   final String doneText;
@@ -12,8 +12,9 @@ class TextDialog extends StatelessWidget {
     this.title = "",
     this.doneText = "",
     this.hintText = "",
+    String? initialText,
     this.textInputType,
-  });
+  }) : controller = TextEditingController(text: initialText);
 
   @override
   Widget build(BuildContext context) {

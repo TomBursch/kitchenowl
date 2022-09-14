@@ -39,6 +39,12 @@ class ExpenseOverviewLoaded extends ExpenseOverviewState {
     required this.categoryOverviewsByMonth,
   });
 
+  double getTotalForMonth(int i) {
+    return categoryOverviewsByMonth.entries
+        .map((e) => e.value[i.toString()] ?? 0)
+        .reduce((v, e) => v + e);
+  }
+
   @override
   List<Object?> get props => [categoryOverviewsByMonth];
 }

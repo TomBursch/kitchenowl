@@ -6,7 +6,7 @@ import 'package:kitchenowl/models/user.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
 
 class SettingsServerCubit extends Cubit<SettingsServerState> {
-  SettingsServerCubit() : super(const SettingsServerState([], {})) {
+  SettingsServerCubit() : super(const LoadingSettingsServerState([], {})) {
     refresh();
   }
 
@@ -104,4 +104,8 @@ class SettingsServerState extends Equatable {
 
   @override
   List<Object?> get props => [users, tags, categories, expenseCategories];
+}
+
+class LoadingSettingsServerState extends SettingsServerState {
+  const LoadingSettingsServerState(super.users, super.tags);
 }

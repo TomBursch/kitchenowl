@@ -111,7 +111,7 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                         items: state.listItems,
                         categories: state.categories,
                         isList: state.style == ShoppinglistStyle.list,
-                        selected: (item) => item is ShoppinglistItem,
+                        selected: (_) => true,
                         isLoading: state is LoadingShoppinglistCubitState,
                         onRefresh: cubit.refresh,
                         onPressed: (Item item) {
@@ -151,7 +151,7 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                             items: items,
                             categories: state.categories,
                             isList: state.style == ShoppinglistStyle.list,
-                            selected: (item) => item is ShoppinglistItem,
+                            selected: (_) => true,
                             isLoading: state is LoadingShoppinglistCubitState,
                             onRefresh: cubit.refresh,
                             onPressed: (Item item) {

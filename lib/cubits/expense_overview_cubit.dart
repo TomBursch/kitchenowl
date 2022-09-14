@@ -1,7 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
-import 'package:kitchenowl/services/transaction_handler.dart';
 
 class ExpenseOverviewCubit extends Cubit<ExpenseOverviewState> {
   ExpenseOverviewCubit() : super(const ExpenseOverviewLoading()) {

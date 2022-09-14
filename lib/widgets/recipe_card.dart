@@ -59,9 +59,10 @@ class RecipeCard extends StatelessWidget {
                         bottom: Radius.circular(14),
                       ),
                     ),
-                    child: const Icon(
+                    child: Icon(
                       Icons.fastfood_rounded,
                       size: 48,
+                      color: Theme.of(context).colorScheme.onPrimary,
                     ),
                   ),
                 ),

@@ -9,6 +9,7 @@ Future<bool> askForConfirmation({
   String? confirmText,
   String? cancelText,
   bool showCancel = true,
+  Color? confirmColor = Colors.redAccent,
 }) async =>
     await showDialog<bool>(
       context: context,
@@ -33,11 +34,13 @@ Future<bool> askForConfirmation({
                 ),
               ),
             TextButton(
-              style: ButtonStyle(
-                foregroundColor: MaterialStateProperty.all<Color>(
-                  Colors.redAccent,
-                ),
-              ),
+              style: confirmColor != null
+                  ? ButtonStyle(
+                      foregroundColor: MaterialStateProperty.all<Color>(
+                        confirmColor,
+                      ),
+                    )
+                  : null,
               onPressed: () => Navigator.of(context).pop(true),
               child: Text(confirmText ?? AppLocalizations.of(context)!.delete),
             ),

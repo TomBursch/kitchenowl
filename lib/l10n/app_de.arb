@@ -61,6 +61,13 @@
     "expenseEdit": "Ausgabe Bearbeiten",
     "expenseEmpty": "Keine Ausgaben, fange an welche zu erstellen!",
     "expenseFactor": "Faktor",
+    "expenseOverviewComparedToPreviousMonth": "Im Vergleich zu den letzten Monaten",
+    "expenseOverviewTotalTitle": "Gesamte Ausgaben für {month}: {value}",
+    "@expenseOverviewTotalTitle": {
+        "placeholders": {
+            "month": {}
+        }
+    },
     "expensePaidBy": "Bezahlt von",
     "expensePaidFor": "Bezahlt für",
     "features": "Features",
@@ -124,6 +131,7 @@
     "optional": "Optional",
     "or": "oder",
     "other": "Anderer",
+    "overview": "Übersicht",
     "pageNotFound": "Diese Seite konnte nicht gefunden werden",
     "password": "Passwort",
     "passwordSave": "Passwort Speichern",
@@ -180,6 +188,7 @@
     "themeLight": "Hell",
     "themeMode": "Theme",
     "themeSystem": "System",
+    "total": "Gesamt",
     "uncategorized": "Unkategorisiert",
     "underConstruction": "Baustelle",
     "unreachableMessage": "Hmmmm... der Server wurde nicht erreicht",

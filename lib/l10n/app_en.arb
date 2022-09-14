@@ -61,6 +61,13 @@
     "expenseEdit": "Edit Expense",
     "expenseEmpty": "No expenses, start by creating one!",
     "expenseFactor": "Factor",
+    "expenseOverviewComparedToPreviousMonth": "Compared to previous months",
+    "expenseOverviewTotalTitle": "Total expenses for {month}:",
+    "@expenseOverviewTotalTitle": {
+        "placeholders": {
+            "month": {}
+        }
+    },
     "expensePaidBy": "Paid by",
     "expensePaidFor": "Paid for",
     "features": "Features",
@@ -124,6 +131,7 @@
     "optional": "Optional",
     "or": "or",
     "other": "other",
+    "overview": "Overview",
     "pageNotFound": "Couldn't find this page",
     "password": "Password",
     "passwordSave": "Update Password",
@@ -180,6 +188,7 @@
     "themeLight": "Light",
     "themeMode": "Theme",
     "themeSystem": "System",
+    "total": "Total",
     "uncategorized": "Uncategorized",
     "underConstruction": "Under Construction",
     "unreachableMessage": "Hmmmm... coulnd't reach server",

@@ -106,7 +106,8 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
 
                     dynamic body;
 
-                    if (state.sorting != ShoppinglistSorting.category) {
+                    if (state.sorting != ShoppinglistSorting.category ||
+                        state is LoadingShoppinglistCubitState) {
                       body = SliverItemGridList(
                         items: state.listItems,
                         categories: state.categories,

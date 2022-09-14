@@ -109,7 +109,7 @@ class RecipeListCubit extends Cubit<RecipeListState> {
     Set<Tag> filter,
   ) =>
       List<Recipe>.from(
-        allRecipes.where((e) => e.tags.any((tag) => filter.contains(tag))),
+        allRecipes.where((e) => e.tags.containsAll(filter)),
       );
 }
 

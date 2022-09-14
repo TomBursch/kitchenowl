@@ -61,6 +61,7 @@ class _PlannerPageState extends State<PlannerPage> {
             builder: (context, state) {
               if (state is! LoadedPlannerCubitState) {
                 return CustomScrollView(
+                  primary: true,
                   slivers: [
                     SliverPadding(
                       padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
@@ -83,6 +84,7 @@ class _PlannerPageState extends State<PlannerPage> {
               }
 
               return CustomScrollView(
+                primary: true,
                 slivers: [
                   SliverPadding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),

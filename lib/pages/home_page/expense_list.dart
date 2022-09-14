@@ -38,6 +38,7 @@ class _ExpensePageState extends State<ExpenseListPage> {
           child: BlocBuilder<ExpenseListCubit, ExpenseListCubitState>(
             bloc: cubit,
             builder: (context, state) => CustomScrollView(
+              primary: true,
               slivers: [
                 SliverPadding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),

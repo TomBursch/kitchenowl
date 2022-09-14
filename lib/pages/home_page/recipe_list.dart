@@ -80,7 +80,6 @@ class _RecipeListPageState extends State<RecipeListPage> {
                   padding: const EdgeInsets.only(bottom: 6),
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
-                    controller: ScrollController(),
                     child: Row(
                       children: const <Widget>[SizedBox(width: 12)] +
                           state.tags.map((tag) {

@@ -40,10 +40,13 @@ abstract class AppThemes {
           1,
         ),
         labelStyle: TextStyle(color: colorScheme.onPrimary),
+      ).copyWith(
+        checkmarkColor: colorScheme.onPrimary,
+        side: BorderSide.none,
       ),
       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
       appBarTheme: AppBarTheme(
-        color: colorScheme.background,
+        backgroundColor: colorScheme.background,
         surfaceTintColor: colorScheme.background,
       ),
       navigationRailTheme: NavigationRailThemeData(
@@ -92,7 +95,8 @@ abstract class AppThemes {
         style: ElevatedButton.styleFrom(
           onPrimary: colorScheme.onSurfaceVariant,
           primary: colorScheme.surfaceVariant,
-        ).copyWith(elevation: ButtonStyleButton.allOrNull(0.0)),
+          elevation: 0,
+        ),
       ),
       floatingActionButtonTheme: FloatingActionButtonThemeData(
         backgroundColor: colorScheme.primary,
@@ -103,6 +107,9 @@ abstract class AppThemes {
         primaryColor: colorScheme.primary,
         secondaryColor: colorScheme.onPrimary,
         labelStyle: TextStyle(color: colorScheme.onPrimary),
+      ).copyWith(
+        checkmarkColor: colorScheme.onPrimary,
+        side: BorderSide.none,
       ),
       visualDensity: VisualDensity.adaptivePlatformDensity,
     );

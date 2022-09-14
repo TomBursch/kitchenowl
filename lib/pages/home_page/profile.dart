@@ -21,6 +21,7 @@ class ProfilePage extends StatelessWidget {
     final isOffline = App.isOffline;
 
     return CustomScrollView(
+      primary: true,
       physics: const ClampingScrollPhysics(),
       slivers: [
         SliverPadding(

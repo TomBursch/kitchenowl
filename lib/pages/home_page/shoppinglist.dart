@@ -79,6 +79,7 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                   builder: (context, state) {
                     if (state is SearchShoppinglistCubitState) {
                       return CustomScrollView(
+                        primary: true,
                         slivers: [
                           SliverItemGridList(
                             items: state.result,
@@ -167,6 +168,7 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                     }
 
                     return CustomScrollView(
+                      primary: true,
                       slivers: [
                         SliverOptionsHeader(
                           // left: HeaderButton(

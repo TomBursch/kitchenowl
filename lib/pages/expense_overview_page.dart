@@ -75,6 +75,7 @@ class _ExpenseOverviewPageState extends State<ExpenseOverviewPage> {
                       // ],
                     ),
                   ),
+                  const Divider(),
                   Text(
                     AppLocalizations.of(context)!
                         .expenseOverviewComparedToPreviousMonth,
@@ -94,9 +95,9 @@ class _ExpenseOverviewPageState extends State<ExpenseOverviewPage> {
                         charts.SeriesLegend(
                           desiredMaxColumns: getValueForScreenType(
                             context: context,
-                            mobile: 3,
-                            tablet: 6,
-                            desktop: 10,
+                            mobile: 2,
+                            tablet: 4,
+                            desktop: 6,
                           ),
                         ),
                       ],

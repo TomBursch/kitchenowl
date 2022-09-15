@@ -54,7 +54,7 @@ class RecipeCard extends StatelessWidget {
                   flex: 3,
                   child: Container(
                     decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.primary,
+                      color: Theme.of(context).colorScheme.secondaryContainer,
                       borderRadius: const BorderRadius.vertical(
                         bottom: Radius.circular(14),
                       ),
@@ -62,7 +62,7 @@ class RecipeCard extends StatelessWidget {
                     child: Icon(
                       Icons.fastfood_rounded,
                       size: 48,
-                      color: Theme.of(context).colorScheme.onPrimary,
+                      color: Theme.of(context).colorScheme.onSecondaryContainer,
                     ),
                   ),
                 ),

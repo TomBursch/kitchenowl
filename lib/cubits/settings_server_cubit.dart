@@ -60,7 +60,10 @@ class SettingsServerCubit extends Cubit<SettingsServerState> {
   }
 
   Future<bool> updateTag(Tag tag) async {
-    return true;
+    final res = await ApiService.getInstance().updateTag(tag);
+    refresh();
+
+    return res;
   }
 
   Future<bool> deleteCategory(Category category) async {
@@ -79,7 +82,10 @@ class SettingsServerCubit extends Cubit<SettingsServerState> {
   }
 
   Future<bool> updateCategory(Category category) async {
-    return true;
+    final res = await ApiService.getInstance().updateCategory(category);
+    refresh();
+
+    return res;
   }
 
   Future<bool> reorderCategory(int oldIndex, int newIndex) async {
@@ -100,8 +106,12 @@ class SettingsServerCubit extends Cubit<SettingsServerState> {
     return res;
   }
 
-  Future<bool> renameExpenseCategory(String name) async {
-    return true;
+  Future<bool> renameExpenseCategory(String oldName, String newName) async {
+    final res =
+        await ApiService.getInstance().renameExpenseCategory(oldName, newName);
+    refresh();
+
+    return res;
   }
 }
 

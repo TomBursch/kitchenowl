@@ -58,6 +58,15 @@ extension ExpenseApi on ApiService {
     return res.statusCode == 200;
   }
 
+  Future<bool> renameExpenseCategory(String oldName, String newName) async {
+    final res = await post(
+      '$baseRoute/categories/$oldName',
+      jsonEncode({'name': newName}),
+    );
+
+    return res.statusCode == 200;
+  }
+
   Future<bool> deleteExpenseCategory(String name) async {
     final res = await delete(
       '$baseRoute/categories',

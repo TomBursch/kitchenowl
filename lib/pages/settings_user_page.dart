@@ -307,10 +307,11 @@ class _SettingsUserPageState extends State<SettingsUserPage> {
           title: AppLocalizations.of(context)!.lltCreate,
           doneText: AppLocalizations.of(context)!.add,
           hintText: AppLocalizations.of(context)!.name,
+          isInputValid: (s) => s.isNotEmpty,
         );
       },
     );
-    if (name == null || name.isEmpty) return;
+    if (name == null) return;
 
     final token = await cubit.addLongLivedToken(name);
 

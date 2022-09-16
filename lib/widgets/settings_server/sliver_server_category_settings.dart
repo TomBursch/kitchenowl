@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/cubits/settings_server_cubit.dart';
 import 'package:kitchenowl/kitchenowl.dart';
+import 'package:kitchenowl/widgets/dismissible_card.dart';
 import 'package:reorderables/reorderables.dart';
 
 class SliverServerCategorySettings extends StatelessWidget {
@@ -25,7 +26,7 @@ class SliverServerCategorySettings extends StatelessWidget {
               BlocProvider.of<SettingsServerCubit>(context).reorderCategory,
           delegate: ReorderableSliverChildBuilderDelegate(
             childCount: state.categories.length,
-            (context, i) => Dismissible(
+            (context, i) => DismissibleCard(
               key: ValueKey<String>(
                 state.categories.elementAt(i).name,
               ),
@@ -47,56 +48,31 @@ class SliverServerCategorySettings extends StatelessWidget {
                   state.categories.elementAt(i),
                 );
               },
-              background: Container(
-                alignment: Alignment.centerLeft,
-                padding: const EdgeInsets.only(left: 16),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(14),
-                  color: Colors.redAccent,
-                ),
-                child: const Icon(
-                  Icons.delete,
-                  color: Colors.white,
-                ),
+              title: Text(
+                state.categories.elementAt(i).name,
               ),
-              secondaryBackground: Container(
-                alignment: Alignment.centerRight,
-                padding: const EdgeInsets.only(right: 16),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(14),
-                  color: Colors.redAccent,
-                ),
-                child: const Icon(
-                  Icons.delete,
-                  color: Colors.white,
-                ),
-              ),
-              child: Card(
-                child: ListTile(
-                  title: Text(
-                    state.categories.elementAt(i).name,
-                  ),
-                  onTap: () async {
-                    final res = await showDialog<String>(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return TextDialog(
-                          title: AppLocalizations.of(context)!.addTag,
-                          doneText: AppLocalizations.of(context)!.rename,
-                          hintText: AppLocalizations.of(context)!.name,
-                          initialText: state.categories.elementAt(i).name,
-                        );
-                      },
+              displayDraggable: true,
+              onTap: () async {
+                final res = await showDialog<String>(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return TextDialog(
+                      title: AppLocalizations.of(context)!.addTag,
+                      doneText: AppLocalizations.of(context)!.rename,
+                      hintText: AppLocalizations.of(context)!.name,
+                      initialText: state.categories.elementAt(i).name,
+                      isInputValid: (s) =>
+                          s.isNotEmpty &&
+                          s != state.categories.elementAt(i).name,
                     );
-                    if (res != null && res.isNotEmpty) {
-                      BlocProvider.of<SettingsServerCubit>(context)
-                          .updateCategory(state.categories
-                              .elementAt(i)
-                              .copyWith(name: res));
-                    }
                   },
-                ),
-              ),
+                );
+                if (res != null) {
+                  BlocProvider.of<SettingsServerCubit>(context).updateCategory(
+                    state.categories.elementAt(i).copyWith(name: res),
+                  );
+                }
+              },
             ),
           ),
         );

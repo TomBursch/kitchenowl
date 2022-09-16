@@ -171,12 +171,7 @@
     "sortingAlphabetical": "Alphabetisch",
     "sortingAlgorithmic": "Algorithmisch",
     "swipeToDelete": "Wische zum löschen",
-    "swipeToDeleteType": "Wische zum löschen von {type}",
-    "@swipeToDeleteType": {
-        "placeholders": {
-            "type": {}
-        }
-    },
+    "swipeToDeleteAndLongPressToReorder": "Wische zum löschen und halte lang zum umsortieren",
     "tagDelete": "Tag löschen",
     "tagDeleteConfirmation": "Bist du dir sicher, dass du {tag} löschen möchtest? Diese Aktion entfernt den Tag von allen Rezepten.",
     "@tagDeleteConfirmation": {

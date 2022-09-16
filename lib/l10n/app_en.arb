@@ -171,12 +171,7 @@
     "sortingAlphabetical": "Alphabetical",
     "sortingAlgorithmic": "Algorithmic",
     "swipeToDelete": "Swipe to delete",
-    "swipeToDeleteType": "Swipe to delete {type}",
-    "@swipeToDeleteType": {
-        "placeholders": {
-            "type": {}
-        }
-    },
+    "swipeToDeleteAndLongPressToReorder": "Swipe to delete and long press to reorder",
     "tagDelete": "Delete Tag",
     "tagDeleteConfirmation": "Are you sure you want to delete {tag}? This will remove the tag from any recipe containing it.",
     "@tagDeleteConfirmation": {

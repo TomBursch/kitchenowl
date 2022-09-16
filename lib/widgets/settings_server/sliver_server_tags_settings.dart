@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/cubits/settings_server_cubit.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/tag.dart';
+import 'package:kitchenowl/widgets/dismissible_card.dart';
 
 class SliverServerTagsSettings extends StatelessWidget {
   const SliverServerTagsSettings({Key? key}) : super(key: key);
@@ -22,7 +23,7 @@ class SliverServerTagsSettings extends StatelessWidget {
         return SliverList(
           delegate: SliverChildBuilderDelegate(
             childCount: state.tags.length,
-            (context, i) => Dismissible(
+            (context, i) => DismissibleCard(
               key: ValueKey<Tag>(state.tags.elementAt(i)),
               confirmDismiss: (direction) async {
                 return (await askForConfirmation(
@@ -40,53 +41,27 @@ class SliverServerTagsSettings extends StatelessWidget {
                 BlocProvider.of<SettingsServerCubit>(context)
                     .deleteTag(state.tags.elementAt(i));
               },
-              background: Container(
-                alignment: Alignment.centerLeft,
-                padding: const EdgeInsets.only(left: 16),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(14),
-                  color: Colors.redAccent,
-                ),
-                child: const Icon(
-                  Icons.delete,
-                  color: Colors.white,
-                ),
-              ),
-              secondaryBackground: Container(
-                alignment: Alignment.centerRight,
-                padding: const EdgeInsets.only(right: 16),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(14),
-                  color: Colors.redAccent,
-                ),
-                child: const Icon(
-                  Icons.delete,
-                  color: Colors.white,
-                ),
-              ),
-              child: Card(
-                child: ListTile(
-                  title: Text(state.tags.elementAt(i).name),
-                  onTap: () async {
-                    final res = await showDialog<String>(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return TextDialog(
-                          title: AppLocalizations.of(context)!.addTag,
-                          doneText: AppLocalizations.of(context)!.rename,
-                          hintText: AppLocalizations.of(context)!.name,
-                          initialText: state.tags.elementAt(i).name,
-                        );
-                      },
+              title: Text(state.tags.elementAt(i).name),
+              onTap: () async {
+                final res = await showDialog<String>(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return TextDialog(
+                      title: AppLocalizations.of(context)!.addTag,
+                      doneText: AppLocalizations.of(context)!.rename,
+                      hintText: AppLocalizations.of(context)!.name,
+                      initialText: state.tags.elementAt(i).name,
+                      isInputValid: (s) =>
+                          s.isNotEmpty && s != state.tags.elementAt(i).name,
                     );
-                    if (res != null && res.isNotEmpty) {
-                      BlocProvider.of<SettingsServerCubit>(context).updateTag(
-                        state.tags.elementAt(i).copyWith(name: res),
-                      );
-                    }
                   },
-                ),
-              ),
+                );
+                if (res != null) {
+                  BlocProvider.of<SettingsServerCubit>(context).updateTag(
+                    state.tags.elementAt(i).copyWith(name: res),
+                  );
+                }
+              },
             ),
           ),
         );

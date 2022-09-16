@@ -35,6 +35,7 @@ class _SettingsServerPageState extends State<SettingsServerPage> {
 
   @override
   Widget build(BuildContext context) {
+    //TODO this still needs some major refactoring
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.server),
@@ -60,9 +61,8 @@ class _SettingsServerPageState extends State<SettingsServerPage> {
                       SliverList(
                         delegate: SliverChildListDelegate([
                           Text(
-                            AppLocalizations.of(context)!.swipeToDeleteType(
-                              AppLocalizations.of(context)!.categories,
-                            ),
+                            AppLocalizations.of(context)!
+                                .swipeToDeleteAndLongPressToReorder,
                             textAlign: TextAlign.center,
                             style: Theme.of(context).textTheme.caption,
                           ),
@@ -87,10 +87,11 @@ class _SettingsServerPageState extends State<SettingsServerPage> {
                                             AppLocalizations.of(context)!.add,
                                         hintText:
                                             AppLocalizations.of(context)!.name,
+                                        isInputValid: (s) => s.isNotEmpty,
                                       );
                                     },
                                   );
-                                  if (res != null && res.isNotEmpty) {
+                                  if (res != null) {
                                     cubit.addTag(res);
                                   }
                                 },
@@ -104,9 +105,7 @@ class _SettingsServerPageState extends State<SettingsServerPage> {
                       SliverList(
                         delegate: SliverChildListDelegate([
                           Text(
-                            AppLocalizations.of(context)!.swipeToDeleteType(
-                              AppLocalizations.of(context)!.tags,
-                            ),
+                            AppLocalizations.of(context)!.swipeToDelete,
                             textAlign: TextAlign.center,
                             style: Theme.of(context).textTheme.caption,
                           ),
@@ -146,10 +145,12 @@ class _SettingsServerPageState extends State<SettingsServerPage> {
                                                   context,
                                                 )!
                                                     .name,
+                                                isInputValid: (s) =>
+                                                    s.isNotEmpty,
                                               );
                                             },
                                           );
-                                          if (res != null && res.isNotEmpty) {
+                                          if (res != null) {
                                             cubit.addExpenseCategory(res);
                                           }
                                         },
@@ -172,10 +173,7 @@ class _SettingsServerPageState extends State<SettingsServerPage> {
                                         .serverSettings.featureExpenses ??
                                     false)
                                 ? Text(
-                                    AppLocalizations.of(context)!
-                                        .swipeToDeleteType(
-                                      AppLocalizations.of(context)!.categories,
-                                    ),
+                                    AppLocalizations.of(context)!.swipeToDelete,
                                     textAlign: TextAlign.center,
                                     style: Theme.of(context).textTheme.caption,
                                   )
@@ -213,9 +211,7 @@ class _SettingsServerPageState extends State<SettingsServerPage> {
                       SliverList(
                         delegate: SliverChildListDelegate([
                           Text(
-                            AppLocalizations.of(context)!.swipeToDeleteType(
-                              AppLocalizations.of(context)!.users,
-                            ),
+                            AppLocalizations.of(context)!.swipeToDelete,
                             textAlign: TextAlign.center,
                             style: Theme.of(context).textTheme.caption,
                           ),

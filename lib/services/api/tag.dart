@@ -21,6 +21,12 @@ extension TagApi on ApiService {
     return res.statusCode == 200;
   }
 
+  Future<bool> updateTag(Tag tag) async {
+    final res = await post('$baseRoute/${tag.id}', json.encode(tag.toJson()));
+
+    return res.statusCode == 200;
+  }
+
   Future<Tag?> getTag(Tag tag) async {
     final res = await get('$baseRoute/${tag.id}');
     if (res.statusCode != 200) return null;

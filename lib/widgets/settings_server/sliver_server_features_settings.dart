@@ -114,10 +114,11 @@ class SliverServerFeaturesSettings extends StatelessWidget {
                       title: AppLocalizations.of(context)!.addCategory,
                       doneText: AppLocalizations.of(context)!.add,
                       hintText: AppLocalizations.of(context)!.name,
+                      isInputValid: (s) => s.isNotEmpty,
                     );
                   },
                 );
-                if (res != null && res.isNotEmpty) {
+                if (res != null) {
                   BlocProvider.of<SettingsServerCubit>(context)
                       .addCategory(res);
                 }

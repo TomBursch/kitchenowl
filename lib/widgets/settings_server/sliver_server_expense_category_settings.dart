@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/cubits/settings_cubit.dart';
 import 'package:kitchenowl/cubits/settings_server_cubit.dart';
 import 'package:kitchenowl/kitchenowl.dart';
+import 'package:kitchenowl/widgets/dismissible_card.dart';
 
 class SliverServerExpenseCategorySettings extends StatelessWidget {
   const SliverServerExpenseCategorySettings({Key? key}) : super(key: key);
@@ -30,7 +31,7 @@ class SliverServerExpenseCategorySettings extends StatelessWidget {
           return SliverList(
             delegate: SliverChildBuilderDelegate(
               childCount: state.expenseCategories.length,
-              (context, i) => Dismissible(
+              (context, i) => DismissibleCard(
                 key: ValueKey<String>(
                   state.expenseCategories.elementAt(i),
                 ),
@@ -54,54 +55,32 @@ class SliverServerExpenseCategorySettings extends StatelessWidget {
                     state.expenseCategories.elementAt(i),
                   );
                 },
-                background: Container(
-                  alignment: Alignment.centerLeft,
-                  padding: const EdgeInsets.only(left: 16),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(14),
-                    color: Colors.redAccent,
-                  ),
-                  child: const Icon(
-                    Icons.delete,
-                    color: Colors.white,
-                  ),
+                title: Text(
+                  state.expenseCategories.elementAt(i),
                 ),
-                secondaryBackground: Container(
-                  alignment: Alignment.centerRight,
-                  padding: const EdgeInsets.only(right: 16),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(14),
-                    color: Colors.redAccent,
-                  ),
-                  child: const Icon(
-                    Icons.delete,
-                    color: Colors.white,
-                  ),
-                ),
-                child: Card(
-                  child: ListTile(
-                    title: Text(
-                      state.expenseCategories.elementAt(i),
-                    ),
-                    onTap: () async {
-                      final res = await showDialog<String>(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return TextDialog(
-                            title: AppLocalizations.of(context)!.addTag,
-                            doneText: AppLocalizations.of(context)!.rename,
-                            hintText: AppLocalizations.of(context)!.name,
-                            initialText: state.expenseCategories.elementAt(i),
-                          );
-                        },
+                onTap: () async {
+                  final res = await showDialog<String>(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return TextDialog(
+                        title: AppLocalizations.of(context)!.addTag,
+                        doneText: AppLocalizations.of(context)!.rename,
+                        hintText: AppLocalizations.of(context)!.name,
+                        initialText: state.expenseCategories.elementAt(i),
+                        isInputValid: (s) =>
+                            s.isNotEmpty &&
+                            s != state.expenseCategories.elementAt(i),
                       );
-                      if (res != null && res.isNotEmpty) {
-                        BlocProvider.of<SettingsServerCubit>(context)
-                            .renameExpenseCategory(res);
-                      }
                     },
-                  ),
-                ),
+                  );
+                  if (res != null) {
+                    BlocProvider.of<SettingsServerCubit>(context)
+                        .renameExpenseCategory(
+                      state.expenseCategories.elementAt(i),
+                      res,
+                    );
+                  }
+                },
               ),
             ),
           );

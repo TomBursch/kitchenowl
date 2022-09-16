@@ -228,10 +228,11 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                                 title: AppLocalizations.of(context)!.addTag,
                                 doneText: AppLocalizations.of(context)!.add,
                                 hintText: AppLocalizations.of(context)!.name,
+                                isInputValid: (s) => s.isNotEmpty,
                               );
                             },
                           );
-                          if (res != null && res.isNotEmpty) {
+                          if (res != null) {
                             cubit.addTag(res);
                           }
                         },

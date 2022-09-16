@@ -3,7 +3,7 @@ from flask import jsonify, Blueprint
 from app.errors import NotFoundRequest
 from flask_jwt_extended import jwt_required
 from app.models import Category
-from .schemas import AddCategory, DeleteCategory
+from .schemas import AddCategory, DeleteCategory, UpdateCategory
 
 category = Blueprint('category', __name__)
 
@@ -29,6 +29,20 @@ def getCategory(id):
 def addCategory(args):
     category = Category()
     category.name = args['name']
+    category.save()
+    return jsonify(category.obj_to_dict())
+
+
+@category.route('/<id>', methods=['POST'])
+@jwt_required()
+@validate_args(UpdateCategory)
+def updateCategory(args, id):
+    category = Category.find_by_id(id)
+    if not category:
+        raise NotFoundRequest()
+
+    if 'name' in args:
+        category.name = args['name']
     category.save()
     return jsonify(category.obj_to_dict())
 

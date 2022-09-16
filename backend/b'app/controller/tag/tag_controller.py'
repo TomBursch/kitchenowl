@@ -3,7 +3,7 @@ from flask import jsonify, Blueprint
 from app.errors import NotFoundRequest
 from flask_jwt_extended import jwt_required
 from app.models import Tag, RecipeTags, Recipe
-from .schemas import SearchByNameRequest, AddTag
+from .schemas import SearchByNameRequest, AddTag, UpdateTag
 
 tag = Blueprint('tag', __name__)
 
@@ -39,6 +39,21 @@ def getTagRecipes(id):
 def addTag(args):
     tag = Tag()
     tag.name = args['name']
+    tag.save()
+    return jsonify(tag.obj_to_dict())
+
+
+@tag.route('/<id>', methods=['POST'])
+@jwt_required()
+@validate_args(UpdateTag)
+def updateTag(args, id):
+    tag = Tag.find_by_id(id)
+    if not tag:
+        raise NotFoundRequest()
+
+    if 'name' in args:
+        tag.name = args['name']
+
     tag.save()
     return jsonify(tag.obj_to_dict())
 

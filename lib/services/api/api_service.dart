@@ -46,6 +46,7 @@ class ApiService {
   Future<void>? _refreshThread;
 
   static void Function(String)? _handleTokenRotation;
+  static Future<String?> Function(String?)? _handleTokenBeforeReauth;
 
   static final ValueNotifier<Connection> _connectionNotifier =
       ValueNotifier<Connection>(Connection.undefined);
@@ -98,6 +99,12 @@ class ApiService {
 
   static void setTokenRotationHandler(void Function(String) handler) {
     _handleTokenRotation = handler;
+  }
+
+  static void setTokenBeforeReauthHandler(
+    Future<String?> Function(String?) handler,
+  ) {
+    _handleTokenBeforeReauth = handler;
   }
 
   static Future<void> connectTo(String url, {String? refreshToken}) async {
@@ -244,6 +251,9 @@ class ApiService {
   }
 
   Future<bool> refreshAuth() async {
+    if (_handleTokenBeforeReauth != null) {
+      _refreshToken = await _handleTokenBeforeReauth!(_refreshToken);
+    }
     final _headers = Map<String, String>.from(headers);
     _headers['Authorization'] = 'Bearer ${_refreshToken ?? ''}';
     final res = await _client.get(

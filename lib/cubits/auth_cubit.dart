@@ -14,6 +14,15 @@ class AuthCubit extends Cubit<AuthState> {
     ApiService.getInstance().addListener(updateState);
     ApiService.setTokenRotationHandler((token) =>
         SecureStorage.getInstance().write(key: 'TOKEN', value: token));
+    if (kIsWeb) {
+      ApiService.setTokenBeforeReauthHandler((token) {
+        if (token == null) return Future.value(token);
+
+        return SecureStorage.getInstance()
+            .read(key: 'TOKEN')
+            .then((value) => value ?? token);
+      });
+    }
     setup();
   }
 

@@ -19,29 +19,19 @@ class SecureStorage extends Storage {
     return _instance!;
   }
 
-  bool _platformSupportsSecureStorage() => !kIsWeb;
-
   @override
   Future<void> delete({required String key}) async {
-    if (_platformSupportsSecureStorage()) {
-      await _storage.delete(key: key);
-    }
+    await _storage.delete(key: key);
   }
 
   @override
   Future<String?> read({required String key}) async {
-    if (_platformSupportsSecureStorage()) {
-      return await _storage.read(key: key);
-    }
-
-    return null;
+    return await _storage.read(key: key);
   }
 
   @override
   Future<void> write({required String key, required String value}) async {
-    if (_platformSupportsSecureStorage()) {
-      await _storage.write(key: key, value: value);
-    }
+    await _storage.write(key: key, value: value);
   }
 }
 

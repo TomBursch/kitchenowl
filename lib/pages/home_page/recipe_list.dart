@@ -145,7 +145,8 @@ class _RecipeListPageState extends State<RecipeListPage> {
                     children: [
                       const Icon(Icons.no_food_rounded),
                       const SizedBox(height: 16),
-                      Text(state is SearchRecipeListState
+                      Text(state is SearchRecipeListState ||
+                              state is FilteredListRecipeListState
                           ? AppLocalizations.of(context)!.recipeEmptySearch
                           : AppLocalizations.of(context)!.recipeEmpty),
                     ],

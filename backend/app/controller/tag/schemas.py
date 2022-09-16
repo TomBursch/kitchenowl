@@ -10,5 +10,12 @@ class SearchByNameRequest(Schema):
 
 class AddTag(Schema):
     name = fields.String(
-        required=True
+        required=True,
+        validate=lambda a: a and not a.isspace()
+    )
+
+
+class UpdateTag(Schema):
+    name = fields.String(
+        validate=lambda a: a and not a.isspace()
     )

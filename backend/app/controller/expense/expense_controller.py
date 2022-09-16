@@ -7,7 +7,7 @@ from flask_jwt_extended import jwt_required
 from sqlalchemy import func
 from app.helpers import validate_args, admin_required
 from app.models import Expense, ExpensePaidFor, User, ExpenseCategory
-from .schemas import AddExpense, UpdateExpense, AddExpenseCategory, DeleteExpenseCategory
+from .schemas import AddExpense, UpdateExpense, AddExpenseCategory, DeleteExpenseCategory, UpdateExpenseCategory
 
 expense = Blueprint('expense', __name__)
 
@@ -176,8 +176,8 @@ def getExpenseOverview():
 @jwt_required()
 @validate_args(AddExpenseCategory)
 def addExpenseCategory(args):
-    ExpenseCategory.create_by_name(args['name'])
-    return jsonify(ExpenseCategory.obj_to_dict())
+    category = ExpenseCategory.create_by_name(args['name'])
+    return jsonify(category.obj_to_dict())
 
 
 @expense.route('/categories', methods=['DELETE'])
@@ -187,3 +187,19 @@ def addExpenseCategory(args):
 def deleteExpenseCategoryById(args):
     ExpenseCategory.delete_by_name(args['name'])
     return jsonify({'msg': 'DONE'})
+
+
+@expense.route('/categories/<name>', methods=['POST'])
+@jwt_required()
+@validate_args(UpdateExpenseCategory)
+def renameExpenseCategory(args, name):
+    category = ExpenseCategory.find_by_name(name)
+
+    if not category:
+        raise NotFoundRequest()
+
+    if 'name' in args:
+        category.name = args['name']
+
+    category.save()
+    return jsonify(category.obj_to_dict())

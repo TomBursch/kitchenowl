@@ -63,10 +63,11 @@ class RecipeCreateFab extends StatelessWidget {
                   doneText: AppLocalizations.of(context)!.add,
                   hintText: 'https://recipepage.com/spaghetti',
                   textInputType: TextInputType.url,
+                  isInputValid: (s) => s.isNotEmpty,
                 );
               },
             );
-            if (url == null || url.isEmpty) return;
+            if (url == null) return;
 
             final res =
                 await Navigator.of(context).push<UpdateEnum>(MaterialPageRoute(

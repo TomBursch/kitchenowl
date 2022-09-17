@@ -7,7 +7,6 @@ import 'package:kitchenowl/config.dart';
 import 'package:kitchenowl/cubits/auth_cubit.dart';
 import 'package:kitchenowl/cubits/settings_cubit.dart';
 import 'package:kitchenowl/pages/settings_server_page.dart';
-import 'package:kitchenowl/pages/settings_shoppinglists_page.dart';
 import 'package:kitchenowl/pages/settings_user_page.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 
@@ -112,43 +111,17 @@ class ProfilePage extends StatelessWidget {
                       ),
                     ),
                   if (!isOffline && user.hasAdminRights())
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Card(
-                            clipBehavior: Clip.antiAlias,
-                            child: ListTile(
-                              title: Text(
-                                AppLocalizations.of(context)!.shoppingLists,
-                                maxLines: 1,
-                              ),
-                              leading: const Icon(Icons.shopping_bag),
-                              minLeadingWidth: 16,
-                              onTap: () => Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      const SettingsShoppinglistsPage(),
-                                ),
-                              ),
-                            ),
+                    Card(
+                      child: ListTile(
+                        title: Text(AppLocalizations.of(context)!.server),
+                        leading: const Icon(Icons.account_tree_rounded),
+                        minLeadingWidth: 16,
+                        onTap: () => Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => const SettingsServerPage(),
                           ),
                         ),
-                        Expanded(
-                          child: Card(
-                            child: ListTile(
-                              title: Text(AppLocalizations.of(context)!.server),
-                              leading: const Icon(Icons.account_tree_rounded),
-                              minLeadingWidth: 16,
-                              onTap: () => Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      const SettingsServerPage(),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
                   Row(
                     children: [

@@ -18,7 +18,16 @@ extension CategoryApi on ApiService {
   Future<bool> addCategory(Category category) async {
     final res = await post(
       baseRoute,
-      jsonEncode({'name': category.name}),
+      jsonEncode(category.toJson()),
+    );
+
+    return res.statusCode == 200;
+  }
+
+  Future<bool> updateCategory(Category category) async {
+    final res = await post(
+      '$baseRoute/${category.id}',
+      jsonEncode(category.toJson()),
     );
 
     return res.statusCode == 200;

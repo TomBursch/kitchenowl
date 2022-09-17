@@ -2,11 +2,11 @@ from sqlalchemy.types import String, TypeDecorator
 import json
 
 
+# Represents a Set in the DataBase (i.e. {e1, e2, e3, ...})
 class DbSetType(TypeDecorator):
     impl = String
 
     def process_bind_param(self, value, dialect):
-        print(value)
         if type(value) is set:
             return json.dumps(list(value))
         else:

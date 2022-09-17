@@ -11,7 +11,7 @@ category = Blueprint('category', __name__)
 @category.route('', methods=['GET'])
 @jwt_required()
 def getAllCategories():
-    return jsonify([e.obj_to_dict() for e in Category.all_by_name()])
+    return jsonify([e.obj_to_dict() for e in Category.all_by_ordering()])
 
 
 @category.route('/<id>', methods=['GET'])
@@ -43,6 +43,8 @@ def updateCategory(args, id):
 
     if 'name' in args:
         category.name = args['name']
+    if 'ordering' in args and category.ordering != args['ordering']:
+        category.reorder(args['ordering'])
     category.save()
     return jsonify(category.obj_to_dict())
 

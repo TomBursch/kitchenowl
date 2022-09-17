@@ -190,8 +190,11 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
       case ShoppinglistSorting.category:
         shoppinglist.sort((a, b) {
           if (b.category == null) return a.name.compareTo(b.name);
-          final int ordering =
-              a.category?.name.compareTo(b.category!.name) ?? 0;
+          int ordering =
+              a.category?.ordering.compareTo(b.category!.ordering) ?? 0;
+          if (ordering == 0) {
+            ordering = a.category?.name.compareTo(b.category!.name) ?? 0;
+          }
           if (ordering == 0) return a.name.compareTo(b.name);
 
           return ordering;

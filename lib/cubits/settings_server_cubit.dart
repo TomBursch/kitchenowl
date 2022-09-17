@@ -89,7 +89,17 @@ class SettingsServerCubit extends Cubit<SettingsServerState> {
   }
 
   Future<bool> reorderCategory(int oldIndex, int newIndex) async {
-    return true;
+    final l = List<Category>.of(state.categories);
+    final category = l.removeAt(oldIndex);
+    l.insert(newIndex, category);
+    emit(state.copyWith(categories: l));
+
+    final res = await ApiService.getInstance()
+        .updateCategory(category.copyWith(ordering: newIndex));
+
+    refresh();
+
+    return res;
   }
 
   Future<bool> deleteExpenseCategory(String name) async {
@@ -128,10 +138,35 @@ class SettingsServerState extends Equatable {
     this.expenseCategories = const [],
   ]);
 
+  SettingsServerState copyWith({
+    List<User>? users,
+    Set<Tag>? tags,
+    List<Category>? categories,
+    List<String>? expenseCategories,
+  }) =>
+      SettingsServerState(
+        users ?? this.users,
+        tags ?? this.tags,
+        categories ?? this.categories,
+        expenseCategories ?? this.expenseCategories,
+      );
+
   @override
   List<Object?> get props => [users, tags, categories, expenseCategories];
 }
 
 class LoadingSettingsServerState extends SettingsServerState {
   const LoadingSettingsServerState(super.users, super.tags);
+
+  @override
+  SettingsServerState copyWith({
+    List<User>? users,
+    Set<Tag>? tags,
+    List<Category>? categories,
+    List<String>? expenseCategories,
+  }) =>
+      LoadingSettingsServerState(
+        users ?? this.users,
+        tags ?? this.tags,
+      );
 }

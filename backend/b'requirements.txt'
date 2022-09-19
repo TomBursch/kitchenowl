@@ -39,7 +39,7 @@ marshmallow==3.18.0
 matplotlib==3.6.0
 mccabe==0.7.0
 mf2py==1.1.2
-mlxtend==0.20.0
+mlxtend==0.21.0
 mypy-extensions==0.4.3
 numpy==1.23.3
 packaging==21.3

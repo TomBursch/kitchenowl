@@ -50,6 +50,7 @@ class App extends StatefulWidget {
 
 class _AppState extends State<App> {
   StreamSubscription? _intentDataStreamSubscription;
+  BuildContext? _sharedContext;
 
   @override
   void initState() {
@@ -112,8 +113,10 @@ class _AppState extends State<App> {
                 builder: (_) => const PageNotFound(),
                 settings: const RouteSettings(name: "/404"),
               ),
-              home: Builder(
-                builder: (context) => AnnotatedRegion<SystemUiOverlayStyle>(
+              home: Builder(builder: (context) {
+                _sharedContext = context;
+
+                return AnnotatedRegion<SystemUiOverlayStyle>(
                   value: _getSystemUI(context, state),
                   child: BlocBuilder<AuthCubit, AuthState>(
                     bloc: widget._authCubit,
@@ -161,8 +164,8 @@ class _AppState extends State<App> {
                       ),
                     ),
                   ),
-                ),
-              ),
+                );
+              }),
             );
           }),
         ),
@@ -208,8 +211,8 @@ class _AppState extends State<App> {
   }
 
   void _handleSharedMedia(SharedMedia media) {
-    if (mounted && media.content != null) {
-      Navigator.of(context).push<UpdateEnum>(MaterialPageRoute(
+    if (mounted && media.content != null && _sharedContext != null) {
+      Navigator.of(_sharedContext!).push<UpdateEnum>(MaterialPageRoute(
         builder: (context) => RecipeScraperPage(
           url: media.content!,
         ),

@@ -43,7 +43,10 @@ class _RecipeScraperPageState extends State<RecipeScraperPage> {
           if (state is! RecipeScraperLoadedState) {
             return Scaffold(
               appBar: AppBar(
-                title: Text(widget.url),
+                title: Text(
+                  Uri.tryParse(widget.url)?.host ?? widget.url,
+                  overflow: TextOverflow.fade,
+                ),
               ),
               body: Center(
                 child: state is RecipeScraperErrorState

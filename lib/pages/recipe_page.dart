@@ -60,6 +60,7 @@ class _RecipePageState extends State<RecipePage> {
             child: ConstrainedBox(
               constraints: const BoxConstraints.expand(width: 1600),
               child: CustomScrollView(
+                primary: true,
                 slivers: [
                   SliverAppBar(
                     flexibleSpace: FlexibleSpaceBar(
@@ -191,13 +192,17 @@ class _RecipePageState extends State<RecipePage> {
                                   elevation: 3,
                                 ),
                               ...state.recipe.tags
-                                  .map((e) => Chip(label: Text(e.name)))
+                                  .map((e) => Chip(
+                                        key: Key(e.name),
+                                        label: Text(e.name),
+                                      ))
                                   .toList(),
                             ],
                           ),
                           const SizedBox(height: 8),
                           MarkdownBody(
                             data: state.recipe.description,
+                            shrinkWrap: true,
                             styleSheet: MarkdownStyleSheet.fromTheme(
                               Theme.of(context),
                             ).copyWith(

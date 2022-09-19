@@ -19,7 +19,7 @@ class SliverItemGridList<T extends Item> extends StatelessWidget {
   final bool isLoading;
 
   const SliverItemGridList({
-    Key? key,
+    super.key,
     this.onRefresh,
     this.onPressed,
     this.onLongPressed,
@@ -28,7 +28,7 @@ class SliverItemGridList<T extends Item> extends StatelessWidget {
     this.isList = false,
     this.selected,
     this.isLoading = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

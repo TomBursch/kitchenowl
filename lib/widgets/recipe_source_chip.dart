@@ -1,14 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
-class RecipeSourceChip extends StatelessWidget {
+class RecipeSourceChip extends StatefulWidget {
   final String source;
   const RecipeSourceChip({Key? key, required this.source}) : super(key: key);
 
   @override
+  State<RecipeSourceChip> createState() => _RecipeSourceChipState();
+}
+
+class _RecipeSourceChipState extends State<RecipeSourceChip> {
+  late Future<bool> canLaunchUrl;
+
+  @override
+  void initState() {
+    super.initState();
+    canLaunchUrl = canLaunchUrlString(widget.source);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: canLaunchUrlString(source),
+      future: canLaunchUrl,
       initialData: false,
       builder: (
         context,
@@ -22,8 +35,8 @@ class RecipeSourceChip extends StatelessWidget {
                   ),
                   label: Text(
                     snapshot.data!
-                        ? Uri.tryParse(source)?.host ?? source
-                        : source,
+                        ? Uri.tryParse(widget.source)?.host ?? widget.source
+                        : widget.source,
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.onPrimary,
                     ),
@@ -32,10 +45,10 @@ class RecipeSourceChip extends StatelessWidget {
                   elevation: 3,
                   onPressed: () async {
                     if (await canLaunchUrlString(
-                      source,
+                      widget.source,
                     )) {
                       await launchUrlString(
-                        source,
+                        widget.source,
                       );
                     }
                   },
@@ -46,7 +59,7 @@ class RecipeSourceChip extends StatelessWidget {
                     color: Theme.of(context).colorScheme.onPrimary,
                   ),
                   label: Text(
-                    source,
+                    widget.source,
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.onPrimary,
                     ),

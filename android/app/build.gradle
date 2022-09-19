@@ -54,6 +54,7 @@ android {
         targetSdkVersion 33
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+        resConfigs "en", "de"
     }
 
     signingConfigs {

@@ -1,4 +1,5 @@
 # Overview
+
 <h3 align="center">
   A grocery list and recipe manager
 </h3>
@@ -16,7 +17,6 @@
   <img alt='Get it on TestFlight' src='img/badges/testflight.png' style="height:60px"/>
 </a>
 
-
 ## ✨ Features
 
 The following features have been implemented:
@@ -28,7 +28,7 @@ The following features have been implemented:
 - Manage balances and track expenses
 - Mobile/Web/Desktop apps
 
-This project is still in development, so some features may not be fully implemented yet.
+Please keep in mind that this project is still in development.
 
 For a list of planned features, check out the [Roadmap](roadmap.md)!
 
@@ -42,6 +42,7 @@ For a list of planned features, check out the [Roadmap](roadmap.md)!
 <img alt="Suggestions page" src="img/screenshots/suggestions.png" width="31%" hspace="5"/>
 
 ## 📟 Social
+
 Join our [Matrix Space](https://matrix.to/#/#kitchenowl:matrix.org) and get involved!
 
 ## 📜 License

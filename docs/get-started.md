@@ -58,7 +58,16 @@ There are three tags available: `latest`, `beta` and `dev`. `latest` is the most
     docker run -d -p 5000:80 --name=kitchenowl --restart=unless-stopped -v kitchenowl_data:/data tombursch/kitchenowl:latest
     ```
 
-:exclamation: We recommend running KitchenOwl behind a reverse proxy with https (e.g. [nginx](https://nginx.org/en/docs/http/configuring_https_servers.html])) :exclamation:
+!!! danger "Important"
+    We recommend running KitchenOwl behind a reverse proxy with https (e.g. [nginx](https://nginx.org/en/docs/http/configuring_https_servers.html]))
+    
+    It is also important that you have HTTP Strict Forward Secrecy enabled and the proper headers applied to your responses or you could be subject to a javascript hijack.
+
+    Please see:
+
+    - [https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security)
+    - [https://www.netsparker.com/blog/web-security/http-security-headers/](https://www.netsparker.com/blog/web-security/http-security-headers/)
+
 
 ## ⏫ Migrating from Older Versions
 Starting from version 0.0.33 the frontend routes requests to the backend. Thus only one port has to be accessible. However, the backend can be hosted in standalone mode as it was before (see legacy server install).

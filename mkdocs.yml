@@ -31,9 +31,11 @@ extra:
     - icon: fontawesome/brands/docker
       link: https://hub.docker.com/u/tombursch
 markdown_extensions:
+  - admonition
   - attr_list
   - def_list
   - md_in_html
+  - pymdownx.details
   - pymdownx.superfences
   - pymdownx.tabbed:
       alternate_style: true

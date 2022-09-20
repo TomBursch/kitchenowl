@@ -18,6 +18,7 @@
         }
     },
     "addRecipeToPlanner": "Zum Essensplan hinzufügen",
+    "addRecipeToPlannerShort": "Hinzufügen",
     "address": "Adresse",
     "addTag": "Add Tag",
     "admin": "Admin",

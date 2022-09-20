@@ -160,7 +160,8 @@ class RecipeCard extends StatelessWidget {
                             ),
                             onPressed: onLongPressed,
                             child: Text(
-                              AppLocalizations.of(context)!.addRecipeToPlanner,
+                              AppLocalizations.of(context)!
+                                  .addRecipeToPlannerShort,
                             ),
                           ),
                         ],

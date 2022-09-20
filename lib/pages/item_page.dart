@@ -12,9 +12,14 @@ import 'package:kitchenowl/widgets/recipe_item.dart';
 class ItemPage<T extends Item> extends StatefulWidget {
   final T item;
   final List<Category> categories;
+  final bool isDescriptionEditable;
 
-  const ItemPage({Key? key, required this.item, this.categories = const []})
-      : super(key: key);
+  const ItemPage({
+    super.key,
+    required this.item,
+    this.categories = const [],
+    this.isDescriptionEditable = true,
+  });
 
   @override
   _ItemPageState createState() => _ItemPageState<T>();
@@ -89,7 +94,8 @@ class _ItemPageState<T extends Item> extends State<ItemPage<T>> {
             onRefresh: cubit.refresh,
             child: CustomScrollView(
               slivers: [
-                if (widget.item is ItemWithDescription)
+                if (widget.isDescriptionEditable &&
+                    widget.item is ItemWithDescription)
                   SliverPadding(
                     padding: const EdgeInsets.all(16),
                     sliver: SliverToBoxAdapter(
@@ -122,7 +128,10 @@ class _ItemPageState<T extends Item> extends State<ItemPage<T>> {
                 if (widget.item is! RecipeItem)
                   SliverPadding(
                     padding: EdgeInsets.only(
-                      top: (widget.item is ItemWithDescription) ? 0 : 16,
+                      top: (widget.isDescriptionEditable &&
+                              widget.item is ItemWithDescription)
+                          ? 0
+                          : 16,
                       bottom: 16,
                       left: 16,
                       right: 16,
@@ -208,7 +217,9 @@ class _ItemPageState<T extends Item> extends State<ItemPage<T>> {
                                     : null,
                               );
                             },
-                            childCount: state.recipes.length + 1,
+                            childCount: state.recipes.isEmpty
+                                ? 0
+                                : state.recipes.length + 1,
                           ),
                         ),
                       );

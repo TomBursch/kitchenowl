@@ -17,6 +17,7 @@ class SliverItemGridList<T extends Item> extends StatelessWidget {
   final bool isList;
   final bool Function(T)? selected;
   final bool isLoading;
+  final bool isDescriptionEditable;
 
   const SliverItemGridList({
     super.key,
@@ -28,6 +29,7 @@ class SliverItemGridList<T extends Item> extends StatelessWidget {
     this.isList = false,
     this.selected,
     this.isLoading = false,
+    this.isDescriptionEditable = true,
   });
 
   @override
@@ -67,6 +69,7 @@ class SliverItemGridList<T extends Item> extends StatelessWidget {
                             builder: (BuildContext context) => ItemPage(
                               item: item,
                               categories: categories ?? const [],
+                              isDescriptionEditable: isDescriptionEditable,
                             ),
                           ),
                         );

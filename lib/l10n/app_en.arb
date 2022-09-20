@@ -18,6 +18,7 @@
         }
     },
     "addRecipeToPlanner": "Add to meal plan",
+    "addRecipeToPlannerShort": "Add to meal plan",
     "address": "Address",
     "addTag": "Add Tag",
     "admin": "Admin",

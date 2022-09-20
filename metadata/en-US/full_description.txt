@@ -1,0 +1,6 @@
+KitchenOwl is a smart self-hosted grocery list and recipe manager.
+Easily add items to your shopping list before you go shopping.
+You can also create recipes and get suggestions on what you want to cook.
+Track your expenses so you know how much you've spend.
+
+* Requires self-hosted backend.

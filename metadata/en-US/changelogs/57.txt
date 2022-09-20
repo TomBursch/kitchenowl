@@ -1,0 +1,7 @@
+New Features:
+- Expense overview
+- Settings overhaul
+- Updated UI
+- Share links to the app
+- Monochrome icon
+- BugFixes

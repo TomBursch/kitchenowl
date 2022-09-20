@@ -114,7 +114,7 @@ def updateExpense(args, id):  # noqa: C901
                     con.expense = expense
                     con.user = user
                 con.save()
-    calculateBalances()
+    recalculateBalances()
     return jsonify(expense.obj_to_dict())
 
 
@@ -122,7 +122,7 @@ def updateExpense(args, id):  # noqa: C901
 @jwt_required()
 def deleteExpenseById(id):
     Expense.delete_by_id(id)
-    calculateBalances()
+    recalculateBalances()
     return jsonify({'msg': 'DONE'})
 
 
@@ -130,6 +130,9 @@ def deleteExpenseById(id):
 @jwt_required()
 @admin_required
 def calculateBalances():
+    recalculateBalances()
+
+def recalculateBalances():
     for user in User.all():
         user.expense_balance = float(Expense.query.with_entities(func.sum(
             Expense.amount).label("balance")).filter(Expense.paid_by == user).first().balance or 0)

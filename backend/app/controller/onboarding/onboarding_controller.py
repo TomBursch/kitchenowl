@@ -27,7 +27,7 @@ def onboard(args):
             settings.expenses_feature = args['expenses_feature']
         settings.save()
     if 'language' in args:
-        importFromLanguage(args['language'])
+        importFromLanguage(args['language'], bulkSave=True)
     username = args['username'].lower()
     user = User.create(username, args['password'], args['name'], owner=True)
 

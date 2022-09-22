@@ -15,6 +15,7 @@
       "name": "Apfel"
     },
     {
+      "category": "🥫 Konserven",
       "name": "Apfelmus"
     },
     {
@@ -24,6 +25,7 @@
       "name": "Aspirin"
     },
     {
+      "category": "🥬 Obst & Gemüse",
       "name": "Aubergine"
     },
     {
@@ -59,6 +61,7 @@
       "name": "Bananen"
     },
     {
+      "category": "🥟 Teigwaren",
       "name": "Bandnudeln"
     },
     {
@@ -81,6 +84,7 @@
       "name": "Birnen"
     },
     {
+      "category": "🥬 Obst & Gemüse",
       "name": "Blattspinat"
     },
     {
@@ -91,6 +95,9 @@
     },
     {
       "name": "Blätterteig"
+    },
+    {
+      "name": "Bohnen"
     },
     {
       "category": "🥬 Obst & Gemüse",
@@ -167,6 +174,15 @@
       "name": "Currypaste"
     },
     {
+      "name": "Currypulver"
+    },
+    {
+      "name": "Currysoße"
+    },
+    {
+      "name": "Datteln"
+    },
+    {
       "category": "🚽 Hygiene",
       "name": "Deodorant"
     },
@@ -187,6 +203,10 @@
       "name": "Eier"
     },
     {
+      "category": "❄️ Tk",
+      "name": "Eis"
+    },
+    {
       "category": "🥬 Obst & Gemüse",
       "name": "Eisbergsalat"
     },
@@ -197,7 +217,11 @@
       "name": "Eiswürfel "
     },
     {
+      "category": "❄️ Tk",
       "name": "Erbsen"
+    },
+    {
+      "name": "Erdbeeren"
     },
     {
       "name": "Erdnuss-Butter"
@@ -222,6 +246,7 @@
       "name": "Fanta"
     },
     {
+      "category": "🥛 Milchprodukte",
       "name": "Feta"
     },
     {
@@ -229,6 +254,9 @@
     },
     {
       "name": "Fleischersatzprodukt"
+    },
+    {
+      "name": "Frischhaltefolie"
     },
     {
       "name": "Frischkäse"
@@ -245,6 +273,7 @@
       "name": "Garam Masala"
     },
     {
+      "category": "🥫 Konserven",
       "name": "Gehackte Tomaten"
     },
     {
@@ -265,6 +294,7 @@
       "name": "Geschenkpapier"
     },
     {
+      "category": "🥫 Konserven",
       "name": "Getrocknete Tomaten"
     },
     {
@@ -323,6 +353,10 @@
       "name": "Hafermilch"
     },
     {
+      "category": "🚽 Hygiene",
+      "name": "Handseife"
+    },
+    {
       "name": "Haribo"
     },
     {
@@ -344,9 +378,13 @@
       "name": "Honig"
     },
     {
+      "name": "Hummus"
+    },
+    {
       "name": "Hustenbonbons"
     },
     {
+      "category": "🥬 Obst & Gemüse",
       "name": "Ingwer"
     },
     {
@@ -373,9 +411,11 @@
       "name": "Ketchup"
     },
     {
+      "category": "🥫 Konserven",
       "name": "Kichererbsen"
     },
     {
+      "category": "🥫 Konserven",
       "name": "Kidneybohnen"
     },
     {
@@ -404,6 +444,7 @@
       "name": "Kohlrabi"
     },
     {
+      "category": "🥫 Konserven",
       "name": "Kokosnuss-Milch"
     },
     {
@@ -416,6 +457,7 @@
       "name": "Konfitüre"
     },
     {
+      "category": "❄️ Tk",
       "name": "Koriander"
     },
     {
@@ -425,6 +467,7 @@
       "name": "Kräuterbaguettes"
     },
     {
+      "category": "🥛 Milchprodukte",
       "name": "Kräuterfrischkäse"
     },
     {
@@ -437,6 +480,7 @@
       "name": "Käse"
     },
     {
+      "category": "🥬 Obst & Gemüse",
       "name": "Kürbis"
     },
     {
@@ -447,6 +491,7 @@
       "name": "Lachgummi"
     },
     {
+      "category": "🥟 Teigwaren",
       "name": "Lasagnenudeln"
     },
     {
@@ -503,6 +548,9 @@
       "name": "Mehl"
     },
     {
+      "name": "Melone"
+    },
+    {
       "name": "Mikrofasertuch"
     },
     {
@@ -523,6 +571,7 @@
       "name": "Mundspülung"
     },
     {
+      "category": "🌶️ Gewürze",
       "name": "Muskatnuss"
     },
     {
@@ -533,6 +582,7 @@
       "name": "Müllsäcke"
     },
     {
+      "category": "🍞 Brotwaren",
       "name": "Müsli"
     },
     {
@@ -563,6 +613,7 @@
       "name": "Orangen"
     },
     {
+      "category": "🍹 Getränke",
       "name": "Orangensaft"
     },
     {
@@ -586,6 +637,7 @@
       "name": "Parmesan"
     },
     {
+      "category": "🥫 Konserven",
       "name": "Passierte Tomaten"
     },
     {
@@ -602,6 +654,7 @@
       "name": "Pfirsich"
     },
     {
+      "category": "💧 Kühltheke",
       "name": "Pflanzenmagarine"
     },
     {
@@ -611,6 +664,7 @@
       "name": "Pflaster"
     },
     {
+      "category": "🥬 Obst & Gemüse",
       "name": "Pilze"
     },
     {
@@ -633,6 +687,7 @@
       "name": "Radicchio"
     },
     {
+      "category": "🥬 Obst & Gemüse",
       "name": "Radieschen"
     },
     {
@@ -649,6 +704,7 @@
       "name": "Red Bull"
     },
     {
+      "category": "🍚 Reisprodukte",
       "name": "Reis"
     },
     {
@@ -667,6 +723,7 @@
       "name": "Ricotta"
     },
     {
+      "category": "🍚 Reisprodukte",
       "name": "Risotto Reis"
     },
     {
@@ -679,6 +736,7 @@
       "name": "Rosmarin"
     },
     {
+      "category": "🥬 Obst & Gemüse",
       "name": "Rote Beete"
     },
     {
@@ -702,6 +760,7 @@
       "name": "Rucola"
     },
     {
+      "category": "💧 Kühltheke",
       "name": "Räuchertofu"
     },
     {
@@ -721,6 +780,7 @@
       "name": "Salatkerne Mix"
     },
     {
+      "category": "🥬 Obst & Gemüse",
       "name": "Salatkopf"
     },
     {
@@ -730,7 +790,7 @@
       "name": "Salz"
     },
     {
-      "name": "Sambal Olek"
+      "name": "Sambal Oelek"
     },
     {
       "category": "🥬 Obst & Gemüse",
@@ -762,12 +822,14 @@
       "name": "Schokolade"
     },
     {
+      "category": "💧 Kühltheke",
       "name": "Schupfnudeln"
     },
     {
       "name": "Schwammlappen"
     },
     {
+      "category": "🥫 Konserven",
       "name": "Schwarze Bohnen"
     },
     {
@@ -816,6 +878,10 @@
       "name": "Sojahack"
     },
     {
+      "category": "🥛 Milchprodukte",
+      "name": "Sojamilch"
+    },
+    {
       "name": "Sojasauce"
     },
     {
@@ -850,6 +916,7 @@
       "name": "Spülmaschinensalz"
     },
     {
+      "category": "🚽 Hygiene",
       "name": "Spültabs"
     },
     {
@@ -873,6 +940,7 @@
       "name": "Süßkartoffel"
     },
     {
+      "category": "🌶️ Gewürze",
       "name": "Tafelsalz"
     },
     {
@@ -882,6 +950,7 @@
       "name": "Taschentuchbox"
     },
     {
+      "category": "🚽 Hygiene",
       "name": "Taschentücher"
     },
     {
@@ -898,6 +967,7 @@
       "name": "Toast"
     },
     {
+      "category": "💧 Kühltheke",
       "name": "Tofu"
     },
     {
@@ -909,6 +979,7 @@
       "name": "Tomaten"
     },
     {
+      "category": "🥫 Konserven",
       "name": "Tomatenmark"
     },
     {
@@ -934,6 +1005,10 @@
       "name": "WC-Reiniger"
     },
     {
+      "name": "Walnusskerne"
+    },
+    {
+      "category": "🚽 Hygiene",
       "name": "Waschpulver"
     },
     {
@@ -941,6 +1016,9 @@
     },
     {
       "name": "Wassereis"
+    },
+    {
+      "name": "Weizengluten"
     },
     {
       "name": "Weißwein"
@@ -960,6 +1038,9 @@
     },
     {
       "name": "Würstchen"
+    },
+    {
+      "name": "Yum Yum"
     },
     {
       "category": "🚽 Hygiene",

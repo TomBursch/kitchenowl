@@ -162,7 +162,16 @@ class _SettingsServerPageState extends State<SettingsServerPage> {
                           ),
                         ]),
                       ),
-                      const SliverServerExpenseCategorySettings(),
+                      BlocBuilder<SettingsCubit, SettingsState>(
+                        buildWhen: (prev, curr) =>
+                            prev.serverSettings.featureExpenses !=
+                            curr.serverSettings.featureExpenses,
+                        builder: (context, settingsState) =>
+                            (settingsState.serverSettings.featureExpenses ??
+                                    false)
+                                ? const SliverServerExpenseCategorySettings()
+                                : const SliverToBoxAdapter(child: SizedBox()),
+                      ),
                       SliverList(
                         delegate: SliverChildListDelegate([
                           BlocBuilder<SettingsCubit, SettingsState>(

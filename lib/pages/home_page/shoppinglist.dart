@@ -43,7 +43,8 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
               child: BlocListener<ShoppinglistCubit, ShoppinglistCubitState>(
                 bloc: cubit,
                 listener: (context, state) {
-                  if (state is! SearchShoppinglistCubitState) {
+                  if (state is! SearchShoppinglistCubitState &&
+                      state is! LoadingShoppinglistCubitState) {
                     if (searchController.text.isNotEmpty) {
                       searchController.clear();
                     }
@@ -198,7 +199,9 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                         ),
                         if (body is List) ...body,
                         if (body is! List) body,
-                        if (!isOffline)
+                        if (!isOffline &&
+                            (state.recentItems.isNotEmpty ||
+                                state is LoadingShoppinglistCubitState))
                           SliverText(
                             padding: const EdgeInsets.all(16),
                             '${AppLocalizations.of(context)!.itemsRecent}:',

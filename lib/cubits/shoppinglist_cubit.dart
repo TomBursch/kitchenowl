@@ -79,7 +79,9 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
     _refreshLock = true;
     // Get required information
     final _state = state;
-    if (_state.recentItems.isEmpty && _state.listItems.isEmpty) {
+    if (_state.recentItems.isEmpty &&
+        _state.listItems.isEmpty &&
+        (query == null || query.isEmpty)) {
       emit(const LoadingShoppinglistCubitState());
     }
 
@@ -173,6 +175,7 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
     List<ShoppinglistItem> shoppinglist,
     ShoppinglistSorting sorting,
   ) {
+    if (shoppinglist.isEmpty) return;
     switch (sorting) {
       case ShoppinglistSorting.alphabetical:
         shoppinglist.sort((a, b) => a.name.compareTo(b.name));

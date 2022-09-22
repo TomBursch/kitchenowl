@@ -102,7 +102,7 @@ class _AppState extends State<App> {
               onGenerateTitle: (BuildContext context) =>
                   AppLocalizations.of(context)!.appTitle,
               localizationsDelegates: AppLocalizations.localizationsDelegates,
-              supportedLocales: AppLocalizations.supportedLocales,
+              supportedLocales: const [Locale('en'), Locale('de')],
               theme: AppThemes.light(lightColorScheme),
               darkTheme: AppThemes.dark(darkColorScheme),
               themeMode: state.themeMode,

@@ -288,7 +288,8 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                         previous.description != current.description ||
                         previous.source != current.source,
                     builder: (context, state) => state.description.isEmpty &&
-                            (Uri.tryParse(state.source)?.isAbsolute ?? false)
+                            (Uri.tryParse(state.source)?.hasAbsolutePath ??
+                                false)
                         ? Padding(
                             padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
                             child: Align(

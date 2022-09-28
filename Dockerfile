@@ -50,7 +50,7 @@ WORKDIR /usr/local/src/app
 RUN flutter packages get
 
 # Build the app for the web
-RUN flutter build web
+RUN flutter build web --release --dart-define=FLUTTER_WEB_CANVASKIT_URL=/canvaskit/
 
 # ------------
 # RUNNER

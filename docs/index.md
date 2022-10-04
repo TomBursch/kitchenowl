@@ -13,6 +13,9 @@
 <a href='https://play.google.com/store/apps/details?id=com.tombursch.kitchenowl'>
   <img alt='Get it on Google Play'  src='img/badges/playstore.png' style="height:60px"/>
 </a>
+<a href='https://f-droid.org/packages/com.tombursch.kitchenowl/'>
+    <img alt='Get it on F-Droid' src='img/badges/f-droid.png' style="height:60px"/>
+  </a>
 <a href='https://testflight.apple.com/join/x7LhltFw'>
   <img alt='Get it on TestFlight' src='img/badges/testflight.png' style="height:60px"/>
 </a>

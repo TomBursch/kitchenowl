@@ -8,7 +8,7 @@ import 'package:kitchenowl/services/transactions/tag.dart';
 
 class RecipeListCubit extends Cubit<RecipeListState> {
   List<Recipe> recipeList = [];
-  bool _refreshLock = false;
+  Future<void>? _refreshThread;
   String? _refreshCurrentQuery;
 
   RecipeListCubit() : super(const LoadingRecipeListState()) {
@@ -53,14 +53,26 @@ class RecipeListCubit extends Cubit<RecipeListState> {
     }
   }
 
-  Future<void> refresh([String? query]) async {
+  Future<void> refresh([String? query]) {
     final state = this.state;
     if (state is SearchRecipeListState) {
       query = query ?? state.query;
     }
-    if (_refreshLock && query == _refreshCurrentQuery) return;
-    _refreshLock = true;
-    _refreshCurrentQuery = query;
+    if (_refreshThread != null && query != _refreshCurrentQuery) {
+      _refreshCurrentQuery = query;
+      _refreshThread = _refresh(query);
+    }
+    if (_refreshThread == null) {
+      _refreshCurrentQuery = query;
+      _refreshThread = _refresh(query);
+    }
+
+    return _refreshThread!;
+  }
+
+  Future<void> _refresh([String? query]) async {
+    final state = this.state;
+
     late ListRecipeListState _state;
     if (state is ListRecipeListState &&
         state is! SearchRecipeListState &&
@@ -100,7 +112,7 @@ class RecipeListCubit extends Cubit<RecipeListState> {
     }
     if (query == _refreshCurrentQuery) {
       emit(_state);
-      _refreshLock = false;
+      _refreshThread = null;
     }
   }
 

@@ -13,7 +13,8 @@ enum ShoppinglistSorting { alphabetical, algorithmic, category }
 enum ShoppinglistStyle { grid, list }
 
 class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
-  bool _refreshLock = false;
+  Future<void>? _refreshThread;
+  String? _refreshCurrentQuery;
 
   String get query => (state is SearchShoppinglistCubitState)
       ? (state as SearchShoppinglistCubitState).query
@@ -73,19 +74,34 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
     emit(state.copyWith(style: style));
   }
 
+  Future<void> refresh([String? query]) {
+    final state = this.state;
+    if (state is SearchShoppinglistCubitState) {
+      query = query ?? state.query;
+    }
+    if (_refreshThread != null && query != _refreshCurrentQuery) {
+      _refreshCurrentQuery = query;
+      _refreshThread = _refresh(query);
+    }
+    if (_refreshThread == null) {
+      _refreshCurrentQuery = query;
+      _refreshThread = _refresh(query);
+    }
+
+    return _refreshThread!;
+  }
+
   // ignore: long-method
-  Future<void> refresh([String? query]) async {
-    if (_refreshLock) return;
-    _refreshLock = true;
+  Future<void> _refresh([String? query]) async {
     // Get required information
     final _state = state;
+    late ShoppinglistCubitState resState;
     if (_state.recentItems.isEmpty &&
         _state.listItems.isEmpty &&
         (query == null || query.isEmpty)) {
       emit(const LoadingShoppinglistCubitState());
     }
 
-    if (_state is SearchShoppinglistCubitState) query = query ?? _state.query;
     Future<List<ShoppinglistItem>> shoppinglist =
         TransactionHandler.getInstance()
             .runTransaction(TransactionShoppingListGetItems());
@@ -125,14 +141,14 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
           description: queryDescription,
         ));
       }
-      emit(SearchShoppinglistCubitState(
+      resState = SearchShoppinglistCubitState(
         result: loadedItems,
         query: query,
         listItems: loadedShoppinglist,
         categories: await categories,
         style: _state.style,
         sorting: state.sorting,
-      ));
+      );
     } else {
       // Sort if needed
       shoppinglist = shoppinglist.then((shoppinglist) {
@@ -145,15 +161,18 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
 
       final recent = TransactionHandler.getInstance()
           .runTransaction(TransactionShoppingListGetRecentItems());
-      emit(ShoppinglistCubitState(
+      resState = ShoppinglistCubitState(
         listItems: await shoppinglist,
         recentItems: await recent,
         categories: await categories,
         sorting: state.sorting,
         style: _state.style,
-      ));
+      );
     }
-    _refreshLock = false;
+    if (query == _refreshCurrentQuery) {
+      emit(resState);
+      _refreshThread = null;
+    }
   }
 
   void _mergeShoppinglistItems(
@@ -239,7 +258,7 @@ class ShoppinglistCubitState extends Equatable {
 
   @override
   List<Object?> get props =>
-      listItems.cast<Object>() + recentItems + categories + [sorting, style];
+      [listItems, recentItems, categories, sorting, style];
 }
 
 class LoadingShoppinglistCubitState extends ShoppinglistCubitState {
@@ -294,5 +313,5 @@ class SearchShoppinglistCubitState extends ShoppinglistCubitState {
       );
 
   @override
-  List<Object?> get props => super.props + result + <Object>[query];
+  List<Object?> get props => super.props + [result, query];
 }

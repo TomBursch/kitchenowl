@@ -72,9 +72,8 @@ class _ItemSearchPageState extends State<ItemSearchPage> {
                   }
                 },
                 decoration: InputDecoration(
-                  filled: true,
                   prefixIcon: const Icon(Icons.search),
-                  suffix: IconButton(
+                  suffixIcon: IconButton(
                     onPressed: () {
                       if (searchController.text.isNotEmpty) {
                         cubit.search('');

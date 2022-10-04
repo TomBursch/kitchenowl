@@ -10,7 +10,7 @@ on:
 
 jobs:
   fastlane-deploy:
-    runs-on: macos-10.15
+    runs-on: macos-latest
     steps:
       # Set up Flutter.
       - name: Clone Flutter repository with stable channel

@@ -1,0 +1,2 @@
+- Updated search behavior 
+- Bug fixes

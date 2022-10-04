@@ -41,6 +41,7 @@ COPY lib /usr/local/src/app/lib
 COPY web /usr/local/src/app/web
 COPY scripts /usr/local/src/app/scripts
 COPY assets /usr/local/src/app/assets
+COPY fonts /usr/local/src/app/fonts
 RUN touch /usr/local/src/app/.env
 
 # Set the working directory to the app files within the container

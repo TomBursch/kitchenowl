@@ -32,7 +32,7 @@
 
 ## ✨ Features
 
-The following features have been implemented:
+The following features have been implemented, but most of them can be disabled when not needed.
 
 ### Shopping list
 

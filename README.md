@@ -7,6 +7,9 @@
   <a href="https://github.com/TomBursch/kitchenowl">
     <img alt="Stars" src="https://img.shields.io/github/stars/tombursch/kitchenowl" />
   </a>
+  <a href="https://hosted.weblate.org/engage/kitchenowl/">
+    <img alt="Translation" src="https://hosted.weblate.org/widgets/kitchenowl/-/kitchenowl/svg-badge.svg" />
+  </a>
   <a href="https://matrix.to/#/#kitchenowl:matrix.org">
     <img alt="Matrix" src="https://img.shields.io/matrix/kitchenowl:matrix.org">
   </a>
@@ -88,7 +91,12 @@ Please take a look at the [docs](https://tombursch.github.io/kitchenowl/).
 
 ## 🙌 Contributing
 
-From opening a bug report to creating a pull request: every contribution is appreciated and welcomed. If you're planning to implement a new feature or change the API please create an issue first. This way, we can ensure your work is not in vain. For more information see [Contributing](CONTRIBUTING.md) or get in contact by joining our [Matrix space](https://matrix.to/#/#kitchenowl:matrix.org).
+From opening a bug report to creating a pull request: every contribution is appreciated and welcomed. If you're planning to implement a new feature or change the API please create an issue first. This way, we can ensure your work is not in vain.
+For more information see [Contributing](CONTRIBUTING.md) or get in contact by joining our [Matrix space](https://matrix.to/#/#kitchenowl:matrix.org).
+
+### Translations
+
+You can help translate the App into your language by using [Weblate](https://hosted.weblate.org/engage/kitchenowl/)!
 
 ## 📚 Related
 

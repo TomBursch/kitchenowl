@@ -39,14 +39,24 @@ class _SearchTextFieldState extends State<SearchTextField> {
   void initState() {
     super.initState();
     showSuffix = widget.controller.text.isNotEmpty;
+    widget.controller.addListener(_onControllerChanged);
     _debouncer =
         Debouncer(duration: Duration(milliseconds: widget.searchDelay));
   }
 
-  void onChanged(String s) {
+  @override
+  void dispose() {
+    widget.controller.removeListener(_onControllerChanged);
+    super.dispose();
+  }
+
+  void _onControllerChanged() {
     setState(() {
-      showSuffix = s.isNotEmpty;
+      showSuffix = widget.controller.text.isNotEmpty;
     });
+  }
+
+  void _onChanged(String s) {
     if (_debouncer != null) {
       _debouncer?.run(() => widget.onSearch(s));
     } else {
@@ -58,7 +68,7 @@ class _SearchTextFieldState extends State<SearchTextField> {
   Widget build(BuildContext context) {
     return TextField(
       controller: widget.controller,
-      onChanged: onChanged,
+      onChanged: _onChanged,
       textInputAction: widget.textInputAction ?? TextInputAction.done,
       onEditingComplete: widget.clearOnSubmit
           ? () {

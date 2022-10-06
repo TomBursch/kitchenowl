@@ -1,7 +1,7 @@
 ## :robot: App Install
 
 Get it on your favorite app store or find the current release for your operating system on the [releases page](https://github.com/TomBursch/kitchenowl/releases).
-Please take a quick look at [Tips & Tricks](/tips-and-tricks) to get the best experience in the app.
+Please take a quick look at [Tips & Tricks](tips-and-tricks.md) to get the best experience in the app.
 
 ## 🗄️ Server Install
 

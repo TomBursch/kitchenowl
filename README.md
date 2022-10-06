@@ -58,11 +58,11 @@ The following features have been implemented:
 - Add items to your shopping list and sync them with multiple users
 - Partial offline support, so you don't lose track of what to buy even when there is no signal
 - Manage recipes and add them to your shopping list
-- Create a meal plan to know what you'll be eating
-- Manage balances and track expenses
-- Mobile/Web/Desktop apps
+- Create a meal plan to always know what you'll be eating
+- Manage balances and track expenses of users
+- Native Mobile/Web/Desktop apps
 
-This project is still in development, so some features may not be fully implemented yet.
+Please keep in mind that this project is still in development.
 
 For a full list check out the [docs](https://tombursch.github.io/kitchenowl). For a list of planned features, take a look at the [Roadmap](https://tombursch.github.io/kitchenowl/roadmap/)!
 
@@ -72,13 +72,13 @@ For a full list check out the [docs](https://tombursch.github.io/kitchenowl). Fo
   <tr>
     <td><img alt="Groceries page" src="docs/img/screenshots/groceries.png"/></td>
     <td><img alt="Recipe page" src="docs/img/screenshots/recipe.png"/></td>
-    <td><img alt="Balance page" src="docs/img/screenshots/balance.png"/></td>
+    <td><img alt="Plan page" src="docs/img/screenshots/plan.png"/></td>
    </tr> 
-   <tr>
-      <td><img alt="Plan page" src="docs/img/screenshots/plan.png"/></td>
+   <!-- <tr>
+      <td><img alt="Balance page" src="docs/img/screenshots/balance.png"/></td>
       <td><img alt="Theme" src="docs/img/screenshots/theme.png"/></td>
       <td><img alt="Suggestions page" src="docs/img/screenshots/suggestions.png"/></td>
-  </tr>
+  </tr> -->
 </table>
 
 ## 🤖 App Install

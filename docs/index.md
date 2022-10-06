@@ -9,31 +9,17 @@
 <h3 align="center">
  🍫 🥘 🍽
 </h3>
-
-<a href='https://play.google.com/store/apps/details?id=com.tombursch.kitchenowl'>
-  <img alt='Get it on Google Play'  src='img/badges/playstore.png' style="height:60px"/>
-</a>
-<a href='https://f-droid.org/packages/com.tombursch.kitchenowl/'>
-    <img alt='Get it on F-Droid' src='img/badges/f-droid.png' style="height:60px"/>
+<p align="center">
+  <a href='https://play.google.com/store/apps/details?id=com.tombursch.kitchenowl'>
+    <img alt='Get it on Google Play'  src='img/badges/playstore.png' style="height:50px"/>
   </a>
-<a href='https://testflight.apple.com/join/x7LhltFw'>
-  <img alt='Get it on TestFlight' src='img/badges/testflight.png' style="height:60px"/>
-</a>
-
-## ✨ Features
-
-The following features have been implemented:
-
-- Add items to your shopping list and sync them with multiple users
-- Partial offline support, so you don't lose track of what to buy even when there is no signal
-- Manage recipes and add them to your shopping list
-- Create a meal plan to know what you'll be eating
-- Manage balances and track expenses
-- Mobile/Web/Desktop apps
-
-Please keep in mind that this project is still in development.
-
-For a list of planned features, check out the [Roadmap](roadmap.md)!
+  <a href='https://f-droid.org/packages/com.tombursch.kitchenowl/'>
+      <img alt='Get it on F-Droid' src='img/badges/f-droid.png' style="height:50px"/>
+    </a>
+  <a href='https://testflight.apple.com/join/x7LhltFw'>
+    <img alt='Get it on TestFlight' src='img/badges/testflight.png' style="height:50px"/>
+  </a>
+</p>
 
 ## 📱 Screenshots
 
@@ -42,7 +28,42 @@ For a list of planned features, check out the [Roadmap](roadmap.md)!
 <img alt="Balance page" src="img/screenshots/balance.png" width="31%" hspace="5"/>
 <img alt="Plan page" src="img/screenshots/plan.png" width="31%" hspace="5"/>
 <img alt="Theme" src="img/screenshots/theme.png" width="31%" hspace="5"/>
-<img alt="Suggestions page" src="img/screenshots/suggestions.png" width="31%" hspace="5"/>
+<!-- <img alt="Suggestions page" src="img/screenshots/suggestions.png" width="31%" hspace="5"/> -->
+
+## ✨ Features
+
+The following features have been implemented:
+
+### Shopping list
+
+- Add items to your shopping list and sync them with multiple users
+- Add descriptions to items to track the amount you need
+- Items can be categorized to have them ordered your way or let the app handle the sorting and adapt to your grocery store
+
+### Recipes
+
+- Manage and create recipes and add them to your shopping list
+- You don't have to do that by hand, just scrape the off the web
+
+### Mealplanner
+
+- Create a meal plan to always know what you'll be eating
+- Get suggestions on what to eat next
+
+### Expenses
+
+- Manage balances and track expenses of users
+- And take a look at the overview of your monthly expenses
+
+### Apps
+
+- Native Android/ios/Web/Desktop apps
+- Partial offline support, so you don't lose track of what to buy even when there is no signal
+- Sleek UI following Material desing guidelines
+
+!!! note "Please keep in mind that this project is still in development."
+
+For a list of planned features, check out the [Roadmap](roadmap.md)!
 
 ## 📟 Social
 

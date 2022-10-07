@@ -188,7 +188,7 @@
     "total": "Total",
     "uncategorized": "Uncategorized",
     "underConstruction": "Under Construction",
-    "unreachableMessage": "Hmmmm... coulnd't reach server",
+    "unreachableMessage": "Hmmmm... couldn't reach server",
     "unsupportedBackendMessage": "The server version is not supported, please update the backend",
     "unsupportedFrontendMessage": "The app version is not supported, please update the app",
     "usedIn": "Used in",

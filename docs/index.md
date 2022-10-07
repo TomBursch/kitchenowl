@@ -59,7 +59,7 @@ The following features have been implemented, but most of them can be disabled w
 
 - Native Android/ios/Web/Desktop apps
 - Partial offline support, so you don't lose track of what to buy even when there is no signal
-- Sleek UI following Material desing guidelines
+- Sleek UI following Material design guidelines
 
 !!! note "Please keep in mind that this project is still in development."
 

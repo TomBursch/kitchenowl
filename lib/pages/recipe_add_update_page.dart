@@ -120,7 +120,7 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                                 fit: BoxFit.cover,
                                 opacity: .5,
                                 image: state.image != null
-                                    ? FileImage(state.image!) as ImageProvider
+                                    ? FileImage(state.image!)
                                     : getImageProvider(
                                         context,
                                         cubit.recipe.image,

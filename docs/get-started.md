@@ -69,5 +69,41 @@ There are three tags available: `latest`, `beta` and `dev`. `latest` is the most
     - [https://www.netsparker.com/blog/web-security/http-security-headers/](https://www.netsparker.com/blog/web-security/http-security-headers/)
 
 
+## Reverse Proxy Setup
+
+Docker-Compose.yml Setup
+
+```
+    version: "3"
+    services:
+        front:
+            image: tombursch/kitchenowl-web:latest
+            environment:
+            - FRONT_URL=https://sub.domain.com  #Add your Reverse Proxy domain here
+            ports:
+            - "9090:80" #You Can change the first port to anything you want just make sure you change the back end to match it
+            depends_on:
+            - back
+            networks:
+            - default
+        back:
+            image: tombursch/kitchenowl:latest
+            restart: unless-stopped
+            networks:
+            - default
+            environment:
+            - JWT_SECRET_KEY=PLEASE_CHANGE_ME
+            - FRONT_URL=http://localhost:9090  #Change the local port to what you have put in front end ports ie. :9090
+            volumes:
+            - kitchenowl_data:/data
+
+    volumes:
+        kitchenowl_data:
+
+    networks:
+        default:
+    ```
+
+
 ## ⏫ Migrating from Older Versions
 Starting from version 0.0.33 the frontend routes requests to the backend. Thus only one port has to be accessible. However, the backend can be hosted in standalone mode as it was before (see legacy server install).

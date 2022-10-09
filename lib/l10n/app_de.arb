@@ -7,9 +7,9 @@
   "@addCategory": {},
   "addDescriptionFromSource": "Füge die Beschreibung der Quelle ein",
   "@addDescriptionFromSource": {},
-  "addItemTitle": "Artikel Hinzufügen",
+  "addItemTitle": "Artikel hinzufügen",
   "@addItemTitle": {},
-  "addLanguage": "Sprache Hinzufügen",
+  "addLanguage": "Sprache hinzufügen",
   "@addLanguage": {},
   "addLanguageConfirm": "Bist du dir sicher, dass du Sprache '{lang}' hinzufügen möchtest? Dies kann (zurzeit) nicht rückgängig gemacht werden.",
   "@addLanguageConfirm": {
@@ -53,9 +53,9 @@
   "@categories": {},
   "category": "Kategorie",
   "@category": {},
-  "categoryDelete": "Lösche Kategorie",
+  "categoryDelete": "Kategorie löschen",
   "@categoryDelete": {},
-  "categoryDeleteConfirmation": "Bist du dir sicher, dass du {category} löschen möchtest? Diese Aktion entfernt die Kategorie von allen Items.",
+  "categoryDeleteConfirmation": "Bist du dir sicher, dass du {category} löschen möchtest? Diese Aktion entfernt die Kategorie von allen Elementen.",
   "@categoryDeleteConfirmation": {
     "placeholders": {
       "category": {}
@@ -85,7 +85,7 @@
   "@error": {},
   "expense": "Ausgabe",
   "@expense": {},
-  "expenseAdd": "Ausgabe Hinzufügen",
+  "expenseAdd": "Ausgabe hinzufügen",
   "@expenseAdd": {},
   "expenseAmount": "Betrag",
   "@expenseAmount": {},
@@ -117,7 +117,7 @@
       "field": {}
     }
   },
-  "forceOfflineMode": "Erzwinge offline Modus",
+  "forceOfflineMode": "Offline Modus erzwingen",
   "@forceOfflineMode": {},
   "gallery": "Galerie",
   "@gallery": {},
@@ -297,7 +297,7 @@
   "@themeDark": {},
   "themeLight": "Hell",
   "@themeLight": {},
-  "themeMode": "Theme",
+  "themeMode": "Farbschema",
   "@themeMode": {},
   "themeSystem": "System",
   "@themeSystem": {},

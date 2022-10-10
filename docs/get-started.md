@@ -13,7 +13,7 @@ There are three tags available: `latest`, `beta` and `dev`. `latest` is the most
     Recommended using [docker-compose](https://docs.docker.com/compose/):
 
     1. Download the [docker-compose.yml](https://github.com/TomBursch/kitchenowl-backend/blob/main/docker-compose.yml)
-    ```
+    ``` yml
     version: "3"
     services:
         front:
@@ -59,8 +59,8 @@ There are three tags available: `latest`, `beta` and `dev`. `latest` is the most
     ```
 
 !!! danger "Important"
-    We recommend running KitchenOwl behind a reverse proxy with https (e.g. [nginx](https://nginx.org/en/docs/http/configuring_https_servers.html]))
-    
+We recommend running KitchenOwl behind a reverse proxy with https (e.g. [nginx](https://nginx.org/en/docs/http/configuring_https_servers.html]))
+
     It is also important that you have HTTP Strict Forward Secrecy enabled and the proper headers applied to your responses or you could be subject to a javascript hijack.
 
     Please see:
@@ -68,20 +68,20 @@ There are three tags available: `latest`, `beta` and `dev`. `latest` is the most
     - [https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security)
     - [https://www.netsparker.com/blog/web-security/http-security-headers/](https://www.netsparker.com/blog/web-security/http-security-headers/)
 
-
 ## Reverse Proxy Setup
 
-Docker-Compose.yml Setup
+You can use any reverse proxy you want!
+See an example below for a docker compose file with KitchenOwl behind a reverse proxy.
 
-```
+``` yml title="Example docker compose"
     version: "3"
     services:
         front:
             image: tombursch/kitchenowl-web:latest
             environment:
-            - FRONT_URL=https://sub.domain.com  #Add your Reverse Proxy domain here
+            - FRONT_URL=https://sub.domain.com # Add your Reverse Proxy domain here
             ports:
-            - "9090:80" #You Can change the first port to anything you want just make sure you change the back end to match it
+            - "9090:80" # You Can change the first port to anything you want just make sure you change the backend to match it
             depends_on:
             - back
             networks:
@@ -93,7 +93,7 @@ Docker-Compose.yml Setup
             - default
             environment:
             - JWT_SECRET_KEY=PLEASE_CHANGE_ME
-            - FRONT_URL=http://localhost:9090  #Change the local port to what you have put in front end ports ie. :9090
+            - FRONT_URL=https://sub.domain.com # Change it to the same URL you have set for the frontend
             volumes:
             - kitchenowl_data:/data
 
@@ -102,8 +102,8 @@ Docker-Compose.yml Setup
 
     networks:
         default:
-    ```
-
+```
 
 ## ⏫ Migrating from Older Versions
+
 Starting from version 0.0.33 the frontend routes requests to the backend. Thus only one port has to be accessible. However, the backend can be hosted in standalone mode as it was before (see legacy server install).

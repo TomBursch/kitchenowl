@@ -60,18 +60,13 @@ FROM nginx:stable-alpine
 
 RUN mkdir -p /var/www/web/kitchenowl
 COPY --from=builder /usr/local/src/app/build/web /var/www/web/kitchenowl
-COPY entrypoint.sh /docker-entrypoint.d/
 COPY default.conf.template /etc/nginx/templates/
-
-# Set the server startup script as executable
-RUN chmod u+x /docker-entrypoint.d/entrypoint.sh
 
 HEALTHCHECK --interval=5m --timeout=3s \
   CMD curl -f http://localhost/api/health/8M4F88S8ooi4sMbLBfkkV7ctWwgibW6V || exit 1
 
 # Set ENV
 ENV BACK_URL='back:5000'
-ENV FRONT_URL='http://localhost'
 
 # Expose the web server
 EXPOSE 80

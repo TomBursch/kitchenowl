@@ -59,7 +59,7 @@ jobs:
     container: ${{ matrix.container }}
     strategy:
       matrix:
-        target: [macOS, Windows, Linux, Android, Debian, Fedora]
+        target: [macOS, Windows, Linux, Android, Debian, Fedora, Web]
         include:
           - os: macos-latest
             target: macOS
@@ -100,12 +100,18 @@ jobs:
             build_path: build/fedora/release
             asset_extension: .rpm
             asset_content_type: application/x-rpm
+          - os: ubuntu-latest
+            target: Web
+            build_target: web --dart-define=FLUTTER_WEB_CANVASKIT_URL=/canvaskit/
+            build_path: build/web
+            asset_extension: .tar.gz
+            asset_content_type: application/gzip
       # Disable fail-fast as we want results from all even if one fails.
       fail-fast: false
     needs: draft-release
     steps:
       - name: Install Linux dependencies
-        if: matrix.target == 'Linux' || matrix.target == 'Debian'
+        if: matrix.target == 'Linux' || matrix.target == 'Debian' || matrix.target == 'Web'
         run: |
           sudo apt-get update
           sudo apt-get install -y libgtk-3-dev libx11-dev pkg-config cmake ninja-build libblkid-dev libsecret-1-dev libjsoncpp-dev
@@ -188,8 +194,8 @@ jobs:
         if: matrix.target == 'Android'
         run: mv app-release.apk $GITHUB_WORKSPACE/kitchenowl_${{ matrix.target }}.apk
         working-directory: ${{ matrix.build_path }}
-      - name: Compress build for Linux
-        if: matrix.target == 'Linux'
+      - name: Compress build for Linux and Web
+        if: matrix.target == 'Linux' || matrix.target == 'Web'
         run: tar czf $GITHUB_WORKSPACE/kitchenowl_${{ matrix.target }}.tar.gz *
         working-directory: ${{ matrix.build_path }}
       - name: Compress build for macOS

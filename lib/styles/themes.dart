@@ -54,6 +54,7 @@ abstract class AppThemes {
       ),
       navigationBarTheme: NavigationBarThemeData(
         backgroundColor: colorScheme.background,
+        height: 70,
       ),
       cardTheme: CardTheme(
         clipBehavior: Clip.antiAlias,
@@ -85,6 +86,7 @@ abstract class AppThemes {
       ),
       navigationBarTheme: NavigationBarThemeData(
         backgroundColor: colorScheme.background,
+        height: 70,
       ),
       appBarTheme: AppBarTheme(
         color: colorScheme.background,

@@ -1,4 +1,4 @@
-name: CI Latest to Docker Hub
+name: CI deploy to Docker Hub
 
 # Controls when the workflow will run
 on:
@@ -74,7 +74,7 @@ jobs:
         with:
           context: ./
           file: ./Dockerfile
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/amd64,linux/arm64,linux/386,linux/arm/v7,linux/arm/v6
           push: true
           tags: ${{ steps.dockertag.outputs.tags }}
           cache-from: type=local,src=/tmp/.buildx-cache

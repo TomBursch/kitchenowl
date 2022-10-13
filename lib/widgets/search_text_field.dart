@@ -23,7 +23,7 @@ class SearchTextField extends StatefulWidget {
     this.textInputAction,
     this.autofocus = false,
     this.clearOnSubmit = true,
-    this.searchDelay = 500,
+    this.searchDelay = 200,
     this.decoration,
   });
 

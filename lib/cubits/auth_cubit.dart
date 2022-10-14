@@ -28,7 +28,9 @@ class AuthCubit extends Cubit<AuthState> {
   void setup() async {
     String? url;
     url = kIsWeb
-        ? Uri.base.host
+        ? kDebugMode
+            ? "http://localhost:5000"
+            : Uri.base.origin
         : await PreferenceStorage.getInstance().read(key: 'URL');
     if (url != null && url.isNotEmpty) {
       final token = await SecureStorage.getInstance().read(key: 'TOKEN');

@@ -36,12 +36,12 @@ dependencies:
   flutter_secure_storage: ^6.0.0
   shared_preferences: ^2.0.15
   flutter_bloc: ^8.1.1
-  animations: ^2.0.5
+  animations: ^2.0.7
   shimmer: ^2.0.0
   equatable: ^2.0.5
   url_launcher: ^6.1.6
-  package_info_plus: ^1.4.3
-  device_info_plus: ^4.1.3
+  package_info_plus: ^2.0.0
+  device_info_plus: ^6.0.0
   http: ^0.13.5
 
   # reorderables: ^0.3.2
@@ -52,11 +52,11 @@ dependencies:
 
   azlistview: ^2.0.0
   flutter_markdown: ^0.6.12
-  tuple: ^2.0.0
+  tuple: ^2.0.1
   charts_flutter: ^0.12.0
   cached_network_image: ^3.2.2
-  image_picker: ^0.8.5+3
-  file_picker: ^5.2.0
+  image_picker: ^0.8.6
+  file_picker: ^5.2.1
   photo_view: ^0.14.0
   share_handler: ^0.0.16
   reorderables: ^0.5.0

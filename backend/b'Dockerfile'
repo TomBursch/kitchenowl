@@ -2,7 +2,7 @@ FROM python:3.10-slim
 
 RUN apt-get update \
     && apt-get install --yes --no-install-recommends \
-        gcc g++ libffi-dev libxml2-dev libxslt-dev
+        gcc g++ libffi-dev libxml2-dev libxslt-dev python3-scipy
 
 ## Setup KitchenOwl
 COPY requirements.txt wsgi.ini wsgi.py entrypoint.sh /usr/src/kitchenowl/

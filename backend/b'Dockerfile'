@@ -1,7 +1,7 @@
 FROM python:3.10-slim
 
 RUN apt-get update \
-    && apt-get install --yes --no-install-recommends \
+    && apt-get install --yes --ignore-missing --no-install-recommends \
         gcc g++ libffi-dev libxml2-dev libxslt-dev gfortran libopenblas-dev
 
 ## Setup KitchenOwl

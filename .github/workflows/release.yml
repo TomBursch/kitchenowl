@@ -177,9 +177,6 @@ jobs:
           KEYSTORE_STORE_PASSWORD: ${{ secrets.KEYSTORE_STORE_PASSWORD }}
         working-directory: android
 
-      - name: Create .env file
-        run: touch .env
-
       # Build the application.
       - run: flutter build -v ${{ matrix.build_target }} --release
 

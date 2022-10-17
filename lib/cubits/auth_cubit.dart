@@ -1,7 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:kitchenowl/models/server_settings.dart';
 import 'package:kitchenowl/models/user.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
@@ -29,7 +28,9 @@ class AuthCubit extends Cubit<AuthState> {
   void setup() async {
     String? url;
     url = kIsWeb
-        ? dotenv.env['FRONT_URL'] ?? "http://localhost"
+        ? kDebugMode
+            ? "http://localhost:5000"
+            : Uri.base.origin
         : await PreferenceStorage.getInstance().read(key: 'URL');
     if (url != null && url.isNotEmpty) {
       final token = await SecureStorage.getInstance().read(key: 'TOKEN');

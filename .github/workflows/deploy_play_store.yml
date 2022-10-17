@@ -55,9 +55,6 @@ jobs:
           KEYSTORE_STORE_PASSWORD: ${{ secrets.KEYSTORE_STORE_PASSWORD }}
         working-directory: android
 
-      - name: Create .env file
-        run: touch .env
-
       # Build and deploy with Fastlane (by default, to internal track) 🚀.
       # Naturally, promote_to_production only deploys.
       - run: bundle exec fastlane ${{ github.event.inputs.lane || 'internal' }}

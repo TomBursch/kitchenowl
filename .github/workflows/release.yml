@@ -8,39 +8,27 @@ on:
       - "beta-v*"
 
 jobs:
-  generate-changelog:
-    name: Generate changelog
+  draft-release:
+    name: Draft Github release
     runs-on: ubuntu-latest
+    outputs:
+      upload_url: ${{ steps.create_release.outputs.upload_url }}
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
       - name: Get latest published release tag
         id: get_latest_release
         uses: pozetroninc/github-action-get-latest-release@master
         with:
           repository: ${{ github.repository }}
           excludes: prerelease, draft
-      - name: Generate changelog since last published release
-        uses: charmixer/auto-changelog-action@v1
+      - name: Build changelog
+        id: github_release
+        uses: mikepenz/release-changelog-builder-action@v3
         with:
+          configuration: "changelog_configuration.json"
+          fromTag: ${{ steps.get_latest_release.outputs.release }}
           token: ${{ secrets.GITHUB_TOKEN }}
-          future_release: ${{ github.ref }}
-          since_tag: ${{ steps.get_latest_release.outputs.release }}
-      - name: Upload changelog
-        uses: actions/upload-artifact@v2
-        with:
-          name: changelog
-          path: CHANGELOG.md
-
-  draft-release:
-    name: Draft Github release
-    needs: generate-changelog
-    runs-on: ubuntu-20.04
-    outputs:
-      upload_url: ${{ steps.create_release.outputs.upload_url }}
-    steps:
-      - name: Download changelog
-        uses: actions/download-artifact@v2
-        with:
-          name: changelog
       - name: Draft release with changelog
         id: create_release
         uses: actions/create-release@v1
@@ -49,7 +37,7 @@ jobs:
         with:
           tag_name: ${{ github.ref }}
           release_name: KitchenOwl ${{ github.ref_name }}
-          body_path: CHANGELOG.md
+          body: ${{steps.github_release.outputs.changelog}}
           draft: true
           prerelease: ${{ startsWith(github.ref_name,'beta-v') }}
 

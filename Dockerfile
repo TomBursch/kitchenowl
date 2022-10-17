@@ -1,7 +1,7 @@
 # ------------
 # BUILDER
 # ------------
-FROM --platform=amd64 debian:latest AS builder
+FROM --platform=$BUILDPLATFORM debian:latest AS builder
 
 # Install dependencies
 RUN apt-get update -y
@@ -55,7 +55,7 @@ RUN flutter build web --release --dart-define=FLUTTER_WEB_CANVASKIT_URL=/canvask
 # ------------
 # RUNNER
 # ------------
-FROM --platform=$BUILDPLATFORM nginx:stable-alpine
+FROM nginx:stable-alpine
 
 RUN mkdir -p /var/www/web/kitchenowl
 COPY --from=builder /usr/local/src/app/build/web /var/www/web/kitchenowl

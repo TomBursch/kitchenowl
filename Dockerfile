@@ -1,7 +1,7 @@
 # ------------
 # BUILDER
 # ------------
-FROM debian:latest AS builder
+FROM --platform=amd64 debian:latest AS builder
 
 # Install dependencies
 RUN apt-get update -y
@@ -27,13 +27,13 @@ RUN git clone https://github.com/flutter/flutter.git -b stable /usr/local/src/fl
 # Set flutter path
 ENV PATH="${PATH}:/usr/local/src/flutter/bin"
 
-# Run flutter doctor
-RUN flutter doctor -v
-
 # Enable flutter web
 RUN flutter config --enable-web
 RUN flutter config --no-analytics
 RUN flutter upgrade
+
+# Run flutter doctor
+RUN flutter doctor -v
 
 # Copy the app files to the container
 COPY .metadata l10n.yaml pubspec.yaml /usr/local/src/app/
@@ -55,7 +55,7 @@ RUN flutter build web --release --dart-define=FLUTTER_WEB_CANVASKIT_URL=/canvask
 # ------------
 # RUNNER
 # ------------
-FROM nginx:stable-alpine
+FROM --platform=$BUILDPLATFORM nginx:stable-alpine
 
 RUN mkdir -p /var/www/web/kitchenowl
 COPY --from=builder /usr/local/src/app/build/web /var/www/web/kitchenowl

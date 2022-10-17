@@ -27,13 +27,13 @@ RUN git clone https://github.com/flutter/flutter.git -b stable /usr/local/src/fl
 # Set flutter path
 ENV PATH="${PATH}:/usr/local/src/flutter/bin"
 
+# Run flutter doctor
+RUN flutter doctor -v
+
 # Enable flutter web
 RUN flutter config --enable-web
 RUN flutter config --no-analytics
 RUN flutter upgrade
-
-# Run flutter doctor
-RUN flutter doctor -v
 
 # Copy the app files to the container
 COPY .metadata l10n.yaml pubspec.yaml /usr/local/src/app/

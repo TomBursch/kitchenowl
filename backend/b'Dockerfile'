@@ -2,7 +2,7 @@ FROM python:3.10-slim
 
 RUN apt-get update \
     && apt-get install --yes --no-install-recommends \
-        gcc g++ libffi-dev libxml2-dev libxslt-dev gfortran libblas-dev pkg-config cmake
+        gcc g++ libffi-dev libxml2-dev libxslt-dev gfortran libopenblas-dev pkg-config cmake
 
 ## Setup KitchenOwl
 COPY requirements.txt wsgi.ini wsgi.py entrypoint.sh /usr/src/kitchenowl/
@@ -22,7 +22,7 @@ RUN chmod u+x ./entrypoint.sh
 
 # Cleanup
 RUN apt-get autoremove --yes \
-        gcc g++ libffi-dev libxml2-dev libxslt-dev gfortran libblas-dev pkg-config cmake \
+        gcc g++ libffi-dev libxml2-dev libxslt-dev gfortran libopenblas-dev pkg-config cmake \
     && rm -rf /var/lib/apt/lists/*
 
 CMD ["wsgi.ini"]

@@ -16,7 +16,7 @@ def importFromLanguage(lang, bulkSave=False):
     importFromDict(data, True, bulkSave=bulkSave)
 
 
-def importFromDict(args, default=False, bulkSave=False):  # noqa
+def importFromDict(args, default=False, bulkSave=False, override=False):  # noqa
     t0 = time.time()
     models = []
     if "items" in args:
@@ -39,14 +39,27 @@ def importFromDict(args, default=False, bulkSave=False):  # noqa
     if "recipes" in args:
         for importRecipe in args['recipes']:
             recipeNameCount = 0
-            if Recipe.find_by_name(importRecipe['name']):
+            recipe = Recipe.find_by_name(importRecipe['name'])
+            if recipe and not override:
                 recipeNameCount = 1 + \
                     Recipe.query.filter(Recipe.name.ilike(
                         importRecipe['name'] + " (_%)")).count()
-            recipe = Recipe()
+            if not recipe:
+                recipe = Recipe()
             recipe.name = importRecipe['name'] + \
                 (f" ({recipeNameCount + 1})" if recipeNameCount > 0 else "")
             recipe.description = importRecipe['description']
+            if 'time' in importRecipe:
+                recipe.time = importRecipe['time']
+            if 'cook_time' in importRecipe:
+                recipe.cook_time = importRecipe['cook_time']
+            if 'prep_time' in importRecipe:
+                recipe.prep_time = importRecipe['prep_time']
+            if 'yields' in importRecipe:
+                recipe.yields = importRecipe['yields']
+            if 'source' in importRecipe:
+                recipe.source = importRecipe['source']
+
             if not bulkSave:
                 recipe.save()
             else:

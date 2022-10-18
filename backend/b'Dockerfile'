@@ -12,7 +12,8 @@ RUN python -m venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
 
 COPY requirements.txt .
-RUN pip install -U pip wheel setuptools && pip install -r requirements.txt
+RUN pip3 install -U pip wheel setuptools
+RUN pip3 install -r requirements.txt
 
 # ------------
 # RUNNER

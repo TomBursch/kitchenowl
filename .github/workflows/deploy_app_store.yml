@@ -21,7 +21,7 @@ jobs:
 
       # Checkout gallery code and get packages.
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - run: flutter packages get
       - run: pod install
         working-directory: ios

@@ -22,7 +22,7 @@ jobs:
           java-version: '11'
       # Set up Flutter.
       - name: Clone Flutter repository with stable channel
-        uses: subosito/flutter-action@v1
+        uses: subosito/flutter-action@v2
         with:
           channel: stable
       - run: flutter config --no-analytics
@@ -30,7 +30,7 @@ jobs:
 
       # Checkout code and get packages.
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - run: flutter packages get
 
       # Setup Ruby, Bundler, and Gemfile dependencies

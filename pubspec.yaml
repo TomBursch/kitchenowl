@@ -30,7 +30,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.4
 
-  collection: ^1.15.0
+  collection: ^1.16.0
   path_provider: ^2.0.11
   flutter_secure_storage: ^6.0.0
   shared_preferences: ^2.0.15
@@ -39,8 +39,8 @@ dependencies:
   shimmer: ^2.0.0
   equatable: ^2.0.5
   url_launcher: ^6.1.6
-  package_info_plus: ^2.0.0
-  device_info_plus: ^6.0.0
+  package_info_plus: 2.0.0
+  device_info_plus: ^7.0.0
   http: ^0.13.5
 
   # reorderables: ^0.3.2

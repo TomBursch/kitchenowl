@@ -112,16 +112,19 @@ class ApiService {
     url += _API_PATH;
     _instance = ApiService._internal(url);
     _instance!.refreshToken = refreshToken ?? '';
+    print("connect");
     await _instance!.refresh();
   }
 
   Future<void> refresh() {
+    print("refresh triggered");
     _refreshThread ??= _refresh();
 
     return _refreshThread!;
   }
 
   Future<void> _refresh() async {
+    print("refresh started");
     Connection status = Connection.disconnected;
     if (baseUrl.isNotEmpty) {
       final healthy = await getInstance().healthy();
@@ -254,12 +257,15 @@ class ApiService {
     if (_handleTokenBeforeReauth != null) {
       _refreshToken = await _handleTokenBeforeReauth!(_refreshToken);
     }
+    if (_refreshToken == null || _refreshToken!.isEmpty) return false;
     final _headers = Map<String, String>.from(headers);
-    _headers['Authorization'] = 'Bearer ${_refreshToken ?? ''}';
-    final res = await _client.get(
-      Uri.parse('$baseUrl/auth/refresh'),
-      headers: _headers,
-    );
+    _headers['Authorization'] = 'Bearer $_refreshToken';
+    final res = await _client
+        .get(
+          Uri.parse('$baseUrl/auth/refresh'),
+          headers: _headers,
+        )
+        .timeout(_TIMEOUT);
     if (res.statusCode == 200) {
       final body = jsonDecode(res.body);
       headers['Authorization'] = 'Bearer ${body['access_token']}';

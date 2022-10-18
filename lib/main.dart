@@ -4,6 +4,7 @@ import 'package:intl/intl_standalone.dart';
 import 'app.dart';
 
 Future main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   if (!kIsWeb) await findSystemLocale(); //BUG in package for web?
   runApp(App());
 }

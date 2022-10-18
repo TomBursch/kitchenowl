@@ -16,6 +16,9 @@ class AddUpdateRecipeCubit extends Cubit<AddUpdateRecipeState> {
           description: recipe.description,
           name: recipe.name,
           time: recipe.time,
+          cookTime: recipe.cookTime,
+          prepTime: recipe.prepTime,
+          yields: recipe.yields,
           source: recipe.source,
           items: recipe.items,
           selectedTags: recipe.tags,
@@ -46,6 +49,9 @@ class AddUpdateRecipeCubit extends Cubit<AddUpdateRecipeState> {
           name: _state.name,
           description: _state.description,
           time: _state.time,
+          cookTime: _state.cookTime,
+          prepTime: _state.prepTime,
+          yields: _state.yields,
           source: _state.source,
           image: image ?? recipe.image,
           items: _state.items,
@@ -56,6 +62,9 @@ class AddUpdateRecipeCubit extends Cubit<AddUpdateRecipeState> {
           name: _state.name,
           description: _state.description,
           time: _state.time,
+          cookTime: _state.cookTime,
+          prepTime: _state.prepTime,
+          yields: _state.yields,
           source: _state.source,
           image: image,
           items: _state.items,
@@ -93,6 +102,18 @@ class AddUpdateRecipeCubit extends Cubit<AddUpdateRecipeState> {
 
   void setTime(int time) {
     emit(state.copyWith(time: time));
+  }
+
+  void setCookTime(int time) {
+    emit(state.copyWith(cookTime: time));
+  }
+
+  void setPrepTime(int time) {
+    emit(state.copyWith(prepTime: time));
+  }
+
+  void setYields(int yields) {
+    emit(state.copyWith(yields: yields));
   }
 
   void setSource(String source) {
@@ -163,6 +184,9 @@ class AddUpdateRecipeState extends Equatable {
   final String name;
   final String description;
   final int time;
+  final int cookTime;
+  final int prepTime;
+  final int yields;
   final String source;
   final File? image;
   final List<RecipeItem> items;
@@ -173,6 +197,9 @@ class AddUpdateRecipeState extends Equatable {
     this.name = "",
     this.description = "",
     this.time = 0,
+    this.cookTime = 0,
+    this.prepTime = 0,
+    this.yields = 0,
     this.source = '',
     this.image,
     this.items = const [],
@@ -184,6 +211,9 @@ class AddUpdateRecipeState extends Equatable {
     String? name,
     String? description,
     int? time,
+    int? cookTime,
+    int? prepTime,
+    int? yields,
     String? source,
     File? image,
     List<RecipeItem>? items,
@@ -194,6 +224,9 @@ class AddUpdateRecipeState extends Equatable {
         name: name ?? this.name,
         description: description ?? this.description,
         time: time ?? this.time,
+        cookTime: cookTime ?? this.cookTime,
+        prepTime: prepTime ?? this.prepTime,
+        yields: yields ?? this.yields,
         source: source ?? this.source,
         image: image ?? this.image,
         items: items ?? this.items,
@@ -204,6 +237,17 @@ class AddUpdateRecipeState extends Equatable {
   bool isValid() => name.isNotEmpty;
 
   @override
-  List<Object?> get props =>
-      [name, description, time, source, image, items, tags, selectedTags];
+  List<Object?> get props => [
+        name,
+        description,
+        time,
+        cookTime,
+        prepTime,
+        yields,
+        source,
+        image,
+        items,
+        tags,
+        selectedTags,
+      ];
 }

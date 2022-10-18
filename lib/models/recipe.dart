@@ -10,6 +10,9 @@ class Recipe extends Model implements ISuspensionBean {
   final bool isPlanned;
   final Set<int> plannedDays;
   final int time;
+  final int cookTime;
+  final int prepTime;
+  final int yields;
   final String source;
   final String image;
   final List<RecipeItem> items;
@@ -21,6 +24,9 @@ class Recipe extends Model implements ISuspensionBean {
     this.description = '',
     this.isPlanned = false,
     this.time = 0,
+    this.cookTime = 0,
+    this.prepTime = 0,
+    this.yields = 0,
     this.source = '',
     this.image = '',
     this.items = const [],
@@ -48,6 +54,9 @@ class Recipe extends Model implements ISuspensionBean {
       description: map['description'],
       isPlanned: map['planned'] ?? false,
       time: map['time'] ?? 0,
+      cookTime: map['cook_time'] ?? 0,
+      prepTime: map['prep_time'] ?? 0,
+      yields: map['yields'] ?? 0,
       source: map['source'] ?? '',
       image: map['photo'] ?? '',
       items: items,
@@ -61,6 +70,9 @@ class Recipe extends Model implements ISuspensionBean {
     String? description,
     bool? isPlanned,
     int? time,
+    int? cookTime,
+    int? prepTime,
+    int? yields,
     String? source,
     String? image,
     List<RecipeItem>? items,
@@ -74,6 +86,9 @@ class Recipe extends Model implements ISuspensionBean {
         items: items ?? this.items,
         isPlanned: isPlanned ?? this.isPlanned,
         time: time ?? this.time,
+        cookTime: cookTime ?? this.cookTime,
+        prepTime: prepTime ?? this.prepTime,
+        yields: yields ?? this.yields,
         source: source ?? this.source,
         image: image ?? this.image,
         tags: tags ?? this.tags,
@@ -87,6 +102,9 @@ class Recipe extends Model implements ISuspensionBean {
         description,
         isPlanned,
         time,
+        cookTime,
+        prepTime,
+        yields,
         source,
         image,
         tags,
@@ -99,6 +117,9 @@ class Recipe extends Model implements ISuspensionBean {
         "name": name,
         "description": description,
         "time": time,
+        "cook_time": cookTime,
+        "prep_time": prepTime,
+        "yields": yields,
         "source": source,
         "photo": image,
         "items": items.map((e) => e.toJson()).toList(),

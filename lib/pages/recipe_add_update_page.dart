@@ -12,6 +12,7 @@ import 'package:kitchenowl/models/update_value.dart';
 import 'package:kitchenowl/pages/item_page.dart';
 import 'package:kitchenowl/pages/item_search_page.dart';
 import 'package:kitchenowl/kitchenowl.dart';
+import 'package:kitchenowl/widgets/recipe_time_settings.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
 class AddUpdateRecipePage extends StatefulWidget {
@@ -29,10 +30,11 @@ class AddUpdateRecipePage extends StatefulWidget {
 class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController descController = TextEditingController();
-  final TextEditingController timeController = TextEditingController();
+  final TextEditingController yieldsController = TextEditingController();
   final TextEditingController sourceController = TextEditingController();
   late AddUpdateRecipeCubit cubit;
   bool isUpdate = false;
+  bool isAdvancedTime = false;
 
   @override
   void initState() {
@@ -40,8 +42,8 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
     isUpdate = widget.recipe.id != null;
     nameController.text = widget.recipe.name;
     descController.text = widget.recipe.description;
-    if (widget.recipe.time > 0) {
-      timeController.text = widget.recipe.time.toString();
+    if (widget.recipe.yields > 0) {
+      yieldsController.text = widget.recipe.yields.toString();
     }
     if (widget.recipe.source.isNotEmpty) {
       sourceController.text = widget.recipe.source;
@@ -54,7 +56,7 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
     cubit.close();
     nameController.dispose();
     descController.dispose();
-    timeController.dispose();
+    yieldsController.dispose();
     sourceController.dispose();
     super.dispose();
   }
@@ -177,17 +179,22 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                   ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                    child: RecipeTimeSettings(
+                      recipe: widget.recipe,
+                      cubit: cubit,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
                     child: TextField(
-                      controller: timeController,
-                      onChanged: (s) => cubit.setTime(int.tryParse(s) ?? 0),
+                      controller: yieldsController,
+                      onChanged: (s) => cubit.setYields(int.tryParse(s) ?? 0),
                       inputFormatters: [
                         FilteringTextInputFormatter.digitsOnly,
                       ],
                       keyboardType: TextInputType.number,
                       decoration: InputDecoration(
-                        labelText: AppLocalizations.of(context)!.cookingTime,
-                        suffix:
-                            Text(AppLocalizations.of(context)!.minutesAbbrev),
+                        labelText: AppLocalizations.of(context)!.yields,
                       ),
                     ),
                   ),

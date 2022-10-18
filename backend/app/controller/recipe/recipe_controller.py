@@ -34,6 +34,12 @@ def addRecipe(args):
     recipe.description = args['description']
     if 'time' in args:
         recipe.time = args['time']
+    if 'cook_time' in args:
+        recipe.cook_time = args['cook_time']
+    if 'prep_time' in args:
+        recipe.prep_time = args['prep_time']
+    if 'yields' in args:
+        recipe.yields = args['yields']
     if 'source' in args:
         recipe.source = args['source']
     if 'photo' in args:
@@ -76,6 +82,12 @@ def updateRecipe(args, id):  # noqa: C901
         recipe.description = args['description']
     if 'time' in args:
         recipe.time = args['time']
+    if 'cook_time' in args:
+        recipe.cook_time = args['cook_time']
+    if 'prep_time' in args:
+        recipe.prep_time = args['prep_time']
+    if 'yields' in args:
+        recipe.yields = args['yields']
     if 'source' in args:
         recipe.source = args['source']
     if 'photo' in args:
@@ -150,6 +162,9 @@ def scrapeRecipe(args):
     recipe = Recipe()
     recipe.name = scraper.title()
     recipe.time = int(scraper.total_time())
+    recipe.cook_time = scraper.cook_time
+    recipe.prep_time = scraper.prep_time
+    recipe.yields = scraper.yields
     description = ''
     try:
         description = scraper.description() + "\n\n"

@@ -1,11 +1,15 @@
 [uwsgi]
+strict = true
+master = true
+enable-threads = true
+vacuum = true
+single-interpreter = true
+die-on-term = true
+need-app = true
+chmod-socket = 664
+
 wsgi-file = wsgi.py
 callable = app
 http = 0.0.0.0:$(HTTP_PORT)
 socket = 0.0.0.0:5000
-processes = 1
-threads = 1
-master = true
-chmod-socket = 664
-vacuum = true
-die-on-term = true
+processes = 2

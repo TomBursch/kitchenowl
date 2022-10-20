@@ -213,7 +213,7 @@
   "@recipesRecent": {},
   "recipesSuggested": "Suggérées",
   "@recipesSuggested": {},
-  "sessions": "Sessions",
+  "sessions": "Séances",
   "@sessions": {},
   "setupTitle": "Coucou ! Prêt·e pour faire les courses ?",
   "@setupTitle": {},
@@ -334,5 +334,11 @@
     "placeholders": {
       "user": {}
     }
-  }
+  },
+  "preparationTime": "Temps de préparation",
+  "@preparationTime": {},
+  "totalTime": "Temps total",
+  "@totalTime": {},
+  "yields": "Rendement",
+  "@yields": {}
 }

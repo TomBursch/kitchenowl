@@ -334,5 +334,11 @@
   "name": "Naam",
   "@name": {},
   "next": "Volgende",
-  "@next": {}
+  "@next": {},
+  "yields": "Opbrengsten",
+  "@yields": {},
+  "totalTime": "Totale tijd",
+  "@totalTime": {},
+  "preparationTime": "Voorbereidingstijd",
+  "@preparationTime": {}
 }

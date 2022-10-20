@@ -334,5 +334,11 @@
   "writeMarkdownHere": "Hier wird markdown unterstützt!",
   "@writeMarkdownHere": {},
   "you": "du",
-  "@you": {}
+  "@you": {},
+  "yields": "Erträge",
+  "@yields": {},
+  "totalTime": "Gesamtzeit",
+  "@totalTime": {},
+  "preparationTime": "Vorbereitungszeit",
+  "@preparationTime": {}
 }

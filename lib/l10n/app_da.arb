@@ -334,5 +334,11 @@
     "placeholders": {
       "lang": {}
     }
-  }
+  },
+  "totalTime": "Samlet tid",
+  "@totalTime": {},
+  "preparationTime": "Tilberedningstid",
+  "@preparationTime": {},
+  "yields": "Udbytter",
+  "@yields": {}
 }

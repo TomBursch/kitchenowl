@@ -49,7 +49,7 @@
   "@darkmode": {},
   "dynamicAccentColor": "Dynamisk aksentfarge",
   "@dynamicAccentColor": {},
-  "expenseEmpty": "Ingen utgifter enda.",
+  "expenseEmpty": "Ingen utgifter enda!",
   "@expenseEmpty": {},
   "forceOfflineMode": "Påtving frakoblet modus",
   "@forceOfflineMode": {},
@@ -65,7 +65,7 @@
   },
   "cookingTime": "Tilberedningstid",
   "@cookingTime": {},
-  "addLanguageConfirm": "Legg til '{lang}'? (Dette kan ikke angres.)",
+  "addLanguageConfirm": "Legg til '{lang}'? (Dette kan ikke angres.).",
   "@addLanguageConfirm": {
     "placeholders": {
       "lang": {}
@@ -85,15 +85,15 @@
   "@llts": {},
   "lltDelete": "Slett symbol med lang holdbarhet",
   "@lltDelete": {},
-  "lltNotShownAgain": "Lagre symbolet. Det vil ikke bli vist igjen.",
+  "lltNotShownAgain": "Lagre symbolet. Det vil ikke bli vist igjen",
   "@lltNotShownAgain": {},
   "lltWarningContent": "Opprett symbol med lang holdbarhet? Dette kan potensielt være en sikkerhetsrisiko. Symbolet utløper ikke og gir full tilgang til kontoen din.",
   "@lltWarningContent": {},
   "lltWarningTitle": "Vet du hva du gjør?",
   "@lltWarningTitle": {},
-  "onboardingLoading": "Importerer språk… Dette kan ta en stund.",
+  "onboardingLoading": "Importerer språk… Dette kan ta en stund :)",
   "@onboardingLoading": {},
-  "onboardingSettingsTitle": "Hei {name}. La oss sette opp tjeneren.",
+  "onboardingSettingsTitle": "Hei {name}. La oss sette opp tjeneren!",
   "@onboardingSettingsTitle": {
     "placeholders": {
       "name": {}
@@ -103,7 +103,7 @@
   "@onboardingTitle": {},
   "other": "annet",
   "@other": {},
-  "plannerEmpty": "Ingen måltider planlagt. Begynn ved å velge en av oppskriftene dine.",
+  "plannerEmpty": "Ingen måltider planlagt. Begynn ved å velge en av oppskriftene dine!",
   "@plannerEmpty": {},
   "recipeDeleteConfirmation": "Fjern {recipe}?",
   "@recipeDeleteConfirmation": {
@@ -111,7 +111,7 @@
       "recipe": {}
     }
   },
-  "recipeEmpty": "Ingen oppskrifter enda.",
+  "recipeEmpty": "Ingen oppskrifter enda!",
   "@recipeEmpty": {},
   "recipesRecent": "Nylig",
   "@recipesRecent": {},
@@ -159,7 +159,7 @@
   "@username": {},
   "users": "Brukere",
   "@users": {},
-  "writeMarkdownHere": "Du kan bruke markdown her.",
+  "writeMarkdownHere": "Du kan bruke markdown her!",
   "@writeMarkdownHere": {},
   "userDeleteConfirmation": "Fjern {user}?",
   "@userDeleteConfirmation": {
@@ -169,9 +169,9 @@
   },
   "unsupportedFrontendMessage": "Installer den nye og støttede versjonen av programmet først",
   "@unsupportedFrontendMessage": {},
-  "unreachableMessage": "Får ikke kontakt med tjeneren …",
+  "unreachableMessage": "Hmmmm… Får ikke kontakt med tjeneren",
   "@unreachableMessage": {},
-  "unsupportedBackendMessage": "Tjenerversjonen støttes ikke. Installer nyeste versjon av bakenden.",
+  "unsupportedBackendMessage": "Tjenerversjonen støttes ikke. Installer nyeste versjon av bakenden",
   "@unsupportedBackendMessage": {},
   "you": "deg",
   "@you": {},
@@ -334,5 +334,11 @@
     "placeholders": {
       "token": {}
     }
-  }
+  },
+  "preparationTime": "Forberedelsestid",
+  "@preparationTime": {},
+  "totalTime": "Total tid",
+  "@totalTime": {},
+  "yields": "Gi",
+  "@yields": {}
 }

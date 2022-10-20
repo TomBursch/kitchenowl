@@ -95,7 +95,7 @@
   },
   "back": "Indietro",
   "@back": {},
-  "balances": "Saldi",
+  "balances": "Bilanci",
   "@balances": {},
   "camera": "Fotocamera",
   "@camera": {},
@@ -334,5 +334,11 @@
   "writeMarkdownHere": "Puoi usare markdown qui!",
   "@writeMarkdownHere": {},
   "you": "tu",
-  "@you": {}
+  "@you": {},
+  "preparationTime": "Tempo di preparazione",
+  "@preparationTime": {},
+  "yields": "Rese",
+  "@yields": {},
+  "totalTime": "Tempo totale",
+  "@totalTime": {}
 }

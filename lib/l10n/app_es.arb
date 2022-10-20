@@ -53,7 +53,7 @@
   "@expenseAmount": {},
   "expenseEmpty": "Sin gastos, empieza creando uno!",
   "@expenseEmpty": {},
-  "expenseFactor": "Factor",
+  "expenseFactor": "Fuente",
   "@expenseFactor": {},
   "expenseOverviewTotalTitle": "Gastos totales en {month}:",
   "@expenseOverviewTotalTitle": {
@@ -253,7 +253,7 @@
   "@expense": {},
   "expenseEdit": "Editar Gasto",
   "@expenseEdit": {},
-  "dynamicAccentColor": "Dynamic Accent Color",
+  "dynamicAccentColor": "Color Activo Dinámico",
   "@dynamicAccentColor": {},
   "delete": "Borrar",
   "@delete": {},
@@ -334,5 +334,11 @@
     }
   },
   "underConstruction": "En construcción",
-  "@underConstruction": {}
+  "@underConstruction": {},
+  "preparationTime": "Tiempo de preparación",
+  "@preparationTime": {},
+  "totalTime": "Tiempo total",
+  "@totalTime": {},
+  "yields": "Rinde",
+  "@yields": {}
 }

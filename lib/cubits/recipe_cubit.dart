@@ -9,22 +9,33 @@ import 'package:kitchenowl/services/transactions/recipe.dart';
 import 'package:kitchenowl/services/transactions/shoppinglist.dart';
 
 class RecipeCubit extends Cubit<RecipeState> {
-  RecipeCubit(Recipe recipe)
-      : super(RecipeState(
-          recipe: recipe,
-          selectedItems: recipe.items.where((e) => !e.optional).toList(),
-        )) {
+  RecipeCubit(Recipe recipe) : super(RecipeState(recipe: recipe)) {
     refresh();
   }
 
   void itemSelected(RecipeItem item) {
-    final List<RecipeItem> selectedItems = List.from(state.selectedItems);
-    if (selectedItems.contains(item)) {
-      selectedItems.remove(item);
+    final List<String> selectedItems = List.from(state.selectedItems);
+    if (selectedItems.contains(item.name)) {
+      selectedItems.remove(item.name);
     } else {
-      selectedItems.add(item);
+      selectedItems.add(item.name);
     }
     emit(state.copyWith(selectedItems: selectedItems));
+  }
+
+  void increaseSelectedYields() {
+    setSelectedYields(state.selectedYields + 1);
+  }
+
+  void decreaseSelectedYields() {
+    setSelectedYields(state.selectedYields - 1);
+  }
+
+  void setSelectedYields(int selectedYields) {
+    emit(state.copyWith(
+      selectedYields: selectedYields,
+      dynamicRecipe: state.recipe.withYields(selectedYields),
+    ));
   }
 
   void setUpdateState(UpdateEnum updateState) {
@@ -34,16 +45,15 @@ class RecipeCubit extends Cubit<RecipeState> {
   Future<void> refresh() async {
     final recipe = await TransactionHandler.getInstance()
         .runTransaction(TransactionRecipeGetRecipe(recipe: state.recipe));
-    emit(state.copyWith(
-      recipe: recipe,
-      selectedItems: recipe.items.where((e) => !e.optional).toList(),
-    ));
+    emit(RecipeState(recipe: recipe, updateState: state.updateState));
   }
 
   Future<void> addItemsToList() async {
     await TransactionHandler.getInstance()
         .runTransaction(TransactionShoppingListAddRecipeItems(
-      items: state.selectedItems,
+      items: state.dynamicRecipe.items
+          .where((item) => state.selectedItems.contains(item.name))
+          .toList(),
     ));
   }
 
@@ -58,27 +68,44 @@ class RecipeCubit extends Cubit<RecipeState> {
 }
 
 class RecipeState extends Equatable {
-  final List<RecipeItem> selectedItems;
+  final List<String> selectedItems;
   final Recipe recipe;
+  final Recipe dynamicRecipe;
+  final int selectedYields;
   final UpdateEnum updateState;
 
-  const RecipeState({
+  const RecipeState.custom({
     required this.recipe,
     required this.selectedItems,
+    required this.dynamicRecipe,
+    this.selectedYields = 0,
     this.updateState = UpdateEnum.unchanged,
   });
 
+  RecipeState({
+    required this.recipe,
+    this.updateState = UpdateEnum.unchanged,
+  })  : dynamicRecipe = recipe,
+        selectedYields = recipe.yields,
+        selectedItems =
+            recipe.items.where((e) => !e.optional).map((e) => e.name).toList();
+
   RecipeState copyWith({
     Recipe? recipe,
-    List<RecipeItem>? selectedItems,
+    Recipe? dynamicRecipe,
+    List<String>? selectedItems,
+    int? selectedYields,
     UpdateEnum? updateState,
   }) =>
-      RecipeState(
+      RecipeState.custom(
         recipe: recipe ?? this.recipe,
+        dynamicRecipe: dynamicRecipe ?? this.dynamicRecipe,
         selectedItems: selectedItems ?? this.selectedItems,
+        selectedYields: selectedYields ?? this.selectedYields,
         updateState: updateState ?? this.updateState,
       );
 
   @override
-  List<Object?> get props => [recipe, selectedItems, updateState];
+  List<Object?> get props =>
+      [recipe, selectedItems, selectedYields, dynamicRecipe, updateState];
 }

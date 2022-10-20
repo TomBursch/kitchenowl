@@ -1,3 +1,4 @@
+import 'package:intl/intl.dart';
 import 'package:kitchenowl/models/category.dart';
 import 'package:kitchenowl/models/model.dart';
 
@@ -202,6 +203,17 @@ class RecipeItem extends ItemWithDescription {
         description: description ?? this.description,
         optional: optional ?? this.optional,
       );
+
+  RecipeItem withFactor(double factor) {
+    String description = this.description.replaceAllMapped(
+          RegExp("\\d+(\\.\\d+)?"),
+          (match) => NumberFormat.decimalPattern().format(
+            (double.tryParse(match.group(0)!)! * factor * 100).round() / 100,
+          ),
+        );
+
+    return copyWith(description: description);
+  }
 
   Item toItem() => Item(id: id, name: name);
 

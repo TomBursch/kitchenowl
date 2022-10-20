@@ -221,6 +221,8 @@
   "@plannerEmpty": {},
   "plannerTitle": "Your planned meals",
   "@plannerTitle": {},
+  "preparationTime": "Preparation time",
+  "@preparationTime": {},
   "profile": "Profile",
   "@profile": {},
   "recipeAdd": "Add Recipe",
@@ -303,6 +305,8 @@
   "@themeSystem": {},
   "total": "Total",
   "@total": {},
+  "totalTime": "Total time",
+  "@totalTime": {},
   "uncategorized": "Uncategorized",
   "@uncategorized": {},
   "underConstruction": "Under Construction",
@@ -333,6 +337,8 @@
   "@users": {},
   "writeMarkdownHere": "You can use markdown here!",
   "@writeMarkdownHere": {},
+  "yields": "Yields",
+  "@yields": {},
   "you": "you",
   "@you": {}
 }

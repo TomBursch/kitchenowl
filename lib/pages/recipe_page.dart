@@ -200,6 +200,16 @@ class _RecipePageState extends State<RecipePage> {
                             ],
                           ),
                           const SizedBox(height: 8),
+                          if (state.recipe.prepTime > 0)
+                            Text(
+                              "${AppLocalizations.of(context)!.preparationTime}: ${state.recipe.prepTime} ${AppLocalizations.of(context)!.minutesAbbrev}",
+                            ),
+                          if (state.recipe.cookTime > 0)
+                            Text(
+                              "${AppLocalizations.of(context)!.cookingTime}: ${state.recipe.cookTime} ${AppLocalizations.of(context)!.minutesAbbrev}",
+                            ),
+                          if (state.recipe.prepTime + state.recipe.cookTime > 0)
+                            const SizedBox(height: 16),
                           MarkdownBody(
                             data: state.recipe.description,
                             shrinkWrap: true,
@@ -231,6 +241,36 @@ class _RecipePageState extends State<RecipePage> {
                       ),
                     ),
                   ),
+                  if (state.recipe.yields > 0 && state.recipe.items.isNotEmpty)
+                    SliverPadding(
+                      padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+                      sliver: SliverToBoxAdapter(
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                AppLocalizations.of(context)!.yields,
+                                style: Theme.of(context).textTheme.headline6,
+                              ),
+                            ),
+                            IconButton(
+                              onPressed: state.selectedYields <= 1
+                                  ? null
+                                  : cubit.decreaseSelectedYields,
+                              icon: const Icon(Icons.remove),
+                            ),
+                            Text(
+                              state.selectedYields.toString(),
+                              style: Theme.of(context).textTheme.headline6,
+                            ),
+                            IconButton(
+                              onPressed: cubit.increaseSelectedYields,
+                              icon: const Icon(Icons.add),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                   if (state.recipe.items.where((e) => !e.optional).isNotEmpty)
                     SliverPadding(
                       padding: const EdgeInsets.all(16),
@@ -243,9 +283,11 @@ class _RecipePageState extends State<RecipePage> {
                     ),
                   if (state.recipe.items.where((e) => !e.optional).isNotEmpty)
                     SliverItemGridList(
-                      items:
-                          state.recipe.items.where((e) => !e.optional).toList(),
-                      selected: (item) => state.selectedItems.contains(item),
+                      items: state.dynamicRecipe.items
+                          .where((e) => !e.optional)
+                          .toList(),
+                      selected: (item) =>
+                          state.selectedItems.contains(item.name),
                       onPressed: cubit.itemSelected,
                       onLongPressed:
                           const Nullable<void Function(RecipeItem)>.empty(),
@@ -262,9 +304,11 @@ class _RecipePageState extends State<RecipePage> {
                     ),
                   if (state.recipe.items.where((e) => e.optional).isNotEmpty)
                     SliverItemGridList(
-                      items:
-                          state.recipe.items.where((e) => e.optional).toList(),
-                      selected: (item) => state.selectedItems.contains(item),
+                      items: state.dynamicRecipe.items
+                          .where((e) => e.optional)
+                          .toList(),
+                      selected: (item) =>
+                          state.selectedItems.contains(item.name),
                       onPressed: cubit.itemSelected,
                       onLongPressed:
                           const Nullable<void Function(RecipeItem)>.empty(),

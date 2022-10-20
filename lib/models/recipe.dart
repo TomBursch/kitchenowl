@@ -95,6 +95,14 @@ class Recipe extends Model implements ISuspensionBean {
         plannedDays: plannedDays ?? this.plannedDays,
       );
 
+  Recipe withYields(int yields) {
+    double factor = yields / this.yields;
+
+    return copyWith(
+      items: items.map((item) => item.withFactor(factor)).toList(),
+    );
+  }
+
   @override
   List<Object?> get props => [
         id,

@@ -54,7 +54,12 @@ class _ExpensePageState extends State<ExpensePage> {
               child: CustomScrollView(
                 slivers: [
                   SliverAppBar(
-                    title: Text(state.expense.name),
+                    flexibleSpace: FlexibleImageSpaceBar(
+                      title: state.expense.name,
+                      imageUrl: state.expense.image,
+                    ),
+                    expandedHeight: state.expense.image.isNotEmpty ? 160 : null,
+                    pinned: true,
                     leading: BackButton(
                       onPressed: () =>
                           Navigator.of(context).pop(cubit.state.updateState),

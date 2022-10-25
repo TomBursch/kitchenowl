@@ -33,7 +33,7 @@ class Expense extends Model {
       id: map['id'],
       name: map['name'],
       amount: map['amount'],
-      image: map['image'] ?? "",
+      image: map['photo'] ?? "",
       category: map['category'],
       createdAt:
           DateTime.fromMillisecondsSinceEpoch(map['created_at'], isUtc: true)
@@ -69,7 +69,7 @@ class Expense extends Model {
   Map<String, dynamic> toJson() => {
         "name": name,
         "amount": amount,
-        "image": image,
+        "photo": image,
         'category': category,
         "paid_by": {"id": paidById},
         "paid_for": paidFor.map((e) => e.toJson()).toList(),

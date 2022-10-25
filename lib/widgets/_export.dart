@@ -19,3 +19,4 @@ export 'show_snack_bar.dart';
 export 'shimmer_card.dart';
 export 'shimmer_shopping_item.dart';
 export 'kitchenowl_switch.dart';
+export 'image_selector.dart';

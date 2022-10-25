@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/kitchenowl.dart';
@@ -21,23 +23,34 @@ class AddUpdateExpenseCubit extends Cubit<AddUpdateExpenseState> {
   }
 
   Future<void> saveExpense() async {
-    if (state.isValid()) {
-      final amount = state.amount * (state.isIncome ? -1 : 1);
+    final _state = state;
+    if (_state.isValid()) {
+      final amount = _state.amount * (_state.isIncome ? -1 : 1);
+      String? image;
+      if (_state.image != null) {
+        if (_state.image!.path.isEmpty) {
+          image = '';
+        } else if (await _state.image!.exists()) {
+          image = await ApiService.getInstance().uploadFile(_state.image!);
+        }
+      }
       if (expense.id == null) {
         await ApiService.getInstance().addExpense(Expense(
           amount: amount,
-          name: state.name,
-          paidById: state.paidBy,
-          paidFor: state.paidFor,
-          category: state.category,
+          name: _state.name,
+          image: image ?? expense.image,
+          paidById: _state.paidBy,
+          paidFor: _state.paidFor,
+          category: _state.category,
         ));
       } else {
         await ApiService.getInstance().updateExpense(expense.copyWith(
           name: state.name,
           amount: amount,
-          paidById: state.paidBy,
-          paidFor: state.paidFor,
-          category: Nullable(state.category),
+          image: image,
+          paidById: _state.paidBy,
+          paidFor: _state.paidFor,
+          category: Nullable(_state.category),
         ));
       }
     }
@@ -61,6 +74,10 @@ class AddUpdateExpenseCubit extends Cubit<AddUpdateExpenseState> {
 
   void setIncome(bool isIncome) {
     emit(state.copyWith(isIncome: isIncome));
+  }
+
+  void setImage(File image) {
+    emit(state.copyWith(image: image));
   }
 
   void setPaidBy(User user) {
@@ -128,6 +145,7 @@ class AddUpdateExpenseState extends Equatable {
   final String name;
   final double amount;
   final bool isIncome;
+  final File? image;
   final int paidBy;
   final List<PaidForModel> paidFor;
   final String? category;
@@ -137,6 +155,7 @@ class AddUpdateExpenseState extends Equatable {
     this.name = "",
     required this.amount,
     this.isIncome = false,
+    this.image,
     required this.paidBy,
     this.category,
     this.paidFor = const [],
@@ -148,6 +167,7 @@ class AddUpdateExpenseState extends Equatable {
     double? amount,
     int? paidBy,
     bool? isIncome,
+    File? image,
     List<PaidForModel>? paidFor,
     String? category,
     List<String>? categories,
@@ -156,6 +176,7 @@ class AddUpdateExpenseState extends Equatable {
         name: name ?? this.name,
         amount: amount ?? this.amount,
         isIncome: isIncome ?? this.isIncome,
+        image: image ?? this.image,
         category: category ?? this.category,
         paidBy: paidBy ?? this.paidBy,
         paidFor: paidFor ?? this.paidFor,
@@ -179,6 +200,14 @@ class AddUpdateExpenseState extends Equatable {
   bool isValid() => name.isNotEmpty && amount != 0 && paidFor.isNotEmpty;
 
   @override
-  List<Object?> get props =>
-      [name, amount, isIncome, paidBy, category, categories] + paidFor;
+  List<Object?> get props => [
+        name,
+        amount,
+        isIncome,
+        image,
+        paidBy,
+        category,
+        categories,
+        paidFor,
+      ];
 }

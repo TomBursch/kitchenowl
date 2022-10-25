@@ -105,54 +105,10 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                     bloc: cubit,
                     buildWhen: (previous, current) =>
                         previous.image != current.image,
-                    builder: (context, state) => Container(
-                      margin: const EdgeInsets.all(16),
-                      constraints: const BoxConstraints.expand(height: 80),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(14),
-                        border: Border.all(
-                          color: Theme.of(context).colorScheme.secondary,
-                          width: 2,
-                        ),
-                        image: (state.image != null &&
-                                    state.image!.path.isNotEmpty ||
-                                state.image == null &&
-                                    cubit.recipe.image.isNotEmpty)
-                            ? DecorationImage(
-                                fit: BoxFit.cover,
-                                opacity: .5,
-                                image: state.image != null
-                                    ? FileImage(state.image!)
-                                    : getImageProvider(
-                                        context,
-                                        cubit.recipe.image,
-                                      ),
-                              )
-                            : null,
-                      ),
-                      child: IconButton(
-                        icon: (state.image != null &&
-                                    state.image!.path.isNotEmpty ||
-                                state.image == null &&
-                                    cubit.recipe.image.isNotEmpty)
-                            ? const Icon(Icons.edit)
-                            : const Icon(Icons.add_photo_alternate_rounded),
-                        color: Theme.of(context).colorScheme.secondary,
-                        onPressed: () async {
-                          File? file = await selectFile(
-                            context: context,
-                            title:
-                                AppLocalizations.of(context)!.recipeImageSelect,
-                            deleteOption: (state.image != null &&
-                                    state.image!.path.isNotEmpty ||
-                                state.image == null &&
-                                    cubit.recipe.image.isNotEmpty),
-                          );
-                          if (file != null) {
-                            cubit.setImage(file);
-                          }
-                        },
-                      ),
+                    builder: (context, state) => ImageSelector(
+                      image: state.image,
+                      originalImage: cubit.recipe.image,
+                      setImage: cubit.setImage,
                     ),
                   ),
                   Padding(

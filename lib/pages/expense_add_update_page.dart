@@ -100,6 +100,16 @@ class _AddUpdateRecipePageState extends State<AddUpdateExpensePage> {
               SliverList(
                 delegate: SliverChildListDelegate(
                   [
+                    BlocBuilder<AddUpdateExpenseCubit, AddUpdateExpenseState>(
+                      bloc: cubit,
+                      buildWhen: (previous, current) =>
+                          previous.image != current.image,
+                      builder: (context, state) => ImageSelector(
+                        image: state.image,
+                        originalImage: cubit.expense.image,
+                        setImage: cubit.setImage,
+                      ),
+                    ),
                     Padding(
                       padding: const EdgeInsets.all(16),
                       child: TextField(

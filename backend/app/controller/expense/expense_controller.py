@@ -40,6 +40,8 @@ def addExpense(args):
     expense = Expense()
     expense.name = args['name']
     expense.amount = args['amount']
+    if 'photo' in args:
+        expense.photo = args['photo']
     if 'category' in args:
         if not args['category']:
             expense.category = None
@@ -82,6 +84,8 @@ def updateExpense(args, id):  # noqa: C901
         expense.name = args['name']
     if 'amount' in args:
         expense.amount = args['amount']
+    if 'photo' in args:
+        expense.photo = args['photo']
     if 'category' in args:
         if not args['category']:
             expense.category = None

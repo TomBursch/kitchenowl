@@ -6,6 +6,7 @@ class Expense extends Model {
   final int? id;
   final String name;
   final double amount;
+  final String image;
   final DateTime? createdAt;
   final String? category;
   final int paidById;
@@ -15,6 +16,7 @@ class Expense extends Model {
     this.id,
     this.name = '',
     this.amount = 0,
+    this.image = "",
     required this.paidById,
     this.paidFor = const [],
     this.createdAt,
@@ -31,6 +33,7 @@ class Expense extends Model {
       id: map['id'],
       name: map['name'],
       amount: map['amount'],
+      image: map['photo'] ?? "",
       category: map['category'],
       createdAt:
           DateTime.fromMillisecondsSinceEpoch(map['created_at'], isUtc: true)
@@ -43,6 +46,7 @@ class Expense extends Model {
   Expense copyWith({
     String? name,
     double? amount,
+    String? image,
     Nullable<String>? category,
     int? paidById,
     List<PaidForModel>? paidFor,
@@ -51,6 +55,7 @@ class Expense extends Model {
         id: id,
         name: name ?? this.name,
         amount: amount ?? this.amount,
+        image: image ?? this.image,
         category: (category ?? Nullable(this.category)).value,
         paidById: paidById ?? this.paidById,
         paidFor: paidFor ?? this.paidFor,
@@ -58,12 +63,13 @@ class Expense extends Model {
 
   @override
   List<Object?> get props =>
-      [id, name, amount, category, createdAt, paidById] + paidFor;
+      [id, name, amount, image, category, createdAt, paidById, paidFor];
 
   @override
   Map<String, dynamic> toJson() => {
         "name": name,
         "amount": amount,
+        "photo": image,
         'category': category,
         "paid_by": {"id": paidById},
         "paid_for": paidFor.map((e) => e.toJson()).toList(),

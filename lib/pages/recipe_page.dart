@@ -63,72 +63,9 @@ class _RecipePageState extends State<RecipePage> {
                 primary: true,
                 slivers: [
                   SliverAppBar(
-                    flexibleSpace: FlexibleSpaceBar(
-                      titlePadding: const EdgeInsetsDirectional.only(
-                        start: 60,
-                        bottom: 16,
-                        end: 36,
-                      ),
-                      title: LayoutBuilder(builder: (context, constraints) {
-                        final isCollapsed = constraints.biggest.height <=
-                            MediaQuery.of(context).padding.top +
-                                kToolbarHeight -
-                                16 +
-                                32;
-
-                        return Text(
-                          state.recipe.name,
-                          maxLines: isCollapsed ? 1 : 2,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.onBackground,
-                          ),
-                        );
-                      }),
-                      background: state.recipe.image.isNotEmpty
-                          ? GestureDetector(
-                              onTap: () =>
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => PhotoViewPage(
-                                  title: state.recipe.name,
-                                  imageProvider: getImageProvider(
-                                    context,
-                                    state.recipe.image,
-                                  ),
-                                  // heroTag: state.recipe.image, # TODO cannot use Hero inside OpenContainer
-                                ),
-                              )),
-                              child:
-                                  // Hero(
-                                  // tag: state.recipe.image,
-                                  // flightShuttleBuilder: (
-                                  //   BuildContext flightContext,
-                                  //   Animation<double> animation,
-                                  //   HeroFlightDirection flightDirection,
-                                  //   BuildContext fromHeroContext,
-                                  //   BuildContext toHeroContext,
-                                  // ) {
-                                  //   final Hero hero = flightDirection ==
-                                  //           HeroFlightDirection.push
-                                  //       ? fromHeroContext.widget as Hero
-                                  //       : toHeroContext.widget as Hero;
-
-                                  //   return hero.child;
-                                  // },
-                                  Image(
-                                image: getImageProvider(
-                                  context,
-                                  state.recipe.image,
-                                ),
-                                color: Theme.of(context)
-                                    .backgroundColor
-                                    .withOpacity(.25),
-                                colorBlendMode: BlendMode.srcATop,
-                                fit: BoxFit.cover,
-                              ),
-                              // ),
-                            )
-                          : null,
+                    flexibleSpace: FlexibleImageSpaceBar(
+                      title: state.recipe.name,
+                      imageUrl: state.recipe.image,
                     ),
                     leading: BackButton(
                       onPressed: () =>

@@ -62,7 +62,7 @@ jobs:
           push: true
           tags: ${{ env.tags }}
           # cache-from: type=registry,ref=${{ secrets.DOCKER_HUB_USERNAME }}/kitchenowl:buildcache
-          cache-to: type=registry,ref=${{ secrets.DOCKER_HUB_USERNAME }}/kitchenowl:buildcache,mode=max
+          # cache-to: type=registry,ref=${{ secrets.DOCKER_HUB_USERNAME }}/kitchenowl:buildcache,mode=max
 
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}

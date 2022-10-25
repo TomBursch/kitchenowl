@@ -20,6 +20,7 @@ class AddExpense(Schema):
     amount = fields.Float(
         required=True
     )
+    photo = fields.String()
     category = fields.String(
         validate=lambda a: not a or (
             a and not a.isspace()), allow_none=True
@@ -44,6 +45,7 @@ class UpdateExpense(Schema):
 
     name = fields.String()
     amount = fields.Float()
+    photo = fields.String()
     category = fields.String(
         validate=lambda a: not a or (
             a and not a.isspace()),

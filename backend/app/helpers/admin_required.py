@@ -1,3 +1,4 @@
+from flask import request
 from app.models import User
 from functools import wraps
 from flask_jwt_extended import get_jwt_identity
@@ -10,7 +11,7 @@ def admin_required(func):
         user = User.find_by_username(get_jwt_identity())
         if not user or not (user.owner or user.admin):
             raise UnauthorizedRequest(
-                message='Elevated rights required'
+                message='Elevated rights required. IP {}'.format(request.remote_addr)
             )
         return func(*args, **kwargs)
 
@@ -23,7 +24,7 @@ def owner_required(func):
         user = User.find_by_username(get_jwt_identity())
         if not user or not user.owner:
             raise UnauthorizedRequest(
-                message='Elevated rights required'
+                message='Elevated rights required. IP {}'.format(request.remote_addr)
             )
         return func(*args, **kwargs)
 

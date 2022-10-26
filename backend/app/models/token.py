@@ -1,6 +1,8 @@
 from __future__ import annotations
 from datetime import datetime
 from typing import Tuple
+
+from flask import request
 from app import db
 from app.config import JWT_REFRESH_TOKEN_EXPIRES, JWT_ACCESS_TOKEN_EXPIRES
 from app.errors import UnauthorizedRequest
@@ -89,7 +91,7 @@ class Token(db.Model, DbModelMixin, TimestampMixin):
         assert device or oldRefreshToken
         if (oldRefreshToken and (oldRefreshToken.type != 'refresh' or oldRefreshToken.has_created_refresh_token())):
             oldRefreshToken.delete_token_familiy()
-            raise UnauthorizedRequest()
+            raise UnauthorizedRequest(message='Unauthorized: IP {} reused the same refresh token, loging out user'.format(request.remote_addr))
 
         refreshToken = create_refresh_token(identity=user)
         model = Token()

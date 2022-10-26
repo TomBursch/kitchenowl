@@ -8,12 +8,11 @@ RUN apt-get update \
         gcc g++ libffi-dev libpcre3-dev build-essential cargo
 
 # Create virtual enviroment
-RUN python -m venv /opt/venv
+RUN python -m venv /opt/venv && /opt/venv/bin/pip install --no-cache-dir -U pip setuptools
 ENV PATH="/opt/venv/bin:$PATH"
 
 COPY requirements.txt .
-RUN pip3 install -U pip wheel setuptools
-RUN pip3 install -r requirements.txt
+RUN pip3 install --no-cache-dir -r requirements.txt && find /opt/venv ( -type d -a -name test -o -name tests \) -o \( -type f -a -name '*.pyc' -o -name '*.pyo' \) -exec rm -rf '{}' \+
 
 # ------------
 # RUNNER

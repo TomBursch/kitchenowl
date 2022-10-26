@@ -18,8 +18,6 @@ There are three tags available: `latest`, `beta` and `dev`. `latest` is the most
     services:
         front:
             image: tombursch/kitchenowl-web:latest
-            environment:
-            - FRONT_URL=http://localhost # The url the instance will be access with
             ports:
             - "80:80"
             depends_on:
@@ -33,7 +31,6 @@ There are three tags available: `latest`, `beta` and `dev`. `latest` is the most
             - default
             environment:
             - JWT_SECRET_KEY=PLEASE_CHANGE_ME
-            - FRONT_URL=http://localhost
             volumes:
             - kitchenowl_data:/data
 
@@ -45,6 +42,14 @@ There are three tags available: `latest`, `beta` and `dev`. `latest` is the most
     ```
     2. Change default values such as `JWT_SECRET_KEY` and the URLs (corresponding to the ones your instance will be running on)
     3. Run `docker-compose up -d`
+=== "Advanced settings"
+    There are a few options for advanced setup. Customize it using enviroment variables.
+
+    - Frontend `tombursch/kitchenowl-web`:
+        - `BACK_URL` (defaut: `back:5000`): Allows to set a custom address for the backend. Needs to be a uwsgi portocol endpoint.
+    - Backend `tombursch/kitchenowl`:
+        - `FRONT_URL`: Adds custom cors header for the set URL.
+        - `HTTP_PORT` (defaut: `80`): Set a custom port for the http server. Usually this should be changed using docker port mapping.
 
 === "Backend only (legacy)"
 
@@ -68,42 +73,11 @@ There are three tags available: `latest`, `beta` and `dev`. `latest` is the most
     - [https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security)
     - [https://www.netsparker.com/blog/web-security/http-security-headers/](https://www.netsparker.com/blog/web-security/http-security-headers/)
 
-## Reverse Proxy Setup
-
-You can use any reverse proxy you want!
-See an example below for a docker compose file with KitchenOwl behind a reverse proxy.
-
-``` yml title="Example docker compose"
-    version: "3"
-    services:
-        front:
-            image: tombursch/kitchenowl-web:latest
-            environment:
-            - FRONT_URL=https://sub.domain.com # Add your Reverse Proxy domain here
-            ports:
-            - "9090:80" # You Can change the first port to anything you want just make sure you change the backend to match it
-            depends_on:
-            - back
-            networks:
-            - default
-        back:
-            image: tombursch/kitchenowl:latest
-            restart: unless-stopped
-            networks:
-            - default
-            environment:
-            - JWT_SECRET_KEY=PLEASE_CHANGE_ME
-            - FRONT_URL=https://sub.domain.com # Change it to the same URL you have set for the frontend
-            volumes:
-            - kitchenowl_data:/data
-
-    volumes:
-        kitchenowl_data:
-
-    networks:
-        default:
-```
 
 ## ⏫ Migrating from Older Versions
 
+### v0.3.3
+Starting from version 0.3.3 `tombursch/kitchenowl-web:latest` ignores the `front_url` enviroment variable and in most cases is not needed in `tombursch/kitchenowl:latest`.
+
+### v0.0.33
 Starting from version 0.0.33 the frontend routes requests to the backend. Thus only one port has to be accessible. However, the backend can be hosted in standalone mode as it was before (see legacy server install).

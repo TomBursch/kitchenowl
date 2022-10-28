@@ -104,6 +104,7 @@ You can help translate the App into your language by using [Weblate](https://hos
 - [KitchenOwl Backend](https://github.com/TomBursch/kitchenowl-backend) Repository
 - [DockerHub](https://hub.docker.com/repository/docker/tombursch/kitchenowl)
 - Icon taken from [Those Icons](https://www.flaticon.com/authors/those-icons) and [Freepik](https://www.flaticon.com/authors/freepik)
+- [Recipe scrapers](https://github.com/hhursev/recipe-scrapers) used for scraping recipes from the web
 
 ### 🔨 Built With
 

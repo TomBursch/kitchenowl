@@ -1,6 +1,6 @@
 from app.helpers import validate_args
 from flask import jsonify, Blueprint
-from app.errors import NotFoundRequest
+from app.errors import InvalidUsage, NotFoundRequest
 from flask_jwt_extended import jwt_required
 from app.models import Item, RecipeItems, Recipe, Category
 from .schemas import SearchByNameRequest, UpdateItem
@@ -55,12 +55,12 @@ def updateItem(args, id):
     if not item:
         raise NotFoundRequest()
     if 'category' in args:
+        print(args)
         if not args['category']:
             item.category = None
+        elif 'id' in args['category']:
+            item.category = Category.find_by_id(args['category']['id'])
         else:
-            category = Category.find_by_name(args['category'])
-            if not category:
-                category = Category.create_by_name(args['category'])
-            item.category = category
+            raise InvalidUsage()
     item.save()
     return jsonify(item.obj_to_dict())

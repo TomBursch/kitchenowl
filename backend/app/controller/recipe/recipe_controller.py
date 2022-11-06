@@ -161,10 +161,22 @@ def scrapeRecipe(args):
     scraper = scrape_me(args['url'], wild_mode=True)
     recipe = Recipe()
     recipe.name = scraper.title()
-    recipe.time = int(scraper.total_time())
-    recipe.cook_time = scraper.cook_time
-    recipe.prep_time = scraper.prep_time
-    recipe.yields = scraper.yields
+    try:
+        recipe.time = int(scraper.total_time())
+    except NotImplementedError:
+        pass
+    try:
+        recipe.cook_time = int(scraper.cook_time())
+    except NotImplementedError:
+        pass
+    try:
+        recipe.prep_time = int(scraper.prep_time())
+    except NotImplementedError:
+        pass
+    try:
+        recipe.yields = scraper.yields()
+    except NotImplementedError:
+        pass
     description = ''
     try:
         description = scraper.description() + "\n\n"

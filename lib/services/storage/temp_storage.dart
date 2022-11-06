@@ -1,7 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
+import 'package:flutter/foundation.dart' as foundation;
+import 'package:kitchenowl/models/category.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/models/recipe.dart';
 import 'package:kitchenowl/models/user.dart';
@@ -49,15 +50,22 @@ class TempStorage {
     return File('$path/recipes.json');
   }
 
+  Future<File> get _localCategoryFile async {
+    final path = await _localPath;
+
+    return File('$path/categories.json');
+  }
+
   Future<void> clearAll() async {
     await clearItems();
     await clearUser();
     await clearUsers();
     await clearRecipes();
+    await clearCategories();
   }
 
   Future<User?> readUser() async {
-    if (!kIsWeb) {
+    if (!foundation.kIsWeb) {
       try {
         final file = await _localUserFile;
         final String content = await file.readAsString();
@@ -70,7 +78,7 @@ class TempStorage {
   }
 
   Future<void> clearUser() async {
-    if (!kIsWeb) {
+    if (!foundation.kIsWeb) {
       try {
         final file = await _localUserFile;
         if (await file.exists()) await file.delete();
@@ -79,14 +87,14 @@ class TempStorage {
   }
 
   Future<void> writeUser(User user) async {
-    if (!kIsWeb) {
+    if (!foundation.kIsWeb) {
       final file = await _localUserFile;
       await file.writeAsString(json.encode(user.toJsonWithId()));
     }
   }
 
   Future<List<User>?> readUsers() async {
-    if (!kIsWeb) {
+    if (!foundation.kIsWeb) {
       try {
         final file = await _localUsersFile;
         final String content = await file.readAsString();
@@ -100,7 +108,7 @@ class TempStorage {
   }
 
   Future<void> clearUsers() async {
-    if (!kIsWeb) {
+    if (!foundation.kIsWeb) {
       try {
         final file = await _localUsersFile;
         if (await file.exists()) await file.delete();
@@ -109,7 +117,7 @@ class TempStorage {
   }
 
   Future<void> writeUsers(List<User> users) async {
-    if (!kIsWeb) {
+    if (!foundation.kIsWeb) {
       final file = await _localUsersFile;
       await file.writeAsString(
         json.encode(users.map((e) => e.toJsonWithId()).toList()),
@@ -118,7 +126,7 @@ class TempStorage {
   }
 
   Future<List<ShoppinglistItem>?> readItems() async {
-    if (!kIsWeb) {
+    if (!foundation.kIsWeb) {
       try {
         final file = await _localItemFile;
         final String content = await file.readAsString();
@@ -133,7 +141,7 @@ class TempStorage {
   }
 
   Future<void> writeItems(List<ShoppinglistItem> items) async {
-    if (!kIsWeb) {
+    if (!foundation.kIsWeb) {
       final file = await _localItemFile;
       await file.writeAsString(
         json.encode(items.map((e) => e.toJsonWithId()).toList()),
@@ -142,7 +150,7 @@ class TempStorage {
   }
 
   Future<void> clearItems() async {
-    if (!kIsWeb) {
+    if (!foundation.kIsWeb) {
       try {
         final file = await _localItemFile;
         if (await file.exists()) await file.delete();
@@ -151,7 +159,7 @@ class TempStorage {
   }
 
   Future<List<Recipe>?> readRecipes() async {
-    if (!kIsWeb) {
+    if (!foundation.kIsWeb) {
       try {
         final file = await _localRecipeFile;
         final String content = await file.readAsString();
@@ -166,7 +174,7 @@ class TempStorage {
   }
 
   Future<void> writeRecipes(List<Recipe> recipes) async {
-    if (!kIsWeb) {
+    if (!foundation.kIsWeb) {
       final file = await _localRecipeFile;
       await file.writeAsString(
         json.encode(recipes.map((e) => e.toJsonWithId()).toList()),
@@ -175,9 +183,42 @@ class TempStorage {
   }
 
   Future<void> clearRecipes() async {
-    if (!kIsWeb) {
+    if (!foundation.kIsWeb) {
       try {
         final file = await _localRecipeFile;
+        if (await file.exists()) await file.delete();
+      } catch (_) {}
+    }
+  }
+
+  Future<List<Category>?> readCategories() async {
+    if (!foundation.kIsWeb) {
+      try {
+        final file = await _localCategoryFile;
+        final String content = await file.readAsString();
+
+        return List<Category>.from(
+          json.decode(content).map((e) => Category.fromJson(e)),
+        );
+      } catch (_) {}
+    }
+
+    return null;
+  }
+
+  Future<void> writeCategories(List<Category> categories) async {
+    if (!foundation.kIsWeb) {
+      final file = await _localCategoryFile;
+      await file.writeAsString(
+        json.encode(categories.map((e) => e.toJsonWithId()).toList()),
+      );
+    }
+  }
+
+  Future<void> clearCategories() async {
+    if (!foundation.kIsWeb) {
+      try {
+        final file = await _localCategoryFile;
         if (await file.exists()) await file.delete();
       } catch (_) {}
     }

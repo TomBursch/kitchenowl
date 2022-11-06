@@ -12,8 +12,8 @@ class TransactionExpenseGetAll extends Transaction<List<Expense>> {
   }
 
   @override
-  Future<List<Expense>> runOnline() async {
-    return await ApiService.getInstance().getAllExpenses() ?? [];
+  Future<List<Expense>?> runOnline() async {
+    return await ApiService.getInstance().getAllExpenses();
   }
 }
 
@@ -29,8 +29,8 @@ class TransactionExpenseGet extends Transaction<Expense> {
   }
 
   @override
-  Future<Expense> runOnline() async {
-    return await ApiService.getInstance().getExpense(expense) ?? expense;
+  Future<Expense?> runOnline() async {
+    return await ApiService.getInstance().getExpense(expense);
   }
 }
 
@@ -84,7 +84,7 @@ class TransactionExpenseRemove extends Transaction<bool> {
   }
 
   @override
-  Future<bool> runOnline() {
+  Future<bool?> runOnline() {
     return ApiService.getInstance().deleteExpense(expense);
   }
 }
@@ -119,7 +119,7 @@ class TransactionExpenseUpdate extends Transaction<bool> {
   }
 
   @override
-  Future<bool> runOnline() {
+  Future<bool?> runOnline() {
     return ApiService.getInstance().updateExpense(expense);
   }
 }

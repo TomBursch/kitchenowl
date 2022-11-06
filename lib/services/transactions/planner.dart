@@ -21,8 +21,8 @@ class TransactionPlannerGetPlannedRecipes extends Transaction<List<Recipe>> {
   }
 
   @override
-  Future<List<Recipe>> runOnline() async {
-    return await ApiService.getInstance().getPlannedRecipes() ?? const [];
+  Future<List<Recipe>?> runOnline() async {
+    return await ApiService.getInstance().getPlannedRecipes();
   }
 }
 
@@ -36,12 +36,12 @@ class TransactionPlannerGetRecentPlannedRecipes
 
   @override
   Future<List<Recipe>> runLocal() async {
-    return [];
+    return const [];
   }
 
   @override
-  Future<List<Recipe>> runOnline() async {
-    return await ApiService.getInstance().getRecentPlannedRecipes() ?? const [];
+  Future<List<Recipe>?> runOnline() async {
+    return await ApiService.getInstance().getRecentPlannedRecipes();
   }
 }
 
@@ -58,8 +58,8 @@ class TransactionPlannerGetSuggestedRecipes extends Transaction<List<Recipe>> {
   }
 
   @override
-  Future<List<Recipe>> runOnline() async {
-    return await ApiService.getInstance().getSuggestedRecipes() ?? const [];
+  Future<List<Recipe>?> runOnline() async {
+    return await ApiService.getInstance().getSuggestedRecipes();
   }
 }
 
@@ -102,7 +102,7 @@ class TransactionPlannerAddRecipe extends Transaction<bool> {
   }
 
   @override
-  Future<bool> runOnline() {
+  Future<bool?> runOnline() {
     return ApiService.getInstance().addPlannedRecipe(recipe, day);
   }
 }
@@ -146,7 +146,7 @@ class TransactionPlannerRemoveRecipe extends Transaction<bool> {
   }
 
   @override
-  Future<bool> runOnline() {
+  Future<bool?> runOnline() {
     return ApiService.getInstance().removePlannedRecipe(recipe, day);
   }
 }
@@ -165,7 +165,7 @@ class TransactionPlannerRefreshSuggestedRecipes
   }
 
   @override
-  Future<List<Recipe>> runOnline() async {
-    return await ApiService.getInstance().refreshSuggestedRecipes() ?? const [];
+  Future<List<Recipe>?> runOnline() async {
+    return await ApiService.getInstance().refreshSuggestedRecipes();
   }
 }

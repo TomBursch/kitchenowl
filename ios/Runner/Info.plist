@@ -34,10 +34,12 @@
       	<string>de</string>
         <string>en</string>
         <string>es</string>
+		<string>fi</string>
         <string>fr</string>
         <string>it</string>
         <string>nb</string>
         <string>nl</string>
+		<string>pa</string>
 	</array>
 	<key>CFBundleName</key>
 	<string>kitchenowl</string>

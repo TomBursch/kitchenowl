@@ -1,3 +1,4 @@
+import re
 from app.errors import NotFoundRequest
 from app.models.recipe import RecipeItems, RecipeTags
 from flask import jsonify, Blueprint
@@ -174,7 +175,9 @@ def scrapeRecipe(args):
     except NotImplementedError:
         pass
     try:
-        recipe.yields = scraper.yields()
+        yields = re.search(r"\d*", scraper.yields())
+        if yields:
+            recipe.yields = int(yields.group())
     except NotImplementedError:
         pass
     description = ''

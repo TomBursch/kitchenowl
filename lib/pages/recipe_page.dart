@@ -70,7 +70,10 @@ class _RecipePageState extends State<RecipePage> {
                       onPressed: () =>
                           Navigator.of(context).pop(cubit.state.updateState),
                     ),
-                    expandedHeight: state.recipe.image.isNotEmpty ? 160 : null,
+                    expandedHeight: state.recipe.image.isNotEmpty
+                        ? (MediaQuery.of(context).size.height / 3.5)
+                            .clamp(160, 310)
+                        : null,
                     pinned: true,
                     actions: [
                       if (!App.isOffline)

@@ -58,7 +58,10 @@ class _ExpensePageState extends State<ExpensePage> {
                       title: state.expense.name,
                       imageUrl: state.expense.image,
                     ),
-                    expandedHeight: state.expense.image.isNotEmpty ? 160 : null,
+                    expandedHeight: state.expense.image.isNotEmpty
+                        ? (MediaQuery.of(context).size.height / 3.5)
+                            .clamp(160, 310)
+                        : null,
                     pinned: true,
                     leading: BackButton(
                       onPressed: () =>

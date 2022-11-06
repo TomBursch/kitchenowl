@@ -27,7 +27,7 @@ class StringItemMatch extends StatelessWidget {
     final int crossAxisCount = getValueForScreenType<int>(
       context: context,
       mobile: 2,
-      tablet: 3,
+      tablet: 4,
       desktop: 6,
     );
 

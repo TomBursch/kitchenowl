@@ -154,7 +154,7 @@ def getAllFiltered(args):
     return jsonify([e.obj_to_full_dict() for e in Recipe.all_by_name_with_filter(args["filter"])])
 
 
-@recipe.route('/scrape', methods=['GET'])
+@recipe.route('/scrape', methods=['GET', 'POST'])
 @jwt_required()
 @validate_args(ScrapeRecipe)
 def scrapeRecipe(args):

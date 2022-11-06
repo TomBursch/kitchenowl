@@ -16,8 +16,8 @@ class TransactionItemGet extends Transaction<Item> {
   }
 
   @override
-  Future<Item> runOnline() async {
-    return await ApiService.getInstance().getItem(item) ?? item;
+  Future<Item?> runOnline() async {
+    return await ApiService.getInstance().getItem(item);
   }
 }
 
@@ -33,7 +33,7 @@ class TransactionItemUpdate extends Transaction<bool> {
   }
 
   @override
-  Future<bool> runOnline() async {
+  Future<bool?> runOnline() async {
     return await ApiService.getInstance().updateItem(item);
   }
 }
@@ -60,7 +60,7 @@ class TransactionItemGetRecipes extends Transaction<List<Recipe>> {
   }
 
   @override
-  Future<List<Recipe>> runOnline() async {
-    return await ApiService.getInstance().getItemRecipes(item) ?? const [];
+  Future<List<Recipe>?> runOnline() async {
+    return await ApiService.getInstance().getItemRecipes(item);
   }
 }

@@ -48,7 +48,7 @@ class Item extends Model {
     ..addAll({
       "id": id,
       "ordering": ordering,
-      "category": category?.name,
+      "category": category?.toJsonWithId(),
     });
 }
 

@@ -13,17 +13,17 @@ class TransactionShoppingListGetItems
 
   @override
   Future<List<ShoppinglistItem>> runLocal() async {
-    return await TempStorage.getInstance().readItems() ?? const [];
+    return await TempStorage.getInstance().readItems() ?? [];
   }
 
   @override
-  Future<List<ShoppinglistItem>> runOnline() async {
+  Future<List<ShoppinglistItem>?> runOnline() async {
     final shoppinglist = await ApiService.getInstance().getItems();
     if (shoppinglist != null) {
       TempStorage.getInstance().writeItems(shoppinglist);
     }
 
-    return shoppinglist ?? const [];
+    return shoppinglist;
   }
 }
 
@@ -37,8 +37,7 @@ class TransactionShoppingListSearchItem extends Transaction<List<Item>> {
 
   @override
   Future<List<Item>> runLocal() async {
-    final shoppinglist =
-        await TempStorage.getInstance().readItems() ?? const [];
+    final shoppinglist = await TempStorage.getInstance().readItems() ?? [];
     shoppinglist
         .retainWhere((e) => e.name.toLowerCase().contains(query.toLowerCase()));
 
@@ -46,8 +45,8 @@ class TransactionShoppingListSearchItem extends Transaction<List<Item>> {
   }
 
   @override
-  Future<List<Item>> runOnline() async {
-    return await ApiService.getInstance().searchItem(query) ?? [];
+  Future<List<Item>?> runOnline() async {
+    return await ApiService.getInstance().searchItem(query);
   }
 }
 
@@ -61,12 +60,12 @@ class TransactionShoppingListGetRecentItems
 
   @override
   Future<List<ItemWithDescription>> runLocal() async {
-    return [];
+    return const [];
   }
 
   @override
-  Future<List<ItemWithDescription>> runOnline() async {
-    return await ApiService.getInstance().getRecentItems() ?? const [];
+  Future<List<ItemWithDescription>?> runOnline() async {
+    return await ApiService.getInstance().getRecentItems();
   }
 }
 
@@ -113,7 +112,7 @@ class TransactionShoppingListAddItem extends Transaction<bool> {
   }
 
   @override
-  Future<bool> runOnline() {
+  Future<bool?> runOnline() {
     return ApiService.getInstance().addItemByName(name, description);
   }
 }
@@ -155,7 +154,7 @@ class TransactionShoppingListDeleteItem extends Transaction<bool> {
   }
 
   @override
-  Future<bool> runOnline() {
+  Future<bool?> runOnline() {
     return ApiService.getInstance().removeItem(item);
   }
 }
@@ -212,7 +211,7 @@ class TransactionShoppingListUpdateItem extends Transaction<bool> {
   }
 
   @override
-  Future<bool> runOnline() async {
+  Future<bool?> runOnline() async {
     if (item is ShoppinglistItem) {
       return ApiService.getInstance()
           .updateShoppingListItemDescription(item, description);
@@ -273,7 +272,7 @@ class TransactionShoppingListAddRecipeItems extends Transaction<bool> {
   }
 
   @override
-  Future<bool> runOnline() {
+  Future<bool?> runOnline() {
     return ApiService.getInstance().addRecipeItems(items);
   }
 }

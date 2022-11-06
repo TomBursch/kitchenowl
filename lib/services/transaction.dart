@@ -25,7 +25,7 @@ abstract class Transaction<T> extends Model {
   final DateTime timestamp;
 
   Future<T> runLocal();
-  Future<T> runOnline();
+  Future<T?> runOnline();
 
   const Transaction.internal(this.timestamp, this.className);
 

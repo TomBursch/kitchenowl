@@ -22,6 +22,12 @@ class Category extends Model {
         "ordering": ordering,
       };
 
+  @override
+  Map<String, dynamic> toJsonWithId() => toJson()
+    ..addAll({
+      "id": id,
+    });
+
   Category copyWith({String? name, int? ordering}) => Category(
         id: id,
         name: name ?? this.name,

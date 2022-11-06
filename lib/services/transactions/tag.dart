@@ -12,7 +12,7 @@ class TransactionTagGetAll extends Transaction<Set<Tag>> {
   }
 
   @override
-  Future<Set<Tag>> runOnline() async {
-    return await ApiService.getInstance().getAllTags() ?? {};
+  Future<Set<Tag>?> runOnline() async {
+    return await ApiService.getInstance().getAllTags();
   }
 }

@@ -66,7 +66,7 @@ extension RecipeApi on ApiService {
   }
 
   Future<RecipeScrape?> scrapeRecipe(String url) async {
-    final res = await get('/recipe/scrape?url=$url');
+    final res = await post('/recipe/scrape', jsonEncode({'url': url}));
     if (res.statusCode != 200) return null;
 
     final body = jsonDecode(res.body);

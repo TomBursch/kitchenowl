@@ -19,7 +19,7 @@ abstract class Config {
 
   static Future<String?> get deviceName async {
     if (await deviceInfo == null) return null;
-    final map = (await deviceInfo)!.toMap();
+    final map = (await deviceInfo)!.data;
 
     return map['prettyName'] ?? // linux
         map['name'] ?? // ios

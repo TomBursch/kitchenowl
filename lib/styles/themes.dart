@@ -95,8 +95,8 @@ abstract class AppThemes {
       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          onPrimary: colorScheme.onSurfaceVariant,
-          primary: colorScheme.surfaceVariant,
+          foregroundColor: colorScheme.onSurfaceVariant,
+          backgroundColor: colorScheme.surfaceVariant,
           elevation: 0,
         ),
       ),

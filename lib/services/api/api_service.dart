@@ -112,19 +112,16 @@ class ApiService {
     url += _API_PATH;
     _instance = ApiService._internal(url);
     _instance!.refreshToken = refreshToken ?? '';
-    print("connect");
     await _instance!.refresh();
   }
 
   Future<void> refresh() {
-    print("refresh triggered");
     _refreshThread ??= _refresh();
 
     return _refreshThread!;
   }
 
   Future<void> _refresh() async {
-    print("refresh started");
     Connection status = Connection.disconnected;
     if (baseUrl.isNotEmpty) {
       final healthy = await getInstance().healthy();

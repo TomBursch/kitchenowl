@@ -8,7 +8,6 @@ import 'package:kitchenowl/cubits/settings_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/models/recipe.dart';
-import 'package:kitchenowl/pages/photo_view_page.dart';
 import 'package:kitchenowl/pages/recipe_add_update_page.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/widgets/recipe_source_chip.dart';

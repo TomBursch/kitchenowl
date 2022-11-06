@@ -40,7 +40,7 @@ dependencies:
   equatable: ^2.0.5
   url_launcher: ^6.1.6
   package_info_plus: ^3.0.1
-  device_info_plus: ^7.0.1
+  device_info_plus: ^8.0.0
   http: ^0.13.5
 
   # reorderables: ^0.3.2
@@ -50,7 +50,7 @@ dependencies:
   dynamic_color: ^1.5.4
 
   azlistview: ^2.0.0
-  flutter_markdown: ^0.6.12
+  flutter_markdown: ^0.6.13
   tuple: ^2.0.1
   charts_flutter: ^0.12.0
   cached_network_image: ^3.2.2
@@ -58,14 +58,14 @@ dependencies:
   file_picker: ^5.2.2
   photo_view: ^0.14.0
   share_handler: ^0.0.16
-  reorderables: ^0.5.0
+  reorderables: ^0.5.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_launcher_icons: ^0.10.0
   flutter_lints: ^2.0.1
-  dart_code_metrics: ^4.21.3
+  dart_code_metrics: ^5.0.1
 
 # The following section is specific to Flutter.
 flutter:

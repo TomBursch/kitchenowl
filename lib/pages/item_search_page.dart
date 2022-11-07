@@ -60,6 +60,7 @@ class _ItemSearchPageState extends State<ItemSearchPage> {
                 controller: searchController,
                 onSearch: cubit.search,
                 autofocus: true,
+                alwaysExpanded: true,
                 textInputAction: TextInputAction.done,
                 onSubmitted: () {
                   if (cubit.state.selectedItems

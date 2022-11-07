@@ -6,6 +6,7 @@ from flask_jwt_extended import jwt_required
 from app.helpers import validate_args
 from app.models import Recipe, Item, Tag
 from recipe_scrapers import scrape_me
+from recipe_scrapers._exceptions import SchemaOrgException
 from .schemas import SearchByNameRequest, AddRecipe, UpdateRecipe, GetAllFilterRequest, ScrapeRecipe
 
 recipe = Blueprint('recipe', __name__)
@@ -164,28 +165,32 @@ def scrapeRecipe(args):
     recipe.name = scraper.title()
     try:
         recipe.time = int(scraper.total_time())
-    except NotImplementedError:
+    except (NotImplementedError, ValueError, SchemaOrgException):
         pass
     try:
         recipe.cook_time = int(scraper.cook_time())
-    except NotImplementedError:
+    except (NotImplementedError, ValueError, SchemaOrgException):
         pass
     try:
         recipe.prep_time = int(scraper.prep_time())
-    except NotImplementedError:
+    except (NotImplementedError, ValueError, SchemaOrgException):
         pass
     try:
         yields = re.search(r"\d*", scraper.yields())
         if yields:
             recipe.yields = int(yields.group())
-    except NotImplementedError:
+    except (NotImplementedError, ValueError, SchemaOrgException):
         pass
     description = ''
     try:
         description = scraper.description() + "\n\n"
-    except NotImplementedError:
+    except (NotImplementedError, ValueError, SchemaOrgException):
         pass
-    recipe.description = description + scraper.instructions()
+    try:
+        description = description + scraper.instructions()
+    except (NotImplementedError, ValueError, SchemaOrgException):
+        pass
+    recipe.description = description
     recipe.photo = scraper.image()
     recipe.source = args['url']
     items = {}

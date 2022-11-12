@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher_string.dart';
+import 'package:kitchenowl/helpers/url_launcher.dart';
 
 class RecipeSourceChip extends StatefulWidget {
   final String source;
+
   const RecipeSourceChip({Key? key, required this.source}) : super(key: key);
 
   @override
@@ -10,12 +11,12 @@ class RecipeSourceChip extends StatefulWidget {
 }
 
 class _RecipeSourceChipState extends State<RecipeSourceChip> {
-  late Future<bool> canLaunchUrl;
+  Future<bool> canLaunchUrl = Future.value(true);
 
   @override
   void initState() {
     super.initState();
-    canLaunchUrl = canLaunchUrlString(widget.source);
+    canLaunchUrl = isValidUrl(widget.source);
   }
 
   @override
@@ -44,13 +45,7 @@ class _RecipeSourceChipState extends State<RecipeSourceChip> {
                   backgroundColor: Theme.of(context).colorScheme.primary,
                   elevation: 3,
                   onPressed: () async {
-                    if (await canLaunchUrlString(
-                      widget.source,
-                    )) {
-                      await launchUrlString(
-                        widget.source,
-                      );
-                    }
+                    await openUrl(context, widget.source);
                   },
                 )
               : Chip(

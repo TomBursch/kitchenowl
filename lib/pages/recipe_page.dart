@@ -6,13 +6,13 @@ import 'package:kitchenowl/app.dart';
 import 'package:kitchenowl/cubits/recipe_cubit.dart';
 import 'package:kitchenowl/cubits/settings_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
+import 'package:kitchenowl/helpers/url_launcher.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/models/recipe.dart';
 import 'package:kitchenowl/pages/recipe_add_update_page.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/widgets/recipe_source_chip.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 
 class RecipePage extends StatefulWidget {
   final Recipe recipe;
@@ -170,9 +170,8 @@ class _RecipePageState extends State<RecipePage> {
                                   const Icon(Icons.error),
                             ),
                             onTapLink: (text, href, title) async {
-                              if (href != null &&
-                                  await canLaunchUrlString(href)) {
-                                await launchUrlString(href);
+                              if (href != null && await isValidUrl(href)) {
+                                await openUrl(context, href);
                               }
                             },
                           ),

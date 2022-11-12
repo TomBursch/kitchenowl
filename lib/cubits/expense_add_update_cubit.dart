@@ -1,7 +1,6 @@
-import 'dart:io';
-
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kitchenowl/helpers/named_bytearray.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/expense.dart';
 import 'package:kitchenowl/models/user.dart';
@@ -28,11 +27,7 @@ class AddUpdateExpenseCubit extends Cubit<AddUpdateExpenseState> {
       final amount = _state.amount * (_state.isIncome ? -1 : 1);
       String? image;
       if (_state.image != null) {
-        if (_state.image!.path.isEmpty) {
-          image = '';
-        } else if (await _state.image!.exists()) {
-          image = await ApiService.getInstance().uploadFile(_state.image!);
-        }
+        image = _state.image!.isEmpty ? '' : await ApiService.getInstance().uploadBytes(_state.image!);
       }
       if (expense.id == null) {
         await ApiService.getInstance().addExpense(Expense(
@@ -76,7 +71,7 @@ class AddUpdateExpenseCubit extends Cubit<AddUpdateExpenseState> {
     emit(state.copyWith(isIncome: isIncome));
   }
 
-  void setImage(File image) {
+  void setImage(NamedByteArray image) {
     emit(state.copyWith(image: image));
   }
 
@@ -145,7 +140,7 @@ class AddUpdateExpenseState extends Equatable {
   final String name;
   final double amount;
   final bool isIncome;
-  final File? image;
+  final NamedByteArray? image;
   final int paidBy;
   final List<PaidForModel> paidFor;
   final String? category;
@@ -167,7 +162,7 @@ class AddUpdateExpenseState extends Equatable {
     double? amount,
     int? paidBy,
     bool? isIncome,
-    File? image,
+    NamedByteArray? image,
     List<PaidForModel>? paidFor,
     String? category,
     List<String>? categories,

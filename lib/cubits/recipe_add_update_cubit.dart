@@ -37,7 +37,9 @@ class AddUpdateRecipeCubit extends Cubit<AddUpdateRecipeState> {
     if (state.isValid()) {
       String? image;
       if (_state.image != null) {
-        image = _state.image!.isEmpty ? '' : await ApiService.getInstance().uploadBytes(_state.image!);
+        image = _state.image!.isEmpty
+            ? ''
+            : await ApiService.getInstance().uploadBytes(_state.image!);
       }
       if (recipe.id == null) {
         await ApiService.getInstance().addRecipe(Recipe(

@@ -52,15 +52,16 @@ class ImageSelector extends StatelessWidget {
     );
   }
 
-  bool hasDominantImage()  {
+  bool hasDominantImage() {
     if (image != null && image!.isNotEmpty) {
       return true;
-    } else if (originalImage.isNotEmpty) {
+    } else if (image == null && originalImage.isNotEmpty) {
       return true;
     } else {
       return false;
     }
   }
+
   ImageProvider<Object>? getDominantImage(BuildContext context) {
     if (image != null && image!.isNotEmpty) {
       return MemoryImage(image!.bytes);

@@ -27,7 +27,9 @@ class AddUpdateExpenseCubit extends Cubit<AddUpdateExpenseState> {
       final amount = _state.amount * (_state.isIncome ? -1 : 1);
       String? image;
       if (_state.image != null) {
-        image = _state.image!.isEmpty ? '' : await ApiService.getInstance().uploadBytes(_state.image!);
+        image = _state.image!.isEmpty
+            ? ''
+            : await ApiService.getInstance().uploadBytes(_state.image!);
       }
       if (expense.id == null) {
         await ApiService.getInstance().addExpense(Expense(

@@ -4,10 +4,11 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:kitchenowl/helpers/named_bytearray.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 
 // ignore: long-method
-Future<File?> selectFile({
+Future<NamedByteArray?> selectFile({
   required BuildContext context,
   required String title,
   bool deleteOption = false,
@@ -41,7 +42,7 @@ Future<File?> selectFile({
       ),
     );
     if (i == null) return null;
-    if (i == -1) return File('');
+    if (i == -1) return NamedByteArray.empty;
     XFile? result = await picker.pickImage(
       source: ImageSource.values[i],
       imageQuality: 90,
@@ -49,7 +50,7 @@ Future<File?> selectFile({
       maxWidth: 2048,
     );
     if (result != null) {
-      return File(result.path);
+      return NamedByteArray(result.name, await result.readAsBytes());
     }
   } else {
     if (deleteOption) {
@@ -73,14 +74,15 @@ Future<File?> selectFile({
         ),
       );
       if (i == null) return null;
-      if (i == -1) return File('');
+      if (i == -1) return NamedByteArray.empty;
     }
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
+      withData: true,
       allowedExtensions: ['jpg', 'jpeg', 'png', 'gif'],
     );
-    if (result != null && result.files.first.path != null) {
-      return File(result.files.first.path!);
+    if (result != null && result.files.first.name.isNotEmpty) {
+      return NamedByteArray(result.files.first.name, result.files.first.bytes!);
     }
   }
 

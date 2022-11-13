@@ -1,12 +1,12 @@
 import 'dart:convert';
-import 'dart:io';
+import 'package:kitchenowl/helpers/named_bytearray.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
 
 extension UploadApi on ApiService {
   static const baseRoute = '/upload';
 
-  Future<String?> uploadFile(File file) async {
-    final res = await postFile(baseRoute, file);
+  Future<String?> uploadBytes(NamedByteArray file) async {
+    final res = await postBytes(baseRoute, file);
     if (res.statusCode != 200) return null;
     final body = jsonDecode(res.body);
 

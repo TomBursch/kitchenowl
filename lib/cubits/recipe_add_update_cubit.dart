@@ -1,7 +1,6 @@
-import 'dart:io';
-
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kitchenowl/helpers/named_bytearray.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/models/recipe.dart';
 import 'package:kitchenowl/models/tag.dart';
@@ -38,11 +37,7 @@ class AddUpdateRecipeCubit extends Cubit<AddUpdateRecipeState> {
     if (state.isValid()) {
       String? image;
       if (_state.image != null) {
-        if (_state.image!.path.isEmpty) {
-          image = '';
-        } else if (await _state.image!.exists()) {
-          image = await ApiService.getInstance().uploadFile(_state.image!);
-        }
+        image = _state.image!.isEmpty ? '' : await ApiService.getInstance().uploadBytes(_state.image!);
       }
       if (recipe.id == null) {
         await ApiService.getInstance().addRecipe(Recipe(
@@ -84,7 +79,7 @@ class AddUpdateRecipeCubit extends Cubit<AddUpdateRecipeState> {
     emit(state.copyWith(name: name));
   }
 
-  void setImage(File image) {
+  void setImage(NamedByteArray image) {
     emit(state.copyWith(image: image));
   }
 
@@ -188,7 +183,7 @@ class AddUpdateRecipeState extends Equatable {
   final int prepTime;
   final int yields;
   final String source;
-  final File? image;
+  final NamedByteArray? image;
   final List<RecipeItem> items;
   final Set<Tag> tags;
   final Set<Tag> selectedTags;
@@ -215,7 +210,7 @@ class AddUpdateRecipeState extends Equatable {
     int? prepTime,
     int? yields,
     String? source,
-    File? image,
+    NamedByteArray? image,
     List<RecipeItem>? items,
     Set<Tag>? tags,
     Set<Tag>? selectedTags,

@@ -1,8 +1,8 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:kitchenowl/config.dart';
+import 'package:kitchenowl/helpers/named_bytearray.dart';
 import 'package:kitchenowl/models/server_settings.dart';
 import 'package:kitchenowl/models/token.dart';
 import 'package:tuple/tuple.dart';
@@ -31,10 +31,13 @@ enum Connection {
 class ApiService {
   // ignore: constant_identifier_names
   static const Duration _TIMEOUT = Duration(seconds: 4);
+
   // ignore: constant_identifier_names
   static const Duration _TIMEOUT_FILE_UPLOAD = Duration(seconds: 10);
+
   // ignore: constant_identifier_names
   static const Duration _TIMEOUT_ONBOARDING = Duration(minutes: 10);
+
   // ignore: constant_identifier_names
   static const String _API_PATH = "/api";
 
@@ -171,7 +174,7 @@ class ApiService {
         ),
       );
 
-  Future<http.Response> postFile(String url, File file) => _handleRequest(
+  Future<http.Response> postBytes(String url, NamedByteArray array) => _handleRequest(
         timeout: _TIMEOUT_FILE_UPLOAD,
         () async {
           final request =
@@ -179,9 +182,9 @@ class ApiService {
           request.headers.addAll(headers);
           request.files.add(http.MultipartFile(
             'file',
-            file.readAsBytes().asStream(),
-            file.lengthSync(),
-            filename: file.uri.pathSegments.last,
+            Stream.fromIterable([array.bytes]),
+            array.bytes.lengthInBytes,
+            filename: array.filename,
           ));
 
           return http.Response.fromStream(await _client.send(request));

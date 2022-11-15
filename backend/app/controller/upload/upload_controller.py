@@ -1,9 +1,12 @@
-from app.config import ALLOWED_FILE_EXTENSIONS, UPLOAD_FOLDER
+import os
+import uuid
+
 from flask import jsonify, Blueprint, send_from_directory, request
 from flask_jwt_extended import jwt_required
 from werkzeug.utils import secure_filename
-import os
-import uuid
+
+from app.config import UPLOAD_FOLDER
+from app.util.filename_validator import allowed_file
 
 upload = Blueprint('upload', __name__)
 
@@ -33,8 +36,3 @@ def upload_file():
 @jwt_required()
 def download_file(name):
     return send_from_directory(UPLOAD_FOLDER, name)
-
-
-def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_FILE_EXTENSIONS

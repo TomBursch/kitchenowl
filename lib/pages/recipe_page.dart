@@ -169,9 +169,9 @@ class _RecipePageState extends State<RecipePage> {
                               errorWidget: (context, url, error) =>
                                   const Icon(Icons.error),
                             ),
-                            onTapLink: (text, href, title) async {
-                              if (href != null && await isValidUrl(href)) {
-                                await openUrl(context, href);
+                            onTapLink: (text, href, title) {
+                              if (href != null && isValidUrl(href)) {
+                                openUrl(context, href);
                               }
                             },
                           ),

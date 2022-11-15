@@ -6,6 +6,8 @@ import 'package:url_launcher/url_launcher.dart' as ul;
 import 'package:flutter_custom_tabs/flutter_custom_tabs.dart';
 
 Future<void> openUrl(BuildContext context, String url) async {
+  if (!isValidUrl(url)) return;
+
   return (!kIsWeb && (Platform.isAndroid || Platform.isIOS))
       ? await launch(
           url,
@@ -28,7 +30,7 @@ Future<void> openUrl(BuildContext context, String url) async {
       : await ul.launchUrl(Uri.parse(url));
 }
 
-Future<bool> isValidUrl(String url) async {
+bool isValidUrl(String url) {
   try {
     var uri = Uri.parse(url);
 

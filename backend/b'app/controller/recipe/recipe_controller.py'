@@ -1,4 +1,10 @@
+import os
 import re
+import uuid
+
+import requests
+from app.util.filename_validator import allowed_file
+from app.config import UPLOAD_FOLDER
 from app.errors import NotFoundRequest
 from app.models.recipe import RecipeItems, RecipeTags
 from flask import jsonify, Blueprint
@@ -7,6 +13,7 @@ from app.helpers import validate_args
 from app.models import Recipe, Item, Tag
 from recipe_scrapers import scrape_me
 from recipe_scrapers._exceptions import SchemaOrgException
+from werkzeug.utils import secure_filename
 from .schemas import SearchByNameRequest, AddRecipe, UpdateRecipe, GetAllFilterRequest, ScrapeRecipe
 
 recipe = Blueprint('recipe', __name__)
@@ -45,7 +52,7 @@ def addRecipe(args):
     if 'source' in args:
         recipe.source = args['source']
     if 'photo' in args:
-        recipe.photo = args['photo']
+        recipe.photo = upload_file_if_needed(args['photo'])
     recipe.save()
     if 'items' in args:
         for recipeItem in args['items']:
@@ -93,7 +100,7 @@ def updateRecipe(args, id):  # noqa: C901
     if 'source' in args:
         recipe.source = args['source']
     if 'photo' in args:
-        recipe.photo = args['photo']
+        recipe.photo = upload_file_if_needed(args['photo'])
     recipe.save()
     if 'items' in args:
         for con in recipe.items:
@@ -157,7 +164,6 @@ def getAllFiltered(args):
 
 
 @recipe.route('/scrape', methods=['GET', 'POST'])
-@jwt_required()
 @validate_args(ScrapeRecipe)
 def scrapeRecipe(args):
     scraper = scrape_me(args['url'], wild_mode=True)
@@ -202,36 +208,16 @@ def scrapeRecipe(args):
     })
 
 
-# @recipe.route('/<id>/item', methods=['POST'])
-# @jwt_required()
-# @validate_args(AddItemByName)
-# def addRecipeItemByName(args, id):
-#     recipe = Recipe.find_by_id(id)
-#     if not recipe:
-#         return jsonify(), 404
-#     item = Item.find_by_name(args['name'])
-#     if not item:
-#         item = Item.create_by_name(args['name'])
-
-#     description = args['description'] if 'description' in args else ''
-#     con = RecipeItems(description=description)
-#     con.item = item
-#     recipe.items.append(con)
-#     recipe.save()
-#     return jsonify(item.obj_to_dict())
-
-
-# @recipe.route('/<id>/item', methods=['DELETE'])
-# @jwt_required()
-# @validate_args(RemoveItem)
-# def removeRecipeItem(args, id):
-#     recipe = Recipe.find_by_id(id)
-#     if not recipe:
-#         return jsonify(), 404
-#     item = Item.find_by_id(args['item_id'])
-#     if not item:
-#         item = Item.create_by_name(args['name'])
-
-#     con = RecipeItems.find_by_ids(id, args['item_id'])
-#     con.delete()
-#     return jsonify({'msg': "DONE"})
+def upload_file_if_needed(url: str):
+    if url is not None and '/' in url:
+        from mimetypes import guess_extension
+        resp = requests.get(url)
+        ext = guess_extension(resp.headers['content-type'])
+        if allowed_file('file' + ext):
+            filename = secure_filename(str(uuid.uuid4()) + '.' + ext)
+            with open(os.path.join(UPLOAD_FOLDER, filename), "wb") as o:
+                o.write(resp.content)
+            return filename
+    elif url is not None:
+        return url
+    return None

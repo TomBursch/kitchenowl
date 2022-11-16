@@ -1,6 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kitchenowl/enums/shoppinglist_sorting.dart';
 import 'package:kitchenowl/models/category.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/services/storage/storage.dart';
@@ -8,12 +9,11 @@ import 'package:kitchenowl/services/transactions/category.dart';
 import 'package:kitchenowl/services/transactions/shoppinglist.dart';
 import 'package:kitchenowl/services/transaction_handler.dart';
 
-enum ShoppinglistSorting { alphabetical, algorithmic, category }
-
 enum ShoppinglistStyle { grid, list }
 
 class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
   Future<void>? _refreshThread;
+  int refreshThreadCount = 0;
   String? _refreshCurrentQuery;
 
   String get query => (state is SearchShoppinglistCubitState)
@@ -66,8 +66,8 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
   }
 
   void setSorting(ShoppinglistSorting sorting, [bool savePreference = true]) {
-    if (state is! SearchShoppinglistCubitState && state.listItems == const []) {
-      _sortShoppinglistItems(state.listItems, sorting);
+    if (state is! SearchShoppinglistCubitState && state.listItems != const []) {
+      ShoppinglistSorting.sortShoppinglistItems(state.listItems, sorting);
     }
     if (savePreference) {
       PreferenceStorage.getInstance()
@@ -87,10 +87,12 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
     }
     if (_refreshThread != null && query != _refreshCurrentQuery) {
       _refreshCurrentQuery = query;
+      refreshThreadCount++;
       _refreshThread = _refresh(query);
     }
     if (forceRefresh || _refreshThread == null) {
       _refreshCurrentQuery = query;
+      refreshThreadCount++;
       _refreshThread = _refresh(query);
     }
 
@@ -100,17 +102,17 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
   // ignore: long-method
   Future<void> _refresh([String? query]) async {
     // Get required information
-    final _state = state;
     late ShoppinglistCubitState resState;
-    if (_state.recentItems.isEmpty &&
-        _state.listItems.isEmpty &&
+    if (state.recentItems.isEmpty &&
+        state.listItems.isEmpty &&
         (query == null || query.isEmpty)) {
       emit(const LoadingShoppinglistCubitState());
     }
 
     Future<List<ShoppinglistItem>> shoppinglist =
-        TransactionHandler.getInstance()
-            .runTransaction(TransactionShoppingListGetItems());
+        TransactionHandler.getInstance().runTransaction(
+      TransactionShoppingListGetItems(sorting: state.sorting),
+    );
 
     Future<List<Category>> categories = TransactionHandler.getInstance()
         .runTransaction(TransactionCategoriesGet());
@@ -152,19 +154,10 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
         query: query,
         listItems: loadedShoppinglist,
         categories: await categories,
-        style: _state.style,
+        style: state.style,
         sorting: state.sorting,
       );
     } else {
-      // Sort if needed
-      shoppinglist = shoppinglist.then((shoppinglist) {
-        if (state.sorting != ShoppinglistSorting.alphabetical) {
-          _sortShoppinglistItems(shoppinglist, state.sorting);
-        }
-
-        return shoppinglist;
-      });
-
       final recent = TransactionHandler.getInstance()
           .runTransaction(TransactionShoppingListGetRecentItems());
       resState = ShoppinglistCubitState(
@@ -172,13 +165,14 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
         recentItems: await recent,
         categories: await categories,
         sorting: state.sorting,
-        style: _state.style,
+        style: state.style,
       );
     }
-    if (query == _refreshCurrentQuery) {
+    if (query == _refreshCurrentQuery && refreshThreadCount == 1) {
       emit(resState);
       _refreshThread = null;
     }
+    refreshThreadCount--;
   }
 
   void _mergeShoppinglistItems(
@@ -193,41 +187,6 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
         items.removeAt(i);
         items.insert(i, shoppinglistItem);
       }
-    }
-  }
-
-  void _sortShoppinglistItems(
-    List<ShoppinglistItem> shoppinglist,
-    ShoppinglistSorting sorting,
-  ) {
-    if (shoppinglist.isEmpty) return;
-    switch (sorting) {
-      case ShoppinglistSorting.alphabetical:
-        shoppinglist.sort((a, b) => a.name.compareTo(b.name));
-        break;
-      case ShoppinglistSorting.algorithmic:
-        shoppinglist.sort((a, b) {
-          final int ordering = a.ordering.compareTo(b.ordering);
-          // Ordering of 0 means not sortable and should be at the back
-          if (ordering != 0 && a.ordering == 0) return 1;
-          if (ordering != 0 && b.ordering == 0) return -1;
-
-          return ordering;
-        });
-        break;
-      case ShoppinglistSorting.category:
-        shoppinglist.sort((a, b) {
-          if (b.category == null) return a.name.compareTo(b.name);
-          int ordering =
-              a.category?.ordering.compareTo(b.category!.ordering) ?? 0;
-          if (ordering == 0) {
-            ordering = a.category?.name.compareTo(b.category!.name) ?? 0;
-          }
-          if (ordering == 0) return a.name.compareTo(b.name);
-
-          return ordering;
-        });
-        break;
     }
   }
 }

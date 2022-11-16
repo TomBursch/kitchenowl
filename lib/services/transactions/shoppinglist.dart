@@ -1,3 +1,4 @@
+import 'package:kitchenowl/enums/shoppinglist_sorting.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/services/transaction.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
@@ -5,7 +6,9 @@ import 'package:kitchenowl/services/storage/temp_storage.dart';
 
 class TransactionShoppingListGetItems
     extends Transaction<List<ShoppinglistItem>> {
-  TransactionShoppingListGetItems({DateTime? timestamp})
+  final ShoppinglistSorting sorting;
+
+  TransactionShoppingListGetItems({DateTime? timestamp, required this.sorting})
       : super.internal(
           timestamp ?? DateTime.now(),
           "TransactionShoppingListGetItems",
@@ -13,12 +16,15 @@ class TransactionShoppingListGetItems
 
   @override
   Future<List<ShoppinglistItem>> runLocal() async {
-    return await TempStorage.getInstance().readItems() ?? [];
+    final l = await TempStorage.getInstance().readItems() ?? [];
+    ShoppinglistSorting.sortShoppinglistItems(l, sorting);
+
+    return l;
   }
 
   @override
   Future<List<ShoppinglistItem>?> runOnline() async {
-    final shoppinglist = await ApiService.getInstance().getItems();
+    final shoppinglist = await ApiService.getInstance().getItems(sorting);
     if (shoppinglist != null) {
       TempStorage.getInstance().writeItems(shoppinglist);
     }

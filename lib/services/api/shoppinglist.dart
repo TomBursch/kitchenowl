@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:kitchenowl/enums/shoppinglist_sorting.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
 
@@ -15,8 +16,10 @@ extension ShoppinglistApi on ApiService {
     return ShoppinglistItem.fromJson(body);
   }
 
-  Future<List<ShoppinglistItem>?> getItems() async {
-    final res = await get('$baseRoute/items');
+  Future<List<ShoppinglistItem>?> getItems([
+    ShoppinglistSorting sorting = ShoppinglistSorting.alphabetical,
+  ]) async {
+    final res = await get('$baseRoute/items?orderby=${sorting.index}');
     if (res.statusCode != 200) return null;
 
     final body = List.from(jsonDecode(res.body));

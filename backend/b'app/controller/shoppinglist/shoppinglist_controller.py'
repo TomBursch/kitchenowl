@@ -4,7 +4,7 @@ from app import db
 from app.models import Item, Shoppinglist, History, Status, Association, ShoppinglistItems
 from app.helpers import validate_args
 from .schemas import (RemoveItem, UpdateDescription,
-                      AddItemByName, CreateList, AddRecipeItems)
+                      AddItemByName, CreateList, AddRecipeItems, GetItems)
 from app.errors import NotFoundRequest
 from datetime import datetime, timedelta
 
@@ -46,11 +46,18 @@ def updateItemDescription(args, id, item_id):
 
 @shoppinglist.route('/<id>/items', methods=['GET'])
 @jwt_required()
-def getAllShoppingListItems(id):
+@validate_args(GetItems)
+def getAllShoppingListItems(args, id):
+    orderby = [Item.name]
+    if ('orderby' in args):
+        if (args['orderby'] == 1):
+            orderby = [Item.ordering==0, Item.ordering]
+        elif (args['orderby'] == 2):
+            orderby = [Item.name]
+
     items = ShoppinglistItems.query.filter(
         ShoppinglistItems.shoppinglist_id == id).join(
-        ShoppinglistItems.item).order_by(
-        Item.name).all()
+        ShoppinglistItems.item).order_by(*orderby, Item.name).all()
     return jsonify([e.obj_to_item_dict() for e in items])
 
 

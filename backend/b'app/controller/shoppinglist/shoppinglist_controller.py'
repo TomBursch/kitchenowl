@@ -6,7 +6,7 @@ from app.helpers import validate_args
 from .schemas import (RemoveItem, UpdateDescription,
                       AddItemByName, CreateList, AddRecipeItems, GetItems)
 from app.errors import NotFoundRequest
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 
 shoppinglist = Blueprint('shoppinglist', __name__)
@@ -163,7 +163,12 @@ def removeShoppinglistItem(args, id):
     description = con.description
     con.delete()
 
-    History.create_dropped(shoppinglist, item, description)
+    removed_at = None
+    if 'removed_at' in args:
+        removed_at = datetime.fromtimestamp(args['removed_at']/1000, timezone.utc)
+        print(removed_at)
+
+    History.create_dropped(shoppinglist, item, description, removed_at)
 
     return jsonify({'msg': "DONE"})
 

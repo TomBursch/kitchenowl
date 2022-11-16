@@ -50,6 +50,7 @@ class RemoveItem(Schema):
     item_id = fields.Integer(
         required=True,
     )
+    removed_at = fields.Integer()
 
     # def validate_id(self, args):
     #     if not ShoppinglistItem.find_by_id(args['id'], args['item_id']):

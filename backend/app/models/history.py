@@ -1,3 +1,4 @@
+from datetime import datetime
 from app import db
 from app.helpers import DbModelMixin, TimestampMixin
 from .shoppinglist import ShoppinglistItems
@@ -35,12 +36,13 @@ class History(db.Model, DbModelMixin, TimestampMixin):
         ).save()
 
     @classmethod
-    def create_dropped(cls, shoppinglist, item, description=''):
+    def create_dropped(cls, shoppinglist, item, description='', created_at=None):
         return cls(
             shoppinglist_id=shoppinglist.id,
             item_id=item.id,
             status=Status.DROPPED,
-            description=description
+            description=description,
+            created_at=created_at or datetime.utcnow
         ).save()
 
     def obj_to_item_dict(self):

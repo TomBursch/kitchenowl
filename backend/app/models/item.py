@@ -71,7 +71,7 @@ class Item(db.Model, DbModelMixin, TimestampMixin):
 
     @classmethod
     def search_name(cls, name: str):
-        item_count = 9
+        item_count = 11
         found = []
 
         # name is a regex

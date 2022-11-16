@@ -174,17 +174,17 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                       primary: true,
                       slivers: [
                         SliverOptionsHeader(
-                          left: HeaderButton(
-                            text: state.style == ShoppinglistStyle.grid
-                                ? AppLocalizations.of(context)!.grid
-                                : AppLocalizations.of(context)!.list,
-                            icon: Icon(
-                              state.style == ShoppinglistStyle.grid
-                                  ? Icons.grid_view_rounded
-                                  : Icons.view_list_rounded,
-                            ),
-                            onPressed: cubit.incrementStyle,
-                          ),
+                          // left: HeaderButton(
+                          //   text: state.style == ShoppinglistStyle.grid
+                          //       ? AppLocalizations.of(context)!.grid
+                          //       : AppLocalizations.of(context)!.list,
+                          //   icon: Icon(
+                          //     state.style == ShoppinglistStyle.grid
+                          //         ? Icons.grid_view_rounded
+                          //         : Icons.view_list_rounded,
+                          //   ),
+                          //   onPressed: cubit.incrementStyle,
+                          // ),
                           right: HeaderButton(
                             text: state.sorting ==
                                     ShoppinglistSorting.alphabetical

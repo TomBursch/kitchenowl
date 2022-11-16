@@ -24,6 +24,10 @@ class SliverServerCategorySettings extends StatelessWidget {
         return ReorderableSliverList(
           onReorder:
               BlocProvider.of<SettingsServerCubit>(context).reorderCategory,
+          buildDraggableFeedback: (_, c, w) => ConstrainedBox(
+            constraints: c,
+            child: w,
+          ),
           delegate: ReorderableSliverChildBuilderDelegate(
             childCount: state.categories.length,
             (context, i) => DismissibleCard(

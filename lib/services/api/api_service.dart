@@ -174,7 +174,8 @@ class ApiService {
         ),
       );
 
-  Future<http.Response> postBytes(String url, NamedByteArray array) => _handleRequest(
+  Future<http.Response> postBytes(String url, NamedByteArray array) =>
+      _handleRequest(
         timeout: _TIMEOUT_FILE_UPLOAD,
         () async {
           final request =

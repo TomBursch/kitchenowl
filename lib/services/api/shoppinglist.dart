@@ -63,10 +63,13 @@ extension ShoppinglistApi on ApiService {
     return res.statusCode == 200;
   }
 
-  Future<bool> removeItem(ShoppinglistItem item) async {
+  Future<bool> removeItem(ShoppinglistItem item, [DateTime? time]) async {
     final res = await delete(
       '$baseRoute/item',
-      body: jsonEncode({'item_id': item.id}),
+      body: jsonEncode({
+        'item_id': item.id,
+        if (time != null) 'removed_at': time.toUtc().millisecondsSinceEpoch,
+      }),
     );
 
     return res.statusCode == 200;

@@ -57,8 +57,9 @@ class SliverServerUserSettings extends StatelessWidget {
                       ? ' (${AppLocalizations.of(context)!.you})'
                       : '')),
               trailing: state.users[i].hasAdminRights()
-                  ? const Icon(
+                  ? Icon(
                       Icons.admin_panel_settings_rounded,
+                      color: state.users[i].owner ? Colors.redAccent : null,
                     )
                   : null,
               onTap: () async {

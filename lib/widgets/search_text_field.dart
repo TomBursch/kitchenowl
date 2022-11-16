@@ -92,7 +92,7 @@ class _SearchTextFieldState extends State<SearchTextField> {
             ? MediaQuery.of(context).size.width
             : getValueForScreenType(
                 context: context,
-                mobile: double.infinity,
+                mobile: MediaQuery.of(context).size.width,
                 tablet: 450,
                 desktop: 550,
               ),

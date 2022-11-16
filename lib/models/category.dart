@@ -10,7 +10,7 @@ class Category extends Model {
   factory Category.fromJson(Map<String, dynamic> map) => Category(
         id: map['id'],
         name: map['name'] ?? "",
-        ordering: map['ordering'] ?? 0,
+        ordering: map['ordering'] ?? -1,
       );
 
   @override

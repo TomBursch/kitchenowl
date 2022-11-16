@@ -53,6 +53,15 @@ class TransactionStorage {
     }
   }
 
+  Future<void> setTransaction(List<Transaction> transactions) async {
+    if (!kIsWeb) {
+      final file = await _localFile;
+      await file.writeAsString(
+        json.encode(transactions.map((t) => t.toJson()).toList()),
+      );
+    }
+  }
+
   Future<void> addTransaction(Transaction t) async {
     if (!kIsWeb) {
       final transactions = (await readTransactions());

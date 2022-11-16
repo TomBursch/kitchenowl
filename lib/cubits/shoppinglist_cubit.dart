@@ -32,7 +32,7 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
     refresh();
   }
 
-  Future<void> search(String query) => refresh(query);
+  Future<void> search(String query) => refresh(query: query);
 
   Future<void> add(String name, [String? description]) async {
     await TransactionHandler.getInstance()
@@ -40,13 +40,19 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
       name: name,
       description: description ?? '',
     ));
-    await refresh('');
+    await refresh(query: '');
   }
 
   Future<void> remove(ShoppinglistItem item) async {
+    final l = List.of(state.listItems);
+    l.remove(item);
+    final recent = List.of(state.recentItems);
+    recent.insert(0, item);
+    recent.removeLast();
+    emit(state.copyWith(listItems: l, recentItems: recent));
     await TransactionHandler.getInstance()
         .runTransaction(TransactionShoppingListDeleteItem(item: item));
-    await refresh();
+    await refresh(forceRefresh: true);
   }
 
   void incrementSorting() {
@@ -74,7 +80,7 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
     emit(state.copyWith(style: style));
   }
 
-  Future<void> refresh([String? query]) {
+  Future<void> refresh({String? query, bool forceRefresh = false}) {
     final state = this.state;
     if (state is SearchShoppinglistCubitState) {
       query = query ?? state.query;
@@ -83,7 +89,7 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
       _refreshCurrentQuery = query;
       _refreshThread = _refresh(query);
     }
-    if (_refreshThread == null) {
+    if (forceRefresh || _refreshThread == null) {
       _refreshCurrentQuery = query;
       _refreshThread = _refresh(query);
     }

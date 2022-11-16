@@ -93,7 +93,7 @@ class _HomePageState extends State<HomePage> {
                 label: AppLocalizations.of(context)!.shoppingList,
                 onTap: (equals) {
                   if (equals) {
-                    shoppingListCubit.refresh("");
+                    shoppingListCubit.refresh(query: '');
                   } else {
                     shoppingListCubit.refresh();
                   }

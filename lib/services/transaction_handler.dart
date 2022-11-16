@@ -15,18 +15,22 @@ class TransactionHandler {
 
   Future<void> runOpenTransactions() async {
     if (!ApiService.getInstance().isConnected()) {
-      ApiService.getInstance().refresh();
+      await ApiService.getInstance().refresh();
     }
-    if (ApiService.getInstance().isConnected()) {
+    if (!App.isForcedOffline && ApiService.getInstance().isConnected()) {
       final transactions =
           await TransactionStorage.getInstance().readTransactions();
       final now = DateTime.now();
+      List<Transaction> openTransactions = [];
       for (final t in transactions) {
         if (t is! ErrorTransaction && t.timestamp.difference(now).inDays < 3) {
-          t.runOnline();
+          dynamic res = t.runOnline();
+          if (res == null || (res is bool && !res)) {
+            openTransactions.add(t);
+          }
         }
       }
-      TransactionStorage.getInstance().clearTransactions();
+      TransactionStorage.getInstance().setTransaction(openTransactions);
     }
   }
 

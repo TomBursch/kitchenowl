@@ -1,0 +1,2 @@
+- Improve offline mode
+- Fix bugs

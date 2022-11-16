@@ -214,7 +214,7 @@ def upload_file_if_needed(url: str):
         resp = requests.get(url)
         ext = guess_extension(resp.headers['content-type'])
         if allowed_file('file' + ext):
-            filename = secure_filename(str(uuid.uuid4()) + '.' + ext)
+            filename = secure_filename(str(uuid.uuid4()) + ext)
             with open(os.path.join(UPLOAD_FOLDER, filename), "wb") as o:
                 o.write(resp.content)
             return filename

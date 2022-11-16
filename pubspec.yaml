@@ -40,7 +40,7 @@ dependencies:
   equatable: ^2.0.5
   url_launcher: ^6.1.6
   flutter_custom_tabs: ^1.0.4
-  package_info_plus: ^3.0.1
+  package_info_plus: ^3.0.2
   device_info_plus: ^8.0.0
   http: ^0.13.5
 
@@ -62,7 +62,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_launcher_icons: ^0.10.0
+  flutter_launcher_icons: ^0.11.0
   flutter_lints: ^2.0.1
   dart_code_metrics: ^5.0.1
 

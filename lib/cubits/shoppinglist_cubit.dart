@@ -13,7 +13,6 @@ enum ShoppinglistStyle { grid, list }
 
 class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
   Future<void>? _refreshThread;
-  int refreshThreadCount = 0;
   String? _refreshCurrentQuery;
 
   String get query => (state is SearchShoppinglistCubitState)
@@ -50,9 +49,10 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
     recent.insert(0, item);
     recent.removeLast();
     emit(state.copyWith(listItems: l, recentItems: recent));
-    await TransactionHandler.getInstance()
-        .runTransaction(TransactionShoppingListDeleteItem(item: item));
-    await refresh(forceRefresh: true);
+    if (!await TransactionHandler.getInstance()
+        .runTransaction(TransactionShoppingListDeleteItem(item: item))) {
+      await refresh();
+    }
   }
 
   void incrementSorting() {
@@ -80,19 +80,17 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
     emit(state.copyWith(style: style));
   }
 
-  Future<void> refresh({String? query, bool forceRefresh = false}) {
+  Future<void> refresh({String? query}) {
     final state = this.state;
     if (state is SearchShoppinglistCubitState) {
       query = query ?? state.query;
     }
     if (_refreshThread != null && query != _refreshCurrentQuery) {
       _refreshCurrentQuery = query;
-      refreshThreadCount++;
       _refreshThread = _refresh(query);
     }
-    if (forceRefresh || _refreshThread == null) {
+    if (_refreshThread == null) {
       _refreshCurrentQuery = query;
-      refreshThreadCount++;
       _refreshThread = _refresh(query);
     }
 
@@ -168,11 +166,10 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
         style: state.style,
       );
     }
-    if (query == _refreshCurrentQuery && refreshThreadCount == 1) {
+    if (query == _refreshCurrentQuery) {
       emit(resState);
       _refreshThread = null;
     }
-    refreshThreadCount--;
   }
 
   void _mergeShoppinglistItems(

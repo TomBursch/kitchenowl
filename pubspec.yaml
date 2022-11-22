@@ -43,8 +43,8 @@ dependencies:
   package_info_plus: ^3.0.2
   device_info_plus: ^8.0.0
   http: ^0.13.5
+  #diffutil_dart: ^3.0.0
 
-  # infinite_scroll_pagination: ^3.1.0
   responsive_builder: ^0.4.3
   dynamic_color: ^1.5.4
 
@@ -52,6 +52,7 @@ dependencies:
   flutter_markdown: ^0.6.13
   tuple: ^2.0.1
   charts_flutter: ^0.12.0
+  fl_chart: ^0.55.2
   cached_network_image: ^3.2.2
   image_picker: ^0.8.6
   file_picker: ^5.2.2

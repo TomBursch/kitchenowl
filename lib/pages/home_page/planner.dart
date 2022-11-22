@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:kitchenowl/cubits/planner_cubit.dart';
+import 'package:kitchenowl/cubits/settings_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/item.dart';
@@ -11,11 +12,32 @@ import 'package:kitchenowl/pages/recipe_page.dart';
 import 'package:kitchenowl/widgets/recipe_card.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
-class PlannerPage extends StatefulWidget {
+import 'home_page_item.dart';
+
+class PlannerPage extends StatefulWidget with HomePageItem {
   const PlannerPage({Key? key}) : super(key: key);
 
   @override
   _PlannerPageState createState() => _PlannerPageState();
+
+  @override
+  IconData icon(BuildContext context) => Icons.calendar_today_rounded;
+
+  @override
+  String label(BuildContext context) => AppLocalizations.of(context)!.planner;
+
+  @override
+  void onSelected(BuildContext context, bool alreadySelected) {
+    BlocProvider.of<PlannerCubit>(context).refresh();
+  }
+
+  @override
+  bool isActive(BuildContext context) =>
+      BlocProvider.of<SettingsCubit>(context)
+          .state
+          .serverSettings
+          .featurePlanner ??
+      false;
 }
 
 class _PlannerPageState extends State<PlannerPage> {

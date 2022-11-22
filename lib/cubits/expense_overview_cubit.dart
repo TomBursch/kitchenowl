@@ -1,6 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:kitchenowl/services/api/api_service.dart';
+import 'package:kitchenowl/enums/expenselist_sorting.dart';
+import 'package:kitchenowl/services/transaction_handler.dart';
+import 'package:kitchenowl/services/transactions/expense.dart';
 
 class ExpenseOverviewCubit extends Cubit<ExpenseOverviewState> {
   ExpenseOverviewCubit() : super(const ExpenseOverviewLoading()) {
@@ -8,14 +10,15 @@ class ExpenseOverviewCubit extends Cubit<ExpenseOverviewState> {
   }
 
   Future<void> refresh() async {
-    // final expense = TransactionHandler.getInstance()
-    //     .runTransaction(TransactionExpenseGet(expense: state.));
-
-    final data = await ApiService.getInstance().getExpenseOverview();
-    if (data == null) return;
+    final overview = await TransactionHandler.getInstance()
+        .runTransaction(TransactionExpenseGetOverview(
+      sorting: ExpenselistSorting.all,
+      months: 5,
+    ));
+    if (overview.isEmpty) return;
 
     emit(ExpenseOverviewLoaded(
-      categoryOverviewsByMonth: data,
+      categoryOverviewsByCategory: overview,
     ));
   }
 }
@@ -32,18 +35,19 @@ class ExpenseOverviewLoading extends ExpenseOverviewState {
 }
 
 class ExpenseOverviewLoaded extends ExpenseOverviewState {
-  final Map<String, Map<String, double>> categoryOverviewsByMonth;
+  final Map<String, Map<String, double>> categoryOverviewsByCategory;
 
   const ExpenseOverviewLoaded({
-    required this.categoryOverviewsByMonth,
+    required this.categoryOverviewsByCategory,
   });
 
   double getTotalForMonth(int i) {
-    return categoryOverviewsByMonth.entries
-        .map((e) => e.value[i.toString()] ?? 0)
-        .reduce((v, e) => v + e);
+    return categoryOverviewsByCategory[i.toString()]
+            ?.values
+            .reduce((v, e) => v + e) ??
+        0;
   }
 
   @override
-  List<Object?> get props => [categoryOverviewsByMonth];
+  List<Object?> get props => [categoryOverviewsByCategory];
 }

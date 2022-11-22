@@ -1,0 +1,4 @@
+enum ExpenselistSorting {
+  all,
+  personal;
+}

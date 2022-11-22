@@ -1,10 +1,15 @@
+import 'package:kitchenowl/enums/expenselist_sorting.dart';
 import 'package:kitchenowl/models/expense.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
 import 'package:kitchenowl/services/transaction.dart';
 
 class TransactionExpenseGetAll extends Transaction<List<Expense>> {
-  TransactionExpenseGetAll({DateTime? timestamp})
-      : super.internal(timestamp ?? DateTime.now(), "TransactionExpenseGetAll");
+  final ExpenselistSorting sorting;
+
+  TransactionExpenseGetAll({
+    DateTime? timestamp,
+    this.sorting = ExpenselistSorting.all,
+  }) : super.internal(timestamp ?? DateTime.now(), "TransactionExpenseGetAll");
 
   @override
   Future<List<Expense>> runLocal() async {
@@ -13,7 +18,28 @@ class TransactionExpenseGetAll extends Transaction<List<Expense>> {
 
   @override
   Future<List<Expense>?> runOnline() async {
-    return await ApiService.getInstance().getAllExpenses();
+    return await ApiService.getInstance().getAllExpenses(sorting);
+  }
+}
+
+class TransactionExpenseGetMore extends Transaction<List<Expense>> {
+  final ExpenselistSorting sorting;
+  final Expense lastExpense;
+
+  TransactionExpenseGetMore({
+    DateTime? timestamp,
+    this.sorting = ExpenselistSorting.all,
+    required this.lastExpense,
+  }) : super.internal(timestamp ?? DateTime.now(), "TransactionExpenseGetMore");
+
+  @override
+  Future<List<Expense>> runLocal() async {
+    return [];
+  }
+
+  @override
+  Future<List<Expense>?> runOnline() async {
+    return await ApiService.getInstance().getAllExpenses(sorting, lastExpense);
   }
 }
 
@@ -121,5 +147,30 @@ class TransactionExpenseUpdate extends Transaction<bool> {
   @override
   Future<bool?> runOnline() {
     return ApiService.getInstance().updateExpense(expense);
+  }
+}
+
+class TransactionExpenseGetOverview
+    extends Transaction<Map<String, Map<String, double>>> {
+  final ExpenselistSorting sorting;
+  final int months;
+
+  TransactionExpenseGetOverview({
+    DateTime? timestamp,
+    this.sorting = ExpenselistSorting.all,
+    this.months = 1,
+  }) : super.internal(
+          timestamp ?? DateTime.now(),
+          "TransactionExpenseGetOverview",
+        );
+
+  @override
+  Future<Map<String, Map<String, double>>> runLocal() async {
+    return {};
+  }
+
+  @override
+  Future<Map<String, Map<String, double>>?> runOnline() async {
+    return await ApiService.getInstance().getExpenseOverview(sorting);
   }
 }

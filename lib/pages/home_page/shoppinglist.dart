@@ -7,11 +7,29 @@ import 'package:kitchenowl/models/category.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 
-class ShoppinglistPage extends StatefulWidget {
+import 'home_page_item.dart';
+
+class ShoppinglistPage extends StatefulWidget with HomePageItem {
   const ShoppinglistPage({Key? key}) : super(key: key);
 
   @override
   _ShoppinglistPageState createState() => _ShoppinglistPageState();
+
+  @override
+  IconData icon(BuildContext context) => Icons.shopping_bag_outlined;
+
+  @override
+  String label(BuildContext context) =>
+      AppLocalizations.of(context)!.shoppingList;
+
+  @override
+  void onSelected(BuildContext context, bool alreadySelected) {
+    if (alreadySelected) {
+      BlocProvider.of<ShoppinglistCubit>(context).refresh(query: '');
+    } else {
+      BlocProvider.of<ShoppinglistCubit>(context).refresh();
+    }
+  }
 }
 
 class _ShoppinglistPageState extends State<ShoppinglistPage> {

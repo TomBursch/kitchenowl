@@ -1,5 +1,6 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/cubits/recipe_list_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/kitchenowl.dart';
@@ -7,16 +8,16 @@ import 'package:kitchenowl/pages/recipe_add_update_page.dart';
 import 'package:kitchenowl/pages/recipe_scraper_page.dart';
 
 class RecipeCreateFab extends StatelessWidget {
-  final RecipeListCubit recipeListCubit;
+  final _fabKey = GlobalKey<ExpandableFabState>();
 
-  const RecipeCreateFab({
+  RecipeCreateFab({
     super.key,
-    required this.recipeListCubit,
   });
 
   @override
   Widget build(BuildContext context) {
     return ExpandableFab(
+      key: _fabKey,
       distance: 70,
       openIcon: const Icon(Icons.add),
       children: [
@@ -27,8 +28,9 @@ class RecipeCreateFab extends StatelessWidget {
           },
           openColor: Theme.of(context).scaffoldBackgroundColor,
           onClosed: (data) {
+            _fabKey.currentState?.reset();
             if (data == UpdateEnum.updated) {
-              recipeListCubit.refresh();
+              BlocProvider.of<RecipeListCubit>(context).refresh();
             }
           },
           closedElevation: 4,
@@ -75,8 +77,10 @@ class RecipeCreateFab extends StatelessWidget {
                 url: url,
               ),
             ));
+
+            _fabKey.currentState?.reset();
             if (res == UpdateEnum.updated) {
-              recipeListCubit.refresh();
+              BlocProvider.of<RecipeListCubit>(context).refresh();
             }
           },
           child: const Icon(Icons.link_rounded),

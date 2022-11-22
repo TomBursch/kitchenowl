@@ -1,13 +1,22 @@
 import 'dart:convert';
 
+import 'package:kitchenowl/enums/expenselist_sorting.dart';
 import 'package:kitchenowl/models/expense.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
 
 extension ExpenseApi on ApiService {
   static const baseRoute = '/expense';
 
-  Future<List<Expense>?> getAllExpenses() async {
-    final res = await get(baseRoute);
+  Future<List<Expense>?> getAllExpenses([
+    ExpenselistSorting sorting = ExpenselistSorting.all,
+    Expense? startAfter,
+  ]) async {
+    String url = '$baseRoute?view=${sorting.index}';
+    if (startAfter != null) {
+      url += '&startAfterId=${startAfter.id}';
+    }
+
+    final res = await get(url);
     if (res.statusCode != 200) return null;
 
     final body = List.from(jsonDecode(res.body));
@@ -76,10 +85,17 @@ extension ExpenseApi on ApiService {
     return res.statusCode == 200;
   }
 
-  Future<Map<String, Map<String, double>>?> getExpenseOverview() async {
-    final res = await get(
-      '$baseRoute/overview',
-    );
+  Future<Map<String, Map<String, double>>?> getExpenseOverview([
+    ExpenselistSorting sorting = ExpenselistSorting.all,
+    int? months,
+  ]) async {
+    String url = '$baseRoute/overview?view=${sorting.index}';
+
+    if (months != null) {
+      url += '&months=$months';
+    }
+
+    final res = await get(url);
     if (res.statusCode != 200) return null;
 
     final body = jsonDecode(res.body);

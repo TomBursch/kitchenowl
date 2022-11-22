@@ -10,7 +10,9 @@ import 'package:kitchenowl/pages/settings_server_page.dart';
 import 'package:kitchenowl/pages/settings_user_page.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 
-class ProfilePage extends StatelessWidget {
+import 'home_page_item.dart';
+
+class ProfilePage extends StatelessWidget with HomePageItem {
   const ProfilePage({Key? key}) : super(key: key);
 
   @override
@@ -187,4 +189,11 @@ class ProfilePage extends StatelessWidget {
       ],
     );
   }
+
+  @override
+  IconData icon(context) =>
+      App.isOffline ? Icons.cloud_off_rounded : Icons.person;
+
+  @override
+  String label(context) => AppLocalizations.of(context)!.profile;
 }

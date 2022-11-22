@@ -17,10 +17,10 @@ class ExpandableFab extends StatefulWidget {
   final Widget openIcon;
 
   @override
-  _ExpandableFabState createState() => _ExpandableFabState();
+  ExpandableFabState createState() => ExpandableFabState();
 }
 
-class _ExpandableFabState extends State<ExpandableFab>
+class ExpandableFabState extends State<ExpandableFab>
     with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
   late final Animation<double> _expandAnimation;
@@ -48,15 +48,22 @@ class _ExpandableFabState extends State<ExpandableFab>
     super.dispose();
   }
 
+  void reset() {
+    setState(() {
+      _open = false;
+    });
+    _controller.reset();
+  }
+
   void _toggle() {
     setState(() {
       _open = !_open;
-      if (_open) {
-        _controller.forward();
-      } else {
-        _controller.reverse();
-      }
     });
+    if (_open) {
+      _controller.forward();
+    } else {
+      _controller.reverse();
+    }
   }
 
   @override

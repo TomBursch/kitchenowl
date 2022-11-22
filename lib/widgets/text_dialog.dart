@@ -30,8 +30,8 @@ class _TextDialogState extends State<TextDialog> {
   void initState() {
     super.initState();
     controller = TextEditingController(text: widget.initialText);
-    if (widget.isInputValid != null && widget.initialText != null) {
-      validText = widget.isInputValid!(widget.initialText!);
+    if (widget.isInputValid != null) {
+      validText = widget.isInputValid!(widget.initialText ?? '');
     }
   }
 

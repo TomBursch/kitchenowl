@@ -1,29 +1,107 @@
+import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:kitchenowl/app.dart';
 import 'package:kitchenowl/cubits/expense_list_cubit.dart';
+import 'package:kitchenowl/cubits/settings_cubit.dart';
+import 'package:kitchenowl/enums/expenselist_sorting.dart';
+import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/user.dart';
+import 'package:kitchenowl/pages/expense_add_update_page.dart';
 import 'package:kitchenowl/pages/expense_overview_page.dart';
+import 'package:kitchenowl/widgets/chart_pie_current_month.dart';
 import 'package:kitchenowl/widgets/expense_item.dart';
 
-class ExpenseListPage extends StatefulWidget {
-  const ExpenseListPage({Key? key}) : super(key: key);
+import 'home_page_item.dart';
+
+class ExpenseListPage extends StatefulWidget with HomePageItem {
+  ExpenseListPage({super.key});
+
+  final ScrollController scrollController = ScrollController();
 
   @override
   _ExpensePageState createState() => _ExpensePageState();
+
+  @override
+  IconData icon(BuildContext context) => Icons.account_balance_rounded;
+
+  @override
+  String label(BuildContext context) => AppLocalizations.of(context)!.balances;
+
+  @override
+  void onSelected(BuildContext context, bool alreadySelected) {
+    BlocProvider.of<ExpenseListCubit>(context).refresh();
+    if (scrollController.hasClients) scrollController.jumpTo(0);
+  }
+
+  @override
+  bool isActive(BuildContext context) =>
+      BlocProvider.of<SettingsCubit>(context)
+          .state
+          .serverSettings
+          .featureExpenses ??
+      false;
+
+  @override
+  Widget? floatingActionButton(BuildContext context) {
+    if (!App.isOffline) {
+      return OpenContainer(
+        transitionType: ContainerTransitionType.fade,
+        openBuilder: (BuildContext ctx, VoidCallback _) {
+          return AddUpdateExpensePage(
+            users: BlocProvider.of<ExpenseListCubit>(context).state.users,
+          );
+        },
+        openColor: Theme.of(context).scaffoldBackgroundColor,
+        onClosed: (data) {
+          if (data == UpdateEnum.updated) {
+            BlocProvider.of<ExpenseListCubit>(context).refresh();
+          }
+        },
+        closedElevation: 4.0,
+        closedShape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(
+            Radius.circular(14),
+          ),
+        ),
+        closedColor:
+            Theme.of(context).floatingActionButtonTheme.backgroundColor ??
+                Theme.of(context).colorScheme.secondary,
+        closedBuilder: (
+          BuildContext context,
+          VoidCallback openContainer,
+        ) {
+          return SizedBox(
+            height: 56,
+            width: 56,
+            child: Center(
+              child: Icon(
+                Icons.add,
+                color: Theme.of(context).colorScheme.onSecondary,
+              ),
+            ),
+          );
+        },
+      );
+    }
+
+    return null;
+  }
 }
 
 class _ExpensePageState extends State<ExpenseListPage> {
   @override
   void initState() {
     super.initState();
+    widget.scrollController.addListener(_scrollListen);
   }
 
   @override
   void dispose() {
+    widget.scrollController.removeListener(_scrollListen);
     super.dispose();
   }
 
@@ -33,12 +111,13 @@ class _ExpensePageState extends State<ExpenseListPage> {
 
     return SafeArea(
       child: Scrollbar(
+        controller: widget.scrollController,
         child: RefreshIndicator(
           onRefresh: cubit.refresh,
           child: BlocBuilder<ExpenseListCubit, ExpenseListCubitState>(
             bloc: cubit,
             builder: (context, state) => CustomScrollView(
-              primary: true,
+              controller: widget.scrollController,
               slivers: [
                 SliverPadding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -92,42 +171,88 @@ class _ExpensePageState extends State<ExpenseListPage> {
                   ),
                 if (state.users.isNotEmpty) ...[
                   SliverToBoxAdapter(
-                    child: SizedBox(
-                      height: (state.users.length * 60 + 30).toDouble(),
-                      child: _getBarChart(context, state),
+                    child: AnimatedCrossFade(
+                      crossFadeState: state.sorting == ExpenselistSorting.all ||
+                              state.categoryOverview.isEmpty
+                          ? CrossFadeState.showFirst
+                          : CrossFadeState.showSecond,
+                      duration: const Duration(milliseconds: 100),
+                      firstChild: SizedBox(
+                        height: (state.users.length * 60 + 30).toDouble(),
+                        child: _getBarChart(context, state),
+                      ),
+                      secondChild: SizedBox(
+                        height: (state.users.length * 60 + 30)
+                            .clamp(150, 270)
+                            .toDouble(),
+                        child: ChartPieCurrentMonth(
+                          data: state.categoryOverview,
+                          availableHeight: (state.users.length * 60 + 30)
+                              .clamp(150, 270)
+                              .toDouble(),
+                        ),
+                      ),
                     ),
                   ),
-                  if (state.expenses.isEmpty && !App.isOffline)
-                    SliverToBoxAdapter(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            const Icon(Icons.money_off_rounded),
-                            const SizedBox(height: 16),
-                            Text(AppLocalizations.of(context)!.expenseEmpty),
-                          ],
-                        ),
+                  if (state.expenses.isNotEmpty)
+                    SliverOptionsHeader(
+                      right: HeaderButton(
+                        text: state.sorting == ExpenselistSorting.all
+                            ? AppLocalizations.of(context)!.household
+                            : state.sorting == ExpenselistSorting.personal
+                                ? AppLocalizations.of(context)!.personal
+                                : AppLocalizations.of(context)!.other,
+                        icon: const Icon(Icons.sort),
+                        onPressed: cubit.incrementSorting,
                       ),
                     ),
                   if (state.expenses.isNotEmpty)
                     SliverPadding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
-                      sliver: SliverList(
-                        delegate: SliverChildBuilderDelegate(
-                          (context, i) => ExpenseItemWidget(
-                            key: ObjectKey(state.expenses[i]),
+                      sliver: SliverImplicitAnimatedList(
+                        itemBuilder: (context, i, animation) => SizeTransition(
+                          key: ValueKey(state.expenses[i].id),
+                          sizeFactor: animation,
+                          child: ExpenseItemWidget(
                             expense: state.expenses[i],
                             users: state.users,
                             onUpdated: cubit.refresh,
+                            displayPersonalAmount:
+                                state.sorting == ExpenselistSorting.personal,
                           ),
-                          childCount: state.expenses.length,
                         ),
+                        removeItemBuilder: (context, expense, animation) =>
+                            SizeTransition(
+                          key: ValueKey(expense.id),
+                          sizeFactor: animation,
+                          child: ExpenseItemWidget(
+                            expense: expense,
+                            users: state.users,
+                            onUpdated: cubit.refresh,
+                            displayPersonalAmount:
+                                state.sorting == ExpenselistSorting.personal,
+                          ),
+                        ),
+                        items: state.expenses,
+                        equalityChecker: (p0, p1) => p0.id == p1.id,
                       ),
                     ),
                 ],
+                if (state.expenses.isEmpty && !App.isOffline)
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          const Icon(Icons.money_off_rounded),
+                          const SizedBox(height: 16),
+                          Text(AppLocalizations.of(context)!.expenseEmpty),
+                        ],
+                      ),
+                    ),
+                  ),
                 if (state.expenses.isEmpty && App.isOffline)
                   SliverToBoxAdapter(
                     child: Padding(
@@ -149,6 +274,13 @@ class _ExpensePageState extends State<ExpenseListPage> {
         ),
       ),
     );
+  }
+
+  void _scrollListen() {
+    if ((widget.scrollController.position.pixels ==
+        widget.scrollController.position.maxScrollExtent)) {
+      BlocProvider.of<ExpenseListCubit>(context).loadMore();
+    }
   }
 
   // ignore: long-method

@@ -21,3 +21,4 @@ export 'shimmer_shopping_item.dart';
 export 'kitchenowl_switch.dart';
 export 'image_selector.dart';
 export 'flexible_image_space_bar.dart';
+export 'sliver_implicit_animated_list.dart';

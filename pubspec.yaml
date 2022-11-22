@@ -38,7 +38,7 @@ dependencies:
   animations: ^2.0.7
   shimmer: ^2.0.0
   equatable: ^2.0.5
-  url_launcher: ^6.1.6
+  url_launcher: ^6.1.7
   flutter_custom_tabs: ^1.0.4
   package_info_plus: ^3.0.2
   device_info_plus: ^8.0.0

@@ -3,19 +3,19 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 
-class MonthsBarChart extends StatefulWidget {
+class ChartBarMonths extends StatefulWidget {
   final Map<String, Map<String, double>> data;
 
-  const MonthsBarChart({
+  const ChartBarMonths({
     super.key,
     required this.data,
   });
 
   @override
-  State<MonthsBarChart> createState() => _MonthsBarChartState();
+  State<ChartBarMonths> createState() => _ChartBarMonthsState();
 }
 
-class _MonthsBarChartState extends State<MonthsBarChart> {
+class _ChartBarMonthsState extends State<ChartBarMonths> {
   static const double barWidth = 35;
   static const double barSpacing = 45;
 
@@ -55,7 +55,7 @@ class _MonthsBarChartState extends State<MonthsBarChart> {
         baselineY: 0,
         barTouchData: BarTouchData(
           touchTooltipData: BarTouchTooltipData(
-            tooltipBgColor: Theme.of(context).colorScheme.surface,
+            tooltipBgColor: Theme.of(context).colorScheme.surfaceVariant,
             tooltipRoundedRadius: 14,
             maxContentWidth: 400,
             getTooltipItem: (group, groupIndex, rod, rodIndex) =>

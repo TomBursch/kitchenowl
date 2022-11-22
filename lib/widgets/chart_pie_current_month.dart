@@ -3,21 +3,21 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 
-class CurrentMonthPieChart extends StatefulWidget {
+class ChartPieCurrentMonth extends StatefulWidget {
   final Map<String, double> data;
   final double availableHeight;
 
-  const CurrentMonthPieChart({
+  const ChartPieCurrentMonth({
     super.key,
     required this.data,
     this.availableHeight = 240,
   });
 
   @override
-  State<CurrentMonthPieChart> createState() => _CurrentMonthPieChartState();
+  State<ChartPieCurrentMonth> createState() => _ChartPieCurrentMonthState();
 }
 
-class _CurrentMonthPieChartState extends State<CurrentMonthPieChart> {
+class _ChartPieCurrentMonthState extends State<ChartPieCurrentMonth> {
   int touchedIndex = -1;
 
   @override
@@ -63,7 +63,7 @@ class _CurrentMonthPieChartState extends State<CurrentMonthPieChart> {
                   .where((e) => e.value != 0)
                   .map((e) => e.key)
                   .elementAt(touchedIndex);
-      final radius = widget.availableHeight / 2 + (isTouched ? 0 : -10) - 15;
+      final radius = widget.availableHeight / 2 + (isTouched ? 0 : -10) - 20;
 
       return PieChartSectionData(
         color: _colorFn(e.key),
@@ -89,7 +89,7 @@ class _CurrentMonthPieChartState extends State<CurrentMonthPieChart> {
           ),
         ),
         showTitle: false,
-        badgePositionPercentageOffset: 1.15,
+        badgePositionPercentageOffset: 1.05,
       );
     }).toList();
   }

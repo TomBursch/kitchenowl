@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:kitchenowl/cubits/expense_overview_cubit.dart';
 import 'package:kitchenowl/kitchenowl.dart';
-import 'package:kitchenowl/widgets/current_month_pie_chart.dart';
-import 'package:kitchenowl/widgets/months_bar_chart.dart';
+import 'package:kitchenowl/widgets/chart_pie_current_month.dart';
+import 'package:kitchenowl/widgets/chart_bar_months.dart';
 
 class ExpenseOverviewPage extends StatefulWidget {
   const ExpenseOverviewPage({super.key});
@@ -62,7 +62,7 @@ class _ExpenseOverviewPageState extends State<ExpenseOverviewPage> {
                   ),
                   SizedBox(
                     height: 300,
-                    child: CurrentMonthPieChart(
+                    child: ChartPieCurrentMonth(
                       data: state.categoryOverviewsByCategory['0']!,
                       availableHeight: 270,
                     ),
@@ -76,7 +76,7 @@ class _ExpenseOverviewPageState extends State<ExpenseOverviewPage> {
                   const SizedBox(height: 32),
                   SizedBox(
                     height: 300,
-                    child: MonthsBarChart(
+                    child: ChartBarMonths(
                       data: state.categoryOverviewsByCategory,
                     ),
                   ),

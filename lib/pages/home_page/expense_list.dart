@@ -12,7 +12,7 @@ import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/user.dart';
 import 'package:kitchenowl/pages/expense_add_update_page.dart';
 import 'package:kitchenowl/pages/expense_overview_page.dart';
-import 'package:kitchenowl/widgets/current_month_pie_chart.dart';
+import 'package:kitchenowl/widgets/chart_pie_current_month.dart';
 import 'package:kitchenowl/widgets/expense_item.dart';
 
 import 'home_page_item.dart';
@@ -185,7 +185,7 @@ class _ExpensePageState extends State<ExpenseListPage> {
                         height: (state.users.length * 60 + 30)
                             .clamp(150, 270)
                             .toDouble(),
-                        child: CurrentMonthPieChart(
+                        child: ChartPieCurrentMonth(
                           data: state.categoryOverview,
                           availableHeight: (state.users.length * 60 + 30)
                               .clamp(150, 270)

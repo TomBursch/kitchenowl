@@ -1,6 +1,13 @@
 from marshmallow import fields, Schema
 
 
+class GetExpenses(Schema):
+    view = fields.Integer()
+    startAfterId = fields.Integer(
+        validate=lambda a: a >= 0
+    )
+
+
 class AddExpense(Schema):
     class User(Schema):
         id = fields.Integer(
@@ -72,4 +79,11 @@ class DeleteExpenseCategory(Schema):
     name = fields.String(
         required=True,
         validate=lambda a: a and not a.isspace()
+    )
+
+
+class GetExpenseOverview(Schema):
+    view = fields.Integer()
+    months = fields.Integer(
+        validate=lambda a: a > 0
     )

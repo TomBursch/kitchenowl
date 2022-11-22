@@ -3,21 +3,32 @@ from datetime import datetime
 from sqlalchemy.sql.expression import desc
 from app.errors import NotFoundRequest
 from flask import jsonify, Blueprint
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import current_user, jwt_required
 from sqlalchemy import func
+from app import db
 from app.helpers import validate_args, admin_required
 from app.models import Expense, ExpensePaidFor, User, ExpenseCategory
-from .schemas import AddExpense, UpdateExpense, AddExpenseCategory, DeleteExpenseCategory, UpdateExpenseCategory
+from .schemas import GetExpenses, AddExpense, UpdateExpense, AddExpenseCategory, DeleteExpenseCategory, UpdateExpenseCategory, GetExpenseOverview
 
 expense = Blueprint('expense', __name__)
 
 
 @expense.route('', methods=['GET'])
 @jwt_required()
-def getAllExpenses():
+@validate_args(GetExpenses)
+def getAllExpenses(args):
+    filter = []
+    if ('startAfterId' in args):
+        filter.append(Expense.id < args['startAfterId'])
+
+    if ('view' in args and args['view'] == 1):
+        subquery = db.session.query(ExpensePaidFor.expense_id).filter(
+            ExpensePaidFor.user_id == current_user.id).scalar_subquery()
+        filter.append(Expense.id.in_(subquery))
+
     return jsonify([e.obj_to_full_dict() for e
-                    in Expense.query.order_by(desc(Expense.id))
-                    .join(Expense.category, isouter=True).limit(50).all()
+                    in Expense.query.order_by(desc(Expense.created_at)).filter(*filter)
+                    .join(Expense.category, isouter=True).limit(30).all()
                     ])
 
 
@@ -136,6 +147,7 @@ def deleteExpenseById(id):
 def calculateBalances():
     recalculateBalances()
 
+
 def recalculateBalances():
     for user in User.all():
         user.expense_balance = float(Expense.query.with_entities(func.sum(
@@ -157,10 +169,20 @@ def getExpenseCategories():
 
 @expense.route('/overview', methods=['GET'])
 @jwt_required()
-def getExpenseOverview():
+@validate_args(GetExpenseOverview)
+def getExpenseOverview(args):
     categories = list(map(lambda x: x.name, ExpenseCategory.all_by_name()))
     categories.append("")
     thisMonthStart = datetime.utcnow().date().replace(day=1)
+
+    months = args['months'] if 'months' in args else 5
+
+    filter = []
+
+    if ('view' in args and args['view'] == 1):
+        subquery = db.session.query(ExpensePaidFor.expense_id).filter(
+            ExpensePaidFor.user_id == current_user.id).scalar_subquery()
+        filter.append(Expense.id.in_(subquery))
 
     def getOverviewForMonthAgo(monthAgo: int):
         monthStart = thisMonthStart.replace(
@@ -169,14 +191,14 @@ def getExpenseOverview():
             monthStart.year, monthStart.month)[1])
         return {
             (e.name or ""): (float(e.balance) or 0) for e in Expense.query.with_entities(ExpenseCategory.name.label("name"), func.sum(
-                Expense.amount).label("balance")).group_by(Expense.category_id).join(Expense.category, isouter=True).filter(Expense.created_at >= monthStart, Expense.created_at <= monthEnd).all()
+                Expense.amount).label("balance")).group_by(Expense.category_id).join(Expense.category, isouter=True).filter(Expense.created_at >= monthStart, Expense.created_at <= monthEnd, *filter).all()
         }
 
-    value = [getOverviewForMonthAgo(i) for i in range(0, 5)]
+    value = [getOverviewForMonthAgo(i) for i in range(0, months)]
 
-    return jsonify({category: {
-        i: (value[i][category] if category in value[i] else 0.0) for i in range(0, 5)
-    } for category in categories})
+    byMonth = {i: {category: (value[i][category] if category in value[i] else 0.0) for category in categories } for i in range(0, months)}
+
+    return jsonify(byMonth)
 
 
 @expense.route('/categories', methods=['POST'])

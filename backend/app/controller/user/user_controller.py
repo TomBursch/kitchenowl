@@ -1,8 +1,8 @@
 from app.errors import NotFoundRequest, UnauthorizedRequest
 from app.helpers.admin_required import admin_required
 from app.helpers import validate_args
-from flask import jsonify, Blueprint, request
-from flask_jwt_extended import jwt_required, get_jwt_identity
+from flask import jsonify, Blueprint
+from flask_jwt_extended import current_user, jwt_required, get_jwt_identity
 from app.models import User
 from .schemas import CreateUser, UpdateUser
 
@@ -19,10 +19,7 @@ def getAllUsers():
 @user.route('', methods=['GET'])
 @jwt_required()
 def getLoggedInUser():
-    user = User.find_by_username(get_jwt_identity())
-    if not user:
-        raise UnauthorizedRequest(message='Unauthorized: IP {}'.format(request.remote_addr))
-    return jsonify(user.obj_to_full_dict())
+    return jsonify(current_user.obj_to_full_dict())
 
 
 @user.route('/<id>', methods=['GET'])

@@ -209,18 +209,32 @@ class _ExpensePageState extends State<ExpenseListPage> {
                   if (state.expenses.isNotEmpty)
                     SliverPadding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
-                      sliver: SliverList(
-                        delegate: SliverChildBuilderDelegate(
-                          (context, i) => ExpenseItemWidget(
-                            key: ValueKey(state.expenses[i].id),
+                      sliver: SliverImplicitAnimatedList(
+                        itemBuilder: (context, i, animation) => SizeTransition(
+                          key: ValueKey(state.expenses[i].id),
+                          sizeFactor: animation,
+                          child: ExpenseItemWidget(
                             expense: state.expenses[i],
                             users: state.users,
                             onUpdated: cubit.refresh,
                             displayPersonalAmount:
                                 state.sorting == ExpenselistSorting.personal,
                           ),
-                          childCount: state.expenses.length,
                         ),
+                        removeItemBuilder: (context, expense, animation) =>
+                            SizeTransition(
+                          key: ValueKey(expense.id),
+                          sizeFactor: animation,
+                          child: ExpenseItemWidget(
+                            expense: expense,
+                            users: state.users,
+                            onUpdated: cubit.refresh,
+                            displayPersonalAmount:
+                                state.sorting == ExpenselistSorting.personal,
+                          ),
+                        ),
+                        items: state.expenses,
+                        equalityChecker: (p0, p1) => p0.id == p1.id,
                       ),
                     ),
                 ],

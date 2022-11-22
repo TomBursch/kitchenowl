@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:diffutil_dart/diffutil.dart' as diffutil;
 
 class SliverImplicitAnimatedList<T> extends StatefulWidget {
   final List<T> items;
@@ -31,23 +32,23 @@ class _SliverImplicitAnimatedListState<T>
     super.didUpdateWidget(oldWidget);
 
     if (oldWidget.items != widget.items) {
-      // final updates = diffutil
-      //     .calculateListDiff<T>(
-      //       widget.items,
-      //       oldWidget.items,
-      //       equalityChecker: widget.equalityChecker,
-      //       detectMoves: false,
-      //     )
-      //     .getUpdates();
+      final updates = diffutil
+          .calculateListDiff<T>(
+            oldWidget.items,
+            widget.items,
+            equalityChecker: widget.equalityChecker,
+            detectMoves: false,
+          )
+          .getUpdates();
 
-      // for (final update in updates) {
-      //   update.when(
-      //     insert: (pos, count) => _onInsert(pos, count),
-      //     remove: (pos, count) => _onRemove(pos, count, oldWidget.items),
-      //     change: (_, __) => throw UnimplementedError(),
-      //     move: (_, __) => throw UnimplementedError(),
-      //   );
-      // }
+      for (final update in updates) {
+        update.when(
+          insert: (pos, count) => _onInsert(pos, count),
+          remove: (pos, count) => _onRemove(pos, count, oldWidget.items),
+          change: (_, __) => throw UnimplementedError(),
+          move: (_, __) => throw UnimplementedError(),
+        );
+      }
     }
   }
 

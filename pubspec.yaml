@@ -43,7 +43,7 @@ dependencies:
   package_info_plus: ^3.0.2
   device_info_plus: ^8.0.0
   http: ^0.13.5
-  #diffutil_dart: ^3.0.0
+  diffutil_dart: ^3.0.0
 
   responsive_builder: ^0.4.3
   dynamic_color: ^1.5.4

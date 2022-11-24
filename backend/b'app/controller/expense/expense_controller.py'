@@ -177,12 +177,23 @@ def getExpenseOverview(args):
 
     months = args['months'] if 'months' in args else 5
 
-    filter = []
+    factor = 1
+    query = Expense.query\
+        .group_by(Expense.category_id)\
+        .join(Expense.category, isouter=True)
 
     if ('view' in args and args['view'] == 1):
-        subquery = db.session.query(ExpensePaidFor.expense_id).filter(
+        filterQuery = db.session.query(ExpensePaidFor.expense_id).filter(
             ExpensePaidFor.user_id == current_user.id).scalar_subquery()
-        filter.append(Expense.id.in_(subquery))
+
+        s1 = ExpensePaidFor.query.with_entities(ExpensePaidFor.expense_id.label("expense_id"), func.sum(
+            ExpensePaidFor.factor).label('total')).group_by(ExpensePaidFor.expense_id).subquery()
+        s2 = ExpensePaidFor.query.with_entities(ExpensePaidFor.expense_id.label("expense_id"), (ExpensePaidFor.factor.cast(
+            db.Float) / s1.c.total).label('factor')).filter(ExpensePaidFor.user_id == current_user.id).join(s1, ExpensePaidFor.expense_id == s1.c.expense_id).subquery()
+
+        factor = s2.c.factor
+
+        query = query.filter(Expense.id.in_(filterQuery)).join(s2)
 
     def getOverviewForMonthAgo(monthAgo: int):
         monthStart = thisMonthStart.replace(
@@ -190,13 +201,17 @@ def getExpenseOverview(args):
         monthEnd = monthStart.replace(day=calendar.monthrange(
             monthStart.year, monthStart.month)[1])
         return {
-            (e.name or ""): (float(e.balance) or 0) for e in Expense.query.with_entities(ExpenseCategory.name.label("name"), func.sum(
-                Expense.amount).label("balance")).group_by(Expense.category_id).join(Expense.category, isouter=True).filter(Expense.created_at >= monthStart, Expense.created_at <= monthEnd, *filter).all()
+            (e.name or ""): (float(e.balance) or 0) for e in
+            query
+            .with_entities(ExpenseCategory.name.label("name"), func.sum(Expense.amount * factor).label("balance"))
+            .filter(Expense.created_at >= monthStart, Expense.created_at <= monthEnd)
+            .all()
         }
 
     value = [getOverviewForMonthAgo(i) for i in range(0, months)]
 
-    byMonth = {i: {category: (value[i][category] if category in value[i] else 0.0) for category in categories } for i in range(0, months)}
+    byMonth = {i: {category: (value[i][category] if category in value[i] else 0.0)
+                   for category in categories} for i in range(0, months)}
 
     return jsonify(byMonth)
 

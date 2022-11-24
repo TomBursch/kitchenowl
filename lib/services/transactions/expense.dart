@@ -171,6 +171,6 @@ class TransactionExpenseGetOverview
 
   @override
   Future<Map<String, Map<String, double>>?> runOnline() async {
-    return await ApiService.getInstance().getExpenseOverview(sorting);
+    return await ApiService.getInstance().getExpenseOverview(sorting, months);
   }
 }

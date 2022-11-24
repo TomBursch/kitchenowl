@@ -139,8 +139,9 @@ class _ExpensePageState extends State<ExpenseListPage> {
                               child: const Icon(Icons.bar_chart_rounded),
                               onTap: () => Navigator.of(context).push(
                                 MaterialPageRoute(
-                                  builder: (context) =>
-                                      const ExpenseOverviewPage(),
+                                  builder: (context) => ExpenseOverviewPage(
+                                    initialSorting: state.sorting,
+                                  ),
                                 ),
                               ),
                             ),
@@ -195,15 +196,17 @@ class _ExpensePageState extends State<ExpenseListPage> {
                     ),
                   ),
                   if (state.expenses.isNotEmpty)
-                    SliverOptionsHeader(
-                      right: HeaderButton(
-                        text: state.sorting == ExpenselistSorting.all
-                            ? AppLocalizations.of(context)!.household
-                            : state.sorting == ExpenselistSorting.personal
-                                ? AppLocalizations.of(context)!.personal
-                                : AppLocalizations.of(context)!.other,
-                        icon: const Icon(Icons.sort),
-                        onPressed: cubit.incrementSorting,
+                    SliverToBoxAdapter(
+                      child: OptionsHeader(
+                        right: HeaderButton(
+                          text: state.sorting == ExpenselistSorting.all
+                              ? AppLocalizations.of(context)!.household
+                              : state.sorting == ExpenselistSorting.personal
+                                  ? AppLocalizations.of(context)!.personal
+                                  : AppLocalizations.of(context)!.other,
+                          icon: const Icon(Icons.sort),
+                          onPressed: cubit.incrementSorting,
+                        ),
                       ),
                     ),
                   if (state.expenses.isNotEmpty)

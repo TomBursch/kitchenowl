@@ -5,33 +5,72 @@ import 'package:kitchenowl/services/transaction_handler.dart';
 import 'package:kitchenowl/services/transactions/expense.dart';
 
 class ExpenseOverviewCubit extends Cubit<ExpenseOverviewState> {
-  ExpenseOverviewCubit() : super(const ExpenseOverviewLoading()) {
+  Future<void>? _refreshThread;
+
+  ExpenseOverviewCubit(ExpenselistSorting initialSorting)
+      : super(ExpenseOverviewLoading(initialSorting)) {
     refresh();
   }
 
-  Future<void> refresh() async {
+  void incrementSorting() {
+    setSorting(ExpenselistSorting
+        .values[(state.sorting.index + 1) % ExpenselistSorting.values.length]);
+  }
+
+  void setSorting(ExpenselistSorting sorting) {
+    emit(state.copyWith(sorting: sorting));
+    refresh();
+  }
+
+  Future<void> refresh() {
+    _refreshThread ??= _refresh();
+
+    return _refreshThread!;
+  }
+
+  Future<void> _refresh() async {
+    final sorting = state.sorting;
     final overview = await TransactionHandler.getInstance()
         .runTransaction(TransactionExpenseGetOverview(
-      sorting: ExpenselistSorting.all,
+      sorting: sorting,
       months: 5,
     ));
-    if (overview.isEmpty) return;
+    if (overview.isEmpty) {
+      _refreshThread = null;
+
+      return;
+    }
 
     emit(ExpenseOverviewLoaded(
+      sorting: sorting,
       categoryOverviewsByCategory: overview,
     ));
+
+    _refreshThread = null;
   }
 }
 
 abstract class ExpenseOverviewState extends Equatable {
-  const ExpenseOverviewState();
+  final ExpenselistSorting sorting;
+
+  const ExpenseOverviewState(this.sorting);
+
+  ExpenseOverviewState copyWith({
+    ExpenselistSorting? sorting,
+  });
 }
 
 class ExpenseOverviewLoading extends ExpenseOverviewState {
-  const ExpenseOverviewLoading();
+  const ExpenseOverviewLoading(super.sorting);
 
   @override
-  List<Object?> get props => [];
+  ExpenseOverviewState copyWith({
+    ExpenselistSorting? sorting,
+  }) =>
+      ExpenseOverviewLoading(sorting ?? this.sorting);
+
+  @override
+  List<Object?> get props => [sorting];
 }
 
 class ExpenseOverviewLoaded extends ExpenseOverviewState {
@@ -39,7 +78,8 @@ class ExpenseOverviewLoaded extends ExpenseOverviewState {
 
   const ExpenseOverviewLoaded({
     required this.categoryOverviewsByCategory,
-  });
+    required ExpenselistSorting sorting,
+  }) : super(sorting);
 
   double getTotalForMonth(int i) {
     return categoryOverviewsByCategory[i.toString()]
@@ -49,5 +89,14 @@ class ExpenseOverviewLoaded extends ExpenseOverviewState {
   }
 
   @override
-  List<Object?> get props => [categoryOverviewsByCategory];
+  ExpenseOverviewState copyWith({
+    ExpenselistSorting? sorting,
+  }) =>
+      ExpenseOverviewLoaded(
+        sorting: sorting ?? this.sorting,
+        categoryOverviewsByCategory: categoryOverviewsByCategory,
+      );
+
+  @override
+  List<Object?> get props => [sorting, categoryOverviewsByCategory];
 }

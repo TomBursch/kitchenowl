@@ -21,28 +21,20 @@ class _ChartBarMonthsState extends State<ChartBarMonths> {
 
   @override
   Widget build(BuildContext context) {
-    final minY = (widget.data
-                    .map((key, value) => MapEntry(
-                          key,
-                          value.values
-                              .fold<double>(0, (p, e) => e < 0 ? p + e : p),
-                        ))
-                    .values
-                    .fold<double>(0, (p, e) => p < e ? p : e) /
-                10)
-            .floor() *
-        10;
-    final maxY = (widget.data
-                    .map((key, value) => MapEntry(
-                          key,
-                          value.values
-                              .fold<double>(0, (p, e) => e > 0 ? p + e : p),
-                        ))
-                    .values
-                    .fold<double>(0, (p, e) => p > e ? p : e) /
-                10)
-            .ceil() *
-        10;
+    final minY = widget.data
+        .map((key, value) => MapEntry(
+              key,
+              value.values.fold<double>(0, (p, e) => e < 0 ? p + e : p),
+            ))
+        .values
+        .fold<double>(0, (p, e) => p < e ? p : e);
+    final maxY = widget.data
+        .map((key, value) => MapEntry(
+              key,
+              value.values.fold<double>(0, (p, e) => e > 0 ? p + e : p),
+            ))
+        .values
+        .fold<double>(0, (p, e) => p > e ? p : e);
 
     return BarChart(
       swapAnimationDuration: const Duration(milliseconds: 150),
@@ -138,10 +130,14 @@ class _ChartBarMonthsState extends State<ChartBarMonths> {
   }
 
   Widget leftTitles(double value, TitleMeta meta) {
+    final showText = value % 10 == 0;
+
     return SideTitleWidget(
       axisSide: meta.axisSide,
       child: Text(
-        NumberFormat.simpleCurrency(decimalDigits: 0).format(value),
+        showText
+            ? NumberFormat.simpleCurrency(decimalDigits: 0).format(value)
+            : "",
         style: const TextStyle(fontSize: 10),
         textAlign: TextAlign.center,
       ),

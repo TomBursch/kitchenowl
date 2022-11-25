@@ -340,5 +340,9 @@
   "totalTime": "Gesamtzeit",
   "@totalTime": {},
   "preparationTime": "Vorbereitungszeit",
-  "@preparationTime": {}
+  "@preparationTime": {},
+  "household": "Haushalt",
+  "@household": {},
+  "personal": "Persönlich",
+  "@personal": {}
 }

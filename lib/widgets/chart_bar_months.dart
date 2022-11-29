@@ -2,14 +2,18 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kitchenowl/kitchenowl.dart';
+import 'package:kitchenowl/models/expense_category.dart';
 
 class ChartBarMonths extends StatefulWidget {
-  final Map<String, Map<String, double>> data;
+  final Map<int, Map<int, double>> data;
+  final Map<int, ExpenseCategory> categoriesById;
 
-  const ChartBarMonths({
+  ChartBarMonths({
     super.key,
     required this.data,
-  });
+    required List<ExpenseCategory> categories,
+  }) : categoriesById =
+            Map.fromEntries(categories.map((e) => MapEntry(e.id!, e)));
 
   @override
   State<ChartBarMonths> createState() => _ChartBarMonthsState();
@@ -59,17 +63,17 @@ class _ChartBarMonthsState extends State<ChartBarMonths> {
                   text: "${_monthOffsetToString(group.x)}\n",
                   style: Theme.of(context).textTheme.titleMedium!,
                 ),
-                ...widget.data[group.x.toString()]!.entries
+                ...widget.data[group.x]!.entries
                     .where((e) => e.value != 0)
                     .map((e) => TextSpan(
                           text:
-                              "${e.key.isEmpty ? AppLocalizations.of(context)!.other : e.key}: ${NumberFormat.simpleCurrency().format(e.value)}\n",
+                              "${widget.categoriesById[e.key]?.name ?? AppLocalizations.of(context)!.other}: ${NumberFormat.simpleCurrency().format(e.value)}\n",
                         ))
                     .toList()
                     .reversed,
                 TextSpan(
                   text:
-                      "\n${AppLocalizations.of(context)!.total}: ${NumberFormat.simpleCurrency().format(widget.data[group.x.toString()]!.values.reduce((v, e) => v + e))}",
+                      "\n${AppLocalizations.of(context)!.total}: ${NumberFormat.simpleCurrency().format(widget.data[group.x]!.values.reduce((v, e) => v + e))}",
                 ),
               ],
             ),
@@ -120,7 +124,7 @@ class _ChartBarMonthsState extends State<ChartBarMonths> {
             .reversed
             .map(
               (e) => generateGroup(
-                int.tryParse(e.key) ?? 0,
+                e.key,
                 e.value,
               ),
             )
@@ -160,7 +164,7 @@ class _ChartBarMonthsState extends State<ChartBarMonths> {
   // ignore: long-method, long-parameter-list
   BarChartGroupData generateGroup(
     int month,
-    Map<String, double> values,
+    Map<int, double> values,
   ) {
     final isTop = values.values.any((e) => e > 0);
     final isBottom = values.values.any((e) => e < 0);
@@ -189,7 +193,7 @@ class _ChartBarMonthsState extends State<ChartBarMonths> {
   }
 
   List<BarChartRodStackItem> generateStack(
-    Map<String, double> values, {
+    Map<int, double> values, {
     bool isTouched = false,
   }) {
     double sumPos = 0;
@@ -216,8 +220,11 @@ class _ChartBarMonthsState extends State<ChartBarMonths> {
     }).toList();
   }
 
-  Color _colorFn(String key) {
-    final i = widget.data['0']!.keys.toList().indexOf(key) % 5;
+  Color _colorFn(int key) {
+    if (widget.categoriesById[key]?.color != null) {
+      return widget.categoriesById[key]!.color!;
+    }
+    final i = widget.data[0]!.keys.toList().indexOf(key) % 5;
     final l = List.generate(5, (i) {
       Color c = lighten(Theme.of(context).colorScheme.primary, -0.2);
       for (int j = 0; j < i; j++) {

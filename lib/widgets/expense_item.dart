@@ -10,6 +10,7 @@ import 'package:kitchenowl/models/expense.dart';
 import 'package:kitchenowl/models/user.dart';
 import 'package:kitchenowl/pages/expense_page.dart';
 import 'package:intl/intl.dart';
+import 'package:kitchenowl/widgets/expense_category_icon.dart';
 
 class ExpenseItemWidget extends StatelessWidget {
   final Expense expense;
@@ -54,6 +55,12 @@ class ExpenseItemWidget extends StatelessWidget {
       ),
       closedBuilder: (context, toggle) => Card(
         child: ListTile(
+          leading: expense.category != null
+              ? ExpenseCategoryIcon(
+                  name: expense.category!.name,
+                  color: expense.category!.color,
+                )
+              : null,
           title: Text(expense.name),
           trailing: Text(NumberFormat.simpleCurrency().format(amount)),
           subtitle: (expense.createdAt != null)

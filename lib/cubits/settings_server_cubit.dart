@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/models/category.dart';
+import 'package:kitchenowl/models/expense_category.dart';
 import 'package:kitchenowl/models/tag.dart';
 import 'package:kitchenowl/models/user.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
@@ -15,7 +16,7 @@ class SettingsServerCubit extends Cubit<SettingsServerState> {
     Future<Set<Tag>?> tags = ApiService.getInstance().getAllTags();
     Future<List<Category>?> categories =
         ApiService.getInstance().getCategories();
-    Future<List<String>?> expenseCategories =
+    Future<List<ExpenseCategory>?> expenseCategories =
         ApiService.getInstance().getExpenseCategories();
 
     emit(SettingsServerState(
@@ -102,23 +103,22 @@ class SettingsServerCubit extends Cubit<SettingsServerState> {
     return res;
   }
 
-  Future<bool> deleteExpenseCategory(String name) async {
-    final res = await ApiService.getInstance().deleteExpenseCategory(name);
+  Future<bool> deleteExpenseCategory(ExpenseCategory category) async {
+    final res = await ApiService.getInstance().deleteExpenseCategory(category);
     refresh();
 
     return res;
   }
 
-  Future<bool> addExpenseCategory(String name) async {
-    final res = await ApiService.getInstance().addExpenseCategory(name);
+  Future<bool> addExpenseCategory(ExpenseCategory category) async {
+    final res = await ApiService.getInstance().addExpenseCategory(category);
     refresh();
 
     return res;
   }
 
-  Future<bool> renameExpenseCategory(String oldName, String newName) async {
-    final res =
-        await ApiService.getInstance().renameExpenseCategory(oldName, newName);
+  Future<bool> updateExpenseCategory(ExpenseCategory category) async {
+    final res = await ApiService.getInstance().updateExpenseCategory(category);
     refresh();
 
     return res;
@@ -129,7 +129,7 @@ class SettingsServerState extends Equatable {
   final List<User> users;
   final Set<Tag> tags;
   final List<Category> categories;
-  final List<String> expenseCategories;
+  final List<ExpenseCategory> expenseCategories;
 
   const SettingsServerState(
     this.users,
@@ -142,7 +142,7 @@ class SettingsServerState extends Equatable {
     List<User>? users,
     Set<Tag>? tags,
     List<Category>? categories,
-    List<String>? expenseCategories,
+    List<ExpenseCategory>? expenseCategories,
   }) =>
       SettingsServerState(
         users ?? this.users,
@@ -163,7 +163,7 @@ class LoadingSettingsServerState extends SettingsServerState {
     List<User>? users,
     Set<Tag>? tags,
     List<Category>? categories,
-    List<String>? expenseCategories,
+    List<ExpenseCategory>? expenseCategories,
   }) =>
       LoadingSettingsServerState(
         users ?? this.users,

@@ -2,16 +2,20 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kitchenowl/kitchenowl.dart';
+import 'package:kitchenowl/models/expense_category.dart';
 
 class ChartPieCurrentMonth extends StatefulWidget {
-  final Map<String, double> data;
+  final Map<int, double> data;
   final double availableHeight;
+  final Map<int, ExpenseCategory> categoriesById;
 
-  const ChartPieCurrentMonth({
+  ChartPieCurrentMonth({
     super.key,
     required this.data,
+    required List<ExpenseCategory> categories,
     this.availableHeight = 240,
-  });
+  }) : categoriesById =
+            Map.fromEntries(categories.map((e) => MapEntry(e.id!, e)));
 
   @override
   State<ChartPieCurrentMonth> createState() => _ChartPieCurrentMonthState();
@@ -79,7 +83,8 @@ class _ChartPieCurrentMonthState extends State<ChartPieCurrentMonth> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    e.key.isEmpty ? AppLocalizations.of(context)!.other : e.key,
+                    widget.categoriesById[e.key]?.name ??
+                        AppLocalizations.of(context)!.other,
                   ),
                   if (isTouched)
                     Text(": ${NumberFormat.simpleCurrency().format(e.value)}"),
@@ -94,7 +99,10 @@ class _ChartPieCurrentMonthState extends State<ChartPieCurrentMonth> {
     }).toList();
   }
 
-  Color _colorFn(String key) {
+  Color _colorFn(int key) {
+    if (widget.categoriesById[key]?.color != null) {
+      return widget.categoriesById[key]!.color!;
+    }
     final i = widget.data.keys.toList().indexOf(key) % 5;
     final l = List.generate(5, (i) {
       Color c = lighten(Theme.of(context).colorScheme.primary, -0.2);

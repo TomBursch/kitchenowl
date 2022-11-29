@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/cubits/settings_cubit.dart';
 import 'package:kitchenowl/cubits/settings_server_cubit.dart';
+import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/kitchenowl.dart';
+import 'package:kitchenowl/models/expense_category.dart';
+import 'package:kitchenowl/pages/expense_category_add_update_page.dart';
 import 'package:kitchenowl/widgets/dismissible_card.dart';
 
 class SliverServerExpenseCategorySettings extends StatelessWidget {
@@ -32,7 +35,7 @@ class SliverServerExpenseCategorySettings extends StatelessWidget {
             delegate: SliverChildBuilderDelegate(
               childCount: state.expenseCategories.length,
               (context, i) => DismissibleCard(
-                key: ValueKey<String>(
+                key: ValueKey<ExpenseCategory>(
                   state.expenseCategories.elementAt(i),
                 ),
                 confirmDismiss: (direction) async {
@@ -56,29 +59,17 @@ class SliverServerExpenseCategorySettings extends StatelessWidget {
                   );
                 },
                 title: Text(
-                  state.expenseCategories.elementAt(i),
+                  state.expenseCategories.elementAt(i).name,
                 ),
                 onTap: () async {
-                  final res = await showDialog<String>(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return TextDialog(
-                        title: AppLocalizations.of(context)!.addTag,
-                        doneText: AppLocalizations.of(context)!.rename,
-                        hintText: AppLocalizations.of(context)!.name,
-                        initialText: state.expenseCategories.elementAt(i),
-                        isInputValid: (s) =>
-                            s.isNotEmpty &&
-                            s != state.expenseCategories.elementAt(i),
-                      );
-                    },
-                  );
-                  if (res != null) {
-                    BlocProvider.of<SettingsServerCubit>(context)
-                        .renameExpenseCategory(
-                      state.expenseCategories.elementAt(i),
-                      res,
-                    );
+                  final res = await Navigator.of(context)
+                      .push<UpdateEnum>(MaterialPageRoute(
+                    builder: (context) => AddUpdateExpenseCategoryPage(
+                      category: state.expenseCategories.elementAt(i),
+                    ),
+                  ));
+                  if (res == UpdateEnum.updated || res == UpdateEnum.updated) {
+                    BlocProvider.of<SettingsServerCubit>(context).refresh();
                   }
                 },
               ),

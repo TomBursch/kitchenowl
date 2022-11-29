@@ -1,5 +1,6 @@
 import 'package:kitchenowl/models/model.dart';
 
+import 'expense_category.dart';
 import 'nullable.dart';
 
 class Expense extends Model {
@@ -8,7 +9,7 @@ class Expense extends Model {
   final double amount;
   final String image;
   final DateTime? createdAt;
-  final String? category;
+  final ExpenseCategory? category;
   final int paidById;
   final List<PaidForModel> paidFor;
 
@@ -34,7 +35,9 @@ class Expense extends Model {
       name: map['name'],
       amount: map['amount'],
       image: map['photo'] ?? "",
-      category: map['category'],
+      category: map['category'] != null
+          ? ExpenseCategory.fromJson(map['category'])
+          : null,
       createdAt:
           DateTime.fromMillisecondsSinceEpoch(map['created_at'], isUtc: true)
               .toLocal(),
@@ -47,7 +50,7 @@ class Expense extends Model {
     String? name,
     double? amount,
     String? image,
-    Nullable<String>? category,
+    Nullable<ExpenseCategory>? category,
     int? paidById,
     List<PaidForModel>? paidFor,
   }) =>
@@ -70,7 +73,7 @@ class Expense extends Model {
         "name": name,
         "amount": amount,
         "photo": image,
-        'category': category,
+        'category': category?.toJson(),
         "paid_by": {"id": paidById},
         "paid_for": paidFor.map((e) => e.toJson()).toList(),
       };

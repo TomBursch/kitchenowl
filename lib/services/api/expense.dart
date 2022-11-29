@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:kitchenowl/enums/expenselist_sorting.dart';
 import 'package:kitchenowl/models/expense.dart';
+import 'package:kitchenowl/models/expense_category.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
 
 extension ExpenseApi on ApiService {
@@ -51,41 +52,40 @@ extension ExpenseApi on ApiService {
     return res.statusCode == 200;
   }
 
-  Future<List<String>?> getExpenseCategories() async {
+  Future<List<ExpenseCategory>?> getExpenseCategories() async {
     final res = await get('$baseRoute/categories');
     if (res.statusCode != 200) return null;
 
-    return List<String>.from(jsonDecode(res.body));
+    final body = List.from(jsonDecode(res.body));
+
+    return body.map((e) => ExpenseCategory.fromJson(e)).toList();
   }
 
-  Future<bool> addExpenseCategory(String name) async {
+  Future<bool> addExpenseCategory(ExpenseCategory category) async {
     final res = await post(
       '$baseRoute/categories',
-      jsonEncode({'name': name}),
+      jsonEncode(category.toJson()),
     );
 
     return res.statusCode == 200;
   }
 
-  Future<bool> renameExpenseCategory(String oldName, String newName) async {
+  Future<bool> updateExpenseCategory(ExpenseCategory category) async {
     final res = await post(
-      '$baseRoute/categories/$oldName',
-      jsonEncode({'name': newName}),
+      '$baseRoute/categories/${category.id}',
+      jsonEncode(category.toJson()),
     );
 
     return res.statusCode == 200;
   }
 
-  Future<bool> deleteExpenseCategory(String name) async {
-    final res = await delete(
-      '$baseRoute/categories',
-      body: jsonEncode({'name': name}),
-    );
+  Future<bool> deleteExpenseCategory(ExpenseCategory category) async {
+    final res = await delete('$baseRoute/categories/${category.id}');
 
     return res.statusCode == 200;
   }
 
-  Future<Map<String, Map<String, double>>?> getExpenseOverview([
+  Future<Map<int, Map<int, double>>?> getExpenseOverview([
     ExpenselistSorting sorting = ExpenselistSorting.all,
     int? months,
   ]) async {
@@ -100,6 +100,9 @@ extension ExpenseApi on ApiService {
 
     final body = jsonDecode(res.body);
 
-    return Map.from(body).map((key, value) => MapEntry(key, Map.from(value)));
+    return Map.from(body).map((key, value) => MapEntry(
+          int.parse(key),
+          Map.from(value).map((key, value) => MapEntry(int.parse(key), value)),
+        ));
   }
 }

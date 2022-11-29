@@ -24,7 +24,7 @@ class Expense(db.Model, DbModelMixin, TimestampMixin):
             ExpensePaidFor.expense_id).all()
         res['paid_for'] = [e.obj_to_dict() for e in paidFor]
         if (self.category):
-            res['category'] = self.category.name
+            res['category'] = self.category.obj_to_full_dict()
         return res
 
     @classmethod

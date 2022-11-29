@@ -28,9 +28,8 @@ class AddExpense(Schema):
         required=True
     )
     photo = fields.String()
-    category = fields.String(
-        validate=lambda a: not a or (
-            a and not a.isspace()), allow_none=True
+    category = fields.Integer(
+        allow_none=True
     )
     paid_by = fields.Nested(User(), required=True)
     paid_for = fields.List(fields.Nested(
@@ -53,9 +52,7 @@ class UpdateExpense(Schema):
     name = fields.String()
     amount = fields.Float()
     photo = fields.String()
-    category = fields.String(
-        validate=lambda a: not a or (
-            a and not a.isspace()),
+    category = fields.Integer(
         allow_none=True
     )
     paid_by = fields.Nested(User())
@@ -67,18 +64,16 @@ class AddExpenseCategory(Schema):
         required=True,
         validate=lambda a: a and not a.isspace()
     )
+    color = fields.Integer()
 
 
 class UpdateExpenseCategory(Schema):
     name = fields.String(
         validate=lambda a: a and not a.isspace()
     )
-
-
-class DeleteExpenseCategory(Schema):
-    name = fields.String(
-        required=True,
-        validate=lambda a: a and not a.isspace()
+    color = fields.Integer(
+        validate=lambda i: i >= 0,
+        allow_none=True
     )
 
 

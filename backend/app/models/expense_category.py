@@ -8,6 +8,7 @@ class ExpenseCategory(db.Model, DbModelMixin, TimestampMixin):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(128))
+    color = db.Column(db.Integer)
 
     expenses = db.relationship(
         'Expense', back_populates='category')
@@ -15,12 +16,6 @@ class ExpenseCategory(db.Model, DbModelMixin, TimestampMixin):
     def obj_to_full_dict(self) -> dict:
         res = super().obj_to_dict()
         return res
-
-    @classmethod
-    def create_by_name(cls, name) -> ExpenseCategory:
-        return cls(
-            name=name,
-        ).save()
 
     @classmethod
     def find_by_name(cls, name) -> ExpenseCategory:

@@ -8,7 +8,7 @@ from sqlalchemy import func
 from app import db
 from app.helpers import validate_args, admin_required
 from app.models import Expense, ExpensePaidFor, User, ExpenseCategory
-from .schemas import GetExpenses, AddExpense, UpdateExpense, AddExpenseCategory, DeleteExpenseCategory, UpdateExpenseCategory, GetExpenseOverview
+from .schemas import GetExpenses, AddExpense, UpdateExpense, AddExpenseCategory, UpdateExpenseCategory, GetExpenseOverview
 
 expense = Blueprint('expense', __name__)
 
@@ -54,12 +54,8 @@ def addExpense(args):
     if 'photo' in args:
         expense.photo = args['photo']
     if 'category' in args:
-        if not args['category']:
-            expense.category = None
-        else:
-            category = ExpenseCategory.find_by_name(args['category'])
-            if not category:
-                category = ExpenseCategory.create_by_name(args['category'])
+        if args['category'] is not None:
+            category = ExpenseCategory.find_by_id(args['category'])
             expense.category = category
     expense.paid_by = user
     expense.save()
@@ -98,13 +94,11 @@ def updateExpense(args, id):  # noqa: C901
     if 'photo' in args:
         expense.photo = args['photo']
     if 'category' in args:
-        if not args['category']:
-            expense.category = None
-        else:
-            category = ExpenseCategory.find_by_name(args['category'])
-            if not category:
-                category = ExpenseCategory.create_by_name(args['category'])
+        if args['category'] is not None:
+            category = ExpenseCategory.find_by_id(args['category'])
             expense.category = category
+        else:
+            expense.category = None
     if 'paid_by' in args:
         user = User.find_by_id(args['paid_by']['id'])
         if user:
@@ -164,15 +158,15 @@ def recalculateBalances():
 @expense.route('/categories', methods=['GET'])
 @jwt_required()
 def getExpenseCategories():
-    return jsonify([e.name for e in ExpenseCategory.all_by_name()])
+    return jsonify([e.obj_to_dict() for e in ExpenseCategory.all_by_name()])
 
 
 @expense.route('/overview', methods=['GET'])
 @jwt_required()
 @validate_args(GetExpenseOverview)
 def getExpenseOverview(args):
-    categories = list(map(lambda x: x.name, ExpenseCategory.all_by_name()))
-    categories.append("")
+    categories = list(map(lambda x: x.id, ExpenseCategory.all_by_name()))
+    categories.append(-1)
     thisMonthStart = datetime.utcnow().date().replace(day=1)
 
     months = args['months'] if 'months' in args else 5
@@ -201,9 +195,9 @@ def getExpenseOverview(args):
         monthEnd = monthStart.replace(day=calendar.monthrange(
             monthStart.year, monthStart.month)[1])
         return {
-            (e.name or ""): (float(e.balance) or 0) for e in
+            (e.id or -1): (float(e.balance) or 0) for e in
             query
-            .with_entities(ExpenseCategory.name.label("name"), func.sum(Expense.amount * factor).label("balance"))
+            .with_entities(ExpenseCategory.id.label("id"), func.sum(Expense.amount * factor).label("balance"))
             .filter(Expense.created_at >= monthStart, Expense.created_at <= monthEnd)
             .all()
         }
@@ -220,30 +214,33 @@ def getExpenseOverview(args):
 @jwt_required()
 @validate_args(AddExpenseCategory)
 def addExpenseCategory(args):
-    category = ExpenseCategory.create_by_name(args['name'])
+    category = ExpenseCategory()
+    category.name = args['name']
+    category.color = args['color']
     return jsonify(category.obj_to_dict())
 
 
-@expense.route('/categories', methods=['DELETE'])
+@expense.route('/categories/<id>', methods=['DELETE'])
 @jwt_required()
 @admin_required
-@validate_args(DeleteExpenseCategory)
-def deleteExpenseCategoryById(args):
-    ExpenseCategory.delete_by_name(args['name'])
+def deleteExpenseCategoryById(id):
+    ExpenseCategory.delete_by_id(id)
     return jsonify({'msg': 'DONE'})
 
 
-@expense.route('/categories/<name>', methods=['POST'])
+@expense.route('/categories/<id>', methods=['POST'])
 @jwt_required()
 @validate_args(UpdateExpenseCategory)
-def renameExpenseCategory(args, name):
-    category = ExpenseCategory.find_by_name(name)
+def updateExpenseCategory(args, id):
+    category = ExpenseCategory.find_by_id(id)
 
     if not category:
         raise NotFoundRequest()
 
     if 'name' in args:
         category.name = args['name']
+    if 'color' in args:
+        category.color = args['color']
 
     category.save()
     return jsonify(category.obj_to_dict())

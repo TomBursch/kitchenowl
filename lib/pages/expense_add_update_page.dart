@@ -8,6 +8,7 @@ import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/helpers/currency_text_input_formatter.dart';
 import 'package:kitchenowl/models/expense.dart';
 import 'package:kitchenowl/kitchenowl.dart';
+import 'package:kitchenowl/models/expense_category.dart';
 import 'package:kitchenowl/models/user.dart';
 import 'package:collection/collection.dart';
 import 'package:responsive_builder/responsive_builder.dart';
@@ -20,10 +21,10 @@ class AddUpdateExpensePage extends StatefulWidget {
       : super(key: key);
 
   @override
-  _AddUpdateRecipePageState createState() => _AddUpdateRecipePageState();
+  _AddUpdateExpensePageState createState() => _AddUpdateExpensePageState();
 }
 
-class _AddUpdateRecipePageState extends State<AddUpdateExpensePage> {
+class _AddUpdateExpensePageState extends State<AddUpdateExpensePage> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController amountController = TextEditingController();
 
@@ -218,59 +219,31 @@ class _AddUpdateRecipePageState extends State<AddUpdateExpensePage> {
                             AppLocalizations.of(context)!.category,
                             style: Theme.of(context).textTheme.caption,
                           ),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: BlocBuilder<AddUpdateExpenseCubit,
-                                    AddUpdateExpenseState>(
-                                  bloc: cubit,
-                                  buildWhen: (prev, curr) =>
-                                      prev.categories != curr.categories ||
-                                      prev.category != curr.category,
-                                  builder: (context, state) =>
-                                      DropdownButton<String?>(
-                                    value: state.category,
-                                    isExpanded: true,
-                                    items: [
-                                      for (final e in (state.categories))
-                                        DropdownMenuItem(
-                                          value: e,
-                                          child: Text(e),
-                                        ),
-                                      DropdownMenuItem(
-                                        value: null,
-                                        child: Text(
-                                          AppLocalizations.of(context)!.none,
-                                        ),
-                                      ),
-                                    ],
-                                    onChanged: cubit.setCategory,
+                          BlocBuilder<AddUpdateExpenseCubit,
+                              AddUpdateExpenseState>(
+                            bloc: cubit,
+                            buildWhen: (prev, curr) =>
+                                prev.categories != curr.categories ||
+                                prev.category != curr.category,
+                            builder: (context, state) =>
+                                DropdownButton<ExpenseCategory?>(
+                              value: state.category,
+                              isExpanded: true,
+                              items: [
+                                for (final e in (state.categories))
+                                  DropdownMenuItem(
+                                    value: e,
+                                    child: Text(e.name),
+                                  ),
+                                DropdownMenuItem(
+                                  value: null,
+                                  child: Text(
+                                    AppLocalizations.of(context)!.none,
                                   ),
                                 ),
-                              ),
-                              IconButton(
-                                onPressed: () async {
-                                  final res = await showDialog<String>(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return TextDialog(
-                                        title: AppLocalizations.of(context)!
-                                            .addCategory,
-                                        doneText:
-                                            AppLocalizations.of(context)!.add,
-                                        hintText:
-                                            AppLocalizations.of(context)!.name,
-                                        isInputValid: (s) => s.isNotEmpty,
-                                      );
-                                    },
-                                  );
-                                  if (res != null) {
-                                    cubit.setCategory(res);
-                                  }
-                                },
-                                icon: const Icon(Icons.add),
-                              ),
-                            ],
+                              ],
+                              onChanged: cubit.setCategory,
+                            ),
                           ),
                         ],
                       ),

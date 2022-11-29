@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/cubits/settings_cubit.dart';
 import 'package:kitchenowl/cubits/settings_server_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
+import 'package:kitchenowl/models/expense_category.dart';
+import 'package:kitchenowl/pages/expense_category_add_update_page.dart';
 import 'package:kitchenowl/pages/settings/create_user_page.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/widgets/settings_server/sliver_server_category_settings.dart';
@@ -113,52 +115,43 @@ class _SettingsServerPageState extends State<SettingsServerPage> {
                             buildWhen: (prev, curr) =>
                                 prev.serverSettings.featureExpenses !=
                                 curr.serverSettings.featureExpenses,
-                            builder: (context, settingsState) => (settingsState
-                                        .serverSettings.featureExpenses ??
-                                    false)
-                                ? Row(
-                                    children: [
-                                      Expanded(
-                                        child: Text(
-                                          '${AppLocalizations.of(context)!.expenseCategories}:',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .headline6,
-                                        ),
-                                      ),
-                                      IconButton(
-                                        icon: const Icon(Icons.add),
-                                        onPressed: () async {
-                                          final res = await showDialog<String>(
-                                            context: context,
-                                            builder: (BuildContext context) {
-                                              return TextDialog(
-                                                title: AppLocalizations.of(
-                                                  context,
-                                                )!
-                                                    .addCategory,
-                                                doneText: AppLocalizations.of(
-                                                  context,
-                                                )!
-                                                    .add,
-                                                hintText: AppLocalizations.of(
-                                                  context,
-                                                )!
-                                                    .name,
-                                                isInputValid: (s) =>
-                                                    s.isNotEmpty,
+                            builder: (context, settingsState) =>
+                                (settingsState.serverSettings.featureExpenses ??
+                                        false)
+                                    ? Row(
+                                        children: [
+                                          Expanded(
+                                            child: Text(
+                                              '${AppLocalizations.of(context)!.expenseCategories}:',
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .headline6,
+                                            ),
+                                          ),
+                                          IconButton(
+                                            icon: const Icon(Icons.add),
+                                            onPressed: () async {
+                                              final res =
+                                                  await Navigator.of(context)
+                                                      .push<UpdateEnum>(
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      const AddUpdateExpenseCategoryPage(),
+                                                ),
                                               );
+                                              if (res == UpdateEnum.updated ||
+                                                  res == UpdateEnum.updated) {
+                                                BlocProvider.of<
+                                                    SettingsServerCubit>(
+                                                  context,
+                                                ).refresh();
+                                              }
                                             },
-                                          );
-                                          if (res != null) {
-                                            cubit.addExpenseCategory(res);
-                                          }
-                                        },
-                                        padding: EdgeInsets.zero,
-                                      ),
-                                    ],
-                                  )
-                                : const SizedBox(),
+                                            padding: EdgeInsets.zero,
+                                          ),
+                                        ],
+                                      )
+                                    : const SizedBox(),
                           ),
                         ]),
                       ),

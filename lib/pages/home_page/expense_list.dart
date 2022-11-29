@@ -188,6 +188,7 @@ class _ExpensePageState extends State<ExpenseListPage> {
                             .toDouble(),
                         child: ChartPieCurrentMonth(
                           data: state.categoryOverview,
+                          categories: state.categories,
                           availableHeight: (state.users.length * 60 + 30)
                               .clamp(150, 270)
                               .toDouble(),

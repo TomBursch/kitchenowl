@@ -61,12 +61,16 @@
       "category": {}
     }
   },
+  "categoryEdit": "Edit Category",
+  "@categoryEdit": {},
   "categoryExpenseDeleteConfirmation": "Are you sure you want to delete {category}? This will remove the category from all expenses.",
   "@categoryExpenseDeleteConfirmation": {
     "placeholders": {
       "category": {}
     }
   },
+  "colorSelect": "Select a color",
+  "@colorSelect": {},
   "cookingTime": "Cooking time",
   "@cookingTime": {},
   "copied": "Copied",

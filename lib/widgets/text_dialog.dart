@@ -46,21 +46,28 @@ class _TextDialogState extends State<TextDialog> {
     return AlertDialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
       title: Text(widget.title),
-      content: TextField(
-        controller: controller,
-        autofocus: true,
-        onChanged: (value) {
-          if (widget.isInputValid != null) {
-            setState(() {
-              validText = widget.isInputValid!(value);
-            });
-          }
-        },
-        onSubmitted: (t) {
-          if (validText) Navigator.of(context).pop(t);
-        },
-        decoration: InputDecoration(hintText: widget.hintText),
-        keyboardType: widget.textInputType,
+      content: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: controller,
+              autofocus: true,
+              onChanged: (value) {
+                if (widget.isInputValid != null) {
+                  setState(() {
+                    validText = widget.isInputValid!(value);
+                  });
+                }
+              },
+              onSubmitted: (t) {
+                if (validText) Navigator.of(context).pop(t);
+              },
+              decoration: InputDecoration(hintText: widget.hintText),
+              keyboardType: widget.textInputType,
+            ),
+          ],
+        ),
       ),
       actions: [
         TextButton(

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/helpers/named_bytearray.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/expense.dart';
+import 'package:kitchenowl/models/expense_category.dart';
 import 'package:kitchenowl/models/user.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
 
@@ -42,7 +43,7 @@ class AddUpdateExpenseCubit extends Cubit<AddUpdateExpenseState> {
         ));
       } else {
         await ApiService.getInstance().updateExpense(expense.copyWith(
-          name: state.name,
+          name: _state.name,
           amount: amount,
           image: image,
           paidById: _state.paidBy,
@@ -85,8 +86,8 @@ class AddUpdateExpenseCubit extends Cubit<AddUpdateExpenseState> {
     emit(state.copyWith(paidBy: userId));
   }
 
-  void setCategory(String? category) {
-    List<String>? categories;
+  void setCategory(ExpenseCategory? category) {
+    List<ExpenseCategory>? categories;
     if (category != null && !state.categories.contains(category)) {
       categories = List.of(state.categories)..add(category);
     }
@@ -145,8 +146,8 @@ class AddUpdateExpenseState extends Equatable {
   final NamedByteArray? image;
   final int paidBy;
   final List<PaidForModel> paidFor;
-  final String? category;
-  final List<String> categories;
+  final ExpenseCategory? category;
+  final List<ExpenseCategory> categories;
 
   const AddUpdateExpenseState({
     this.name = "",
@@ -166,8 +167,8 @@ class AddUpdateExpenseState extends Equatable {
     bool? isIncome,
     NamedByteArray? image,
     List<PaidForModel>? paidFor,
-    String? category,
-    List<String>? categories,
+    ExpenseCategory? category,
+    List<ExpenseCategory>? categories,
   }) =>
       AddUpdateExpenseState(
         name: name ?? this.name,
@@ -181,8 +182,8 @@ class AddUpdateExpenseState extends Equatable {
       );
 
   AddUpdateExpenseState copyWithCategory({
-    required String? category,
-    required List<String>? categories,
+    required ExpenseCategory? category,
+    required List<ExpenseCategory>? categories,
   }) =>
       AddUpdateExpenseState(
         name: name,

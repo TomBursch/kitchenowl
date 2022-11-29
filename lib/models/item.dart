@@ -1,4 +1,3 @@
-import 'package:intl/intl.dart';
 import 'package:kitchenowl/helpers/string_scaler.dart';
 import 'package:kitchenowl/models/category.dart';
 import 'package:kitchenowl/models/model.dart';

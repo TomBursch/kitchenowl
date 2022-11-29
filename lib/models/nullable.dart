@@ -9,6 +9,8 @@ class Nullable<T> extends Equatable {
 
   const Nullable.empty() : value = null;
 
+  Nullable<R> map<R>(R? Function(T?) f) => Nullable<R>(f(value));
+
   T? or(T? alternative) => value ?? alternative;
 
   @override

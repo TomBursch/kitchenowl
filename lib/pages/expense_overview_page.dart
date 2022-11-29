@@ -107,7 +107,8 @@ class _ExpenseOverviewPageState extends State<ExpenseOverviewPage> {
                   SizedBox(
                     height: 300,
                     child: ChartPieCurrentMonth(
-                      data: state.categoryOverviewsByCategory['0']!,
+                      data: state.categoryOverviewsByCategory[0]!,
+                      categories: state.categories,
                       availableHeight: 270,
                     ),
                   ),
@@ -122,6 +123,7 @@ class _ExpenseOverviewPageState extends State<ExpenseOverviewPage> {
                     height: 300,
                     child: ChartBarMonths(
                       data: state.categoryOverviewsByCategory,
+                      categories: state.categories,
                     ),
                   ),
                 ],

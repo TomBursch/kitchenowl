@@ -1,5 +1,6 @@
 import 'package:kitchenowl/enums/expenselist_sorting.dart';
 import 'package:kitchenowl/models/expense.dart';
+import 'package:kitchenowl/models/expense_category.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
 import 'package:kitchenowl/services/transaction.dart';
 
@@ -151,7 +152,7 @@ class TransactionExpenseUpdate extends Transaction<bool> {
 }
 
 class TransactionExpenseGetOverview
-    extends Transaction<Map<String, Map<String, double>>> {
+    extends Transaction<Map<int, Map<int, double>>> {
   final ExpenselistSorting sorting;
   final int months;
 
@@ -165,12 +166,31 @@ class TransactionExpenseGetOverview
         );
 
   @override
-  Future<Map<String, Map<String, double>>> runLocal() async {
+  Future<Map<int, Map<int, double>>> runLocal() async {
     return {};
   }
 
   @override
-  Future<Map<String, Map<String, double>>?> runOnline() async {
+  Future<Map<int, Map<int, double>>?> runOnline() async {
     return await ApiService.getInstance().getExpenseOverview(sorting, months);
+  }
+}
+
+class TransactionExpenseCategoriesGet
+    extends Transaction<List<ExpenseCategory>> {
+  TransactionExpenseCategoriesGet({DateTime? timestamp})
+      : super.internal(
+          timestamp ?? DateTime.now(),
+          "TransactionExpenseCategoriesGet",
+        );
+
+  @override
+  Future<List<ExpenseCategory>> runLocal() async {
+    return const [];
+  }
+
+  @override
+  Future<List<ExpenseCategory>?> runOnline() async {
+    return await ApiService.getInstance().getExpenseCategories();
   }
 }

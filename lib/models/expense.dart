@@ -73,7 +73,7 @@ class Expense extends Model {
         "name": name,
         "amount": amount,
         "photo": image,
-        'category': category?.toJson(),
+        'category': category?.id,
         "paid_by": {"id": paidById},
         "paid_for": paidFor.map((e) => e.toJson()).toList(),
       };

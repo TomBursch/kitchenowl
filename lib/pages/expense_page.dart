@@ -109,7 +109,7 @@ class _ExpensePageState extends State<ExpensePage> {
                         if (state.expense.category != null)
                           ListTile(
                             title: Text(
-                              "${AppLocalizations.of(context)!.category} ${state.expense.category!}",
+                              "${AppLocalizations.of(context)!.category} ${state.expense.category!.name}",
                             ),
                           ),
                         ListTile(

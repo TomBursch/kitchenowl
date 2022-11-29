@@ -161,6 +161,8 @@ class TransactionShoppingListDeleteItem extends Transaction<bool> {
 
   @override
   Future<bool?> runOnline() {
+    runLocal();
+
     return ApiService.getInstance().removeItem(item, timestamp);
   }
 }

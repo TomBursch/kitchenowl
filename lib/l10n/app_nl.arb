@@ -340,5 +340,7 @@
   "totalTime": "Totale tijd",
   "@totalTime": {},
   "preparationTime": "Voorbereidingstijd",
-  "@preparationTime": {}
+  "@preparationTime": {},
+  "personal": "Persoonlijk",
+  "@personal": {}
 }

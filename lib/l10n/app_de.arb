@@ -344,5 +344,9 @@
   "household": "Haushalt",
   "@household": {},
   "personal": "Persönlich",
-  "@personal": {}
+  "@personal": {},
+  "categoryEdit": "Kategorie bearbeiten",
+  "@categoryEdit": {},
+  "colorSelect": "Suche eine Farbe aus",
+  "@colorSelect": {}
 }

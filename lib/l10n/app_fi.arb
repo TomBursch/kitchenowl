@@ -264,5 +264,53 @@
   "tags": "Avainsanat",
   "@tags": {},
   "themeLight": "Vaalea",
-  "@themeLight": {}
+  "@themeLight": {},
+  "household": "Kotitalous",
+  "@household": {},
+  "admin": "Ylläpitäjä",
+  "@admin": {},
+  "balances": "Saldot",
+  "@balances": {},
+  "categoryExpenseDeleteConfirmation": "Haluatko varmasti poistaa kategorian {category}? Kategoria poistetaan kaikista kuluista.",
+  "@categoryExpenseDeleteConfirmation": {
+    "placeholders": {
+      "category": {}
+    }
+  },
+  "expense": "Kulu",
+  "@expense": {},
+  "expenseAdd": "Lisää kulu",
+  "@expenseAdd": {},
+  "expenseCategories": "Kululuokat",
+  "@expenseCategories": {},
+  "expenseEdit": "Muokkaa kulu",
+  "@expenseEdit": {},
+  "expenseEmpty": "Ei kuluja, aloita luomalla sellainen!",
+  "@expenseEmpty": {},
+  "income": "Tulot",
+  "@income": {},
+  "offlineMessage": "Olet offline",
+  "@offlineMessage": {},
+  "overview": "Yleiskatsaus",
+  "@overview": {},
+  "personal": "Henkilökohtainen",
+  "@personal": {},
+  "addDescriptionFromSource": "Lisää kuvaus lähteestä",
+  "@addDescriptionFromSource": {},
+  "addLanguageConfirm": "Haluatko varmasti lisätä kielen '{lang}'? Tätä ei (juuri nyt) voi perua.",
+  "@addLanguageConfirm": {
+    "placeholders": {
+      "lang": {}
+    }
+  },
+  "appDescription": "KitchenOwl auttaa sinua järjestämään päivittäistavaraelämäsi.",
+  "@appDescription": {},
+  "appLegal": "2021 KitchenOwl-tekijät",
+  "@appLegal": {},
+  "total": "Yhteensä",
+  "@total": {},
+  "categoryEdit": "Muokkaa kategoriaa",
+  "@categoryEdit": {},
+  "colorSelect": "Valitse väri",
+  "@colorSelect": {}
 }

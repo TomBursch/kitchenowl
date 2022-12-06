@@ -189,7 +189,7 @@ class _ExpensePageState extends State<ExpenseListPage> {
                           child: Row(
                             children: [
                               if (state.categoryOverview.values
-                                      .reduce((a, b) => a + b) !=
+                                      .fold(0.0, (a, b) => a + b) !=
                                   0)
                                 Expanded(
                                   flex: 2,
@@ -214,7 +214,7 @@ class _ExpensePageState extends State<ExpenseListPage> {
                                     Text(
                                       NumberFormat.simpleCurrency().format(state
                                           .categoryOverview.values
-                                          .reduce((a, b) => a + b)),
+                                          .fold(0.0, (a, b) => a + b)),
                                       style:
                                           Theme.of(context).textTheme.headline5,
                                     ),

@@ -9,6 +9,8 @@ import 'package:kitchenowl/services/storage/temp_storage.dart';
 import 'package:kitchenowl/services/transaction_handler.dart';
 
 class AuthCubit extends Cubit<AuthState> {
+  bool _forcedOfflineMode = false;
+
   AuthCubit() : super(const Loading()) {
     ApiService.getInstance().addListener(updateState);
     ApiService.setTokenRotationHandler((token) =>
@@ -43,22 +45,17 @@ class AuthCubit extends Cubit<AuthState> {
   void updateState() async {
     switch (ApiService.getInstance().connectionStatus) {
       case Connection.authenticated:
-        final user = (await ApiService.getInstance().getUser())!;
-        TempStorage.getInstance().writeUser(user);
-        await TransactionHandler.getInstance().runOpenTransactions();
-        emit(Authenticated(user));
+        if (!_forcedOfflineMode) {
+          final user = (await ApiService.getInstance().getUser())!;
+          TempStorage.getInstance().writeUser(user);
+          await TransactionHandler.getInstance().runOpenTransactions();
+          emit(Authenticated(user));
+        } else {
+          await _caseDisconnected();
+        }
         break;
       case Connection.disconnected:
-        if (kIsWeb || ApiService.getInstance().baseUrl.isNotEmpty) {
-          final user = await TempStorage.getInstance().readUser();
-          if (user != null) {
-            emit(AuthenticatedOffline(user));
-          } else {
-            emit(const Unreachable());
-          }
-        } else {
-          emit(const Setup());
-        }
+        await _caseDisconnected();
         break;
       case Connection.connected:
         if (await ApiService.getInstance().isOnboarding()) {
@@ -76,6 +73,20 @@ class AuthCubit extends Cubit<AuthState> {
       case Connection.undefined:
         emit(const Loading());
         break;
+    }
+    _forcedOfflineMode = state.forcedOfflineMode;
+  }
+
+  Future<void> _caseDisconnected() async {
+    if (kIsWeb || ApiService.getInstance().baseUrl.isNotEmpty) {
+      final user = await TempStorage.getInstance().readUser();
+      if (user != null) {
+        emit(AuthenticatedOffline(user, _forcedOfflineMode));
+      } else {
+        emit(const Unreachable());
+      }
+    } else {
+      emit(const Setup());
     }
   }
 
@@ -100,7 +111,7 @@ class AuthCubit extends Cubit<AuthState> {
       if (state is AuthenticatedOffline) {
         final user = await TempStorage.getInstance().readUser();
         if (user != null) {
-          emit(AuthenticatedOffline(user));
+          emit(AuthenticatedOffline(user, state.forcedOfflineMode));
         } else {
           emit(const Unreachable());
         }
@@ -181,12 +192,20 @@ class AuthCubit extends Cubit<AuthState> {
       }
     }
   }
+
+  void setForcedOfflineMode(bool forcedOfflineMode) async {
+    _forcedOfflineMode = forcedOfflineMode;
+    updateState(); // force refresh if state stays the same
+    refresh();
+  }
 }
 
 abstract class AuthState extends Equatable {
   final int orderId; // used by the ui
 
   const AuthState(this.orderId);
+
+  bool get forcedOfflineMode => false;
 }
 
 class Authenticated extends AuthState {
@@ -199,10 +218,14 @@ class Authenticated extends AuthState {
 }
 
 class AuthenticatedOffline extends Authenticated {
-  const AuthenticatedOffline(User user) : super(user);
+  const AuthenticatedOffline(User user, this._forcedOfflineMode) : super(user);
+  final bool _forcedOfflineMode;
 
   @override
-  List<Object?> get props => [user];
+  List<Object?> get props => [user, _forcedOfflineMode];
+
+  @override
+  bool get forcedOfflineMode => _forcedOfflineMode;
 }
 
 class Onboarding extends AuthState {

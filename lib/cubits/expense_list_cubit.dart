@@ -20,8 +20,8 @@ class ExpenseListCubit extends Cubit<ExpenseListCubitState> {
           false,
         );
       }
+      refresh();
     });
-    refresh();
   }
 
   Future<void> remove(Expense expense) async {

@@ -104,14 +104,20 @@ class _ExpenseOverviewPageState extends State<ExpenseOverviewPage> {
                       ),
                     ],
                   ),
-                  SizedBox(
-                    height: 300,
-                    child: ChartPieCurrentMonth(
-                      data: state.categoryOverviewsByCategory[0]!,
-                      categories: state.categories,
-                      availableHeight: 270,
+                  if (state.categoryOverviewsByCategory[0]!.values
+                          .reduce((a, b) => a + b) !=
+                      0)
+                    SizedBox(
+                      height: (MediaQuery.of(context).size.width - 32)
+                          .clamp(270, 450),
+                      child: ChartPieCurrentMonth(
+                        data: state.categoryOverviewsByCategory[0]!,
+                        categories: state.categories,
+                        availableHeight:
+                            (MediaQuery.of(context).size.width - 32)
+                                .clamp(270, 450),
+                      ),
                     ),
-                  ),
                   const Divider(),
                   Text(
                     AppLocalizations.of(context)!

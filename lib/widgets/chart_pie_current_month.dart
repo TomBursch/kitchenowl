@@ -13,7 +13,7 @@ class ChartPieCurrentMonth extends StatefulWidget {
     super.key,
     required this.data,
     required List<ExpenseCategory> categories,
-    this.availableHeight = 240,
+    this.availableHeight = 270,
   }) : categoriesById =
             Map.fromEntries(categories.map((e) => MapEntry(e.id!, e)));
 
@@ -26,6 +26,10 @@ class _ChartPieCurrentMonthState extends State<ChartPieCurrentMonth> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.data.values.reduce((v, e) => v + e) == 0) {
+      return const SizedBox();
+    }
+
     return PieChart(
       PieChartData(
         pieTouchData: PieTouchData(
@@ -76,18 +80,21 @@ class _ChartPieCurrentMonthState extends State<ChartPieCurrentMonth> {
         badgeWidget: Card(
           child: AnimatedSize(
             duration: const Duration(milliseconds: 200),
-            alignment: Alignment.centerLeft,
+            alignment: Alignment.centerRight,
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 6),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(
-                    widget.categoriesById[e.key]?.name ??
-                        AppLocalizations.of(context)!.other,
-                  ),
                   if (isTouched)
-                    Text(": ${NumberFormat.simpleCurrency().format(e.value)}"),
+                    Text(
+                      '${widget.categoriesById[e.key]?.name ?? AppLocalizations.of(context)!.other}: ',
+                    ),
+                  if (!isTouched)
+                    Text(
+                      '${widget.categoriesById[e.key]?.name.characters.first ?? ''}: ',
+                    ),
+                  Text(NumberFormat.simpleCurrency().format(e.value)),
                 ],
               ),
             ),

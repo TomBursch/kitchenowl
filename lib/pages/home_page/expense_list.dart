@@ -182,16 +182,47 @@ class _ExpensePageState extends State<ExpenseListPage> {
                         height: (state.users.length * 60 + 30).toDouble(),
                         child: _getBarChart(context, state),
                       ),
-                      secondChild: SizedBox(
-                        height: (state.users.length * 60 + 30)
-                            .clamp(150, 270)
-                            .toDouble(),
-                        child: ChartPieCurrentMonth(
-                          data: state.categoryOverview,
-                          categories: state.categories,
-                          availableHeight: (state.users.length * 60 + 30)
-                              .clamp(150, 270)
-                              .toDouble(),
+                      secondChild: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: SizedBox(
+                          height: 270,
+                          child: Row(
+                            children: [
+                              if (state.categoryOverview.values
+                                      .reduce((a, b) => a + b) !=
+                                  0)
+                                Expanded(
+                                  flex: 2,
+                                  child: ChartPieCurrentMonth(
+                                    data: state.categoryOverview,
+                                    categories: state.categories,
+                                  ),
+                                ),
+                              Expanded(
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      DateFormat.MMMM()
+                                              .dateSymbols
+                                              .STANDALONEMONTHS[
+                                          DateTime.now().month - 1],
+                                      style:
+                                          Theme.of(context).textTheme.headline5,
+                                    ),
+                                    const Divider(),
+                                    Text(
+                                      NumberFormat.simpleCurrency().format(state
+                                          .categoryOverview.values
+                                          .reduce((a, b) => a + b)),
+                                      style:
+                                          Theme.of(context).textTheme.headline5,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),

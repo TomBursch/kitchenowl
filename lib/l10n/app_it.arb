@@ -340,5 +340,13 @@
   "yields": "Rese",
   "@yields": {},
   "totalTime": "Tempo totale",
-  "@totalTime": {}
+  "@totalTime": {},
+  "household": "Domestico",
+  "@household": {},
+  "personal": "Personale",
+  "@personal": {},
+  "categoryEdit": "Modifica la categoria",
+  "@categoryEdit": {},
+  "colorSelect": "Seleziona un colore",
+  "@colorSelect": {}
 }

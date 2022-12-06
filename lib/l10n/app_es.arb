@@ -340,5 +340,7 @@
   "totalTime": "Tiempo total",
   "@totalTime": {},
   "yields": "Rinde",
-  "@yields": {}
+  "@yields": {},
+  "personal": "Personal",
+  "@personal": {}
 }

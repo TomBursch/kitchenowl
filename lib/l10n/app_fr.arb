@@ -340,5 +340,13 @@
   "totalTime": "Temps total",
   "@totalTime": {},
   "yields": "Rendement",
-  "@yields": {}
+  "@yields": {},
+  "household": "Ménage",
+  "@household": {},
+  "personal": "Personnel",
+  "@personal": {},
+  "categoryEdit": "Modifier la catégorie",
+  "@categoryEdit": {},
+  "colorSelect": "Sélectionnez une couleur",
+  "@colorSelect": {}
 }

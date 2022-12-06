@@ -1,7 +1,7 @@
 # ------------
 # BUILDER
 # ------------
-FROM python:3.10-slim as builder
+FROM python:3.11-slim as builder
 
 RUN apt-get update \
     && apt-get install --yes --no-install-recommends \
@@ -18,7 +18,7 @@ RUN pip3 install --no-cache-dir -r requirements.txt && find /opt/venv \( -type d
 # ------------
 # RUNNER
 # ------------
-FROM python:3.10-slim as runner
+FROM python:3.11-slim as runner
 
 # Use virtual enviroment
 COPY --from=builder /opt/venv /opt/venv

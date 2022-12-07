@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/cubits/settings_cubit.dart';
 import 'package:kitchenowl/cubits/settings_server_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
-import 'package:kitchenowl/models/expense_category.dart';
 import 'package:kitchenowl/pages/expense_category_add_update_page.dart';
 import 'package:kitchenowl/pages/settings/create_user_page.dart';
 import 'package:kitchenowl/kitchenowl.dart';

@@ -8,7 +8,6 @@ import 'package:kitchenowl/config.dart';
 import 'package:kitchenowl/models/server_settings.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
 import 'package:kitchenowl/services/storage/storage.dart';
-import 'package:kitchenowl/services/transaction_handler.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 class SettingsCubit extends Cubit<SettingsState> {

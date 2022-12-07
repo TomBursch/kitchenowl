@@ -65,10 +65,10 @@ class AuthCubit extends Cubit<AuthState> {
         }
         break;
       case Connection.unsupportedBackend:
-        emit(const Unsupported(true));
+        await _caseUnsupported(true);
         break;
       case Connection.unsupportedFrontend:
-        emit(const Unsupported(false));
+        await _caseUnsupported(false);
         break;
       case Connection.undefined:
         emit(const Loading());
@@ -87,6 +87,20 @@ class AuthCubit extends Cubit<AuthState> {
       }
     } else {
       emit(const Setup());
+    }
+  }
+
+  Future<void> _caseUnsupported(bool unsupportedBackend) async {
+    if (_forcedOfflineMode &&
+        (kIsWeb || ApiService.getInstance().baseUrl.isNotEmpty)) {
+      final user = await TempStorage.getInstance().readUser();
+      if (user != null) {
+        emit(AuthenticatedOffline(user, true));
+      } else {
+        emit(Unsupported(unsupportedBackend));
+      }
+    } else {
+      emit(Unsupported(unsupportedBackend));
     }
   }
 

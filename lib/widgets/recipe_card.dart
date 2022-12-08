@@ -45,6 +45,7 @@ class RecipeCard extends StatelessWidget {
                       image: getImageProvider(
                         context,
                         recipe.image,
+                        maxWidth: 512,
                       ),
                     ),
                   ),

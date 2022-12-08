@@ -66,7 +66,11 @@ class ImageSelector extends StatelessWidget {
     if (image != null && image!.isNotEmpty) {
       return MemoryImage(image!.bytes);
     } else if (originalImage.isNotEmpty) {
-      return getImageProvider(context, originalImage);
+      return getImageProvider(
+        context,
+        originalImage,
+        maxWidth: MediaQuery.of(context).size.width.toInt(),
+      );
     } else {
       return null;
     }

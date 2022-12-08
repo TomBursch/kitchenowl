@@ -66,6 +66,7 @@ class FlexibleImageSpaceBar extends StatelessWidget {
                 image: getImageProvider(
                   context,
                   imageUrl,
+                  maxWidth: MediaQuery.of(context).size.width.toInt(),
                 ),
                 color: Theme.of(context).backgroundColor.withOpacity(.25),
                 colorBlendMode: BlendMode.srcATop,

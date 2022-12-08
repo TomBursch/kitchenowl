@@ -15,8 +15,10 @@ bool _urlIsLocal(String url) => !url.contains('/');
 
 ImageProvider<Object> getImageProvider(
   BuildContext context,
-  String image,
-) {
+  String image, {
+  int? maxWidth,
+  int? maxHeight,
+}) {
   if (kIsWeb) {
     return NetworkImage(
       buildUrl(image),
@@ -26,6 +28,8 @@ ImageProvider<Object> getImageProvider(
 
   return CachedNetworkImageProvider(
     buildUrl(image),
+    maxWidth: maxWidth,
+    maxHeight: maxHeight,
     headers: _urlIsLocal(image) ? ApiService.getInstance().headers : null,
   );
 }

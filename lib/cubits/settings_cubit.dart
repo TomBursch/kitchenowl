@@ -8,7 +8,6 @@ import 'package:kitchenowl/config.dart';
 import 'package:kitchenowl/models/server_settings.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
 import 'package:kitchenowl/services/storage/storage.dart';
-import 'package:kitchenowl/services/transaction_handler.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 class SettingsCubit extends Cubit<SettingsState> {
@@ -63,13 +62,6 @@ class SettingsCubit extends Cubit<SettingsState> {
     emit(state.copyWith(themeMode: themeMode));
   }
 
-  void setForcedOfflineMode(bool forcedOfflineMode) {
-    emit(state.copyWith(forcedOfflineMode: forcedOfflineMode));
-    if (!forcedOfflineMode) {
-      TransactionHandler.getInstance().runOpenTransactions();
-    }
-  }
-
   void setUseDynamicAccentColor(bool dynamicAccentColor) {
     PreferenceStorage.getInstance()
         .writeBool(key: 'dynamicAccentColor', value: dynamicAccentColor);
@@ -93,13 +85,11 @@ class SettingsCubit extends Cubit<SettingsState> {
 
 class SettingsState extends Equatable {
   final ThemeMode themeMode;
-  final bool forcedOfflineMode;
   final ServerSettings serverSettings;
   final bool dynamicAccentColor;
 
   const SettingsState({
     this.themeMode = ThemeMode.system,
-    this.forcedOfflineMode = false,
     this.serverSettings = const ServerSettings(),
     this.dynamicAccentColor = false,
   });
@@ -112,12 +102,10 @@ class SettingsState extends Equatable {
   }) =>
       SettingsState(
         themeMode: themeMode ?? this.themeMode,
-        forcedOfflineMode: forcedOfflineMode ?? this.forcedOfflineMode,
         serverSettings: serverSettings ?? this.serverSettings,
         dynamicAccentColor: dynamicAccentColor ?? this.dynamicAccentColor,
       );
 
   @override
-  List<Object?> get props =>
-      [themeMode, forcedOfflineMode, serverSettings, dynamicAccentColor];
+  List<Object?> get props => [themeMode, serverSettings, dynamicAccentColor];
 }

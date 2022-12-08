@@ -100,7 +100,7 @@ class ExpenseListCubit extends Cubit<ExpenseListCubitState> {
       expenses: await expenses,
       sorting: sorting,
       categories: await categories,
-      categoryOverview: await categoryOverview ?? state.categoryOverview,
+      categoryOverview: (await categoryOverview) ?? state.categoryOverview,
     ));
     _refreshThread = null;
   }

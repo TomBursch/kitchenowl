@@ -31,6 +31,7 @@ class _LoginPageState extends State<LoginPage> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    const Spacer(),
                     Text(
                       '${AppLocalizations.of(context)!.loginTo} ${Uri.parse(ApiService.getInstance().baseUrl).authority}',
                     ),
@@ -68,12 +69,13 @@ class _LoginPageState extends State<LoginPage> {
                         child: Text(AppLocalizations.of(context)!.login),
                       ),
                     ),
-                    if (!kIsWeb) Text(AppLocalizations.of(context)!.or),
+                    const Spacer(),
                     if (!kIsWeb)
-                      TextButton(
+                      TextButton.icon(
+                        icon: const Icon(Icons.swap_horiz_rounded),
+                        label: Text(AppLocalizations.of(context)!.serverChange),
                         onPressed: () =>
                             BlocProvider.of<AuthCubit>(context).removeServer(),
-                        child: Text(AppLocalizations.of(context)!.serverChange),
                       ),
                   ],
                 ),

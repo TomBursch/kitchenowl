@@ -38,7 +38,7 @@ class App extends StatefulWidget {
       _instance!._authCubit.state is AuthenticatedOffline || isForcedOffline;
 
   static bool get isForcedOffline =>
-      _instance!._settingsCubit.state.forcedOfflineMode;
+      _instance!._authCubit.state.forcedOfflineMode;
 
   App({Key? key}) : super(key: key) {
     _instance = this;

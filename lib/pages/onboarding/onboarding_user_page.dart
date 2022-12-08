@@ -31,6 +31,7 @@ class _OnboardingUserPageState extends State<OnboardingUserPage> {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          const Spacer(),
           Text(AppLocalizations.of(context)!.onboardingTitle),
           TextFormField(
             controller: usernameController,
@@ -93,12 +94,13 @@ class _OnboardingUserPageState extends State<OnboardingUserPage> {
               child: Text(AppLocalizations.of(context)!.next),
             ),
           ),
-          if (!kIsWeb) Text(AppLocalizations.of(context)!.or),
+          const Spacer(),
           if (!kIsWeb)
-            TextButton(
+            TextButton.icon(
+              icon: const Icon(Icons.swap_horiz_rounded),
+              label: Text(AppLocalizations.of(context)!.serverChange),
               onPressed: () =>
                   BlocProvider.of<AuthCubit>(context).removeServer(),
-              child: Text(AppLocalizations.of(context)!.serverChange),
             ),
         ],
       ),

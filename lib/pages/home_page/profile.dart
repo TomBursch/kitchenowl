@@ -105,11 +105,16 @@ class ProfilePage extends StatelessWidget with HomePageItem {
                           Text(AppLocalizations.of(context)!.forceOfflineMode),
                       leading: const Icon(Icons.mobiledata_off_outlined),
                       contentPadding: const EdgeInsets.only(left: 20, right: 0),
-                      trailing: KitchenOwlSwitch(
-                        value: state.forcedOfflineMode,
-                        onChanged: (value) =>
-                            BlocProvider.of<SettingsCubit>(context)
-                                .setForcedOfflineMode(value),
+                      trailing: BlocBuilder<AuthCubit, AuthState>(
+                        buildWhen: (previous, current) =>
+                            previous.forcedOfflineMode !=
+                            current.forcedOfflineMode,
+                        builder: (context, state) => KitchenOwlSwitch(
+                          value: state.forcedOfflineMode,
+                          onChanged: (value) =>
+                              BlocProvider.of<AuthCubit>(context)
+                                  .setForcedOfflineMode(value),
+                        ),
                       ),
                     ),
                   if (!isOffline && user.hasAdminRights())

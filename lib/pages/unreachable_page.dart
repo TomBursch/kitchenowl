@@ -10,12 +10,14 @@ class UnreachablePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: ConstrainedBox(
-          constraints: const BoxConstraints.expand(width: 600),
+      body: SafeArea(
+        child: Align(
+          alignment: Alignment.center,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              const Spacer(),
               Text(
                 '\\:',
                 style: Theme.of(context).textTheme.headline2,
@@ -32,12 +34,16 @@ class UnreachablePage extends StatelessWidget {
                 onPressed: BlocProvider.of<AuthCubit>(context).refresh,
                 child: Text(AppLocalizations.of(context)!.refresh),
               ),
-              if (!kIsWeb) Text(AppLocalizations.of(context)!.or),
+              const Spacer(),
               if (!kIsWeb)
-                TextButton(
-                  onPressed: () =>
-                      BlocProvider.of<AuthCubit>(context).removeServer(),
-                  child: Text(AppLocalizations.of(context)!.serverChange),
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: TextButton.icon(
+                    icon: const Icon(Icons.swap_horiz_rounded),
+                    label: Text(AppLocalizations.of(context)!.serverChange),
+                    onPressed: () =>
+                        BlocProvider.of<AuthCubit>(context).removeServer(),
+                  ),
                 ),
             ],
           ),

@@ -8,6 +8,7 @@ import 'package:kitchenowl/cubits/expense_list_cubit.dart';
 import 'package:kitchenowl/cubits/settings_cubit.dart';
 import 'package:kitchenowl/enums/expenselist_sorting.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
+import 'package:kitchenowl/enums/views_enum.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/user.dart';
 import 'package:kitchenowl/pages/expense_add_update_page.dart';
@@ -26,10 +27,7 @@ class ExpenseListPage extends StatefulWidget with HomePageItem {
   _ExpensePageState createState() => _ExpensePageState();
 
   @override
-  IconData icon(BuildContext context) => Icons.account_balance_rounded;
-
-  @override
-  String label(BuildContext context) => AppLocalizations.of(context)!.balances;
+  ViewsEnum type() => ViewsEnum.balances;
 
   @override
   void onSelected(BuildContext context, bool alreadySelected) {

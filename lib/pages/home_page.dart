@@ -7,6 +7,7 @@ import 'package:kitchenowl/cubits/planner_cubit.dart';
 import 'package:kitchenowl/cubits/recipe_list_cubit.dart';
 import 'package:kitchenowl/cubits/settings_cubit.dart';
 import 'package:kitchenowl/cubits/shoppinglist_cubit.dart';
+import 'package:kitchenowl/enums/views_enum.dart';
 import 'package:kitchenowl/pages/home_page/_export.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
@@ -18,6 +19,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  static const int _bottomAppBarSize = 5;
+
   final ShoppinglistCubit shoppingListCubit = ShoppinglistCubit();
   final RecipeListCubit recipeListCubit = RecipeListCubit();
   final PlannerCubit plannerCubit = PlannerCubit();
@@ -25,7 +28,6 @@ class _HomePageState extends State<HomePage> {
 
   late List<HomePageItem> pages;
   int _selectedIndex = 0;
-  int offset = 0;
 
   @override
   void initState() {
@@ -73,16 +75,40 @@ class _HomePageState extends State<HomePage> {
               final _offset =
                   (state.serverSettings.featurePlanner ?? false ? 0 : 1) +
                       (state.serverSettings.featureExpenses ?? false ? 0 : 1);
-              _selectedIndex = (_selectedIndex *
-                      (pages.length - _offset) /
-                      (pages.length - offset))
-                  .clamp(0, pages.length - _offset)
-                  .round();
-
-              offset = _offset;
+              _selectedIndex =
+                  _selectedIndex.clamp(0, pages.length - 1 - _offset);
             },
             builder: (context, state) {
-              final _pages = pages.where((e) => e.isActive(context)).toList();
+              List<HomePageItem> _pages =
+                  (state.serverSettings.viewOrdering ?? ViewsEnum.values)
+                      .map<HomePageItem?>((e) {
+                        final i = pages.indexWhere(
+                          (page) => page.type() == e,
+                        );
+
+                        return i >= 0 ? pages[i] : null;
+                      })
+                      .where((e) => e != null && e.isActive(context))
+                      .cast<HomePageItem>()
+                      .toList();
+
+              final bool useBottomNavigationBar = getValueForScreenType<bool>(
+                context: context,
+                mobile: true,
+                tablet: false,
+                desktop: false,
+              );
+
+              if (useBottomNavigationBar && _bottomAppBarSize < _pages.length) {
+                _selectedIndex = _selectedIndex.clamp(0, _bottomAppBarSize - 1);
+                _pages.insert(
+                  _bottomAppBarSize - 1,
+                  OverflowPage(
+                    pages: _pages.sublist(_bottomAppBarSize - 1, _pages.length),
+                  ),
+                );
+                _pages = _pages.sublist(0, _bottomAppBarSize);
+              }
 
               Widget body = PageTransitionSwitcher(
                 transitionBuilder: (
@@ -104,13 +130,6 @@ class _HomePageState extends State<HomePage> {
                     child: _pages[_selectedIndex],
                   ),
                 ),
-              );
-
-              final bool useBottomNavigationBar = getValueForScreenType<bool>(
-                context: context,
-                mobile: true,
-                tablet: false,
-                desktop: false,
               );
 
               if (!useBottomNavigationBar) {
@@ -151,7 +170,6 @@ class _HomePageState extends State<HomePage> {
                         labelBehavior:
                             NavigationDestinationLabelBehavior.onlyShowSelected,
                         destinations: _pages
-                            .where((e) => e.isActive(context))
                             .map((e) => NavigationDestination(
                                   icon: Icon(e.icon(context)),
                                   label: e.label(context),

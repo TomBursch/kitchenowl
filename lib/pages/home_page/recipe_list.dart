@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/app.dart';
 import 'package:kitchenowl/cubits/recipe_list_cubit.dart';
+import 'package:kitchenowl/enums/views_enum.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/widgets/recipe_create_fab.dart';
 import 'package:kitchenowl/widgets/recipe_item.dart';
@@ -18,10 +19,10 @@ class RecipeListPage extends StatefulWidget with HomePageItem {
   _RecipeListPageState createState() => _RecipeListPageState();
 
   @override
-  IconData icon(BuildContext context) => Icons.shopping_bag_outlined;
+  IconData icon(BuildContext context) => Icons.receipt_rounded;
 
   @override
-  String label(BuildContext context) => AppLocalizations.of(context)!.recipes;
+  ViewsEnum type() => ViewsEnum.recipes;
 
   @override
   void onSelected(BuildContext context, bool alreadySelected) {

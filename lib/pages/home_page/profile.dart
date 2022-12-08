@@ -6,6 +6,7 @@ import 'package:kitchenowl/app.dart';
 import 'package:kitchenowl/config.dart';
 import 'package:kitchenowl/cubits/auth_cubit.dart';
 import 'package:kitchenowl/cubits/settings_cubit.dart';
+import 'package:kitchenowl/enums/views_enum.dart';
 import 'package:kitchenowl/pages/settings_server_page.dart';
 import 'package:kitchenowl/pages/settings_user_page.dart';
 import 'package:kitchenowl/kitchenowl.dart';
@@ -197,8 +198,8 @@ class ProfilePage extends StatelessWidget with HomePageItem {
 
   @override
   IconData icon(context) =>
-      App.isOffline ? Icons.cloud_off_rounded : Icons.person;
+      App.isOffline ? Icons.cloud_off_rounded : type().toIcon();
 
   @override
-  String label(context) => AppLocalizations.of(context)!.profile;
+  ViewsEnum type() => ViewsEnum.profile;
 }

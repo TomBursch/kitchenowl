@@ -185,6 +185,8 @@
   "@mealPlanner": {},
   "minutesAbbrev": "min",
   "@minutesAbbrev": {},
+  "more": "More",
+  "@more": {},
   "name": "Name",
   "@name": {},
   "next": "Next",

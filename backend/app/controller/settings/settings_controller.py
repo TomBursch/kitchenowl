@@ -17,6 +17,8 @@ def setSettings(args):
         settings.planner_feature = args['planner_feature']
     if 'expenses_feature' in args:
         settings.expenses_feature = args['expenses_feature']
+    if 'view_ordering' in args:
+        settings.view_ordering = args['view_ordering']
     settings.save()
     return jsonify(settings.obj_to_dict())
 

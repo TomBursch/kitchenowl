@@ -16,5 +16,6 @@ def get_health():
     info.update({
         'planner_feature': settings.planner_feature,
         'expenses_feature': settings.expenses_feature,
+        'view_ordering': settings.view_ordering,
     })
     return jsonify(info)

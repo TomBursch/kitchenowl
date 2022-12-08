@@ -1,5 +1,6 @@
 from app import db
 from app.helpers import DbModelMixin, TimestampMixin
+from app.helpers.db_list_type import DbListType
 
 
 class Settings(db.Model, DbModelMixin, TimestampMixin):
@@ -7,6 +8,8 @@ class Settings(db.Model, DbModelMixin, TimestampMixin):
 
     planner_feature = db.Column(db.Boolean(), primary_key=True, default=True)
     expenses_feature = db.Column(db.Boolean(), primary_key=True, default=True)
+
+    view_ordering = db.Column(DbListType(), default = list())
 
     @classmethod
     def get(cls):

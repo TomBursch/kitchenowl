@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/app.dart';
 import 'package:kitchenowl/cubits/shoppinglist_cubit.dart';
 import 'package:kitchenowl/enums/shoppinglist_sorting.dart';
+import 'package:kitchenowl/enums/views_enum.dart';
 import 'package:kitchenowl/models/category.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/kitchenowl.dart';
@@ -16,11 +17,7 @@ class ShoppinglistPage extends StatefulWidget with HomePageItem {
   _ShoppinglistPageState createState() => _ShoppinglistPageState();
 
   @override
-  IconData icon(BuildContext context) => Icons.shopping_bag_outlined;
-
-  @override
-  String label(BuildContext context) =>
-      AppLocalizations.of(context)!.shoppingList;
+  ViewsEnum type() => ViewsEnum.shoppingList;
 
   @override
   void onSelected(BuildContext context, bool alreadySelected) {

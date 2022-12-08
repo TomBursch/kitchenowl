@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:kitchenowl/cubits/planner_cubit.dart';
 import 'package:kitchenowl/cubits/settings_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
+import 'package:kitchenowl/enums/views_enum.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/models/recipe.dart';
@@ -21,10 +22,7 @@ class PlannerPage extends StatefulWidget with HomePageItem {
   _PlannerPageState createState() => _PlannerPageState();
 
   @override
-  IconData icon(BuildContext context) => Icons.calendar_today_rounded;
-
-  @override
-  String label(BuildContext context) => AppLocalizations.of(context)!.planner;
+  ViewsEnum type() => ViewsEnum.mealPlanner;
 
   @override
   void onSelected(BuildContext context, bool alreadySelected) {

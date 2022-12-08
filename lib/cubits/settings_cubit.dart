@@ -5,6 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/config.dart';
+import 'package:kitchenowl/enums/views_enum.dart';
 import 'package:kitchenowl/models/server_settings.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
 import 'package:kitchenowl/services/storage/storage.dart';
@@ -45,7 +46,8 @@ class SettingsCubit extends Cubit<SettingsState> {
     ));
 
     if (ApiService.getInstance().serverSettings.featureExpenses != null ||
-        ApiService.getInstance().serverSettings.featurePlanner != null) {
+        ApiService.getInstance().serverSettings.featurePlanner != null ||
+        ApiService.getInstance().serverSettings.viewOrdering != null) {
       serverSettings = ApiService.getInstance().serverSettings;
     }
 
@@ -68,18 +70,44 @@ class SettingsCubit extends Cubit<SettingsState> {
     emit(state.copyWith(dynamicAccentColor: dynamicAccentColor));
   }
 
-  void setFeaturePlanner(bool featurePlanner) {
-    PreferenceStorage.getInstance()
-        .writeBool(key: 'featurePlanner', value: featurePlanner);
-    ApiService.getInstance()
-        .setSettings(ServerSettings(featurePlanner: featurePlanner));
+  void setView(ViewsEnum view, bool value) {
+    if (view == ViewsEnum.mealPlanner) {
+      final settings = state.serverSettings.copyWith(featurePlanner: value);
+      emit(state.copyWith(serverSettings: settings));
+      PreferenceStorage.getInstance()
+          .write(key: 'serverSettings', value: jsonEncode(settings.toJson()));
+      ApiService.getInstance()
+          .setSettings(ServerSettings(featurePlanner: value));
+    }
+    if (view == ViewsEnum.balances) {
+      final settings = state.serverSettings.copyWith(featureExpenses: value);
+      emit(state.copyWith(serverSettings: settings));
+      PreferenceStorage.getInstance()
+          .write(key: 'serverSettings', value: jsonEncode(settings.toJson()));
+      ApiService.getInstance()
+          .setSettings(ServerSettings(featureExpenses: value));
+    }
   }
 
-  void setFeatureExpenses(bool featureExpenses) {
+  void reorderView(int oldIndex, int newIndex) {
+    final l = List.of(state.serverSettings.viewOrdering!);
+    l.insert(newIndex, l.removeAt(oldIndex));
+    final settings = state.serverSettings.copyWith(viewOrdering: l);
+    emit(state.copyWith(serverSettings: settings));
     PreferenceStorage.getInstance()
-        .writeBool(key: 'featureExpenses', value: featureExpenses);
-    ApiService.getInstance()
-        .setSettings(ServerSettings(featureExpenses: featureExpenses));
+        .write(key: 'serverSettings', value: jsonEncode(settings.toJson()));
+    ApiService.getInstance().setSettings(ServerSettings(viewOrdering: l));
+  }
+
+  void resetViewOrder() {
+    final settings =
+        state.serverSettings.copyWith(viewOrdering: ViewsEnum.values);
+    emit(state.copyWith(serverSettings: settings));
+    PreferenceStorage.getInstance()
+        .write(key: 'serverSettings', value: jsonEncode(settings.toJson()));
+    ApiService.getInstance().setSettings(const ServerSettings(
+      viewOrdering: ViewsEnum.values,
+    ));
   }
 }
 
@@ -108,4 +136,15 @@ class SettingsState extends Equatable {
 
   @override
   List<Object?> get props => [themeMode, serverSettings, dynamicAccentColor];
+
+  bool isViewActive(ViewsEnum view) {
+    if (view == ViewsEnum.mealPlanner) {
+      return serverSettings.featurePlanner ?? true;
+    }
+    if (view == ViewsEnum.balances) {
+      return serverSettings.featureExpenses ?? true;
+    }
+
+    return true;
+  }
 }

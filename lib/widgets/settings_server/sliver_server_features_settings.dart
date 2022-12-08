@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/cubits/settings_cubit.dart';
 import 'package:kitchenowl/cubits/settings_server_cubit.dart';
+import 'package:kitchenowl/enums/views_enum.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
 import 'package:kitchenowl/widgets/language_dialog.dart';
+import 'package:kitchenowl/widgets/settings_server/view_settings_list_tile.dart';
+import 'package:reorderables/reorderables.dart';
 
 class SliverServerFeaturesSettings extends StatelessWidget {
   const SliverServerFeaturesSettings({Key? key}) : super(key: key);
@@ -27,42 +30,46 @@ class SliverServerFeaturesSettings extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 8),
-        Text(
-          '${AppLocalizations.of(context)!.features}:',
-          style: Theme.of(context).textTheme.headline6,
-        ),
-        const SizedBox(height: 8),
         BlocBuilder<SettingsCubit, SettingsState>(
-          builder: (context, state) => Column(
-            mainAxisSize: MainAxisSize.min,
+          builder: (context, state) => Row(
             children: [
-              ListTile(
-                title: Text(
-                  AppLocalizations.of(context)!.mealPlanner,
-                ),
-                leading: const Icon(Icons.calendar_today_rounded),
-                contentPadding: const EdgeInsets.only(left: 20, right: 0),
-                trailing: KitchenOwlSwitch(
-                  value: state.serverSettings.featurePlanner ?? false,
-                  onChanged:
-                      BlocProvider.of<SettingsCubit>(context).setFeaturePlanner,
+              Expanded(
+                child: Text(
+                  '${AppLocalizations.of(context)!.features}:',
+                  style: Theme.of(context).textTheme.headline6,
                 ),
               ),
-              ListTile(
-                title: Text(
-                  AppLocalizations.of(context)!.balances,
+              if (state.serverSettings.viewOrdering != ViewsEnum.values)
+                IconButton(
+                  onPressed:
+                      BlocProvider.of<SettingsCubit>(context).resetViewOrder,
+                  icon: const Icon(Icons.restart_alt_rounded),
+                  padding: EdgeInsets.zero,
                 ),
-                leading: const Icon(Icons.account_balance_rounded),
-                contentPadding: const EdgeInsets.only(left: 20, right: 0),
-                trailing: KitchenOwlSwitch(
-                  value: state.serverSettings.featureExpenses ?? false,
-                  onChanged: BlocProvider.of<SettingsCubit>(context)
-                      .setFeatureExpenses,
-                ),
-              ),
             ],
           ),
         ),
+        const SizedBox(height: 8),
+        BlocBuilder<SettingsCubit, SettingsState>(
+          builder: (context, state) => ReorderableColumn(
+            onReorder: BlocProvider.of<SettingsCubit>(context).reorderView,
+            children: state.serverSettings.viewOrdering!
+                .sublist(0, state.serverSettings.viewOrdering!.length - 1)
+                .map(
+                  (view) => ViewSettingsListTile(
+                    key: ValueKey(view),
+                    view: view,
+                    isActive: state.isViewActive(view),
+                  ),
+                )
+                .toList(),
+          ),
+        ),
+        const ViewSettingsListTile(
+          view: ViewsEnum.profile,
+          showHandleIfNotOptional: false,
+        ),
+        const Divider(),
         ListTile(
           title: Text(AppLocalizations.of(context)!.language),
           leading: const Icon(Icons.language_rounded),

@@ -111,14 +111,13 @@ class Recipe(db.Model, DbModelMixin, TimestampMixin):
 
     @classmethod
     def search_name(cls, name):
-        recipe_count = 12
         if '*' in name or '_' in name:
             looking_for = name.replace('_', '__')\
                 .replace('*', '%')\
                 .replace('?', '_')
         else:
             looking_for = '%{0}%'.format(name)
-        return cls.query.filter(cls.name.ilike(looking_for)).limit(recipe_count).all()
+        return cls.query.filter(cls.name.ilike(looking_for)).order_by(cls.name).all()
 
     @classmethod
     def all_by_name_with_filter(cls, filter):

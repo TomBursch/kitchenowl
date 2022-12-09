@@ -61,6 +61,9 @@ class SearchByNameRequest(Schema):
         required=True,
         validate=lambda a: a and not a.isspace()
     )
+    only_ids = fields.Boolean(
+        default=False,
+    )
 
 
 class GetAllFilterRequest(Schema):

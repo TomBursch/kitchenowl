@@ -153,6 +153,8 @@ def deleteRecipeById(id):
 @jwt_required()
 @validate_args(SearchByNameRequest)
 def searchRecipeByName(args):
+    if 'only_ids' in args and args['only_ids']:
+        return jsonify([e.id for e in Recipe.search_name(args['query'])])
     return jsonify([e.obj_to_dict() for e in Recipe.search_name(args['query'])])
 
 

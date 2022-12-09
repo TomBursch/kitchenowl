@@ -28,13 +28,11 @@ extension RecipeApi on ApiService {
     return body.map((e) => Recipe.fromJson(e)).toList();
   }
 
-  Future<List<Recipe>?> searchRecipe(String query) async {
-    final res = await get('$baseRoute/search?query=$query');
+  Future<List<int>?> searchRecipe(String query) async {
+    final res = await get('$baseRoute/search?only_ids=true&query=$query');
     if (res.statusCode != 200) return null;
 
-    final body = List.from(jsonDecode(res.body));
-
-    return body.map((e) => Recipe.fromJson(e)).toList();
+    return List.from(jsonDecode(res.body));
   }
 
   Future<Recipe?> getRecipe(Recipe recipe) async {

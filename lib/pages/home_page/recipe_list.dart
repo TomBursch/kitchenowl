@@ -57,11 +57,11 @@ class _RecipeListPageState extends State<RecipeListPage> {
   Widget build(BuildContext context) {
     final cubit = BlocProvider.of<RecipeListCubit>(context);
 
-    final bool useBottomNavigationBar = getValueForScreenType<bool>(
+    final int hintOffset = getValueForScreenType<int>(
       context: context,
-      mobile: true,
-      tablet: false,
-      desktop: false,
+      mobile: 0,
+      tablet: 80,
+      desktop: 256,
     );
 
     return SafeArea(
@@ -213,8 +213,15 @@ class _RecipeListPageState extends State<RecipeListPage> {
                           color: Theme.of(context).colorScheme.onPrimary,
                         ),
                         indexHintAlignment: Alignment.centerLeft,
-                        indexHintOffset:
-                            Offset(useBottomNavigationBar ? 0 : 216, 0),
+                        indexHintOffset: Offset(
+                          ((MediaQuery.of(context).size.width -
+                                          hintOffset -
+                                          1600) /
+                                      2)
+                                  .clamp(0, double.infinity) +
+                              hintOffset.toDouble(),
+                          0,
+                        ),
                       ),
                       hapticFeedback: true,
                       itemBuilder: (context, i) {

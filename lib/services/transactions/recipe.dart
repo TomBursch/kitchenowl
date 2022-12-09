@@ -89,6 +89,11 @@ class TransactionRecipeSearchRecipes extends Transaction<List<Recipe>> {
 
   @override
   Future<List<Recipe>?> runOnline() async {
-    return await ApiService.getInstance().searchRecipe(query);
+    final ids = await ApiService.getInstance().searchRecipe(query);
+    if (ids == null) return [];
+    final recipes = (await TempStorage.getInstance().readRecipes() ?? [])
+      ..retainWhere((e) => ids.contains(e.id));
+
+    return recipes;
   }
 }

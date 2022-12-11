@@ -41,7 +41,8 @@ class ServerSettings extends Model {
       data['expenses_feature'] = featureExpenses;
     }
     if (viewOrdering != null) {
-      data['view_ordering'] = viewOrdering!.map((e) => e.toString()).toList();
+      data['view_ordering'] = viewOrdering!.map((e) => e.toString()).toList()
+        ..remove(ViewsEnum.profile.toString());
     }
 
     return data;

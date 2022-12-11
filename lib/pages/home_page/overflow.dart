@@ -48,7 +48,8 @@ class OverflowPage extends StatelessWidget with HomePageItem {
                                   ),
                                   BlocProvider.value(
                                     value: BlocProvider.of<RecipeListCubit>(
-                                        context),
+                                      context,
+                                    ),
                                   ),
                                   BlocProvider.value(
                                     value:

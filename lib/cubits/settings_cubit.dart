@@ -103,10 +103,14 @@ class SettingsCubit extends Cubit<SettingsState> {
     final settings =
         state.serverSettings.copyWith(viewOrdering: ViewsEnum.values);
     emit(state.copyWith(serverSettings: settings));
-    PreferenceStorage.getInstance()
-        .write(key: 'serverSettings', value: jsonEncode(settings.toJson()));
+    PreferenceStorage.getInstance().write(
+      key: 'serverSettings',
+      value: jsonEncode(
+        settings.copyWith(viewOrdering: const []).toJson(),
+      ),
+    );
     ApiService.getInstance().setSettings(const ServerSettings(
-      viewOrdering: ViewsEnum.values,
+      viewOrdering: [],
     ));
   }
 }

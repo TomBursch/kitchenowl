@@ -64,7 +64,10 @@ class AddExpenseCategory(Schema):
         required=True,
         validate=lambda a: a and not a.isspace()
     )
-    color = fields.Integer()
+    color = fields.Integer(
+        validate=lambda i: i >= 0,
+        allow_none=True
+    )
 
 
 class UpdateExpenseCategory(Schema):

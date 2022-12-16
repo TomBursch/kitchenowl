@@ -37,7 +37,7 @@ def findMealInstances(added, dropped):
             added_time = added_recipes[current_dropped.recipe_id]
             dropped_time = current_dropped.created_at
             # if duration threshold is met, consider it as a cooked meal
-            if(dropped_time - added_time >=
+            if (dropped_time - added_time >=
                     datetime.timedelta(hours=MEAL_THRESHOLD)):
                 meal = {
                     "recipe_id": current_dropped.recipe_id,

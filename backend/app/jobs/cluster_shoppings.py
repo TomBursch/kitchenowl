@@ -9,7 +9,7 @@ import numpy as np
 def clusterShoppings():
     dropped = History.find_dropped_by_shoppinglist_id(1)
 
-    if(len(dropped) == 0):
+    if (len(dropped) == 0):
         app.logger.info("no history to investigate")
         return None
 
@@ -24,7 +24,7 @@ def clusterShoppings():
     dbs = DBSCAN1D(eps=eps, min_samples=min_samples)
     labels = dbs.fit_predict(timestamps)
 
-    if(len(labels) == 0):
+    if (len(labels) == 0):
         app.logger.info("no shopping instances identified")
         return None
 

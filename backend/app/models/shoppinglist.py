@@ -1,3 +1,4 @@
+from typing import Self
 from app import db
 from app.helpers import DbModelMixin, TimestampMixin
 
@@ -11,7 +12,7 @@ class Shoppinglist(db.Model, DbModelMixin, TimestampMixin):
     items = db.relationship('ShoppinglistItems')
 
     @classmethod
-    def create(cls, name):
+    def create(cls, name) -> Self:
         return cls(name=name).save()
 
 
@@ -26,7 +27,7 @@ class ShoppinglistItems(db.Model, DbModelMixin, TimestampMixin):
     item = db.relationship("Item", back_populates='shoppinglists')
     shoppinglist = db.relationship("Shoppinglist", back_populates='items')
 
-    def obj_to_item_dict(self):
+    def obj_to_item_dict(self) -> dict:
         res = self.item.obj_to_dict()
         res['description'] = getattr(self, 'description')
         res['created_at'] = getattr(self, 'created_at')
@@ -34,5 +35,5 @@ class ShoppinglistItems(db.Model, DbModelMixin, TimestampMixin):
         return res
 
     @classmethod
-    def find_by_ids(cls, shoppinglist_id, item_id):
+    def find_by_ids(cls, shoppinglist_id: int, item_id: int) -> Self:
         return cls.query.filter(cls.shoppinglist_id == shoppinglist_id, cls.item_id == item_id).first()

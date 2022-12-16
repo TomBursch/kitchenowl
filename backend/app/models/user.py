@@ -1,3 +1,4 @@
+from typing import Self
 from app import db
 from app.helpers import DbModelMixin, TimestampMixin
 from app.config import bcrypt
@@ -24,13 +25,13 @@ class User(db.Model, DbModelMixin, TimestampMixin):
     expenses_paid_for = db.relationship(
         'ExpensePaidFor', back_populates='user', cascade="all, delete-orphan")
 
-    def check_password(self, password):
+    def check_password(self, password: str) -> bool:
         return bcrypt.check_password_hash(self.password, password)
 
-    def set_password(self, password):
+    def set_password(self, password: str):
         self.password = bcrypt.generate_password_hash(password).decode('utf-8')
 
-    def obj_to_dict(self, skip_columns=None, include_columns=None) -> dict:
+    def obj_to_dict(self, skip_columns: list[str] = None, include_columns: list[str] = None) -> dict:
         if skip_columns:
             skip_columns = skip_columns + ['password']
         else:
@@ -47,11 +48,11 @@ class User(db.Model, DbModelMixin, TimestampMixin):
         return res
 
     @classmethod
-    def find_by_username(cls, username):
+    def find_by_username(cls, username: str) -> Self:
         return cls.query.filter(cls.username == username).first()
 
     @classmethod
-    def create(cls, username, password, name, owner=False):
+    def create(cls, username: str, password: str, name: str, owner=False) -> Self:
         return cls(
             username=username,
             password=bcrypt.generate_password_hash(password).decode('utf-8'),

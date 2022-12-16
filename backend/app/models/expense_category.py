@@ -1,4 +1,5 @@
 from __future__ import annotations
+from typing import Self
 from app import db
 from app.helpers import DbModelMixin, TimestampMixin
 
@@ -18,11 +19,11 @@ class ExpenseCategory(db.Model, DbModelMixin, TimestampMixin):
         return res
 
     @classmethod
-    def find_by_name(cls, name) -> ExpenseCategory:
+    def find_by_name(cls, name) -> Self:
         return cls.query.filter(cls.name == name).first()
 
     @classmethod
-    def find_by_id(cls, id) -> ExpenseCategory:
+    def find_by_id(cls, id) -> Self:
         return cls.query.filter(cls.id == id).first()
 
     @classmethod

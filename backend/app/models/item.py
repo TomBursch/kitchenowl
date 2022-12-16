@@ -1,4 +1,5 @@
 from __future__ import annotations
+from typing import Self
 from app import db
 from app.helpers import DbModelMixin, TimestampMixin
 from app.models.category import Category
@@ -31,14 +32,14 @@ class Item(db.Model, DbModelMixin, TimestampMixin):
     consequents = db.relationship(
         "Association", back_populates="consequent", foreign_keys='Association.consequent_id')
 
-    def obj_to_dict(self):
+    def obj_to_dict(self) -> dict:
         res = super().obj_to_dict()
         if self.category_id:
             category = Category.find_by_id(self.category_id)
             res['category'] = category.obj_to_dict()
         return res
 
-    def obj_to_export_dict(self):
+    def obj_to_export_dict(self) -> dict:
         res = {
             "name": self.name,
         }
@@ -47,30 +48,30 @@ class Item(db.Model, DbModelMixin, TimestampMixin):
         return res
 
     @classmethod
-    def create_by_name(cls, name: str, default=False) -> Item:
+    def create_by_name(cls, name: str, default=False) -> Self:
         return cls(
             name=name.strip(),
             default=default,
         ).save()
 
     @classmethod
-    def allByName(cls):
+    def allByName(cls) -> list[Self]:
         """
         Return all instances of Item ordered by name
         """
         return cls.query.order_by(cls.name).all()
 
     @classmethod
-    def find_by_name(cls, name: str) -> Item:
+    def find_by_name(cls, name: str) -> Self:
         name = name.strip()
         return cls.query.filter(cls.name == name).first()
 
     @classmethod
-    def find_by_id(cls, id) -> Item:
+    def find_by_id(cls, id) -> Self:
         return cls.query.filter(cls.id == id).first()
 
     @classmethod
-    def search_name(cls, name: str):
+    def search_name(cls, name: str) -> list[Self]:
         item_count = 11
         found = []
 

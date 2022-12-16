@@ -45,7 +45,8 @@ def login(args):
     username = args['username'].lower()
     user = User.find_by_username(username)
     if not user or not user.check_password(args['password']):
-        raise UnauthorizedRequest(message='Unauthorized: IP {} login attemp with wrong username or password'.format(request.remote_addr))
+        raise UnauthorizedRequest(
+            message='Unauthorized: IP {} login attemp with wrong username or password'.format(request.remote_addr))
     device = "Unkown"
     if "device" in args:
         device = args['device']
@@ -78,11 +79,13 @@ def login(args):
 def refresh():
     user = User.find_by_username(get_jwt_identity())
     if not user:
-        raise UnauthorizedRequest(message='Unauthorized: IP {} refresh attemp with wrong username or password'.format(request.remote_addr))
+        raise UnauthorizedRequest(
+            message='Unauthorized: IP {} refresh attemp with wrong username or password'.format(request.remote_addr))
 
     refreshModel = Token.find_by_jti(get_jwt()['jti'])
     # Refresh token rotation
-    refreshToken, refreshModel = Token.create_refresh_token(user, oldRefreshToken=refreshModel)
+    refreshToken, refreshModel = Token.create_refresh_token(
+        user, oldRefreshToken=refreshModel)
 
     # Create access token
     accesssToken, _ = Token.create_access_token(user, refreshModel)
@@ -99,7 +102,8 @@ def logout():
     jwt = get_jwt()
     token = Token.find_by_jti(jwt['jti'])
     if not token:
-        raise UnauthorizedRequest(message='Unauthorized: IP {}'.format(request.remote_addr))
+        raise UnauthorizedRequest(
+            message='Unauthorized: IP {}'.format(request.remote_addr))
 
     if token.type == 'access':
         token.refresh_token.delete()
@@ -115,7 +119,8 @@ def logout():
 def createLongLivedToken(args):
     user = User.find_by_username(get_jwt_identity())
     if not user:
-        raise UnauthorizedRequest(message='Unauthorized: IP {}'.format(request.remote_addr))
+        raise UnauthorizedRequest(
+            message='Unauthorized: IP {}'.format(request.remote_addr))
 
     llToken, _ = Token.create_longlived_token(user, args['device'])
 
@@ -129,11 +134,13 @@ def createLongLivedToken(args):
 def deleteLongLivedToken(id):
     user = User.find_by_username(get_jwt_identity())
     if not user:
-        raise UnauthorizedRequest(message='Unauthorized: IP {}'.format(request.remote_addr))
+        raise UnauthorizedRequest(
+            message='Unauthorized: IP {}'.format(request.remote_addr))
 
     token = Token.find_by_id(id)
     if (token.user_id != user.id or token.type != 'llt'):
-        raise UnauthorizedRequest(message='Unauthorized: IP {}'.format(request.remote_addr))
+        raise UnauthorizedRequest(
+            message='Unauthorized: IP {}'.format(request.remote_addr))
 
     token.delete()
 

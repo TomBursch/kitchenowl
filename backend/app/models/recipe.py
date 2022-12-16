@@ -1,4 +1,5 @@
 from __future__ import annotations
+from typing import Self
 from app import db
 from app.helpers import DbModelMixin, TimestampMixin
 from app.helpers.db_set_type import DbSetType
@@ -31,7 +32,7 @@ class Recipe(db.Model, DbModelMixin, TimestampMixin):
     tags = db.relationship(
         'RecipeTags', back_populates='recipe', cascade="all, delete-orphan")
 
-    def obj_to_dict(self):
+    def obj_to_dict(self) -> dict:
         res = super().obj_to_dict()
         res['planned_days'] = list(self.planned_days or set())
         return res
@@ -97,20 +98,20 @@ class Recipe(db.Model, DbModelMixin, TimestampMixin):
         db.session.commit()
 
     @classmethod
-    def find_suggestions(cls):
+    def find_suggestions(cls) -> list[Self]:
         return cls.query.filter(cls.planned == False).filter(  # noqa
             cls.suggestion_rank > 0).order_by(cls.suggestion_rank).all()
 
     @classmethod
-    def find_by_name(cls, name) -> Recipe:
+    def find_by_name(cls, name: str) -> Self:
         return cls.query.filter(cls.name == name).first()
 
     @classmethod
-    def find_by_id(cls, id) -> Recipe:
+    def find_by_id(cls, id: int) -> Self:
         return cls.query.filter(cls.id == id).first()
 
     @classmethod
-    def search_name(cls, name):
+    def search_name(cls, name: str) -> list[Self]:
         if '*' in name or '_' in name:
             looking_for = name.replace('_', '__')\
                 .replace('*', '%')\
@@ -120,7 +121,7 @@ class Recipe(db.Model, DbModelMixin, TimestampMixin):
         return cls.query.filter(cls.name.ilike(looking_for)).order_by(cls.name).all()
 
     @classmethod
-    def all_by_name_with_filter(cls, filter):
+    def all_by_name_with_filter(cls, filter: list[str]) -> list[Self]:
         sq = db.session.query(RecipeTags.recipe_id).join(RecipeTags.tag).filter(
             Tag.name.in_(filter)).subquery()
         return db.session.query(cls).filter(cls.id.in_(sq)).order_by(cls.name).all()
@@ -138,7 +139,7 @@ class RecipeItems(db.Model, DbModelMixin, TimestampMixin):
     item = db.relationship("Item", back_populates='recipes')
     recipe = db.relationship("Recipe", back_populates='items')
 
-    def obj_to_item_dict(self):
+    def obj_to_item_dict(self) -> dict:
         res = self.item.obj_to_dict()
         res['description'] = getattr(self, 'description')
         res['optional'] = getattr(self, 'optional')
@@ -146,7 +147,7 @@ class RecipeItems(db.Model, DbModelMixin, TimestampMixin):
         res['updated_at'] = getattr(self, 'updated_at')
         return res
 
-    def obj_to_recipe_dict(self):
+    def obj_to_recipe_dict(self) -> dict:
         res = self.recipe.obj_to_dict()
         res['items'] = [
             {
@@ -158,7 +159,7 @@ class RecipeItems(db.Model, DbModelMixin, TimestampMixin):
         return res
 
     @classmethod
-    def find_by_ids(cls, recipe_id, item_id):
+    def find_by_ids(cls, recipe_id: int, item_id: int) -> Self:
         return cls.query.filter(cls.recipe_id == recipe_id, cls.item_id == item_id).first()
 
 
@@ -172,12 +173,12 @@ class RecipeTags(db.Model, DbModelMixin, TimestampMixin):
     tag = db.relationship("Tag", back_populates='recipes')
     recipe = db.relationship("Recipe", back_populates='tags')
 
-    def obj_to_item_dict(self):
+    def obj_to_item_dict(self) -> dict:
         res = self.tag.obj_to_dict()
         res['created_at'] = getattr(self, 'created_at')
         res['updated_at'] = getattr(self, 'updated_at')
         return res
 
     @classmethod
-    def find_by_ids(cls, recipe_id, tag_id):
+    def find_by_ids(cls, recipe_id: int, tag_id: int) -> Self:
         return cls.query.filter(cls.recipe_id == recipe_id, cls.tag_id == tag_id).first()

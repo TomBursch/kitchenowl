@@ -1,5 +1,5 @@
 from __future__ import annotations
-from unicodedata import category
+from typing import Self
 from app import db
 from app.helpers import DbModelMixin, TimestampMixin
 
@@ -24,25 +24,25 @@ class Category(db.Model, DbModelMixin, TimestampMixin):
         return cls.query.order_by(cls.ordering, cls.name).all()
 
     @classmethod
-    def create_by_name(cls, name, default=False) -> Category:
+    def create_by_name(cls, name, default=False) -> Self:
         return cls(
             name=name,
             default=default,
         ).save()
 
     @classmethod
-    def find_by_name(cls, name) -> Category:
+    def find_by_name(cls, name) -> Self:
         return cls.query.filter(cls.name == name).first()
 
     @classmethod
-    def find_by_id(cls, id) -> Category:
+    def find_by_id(cls, id) -> Self:
         return cls.query.filter(cls.id == id).first()
 
     def reorder(self, newIndex: int):
         cls = self.__class__
         self.ordering = newIndex
 
-        l = cls.query.order_by(cls.ordering, cls.name).all()
+        l: list[cls] = cls.query.order_by(cls.ordering, cls.name).all()
 
         oldIndex = list(map(lambda x: x.id, l)).index(self.id)
         if oldIndex < 0:

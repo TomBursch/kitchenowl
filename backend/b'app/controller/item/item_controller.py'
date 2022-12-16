@@ -55,7 +55,6 @@ def updateItem(args, id):
     if not item:
         raise NotFoundRequest()
     if 'category' in args:
-        print(args)
         if not args['category']:
             item.category = None
         elif 'id' in args['category']:

@@ -51,7 +51,7 @@ def getAllShoppingListItems(args, id):
     orderby = [Item.name]
     if ('orderby' in args):
         if (args['orderby'] == 1):
-            orderby = [Item.ordering==0, Item.ordering]
+            orderby = [Item.ordering == 0, Item.ordering]
         elif (args['orderby'] == 2):
             orderby = [Item.name]
 
@@ -165,8 +165,8 @@ def removeShoppinglistItem(args, id):
 
     removed_at = None
     if 'removed_at' in args:
-        removed_at = datetime.fromtimestamp(args['removed_at']/1000, timezone.utc)
-        print(removed_at)
+        removed_at = datetime.fromtimestamp(
+            args['removed_at']/1000, timezone.utc)
 
     History.create_dropped(shoppinglist, item, description, removed_at)
 

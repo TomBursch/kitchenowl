@@ -1,3 +1,4 @@
+from typing import Self
 from app import db
 from app.helpers import DbModelMixin, TimestampMixin
 
@@ -11,20 +12,20 @@ class Tag(db.Model, DbModelMixin, TimestampMixin):
     recipes = db.relationship(
         'RecipeTags', back_populates='tag', cascade="all, delete-orphan")
 
-    def obj_to_full_dict(self):
+    def obj_to_full_dict(self) -> dict:
         res = super().obj_to_dict()
         return res
 
     @classmethod
-    def create_by_name(cls, name):
+    def create_by_name(cls, name: str) -> Self:
         return cls(
             name=name,
         ).save()
 
     @classmethod
-    def find_by_name(cls, name):
+    def find_by_name(cls, name: str) -> Self:
         return cls.query.filter(cls.name == name).first()
 
     @classmethod
-    def find_by_id(cls, id):
+    def find_by_id(cls, id: int) -> Self:
         return cls.query.filter(cls.id == id).first()

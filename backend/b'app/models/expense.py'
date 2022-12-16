@@ -1,3 +1,4 @@
+from typing import Self
 from app import db
 from app.helpers import DbModelMixin, TimestampMixin
 
@@ -17,7 +18,7 @@ class Expense(db.Model, DbModelMixin, TimestampMixin):
     paid_for = db.relationship(
         'ExpensePaidFor', back_populates='expense', cascade="all, delete-orphan")
 
-    def obj_to_full_dict(self):
+    def obj_to_full_dict(self) -> dict:
         res = super().obj_to_dict()
         paidFor = ExpensePaidFor.query.filter(ExpensePaidFor.expense_id == self.id).join(
             ExpensePaidFor.user).order_by(
@@ -28,11 +29,11 @@ class Expense(db.Model, DbModelMixin, TimestampMixin):
         return res
 
     @classmethod
-    def find_by_name(cls, name):
+    def find_by_name(cls, name) -> Self:
         return cls.query.filter(cls.name == name).first()
 
     @classmethod
-    def find_by_id(cls, id):
+    def find_by_id(cls, id) -> Self:
         return cls.query.filter(cls.id == id).join(Expense.category, isouter=True).first()
 
 
@@ -55,5 +56,5 @@ class ExpensePaidFor(db.Model, DbModelMixin, TimestampMixin):
         return res
 
     @classmethod
-    def find_by_ids(cls, expense_id, user_id):
+    def find_by_ids(cls, expense_id, user_id) -> list[Self]:
         return cls.query.filter(cls.expense_id == expense_id, cls.user_id == user_id).first()

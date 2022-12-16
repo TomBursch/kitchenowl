@@ -1,11 +1,12 @@
 from __future__ import annotations
+from typing import Self
 from sqlalchemy import asc, desc
 from app import db
 
 
 class DbModelMixin(object):
 
-    def save(self) -> DbModelMixin:
+    def save(self) -> Self:
         """
         Persist changes to current instance in db
         """
@@ -18,7 +19,7 @@ class DbModelMixin(object):
 
         return self
 
-    def assign(self, **kwargs) -> DbModelMixin:
+    def assign(self, **kwargs) -> Self:
         """
         Update an entry
         """
@@ -27,7 +28,7 @@ class DbModelMixin(object):
 
         return self
 
-    def assign_columns(self, args):
+    def assign_columns(self, args: dict):
         model_columns = list(self.__class__.__table__.columns.keys())
         for k, v in args.items():
             if k in model_columns:
@@ -35,14 +36,14 @@ class DbModelMixin(object):
 
         return self
 
-    def update(self, details):
+    def update(self, details: dict):
         model_columns = list(self.__class__.__table__.columns.keys())
         for k, v in details.items():
             if k in model_columns and (v or v == ''):
                 setattr(self, k, v)
         self.save()
 
-    def update_attr(self, key, value):
+    def update_attr(self, key: str, value):
         model_columns = list(self.__class__.__table__.columns.keys())
         if key in model_columns:
             setattr(self, key, value)
@@ -83,7 +84,7 @@ class DbModelMixin(object):
         db.session.delete(self)
         db.session.commit()
 
-    def obj_to_dict(self, skip_columns=None, include_columns=None) -> dict:
+    def obj_to_dict(self, skip_columns: list[str] = None, include_columns: list[str] = None) -> dict:
         d = {}
         for column in self.__table__.columns:
             d[column.name] = getattr(self, column.name)
@@ -100,7 +101,7 @@ class DbModelMixin(object):
 
         return d
 
-    def clone(self, overrides) -> DbModelMixin:
+    def clone(self, overrides) -> Self:
         new_self = self.__class__()
         new_self.assign_columns(self.obj_to_dict())
 
@@ -111,41 +112,41 @@ class DbModelMixin(object):
         return new_self
 
     @classmethod
-    def find_by_id(cls, target_id) -> DbModelMixin:
+    def find_by_id(cls, target_id: int) -> Self:
         """
         Find the row with specified id
         """
         return cls.query.filter(cls.id == target_id).first()
 
     @classmethod
-    def find_all_by_id(cls, target_id):
+    def find_all_by_id(cls, target_id: int) -> list[Self]:
         """
         Find all the rows with specified id
         """
         return cls.query.filter(cls.id == target_id).all()
 
     @classmethod
-    def find_all_by_ids(cls, target_ids):
+    def find_all_by_ids(cls, target_ids: list[int]) -> list[Self]:
         """
         Find all the rows with specified id
         """
         return cls.query.filter(cls.id.in_(target_ids)).all()
 
     @classmethod
-    def delete_by_id(cls, target_id):
+    def delete_by_id(cls, target_id: int):
         mc = cls.find_by_id(target_id)
         if mc:
             mc.delete()
 
     @classmethod
-    def all(cls):
+    def all(cls) -> list[Self]:
         """
         Return all instances of model
         """
         return cls.query.order_by(cls.id).all()
 
     @classmethod
-    def all_by_name(cls):
+    def all_by_name(cls) -> list[Self]:
         """
         Return all instances of model ordered by name
         IMPORTANT: requires name column
@@ -153,7 +154,7 @@ class DbModelMixin(object):
         return cls.query.order_by(cls.name).all()
 
     @classmethod
-    def first(cls) -> DbModelMixin:
+    def first(cls) -> Self:
         """
         Returns the first entry of database
         """
@@ -164,7 +165,7 @@ class DbModelMixin(object):
         return None
 
     @classmethod
-    def last(cls) -> DbModelMixin:
+    def last(cls) -> Self:
         """
         Return the last entry of table in database
         """

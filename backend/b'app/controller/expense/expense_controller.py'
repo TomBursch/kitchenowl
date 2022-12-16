@@ -183,7 +183,8 @@ def getExpenseOverview(args):
         s1 = ExpensePaidFor.query.with_entities(ExpensePaidFor.expense_id.label("expense_id"), func.sum(
             ExpensePaidFor.factor).label('total')).group_by(ExpensePaidFor.expense_id).subquery()
         s2 = ExpensePaidFor.query.with_entities(ExpensePaidFor.expense_id.label("expense_id"), (ExpensePaidFor.factor.cast(
-            db.Float) / s1.c.total).label('factor')).filter(ExpensePaidFor.user_id == current_user.id).join(s1, ExpensePaidFor.expense_id == s1.c.expense_id).subquery()
+            db.Float) / s1.c.total).label('factor')).filter(ExpensePaidFor.user_id == current_user.id)\
+            .join(s1, ExpensePaidFor.expense_id == s1.c.expense_id).subquery()
 
         factor = s2.c.factor
 

@@ -29,6 +29,7 @@ def daily():
         computeRecipeSuggestions(meal_instances)
         app.logger.info("--- daily analysis is completed ---")
 
+
 @scheduler.task('interval', id='every30min', minutes=30)
 def halfHourly():
     with app.app_context():

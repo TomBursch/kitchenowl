@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Self
 from app import db
 from app.helpers import DbModelMixin, TimestampMixin
 from .shoppinglist import ShoppinglistItems
@@ -45,29 +46,29 @@ class History(db.Model, DbModelMixin, TimestampMixin):
             created_at=created_at or datetime.utcnow
         ).save()
 
-    def obj_to_item_dict(self):
+    def obj_to_item_dict(self) -> dict:
         res = self.item.obj_to_dict()
         res['timestamp'] = getattr(self, 'created_at')
         return res
 
     @classmethod
-    def find_added_by_shoppinglist_id(cls, shoppinglist_id):
+    def find_added_by_shoppinglist_id(cls, shoppinglist_id: int) -> list[Self]:
         return cls.query.filter(cls.shoppinglist_id == shoppinglist_id, cls.status == Status.ADDED).all()
 
     @classmethod
-    def find_dropped_by_shoppinglist_id(cls, shoppinglist_id):
+    def find_dropped_by_shoppinglist_id(cls, shoppinglist_id: int) -> list[Self]:
         return cls.query.filter(cls.shoppinglist_id == shoppinglist_id, cls.status == Status.DROPPED).all()
 
     @classmethod
-    def find_by_shoppinglist_id(cls, shoppinglist_id):
+    def find_by_shoppinglist_id(cls, shoppinglist_id: int) -> list[Self]:
         return cls.query.filter(cls.shoppinglist_id == shoppinglist_id).all()
 
     @classmethod
-    def find_all(cls):
+    def find_all(cls) -> list[Self]:
         return cls.query.all()
 
     @classmethod
-    def get_recent(cls, shoppinglist_id):
+    def get_recent(cls, shoppinglist_id: int) -> list[Self]:
         sq = db.session.query(ShoppinglistItems.item_id).filter(
             ShoppinglistItems.shoppinglist_id == shoppinglist_id).subquery().select(ShoppinglistItems.item_id)
         sq2 = db.session.query(func.max(cls.id)).filter(cls.status == Status.DROPPED).filter(

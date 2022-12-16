@@ -1,3 +1,4 @@
+from typing import Self
 from app import db
 from app.helpers import DbModelMixin, TimestampMixin
 from .recipe import Recipe
@@ -24,38 +25,38 @@ class RecipeHistory(db.Model, DbModelMixin, TimestampMixin):
     status = db.Column(db.Enum(Status))
 
     @classmethod
-    def create_added(cls, recipe):
+    def create_added(cls, recipe: Recipe) -> Self:
         return cls(
             recipe_id=recipe.id,
             status=Status.ADDED
         ).save()
 
     @classmethod
-    def create_dropped(cls, recipe):
+    def create_dropped(cls, recipe: Recipe) -> Self:
         return cls(
             recipe_id=recipe.id,
             status=Status.DROPPED
         ).save()
 
-    def obj_to_item_dict(self):
+    def obj_to_item_dict(self) -> dict:
         res = self.item.obj_to_dict()
         res['timestamp'] = getattr(self, 'created_at')
         return res
 
     @classmethod
-    def find_added(cls):
+    def find_added(cls) -> list[Self]:
         return cls.query.filter(cls.status == Status.ADDED).all()
 
     @classmethod
-    def find_dropped(cls):
+    def find_dropped(cls) -> list[Self]:
         return cls.query.filter(cls.status == Status.DROPPED).all()
 
     @classmethod
-    def find_all(cls):
+    def find_all(cls) -> list[Self]:
         return cls.query.all()
 
     @classmethod
-    def get_recent(cls):
+    def get_recent(cls) -> list[Self]:
         sq = db.session.query(Recipe.id).filter(
             Recipe.planned).subquery().select(Recipe.id)
         sq2 = db.session.query(func.max(cls.id)).filter(cls.status == Status.DROPPED).filter(

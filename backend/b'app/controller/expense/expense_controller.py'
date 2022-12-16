@@ -217,6 +217,7 @@ def addExpenseCategory(args):
     category = ExpenseCategory()
     category.name = args['name']
     category.color = args['color']
+    category.save()
     return jsonify(category.obj_to_dict())
 
 

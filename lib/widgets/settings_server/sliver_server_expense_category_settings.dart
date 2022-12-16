@@ -47,7 +47,7 @@ class SliverServerExpenseCategorySettings extends StatelessWidget {
                     content: Text(
                       AppLocalizations.of(context)!
                           .categoryExpenseDeleteConfirmation(
-                        state.expenseCategories.elementAt(i),
+                        state.expenseCategories.elementAt(i).name,
                       ),
                     ),
                   ));

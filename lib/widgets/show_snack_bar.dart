@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 
+// ignore: long-parameter-list
 ScaffoldFeatureController<SnackBar, SnackBarClosedReason> showSnackbar({
   required BuildContext context,
   SnackBarAction? action,
   required Widget content,
   Duration? duration,
+  double? width = 180,
 }) =>
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -15,7 +17,7 @@ ScaffoldFeatureController<SnackBar, SnackBarClosedReason> showSnackbar({
           child: content,
         ),
         duration: duration ?? const Duration(milliseconds: 1500),
-        width: 180,
+        width: width,
         padding: const EdgeInsets.symmetric(
           horizontal: 16,
           vertical: 16,

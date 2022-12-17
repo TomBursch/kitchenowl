@@ -261,23 +261,26 @@ class ApiService {
     if (_refreshToken == null || _refreshToken!.isEmpty) return false;
     final _headers = Map<String, String>.from(headers);
     _headers['Authorization'] = 'Bearer $_refreshToken';
-    final res = await _client
-        .get(
-          Uri.parse('$baseUrl/auth/refresh'),
-          headers: _headers,
-        )
-        .timeout(_TIMEOUT);
-    if (res.statusCode == 200) {
-      final body = jsonDecode(res.body);
-      headers['Authorization'] = 'Bearer ${body['access_token']}';
-      _refreshToken = body['refresh_token'];
-      if (_handleTokenRotation != null) {
-        _handleTokenRotation!(_refreshToken!);
-      }
-      _setConnectionState(Connection.authenticated);
+    try {
+      final res = await _client
+          .get(
+            Uri.parse('$baseUrl/auth/refresh'),
+            headers: _headers,
+          )
+          .timeout(_TIMEOUT);
 
-      return true;
-    }
+      if (res.statusCode == 200) {
+        final body = jsonDecode(res.body);
+        headers['Authorization'] = 'Bearer ${body['access_token']}';
+        _refreshToken = body['refresh_token'];
+        if (_handleTokenRotation != null) {
+          _handleTokenRotation!(_refreshToken!);
+        }
+        _setConnectionState(Connection.authenticated);
+
+        return true;
+      }
+    } catch (_) {}
 
     return false;
   }

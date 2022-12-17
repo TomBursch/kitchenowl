@@ -350,5 +350,7 @@
   "categoryEdit": "Kategorie bearbeiten",
   "@categoryEdit": {},
   "colorSelect": "Suche eine Farbe aus",
-  "@colorSelect": {}
+  "@colorSelect": {},
+  "wrongUsernameOrPassword": "Benutzername oder Passwort ist falsch",
+  "@wrongUsernameOrPassword": {}
 }

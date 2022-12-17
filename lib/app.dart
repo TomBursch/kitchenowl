@@ -151,6 +151,7 @@ class _AppState extends State<App> {
                           if (state is Unsupported) {
                             return UnsupportedPage(
                               unsupportedBackend: state.unsupportedBackend,
+                              canForceOfflineMode: state.canForceOfflineMode,
                             );
                           }
                           if (state is LoadingOnboard) {

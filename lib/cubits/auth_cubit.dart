@@ -42,7 +42,7 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
-  void updateState() async {
+  Future<void> updateState() async {
     switch (ApiService.getInstance().connectionStatus) {
       case Connection.authenticated:
         if (!_forcedOfflineMode) {
@@ -91,16 +91,16 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   Future<void> _caseUnsupported(bool unsupportedBackend) async {
+    final user = await TempStorage.getInstance().readUser();
     if (_forcedOfflineMode &&
         (kIsWeb || ApiService.getInstance().baseUrl.isNotEmpty)) {
-      final user = await TempStorage.getInstance().readUser();
       if (user != null) {
         emit(AuthenticatedOffline(user, true));
       } else {
         emit(Unsupported(unsupportedBackend));
       }
     } else {
-      emit(Unsupported(unsupportedBackend));
+      emit(Unsupported(unsupportedBackend, user != null));
     }
   }
 
@@ -158,13 +158,21 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
-  void login(String username, String password) async {
+  void login(
+    String username,
+    String password, [
+    Function? wrongCredentialsCallback,
+  ]) async {
     emit(const Loading());
     final token = await ApiService.getInstance().login(username, password);
     if (token != null && ApiService.getInstance().isAuthenticated()) {
       await SecureStorage.getInstance().write(key: 'TOKEN', value: token);
     } else {
-      updateState();
+      await updateState();
+      if (ApiService.getInstance().connectionStatus == Connection.connected &&
+          wrongCredentialsCallback != null) {
+        wrongCredentialsCallback();
+      }
     }
   }
 
@@ -286,8 +294,12 @@ class Unreachable extends AuthState {
 
 class Unsupported extends AuthState {
   final bool unsupportedBackend;
-  const Unsupported(this.unsupportedBackend) : super(6);
+  final bool canForceOfflineMode;
+
+  const Unsupported(this.unsupportedBackend, [this.canForceOfflineMode = false])
+      : super(6);
 
   @override
-  List<Object?> get props => ["Unsupported", unsupportedBackend];
+  List<Object?> get props =>
+      ["Unsupported", unsupportedBackend, canForceOfflineMode];
 }

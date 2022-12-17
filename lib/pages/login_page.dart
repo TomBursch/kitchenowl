@@ -53,6 +53,12 @@ class _LoginPageState extends State<LoginPage> {
                           BlocProvider.of<AuthCubit>(context).login(
                         usernameController.text,
                         passwordController.text,
+                        () => showSnackbar(
+                          context: context,
+                          content: Text(AppLocalizations.of(context)!
+                              .wrongUsernameOrPassword),
+                          width: null,
+                        ),
                       ),
                       decoration: InputDecoration(
                         labelText: AppLocalizations.of(context)!.password,
@@ -65,6 +71,12 @@ class _LoginPageState extends State<LoginPage> {
                             BlocProvider.of<AuthCubit>(context).login(
                           usernameController.text,
                           passwordController.text,
+                          () => showSnackbar(
+                            context: context,
+                            content: Text(AppLocalizations.of(context)!
+                                .wrongUsernameOrPassword),
+                            width: null,
+                          ),
                         ),
                         child: Text(AppLocalizations.of(context)!.login),
                       ),

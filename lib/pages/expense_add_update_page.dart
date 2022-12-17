@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 import 'package:kitchenowl/cubits/auth_cubit.dart';
 import 'package:kitchenowl/cubits/expense_add_update_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
@@ -10,7 +8,7 @@ import 'package:kitchenowl/models/expense.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/expense_category.dart';
 import 'package:kitchenowl/models/user.dart';
-import 'package:collection/collection.dart';
+import 'package:kitchenowl/widgets/expense_add_update/paid_for_widget.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
 class AddUpdateExpensePage extends StatefulWidget {
@@ -126,8 +124,16 @@ class _AddUpdateExpensePageState extends State<AddUpdateExpensePage> {
                       padding: const EdgeInsets.all(16),
                       child: TextField(
                         controller: amountController,
-                        onChanged: (s) =>
-                            cubit.setAmount(double.tryParse(s) ?? 0),
+                        onTap: () => amountController.selection =
+                            TextSelection.collapsed(
+                          offset: amountController.text.length,
+                        ),
+                        onChanged: (s) {
+                          cubit.setAmount(double.tryParse(s) ?? 0);
+                          amountController.selection = TextSelection.collapsed(
+                            offset: amountController.text.length,
+                          );
+                        },
                         textInputAction: TextInputAction.next,
                         keyboardType: TextInputType.number,
                         inputFormatters: [CurrencyTextInputFormater()],
@@ -290,73 +296,13 @@ class _AddUpdateExpensePageState extends State<AddUpdateExpensePage> {
                   ],
                 ),
               ),
-              BlocBuilder<AddUpdateExpenseCubit, AddUpdateExpenseState>(
-                bloc: cubit,
-                builder: (context, state) => SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (context, i) {
-                      final controller = TextEditingController(
-                        text: (cubit.state.paidFor
-                                .firstWhereOrNull(
-                                  (e) => e.userId == widget.users[i].id,
-                                )
-                                ?.factor
-                                .toString()) ??
-                            "",
-                      );
-
-                      return CustomCheckboxListTile(
-                        title: Text(widget.users[i].name),
-                        value: cubit.containsUser(widget.users[i]),
-                        onChanged: (v) {
-                          if (v != null) {
-                            if (v) {
-                              cubit.addUser(widget.users[i]);
-                            } else {
-                              cubit.removeUser(widget.users[i]);
-                            }
-                          }
-                        },
-                        subtitle: Text(NumberFormat.simpleCurrency().format(
-                          (state.amount *
-                              (cubit.state.paidFor
-                                      .firstWhereOrNull(
-                                        (e) => e.userId == widget.users[i].id,
-                                      )
-                                      ?.factor ??
-                                  0) /
-                              state.paidFor.fold(0, (p, v) => p + v.factor)),
-                        )),
-                        trailing: ConstrainedBox(
-                          constraints: const BoxConstraints(
-                            minWidth: 20,
-                            maxWidth: 100,
-                          ),
-                          child: TextField(
-                            textInputAction: TextInputAction.next,
-                            keyboardType: TextInputType.number,
-                            textAlign: TextAlign.right,
-                            controller: controller,
-                            onTap: () {
-                              cubit.addUser(widget.users[i]);
-                              controller.selection = TextSelection(
-                                baseOffset: 0,
-                                extentOffset: controller.text.length,
-                              );
-                            },
-                            onChanged: (t) => cubit.setFactor(
-                              widget.users[i],
-                              int.tryParse(t) ?? 1,
-                            ),
-                            inputFormatters: [
-                              FilteringTextInputFormatter.digitsOnly,
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                    childCount: widget.users.length,
+              SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (context, i) => PaidForWidget(
+                    user: widget.users[i],
+                    cubit: cubit,
                   ),
+                  childCount: widget.users.length,
                 ),
               ),
               if (isUpdate)

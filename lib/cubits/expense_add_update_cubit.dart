@@ -97,13 +97,13 @@ class AddUpdateExpenseCubit extends Cubit<AddUpdateExpenseState> {
     ));
   }
 
-  void addUser(User user) {
+  void addUser(User user, [int factor = 1]) {
     if (!containsUser(user)) {
       emit(state.copyWith(
         paidFor: List.from(state.paidFor)
           ..add(PaidForModel(
             userId: user.id,
-            factor: 1,
+            factor: factor,
           )),
       ));
     }
@@ -119,12 +119,16 @@ class AddUpdateExpenseCubit extends Cubit<AddUpdateExpenseState> {
     emit(state.copyWith(paidFor: l));
   }
 
-  void setFactor(User user, int factor) {
+  void setFactor(User user, int? factor) {
+    if (factor == null || factor <= 0) return removeUser(user);
+
     final l = List<PaidForModel>.from(state.paidFor);
     final i = l.indexWhere((e) => e.userId == user.id);
     if (i >= 0) {
       l[i] = PaidForModel(userId: user.id, factor: factor);
       emit(state.copyWith(paidFor: l));
+    } else {
+      addUser(user, factor);
     }
   }
 

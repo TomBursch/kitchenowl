@@ -6,8 +6,8 @@ FROM python:3.11-slim as builder
 RUN apt-get update \
     && apt-get install --yes --no-install-recommends \
         gcc g++ libffi-dev libpcre3-dev build-essential cargo \
-        libxml2-dev libxslt-dev
-        # cmake gfortran libopenblas-dev liblapack-dev pkg-config ninja-build
+        libxml2-dev libxslt-dev cmake gfortran libopenblas-dev liblapack-dev pkg-config ninja-build \
+         autoconf automake zlib1g-dev libjpeg62-turbo-dev
 
 # Create virtual enviroment
 RUN python -m venv /opt/venv && /opt/venv/bin/pip install --no-cache-dir -U pip setuptools wheel

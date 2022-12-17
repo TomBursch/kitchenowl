@@ -5,8 +5,9 @@ FROM python:3.11-slim as builder
 
 RUN apt-get update \
     && apt-get install --yes --no-install-recommends \
-        gcc g++ libffi-dev libpcre3-dev build-essential cargo 
-        # libxml2-dev libxslt-dev cmake gfortran libopenblas-dev liblapack-dev pkg-config ninja-build
+        gcc g++ libffi-dev libpcre3-dev build-essential cargo \
+        libxml2-dev libxslt-dev
+        # cmake gfortran libopenblas-dev liblapack-dev pkg-config ninja-build
 
 # Create virtual enviroment
 RUN python -m venv /opt/venv && /opt/venv/bin/pip install --no-cache-dir -U pip setuptools wheel
@@ -19,6 +20,11 @@ RUN pip3 install --no-cache-dir -r requirements.txt && find /opt/venv \( -type d
 # RUNNER
 # ------------
 FROM python:3.11-slim as runner
+
+RUN apt-get update \
+    && apt-get install --yes --no-install-recommends \
+        libxml2 \
+    && rm -rf /var/lib/apt/lists/*
 
 # Use virtual enviroment
 COPY --from=builder /opt/venv /opt/venv

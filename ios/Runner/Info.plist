@@ -42,6 +42,7 @@
         <string>nb</string>
         <string>nl</string>
 		<string>pa</string>
+		<string>tr</string>
 	</array>
 	<key>CFBundleName</key>
 	<string>kitchenowl</string>

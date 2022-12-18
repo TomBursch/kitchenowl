@@ -27,6 +27,7 @@ class AddExpense(Schema):
     amount = fields.Float(
         required=True
     )
+    date = fields.Integer()
     photo = fields.String()
     category = fields.Integer(
         allow_none=True
@@ -51,6 +52,7 @@ class UpdateExpense(Schema):
 
     name = fields.String()
     amount = fields.Float()
+    date = fields.Integer()
     photo = fields.String()
     category = fields.Integer(
         allow_none=True

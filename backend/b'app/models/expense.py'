@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Self
 from app import db
 from app.helpers import DbModelMixin, TimestampMixin
@@ -9,6 +10,7 @@ class Expense(db.Model, DbModelMixin, TimestampMixin):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(128))
     amount = db.Column(db.Float())
+    date = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
     category_id = db.Column(db.Integer, db.ForeignKey('expense_category.id'))
     photo = db.Column(db.String())
     paid_by_id = db.Column(db.Integer, db.ForeignKey('user.id'))

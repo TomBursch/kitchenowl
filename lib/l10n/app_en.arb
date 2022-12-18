@@ -77,6 +77,8 @@
   "@copied": {},
   "darkmode": "Darkmode",
   "@darkmode": {},
+  "date": "Date",
+  "@date": {},
   "delete": "Delete",
   "@delete": {},
   "description": "Description",

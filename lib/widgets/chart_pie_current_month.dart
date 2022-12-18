@@ -92,7 +92,7 @@ class _ChartPieCurrentMonthState extends State<ChartPieCurrentMonth> {
                     ),
                   if (!isTouched)
                     Text(
-                      '${widget.categoriesById[e.key]?.name.characters.first ?? ''}: ',
+                      '${widget.categoriesById[e.key]?.name.characters.first ?? '🪙'}: ',
                     ),
                   Text(NumberFormat.simpleCurrency().format(e.value)),
                 ],

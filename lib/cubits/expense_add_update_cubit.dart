@@ -12,6 +12,7 @@ class AddUpdateExpenseCubit extends Cubit<AddUpdateExpenseState> {
   AddUpdateExpenseCubit([this.expense = const Expense(paidById: 0)])
       : super(AddUpdateExpenseState(
           amount: expense.amount.abs(),
+          date: expense.date ?? DateTime.now(),
           isIncome: expense.amount < 0,
           name: expense.name,
           paidBy: expense.paidById,
@@ -36,6 +37,7 @@ class AddUpdateExpenseCubit extends Cubit<AddUpdateExpenseState> {
         await ApiService.getInstance().addExpense(Expense(
           amount: amount,
           name: _state.name,
+          date: _state.date,
           image: image ?? expense.image,
           paidById: _state.paidBy,
           paidFor: _state.paidFor,
@@ -45,6 +47,7 @@ class AddUpdateExpenseCubit extends Cubit<AddUpdateExpenseState> {
         await ApiService.getInstance().updateExpense(expense.copyWith(
           name: _state.name,
           amount: amount,
+          date: _state.date,
           image: image,
           paidById: _state.paidBy,
           paidFor: _state.paidFor,
@@ -64,6 +67,10 @@ class AddUpdateExpenseCubit extends Cubit<AddUpdateExpenseState> {
 
   void setName(String name) {
     emit(state.copyWith(name: name));
+  }
+
+  void setDate(DateTime date) {
+    emit(state.copyWith(date: date));
   }
 
   void setAmount(double amount) {
@@ -146,6 +153,7 @@ class AddUpdateExpenseCubit extends Cubit<AddUpdateExpenseState> {
 class AddUpdateExpenseState extends Equatable {
   final String name;
   final double amount;
+  final DateTime date;
   final bool isIncome;
   final NamedByteArray? image;
   final int paidBy;
@@ -159,6 +167,7 @@ class AddUpdateExpenseState extends Equatable {
     this.isIncome = false,
     this.image,
     required this.paidBy,
+    required this.date,
     this.category,
     this.paidFor = const [],
     this.categories = const [],
@@ -168,6 +177,7 @@ class AddUpdateExpenseState extends Equatable {
     String? name,
     double? amount,
     int? paidBy,
+    DateTime? date,
     bool? isIncome,
     NamedByteArray? image,
     List<PaidForModel>? paidFor,
@@ -177,6 +187,7 @@ class AddUpdateExpenseState extends Equatable {
       AddUpdateExpenseState(
         name: name ?? this.name,
         amount: amount ?? this.amount,
+        date: date ?? this.date,
         isIncome: isIncome ?? this.isIncome,
         image: image ?? this.image,
         category: category ?? this.category,
@@ -192,6 +203,7 @@ class AddUpdateExpenseState extends Equatable {
       AddUpdateExpenseState(
         name: name,
         amount: amount,
+        date: date,
         isIncome: isIncome,
         category: category,
         paidBy: paidBy,
@@ -205,6 +217,7 @@ class AddUpdateExpenseState extends Equatable {
   List<Object?> get props => [
         name,
         amount,
+        date,
         isIncome,
         image,
         paidBy,

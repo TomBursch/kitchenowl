@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:kitchenowl/cubits/auth_cubit.dart';
 import 'package:kitchenowl/cubits/expense_add_update_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
@@ -96,22 +97,22 @@ class _AddUpdateExpensePageState extends State<AddUpdateExpensePage> {
           constraints: const BoxConstraints.expand(width: 1600),
           child: CustomScrollView(
             slivers: [
-              SliverList(
-                delegate: SliverChildListDelegate(
-                  [
-                    BlocBuilder<AddUpdateExpenseCubit, AddUpdateExpenseState>(
-                      bloc: cubit,
-                      buildWhen: (previous, current) =>
-                          previous.image != current.image,
-                      builder: (context, state) => ImageSelector(
-                        image: state.image,
-                        originalImage: cubit.expense.image,
-                        setImage: cubit.setImage,
+              SliverPadding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                sliver: SliverList(
+                  delegate: SliverChildListDelegate(
+                    [
+                      BlocBuilder<AddUpdateExpenseCubit, AddUpdateExpenseState>(
+                        bloc: cubit,
+                        buildWhen: (previous, current) =>
+                            previous.image != current.image,
+                        builder: (context, state) => ImageSelector(
+                          image: state.image,
+                          originalImage: cubit.expense.image,
+                          setImage: cubit.setImage,
+                        ),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: TextField(
+                      TextField(
                         controller: nameController,
                         onChanged: (s) => cubit.setName(s),
                         textInputAction: TextInputAction.next,
@@ -119,10 +120,65 @@ class _AddUpdateExpensePageState extends State<AddUpdateExpensePage> {
                           labelText: AppLocalizations.of(context)!.name,
                         ),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: TextField(
+                      const SizedBox(height: 16),
+                      Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Text(
+                            AppLocalizations.of(context)!.date,
+                            style: Theme.of(context).textTheme.caption,
+                          ),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: BlocBuilder<AddUpdateExpenseCubit,
+                                    AddUpdateExpenseState>(
+                                  bloc: cubit,
+                                  buildWhen: (previous, current) =>
+                                      previous.date != current.date,
+                                  builder: (context, state) => Text(
+                                    DateFormat.yMMMMd()
+                                        .add_jm()
+                                        .format(state.date),
+                                  ),
+                                ),
+                              ),
+                              ElevatedButton(
+                                child: const Icon(Icons.calendar_month_rounded),
+                                onPressed: () async {
+                                  final DateTime? date = await showDatePicker(
+                                    context: context,
+                                    initialDate: cubit.state.date,
+                                    firstDate: DateTime(2000),
+                                    lastDate: DateTime.now()
+                                        .add(const Duration(days: 400)),
+                                  );
+                                  if (date == null) return;
+
+                                  final TimeOfDay? time = await showTimePicker(
+                                    context: context,
+                                    initialTime: TimeOfDay.fromDateTime(
+                                      cubit.state.date,
+                                    ),
+                                  );
+
+                                  if (time == null) return;
+
+                                  cubit.setDate(DateTime(
+                                    date.year,
+                                    date.month,
+                                    date.day,
+                                    time.hour,
+                                    time.minute,
+                                  ));
+                                },
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      TextField(
                         controller: amountController,
                         onTap: () => amountController.selection =
                             TextSelection.collapsed(
@@ -142,11 +198,8 @@ class _AddUpdateExpensePageState extends State<AddUpdateExpensePage> {
                               AppLocalizations.of(context)!.expenseAmount,
                         ),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: BlocBuilder<AddUpdateExpenseCubit,
-                          AddUpdateExpenseState>(
+                      const SizedBox(height: 16),
+                      BlocBuilder<AddUpdateExpenseCubit, AddUpdateExpenseState>(
                         bloc: cubit,
                         buildWhen: (prev, curr) =>
                             prev.isIncome != curr.isIncome,
@@ -214,10 +267,8 @@ class _AddUpdateExpensePageState extends State<AddUpdateExpensePage> {
                           ],
                         ),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
+                      const SizedBox(height: 16),
+                      Column(
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -253,12 +304,10 @@ class _AddUpdateExpensePageState extends State<AddUpdateExpensePage> {
                           ),
                         ],
                       ),
-                    ),
-                    BlocBuilder<AddUpdateExpenseCubit, AddUpdateExpenseState>(
-                      bloc: cubit,
-                      builder: (context, state) => Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: Column(
+                      const SizedBox(height: 16),
+                      BlocBuilder<AddUpdateExpenseCubit, AddUpdateExpenseState>(
+                        bloc: cubit,
+                        builder: (context, state) => Column(
                           mainAxisSize: MainAxisSize.min,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -284,16 +333,14 @@ class _AddUpdateExpensePageState extends State<AddUpdateExpensePage> {
                           ],
                         ),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-                      child: Text(
+                      const SizedBox(height: 16),
+                      Text(
                         AppLocalizations.of(context)!.expensePaidFor,
                         style: Theme.of(context).textTheme.caption,
                       ),
-                    ),
-                    const Divider(indent: 16, endIndent: 16),
-                  ],
+                      const Divider(),
+                    ],
+                  ),
                 ),
               ),
               SliverList(
@@ -306,30 +353,27 @@ class _AddUpdateExpensePageState extends State<AddUpdateExpensePage> {
                 ),
               ),
               if (isUpdate)
-                SliverPadding(
-                  padding: const EdgeInsets.all(16),
-                  sliver: SliverToBoxAdapter(
-                    child: LoadingElevatedButton(
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all<Color>(
-                          Colors.redAccent,
-                        ),
-                        foregroundColor: MaterialStateProperty.all<Color>(
-                          Colors.white,
-                        ),
+                SliverToBoxAdapter(
+                  child: LoadingElevatedButton(
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all<Color>(
+                        Colors.redAccent,
                       ),
-                      onPressed: () async {
-                        await cubit.deleteExpense();
-                        if (!mounted) return;
-                        Navigator.of(context).pop(UpdateEnum.deleted);
-                      },
-                      child: Text(AppLocalizations.of(context)!.delete),
+                      foregroundColor: MaterialStateProperty.all<Color>(
+                        Colors.white,
+                      ),
                     ),
+                    onPressed: () async {
+                      await cubit.deleteExpense();
+                      if (!mounted) return;
+                      Navigator.of(context).pop(UpdateEnum.deleted);
+                    },
+                    child: Text(AppLocalizations.of(context)!.delete),
                   ),
                 ),
               if (!mobileLayout)
                 SliverPadding(
-                  padding: EdgeInsets.fromLTRB(16, isUpdate ? 0 : 16, 16, 16),
+                  padding: EdgeInsets.fromLTRB(0, isUpdate ? 0 : 16, 0, 16),
                   sliver: SliverToBoxAdapter(
                     child: BlocBuilder<AddUpdateExpenseCubit,
                         AddUpdateExpenseState>(

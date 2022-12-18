@@ -8,7 +8,7 @@ class Expense extends Model {
   final String name;
   final double amount;
   final String image;
-  final DateTime? createdAt;
+  final DateTime? date;
   final ExpenseCategory? category;
   final int paidById;
   final List<PaidForModel> paidFor;
@@ -20,7 +20,7 @@ class Expense extends Model {
     this.image = "",
     required this.paidById,
     this.paidFor = const [],
-    this.createdAt,
+    this.date,
     this.category,
   });
 
@@ -38,9 +38,8 @@ class Expense extends Model {
       category: map['category'] != null
           ? ExpenseCategory.fromJson(map['category'])
           : null,
-      createdAt:
-          DateTime.fromMillisecondsSinceEpoch(map['created_at'], isUtc: true)
-              .toLocal(),
+      date: DateTime.fromMillisecondsSinceEpoch(map['date'], isUtc: true)
+          .toLocal(),
       paidById: map['paid_by_id'],
       paidFor: paidFor,
     );
@@ -49,6 +48,7 @@ class Expense extends Model {
   Expense copyWith({
     String? name,
     double? amount,
+    DateTime? date,
     String? image,
     Nullable<ExpenseCategory>? category,
     int? paidById,
@@ -58,6 +58,7 @@ class Expense extends Model {
         id: id,
         name: name ?? this.name,
         amount: amount ?? this.amount,
+        date: date ?? this.date,
         image: image ?? this.image,
         category: (category ?? Nullable(this.category)).value,
         paidById: paidById ?? this.paidById,
@@ -66,17 +67,22 @@ class Expense extends Model {
 
   @override
   List<Object?> get props =>
-      [id, name, amount, image, category, createdAt, paidById, paidFor];
+      [id, name, amount, image, category, date, paidById, paidFor];
 
   @override
-  Map<String, dynamic> toJson() => {
-        "name": name,
-        "amount": amount,
-        "photo": image,
-        'category': category?.id,
-        "paid_by": {"id": paidById},
-        "paid_for": paidFor.map((e) => e.toJson()).toList(),
-      };
+  Map<String, dynamic> toJson() {
+    assert(date != null);
+
+    return {
+      "name": name,
+      "amount": amount,
+      "photo": image,
+      'category': category?.id,
+      "date": date!.toUtc().millisecondsSinceEpoch,
+      "paid_by": {"id": paidById},
+      "paid_for": paidFor.map((e) => e.toJson()).toList(),
+    };
+  }
 
   @override
   Map<String, dynamic> toJsonWithId() => toJson()

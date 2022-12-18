@@ -118,10 +118,11 @@ class _ExpensePageState extends State<ExpensePage> {
                                   (e) => e.id == state.expense.paidById,
                                 )?.name ?? AppLocalizations.of(context)!.other}",
                           ),
-                          trailing: state.expense.createdAt != null
+                          trailing: state.expense.date != null
                               ? Text(
                                   DateFormat.yMMMMEEEEd()
-                                      .format(state.expense.createdAt!),
+                                      .add_jm()
+                                      .format(state.expense.date!),
                                 )
                               : null,
                         ),

@@ -63,8 +63,8 @@ class ExpenseItemWidget extends StatelessWidget {
               : null,
           title: Text(expense.name),
           trailing: Text(NumberFormat.simpleCurrency().format(amount)),
-          subtitle: (expense.createdAt != null)
-              ? Text(DateFormat.yMMMd().format(expense.createdAt!))
+          subtitle: (expense.date != null)
+              ? Text(DateFormat.yMMMd().format(expense.date!))
               : null,
           onTap: (kIsWeb || Platform.isIOS)
               ? () async {

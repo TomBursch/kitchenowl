@@ -73,6 +73,8 @@
   "@copied": {},
   "darkmode": "Nachtmodus",
   "@darkmode": {},
+  "date": "Datum",
+  "@date": {},
   "delete": "Löschen",
   "@delete": {},
   "description": "Beschreibung",

@@ -59,6 +59,7 @@ FROM nginx:stable-alpine
 
 RUN mkdir -p /var/www/web/kitchenowl
 COPY --from=builder /usr/local/src/app/build/web /var/www/web/kitchenowl
+COPY docker-entrypoint-custom.sh /docker-entrypoint.d/01-kitchenowl-customization.sh
 COPY default.conf.template /etc/nginx/templates/
 
 HEALTHCHECK --interval=5m --timeout=3s \

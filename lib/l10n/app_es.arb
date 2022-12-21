@@ -342,5 +342,17 @@
   "yields": "Rinde",
   "@yields": {},
   "personal": "Personal",
-  "@personal": {}
+  "@personal": {},
+  "categoryEdit": "Editar categoría",
+  "@categoryEdit": {},
+  "colorSelect": "Selecciona un color",
+  "@colorSelect": {},
+  "more": "Más",
+  "@more": {},
+  "household": "Familiar",
+  "@household": {},
+  "wrongUsernameOrPassword": "Nombre de usuario o contraseña incorrectos",
+  "@wrongUsernameOrPassword": {},
+  "date": "Fecha",
+  "@date": {}
 }

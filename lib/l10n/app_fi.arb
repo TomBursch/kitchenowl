@@ -312,5 +312,19 @@
   "categoryEdit": "Muokkaa kategoriaa",
   "@categoryEdit": {},
   "colorSelect": "Valitse väri",
-  "@colorSelect": {}
+  "@colorSelect": {},
+  "more": "Lisää",
+  "@more": {},
+  "date": "Päivämäärä",
+  "@date": {},
+  "expenseOverviewTotalTitle": "Kokonaiskulut {month}:",
+  "@expenseOverviewTotalTitle": {
+    "placeholders": {
+      "month": {}
+    }
+  },
+  "wrongUsernameOrPassword": "Väärä käyttäjätunnus tai salasana",
+  "@wrongUsernameOrPassword": {},
+  "writeMarkdownHere": "Voit käyttää markdownia täällä!",
+  "@writeMarkdownHere": {}
 }

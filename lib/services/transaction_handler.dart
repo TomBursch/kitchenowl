@@ -14,12 +14,10 @@ class TransactionHandler {
   }
 
   Future<void> runOpenTransactions() async {
-    if (!ApiService.getInstance().isConnected()) {
-      await ApiService.getInstance().refresh();
-    }
-    if (!App.isForcedOffline && ApiService.getInstance().isConnected()) {
+    if (ApiService.getInstance().isConnected()) {
       final transactions =
           await TransactionStorage.getInstance().readTransactions();
+
       final now = DateTime.now();
       List<Transaction> openTransactions = [];
       for (final t in transactions) {

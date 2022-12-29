@@ -48,7 +48,7 @@ class AuthCubit extends Cubit<AuthState> {
         if (!_forcedOfflineMode) {
           final user = (await ApiService.getInstance().getUser())!;
           TempStorage.getInstance().writeUser(user);
-          await TransactionHandler.getInstance().runOpenTransactions();
+          TransactionHandler.getInstance().runOpenTransactions();
           emit(Authenticated(user));
         } else {
           await _caseDisconnected();

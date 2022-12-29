@@ -1,0 +1,6 @@
+- Expense overhaul
+- New language: Turkish
+- Dismiss unsupported backend message 
+- Improved offline mode
+- Updated recipe search and scaling
+- Other bug fixes

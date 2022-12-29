@@ -348,5 +348,11 @@
   "categoryEdit": "Modifica la categoria",
   "@categoryEdit": {},
   "colorSelect": "Seleziona un colore",
-  "@colorSelect": {}
+  "@colorSelect": {},
+  "more": "Più",
+  "@more": {},
+  "date": "Data",
+  "@date": {},
+  "wrongUsernameOrPassword": "Nome utente o password errato",
+  "@wrongUsernameOrPassword": {}
 }

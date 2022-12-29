@@ -68,13 +68,22 @@ class TransactionShoppingListGetRecentItems
   @override
   Future<List<ItemWithDescription>> runLocal() async {
     final shoppinglist =
-        await TempStorage.getInstance().readItems() ?? const [];
+        (await TempStorage.getInstance().readItems() ?? const [])
+            .map((e) => e.name)
+            .toSet();
 
     return (await TransactionStorage.getInstance().readTransactions())
         .whereType<TransactionShoppingListDeleteItem>()
         .map((e) => e.item)
-        .where((e) => !shoppinglist.contains(e))
-        .toList();
+        .where((e) {
+      if (shoppinglist.contains(e.name)) {
+        return false;
+      } else {
+        shoppinglist.add(e.name);
+
+        return true;
+      }
+    }).toList();
   }
 
   @override

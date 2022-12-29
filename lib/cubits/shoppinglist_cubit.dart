@@ -43,12 +43,31 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
   }
 
   Future<void> remove(ShoppinglistItem item) async {
-    final l = List.of(state.listItems);
+    final _state = state;
+    final l = List.of(_state.listItems);
     l.remove(item);
-    final recent = List.of(state.recentItems);
+    final recent = List.of(_state.recentItems);
     recent.insert(0, item);
-    recent.removeLast();
-    emit(state.copyWith(listItems: l, recentItems: recent));
+    if (recent.length > 8) {
+      recent.removeLast();
+    }
+    if (_state is SearchShoppinglistCubitState) {
+      final result = List.of(_state.result);
+      final index = result.indexOf(item);
+      if (index >= 0) {
+        result.removeAt(index);
+        result.insert(
+          index,
+          ItemWithDescription.fromItem(
+            item: item,
+            description: item.description,
+          ),
+        );
+      }
+      emit(_state.copyWith(listItems: l, recentItems: recent, result: result));
+    } else {
+      emit(state.copyWith(listItems: l, recentItems: recent));
+    }
     if (!await TransactionHandler.getInstance()
         .runTransaction(TransactionShoppingListDeleteItem(item: item))) {
       await refresh();
@@ -263,6 +282,7 @@ class SearchShoppinglistCubitState extends ShoppinglistCubitState {
     List<Category>? categories,
     ShoppinglistSorting? sorting,
     ShoppinglistStyle? style,
+    List<Item>? result,
   }) =>
       SearchShoppinglistCubitState(
         listItems: listItems ?? this.listItems,
@@ -271,7 +291,7 @@ class SearchShoppinglistCubitState extends ShoppinglistCubitState {
         categories: categories ?? this.categories,
         style: style ?? this.style,
         query: query,
-        result: result,
+        result: result ?? this.result,
       );
 
   @override

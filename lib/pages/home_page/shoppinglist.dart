@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:kitchenowl/app.dart';
 import 'package:kitchenowl/cubits/shoppinglist_cubit.dart';
 import 'package:kitchenowl/enums/shoppinglist_sorting.dart';
 import 'package:kitchenowl/enums/views_enum.dart';
@@ -47,7 +46,6 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
   @override
   Widget build(BuildContext context) {
     final cubit = BlocProvider.of<ShoppinglistCubit>(context);
-    final isOffline = App.isOffline;
 
     return SafeArea(
       child: Column(
@@ -218,25 +216,23 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                         ),
                         if (body is List) ...body,
                         if (body is! List) body,
-                        if (!isOffline &&
-                            (state.recentItems.isNotEmpty ||
-                                state is LoadingShoppinglistCubitState))
+                        if ((state.recentItems.isNotEmpty ||
+                            state is LoadingShoppinglistCubitState))
                           SliverText(
                             padding: const EdgeInsets.all(16),
                             '${AppLocalizations.of(context)!.itemsRecent}:',
                             style: Theme.of(context).textTheme.headline6,
                           ),
-                        if (!isOffline)
-                          SliverItemGridList(
-                            items: state.recentItems,
-                            onPressed: (ItemWithDescription item) =>
-                                cubit.add(item.name, item.description),
-                            categories: state.categories,
-                            onRefresh: cubit.refresh,
-                            isDescriptionEditable: false,
-                            isLoading: state is LoadingShoppinglistCubitState,
-                            isList: state.style == ShoppinglistStyle.list,
-                          ),
+                        SliverItemGridList(
+                          items: state.recentItems,
+                          onPressed: (ItemWithDescription item) =>
+                              cubit.add(item.name, item.description),
+                          categories: state.categories,
+                          onRefresh: cubit.refresh,
+                          isDescriptionEditable: false,
+                          isLoading: state is LoadingShoppinglistCubitState,
+                          isList: state.style == ShoppinglistStyle.list,
+                        ),
                       ],
                     );
                   },

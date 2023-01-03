@@ -1,5 +1,6 @@
 import calendar
 from datetime import datetime, timezone
+from dateutil.relativedelta import relativedelta
 from sqlalchemy.sql.expression import desc
 from app.errors import NotFoundRequest
 from flask import jsonify, Blueprint
@@ -53,7 +54,7 @@ def addExpense(args):
     expense.amount = args['amount']
     if 'date' in args:
         expense.date = datetime.fromtimestamp(
-                args['date']/1000, timezone.utc)
+            args['date']/1000, timezone.utc)
     if 'photo' in args:
         expense.photo = args['photo']
     if 'category' in args:
@@ -197,8 +198,7 @@ def getExpenseOverview(args):
         query = query.filter(Expense.id.in_(filterQuery)).join(s2)
 
     def getOverviewForMonthAgo(monthAgo: int):
-        monthStart = thisMonthStart.replace(
-            month=(thisMonthStart.month - monthAgo))
+        monthStart = thisMonthStart - relativedelta(months=monthAgo)
         monthEnd = monthStart.replace(day=calendar.monthrange(
             monthStart.year, monthStart.month)[1])
         return {

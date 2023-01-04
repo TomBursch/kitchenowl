@@ -28,16 +28,21 @@ class History(db.Model, DbModelMixin, TimestampMixin):
     description = db.Column('description', db.String())
 
     @classmethod
-    def create_added(cls, shoppinglist, item, description=''):
+    def create_added_without_save(cls, shoppinglist, item, description='') -> Self:
         return cls(
             shoppinglist_id=shoppinglist.id,
             item_id=item.id,
             status=Status.ADDED,
             description=description
-        ).save()
+        )
+    
+    @classmethod
+    def create_added(cls, shoppinglist, item, description='') -> Self:
+        return cls.create_added_without_save(shoppinglist, item, description).save()
+    
 
     @classmethod
-    def create_dropped(cls, shoppinglist, item, description='', created_at=None):
+    def create_dropped(cls, shoppinglist, item, description='', created_at=None) -> Self:
         return cls(
             shoppinglist_id=shoppinglist.id,
             item_id=item.id,

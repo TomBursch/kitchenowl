@@ -28,10 +28,10 @@ jobs:
         run: |
           if [[ $REF == "refs/tags/v"* ]]
           then
-            echo "tags=$BASE_TAG:latest, $BASE_TAG:beta" >> $GITHUB_ENV
+            echo "tags=$BASE_TAG:latest, $BASE_TAG:beta, $BASE_TAG:${REF#refs/tags/}" >> $GITHUB_ENV
           elif [[ $REF == "refs/tags/beta-v"* ]]
           then
-            echo "tags=$BASE_TAG:beta" >> $GITHUB_ENV
+            echo "tags=$BASE_TAG:beta, $BASE_TAG:${REF#refs/tags/}" >> $GITHUB_ENV
           else
             echo "tags=$BASE_TAG:dev" >> $GITHUB_ENV
           fi
@@ -58,7 +58,7 @@ jobs:
         with:
           context: ./
           file: ./Dockerfile
-          platforms: linux/amd64,linux/arm64 #,linux/arm/v7 #,linux/386,linux/arm/v6
+          platforms: linux/amd64,linux/arm64,linux/arm/v7 #,linux/386,linux/arm/v6
           push: true
           tags: ${{ env.tags }}
           # cache-from: type=registry,ref=${{ secrets.DOCKER_HUB_USERNAME }}/kitchenowl:buildcache

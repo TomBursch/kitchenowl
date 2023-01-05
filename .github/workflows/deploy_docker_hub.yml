@@ -36,10 +36,10 @@ jobs:
         run: |
           if [[ $REF == "refs/tags/v"* ]]
           then
-            echo "tags=$BASE_TAG:latest, $BASE_TAG:beta" >> $GITHUB_ENV
+            echo "tags=$BASE_TAG:latest, $BASE_TAG:beta, $BASE_TAG:${REF#refs/tags/}" >> $GITHUB_ENV
           elif [[ $REF == "refs/tags/beta-v"* ]]
           then
-            echo "tags=$BASE_TAG:beta" >> $GITHUB_ENV
+            echo "tags=$BASE_TAG:beta, $BASE_TAG:${REF#refs/tags/}" >> $GITHUB_ENV
           else
             echo "tags=$BASE_TAG:dev" >> $GITHUB_ENV
           fi

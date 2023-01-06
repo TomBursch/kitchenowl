@@ -16,13 +16,38 @@
 default_platform(:ios)
 
 platform :ios do
-  desc "Push a new beta build to TestFlight"
-  lane :beta do
+  
+  desc "Push a new internal build to TestFlight"
+  lane :internal do
+    sync_code_signing
     sh "flutter build ios --release --no-codesign"
-    build_app(workspace: "Runner.xcworkspace", scheme: "Runner", export_method: "app-store")
-    upload_to_testflight
+    build_app(
+      skip_build_archive: true,
+      archive_path: "../build/ios/archive/Runner.xcarchive",
+    )
+    upload_to_testflight(skip_waiting_for_build_processing: true)
   end
-  lane :test do
-    build_app(workspace: "Runner.xcworkspace", scheme: "Runner", export_method: "app-store")
+
+  desc "Push a new internal build to TestFlight"
+  lane :beta do
+    sync_code_signing
+    sh "flutter build ios --release --no-codesign"
+    build_app(
+      skip_build_archive: true,
+      archive_path: "../build/ios/archive/Runner.xcarchive",
+    )
+    upload_to_testflight(skip_waiting_for_build_processing: true)
   end
+
+  desc "Push a new internal build to TestFlight"
+  lane :production do
+    sync_code_signing
+    sh "flutter build ios --release --no-codesign"
+    build_app(
+      skip_build_archive: true,
+      archive_path: "../build/ios/archive/Runner.xcarchive",
+    )
+    upload_to_app_store
+  end
+
 end

@@ -4,9 +4,13 @@ on:
     # Enable manual run
     inputs:
       lane:
-        description: "Fastlane lane to use (beta)"
+        description: "Fastlane lane to use"
         required: true
-        default: "beta"
+        default: "internal"
+  push:
+    tags:
+      - "v*"
+      - "beta-v*"
 
 jobs:
   fastlane-deploy:
@@ -26,18 +30,34 @@ jobs:
       - run: pod install
         working-directory: ios
 
+      # Decide track internal|beta|production (not in use yet)
+      - name: Decide track
+        id: track
+        run: |
+          if [[ $REF == "refs/tags/v"* ]]
+          then
+            echo "production" >> $GITHUB_ENV
+          elif [[ $REF == "refs/tags/beta-v"* ]]
+          then
+            echo "beta" >> $GITHUB_ENV
+          else
+            echo "internal" >> $GITHUB_ENV
+          fi
+        env:
+          REF: ${{ github.ref }}
+
       # Setup Ruby, Bundler, and Gemfile dependencies
       - name: Setup Fastlane
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: "2.7"
+          ruby-version: "3.2"
           bundler-cache: true
           working-directory: ios
 
       # Build and deploy with Fastlane (by default, to internal track) 🚀.
       # Naturally, promote_to_production only deploys.
-      - run: bundle exec fastlane ${{ github.event.inputs.lane || 'beta' }}
+      - run: bundle exec fastlane ${{ github.event.inputs.lane || 'internal' }}
         env:
-          FASTLANE_PASSWORD: ${{ secrets.APP_STORE_PASSWORD }}
-          FASTLANE_USER: ${{ secrets.APP_STORE_EMAIL }}
+          FASTLANE_USER: ${{ secrets.APPLE_USER_EMAIL }}
+          FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
         working-directory: ios

@@ -16,11 +16,7 @@
 default_platform(:android)
 
 platform :android do
-  desc "Runs all the tests"
-  lane :test do
-    gradle(task: "test")
-  end
-
+  
   desc "Submit a new internal build to Google Play"
   lane :internal do
     sh "flutter build appbundle -v"
@@ -37,16 +33,6 @@ platform :android do
     upload_to_play_store(
       track: 'beta',
       aab: '../build/app/outputs/bundle/release/app-release.aab',
-      json_key_data: ENV['PLAY_STORE_CONFIG_JSON'],
-      )
-  end
-
-  desc "Promote beta track to prod"
-  lane :promote_to_production do
-    upload_to_play_store(
-      track: 'beta',
-      track_promote_to: 'production',
-      skip_upload_changelogs: true,
       json_key_data: ENV['PLAY_STORE_CONFIG_JSON'],
       )
   end

@@ -33,11 +33,27 @@ jobs:
         uses: actions/checkout@v3
       - run: flutter packages get
 
+      # Decide track internal|beta|production (not in use yet)
+      - name: Decide track
+        id: track
+        run: |
+          if [[ $REF == "refs/tags/v"* ]]
+          then
+            echo "production" >> $GITHUB_ENV
+          elif [[ $REF == "refs/tags/beta-v"* ]]
+          then
+            echo "beta" >> $GITHUB_ENV
+          else
+            echo "internal" >> $GITHUB_ENV
+          fi
+        env:
+          REF: ${{ github.ref }}
+
       # Setup Ruby, Bundler, and Gemfile dependencies
       - name: Setup Fastlane
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: "3.1.2"
+          ruby-version: "3.2"
           bundler-cache: true
           working-directory: android
 

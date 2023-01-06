@@ -10,6 +10,8 @@ import 'package:kitchenowl/services/transactions/tag.dart';
 
 class AddUpdateRecipeCubit extends Cubit<AddUpdateRecipeState> {
   final Recipe recipe;
+  bool hasChanges = false;
+
   AddUpdateRecipeCubit([this.recipe = const Recipe()])
       : super(AddUpdateRecipeState(
           description: recipe.description,
@@ -35,6 +37,7 @@ class AddUpdateRecipeCubit extends Cubit<AddUpdateRecipeState> {
   Future<void> saveRecipe() async {
     final AddUpdateRecipeState _state = state;
     if (state.isValid()) {
+      hasChanges = false;
       String? image;
       if (_state.image != null) {
         image = _state.image!.isEmpty
@@ -78,14 +81,17 @@ class AddUpdateRecipeCubit extends Cubit<AddUpdateRecipeState> {
   }
 
   void setName(String name) {
+    hasChanges = true;
     emit(state.copyWith(name: name));
   }
 
   void setImage(NamedByteArray image) {
+    hasChanges = true;
     emit(state.copyWith(image: image));
   }
 
   void setDescription(String desc) {
+    hasChanges = true;
     emit(state.copyWith(description: desc));
   }
 
@@ -98,26 +104,32 @@ class AddUpdateRecipeCubit extends Cubit<AddUpdateRecipeState> {
   }
 
   void setTime(int time) {
+    hasChanges = true;
     emit(state.copyWith(time: time));
   }
 
   void setCookTime(int time) {
+    hasChanges = true;
     emit(state.copyWith(cookTime: time));
   }
 
   void setPrepTime(int time) {
+    hasChanges = true;
     emit(state.copyWith(prepTime: time));
   }
 
   void setYields(int yields) {
+    hasChanges = true;
     emit(state.copyWith(yields: yields));
   }
 
   void setSource(String source) {
+    hasChanges = true;
     emit(state.copyWith(source: source));
   }
 
   void selectTag(Tag tag, bool selected) {
+    hasChanges = true;
     final l = Set<Tag>.from(state.selectedTags);
     if (selected) {
       l.add(tag);
@@ -128,6 +140,7 @@ class AddUpdateRecipeCubit extends Cubit<AddUpdateRecipeState> {
   }
 
   void addTag(String tag) {
+    hasChanges = true;
     final l = Set<Tag>.from(state.tags);
     final selected = Set<Tag>.from(state.selectedTags);
     final t = Tag(name: tag);
@@ -137,6 +150,7 @@ class AddUpdateRecipeCubit extends Cubit<AddUpdateRecipeState> {
   }
 
   void addItem(RecipeItem item) {
+    hasChanges = true;
     emit(state.copyWith(items: List.from(state.items)..add(item)));
   }
 
@@ -145,12 +159,14 @@ class AddUpdateRecipeCubit extends Cubit<AddUpdateRecipeState> {
   }
 
   void removeItem(RecipeItem item) {
+    hasChanges = true;
     final l = List<RecipeItem>.from(state.items);
     l.remove(item);
     emit(state.copyWith(items: l));
   }
 
   void updateFromItemList(List<Item> items, bool optional) {
+    hasChanges = true;
     final l = <RecipeItem>[];
     for (final item in items) {
       l.add(state.items
@@ -169,6 +185,7 @@ class AddUpdateRecipeCubit extends Cubit<AddUpdateRecipeState> {
   }
 
   void updateItem(RecipeItem item) {
+    hasChanges = true;
     final int i = state.items.indexWhere((e) => e.name == item.name);
     if (i < 0) return;
     final l = List.of(state.items);

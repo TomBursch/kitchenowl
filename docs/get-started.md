@@ -66,7 +66,7 @@ There are three tags available: `latest`, `beta` and `dev`. `latest` is the most
 !!! danger "Important"
     We recommend running KitchenOwl behind a reverse proxy with https (e.g. [nginx](https://nginx.org/en/docs/http/configuring_https_servers.html]))
 
-    It is also important that you have HTTP Strict Forward Secrecy enabled and the proper headers applied to your responses or you could be subject to a javascript hijack.
+    It is also important that you have HTTP Strict Transport Security enabled and the proper headers applied to your responses or you could be subject to a javascript hijack.
 
     Please see:
 

@@ -4,6 +4,7 @@ class DismissibleCard extends StatelessWidget {
   final Future<bool> Function(DismissDirection)? confirmDismiss;
   final void Function(DismissDirection)? onDismissed;
   final void Function()? onTap;
+  final bool isDismissable;
   final Widget title;
   final Widget? subtitle;
   final Widget? trailing;
@@ -18,12 +19,24 @@ class DismissibleCard extends StatelessWidget {
     this.subtitle,
     this.trailing,
     this.displayDraggable = false,
+    this.isDismissable = true,
   })  : assert(!displayDraggable || trailing == null,
             "Trailing cannot be set when displayDraggable is set"),
         super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    Widget widget = Card(
+      child: ListTile(
+        title: title,
+        onTap: onTap,
+        subtitle: subtitle,
+        trailing: displayDraggable ? const Icon(Icons.drag_handle) : trailing,
+      ),
+    );
+
+    if (!isDismissable) return widget;
+
     return Dismissible(
       key: key!,
       confirmDismiss: confirmDismiss,
@@ -52,14 +65,7 @@ class DismissibleCard extends StatelessWidget {
           color: Colors.white,
         ),
       ),
-      child: Card(
-        child: ListTile(
-          title: title,
-          onTap: onTap,
-          subtitle: subtitle,
-          trailing: displayDraggable ? const Icon(Icons.drag_handle) : trailing,
-        ),
-      ),
+      child: widget,
     );
   }
 }

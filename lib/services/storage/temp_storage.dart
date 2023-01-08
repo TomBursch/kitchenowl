@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart' as foundation;
 import 'package:kitchenowl/models/category.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/models/recipe.dart';
+import 'package:kitchenowl/models/shoppinglist.dart';
 import 'package:kitchenowl/models/user.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -38,10 +39,16 @@ class TempStorage {
     return File('$path/users.json');
   }
 
-  Future<File> get _localItemFile async {
+  Future<File> get _localshoppingListsFile async {
     final path = await _localPath;
 
-    return File('$path/items.json');
+    return File('$path/shoppinglists.json');
+  }
+
+  Future<File> _localItemFile(ShoppingList? shoppinglist) async {
+    final path = await _localPath;
+
+    return File('$path/items_${shoppinglist?.id ?? 1}.json');
   }
 
   Future<File> get _localRecipeFile async {
@@ -58,6 +65,7 @@ class TempStorage {
 
   Future<void> clearAll() async {
     await clearItems();
+    await clearShoppingLists(); // must come after items
     await clearUser();
     await clearUsers();
     await clearRecipes();
@@ -125,10 +133,44 @@ class TempStorage {
     }
   }
 
-  Future<List<ShoppinglistItem>?> readItems() async {
+  Future<List<ShoppingList>?> readShoppingLists() async {
     if (!foundation.kIsWeb) {
       try {
-        final file = await _localItemFile;
+        final file = await _localshoppingListsFile;
+        final String content = await file.readAsString();
+        List list = json.decode(content);
+
+        return list.map((e) => ShoppingList.fromJson(e)).toList();
+      } catch (_) {}
+    }
+
+    return null;
+  }
+
+  Future<void> clearShoppingLists() async {
+    if (!foundation.kIsWeb) {
+      try {
+        final file = await _localshoppingListsFile;
+        if (await file.exists()) await file.delete();
+      } catch (_) {}
+    }
+  }
+
+  Future<void> writeShoppingLists(List<ShoppingList> users) async {
+    if (!foundation.kIsWeb) {
+      final file = await _localshoppingListsFile;
+      await file.writeAsString(
+        json.encode(users.map((e) => e.toJsonWithId()).toList()),
+      );
+    }
+  }
+
+  Future<List<ShoppinglistItem>?> readItems([
+    ShoppingList? shoppinglist,
+  ]) async {
+    if (!foundation.kIsWeb) {
+      try {
+        final file = await _localItemFile(shoppinglist);
         final String content = await file.readAsString();
 
         return List<ShoppinglistItem>.from(
@@ -140,9 +182,12 @@ class TempStorage {
     return null;
   }
 
-  Future<void> writeItems(List<ShoppinglistItem> items) async {
+  Future<void> writeItems(
+    ShoppingList? shoppinglist,
+    List<ShoppinglistItem> items,
+  ) async {
     if (!foundation.kIsWeb) {
-      final file = await _localItemFile;
+      final file = await _localItemFile(shoppinglist);
       await file.writeAsString(
         json.encode(items.map((e) => e.toJsonWithId()).toList()),
       );
@@ -152,8 +197,12 @@ class TempStorage {
   Future<void> clearItems() async {
     if (!foundation.kIsWeb) {
       try {
-        final file = await _localItemFile;
-        if (await file.exists()) await file.delete();
+        List<ShoppingList> shoppinglists =
+            await readShoppingLists() ?? const [];
+        for (final shoppinglist in shoppinglists) {
+          final file = await _localItemFile(shoppinglist);
+          if (await file.exists()) await file.delete();
+        }
       } catch (_) {}
     }
   }

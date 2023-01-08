@@ -6,6 +6,7 @@ import 'package:kitchenowl/app.dart';
 import 'package:kitchenowl/cubits/recipe_list_cubit.dart';
 import 'package:kitchenowl/enums/views_enum.dart';
 import 'package:kitchenowl/kitchenowl.dart';
+import 'package:kitchenowl/widgets/choice_scroll.dart';
 import 'package:kitchenowl/widgets/recipe_create_fab.dart';
 import 'package:kitchenowl/widgets/recipe_item.dart';
 import 'package:responsive_builder/responsive_builder.dart';
@@ -102,39 +103,33 @@ class _RecipeListPageState extends State<RecipeListPage> {
                 alignment: Alignment.centerLeft,
                 child: Padding(
                   padding: const EdgeInsets.only(bottom: 6),
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: const <Widget>[SizedBox(width: 12)] +
-                          state.tags.map((tag) {
-                            return Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 4),
-                              child: FilterChip(
-                                label: Text(
-                                  tag.name,
-                                  style: TextStyle(
-                                    color:
-                                        (state is FilteredListRecipeListState) &&
-                                                state.selectedTags.contains(tag)
-                                            ? Theme.of(context)
-                                                .colorScheme
-                                                .onPrimary
-                                            : null,
-                                  ),
+                  child: ChoiceScroll(
+                    children: const <Widget>[SizedBox(width: 12)] +
+                        state.tags.map((tag) {
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 4),
+                            child: FilterChip(
+                              label: Text(
+                                tag.name,
+                                style: TextStyle(
+                                  color: (state
+                                              is FilteredListRecipeListState) &&
+                                          state.selectedTags.contains(tag)
+                                      ? Theme.of(context).colorScheme.onPrimary
+                                      : null,
                                 ),
-                                selected:
-                                    (state is FilteredListRecipeListState) &&
-                                        state.selectedTags.contains(tag),
-                                selectedColor:
-                                    Theme.of(context).colorScheme.secondary,
-                                onSelected: (bool selected) =>
-                                    cubit.tagSelected(tag, selected),
                               ),
-                            );
-                          }).toList()
-                        ..add(const SizedBox(width: 12)),
-                    ),
+                              selected:
+                                  (state is FilteredListRecipeListState) &&
+                                      state.selectedTags.contains(tag),
+                              selectedColor:
+                                  Theme.of(context).colorScheme.secondary,
+                              onSelected: (bool selected) =>
+                                  cubit.tagSelected(tag, selected),
+                            ),
+                          );
+                        }).toList()
+                      ..add(const SizedBox(width: 12)),
                   ),
                 ),
               );

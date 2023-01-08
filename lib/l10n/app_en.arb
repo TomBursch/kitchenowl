@@ -29,6 +29,8 @@
   "@addRecipeToPlannerShort": {},
   "address": "Address",
   "@address": {},
+  "addShoppingList": "Add Shopping list",
+  "@addShoppingList": {},
   "addTag": "Add Tag",
   "@addTag": {},
   "admin": "Admin",
@@ -79,6 +81,8 @@
   "@darkmode": {},
   "date": "Date",
   "@date": {},
+  "defaultWord": "Default",
+  "@defaultWord": {},
   "delete": "Delete",
   "@delete": {},
   "description": "Description",
@@ -285,6 +289,16 @@
   "@setupTitle": {},
   "shoppingList": "Shopping list",
   "@shoppingList": {},
+  "shoppingListDelete": "Delete Shopping list",
+  "@shoppingListDelete": {},
+  "shoppingListDeleteConfirmation": "Are you sure you want to delete {shoppingList}?",
+  "@shoppingListDeleteConfirmation": {
+    "placeholders": {
+      "shoppingList": {}
+    }
+  },
+  "shoppingListEdit": "Edit Shopping list",
+  "@shoppingListEdit": {},
   "shoppingLists": "Shopping lists",
   "@shoppingLists": {},
   "start": "Start",

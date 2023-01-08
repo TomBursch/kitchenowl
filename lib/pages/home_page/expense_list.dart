@@ -226,16 +226,20 @@ class _ExpensePageState extends State<ExpenseListPage> {
                     ),
                   ),
                   if (state.expenses.isNotEmpty)
-                    SliverToBoxAdapter(
-                      child: OptionsHeader(
-                        right: HeaderButton(
-                          text: state.sorting == ExpenselistSorting.all
-                              ? AppLocalizations.of(context)!.household
-                              : state.sorting == ExpenselistSorting.personal
-                                  ? AppLocalizations.of(context)!.personal
-                                  : AppLocalizations.of(context)!.other,
-                          icon: const Icon(Icons.sort),
-                          onPressed: cubit.incrementSorting,
+                    SliverPadding(
+                      padding: const EdgeInsets.only(right: 16),
+                      sliver: SliverToBoxAdapter(
+                        child: Align(
+                          alignment: Alignment.centerRight,
+                          child: TrailingIconTextButton(
+                            text: state.sorting == ExpenselistSorting.all
+                                ? AppLocalizations.of(context)!.household
+                                : state.sorting == ExpenselistSorting.personal
+                                    ? AppLocalizations.of(context)!.personal
+                                    : AppLocalizations.of(context)!.other,
+                            icon: const Icon(Icons.sort),
+                            onPressed: cubit.incrementSorting,
+                          ),
                         ),
                       ),
                     ),

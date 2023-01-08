@@ -107,7 +107,7 @@ class SliverServerFeaturesSettings extends StatelessWidget {
           children: [
             Expanded(
               child: Text(
-                '${AppLocalizations.of(context)!.categories}:',
+                '${AppLocalizations.of(context)!.shoppingLists}:',
                 style: Theme.of(context).textTheme.headline6,
               ),
             ),
@@ -118,7 +118,7 @@ class SliverServerFeaturesSettings extends StatelessWidget {
                   context: context,
                   builder: (BuildContext context) {
                     return TextDialog(
-                      title: AppLocalizations.of(context)!.addCategory,
+                      title: AppLocalizations.of(context)!.addShoppingList,
                       doneText: AppLocalizations.of(context)!.add,
                       hintText: AppLocalizations.of(context)!.name,
                       isInputValid: (s) => s.isNotEmpty,
@@ -127,7 +127,7 @@ class SliverServerFeaturesSettings extends StatelessWidget {
                 );
                 if (res != null) {
                   BlocProvider.of<SettingsServerCubit>(context)
-                      .addCategory(res);
+                      .addShoppingList(res);
                 }
               },
               padding: EdgeInsets.zero,

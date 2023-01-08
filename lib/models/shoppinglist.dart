@@ -1,16 +1,26 @@
-import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/models/model.dart';
 
-class Shoppinglist extends Model {
+class ShoppingList extends Model {
   final int? id;
   final String name;
-  final List<Item> items;
 
-  const Shoppinglist({this.id, required this.name, this.items = const []});
+  const ShoppingList({this.id, required this.name});
 
-  factory Shoppinglist.fromJson(Map<String, dynamic> map) => Shoppinglist(
+  const ShoppingList.def()
+      : id = 1,
+        name = "";
+
+  factory ShoppingList.fromJson(Map<String, dynamic> map) => ShoppingList(
         id: map['id'],
         name: map['name'],
+      );
+
+  ShoppingList copyWith({
+    String? name,
+  }) =>
+      ShoppingList(
+        id: id,
+        name: name ?? this.name,
       );
 
   @override
@@ -18,7 +28,12 @@ class Shoppinglist extends Model {
 
   @override
   Map<String, dynamic> toJson() => {
-        "id": id,
-        "name": id,
+        "name": name,
       };
+
+  @override
+  Map<String, dynamic> toJsonWithId() => toJson()
+    ..addAll({
+      "id": id,
+    });
 }

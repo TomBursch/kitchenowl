@@ -28,6 +28,11 @@ class ImportSchema(Schema):
         description = fields.String(
             load_default=''
         )
+        time = fields.Integer()
+        cook_time = fields.Integer()
+        prep_time = fields.Integer()
+        yields = fields.Integer()
+        source = fields.String()
         items = fields.List(fields.Nested(RecipeItem))
 
     items = fields.List(fields.Nested(Item))

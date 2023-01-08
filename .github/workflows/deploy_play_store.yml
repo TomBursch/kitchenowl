@@ -39,12 +39,12 @@ jobs:
         run: |
           if [[ $REF == "refs/tags/v"* ]]
           then
-            echo "production" >> $GITHUB_ENV
+            echo "track=production" >> $GITHUB_ENV
           elif [[ $REF == "refs/tags/beta-v"* ]]
           then
-            echo "beta" >> $GITHUB_ENV
+            echo "track=beta" >> $GITHUB_ENV
           else
-            echo "internal" >> $GITHUB_ENV
+            echo "track=internal" >> $GITHUB_ENV
           fi
         env:
           REF: ${{ github.ref }}

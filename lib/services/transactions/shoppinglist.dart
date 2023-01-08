@@ -106,6 +106,7 @@ class TransactionShoppingListGetRecentItems
 
     return (await TransactionStorage.getInstance().readTransactions())
         .whereType<TransactionShoppingListDeleteItem>()
+        .where((e) => e.shoppinglist.id == shoppinglist.id)
         .map((e) => e.item)
         .where((e) {
       if (items.contains(e.name)) {
@@ -163,7 +164,7 @@ class TransactionShoppingListAddItem extends Transaction<bool> {
 
   @override
   Future<bool> runLocal() async {
-    final list = await TempStorage.getInstance().readItems() ?? [];
+    final list = await TempStorage.getInstance().readItems(shoppinglist) ?? [];
     list.add(ShoppinglistItem(name: name, description: description));
     TempStorage.getInstance().writeItems(shoppinglist, list);
 
@@ -212,7 +213,7 @@ class TransactionShoppingListDeleteItem extends Transaction<bool> {
 
   @override
   Future<bool> runLocal() async {
-    final list = await TempStorage.getInstance().readItems() ?? [];
+    final list = await TempStorage.getInstance().readItems(shoppinglist) ?? [];
     list.removeWhere((e) => e.name == item.name);
     TempStorage.getInstance().writeItems(shoppinglist, list);
 
@@ -267,7 +268,8 @@ class TransactionShoppingListUpdateItem extends Transaction<bool> {
   @override
   Future<bool> runLocal() async {
     if (item is ShoppinglistItem) {
-      final list = await TempStorage.getInstance().readItems() ?? [];
+      final list =
+          await TempStorage.getInstance().readItems(shoppinglist) ?? [];
       final int i = list.indexWhere((e) => e.id == item.id);
       list.removeAt(i);
       list.insert(
@@ -328,7 +330,7 @@ class TransactionShoppingListAddRecipeItems extends Transaction<bool> {
 
   @override
   Future<bool> runLocal() async {
-    final list = await TempStorage.getInstance().readItems() ?? [];
+    final list = await TempStorage.getInstance().readItems(null) ?? [];
     for (final item in items) {
       final int i = list.indexWhere((e) => e.id == item.id);
       if (i >= 0) {

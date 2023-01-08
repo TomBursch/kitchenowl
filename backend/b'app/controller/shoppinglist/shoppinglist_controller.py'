@@ -4,8 +4,8 @@ from app import db
 from app.models import Item, Shoppinglist, History, Status, Association, ShoppinglistItems
 from app.helpers import validate_args
 from .schemas import (RemoveItem, UpdateDescription,
-                      AddItemByName, CreateList, AddRecipeItems, GetItems)
-from app.errors import NotFoundRequest
+                      AddItemByName, CreateList, AddRecipeItems, GetItems, UpdateList)
+from app.errors import NotFoundRequest, ForbiddenRequest
 from datetime import datetime, timedelta, timezone
 import app.util.description_merger as description_merger
 
@@ -17,19 +17,51 @@ shoppinglist = Blueprint('shoppinglist', __name__)
 def before_first_request():
     # Add default shoppinglist
     if (not Shoppinglist.find_by_id(1)):
-        sl = Shoppinglist(
+        Shoppinglist(
             name='Default'
-        )
-        sl.save()
+        ).save()
 
 
-@shoppinglist.route('/<id>/item/<item_id>', methods=['GET'])
+@shoppinglist.route('', methods=['POST'])
 @jwt_required()
-def getShoppingListItem(id, item_id):
-    item = Item.find_by_id(item_id)
-    if not item:
+@validate_args(CreateList)
+def createShoppinglist(args):
+    return jsonify(Shoppinglist(name=args['name']).save().obj_to_dict())
+
+
+@shoppinglist.route('', methods=['GET'])
+@jwt_required()
+def getShoppinglists():
+    shoppinglists = Shoppinglist.all()
+    return jsonify([e.obj_to_dict() for e in shoppinglists])
+
+
+@shoppinglist.route('/<id>', methods=['POST'])
+@jwt_required()
+@validate_args(UpdateList)
+def updateShoppinglist(args, id):
+    shoppinglist = Shoppinglist.find_by_id(id)
+    if not shoppinglist:
         raise NotFoundRequest()
-    return jsonify(item.obj_to_dict())
+
+    if 'name' in args:
+        shoppinglist.name = args['name']
+
+    shoppinglist.save()
+    return jsonify(shoppinglist.obj_to_dict())
+
+
+@shoppinglist.route('/<id>', methods=['DELETE'])
+@jwt_required()
+def deleteShoppinglist(id):
+    shoppinglist = Shoppinglist.find_by_id(id)
+    if not shoppinglist:
+        raise NotFoundRequest()
+    if shoppinglist.isDefault():
+        return ForbiddenRequest()
+    shoppinglist.delete()
+
+    return jsonify({'msg': 'DONE'})
 
 
 @shoppinglist.route('/<id>/item/<item_id>', methods=['POST'])
@@ -174,14 +206,6 @@ def removeShoppinglistItem(args, id):
     return jsonify({'msg': "DONE"})
 
 
-@shoppinglist.route('', methods=['POST'])
-@jwt_required()
-@validate_args(CreateList)
-def createList(args):
-    return jsonify(Shoppinglist.create(
-        args['name']).save().obj_to_dict())
-
-
 @shoppinglist.route('/<id>/recipeitems', methods=['POST'])
 @jwt_required()
 @validate_args(AddRecipeItems)
@@ -216,23 +240,3 @@ def addRecipeItems(args, id):
         raise e
 
     return jsonify(item.obj_to_dict())
-
-# @shoppinglist.route('/<id>/item', methods=['POST'])
-# @jwt_required()
-# @validate_args(UpdateDescription)
-# def updateDescription(args, id):
-#     item = ShoppinglistItem.find_by_ids(id, args['item_id'])
-#     if (not item):
-#         raise Exception()
-#     item.desciption = args['description']
-#     item.save()
-#     return jsonify(item.obj_to_dict())
-
-
-@shoppinglist.route('/<id>', methods=['GET'])
-@jwt_required()
-def getShoppinglist(id):
-    shoppinglist = Shoppinglist.find_by_id(id)
-    if not shoppinglist:
-        raise NotFoundRequest()
-    return jsonify(shoppinglist.obj_to_dict())

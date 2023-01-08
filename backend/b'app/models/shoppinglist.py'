@@ -9,11 +9,14 @@ class Shoppinglist(db.Model, DbModelMixin, TimestampMixin):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(128), unique=True)
 
-    items = db.relationship('ShoppinglistItems')
+    items = db.relationship('ShoppinglistItems', cascade="all, delete-orphan")
 
     @classmethod
-    def create(cls, name) -> Self:
-        return cls(name=name).save()
+    def getDefault(cls) -> Self:
+        return cls.find_by_id(1)
+
+    def isDefault(self) -> bool:
+        return self.id == 1
 
 
 class ShoppinglistItems(db.Model, DbModelMixin, TimestampMixin):

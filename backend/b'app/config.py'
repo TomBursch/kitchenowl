@@ -1,6 +1,6 @@
 from datetime import timedelta
 from sqlalchemy import MetaData
-from app.errors import NotFoundRequest, UnauthorizedRequest
+from app.errors import NotFoundRequest, UnauthorizedRequest, ForbiddenRequest, InvalidUsage
 from app.util import KitchenOwlJSONProvider
 from flask import Flask, jsonify, request
 from flask_migrate import Migrate
@@ -90,6 +90,12 @@ def unhandled_exception(e):
     if type(e) is NotFoundRequest:
         app.logger.info(e)
         return jsonify(message="Requested resource not found"), 404
+    if type(e) is ForbiddenRequest:
+        app.logger.warning(e)
+        return jsonify(message="Request forbidden"), 403
+    if type(e) is InvalidUsage:
+        app.logger.warning(e)
+        return jsonify(message="Request invalid"), 400
     if type(e) is UnauthorizedRequest:
         app.logger.warning(e)
         return jsonify(message="Request unauthorized"), 401

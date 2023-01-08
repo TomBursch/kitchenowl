@@ -29,7 +29,13 @@ class AddRecipeItems(Schema):
 
 class CreateList(Schema):
     name = fields.String(
-        required=True
+        required=True,
+        validate=lambda a: a and not a.isspace()
+    )
+
+class UpdateList(Schema):
+    name = fields.String(
+        validate=lambda a: a and not a.isspace()
     )
 
 

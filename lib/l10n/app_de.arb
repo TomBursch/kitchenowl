@@ -31,6 +31,8 @@
   "@address": {},
   "addTag": "Markierung hinzufügen",
   "@addTag": {},
+  "addShoppingList": "Einkaufsliste hinzufügen",
+  "@addShoppingList": {},
   "admin": "Admin",
   "@admin": {},
   "appDescription": "KitchenOwl hilft dir dein Lebensmitteleinkauf zu erleichtern.",
@@ -75,6 +77,8 @@
   "@darkmode": {},
   "date": "Datum",
   "@date": {},
+  "defaultWord": "Standard",
+  "@defaultWord": {},
   "delete": "Löschen",
   "@delete": {},
   "description": "Beschreibung",
@@ -275,6 +279,16 @@
   "@setupTitle": {},
   "shoppingList": "Einkaufsliste",
   "@shoppingList": {},
+  "shoppingListDelete": "Einkaufsliste löschen",
+  "@shoppingListDelete": {},
+  "shoppingListDeleteConfirmation": "Bist du dir sicher, dass du {shoppingList} löschen möchtest?",
+  "@shoppingListDeleteConfirmation": {
+    "placeholders": {
+      "shoppingList": {}
+    }
+  },
+  "shoppingListEdit": "Einkaufsliste bearbeiten",
+  "@shoppingListEdit": {},
   "shoppingLists": "Einkaufslisten",
   "@shoppingLists": {},
   "start": "Start",

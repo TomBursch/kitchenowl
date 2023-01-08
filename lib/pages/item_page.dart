@@ -6,17 +6,20 @@ import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/models/category.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/kitchenowl.dart';
+import 'package:kitchenowl/models/shoppinglist.dart';
 import 'package:kitchenowl/models/update_value.dart';
 import 'package:kitchenowl/widgets/recipe_item.dart';
 
 class ItemPage<T extends Item> extends StatefulWidget {
   final T item;
+  final ShoppingList? shoppingList;
   final List<Category> categories;
   final bool isDescriptionEditable;
 
   const ItemPage({
     super.key,
     required this.item,
+    this.shoppingList,
     this.categories = const [],
     this.isDescriptionEditable = true,
   });
@@ -36,7 +39,8 @@ class _ItemPageState<T extends Item> extends State<ItemPage<T>> {
     if (widget.item is ItemWithDescription) {
       descController.text = (widget.item as ItemWithDescription).description;
     }
-    cubit = ItemEditCubit<T>(item: widget.item);
+    cubit =
+        ItemEditCubit<T>(item: widget.item, shoppingList: widget.shoppingList);
   }
 
   @override

@@ -18,13 +18,16 @@ class ShimmerShoppingItemWidget extends StatelessWidget {
     );
 
     return (gridStyle ?? true)
-        ? Shimmer.fromColors(
-            baseColor: color,
-            highlightColor: Colors.grey[300]!.withOpacity(.5),
-            child: Material(
-              color: color,
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(14)),
+        ? Padding(
+            padding: const EdgeInsets.all(4),
+            child: Shimmer.fromColors(
+              baseColor: color,
+              highlightColor: Colors.grey[300]!.withOpacity(.5),
+              child: Material(
+                color: color,
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(14)),
+                ),
               ),
             ),
           )

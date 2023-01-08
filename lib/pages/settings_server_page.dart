@@ -12,6 +12,8 @@ import 'package:kitchenowl/widgets/settings_server/sliver_server_features_settin
 import 'package:kitchenowl/widgets/settings_server/sliver_server_tags_settings.dart';
 import 'package:kitchenowl/widgets/settings_server/sliver_server_user_settings.dart';
 
+import '../widgets/settings_server/sliver_server_shoppinglists_settings.dart';
+
 class SettingsServerPage extends StatefulWidget {
   const SettingsServerPage({Key? key}) : super(key: key);
 
@@ -58,6 +60,56 @@ class _SettingsServerPageState extends State<SettingsServerPage> {
                         .copyWith(scrollbars: false),
                     slivers: [
                       const SliverServerFeaturesSettings(),
+                      const SliverServerShoppingListsSettings(),
+                      SliverList(
+                        delegate: SliverChildListDelegate(
+                          [
+                            Text(
+                              AppLocalizations.of(context)!
+                                  .swipeToDeleteAndLongPressToReorder,
+                              textAlign: TextAlign.center,
+                              style: Theme.of(context).textTheme.caption,
+                            ),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    '${AppLocalizations.of(context)!.categories}:',
+                                    style:
+                                        Theme.of(context).textTheme.headline6,
+                                  ),
+                                ),
+                                IconButton(
+                                  icon: const Icon(Icons.add),
+                                  onPressed: () async {
+                                    final res = await showDialog<String>(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return TextDialog(
+                                          title: AppLocalizations.of(context)!
+                                              .addCategory,
+                                          doneText:
+                                              AppLocalizations.of(context)!.add,
+                                          hintText:
+                                              AppLocalizations.of(context)!
+                                                  .name,
+                                          isInputValid: (s) => s.isNotEmpty,
+                                        );
+                                      },
+                                    );
+                                    if (res != null) {
+                                      BlocProvider.of<SettingsServerCubit>(
+                                              context)
+                                          .addCategory(res);
+                                    }
+                                  },
+                                  padding: EdgeInsets.zero,
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
                       const SliverServerCategorySettings(),
                       SliverList(
                         delegate: SliverChildListDelegate([

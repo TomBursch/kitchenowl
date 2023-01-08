@@ -3,6 +3,7 @@ import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/category.dart';
 import 'package:kitchenowl/models/item.dart';
+import 'package:kitchenowl/models/shoppinglist.dart';
 import 'package:kitchenowl/models/update_value.dart';
 import 'package:kitchenowl/pages/item_page.dart';
 import 'package:kitchenowl/widgets/shopping_item.dart';
@@ -13,7 +14,8 @@ class SliverItemGridList<T extends Item> extends StatelessWidget {
   final void Function(T)? onPressed;
   final Nullable<void Function(T)>? onLongPressed;
   final List<T> items;
-  final List<Category>? categories; // forwared to item page on long press
+  final List<Category>? categories; // forwarded to item page on long press
+  final ShoppingList? shoppingList; // forwarded to item page on long press
   final bool isList;
   final bool Function(T)? selected;
   final bool isLoading;
@@ -26,6 +28,7 @@ class SliverItemGridList<T extends Item> extends StatelessWidget {
     this.onLongPressed,
     this.items = const [],
     this.categories,
+    this.shoppingList,
     this.isList = false,
     this.selected,
     this.isLoading = false,
@@ -68,6 +71,7 @@ class SliverItemGridList<T extends Item> extends StatelessWidget {
                           MaterialPageRoute(
                             builder: (BuildContext context) => ItemPage(
                               item: item,
+                              shoppingList: shoppingList,
                               categories: categories ?? const [],
                               isDescriptionEditable: isDescriptionEditable,
                             ),

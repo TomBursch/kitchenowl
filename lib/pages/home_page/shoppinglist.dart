@@ -6,6 +6,7 @@ import 'package:kitchenowl/enums/views_enum.dart';
 import 'package:kitchenowl/models/category.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/kitchenowl.dart';
+import 'package:kitchenowl/widgets/choice_scroll.dart';
 
 import 'home_page_item.dart';
 
@@ -99,6 +100,7 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                           SliverItemGridList(
                             items: state.result,
                             categories: state.categories,
+                            shoppingList: state.selectedShoppinglist,
                             onRefresh: cubit.refresh,
                             selected: (item) => item is ShoppinglistItem,
                             isLoading: state is LoadingShoppinglistCubitState,
@@ -126,6 +128,7 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                       body = SliverItemGridList(
                         items: state.listItems,
                         categories: state.categories,
+                        shoppingList: state.selectedShoppinglist,
                         isList: state.style == ShoppinglistStyle.list,
                         selected: (_) => true,
                         isLoading: state is LoadingShoppinglistCubitState,
@@ -166,6 +169,7 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                           grids.add(SliverItemGridList(
                             items: items,
                             categories: state.categories,
+                            shoppingList: state.selectedShoppinglist,
                             isList: state.style == ShoppinglistStyle.list,
                             selected: (_) => true,
                             isLoading: state is LoadingShoppinglistCubitState,
@@ -187,30 +191,62 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                       primary: true,
                       slivers: [
                         SliverToBoxAdapter(
-                          child: OptionsHeader(
-                            // left: HeaderButton(
-                            //   text: state.style == ShoppinglistStyle.grid
-                            //       ? AppLocalizations.of(context)!.grid
-                            //       : AppLocalizations.of(context)!.list,
-                            //   icon: Icon(
-                            //     state.style == ShoppinglistStyle.grid
-                            //         ? Icons.grid_view_rounded
-                            //         : Icons.view_list_rounded,
-                            //   ),
-                            //   onPressed: cubit.incrementStyle,
-                            // ),
-                            right: HeaderButton(
-                              text: state.sorting ==
-                                      ShoppinglistSorting.alphabetical
-                                  ? AppLocalizations.of(context)!
-                                      .sortingAlphabetical
-                                  : state.sorting ==
-                                          ShoppinglistSorting.algorithmic
-                                      ? AppLocalizations.of(context)!
-                                          .sortingAlgorithmic
-                                      : AppLocalizations.of(context)!.category,
-                              icon: const Icon(Icons.sort),
-                              onPressed: cubit.incrementSorting,
+                          child: LeftRightWrap(
+                            left: (state.shoppinglists.length < 2)
+                                ? const SizedBox()
+                                : ChoiceScroll(
+                                    children:
+                                        state.shoppinglists.map((shoppinglist) {
+                                      return Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 4,
+                                        ),
+                                        child: KtichenOwlChoiceChip(
+                                          label: Text(
+                                            shoppinglist.name,
+                                            style: TextStyle(
+                                              color: shoppinglist.id ==
+                                                      state.selectedShoppinglist
+                                                          .id
+                                                  ? Theme.of(context)
+                                                      .colorScheme
+                                                      .onPrimary
+                                                  : null,
+                                            ),
+                                          ),
+                                          selected: shoppinglist.id ==
+                                              state.selectedShoppinglist.id,
+                                          selectedColor: Theme.of(context)
+                                              .colorScheme
+                                              .secondary,
+                                          onSelected: (bool selected) {
+                                            if (selected) {
+                                              cubit.setShoppingList(
+                                                shoppinglist,
+                                              );
+                                            }
+                                          },
+                                        ),
+                                      );
+                                    }).toList(),
+                                  ),
+                            right: Padding(
+                              padding:
+                                  const EdgeInsets.only(right: 16, bottom: 6),
+                              child: TrailingIconTextButton(
+                                onPressed: cubit.incrementSorting,
+                                text: state.sorting ==
+                                        ShoppinglistSorting.alphabetical
+                                    ? AppLocalizations.of(context)!
+                                        .sortingAlphabetical
+                                    : state.sorting ==
+                                            ShoppinglistSorting.algorithmic
+                                        ? AppLocalizations.of(context)!
+                                            .sortingAlgorithmic
+                                        : AppLocalizations.of(context)!
+                                            .category,
+                                icon: const Icon(Icons.sort),
+                              ),
                             ),
                           ),
                         ),
@@ -228,6 +264,7 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                           onPressed: (ItemWithDescription item) =>
                               cubit.add(item.name, item.description),
                           categories: state.categories,
+                          shoppingList: state.selectedShoppinglist,
                           onRefresh: cubit.refresh,
                           isDescriptionEditable: false,
                           isLoading: state is LoadingShoppinglistCubitState,

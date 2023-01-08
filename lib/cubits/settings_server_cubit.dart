@@ -2,16 +2,19 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/models/category.dart';
 import 'package:kitchenowl/models/expense_category.dart';
+import 'package:kitchenowl/models/shoppinglist.dart';
 import 'package:kitchenowl/models/tag.dart';
 import 'package:kitchenowl/models/user.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
 
 class SettingsServerCubit extends Cubit<SettingsServerState> {
-  SettingsServerCubit() : super(const LoadingSettingsServerState([], {})) {
+  SettingsServerCubit() : super(const LoadingSettingsServerState([])) {
     refresh();
   }
 
   Future<void> refresh() async {
+    Future<List<ShoppingList>?> shoppingLists =
+        ApiService.getInstance().getShoppingLists();
     Future<List<User>?> users = ApiService.getInstance().getAllUsers();
     Future<Set<Tag>?> tags = ApiService.getInstance().getAllTags();
     Future<List<Category>?> categories =
@@ -21,6 +24,7 @@ class SettingsServerCubit extends Cubit<SettingsServerState> {
 
     emit(SettingsServerState(
       await users ?? [],
+      await shoppingLists ?? [],
       await tags ?? {},
       await categories ?? [],
       await expenseCategories ?? [],
@@ -62,6 +66,29 @@ class SettingsServerCubit extends Cubit<SettingsServerState> {
 
   Future<bool> updateTag(Tag tag) async {
     final res = await ApiService.getInstance().updateTag(tag);
+    refresh();
+
+    return res;
+  }
+
+  Future<bool> deleteShoppingList(ShoppingList shoppingList) async {
+    if (shoppingList.id == 1) return false;
+    final res = await ApiService.getInstance().deleteShoppingList(shoppingList);
+    refresh();
+
+    return res;
+  }
+
+  Future<bool> addShoppingList(String name) async {
+    final res = await ApiService.getInstance()
+        .addShoppingList(ShoppingList(name: name));
+    refresh();
+
+    return res;
+  }
+
+  Future<bool> updateShoppingList(ShoppingList shoppingList) async {
+    final res = await ApiService.getInstance().updateShoppingList(shoppingList);
     refresh();
 
     return res;
@@ -127,46 +154,52 @@ class SettingsServerCubit extends Cubit<SettingsServerState> {
 
 class SettingsServerState extends Equatable {
   final List<User> users;
+  final List<ShoppingList> shoppingLists;
   final Set<Tag> tags;
   final List<Category> categories;
   final List<ExpenseCategory> expenseCategories;
 
   const SettingsServerState(
-    this.users,
-    this.tags, [
+    this.users, [
+    this.shoppingLists = const [],
+    this.tags = const {},
     this.categories = const [],
     this.expenseCategories = const [],
   ]);
 
   SettingsServerState copyWith({
     List<User>? users,
+    List<ShoppingList>? shoppingLists,
     Set<Tag>? tags,
     List<Category>? categories,
     List<ExpenseCategory>? expenseCategories,
   }) =>
       SettingsServerState(
         users ?? this.users,
+        shoppingLists ?? this.shoppingLists,
         tags ?? this.tags,
         categories ?? this.categories,
         expenseCategories ?? this.expenseCategories,
       );
 
   @override
-  List<Object?> get props => [users, tags, categories, expenseCategories];
+  List<Object?> get props =>
+      [users, shoppingLists, tags, categories, expenseCategories];
 }
 
 class LoadingSettingsServerState extends SettingsServerState {
-  const LoadingSettingsServerState(super.users, super.tags);
+  const LoadingSettingsServerState(super.users);
 
   @override
+  // ignore: long-parameter-list
   SettingsServerState copyWith({
     List<User>? users,
+    List<ShoppingList>? shoppingLists,
     Set<Tag>? tags,
     List<Category>? categories,
     List<ExpenseCategory>? expenseCategories,
   }) =>
       LoadingSettingsServerState(
         users ?? this.users,
-        tags ?? this.tags,
       );
 }

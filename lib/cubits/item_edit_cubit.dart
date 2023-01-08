@@ -4,6 +4,7 @@ import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/category.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/models/recipe.dart';
+import 'package:kitchenowl/models/shoppinglist.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
 import 'package:kitchenowl/services/transaction_handler.dart';
 import 'package:kitchenowl/services/transactions/item.dart';
@@ -11,6 +12,7 @@ import 'package:kitchenowl/services/transactions/shoppinglist.dart';
 
 class ItemEditCubit<T extends Item> extends Cubit<ItemEditState> {
   final T _item;
+  final ShoppingList? shoppingList;
 
   T get item {
     if (_item is ItemWithDescription) {
@@ -25,7 +27,7 @@ class ItemEditCubit<T extends Item> extends Cubit<ItemEditState> {
     ) as T;
   }
 
-  ItemEditCubit({required T item})
+  ItemEditCubit({required T item, this.shoppingList})
       : _item = item,
         super(ItemEditState(
           description: (item is ItemWithDescription) ? item.description : '',
@@ -66,9 +68,10 @@ class ItemEditCubit<T extends Item> extends Cubit<ItemEditState> {
   }
 
   Future<void> saveItem() async {
-    if (hasChangedDescription()) {
+    if (shoppingList != null && hasChangedDescription()) {
       await TransactionHandler.getInstance()
           .runTransaction(TransactionShoppingListUpdateItem(
+        shoppinglist: shoppingList!,
         item: _item,
         description: state.description,
       ));

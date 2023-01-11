@@ -8,15 +8,47 @@ from app.models import Item, Recipe, RecipeItems, Tag, RecipeTags, Category
 
 
 def importFromLanguage(lang, bulkSave=False):
-    file_path = f'{APP_DIR}/../templates/{lang}.json'
+    file_path = f'{APP_DIR}/../templates/l10n/{lang}.json'
     if lang not in SUPPORTED_LANGUAGES or not exists(file_path):
         raise NotFoundRequest('Language code not supported')
     with open(file_path, 'r') as f:
         data = json.load(f)
-    importFromDict(data, True, bulkSave=bulkSave)
+    with open(f'{APP_DIR}/../templates/attributes.json', 'r') as f:
+        attributes = json.load(f)
+
+    t0 = time.time()
+    models = []
+    for key, name in data["items"].items():
+        item = Item.find_by_name(name)
+        if not item:
+            item = Item()
+            item.name = name
+            item.default = True
+
+        # Category not already set for existing item and category set for template and category translation exist for language
+        if not item.category_id and key in attributes["items"] and "category" in attributes["items"][key] and attributes["items"][key]["category"] in data["categories"]:
+            category_name = data["categories"][attributes["items"]
+                                               [key]["category"]]
+            category = Category.find_by_name(category_name)
+            if not category:
+                category = Category.create_by_name(category_name, True)
+            item.category = category
+        if not bulkSave:
+            item.save()
+        else:
+            models.append(item)
+
+    if bulkSave:
+        try:
+            db.session.add_all(models)
+            db.session.commit()
+        except Exception as e:
+            db.session.rollback()
+            raise e
+    app.logger.info(f"Import took: {(time.time() - t0):.3f}s")
 
 
-def importFromDict(args, default=False, bulkSave=False, override=False):  # noqa
+def importFromDict(args, bulkSave=False, override=False):  # noqa
     t0 = time.time()
     models = []
     if "items" in args:
@@ -25,12 +57,11 @@ def importFromDict(args, default=False, bulkSave=False, override=False):  # noqa
             if not item:
                 item = Item()
                 item.name = importItem['name']
-                item.default = default
             if "category" in importItem and not item.category_id:
                 category = Category.find_by_name(importItem['category'])
                 if not category:
                     category = Category.create_by_name(
-                        importItem['category'], default)
+                        importItem['category'])
                 item.category = category
             if not bulkSave:
                 item.save()
@@ -69,7 +100,7 @@ def importFromDict(args, default=False, bulkSave=False, override=False):  # noqa
                 for recipeItem in importRecipe['items']:
                     item = Item.find_by_name(recipeItem['name'])
                     if not item:
-                        item = Item.create_by_name(recipeItem['name'], default)
+                        item = Item.create_by_name(recipeItem['name'])
                     con = RecipeItems(
                         description=recipeItem['description'],
                         optional=recipeItem['optional']
@@ -84,7 +115,7 @@ def importFromDict(args, default=False, bulkSave=False, override=False):  # noqa
                 for tagName in args['tags']:
                     tag = Tag.find_by_name(tagName)
                     if not tag:
-                        tag = Tag.create_by_name(recipeItem['name'])
+                        tag = Tag.create_by_name(tagName)
                     con = RecipeTags()
                     con.tag = tag
                     con.recipe = recipe

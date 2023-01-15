@@ -34,7 +34,12 @@ JWT_REFRESH_TOKEN_EXPIRES = timedelta(days=30)
 
 SUPPORTED_LANGUAGES = {
     'en': 'English',
-    'de': 'Deutsch'
+    'de': 'Deutsch',
+    'es': 'Español',
+    'fr': 'Français',
+    # 'nb_NO': '',
+    # 'pt': 'Português',
+    'pt_BR': 'Português Brasileiro',
 }
 
 Flask.json_provider_class = KitchenOwlJSONProvider

@@ -28,7 +28,7 @@ The `description` is a descriptive summary of the change the PR will make.
 - One PR per fix or feature
 
 ### Requirements
-- Python 3.9+
+- Python 3.11+
 
 ### Setup & Install
 - Create a python environment `python3 -m venv venv`

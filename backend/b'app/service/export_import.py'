@@ -17,10 +17,12 @@ def importFromLanguage(lang, bulkSave=False):
         attributes = json.load(f)
 
     t0 = time.time()
-    models = []
+    models: list[Item] = []
     for key, name in data["items"].items():
         item = Item.find_by_name(name)
         if not item:
+            if bulkSave and any(i.name == name for i in models): # slow but needed to filter out duplicate names
+                continue
             item = Item()
             item.name = name
             item.default = True
@@ -55,6 +57,8 @@ def importFromDict(args, bulkSave=False, override=False):  # noqa
         for importItem in args['items']:
             item = Item.find_by_name(importItem['name'])
             if not item:
+                if bulkSave and any(i.name == importItem['name'] for i in models): # slow but needed to filter out duplicate names
+                    continue
                 item = Item()
                 item.name = importItem['name']
             if "category" in importItem and not item.category_id:

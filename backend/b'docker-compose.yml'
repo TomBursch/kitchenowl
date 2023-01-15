@@ -22,7 +22,7 @@ services:
       - JWT_SECRET_KEY=PLEASE_CHANGE_ME
       # - FRONT_URL=http://localhost # Optional should not be changed unless you know what youre doing
     volumes:
-    - kitchenowl_data:/data
+      - kitchenowl_data:/data
 
 volumes:
   kitchenowl_data:

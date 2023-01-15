@@ -1,5 +1,6 @@
 from datetime import timedelta
 from sqlalchemy import MetaData
+from sqlalchemy.engine import URL
 from app.errors import NotFoundRequest, UnauthorizedRequest, ForbiddenRequest, InvalidUsage
 from app.util import KitchenOwlJSONProvider
 from flask import Flask, jsonify, request
@@ -20,6 +21,14 @@ PROJECT_DIR = os.path.dirname(APP_DIR)
 UPLOAD_FOLDER = os.getenv('STORAGE_PATH', PROJECT_DIR) + '/upload'
 ALLOWED_FILE_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 
+DB_URL = URL.create(
+    os.getenv('DB_DRIVER', "sqlite"),
+    username=os.getenv('DB_USER', ""),
+    password=os.getenv('DB_PASSWORD', ""),
+    host=os.getenv('DB_HOST', ""),
+    database=os.getenv('DB_NAME', os.getenv('STORAGE_PATH', PROJECT_DIR) + "/database.db"),
+)
+
 JWT_ACCESS_TOKEN_EXPIRES = timedelta(minutes=15)
 JWT_REFRESH_TOKEN_EXPIRES = timedelta(days=30)
 
@@ -35,8 +44,7 @@ app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 32 * 1000 * 1000  # 32MB max upload
 # SQLAlchemy
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + \
-    os.getenv('STORAGE_PATH', PROJECT_DIR) + '/database.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = DB_URL
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 # JWT
 app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY', 'super-secret')

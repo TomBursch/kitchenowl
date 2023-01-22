@@ -340,5 +340,19 @@
   "preparationTime": "Tilberedningstid",
   "@preparationTime": {},
   "yields": "Udbytter",
-  "@yields": {}
+  "@yields": {},
+  "date": "Dato",
+  "@date": {},
+  "personal": "Personligt",
+  "@personal": {},
+  "wrongUsernameOrPassword": "Forkert brugernavn eller adgangskode",
+  "@wrongUsernameOrPassword": {},
+  "categoryEdit": "Rediger kategori",
+  "@categoryEdit": {},
+  "household": "Husholdning",
+  "@household": {},
+  "more": "Mere",
+  "@more": {},
+  "colorSelect": "Vælg en farve",
+  "@colorSelect": {}
 }

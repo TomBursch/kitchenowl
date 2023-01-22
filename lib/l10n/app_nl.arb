@@ -342,5 +342,17 @@
   "preparationTime": "Voorbereidingstijd",
   "@preparationTime": {},
   "personal": "Persoonlijk",
-  "@personal": {}
+  "@personal": {},
+  "date": "Datum",
+  "@date": {},
+  "wrongUsernameOrPassword": "Verkeerde gebruikersnaam of wachtwoord",
+  "@wrongUsernameOrPassword": {},
+  "categoryEdit": "Bewerk categorie",
+  "@categoryEdit": {},
+  "colorSelect": "Selecteer een kleur",
+  "@colorSelect": {},
+  "household": "Huishouden",
+  "@household": {},
+  "more": "Meer",
+  "@more": {}
 }

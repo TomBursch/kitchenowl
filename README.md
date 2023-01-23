@@ -1,9 +1,18 @@
+<h1 align="center">
+  <img width="128" src="docs/img/icon.png#gh-light-mode-only" alt="KitchenOwl">
+  <img width="128" src="docs/img/icon.png#gh-dark-mode-only" alt="KitchenOwl">
+</h1>
 <p align="center">
-  <a href="https://github.com/TomBursch/kitchenowl">
-    <img alt="KitchenOwl" src="https://raw.githubusercontent.com/TomBursch/kitchenowl/main/docs/img/icon.png" width="128" />
-  </a>
+  <p align="center">A smart grocery list and recipe manager.</p>
 </p>
-<p align="center">
+
+<h4 align="center">
+  <a href="https://matrix.to/#/#kitchenowl:matrix.org">Matrix</a> |
+  <a href="https://tombursch.github.io/kitchenowl/get-started/">Self-Hosting</a> |
+  <a href="https://tombursch.github.io/kitchenowl/">Docs</a>
+</h4>
+
+<h4 align="center">
   <a href="https://github.com/TomBursch/kitchenowl">
     <img alt="Stars" src="https://img.shields.io/github/stars/tombursch/kitchenowl" />
   </a>
@@ -22,49 +31,36 @@
   <a href="https://hub.docker.com/repository/docker/tombursch/kitchenowl">
     <img alt="Docker pulls" src="https://img.shields.io/docker/pulls/tombursch/kitchenowl" />
   </a>
-</p>
+</h4>
 
-<div>
+<div align="center">
   <a href='https://play.google.com/store/apps/details?id=com.tombursch.kitchenowl'>
-    <img alt='Get it on Google Play' src='docs/img/badges/playstore.png' height="60" />
+    <img alt='Get it on Google Play' src='docs/img/badges/playstore.png' height="50" />
   </a>
   <a href='https://f-droid.org/packages/com.tombursch.kitchenowl/'>
-    <img alt='Get it on F-Droid' src='docs/img/badges/f-droid.png' height="60"/>
+    <img alt='Get it on F-Droid' src='docs/img/badges/f-droid.png' height="50"/>
   </a>
   <a href='https://testflight.apple.com/join/x7LhltFw'>
-    <img alt='Get it on TestFlight' src='docs/img/badges/testflight.png' height="60" />
+    <img alt='Get it on TestFlight' src='docs/img/badges/testflight.png' height="50" />
   </a>
 </div>
-
-<h1 align="center">
-  KitchenOwl
-</h1>
-
-<h3 align="center">
-  A grocery list and recipe manager
-</h3>
-<p align="center">
-  KitchenOwl is a smart self-hosted grocery list and recipe manager. Easily add items to your shopping list before you go shopping. You can also create recipes and get suggestions on what you want to cook. Track your expenses so you know how much you've spend.
-</p>
 
 <h3 align="center">
  🍫 🥘 🍽
 </h3>
 
-## ✨ Features
+KitchenOwl is a smart self-hosted grocery list and recipe manager. Easily add items to your shopping list before you go shopping. You can also create recipes and get suggestions on what you want to cook. Track your expenses so you know how much you've spend.
 
-The following features have been implemented:
-
+- Native Mobile/Web/Desktop apps with a great design
 - Add items to your shopping list and sync them with multiple users
 - Partial offline support, so you don't lose track of what to buy even when there is no signal
 - Manage recipes and add them to your shopping list
 - Create a meal plan to always know what you'll be eating
-- Manage balances and track expenses of users
-- Native Mobile/Web/Desktop apps
+- Manage balances and track expenses of your household
 
 Please keep in mind that this project is still in development.
 
-For a full list check out the [docs](https://tombursch.github.io/kitchenowl). For a list of planned features, take a look at the [Roadmap](https://tombursch.github.io/kitchenowl/roadmap/)!
+For a full list check out the [docs](https://tombursch.github.io/kitchenowl). For a list of planned features, take a look at the [Roadmap](https://github.com/users/TomBursch/projects/1)!
 
 ## 📱 Screenshots
 
@@ -83,34 +79,54 @@ For a full list check out the [docs](https://tombursch.github.io/kitchenowl). Fo
 
 ## 🤖 App Install
 
-Get it on [Google Play](https://play.google.com/store/apps/details?id=com.tombursch.kitchenowl) or find the current release for your operating system on the [releases page](https://github.com/TomBursch/kitchenowl/releases).
+Get it in your favorite store or find the current release for your operating system on the [releases page](https://github.com/TomBursch/kitchenowl/releases).
 
-## 🗄️ Server Install
+## 🚀 Get started
 
-Please take a look at the [docs](https://tombursch.github.io/kitchenowl/).
+Please take a look at the [get started guide](https://tombursch.github.io/kitchenowl/get-started/).
 
 ## 🙌 Contributing
 
 From opening a bug report to creating a pull request: every contribution is appreciated and welcomed. If you're planning to implement a new feature or change the API please create an issue first. This way, we can ensure your work is not in vain.
 For more information see [Contributing](CONTRIBUTING.md) or get in contact by joining our [Matrix space](https://matrix.to/#/#kitchenowl:matrix.org).
 
-### Translations
+### 🌍 Translations
 
 You can help translate the App into your language by using [Weblate](https://hosted.weblate.org/engage/kitchenowl/)!
+
+<p align="center">
+  <a href="https://hosted.weblate.org/engage/kitchenowl/">
+    <img src="https://hosted.weblate.org/widgets/kitchenowl/-/kitchenowl/multi-auto.svg" alt="Translation status" />
+  </a>
+</p>
+
+## 🛎️ Stay Up-to-Date
+
+KitchenOwl is moving fast, to stay updated consider starring and watching the releases of this repositories.
+
+### 💬 Status
+- [x] Public Alpha: Still working on stuff (sometimes things might break)
+- [ ] Public Beta: Stable and most planned features complete
+- [ ] Public: Production-ready
 
 ## 📚 Related
 
 - [Docs](https://tombursch.github.io/kitchenowl/)
 - [KitchenOwl Backend](https://github.com/TomBursch/kitchenowl-backend) Repository
 - [DockerHub](https://hub.docker.com/repository/docker/tombursch/kitchenowl)
-- Icon taken from [Those Icons](https://www.flaticon.com/authors/those-icons) and [Freepik](https://www.flaticon.com/authors/freepik)
+- Owl icon taken from [Freepik](https://www.flaticon.com/authors/freepik)
 - [Recipe scrapers](https://github.com/hhursev/recipe-scrapers) used for scraping recipes from the web
+- [Weblate](https://weblate.org/) is helping with continuous localization as part of their ongoing support for libre software projects.
 
 ### 🔨 Built With
 
-- [Flask](https://flask.palletsprojects.com/en/1.1.x/)
+- [Flask](https://flask.palletsprojects.com/)
 - [Flutter](https://flutter.dev/)
 - [Docker](https://docs.docker.com/)
+
+## 🍀 Contributors
+
+[//]: contributor-faces
 
 ## 📜 License
 

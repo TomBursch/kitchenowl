@@ -123,7 +123,7 @@ class RecipeCard extends StatelessWidget {
                           "${recipe.time} min",
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: Theme.of(context).textTheme.caption,
+                          style: Theme.of(context).textTheme.bodySmall,
                         ),
                       const Spacer(),
                       const Divider(),

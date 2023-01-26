@@ -188,7 +188,7 @@ class _RecipePageState extends State<RecipePage> {
                             Expanded(
                               child: Text(
                                 AppLocalizations.of(context)!.yields,
-                                style: Theme.of(context).textTheme.headline6,
+                                style: Theme.of(context).textTheme.titleLarge,
                               ),
                             ),
                             IconButton(
@@ -199,7 +199,7 @@ class _RecipePageState extends State<RecipePage> {
                             ),
                             Text(
                               state.selectedYields.toString(),
-                              style: Theme.of(context).textTheme.headline6,
+                              style: Theme.of(context).textTheme.titleLarge,
                             ),
                             IconButton(
                               onPressed: cubit.increaseSelectedYields,
@@ -215,7 +215,7 @@ class _RecipePageState extends State<RecipePage> {
                       sliver: SliverToBoxAdapter(
                         child: Text(
                           '${AppLocalizations.of(context)!.items}:',
-                          style: Theme.of(context).textTheme.headline6,
+                          style: Theme.of(context).textTheme.titleLarge,
                         ),
                       ),
                     ),
@@ -236,7 +236,7 @@ class _RecipePageState extends State<RecipePage> {
                       sliver: SliverToBoxAdapter(
                         child: Text(
                           '${AppLocalizations.of(context)!.itemsOptional}:',
-                          style: Theme.of(context).textTheme.headline6,
+                          style: Theme.of(context).textTheme.titleLarge,
                         ),
                       ),
                     ),

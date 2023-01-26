@@ -94,13 +94,13 @@ class _ExpenseOverviewPageState extends State<ExpenseOverviewPage> {
                               .expenseOverviewTotalTitle(
                             _monthOffsetToString(0),
                           ),
-                          style: Theme.of(context).textTheme.headline5,
+                          style: Theme.of(context).textTheme.headlineSmall,
                         ),
                       ),
                       Text(
                         NumberFormat.simpleCurrency()
                             .format(state.getTotalForMonth(0)),
-                        style: Theme.of(context).textTheme.headline5,
+                        style: Theme.of(context).textTheme.headlineSmall,
                       ),
                     ],
                   ),
@@ -122,7 +122,7 @@ class _ExpenseOverviewPageState extends State<ExpenseOverviewPage> {
                   Text(
                     AppLocalizations.of(context)!
                         .expenseOverviewComparedToPreviousMonth,
-                    style: Theme.of(context).textTheme.headline5,
+                    style: Theme.of(context).textTheme.headlineSmall,
                   ),
                   const SizedBox(height: 32),
                   SizedBox(

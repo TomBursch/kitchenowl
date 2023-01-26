@@ -70,7 +70,7 @@ class _TextDialogState extends State<TextDialog> {
         ),
       ),
       actions: [
-        TextButton(
+        FilledButton(
           onPressed: validText
               ? () => Navigator.of(context).pop(controller.text)
               : null,

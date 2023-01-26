@@ -69,6 +69,7 @@ abstract class AppThemes {
     );
   }
 
+  // ignore: long-method
   static ThemeData dark([ColorScheme? colorScheme]) {
     colorScheme ??= darkScheme;
 
@@ -104,6 +105,9 @@ abstract class AppThemes {
         backgroundColor: colorScheme.primary,
         foregroundColor: colorScheme.onPrimary,
         elevation: 0,
+      ),
+      listTileTheme: ListTileThemeData(
+        iconColor: colorScheme.onBackground,
       ),
       chipTheme: ChipThemeData.fromDefaults(
         primaryColor: colorScheme.primary,

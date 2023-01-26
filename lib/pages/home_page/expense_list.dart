@@ -128,7 +128,7 @@ class _ExpensePageState extends State<ExpenseListPage> {
                           Expanded(
                             child: Text(
                               AppLocalizations.of(context)!.balances,
-                              style: Theme.of(context).textTheme.headline5,
+                              style: Theme.of(context).textTheme.headlineSmall,
                             ),
                           ),
                           if (state.expenses.isNotEmpty)
@@ -205,16 +205,18 @@ class _ExpensePageState extends State<ExpenseListPage> {
                                               .dateSymbols
                                               .STANDALONEMONTHS[
                                           DateTime.now().month - 1],
-                                      style:
-                                          Theme.of(context).textTheme.headline5,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headlineSmall,
                                     ),
                                     const Divider(),
                                     Text(
                                       NumberFormat.simpleCurrency().format(state
                                           .categoryOverview.values
                                           .fold(0.0, (a, b) => a + b)),
-                                      style:
-                                          Theme.of(context).textTheme.headline5,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headlineSmall,
                                     ),
                                   ],
                                 ),

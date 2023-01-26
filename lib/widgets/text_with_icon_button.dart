@@ -21,7 +21,7 @@ class TextWithIconButton extends StatelessWidget {
         Expanded(
           child: Text(
             title,
-            style: style ?? Theme.of(context).textTheme.headline6,
+            style: style ?? Theme.of(context).textTheme.titleLarge,
           ),
         ),
         IconButton(

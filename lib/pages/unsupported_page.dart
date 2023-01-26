@@ -27,7 +27,7 @@ class UnsupportedPage extends StatelessWidget {
                 const Spacer(),
                 Text(
                   '\\:',
-                  style: Theme.of(context).textTheme.headline2,
+                  style: Theme.of(context).textTheme.displayMedium,
                 ),
                 const SizedBox(height: 10),
                 Text(
@@ -37,7 +37,7 @@ class UnsupportedPage extends StatelessWidget {
                           .unsupportedFrontendMessage,
                   maxLines: null,
                   textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.caption,
+                  style: Theme.of(context).textTheme.bodySmall,
                 ),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(0, 16, 0, 10),

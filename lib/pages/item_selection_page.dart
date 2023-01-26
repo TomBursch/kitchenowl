@@ -56,7 +56,7 @@ class _ItemSelectionPageState extends State<ItemSelectionPage> {
                   sliver: SliverToBoxAdapter(
                     child: Text(
                       '${recipe.name}:',
-                      style: Theme.of(context).textTheme.headline5,
+                      style: Theme.of(context).textTheme.headlineSmall,
                     ),
                   ),
                 ),
@@ -73,7 +73,7 @@ class _ItemSelectionPageState extends State<ItemSelectionPage> {
                   sliver: SliverToBoxAdapter(
                     child: Text(
                       '${AppLocalizations.of(context)!.itemsOptional}:',
-                      style: Theme.of(context).textTheme.headline6,
+                      style: Theme.of(context).textTheme.titleLarge,
                     ),
                   ),
                 ),

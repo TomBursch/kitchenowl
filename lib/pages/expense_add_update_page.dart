@@ -127,7 +127,7 @@ class _AddUpdateExpensePageState extends State<AddUpdateExpensePage> {
                         children: [
                           Text(
                             AppLocalizations.of(context)!.date,
-                            style: Theme.of(context).textTheme.caption,
+                            style: Theme.of(context).textTheme.bodySmall,
                           ),
                           Row(
                             children: [
@@ -274,7 +274,7 @@ class _AddUpdateExpensePageState extends State<AddUpdateExpensePage> {
                         children: [
                           Text(
                             AppLocalizations.of(context)!.category,
-                            style: Theme.of(context).textTheme.caption,
+                            style: Theme.of(context).textTheme.bodySmall,
                           ),
                           BlocBuilder<AddUpdateExpenseCubit,
                               AddUpdateExpenseState>(
@@ -313,7 +313,7 @@ class _AddUpdateExpensePageState extends State<AddUpdateExpensePage> {
                           children: [
                             Text(
                               AppLocalizations.of(context)!.expensePaidBy,
-                              style: Theme.of(context).textTheme.caption,
+                              style: Theme.of(context).textTheme.bodySmall,
                             ),
                             DropdownButton<int>(
                               value: state.paidBy,
@@ -336,7 +336,7 @@ class _AddUpdateExpensePageState extends State<AddUpdateExpensePage> {
                       const SizedBox(height: 16),
                       Text(
                         AppLocalizations.of(context)!.expensePaidFor,
-                        style: Theme.of(context).textTheme.caption,
+                        style: Theme.of(context).textTheme.bodySmall,
                       ),
                       const Divider(),
                     ],

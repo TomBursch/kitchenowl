@@ -150,7 +150,7 @@ class _SettingsUserPageState extends State<SettingsUserPage> {
                                   Text(
                                     '${AppLocalizations.of(context)!.sessions}:',
                                     style:
-                                        Theme.of(context).textTheme.headline6,
+                                        Theme.of(context).textTheme.titleLarge,
                                   ),
                                   const SizedBox(height: 8),
                                   ListView.builder(

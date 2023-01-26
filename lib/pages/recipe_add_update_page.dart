@@ -289,7 +289,7 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                           Expanded(
                             child: Text(
                               '${AppLocalizations.of(context)!.items}:',
-                              style: Theme.of(context).textTheme.headline6,
+                              style: Theme.of(context).textTheme.titleLarge,
                             ),
                           ),
                           IconButton(
@@ -322,7 +322,7 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                         Expanded(
                           child: Text(
                             '${AppLocalizations.of(context)!.itemsOptional}:',
-                            style: Theme.of(context).textTheme.headline6,
+                            style: Theme.of(context).textTheme.titleLarge,
                           ),
                         ),
                         IconButton(

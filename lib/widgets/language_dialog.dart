@@ -51,7 +51,7 @@ class _LanguageDialogState extends State<LanguageDialog> {
         },
       ),
       actions: [
-        TextButton(
+        FilledButton(
           onPressed: language != null
               ? () => Navigator.of(context).pop(language)
               : null,

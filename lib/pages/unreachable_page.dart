@@ -20,14 +20,14 @@ class UnreachablePage extends StatelessWidget {
               const Spacer(),
               Text(
                 '\\:',
-                style: Theme.of(context).textTheme.headline2,
+                style: Theme.of(context).textTheme.displayMedium,
               ),
               const SizedBox(height: 10),
               Text(
                 AppLocalizations.of(context)!.unreachableMessage,
                 maxLines: null,
                 textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.caption,
+                style: Theme.of(context).textTheme.bodySmall,
               ),
               const SizedBox(height: 10),
               ElevatedButton(

@@ -37,7 +37,7 @@ class ProfilePage extends StatelessWidget with HomePageItem {
               ),
               Text(
                 user.name,
-                style: Theme.of(context).textTheme.headline5,
+                style: Theme.of(context).textTheme.headlineSmall,
                 textAlign: TextAlign.center,
               ),
             ]),

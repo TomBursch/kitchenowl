@@ -145,7 +145,7 @@ class _ItemPageState<T extends Item> extends State<ItemPage<T>> {
                         [
                           Text(
                             AppLocalizations.of(context)!.category,
-                            style: Theme.of(context).textTheme.caption,
+                            style: Theme.of(context).textTheme.bodySmall,
                           ),
                           Row(
                             children: [
@@ -199,7 +199,7 @@ class _ItemPageState<T extends Item> extends State<ItemPage<T>> {
                                   child: Text(
                                     '${AppLocalizations.of(context)!.usedIn}:',
                                     style:
-                                        Theme.of(context).textTheme.headline6,
+                                        Theme.of(context).textTheme.titleLarge,
                                   ),
                                 );
                               }
@@ -215,8 +215,9 @@ class _ItemPageState<T extends Item> extends State<ItemPage<T>> {
                                     ? Text(
                                         state
                                             .recipes[i].items.first.description,
-                                        style:
-                                            Theme.of(context).textTheme.caption,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodySmall,
                                       )
                                     : null,
                               );

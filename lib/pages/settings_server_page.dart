@@ -68,7 +68,7 @@ class _SettingsServerPageState extends State<SettingsServerPage> {
                               AppLocalizations.of(context)!
                                   .swipeToDeleteAndLongPressToReorder,
                               textAlign: TextAlign.center,
-                              style: Theme.of(context).textTheme.caption,
+                              style: Theme.of(context).textTheme.bodySmall,
                             ),
                             Row(
                               children: [
@@ -76,7 +76,7 @@ class _SettingsServerPageState extends State<SettingsServerPage> {
                                   child: Text(
                                     '${AppLocalizations.of(context)!.categories}:',
                                     style:
-                                        Theme.of(context).textTheme.headline6,
+                                        Theme.of(context).textTheme.titleLarge,
                                   ),
                                 ),
                                 IconButton(
@@ -99,8 +99,8 @@ class _SettingsServerPageState extends State<SettingsServerPage> {
                                     );
                                     if (res != null) {
                                       BlocProvider.of<SettingsServerCubit>(
-                                              context)
-                                          .addCategory(res);
+                                        context,
+                                      ).addCategory(res);
                                     }
                                   },
                                   padding: EdgeInsets.zero,
@@ -117,14 +117,14 @@ class _SettingsServerPageState extends State<SettingsServerPage> {
                             AppLocalizations.of(context)!
                                 .swipeToDeleteAndLongPressToReorder,
                             textAlign: TextAlign.center,
-                            style: Theme.of(context).textTheme.caption,
+                            style: Theme.of(context).textTheme.bodySmall,
                           ),
                           Row(
                             children: [
                               Expanded(
                                 child: Text(
                                   '${AppLocalizations.of(context)!.tags}:',
-                                  style: Theme.of(context).textTheme.headline6,
+                                  style: Theme.of(context).textTheme.titleLarge,
                                 ),
                               ),
                               IconButton(
@@ -160,7 +160,7 @@ class _SettingsServerPageState extends State<SettingsServerPage> {
                           Text(
                             AppLocalizations.of(context)!.swipeToDelete,
                             textAlign: TextAlign.center,
-                            style: Theme.of(context).textTheme.caption,
+                            style: Theme.of(context).textTheme.bodySmall,
                           ),
                           BlocBuilder<SettingsCubit, SettingsState>(
                             buildWhen: (prev, curr) =>
@@ -176,7 +176,7 @@ class _SettingsServerPageState extends State<SettingsServerPage> {
                                               '${AppLocalizations.of(context)!.expenseCategories}:',
                                               style: Theme.of(context)
                                                   .textTheme
-                                                  .headline6,
+                                                  .titleLarge,
                                             ),
                                           ),
                                           IconButton(
@@ -228,7 +228,8 @@ class _SettingsServerPageState extends State<SettingsServerPage> {
                                 ? Text(
                                     AppLocalizations.of(context)!.swipeToDelete,
                                     textAlign: TextAlign.center,
-                                    style: Theme.of(context).textTheme.caption,
+                                    style:
+                                        Theme.of(context).textTheme.bodySmall,
                                   )
                                 : const SizedBox(),
                           ),
@@ -237,7 +238,7 @@ class _SettingsServerPageState extends State<SettingsServerPage> {
                               Expanded(
                                 child: Text(
                                   '${AppLocalizations.of(context)!.users}:',
-                                  style: Theme.of(context).textTheme.headline6,
+                                  style: Theme.of(context).textTheme.titleLarge,
                                 ),
                               ),
                               IconButton(
@@ -266,7 +267,7 @@ class _SettingsServerPageState extends State<SettingsServerPage> {
                           Text(
                             AppLocalizations.of(context)!.swipeToDelete,
                             textAlign: TextAlign.center,
-                            style: Theme.of(context).textTheme.caption,
+                            style: Theme.of(context).textTheme.bodySmall,
                           ),
                           SizedBox(
                             height: MediaQuery.of(context).padding.bottom + 4,

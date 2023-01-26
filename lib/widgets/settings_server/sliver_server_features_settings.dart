@@ -19,7 +19,7 @@ class SliverServerFeaturesSettings extends StatelessWidget {
         const SizedBox(height: 16),
         Text(
           '${AppLocalizations.of(context)!.server}:',
-          style: Theme.of(context).textTheme.headline6,
+          style: Theme.of(context).textTheme.titleLarge,
         ),
         const SizedBox(height: 8),
         Card(
@@ -36,7 +36,7 @@ class SliverServerFeaturesSettings extends StatelessWidget {
               Expanded(
                 child: Text(
                   '${AppLocalizations.of(context)!.features}:',
-                  style: Theme.of(context).textTheme.headline6,
+                  style: Theme.of(context).textTheme.titleLarge,
                 ),
               ),
               if (state.serverSettings.viewOrdering != ViewsEnum.values)
@@ -108,7 +108,7 @@ class SliverServerFeaturesSettings extends StatelessWidget {
             Expanded(
               child: Text(
                 '${AppLocalizations.of(context)!.shoppingLists}:',
-                style: Theme.of(context).textTheme.headline6,
+                style: Theme.of(context).textTheme.titleLarge,
               ),
             ),
             IconButton(

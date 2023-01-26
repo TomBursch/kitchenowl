@@ -34,7 +34,7 @@ Future<bool> askForConfirmation({
                   cancelText ?? AppLocalizations.of(context)!.cancel,
                 ),
               ),
-            TextButton(
+            FilledButton(
               style: confirmColor != null
                   ? ButtonStyle(
                       foregroundColor: MaterialStateProperty.all<Color>(

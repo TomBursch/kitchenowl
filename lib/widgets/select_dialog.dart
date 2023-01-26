@@ -38,7 +38,7 @@ class SelectDialog extends StatelessWidget {
             .toList(),
       ),
       actions: [
-        TextButton(
+        FilledButton(
           child: Text(cancelText),
           onPressed: () => Navigator.of(context).pop(),
         ),

@@ -34,7 +34,7 @@ class ShimmerText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       constraints: BoxConstraints(
-        maxHeight: Theme.of(context).textTheme.bodyText1!.fontSize!,
+        maxHeight: Theme.of(context).textTheme.bodyLarge!.fontSize!,
         maxWidth: maxWidth,
       ),
       decoration: BoxDecoration(

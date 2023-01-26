@@ -27,7 +27,7 @@ class PhotoViewPage extends StatelessWidget {
           heroAttributes:
               heroTag != null ? PhotoViewHeroAttributes(tag: heroTag!) : null,
           backgroundDecoration:
-              BoxDecoration(color: Theme.of(context).backgroundColor),
+              BoxDecoration(color: Theme.of(context).colorScheme.background),
         ),
       ),
     );

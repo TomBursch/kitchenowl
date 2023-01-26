@@ -27,6 +27,7 @@ class RecipeItemWidget extends StatelessWidget {
         Theme.of(context).colorScheme.surfaceTint,
         1,
       ).withAlpha(0),
+      closedElevation: 0,
       closedShape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(
           Radius.circular(14),

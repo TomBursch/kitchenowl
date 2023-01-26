@@ -32,7 +32,7 @@ class ExpenseCategoryIcon extends StatelessWidget {
         child: Text(
           name.characters.isNotEmpty ? name.characters.first : "",
           textScaleFactor: textScaleFactor,
-          style: Theme.of(context).textTheme.headline5!.copyWith(
+          style: Theme.of(context).textTheme.headlineSmall!.copyWith(
                 color: color != null
                     ? color!.computeLuminance() > 0.5
                         ? Colors.black

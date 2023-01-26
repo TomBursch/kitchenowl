@@ -14,14 +14,14 @@ class PageNotFound extends StatelessWidget {
           children: [
             Text(
               '404',
-              style: Theme.of(context).textTheme.headline2,
+              style: Theme.of(context).textTheme.displayMedium,
             ),
             const SizedBox(height: 10),
             Text(
               AppLocalizations.of(context)!.pageNotFound,
               maxLines: null,
               textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.caption,
+              style: Theme.of(context).textTheme.bodySmall,
             ),
             const SizedBox(height: 10),
             ElevatedButton(

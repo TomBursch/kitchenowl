@@ -47,6 +47,7 @@ class ExpenseItemWidget extends StatelessWidget {
         Theme.of(context).colorScheme.surfaceTint,
         1,
       ).withAlpha(0),
+      closedElevation: 0,
       openColor: Theme.of(context).scaffoldBackgroundColor,
       closedShape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(

@@ -12,7 +12,7 @@ ScaffoldFeatureController<SnackBar, SnackBarClosedReason> showSnackbar({
       SnackBar(
         action: action,
         content: DefaultTextStyle(
-          style: Theme.of(context).textTheme.bodyText1!,
+          style: Theme.of(context).textTheme.bodyLarge!,
           textAlign: action == null ? TextAlign.center : null,
           child: content,
         ),

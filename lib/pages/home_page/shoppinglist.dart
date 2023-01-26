@@ -162,7 +162,7 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                                       vertical: 8,
                                     )
                                   : const EdgeInsets.fromLTRB(16, 0, 16, 8),
-                              style: Theme.of(context).textTheme.headline6,
+                              style: Theme.of(context).textTheme.titleLarge,
                             ),
                           );
 
@@ -257,7 +257,7 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                           SliverText(
                             padding: const EdgeInsets.all(16),
                             '${AppLocalizations.of(context)!.itemsRecent}:',
-                            style: Theme.of(context).textTheme.headline6,
+                            style: Theme.of(context).textTheme.titleLarge,
                           ),
                         SliverItemGridList(
                           items: state.recentItems,

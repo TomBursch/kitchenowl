@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class KitchenOwlSwitch extends StatelessWidget {
@@ -10,6 +13,13 @@ class KitchenOwlSwitch extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (!kIsWeb && Platform.isAndroid) {
+      return Switch(
+        value: value,
+        onChanged: onChanged,
+      );
+    }
+
     return Transform.scale(
       scale: 0.9,
       child: CupertinoSwitch(

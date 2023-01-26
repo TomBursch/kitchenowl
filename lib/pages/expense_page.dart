@@ -97,13 +97,13 @@ class _ExpensePageState extends State<ExpensePage> {
                         const SizedBox(height: 16),
                         Text(
                           AppLocalizations.of(context)!.expenseAmount,
-                          style: Theme.of(context).textTheme.subtitle1,
+                          style: Theme.of(context).textTheme.titleMedium,
                           textAlign: TextAlign.center,
                         ),
                         Text(
                           NumberFormat.simpleCurrency()
                               .format(state.expense.amount),
-                          style: Theme.of(context).textTheme.headline2,
+                          style: Theme.of(context).textTheme.displayMedium,
                           textAlign: TextAlign.center,
                         ),
                         if (state.expense.category != null)
@@ -134,7 +134,8 @@ class _ExpensePageState extends State<ExpensePage> {
                               Expanded(
                                 child: Text(
                                   '${AppLocalizations.of(context)!.expensePaidFor}:',
-                                  style: Theme.of(context).textTheme.subtitle1,
+                                  style:
+                                      Theme.of(context).textTheme.titleMedium,
                                 ),
                               ),
                               Text(AppLocalizations.of(context)!.expenseFactor),

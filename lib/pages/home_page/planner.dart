@@ -91,7 +91,7 @@ class _PlannerPageState extends State<PlannerPage> {
                           alignment: Alignment.centerLeft,
                           child: Text(
                             AppLocalizations.of(context)!.plannerTitle,
-                            style: Theme.of(context).textTheme.headline5,
+                            style: Theme.of(context).textTheme.headlineSmall,
                           ),
                         ),
                       ),
@@ -117,7 +117,8 @@ class _PlannerPageState extends State<PlannerPage> {
                             Expanded(
                               child: Text(
                                 AppLocalizations.of(context)!.plannerTitle,
-                                style: Theme.of(context).textTheme.headline5,
+                                style:
+                                    Theme.of(context).textTheme.headlineSmall,
                               ),
                             ),
                             if (state.plannedRecipes.isNotEmpty)
@@ -228,7 +229,7 @@ class _PlannerPageState extends State<PlannerPage> {
                       sliver: SliverToBoxAdapter(
                         child: Text(
                           '${AppLocalizations.of(context)!.recipesRecent}:',
-                          style: Theme.of(context).textTheme.headline6,
+                          style: Theme.of(context).textTheme.titleLarge,
                         ),
                       ),
                     ),
@@ -272,7 +273,7 @@ class _PlannerPageState extends State<PlannerPage> {
                             Expanded(
                               child: Text(
                                 '${AppLocalizations.of(context)!.recipesSuggested}:',
-                                style: Theme.of(context).textTheme.headline6,
+                                style: Theme.of(context).textTheme.titleLarge,
                               ),
                             ),
                             InkWell(

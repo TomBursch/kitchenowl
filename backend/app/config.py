@@ -23,9 +23,9 @@ ALLOWED_FILE_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 
 DB_URL = URL.create(
     os.getenv('DB_DRIVER', "sqlite"),
-    username=os.getenv('DB_USER', ""),
-    password=os.getenv('DB_PASSWORD', ""),
-    host=os.getenv('DB_HOST', ""),
+    username=os.getenv('DB_USER'),
+    password=os.getenv('DB_PASSWORD'),
+    host=os.getenv('DB_HOST'),
     database=os.getenv('DB_NAME', os.getenv(
         'STORAGE_PATH', PROJECT_DIR) + "/database.db"),
 )

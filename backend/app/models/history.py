@@ -74,8 +74,8 @@ class History(db.Model, DbModelMixin, TimestampMixin):
     @classmethod
     def get_recent(cls, shoppinglist_id: int) -> list[Self]:
         sq = db.session.query(
-            ShoppinglistItems.item_id).subquery().select(cls.item_id)
+            ShoppinglistItems.item_id).subquery().select()
         sq2 = db.session.query(func.max(cls.id)).filter(cls.status == Status.DROPPED).filter(
-            cls.item_id.notin_(sq)).group_by(cls.item_id).join(cls.item).subquery().select(cls.id)
+            cls.item_id.notin_(sq)).group_by(cls.item_id).join(cls.item).subquery().select()
         return cls.query.filter(
             cls.shoppinglist_id == shoppinglist_id).filter(cls.id.in_(sq2)).order_by(cls.id.desc()).limit(9)

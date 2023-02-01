@@ -26,7 +26,8 @@ DB_URL = URL.create(
     username=os.getenv('DB_USER', ""),
     password=os.getenv('DB_PASSWORD', ""),
     host=os.getenv('DB_HOST', ""),
-    database=os.getenv('DB_NAME', os.getenv('STORAGE_PATH', PROJECT_DIR) + "/database.db"),
+    database=os.getenv('DB_NAME', os.getenv(
+        'STORAGE_PATH', PROJECT_DIR) + "/database.db"),
 )
 
 JWT_ACCESS_TOKEN_EXPIRES = timedelta(minutes=15)
@@ -37,9 +38,11 @@ SUPPORTED_LANGUAGES = {
     'de': 'Deutsch',
     'es': 'Español',
     'fr': 'Français',
+    'id': 'Bahasa Indonesia',
     # 'nb_NO': '',
-    # 'pt': 'Português',
     'pt_BR': 'Português Brasileiro',
+    # 'pt': 'Português',
+    'ru': 'русский язык',
 }
 
 Flask.json_provider_class = KitchenOwlJSONProvider

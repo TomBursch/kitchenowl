@@ -1,0 +1,21 @@
+{
+  "categories": {
+    "canned": "Консервированная еда",
+    "dairy": "Дневник",
+    "drinks": "Напитки",
+    "freezer": "Холодильник",
+    "fruits_vegetables": "Фрукты и овощи",
+    "hygiene": "Гигиена",
+    "snacks": "Закуски"
+  },
+  "items": {
+    "amaretto": "Амаретто",
+    "apple": "Яблоко",
+    "apple_pulp": "Яблочное пюре",
+    "applesauce": "Яблочный сок",
+    "aspirin": "Аспирин",
+    "avocado": "Авокадо",
+    "bacon": "Бекон",
+    "baguette": "Багет"
+  }
+}

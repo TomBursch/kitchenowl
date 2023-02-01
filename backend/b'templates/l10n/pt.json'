@@ -1,1 +1,26 @@
-{}
+{
+  "categories": {
+    "bread": "🍞 Produtos de Pão",
+    "canned": "🥫 Alimentos Enlatados",
+    "dairy": "🥛 Lácteos",
+    "drinks": "🍹 Bebidas",
+    "freezer": "❄️ Congelados",
+    "fruits_vegetables": "🥬 Frutas e legumes",
+    "grain": "🥟 Grãos",
+    "hygiene": "🚽 Higiene",
+    "refrigerated": "💧 Refrigerados",
+    "snacks": "🥜 Lanches"
+  },
+  "items": {
+    "aioli": "Aioli",
+    "amaretto": "Amaretto",
+    "apple": "Maçã",
+    "apple_pulp": "Polpa de maçã",
+    "apérol": "Apérol",
+    "aspargus": "Espargos",
+    "aspirin": "Aspirina",
+    "avocado": "Abacate",
+    "bacon": "Toucinho",
+    "baguette": "Baguete"
+  }
+}

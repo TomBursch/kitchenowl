@@ -30,8 +30,8 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.4
 
-  collection: ^1.16.0
-  path_provider: ^2.0.11
+  collection: ^1.17.0
+  path_provider: ^2.0.12
   flutter_secure_storage: ^7.0.1
   shared_preferences: ^2.0.15
   flutter_bloc: ^8.1.1
@@ -46,13 +46,13 @@ dependencies:
   diffutil_dart: ^3.0.0
 
   responsive_builder: ^0.5.0
-  dynamic_color: ^1.5.4
+  dynamic_color: ^1.6.0
 
   azlistview: ^2.0.0
   flutter_markdown: ^0.6.13
   tuple: ^2.0.1
   charts_flutter: ^0.12.0
-  fl_chart: ^0.55.2
+  fl_chart: ^0.60.0
   cached_network_image: ^3.2.3
   image_picker: ^0.8.6
   file_picker: ^5.2.4
@@ -66,7 +66,7 @@ dev_dependencies:
     sdk: flutter
   flutter_launcher_icons: ^0.11.0
   flutter_lints: ^2.0.1
-  dart_code_metrics: ^5.3.0
+  dart_code_metrics: ^5.3.1
 
 # The following section is specific to Flutter.
 flutter:

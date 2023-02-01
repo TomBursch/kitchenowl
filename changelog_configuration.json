@@ -15,6 +15,10 @@
     {
       "title": "## 📚 Documentation",
       "labels": ["documentation"]
+    },
+    {
+      "title": "## 🌍 Translations",
+      "labels": ["localization"]
     }
   ],
   "ignore_labels": ["ignore"],

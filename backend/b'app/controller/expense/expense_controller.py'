@@ -205,7 +205,7 @@ def getExpenseOverview(args):
             (e.id or -1): (float(e.balance) or 0) for e in
             query
             .with_entities(ExpenseCategory.id.label("id"), func.sum(Expense.amount * factor).label("balance"))
-            .filter(Expense.created_at >= monthStart, Expense.created_at <= monthEnd)
+            .filter(Expense.date >= monthStart, Expense.date <= monthEnd)
             .all()
         }
 

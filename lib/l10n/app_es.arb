@@ -354,5 +354,25 @@
   "wrongUsernameOrPassword": "Nombre de usuario o contraseña incorrectos",
   "@wrongUsernameOrPassword": {},
   "date": "Fecha",
-  "@date": {}
+  "@date": {},
+  "unsavedChangesBody": "¿Estás seguro de que quieres volver?",
+  "@unsavedChangesBody": {},
+  "unsavedChangesTitle": "Tienes cambios sin guardar",
+  "@unsavedChangesTitle": {},
+  "yes": "Sí",
+  "@yes": {},
+  "addShoppingList": "Agregar la lista de las compras",
+  "@addShoppingList": {},
+  "shoppingListEdit": "Editar la lista de las compras",
+  "@shoppingListEdit": {},
+  "defaultWord": "Por defecto",
+  "@defaultWord": {},
+  "shoppingListDelete": "Eliminar la lista de las compras",
+  "@shoppingListDelete": {},
+  "shoppingListDeleteConfirmation": "¿Está seguro de que desea eliminar {shoppingList}?",
+  "@shoppingListDeleteConfirmation": {
+    "placeholders": {
+      "shoppingList": {}
+    }
+  }
 }

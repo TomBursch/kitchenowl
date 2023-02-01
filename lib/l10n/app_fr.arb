@@ -354,5 +354,25 @@
   "date": "Date",
   "@date": {},
   "wrongUsernameOrPassword": "Nom d'utilisateur ou mot de passe erroné",
-  "@wrongUsernameOrPassword": {}
+  "@wrongUsernameOrPassword": {},
+  "addShoppingList": "Ajouter une liste de courses",
+  "@addShoppingList": {},
+  "defaultWord": "Par défaut",
+  "@defaultWord": {},
+  "shoppingListDelete": "Supprimer la liste de courses",
+  "@shoppingListDelete": {},
+  "shoppingListEdit": "Modifier la liste de courses",
+  "@shoppingListEdit": {},
+  "unsavedChangesTitle": "Vous avez des changements non enregistrés",
+  "@unsavedChangesTitle": {},
+  "yes": "Oui",
+  "@yes": {},
+  "shoppingListDeleteConfirmation": "Êtes-vous sûr·e de vouloir supprimer {shoppingList} ?",
+  "@shoppingListDeleteConfirmation": {
+    "placeholders": {
+      "shoppingList": {}
+    }
+  },
+  "unsavedChangesBody": "Êtes-vous sûr·e de vouloir revenir en arrière ?",
+  "@unsavedChangesBody": {}
 }

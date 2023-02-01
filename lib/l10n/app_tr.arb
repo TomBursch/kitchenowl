@@ -354,5 +354,25 @@
   "wrongUsernameOrPassword": "Yanlış kullanıcı adı veya parola",
   "@wrongUsernameOrPassword": {},
   "date": "Tarih",
-  "@date": {}
+  "@date": {},
+  "unsavedChangesTitle": "Kaydedilmemiş değişiklikleriniz var",
+  "@unsavedChangesTitle": {},
+  "unsavedChangesBody": "Geri gitmek istediğinizden emin misiniz?",
+  "@unsavedChangesBody": {},
+  "yes": "Evet",
+  "@yes": {},
+  "defaultWord": "Öntanımlı",
+  "@defaultWord": {},
+  "shoppingListEdit": "Alışveriş listesini düzenle",
+  "@shoppingListEdit": {},
+  "addShoppingList": "Alışveriş listesi ekle",
+  "@addShoppingList": {},
+  "shoppingListDelete": "Alışveriş listesini sil",
+  "@shoppingListDelete": {},
+  "shoppingListDeleteConfirmation": "{shoppingList} listesini silmek istediğinizden emin misiniz?",
+  "@shoppingListDeleteConfirmation": {
+    "placeholders": {
+      "shoppingList": {}
+    }
+  }
 }

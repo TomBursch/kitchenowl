@@ -326,5 +326,33 @@
   "wrongUsernameOrPassword": "Väärä käyttäjätunnus tai salasana",
   "@wrongUsernameOrPassword": {},
   "writeMarkdownHere": "Voit käyttää markdownia täällä!",
-  "@writeMarkdownHere": {}
+  "@writeMarkdownHere": {},
+  "addShoppingList": "Lisää ostoslista",
+  "@addShoppingList": {},
+  "defaultWord": "Oletus",
+  "@defaultWord": {},
+  "shoppingListDelete": "Poista ostoslista",
+  "@shoppingListDelete": {},
+  "shoppingListDeleteConfirmation": "Haluatko varmasti poistaa {shoppingList}?",
+  "@shoppingListDeleteConfirmation": {
+    "placeholders": {
+      "shoppingList": {}
+    }
+  },
+  "shoppingListEdit": "Muokkaa ostoslistaa",
+  "@shoppingListEdit": {},
+  "unsavedChangesTitle": "Sinulla on tallentamattomia muutoksia",
+  "@unsavedChangesTitle": {},
+  "unsavedChangesBody": "Oletko varma, että haluat palata?",
+  "@unsavedChangesBody": {},
+  "yes": "Kyllä",
+  "@yes": {},
+  "lltNotShownAgain": "Tallenna tunnus, et näe sitä uudelleen",
+  "@lltNotShownAgain": {},
+  "lltDeleteConfirmation": "Haluatko varmasti poistaa pitkäikäisen tunnuksen '{token}'? Tätä ei voi perua.",
+  "@lltDeleteConfirmation": {
+    "placeholders": {
+      "token": {}
+    }
+  }
 }

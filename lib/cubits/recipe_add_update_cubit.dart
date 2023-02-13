@@ -10,9 +10,9 @@ import 'package:kitchenowl/services/transactions/tag.dart';
 
 class AddUpdateRecipeCubit extends Cubit<AddUpdateRecipeState> {
   final Recipe recipe;
-  bool hasChanges = false;
+  bool hasChanges;
 
-  AddUpdateRecipeCubit([this.recipe = const Recipe()])
+  AddUpdateRecipeCubit([this.recipe = const Recipe(), this.hasChanges = false])
       : super(AddUpdateRecipeState(
           description: recipe.description,
           name: recipe.name,

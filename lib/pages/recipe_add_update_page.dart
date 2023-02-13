@@ -46,7 +46,7 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
     if (widget.recipe.source.isNotEmpty) {
       sourceController.text = widget.recipe.source;
     }
-    cubit = AddUpdateRecipeCubit(widget.recipe);
+    cubit = AddUpdateRecipeCubit(widget.recipe, !isUpdate);
   }
 
   @override

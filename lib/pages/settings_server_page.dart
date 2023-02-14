@@ -98,9 +98,7 @@ class _SettingsServerPageState extends State<SettingsServerPage> {
                                       },
                                     );
                                     if (res != null) {
-                                      BlocProvider.of<SettingsServerCubit>(
-                                        context,
-                                      ).addCategory(res);
+                                      cubit.addCategory(res);
                                     }
                                   },
                                   padding: EdgeInsets.zero,

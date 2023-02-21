@@ -87,4 +87,4 @@ urllib3==1.26.14
 uWSGI==2.0.21
 w3lib==2.1.1
 webencodings==0.5.1
-Werkzeug==2.2.2
+Werkzeug==2.2.3

@@ -4,6 +4,7 @@ import 'dart:math' as math;
 abstract class StringScaler {
   // ignore: long-method
   static String scale(String str, double factor, [int decimals = 2]) {
+    if (str.isEmpty) return "${factor}x";
     // Replace custom unicode
     str = str.replaceAllMapped(
       RegExp('¼|½|¾|⅐|⅑|⅒|⅓|⅔|⅕|⅖|⅗|⅘|⅙|⅚|⅛|⅜|⅝|⅞'),

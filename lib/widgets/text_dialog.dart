@@ -63,6 +63,7 @@ class _TextDialogState extends State<TextDialog> {
               onSubmitted: (t) {
                 if (validText) Navigator.of(context).pop(t);
               },
+              textCapitalization: TextCapitalization.sentences,
               decoration: InputDecoration(hintText: widget.hintText),
               keyboardType: widget.textInputType,
             ),

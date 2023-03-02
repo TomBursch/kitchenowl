@@ -82,6 +82,7 @@ class _SettingsUserPageState extends State<SettingsUserPage> {
                     TextField(
                       controller: nameController,
                       textInputAction: TextInputAction.done,
+                      textCapitalization: TextCapitalization.sentences,
                       decoration: InputDecoration(
                         labelText: AppLocalizations.of(context)!.name,
                       ),

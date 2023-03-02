@@ -101,6 +101,7 @@ class _SearchTextFieldState extends State<SearchTextField> {
           focusNode: focusNode,
           onChanged: _onChanged,
           textInputAction: widget.textInputAction ?? TextInputAction.done,
+          textCapitalization: TextCapitalization.sentences,
           onEditingComplete: widget.clearOnSubmit
               ? () {
                   _debouncer?.cancel();

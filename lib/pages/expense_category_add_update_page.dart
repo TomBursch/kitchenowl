@@ -103,6 +103,7 @@ class _AddUpdateExpenseCategoryPageState
                         controller: nameController,
                         onChanged: (s) => cubit.setName(s),
                         textInputAction: TextInputAction.next,
+                        textCapitalization: TextCapitalization.sentences,
                         decoration: InputDecoration(
                           labelText: AppLocalizations.of(context)!.name,
                         ),

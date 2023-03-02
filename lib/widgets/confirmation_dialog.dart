@@ -9,7 +9,8 @@ Future<bool> askForConfirmation({
   String? confirmText,
   String? cancelText,
   bool showCancel = true,
-  Color? confirmColor = Colors.redAccent,
+  Color? confirmBackgroundColor = Colors.redAccent,
+  Color? confirmForegroundColor = Colors.white,
   Color? cancelColor,
 }) async =>
     await showDialog<bool>(
@@ -35,11 +36,19 @@ Future<bool> askForConfirmation({
                 ),
               ),
             FilledButton(
-              style: confirmColor != null
+              style: confirmBackgroundColor != null ||
+                      confirmForegroundColor != null
                   ? ButtonStyle(
-                      foregroundColor: MaterialStateProperty.all<Color>(
-                        confirmColor,
-                      ),
+                      backgroundColor: confirmBackgroundColor != null
+                          ? MaterialStateProperty.all<Color>(
+                              confirmBackgroundColor,
+                            )
+                          : null,
+                      foregroundColor: confirmForegroundColor != null
+                          ? MaterialStateProperty.all<Color>(
+                              confirmForegroundColor,
+                            )
+                          : null,
                     )
                   : null,
               onPressed: () => Navigator.of(context).pop(true),

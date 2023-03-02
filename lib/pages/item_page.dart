@@ -107,6 +107,7 @@ class _ItemPageState<T extends Item> extends State<ItemPage<T>> {
                         autofocus: true,
                         controller: descController,
                         onChanged: (s) => cubit.setDescription(s),
+                        textCapitalization: TextCapitalization.sentences,
                         decoration: InputDecoration(
                           border: const OutlineInputBorder(
                             borderRadius: BorderRadius.all(Radius.circular(14)),

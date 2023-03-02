@@ -75,7 +75,8 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
             title: Text(AppLocalizations.of(context)!.unsavedChangesTitle),
             content: Text(AppLocalizations.of(context)!.unsavedChangesBody),
             confirmText: AppLocalizations.of(context)!.yes,
-            confirmColor: Theme.of(context).colorScheme.primary,
+            confirmBackgroundColor: Theme.of(context).colorScheme.primary,
+            confirmForegroundColor: Theme.of(context).colorScheme.onPrimary,
           );
         }
 
@@ -129,6 +130,7 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                         controller: nameController,
                         onChanged: (s) => cubit.setName(s),
                         textInputAction: TextInputAction.next,
+                        textCapitalization: TextCapitalization.sentences,
                         decoration: InputDecoration(
                           labelText: AppLocalizations.of(context)!.name,
                         ),
@@ -245,6 +247,7 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                         child: TextField(
                           controller: descController,
                           onChanged: (s) => cubit.setDescription(s),
+                          textCapitalization: TextCapitalization.sentences,
                           maxLines: null,
                           decoration: InputDecoration(
                             border: const OutlineInputBorder(

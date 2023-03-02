@@ -116,6 +116,7 @@ class _AddUpdateExpensePageState extends State<AddUpdateExpensePage> {
                         controller: nameController,
                         onChanged: (s) => cubit.setName(s),
                         textInputAction: TextInputAction.next,
+                        textCapitalization: TextCapitalization.sentences,
                         decoration: InputDecoration(
                           labelText: AppLocalizations.of(context)!.name,
                         ),
@@ -191,6 +192,7 @@ class _AddUpdateExpensePageState extends State<AddUpdateExpensePage> {
                           );
                         },
                         textInputAction: TextInputAction.next,
+                        textCapitalization: TextCapitalization.sentences,
                         keyboardType: TextInputType.number,
                         inputFormatters: [CurrencyTextInputFormater()],
                         decoration: InputDecoration(

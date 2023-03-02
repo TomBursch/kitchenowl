@@ -60,6 +60,7 @@ dependencies:
   share_handler: ^0.0.16
   reorderables: ^0.6.0
   flutter_colorpicker: ^1.0.3
+  sliver_tools: ^0.2.9
 
 dev_dependencies:
   flutter_test:

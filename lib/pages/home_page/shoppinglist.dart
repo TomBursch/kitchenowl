@@ -7,6 +7,7 @@ import 'package:kitchenowl/models/category.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/widgets/choice_scroll.dart';
+import 'package:kitchenowl/widgets/home_page/sliver_category_item_grid_list.dart';
 
 import 'home_page_item.dart';
 
@@ -151,38 +152,26 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                         final List<ShoppinglistItem> items = state.listItems
                             .where((e) => e.category == category)
                             .toList();
-                        if (items.isNotEmpty) {
-                          grids.add(
-                            SliverText(
-                              category?.name ??
-                                  AppLocalizations.of(context)!.uncategorized,
-                              padding: i != 0
-                                  ? const EdgeInsets.symmetric(
-                                      horizontal: 16,
-                                      vertical: 8,
-                                    )
-                                  : const EdgeInsets.fromLTRB(16, 0, 16, 8),
-                              style: Theme.of(context).textTheme.titleLarge,
-                            ),
-                          );
+                        if (items.isEmpty) continue;
 
-                          grids.add(SliverItemGridList(
-                            items: items,
-                            categories: state.categories,
-                            shoppingList: state.selectedShoppinglist,
-                            isList: state.style == ShoppinglistStyle.list,
-                            selected: (_) => true,
-                            isLoading: state is LoadingShoppinglistCubitState,
-                            onRefresh: cubit.refresh,
-                            onPressed: (Item item) {
-                              if (item is ShoppinglistItem) {
-                                cubit.remove(item);
-                              } else {
-                                cubit.add(item.name);
-                              }
-                            },
-                          ));
-                        }
+                        grids.add(SliverCategoryItemGridList(
+                          name: category?.name ??
+                              AppLocalizations.of(context)!.uncategorized,
+                          items: items,
+                          categories: state.categories,
+                          shoppingList: state.selectedShoppinglist,
+                          isList: state.style == ShoppinglistStyle.list,
+                          selected: (_) => true,
+                          isLoading: state is LoadingShoppinglistCubitState,
+                          onRefresh: cubit.refresh,
+                          onPressed: (Item item) {
+                            if (item is ShoppinglistItem) {
+                              cubit.remove(item);
+                            } else {
+                              cubit.add(item.name);
+                            }
+                          },
+                        ));
                       }
                       body = grids;
                     }

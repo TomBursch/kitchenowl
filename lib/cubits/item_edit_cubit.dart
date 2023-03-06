@@ -19,11 +19,13 @@ class ItemEditCubit<T extends Item> extends Cubit<ItemEditState> {
       return (((_item as ItemWithDescription).copyWith(
         description: state.description,
         category: Nullable(state.category),
+        icon: Nullable(state.icon),
       )) as T);
     }
 
     return _item.copyWith(
       category: Nullable(state.category),
+      icon: Nullable(state.icon),
     ) as T;
   }
 
@@ -31,6 +33,7 @@ class ItemEditCubit<T extends Item> extends Cubit<ItemEditState> {
       : _item = item,
         super(ItemEditState(
           description: (item is ItemWithDescription) ? item.description : '',
+          icon: item.icon,
           name: item.name,
           category: item.category,
         )) {
@@ -59,7 +62,7 @@ class ItemEditCubit<T extends Item> extends Cubit<ItemEditState> {
   }
 
   bool hasChangedItem() {
-    return _item.category != state.category;
+    return _item.category != state.category || _item.icon != state.icon;
   }
 
   bool hasChangedDescription() {
@@ -102,8 +105,13 @@ class ItemEditCubit<T extends Item> extends Cubit<ItemEditState> {
 
   void setCategory(Category? category) {
     emit(state.copyWith(
-      category: category,
-      overrideCategory: true,
+      category: Nullable(category),
+    ));
+  }
+
+  void setIcon(String? icon) {
+    emit(state.copyWith(
+      icon: Nullable(icon),
     ));
   }
 }
@@ -111,12 +119,14 @@ class ItemEditCubit<T extends Item> extends Cubit<ItemEditState> {
 class ItemEditState extends Equatable {
   final String name;
   final String description;
+  final String? icon;
   final List<Recipe> recipes;
   final Category? category;
 
   const ItemEditState({
     this.name = "",
     this.description = "",
+    this.icon,
     this.recipes = const [],
     this.category,
   });
@@ -124,17 +134,18 @@ class ItemEditState extends Equatable {
   ItemEditState copyWith({
     String? name,
     String? description,
+    Nullable<String>? icon,
     List<Recipe>? recipes,
-    Category? category,
-    bool overrideCategory = false,
+    Nullable<Category>? category,
   }) =>
       ItemEditState(
         name: name ?? this.name,
         description: description ?? this.description,
+        icon: (icon ?? Nullable(this.icon)).value,
         recipes: recipes ?? this.recipes,
-        category: overrideCategory ? category : category ?? this.category,
+        category: (category ?? Nullable(this.category)).value,
       );
 
   @override
-  List<Object?> get props => [name, description, recipes, category];
+  List<Object?> get props => [name, description, icon, recipes, category];
 }

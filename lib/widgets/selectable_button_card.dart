@@ -42,6 +42,8 @@ class SelectableButtonCard extends StatelessWidget {
                 child: Icon(
                   icon,
                   size: 64,
+                  color:
+                      selected ? Theme.of(context).colorScheme.onPrimary : null,
                 ),
               ),
             Text(

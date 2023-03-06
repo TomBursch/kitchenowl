@@ -69,6 +69,8 @@
       "category": {}
     }
   },
+  "changeIcon": "Ändere Icon",
+  "@changeIcon": {},
   "cookingTime": "Kochzeit",
   "@cookingTime": {},
   "copied": "Kopiert",

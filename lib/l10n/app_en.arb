@@ -71,6 +71,8 @@
       "category": {}
     }
   },
+  "changeIcon": "Change Icon",
+  "@changeIcon": {},
   "colorSelect": "Select a color",
   "@colorSelect": {},
   "cookingTime": "Cooking time",

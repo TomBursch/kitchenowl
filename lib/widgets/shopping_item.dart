@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kitchenowl/item_icons.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/widgets/selectable_button_card.dart';
 
@@ -24,6 +25,7 @@ class ShoppingItemWidget<T extends Item> extends StatelessWidget {
         ? SelectableButtonCard(
             title: item.name,
             selected: selected,
+            icon: ItemIcons.get(item),
             description: (item is ItemWithDescription)
                 ? (item as ItemWithDescription).description
                 : null,

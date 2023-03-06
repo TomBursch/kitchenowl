@@ -6,7 +6,6 @@ import 'package:kitchenowl/models/update_value.dart';
 import 'package:kitchenowl/pages/item_page.dart';
 import 'package:kitchenowl/pages/item_search_page.dart';
 import 'package:kitchenowl/widgets/shopping_item.dart';
-import 'package:responsive_builder/responsive_builder.dart';
 
 class StringItemMatch extends StatelessWidget {
   final String string;
@@ -24,15 +23,8 @@ class StringItemMatch extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final int crossAxisCount = getValueForScreenType<int>(
-      context: context,
-      mobile: 2,
-      tablet: 4,
-      desktop: 6,
-    );
-
     return FractionallySizedBox(
-      widthFactor: 1 / crossAxisCount,
+      widthFactor: 1 / (MediaQuery.of(context).size.width ~/ 135).clamp(1, 9),
       alignment: Alignment.topCenter,
       child: Column(
         mainAxisSize: MainAxisSize.min,

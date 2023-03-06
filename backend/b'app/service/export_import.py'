@@ -24,8 +24,11 @@ def importFromLanguage(lang, bulkSave=False):
             if bulkSave and any(i.name == name for i in models): # slow but needed to filter out duplicate names
                 continue
             item = Item()
-            item.name = name
+            item.name = name.strip()
             item.default = True
+
+        if key in attributes["items"] and "icon" in attributes["items"][key]:
+            item.icon = attributes["items"][key]["icon"]
 
         # Category not already set for existing item and category set for template and category translation exist for language
         if not item.category_id and key in attributes["items"] and "category" in attributes["items"][key] and attributes["items"][key]["category"] in data["categories"]:

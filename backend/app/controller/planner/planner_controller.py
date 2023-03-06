@@ -1,8 +1,9 @@
 from app.errors import NotFoundRequest
 from flask import jsonify, Blueprint
 from flask_jwt_extended import jwt_required
+from app import db
 from app.helpers import validate_args
-from app.models import Recipe, RecipeHistory
+from app.models import Recipe, RecipeHistory, Planner
 from .schemas import AddPlannedRecipe, RemovePlannedRecipe
 
 planner = Blueprint('planner', __name__)
@@ -11,8 +12,18 @@ planner = Blueprint('planner', __name__)
 @planner.route('/recipes', methods=['GET'])
 @jwt_required()
 def getAllPlannedRecipes():
-    recipes = Recipe.query.filter(Recipe.planned).order_by(Recipe.name).all()
+    plannedRecipes = db.session.query(Planner.recipe_id).group_by(
+        Planner.recipe_id).scalar_subquery()
+    recipes = Recipe.query.filter(Recipe.id.in_(
+        plannedRecipes)).order_by(Recipe.name).all()
     return jsonify([e.obj_to_full_dict() for e in recipes])
+
+
+@planner.route('/', methods=['GET'])
+@jwt_required()
+def getPlanner():
+    plans = Planner.query.all()
+    return jsonify([e.obj_to_full_dict() for e in plans])
 
 
 @planner.route('/recipe', methods=['POST'])
@@ -22,14 +33,23 @@ def addPlannedRecipe(args):
     recipe = Recipe.find_by_id(args['recipe_id'])
     if not recipe:
         raise NotFoundRequest()
-    if 'day' in args:
-        recipe.planned_days = recipe.planned_days.copy()
-        recipe.planned_days.add(args['day'])
-    else:
-        recipe.planned_days = set()
-    recipe.planned = True
-    recipe.save()
-    RecipeHistory.create_added(recipe)
+    day = args['day'] if 'day' in args else -1
+    planner = Planner.find_by_day(recipe_id=recipe.id, day=day)
+    if not planner:
+        if day >= 0:
+            old = Planner.find_by_day(recipe_id=recipe.id, day=-1)
+            if old: old.delete()
+        elif len(recipe.plans) > 0:
+            return jsonify(recipe.obj_to_dict())
+        planner = Planner()
+        planner.recipe_id = recipe.id
+        planner.day = day
+        if 'yields' in args:
+            planner.yields = args['yields']
+        planner.save()
+
+        RecipeHistory.create_added(recipe)
+
     return jsonify(recipe.obj_to_dict())
 
 
@@ -40,14 +60,11 @@ def removePlannedRecipeById(args, id):
     recipe = Recipe.find_by_id(id)
     if not recipe:
         raise NotFoundRequest()
-    if recipe.planned:
-        if 'day' in args:
-            recipe.planned_days = recipe.planned_days.copy()
-            recipe.planned_days.discard(args['day'])
-        else:
-            recipe.planned_days = {}
-        recipe.planned = len(recipe.planned_days) > 0
-        recipe.save()
+    
+    day = args['day'] if 'day' in args else -1
+    planner = Planner.find_by_day(recipe_id=recipe.id, day=day)
+    if planner:
+        planner.delete()
         RecipeHistory.create_dropped(recipe)
     return jsonify(recipe.obj_to_dict())
 

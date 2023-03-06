@@ -61,5 +61,7 @@ def updateItem(args, id):
             item.category = Category.find_by_id(args['category']['id'])
         else:
             raise InvalidUsage()
+    if 'icon' in args:
+        item.icon = args['icon']
     item.save()
     return jsonify(item.obj_to_dict())

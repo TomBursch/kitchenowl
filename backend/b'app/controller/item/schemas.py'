@@ -24,3 +24,7 @@ class UpdateItem(Schema):
         )
 
     category = fields.Nested(Category(), allow_none=True)
+    icon = fields.String(
+        validate=lambda a: not a or not a.isspace(),
+        allow_none=True,
+    )

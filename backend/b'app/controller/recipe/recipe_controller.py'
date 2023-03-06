@@ -19,7 +19,7 @@ from .schemas import SearchByNameRequest, AddRecipe, UpdateRecipe, GetAllFilterR
 recipe = Blueprint('recipe', __name__)
 
 
-@recipe.route('', methods=['GET'])
+@recipe.route('/', methods=['GET'])
 @jwt_required()
 def getAllRecipes():
     return jsonify([e.obj_to_full_dict() for e in Recipe.all_by_name()])

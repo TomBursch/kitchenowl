@@ -5,6 +5,7 @@ from app.helpers import DbModelMixin, TimestampMixin
 from app.helpers.db_set_type import DbSetType
 from .item import Item
 from .tag import Tag
+from .planner import Planner
 from random import randint
 
 
@@ -15,8 +16,6 @@ class Recipe(db.Model, DbModelMixin, TimestampMixin):
     name = db.Column(db.String(128))
     description = db.Column(db.String())
     photo = db.Column(db.String())
-    planned = db.Column(db.Boolean)
-    planned_days = db.Column(DbSetType(), default=set())
     time = db.Column(db.Integer)
     cook_time = db.Column(db.Integer)
     prep_time = db.Column(db.Integer)
@@ -31,10 +30,13 @@ class Recipe(db.Model, DbModelMixin, TimestampMixin):
         'RecipeItems', back_populates='recipe', cascade="all, delete-orphan")
     tags = db.relationship(
         'RecipeTags', back_populates='recipe', cascade="all, delete-orphan")
+    plans = db.relationship(
+        'Planner', back_populates='recipe', cascade="all, delete-orphan")
 
     def obj_to_dict(self) -> dict:
         res = super().obj_to_dict()
-        res['planned_days'] = list(self.planned_days or set())
+        res['planned'] = len(self.plans) > 0
+        res['planned_days'] = [plan.day for plan in self.plans if plan.day >=0 ]
         return res
 
     def obj_to_full_dict(self) -> dict:
@@ -99,7 +101,8 @@ class Recipe(db.Model, DbModelMixin, TimestampMixin):
 
     @classmethod
     def find_suggestions(cls) -> list[Self]:
-        return cls.query.filter(cls.planned == False).filter(  # noqa
+        sq = db.session.query(Planner.recipe_id).group_by(Planner.recipe_id).scalar_subquery()
+        return cls.query.filter(cls.id.notin_(sq)).filter(  # noqa
             cls.suggestion_rank > 0).order_by(cls.suggestion_rank).all()
 
     @classmethod

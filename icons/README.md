@@ -1,6 +1,6 @@
 # Icons8
 
-The icons in the `/icons/icons8` folder cannot be extracted, used, or distributed by any third party. See [copyright](./COPYRIGHT) for more information.
+The icons in the `/icons/icons8` folder cannot be extracted, used, or distributed by any third party. See [copyright](./icons8/COPYRIGHT) for more information.
 
 Specials thanks to https://icons8.com/ who are the sole copyright holder.
 

@@ -55,12 +55,6 @@ class _PlannerPageState extends State<PlannerPage> {
   @override
   Widget build(BuildContext context) {
     final cubit = BlocProvider.of<PlannerCubit>(context);
-    final int crossAxisCount = getValueForScreenType<int>(
-      context: context,
-      mobile: 3,
-      tablet: 6,
-      desktop: 9,
-    );
 
     final weekdayMapping = {
       0: DateTime.monday,
@@ -149,77 +143,85 @@ class _PlannerPageState extends State<PlannerPage> {
                         ),
                       ),
                     ),
-                  SliverPadding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    sliver: SliverToBoxAdapter(
-                      child: Wrap(
-                        crossAxisAlignment: WrapCrossAlignment.end,
-                        alignment: WrapAlignment.start,
-                        children: [
-                          for (final recipe in state.getPlannedWithoutDay())
-                            KitchenOwlFractionallySizedBox(
-                              widthFactor: (1 / crossAxisCount),
-                              child: AspectRatio(
-                                aspectRatio: 1,
-                                child: SelectableButtonCard(
-                                  key: Key(recipe.name),
-                                  title: recipe.name,
-                                  selected: true,
-                                  onPressed: () {
-                                    cubit.remove(recipe);
-                                  },
-                                  onLongPressed: () => _openRecipePage(
-                                    context,
-                                    cubit,
-                                    recipe,
+                  SliverLayoutBuilder(
+                    builder: (context, constraints) => SliverPadding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      sliver: SliverToBoxAdapter(
+                        child: Wrap(
+                          crossAxisAlignment: WrapCrossAlignment.end,
+                          alignment: WrapAlignment.start,
+                          children: [
+                            for (final recipe in state.getPlannedWithoutDay())
+                              KitchenOwlFractionallySizedBox(
+                                widthFactor: (1 /
+                                    (constraints.crossAxisExtent ~/ 135)
+                                        .clamp(1, 9)),
+                                child: AspectRatio(
+                                  aspectRatio: 1,
+                                  child: SelectableButtonCard(
+                                    key: Key(recipe.name),
+                                    title: recipe.name,
+                                    selected: true,
+                                    onPressed: () {
+                                      cubit.remove(recipe);
+                                    },
+                                    onLongPressed: () => _openRecipePage(
+                                      context,
+                                      cubit,
+                                      recipe,
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                          for (int day = 0; day < 7; day++)
-                            for (final recipe in state.getPlannedOfDay(day))
-                              KitchenOwlFractionallySizedBox(
-                                widthFactor: (1 / crossAxisCount),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.stretch,
-                                  children: [
-                                    if (recipe == state.getPlannedOfDay(day)[0])
-                                      Padding(
-                                        padding: const EdgeInsets.only(top: 5),
-                                        child: Text(
-                                          '${DateFormat.E().dateSymbols.STANDALONEWEEKDAYS[weekdayMapping[day]! % 7]}:',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyLarge,
+                            for (int day = 0; day < 7; day++)
+                              for (final recipe in state.getPlannedOfDay(day))
+                                KitchenOwlFractionallySizedBox(
+                                  widthFactor: (1 /
+                                      (constraints.crossAxisExtent ~/ 135)
+                                          .clamp(1, 9)),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.stretch,
+                                    children: [
+                                      if (recipe ==
+                                          state.getPlannedOfDay(day)[0])
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(top: 5),
+                                          child: Text(
+                                            '${DateFormat.E().dateSymbols.STANDALONEWEEKDAYS[weekdayMapping[day]! % 7]}:',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyLarge,
+                                          ),
                                         ),
-                                      ),
-                                    AspectRatio(
-                                      aspectRatio: 1,
-                                      child: SelectableButtonCard(
-                                        key: Key(
-                                          recipe.name,
-                                        ),
-                                        title: recipe.name,
-                                        selected: true,
-                                        onPressed: () {
-                                          cubit.remove(
+                                      AspectRatio(
+                                        aspectRatio: 1,
+                                        child: SelectableButtonCard(
+                                          key: Key(
+                                            recipe.name,
+                                          ),
+                                          title: recipe.name,
+                                          selected: true,
+                                          onPressed: () {
+                                            cubit.remove(
+                                              recipe,
+                                              day,
+                                            );
+                                          },
+                                          onLongPressed: () => _openRecipePage(
+                                            context,
+                                            cubit,
                                             recipe,
-                                            day,
-                                          );
-                                        },
-                                        onLongPressed: () => _openRecipePage(
-                                          context,
-                                          cubit,
-                                          recipe,
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
-                              ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ),

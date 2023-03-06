@@ -135,3 +135,19 @@ app.*.symbols
 # MkDocs
 site/
 
+# KitchenOwl
+icons/
+
+# Development
+.devcontainer
+
+# Test related files
+.tox
+tests
+
+# Other virtualization methods
+venv
+.vagrant
+
+# Temporary files
+**/__pycache__

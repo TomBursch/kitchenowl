@@ -1,0 +1,1 @@
+The icons contained in the `Items.ttf` font may not be extracted, used, or distributed by any third party (See [here](../icons/README.md) for more information)

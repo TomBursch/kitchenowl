@@ -7,7 +7,6 @@ import 'package:kitchenowl/models/shoppinglist.dart';
 import 'package:kitchenowl/models/update_value.dart';
 import 'package:kitchenowl/pages/item_page.dart';
 import 'package:kitchenowl/widgets/shopping_item.dart';
-import 'package:responsive_builder/responsive_builder.dart';
 
 class SliverItemGridList<T extends Item> extends StatelessWidget {
   final void Function()? onRefresh;
@@ -41,13 +40,6 @@ class SliverItemGridList<T extends Item> extends StatelessWidget {
       return const SliverToBoxAdapter(child: SizedBox(height: 0));
     }
 
-    final int crossAxisCount = getValueForScreenType<int>(
-      context: context,
-      mobile: 3,
-      tablet: 6,
-      desktop: 9,
-    );
-
     final delegate = isLoading
         ? SliverChildBuilderDelegate(
             childCount: 1,
@@ -58,45 +50,50 @@ class SliverItemGridList<T extends Item> extends StatelessWidget {
           )
         : SliverChildBuilderDelegate(
             childCount: items.length,
-            (context, i) => ShoppingItemWidget<T>(
-              key: ObjectKey(items[i]),
-              item: items[i],
-              selected: selected?.call(items[i]) ?? false,
-              gridStyle: !isList,
-              onPressed: onPressed,
-              onLongPressed: (onLongPressed ??
-                      Nullable((Item item) async {
-                        final res =
-                            await Navigator.of(context).push<UpdateValue<Item>>(
-                          MaterialPageRoute(
-                            builder: (BuildContext context) => ItemPage(
-                              item: item,
-                              shoppingList: shoppingList,
-                              categories: categories ?? const [],
-                              isDescriptionEditable: isDescriptionEditable,
+            (context, i) => SizedBox(
+              child: ShoppingItemWidget<T>(
+                key: ObjectKey(items[i]),
+                item: items[i],
+                selected: selected?.call(items[i]) ?? false,
+                gridStyle: !isList,
+                onPressed: onPressed,
+                onLongPressed: (onLongPressed ??
+                        Nullable((Item item) async {
+                          final res = await Navigator.of(context)
+                              .push<UpdateValue<Item>>(
+                            MaterialPageRoute(
+                              builder: (BuildContext context) => ItemPage(
+                                item: item,
+                                shoppingList: shoppingList,
+                                categories: categories ?? const [],
+                                isDescriptionEditable: isDescriptionEditable,
+                              ),
                             ),
-                          ),
-                        );
-                        if (onRefresh != null &&
-                            res != null &&
-                            (res.state == UpdateEnum.deleted ||
-                                res.state == UpdateEnum.updated)) {
-                          onRefresh!();
-                        }
-                      }))
-                  .value,
+                          );
+                          if (onRefresh != null &&
+                              res != null &&
+                              (res.state == UpdateEnum.deleted ||
+                                  res.state == UpdateEnum.updated)) {
+                            onRefresh!();
+                          }
+                        }))
+                    .value,
+              ),
             ),
           );
 
     return SliverPadding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       sliver: !isList
-          ? SliverGrid(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: crossAxisCount,
-                childAspectRatio: 1,
+          ? SliverLayoutBuilder(
+              builder: (context, constraints) => SliverGrid(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount:
+                      (constraints.crossAxisExtent ~/ 135).clamp(1, 9),
+                  childAspectRatio: 1,
+                ),
+                delegate: delegate,
               ),
-              delegate: delegate,
             )
           : SliverList(delegate: delegate),
     );

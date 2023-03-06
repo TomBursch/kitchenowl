@@ -7,12 +7,14 @@ import 'nullable.dart';
 class Item extends Model {
   final int? id;
   final String name;
+  final String? icon;
   final int ordering;
   final Category? category;
 
   const Item({
     this.id,
     required this.name,
+    this.icon,
     this.ordering = 0,
     this.category,
   });
@@ -21,6 +23,7 @@ class Item extends Model {
         id: map['id'],
         name: map['name'],
         ordering: map['ordering'],
+        icon: map['icon'],
         category:
             map['category'] != null ? Category.fromJson(map['category']) : null,
       );
@@ -28,15 +31,18 @@ class Item extends Model {
   Item copyWith({
     String? name,
     Nullable<Category>? category,
+    Nullable<String>? icon,
   }) =>
-      ItemWithDescription(
+      Item(
         id: id,
         name: name ?? this.name,
         category: (category ?? Nullable(this.category)).value,
+        icon: (icon ?? Nullable(this.icon)).value,
+        ordering: ordering,
       );
 
   @override
-  List<Object?> get props => [id, name, ordering, category];
+  List<Object?> get props => [id, name, icon, ordering, category];
 
   @override
   Map<String, dynamic> toJson() => {
@@ -48,6 +54,7 @@ class Item extends Model {
     ..addAll({
       "id": id,
       "ordering": ordering,
+      "icon": icon,
       "category": category?.toJsonWithId(),
     });
 }
@@ -59,6 +66,7 @@ class ItemWithDescription extends Item {
     super.id,
     required super.name,
     super.ordering = 0,
+    super.icon,
     super.category,
     this.description = '',
   });
@@ -68,6 +76,7 @@ class ItemWithDescription extends Item {
         id: map['id'],
         name: map['name'],
         description: map['description'] ?? "",
+        icon: map['icon'],
         category:
             map['category'] != null ? Category.fromJson(map['category']) : null,
       );
@@ -79,6 +88,9 @@ class ItemWithDescription extends Item {
       ItemWithDescription(
         id: item.id,
         name: item.name,
+        icon: item.icon,
+        category: item.category,
+        ordering: item.ordering,
         description: description,
       );
 
@@ -92,13 +104,16 @@ class ItemWithDescription extends Item {
   ItemWithDescription copyWith({
     String? name,
     Nullable<Category>? category,
+    Nullable<String>? icon,
     String? description,
   }) =>
       ItemWithDescription(
         id: id,
         name: name ?? this.name,
         category: (category ?? Nullable(this.category)).value,
+        icon: (icon ?? Nullable(this.icon)).value,
         description: description ?? this.description,
+        ordering: ordering,
       );
 
   @override
@@ -111,6 +126,7 @@ class ShoppinglistItem extends ItemWithDescription {
     required super.name,
     super.description = '',
     super.category,
+    super.icon,
     super.ordering = 0,
   });
 
@@ -120,6 +136,7 @@ class ShoppinglistItem extends ItemWithDescription {
       name: map['name'],
       description: map['description'],
       ordering: map['ordering'],
+      icon: map['icon'],
       category:
           map['category'] != null ? Category.fromJson(map['category']) : null,
     );
@@ -132,6 +149,7 @@ class ShoppinglistItem extends ItemWithDescription {
       ShoppinglistItem(
         id: item.id,
         name: item.name,
+        icon: item.icon,
         description: description,
       );
 
@@ -139,13 +157,16 @@ class ShoppinglistItem extends ItemWithDescription {
   ShoppinglistItem copyWith({
     String? name,
     Nullable<Category>? category,
+    Nullable<String>? icon,
     String? description,
   }) =>
       ShoppinglistItem(
         id: id,
         name: name ?? this.name,
         category: (category ?? Nullable(this.category)).value,
+        icon: (icon ?? Nullable(this.icon)).value,
         description: description ?? this.description,
+        ordering: ordering,
       );
 }
 
@@ -158,6 +179,7 @@ class RecipeItem extends ItemWithDescription {
     super.description = '',
     super.ordering = 0,
     super.category,
+    super.icon,
     this.optional = false,
   });
 
@@ -165,6 +187,7 @@ class RecipeItem extends ItemWithDescription {
         id: map['id'],
         name: map['name'] ?? '',
         description: map['description'],
+        icon: map['icon'],
         optional: map['optional'],
         category:
             map['category'] != null ? Category.fromJson(map['category']) : null,
@@ -178,6 +201,9 @@ class RecipeItem extends ItemWithDescription {
       RecipeItem(
         id: item.id,
         name: item.name,
+        icon: item.icon,
+        category: item.category,
+        ordering: item.ordering,
         description:
             item is ItemWithDescription ? item.description : description,
         optional: optional,
@@ -193,6 +219,7 @@ class RecipeItem extends ItemWithDescription {
   RecipeItem copyWith({
     String? name,
     Nullable<Category>? category,
+    Nullable<String>? icon,
     String? description,
     bool? optional,
   }) =>
@@ -200,6 +227,7 @@ class RecipeItem extends ItemWithDescription {
         id: id,
         name: name ?? this.name,
         category: (category ?? Nullable(this.category)).value,
+        icon: (icon ?? Nullable(this.icon)).value,
         description: description ?? this.description,
         optional: optional ?? this.optional,
       );
@@ -210,13 +238,31 @@ class RecipeItem extends ItemWithDescription {
     return copyWith(description: StringScaler.scale(description, factor));
   }
 
-  Item toItem() => Item(id: id, name: name);
+  Item toItem() => Item(
+        id: id,
+        name: name,
+        icon: icon,
+        ordering: ordering,
+        category: category,
+      );
 
-  ItemWithDescription toItemWithDescription() =>
-      ItemWithDescription(id: id, name: name, description: description);
+  ItemWithDescription toItemWithDescription() => ItemWithDescription(
+        id: id,
+        name: name,
+        icon: icon,
+        ordering: ordering,
+        category: category,
+        description: description,
+      );
 
-  ShoppinglistItem toShoppingListItem() =>
-      ShoppinglistItem(id: id, name: name, description: description);
+  ShoppinglistItem toShoppingListItem() => ShoppinglistItem(
+        id: id,
+        name: name,
+        icon: icon,
+        ordering: ordering,
+        category: category,
+        description: description,
+      );
 
   @override
   List<Object?> get props => super.props + [optional];

@@ -113,6 +113,9 @@ flutter:
         - asset: fonts/Roboto-BlackItalic.ttf
           weight: 900
           style: italic
+    - family: Items
+      fonts:
+      - asset: fonts/Items.ttf
 
 flutter_icons:
   image_path: "assets/icon/icon.png"

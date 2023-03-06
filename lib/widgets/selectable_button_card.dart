@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class SelectableButtonCard extends StatelessWidget {
   final String title;
+  final IconData? icon;
   final String? description;
   final bool selected;
   final void Function()? onPressed;
@@ -9,6 +10,7 @@ class SelectableButtonCard extends StatelessWidget {
 
   const SelectableButtonCard({
     Key? key,
+    this.icon,
     required this.title,
     this.description,
     this.onPressed,
@@ -34,35 +36,40 @@ class SelectableButtonCard extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            if (icon != null)
+              Padding(
+                padding: const EdgeInsets.fromLTRB(8, 4, 8, 12),
+                child: Icon(
+                  icon,
+                  size: 64,
+                ),
+              ),
             Text(
               title,
-              maxLines: 3,
-              overflow: TextOverflow.ellipsis,
-              softWrap: true,
-              textAlign: TextAlign.center,
               style: TextStyle(
                 color:
                     selected ? Theme.of(context).colorScheme.onPrimary : null,
               ),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              softWrap: true,
+              textAlign: TextAlign.center,
             ),
             if (description != null && description!.isNotEmpty)
-              Padding(
-                padding: const EdgeInsets.only(top: 2),
-                child: Text(
-                  description!,
-                  style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                        color: selected
-                            ? Theme.of(context)
-                                .colorScheme
-                                .onPrimary
-                                .withOpacity(.7)
-                            : null,
-                      ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  softWrap: true,
-                  textAlign: TextAlign.center,
-                ),
+              Text(
+                description!,
+                style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                      color: selected
+                          ? Theme.of(context)
+                              .colorScheme
+                              .onPrimary
+                              .withOpacity(.7)
+                          : null,
+                    ),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                softWrap: true,
+                textAlign: TextAlign.center,
               ),
           ],
         ),

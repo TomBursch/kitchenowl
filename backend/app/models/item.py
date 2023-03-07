@@ -47,6 +47,11 @@ class Item(db.Model, DbModelMixin, TimestampMixin):
         if self.category:
             res["category"] = self.category.name
         return res
+    
+    def save(self, keepDefault=False) -> Self:
+        if not keepDefault:
+            self.default = False
+        super().save()
 
     @classmethod
     def create_by_name(cls, name: str, default=False) -> Self:

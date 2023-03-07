@@ -26,22 +26,23 @@ def importFromLanguage(lang, bulkSave=False):
             item = Item()
             item.name = name.strip()
             item.default = True
+        
+        if item.default:
+            if key in attributes["items"] and "icon" in attributes["items"][key]:
+                item.icon = attributes["items"][key]["icon"]
 
-        if key in attributes["items"] and "icon" in attributes["items"][key]:
-            item.icon = attributes["items"][key]["icon"]
-
-        # Category not already set for existing item and category set for template and category translation exist for language
-        if not item.category_id and key in attributes["items"] and "category" in attributes["items"][key] and attributes["items"][key]["category"] in data["categories"]:
-            category_name = data["categories"][attributes["items"]
-                                               [key]["category"]]
-            category = Category.find_by_name(category_name)
-            if not category:
-                category = Category.create_by_name(category_name, True)
-            item.category = category
-        if not bulkSave:
-            item.save()
-        else:
-            models.append(item)
+            # Category not already set for existing item and category set for template and category translation exist for language
+            if not item.category_id and key in attributes["items"] and "category" in attributes["items"][key] and attributes["items"][key]["category"] in data["categories"]:
+                category_name = data["categories"][attributes["items"]
+                                                [key]["category"]]
+                category = Category.find_by_name(category_name)
+                if not category:
+                    category = Category.create_by_name(category_name, True)
+                item.category = category
+            if not bulkSave:
+                item.save(keepDefault=True)
+            else:
+                models.append(item)
 
     if bulkSave:
         try:

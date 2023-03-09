@@ -5,17 +5,23 @@ import 'package:kitchenowl/app.dart';
 import 'package:kitchenowl/cubits/expense_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/models/expense.dart';
+import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/models/user.dart';
 import 'package:kitchenowl/pages/expense_add_update_page.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:collection/collection.dart';
 
 class ExpensePage extends StatefulWidget {
+  final Household household;
   final Expense expense;
   final List<User> users;
 
-  const ExpensePage({Key? key, required this.expense, required this.users})
-      : super(key: key);
+  const ExpensePage({
+    super.key,
+    required this.expense,
+    required this.users,
+    required this.household,
+  });
 
   @override
   _ExpensePageState createState() => _ExpensePageState();
@@ -74,6 +80,7 @@ class _ExpensePageState extends State<ExpensePage> {
                             final res = await Navigator.of(context)
                                 .push<UpdateEnum>(MaterialPageRoute(
                               builder: (context) => AddUpdateExpensePage(
+                                household: widget.household,
                                 expense: state.expense,
                                 users: state.users,
                               ),

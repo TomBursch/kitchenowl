@@ -195,11 +195,4 @@ class ProfilePage extends StatelessWidget with HomePageItem {
       ],
     );
   }
-
-  @override
-  IconData icon(context) =>
-      App.isOffline ? Icons.cloud_off_rounded : type().toIcon();
-
-  @override
-  ViewsEnum type() => ViewsEnum.profile;
 }

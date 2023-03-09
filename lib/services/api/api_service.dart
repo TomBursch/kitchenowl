@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:kitchenowl/config.dart';
 import 'package:kitchenowl/helpers/named_bytearray.dart';
+import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/models/server_settings.dart';
 import 'package:kitchenowl/models/token.dart';
 import 'package:tuple/tuple.dart';
@@ -40,6 +41,8 @@ class ApiService {
 
   // ignore: constant_identifier_names
   static const String _API_PATH = "/api";
+
+  String householdPath(Household household) => "/household/${household.id}";
 
   static ApiService? _instance;
   final _client = http.Client();
@@ -340,12 +343,12 @@ class ApiService {
       'password': password,
     };
     if (settings != null) {
-      if (settings.featurePlanner != null) {
-        sendBody['planner_feature'] = settings.featurePlanner!;
-      }
-      if (settings.featureExpenses != null) {
-        sendBody['expenses_feature'] = settings.featureExpenses!;
-      }
+      // if (settings.featurePlanner != null) {
+      //   sendBody['planner_feature'] = settings.featurePlanner!;
+      // }
+      // if (settings.featureExpenses != null) {
+      //   sendBody['expenses_feature'] = settings.featureExpenses!;
+      // }
     }
     if (language != null) {
       sendBody['language'] = language;

@@ -1,4 +1,5 @@
 import 'package:kitchenowl/enums/shoppinglist_sorting.dart';
+import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/models/shoppinglist.dart';
 import 'package:kitchenowl/services/storage/transaction_storage.dart';
@@ -7,7 +8,9 @@ import 'package:kitchenowl/services/api/api_service.dart';
 import 'package:kitchenowl/services/storage/temp_storage.dart';
 
 class TransactionShoppingListGet extends Transaction<List<ShoppingList>> {
-  TransactionShoppingListGet({DateTime? timestamp})
+  final Household household;
+
+  TransactionShoppingListGet({DateTime? timestamp, required this.household})
       : super.internal(
           timestamp ?? DateTime.now(),
           "TransactionShoppingListGet",
@@ -20,7 +23,7 @@ class TransactionShoppingListGet extends Transaction<List<ShoppingList>> {
 
   @override
   Future<List<ShoppingList>?> runOnline() async {
-    final lists = await ApiService.getInstance().getShoppingLists();
+    final lists = await ApiService.getInstance().getShoppingLists(household);
     if (lists != null) {
       TempStorage.getInstance().writeShoppingLists(lists);
     }
@@ -64,9 +67,14 @@ class TransactionShoppingListGetItems
 }
 
 class TransactionShoppingListSearchItem extends Transaction<List<Item>> {
+  final Household household;
   final String query;
-  TransactionShoppingListSearchItem({required this.query, DateTime? timestamp})
-      : super.internal(
+
+  TransactionShoppingListSearchItem({
+    required this.household,
+    required this.query,
+    DateTime? timestamp,
+  }) : super.internal(
           timestamp ?? DateTime.now(),
           "TransactionShoppingListSearchItem",
         );
@@ -82,7 +90,7 @@ class TransactionShoppingListSearchItem extends Transaction<List<Item>> {
 
   @override
   Future<List<Item>?> runOnline() async {
-    return await ApiService.getInstance().searchItem(query);
+    return await ApiService.getInstance().searchItem(household, query);
   }
 }
 

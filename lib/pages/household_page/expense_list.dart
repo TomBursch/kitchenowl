@@ -5,7 +5,6 @@ import 'package:intl/intl.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:kitchenowl/app.dart';
 import 'package:kitchenowl/cubits/expense_list_cubit.dart';
-import 'package:kitchenowl/cubits/settings_cubit.dart';
 import 'package:kitchenowl/enums/expenselist_sorting.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/enums/views_enum.dart';
@@ -19,9 +18,7 @@ import 'package:kitchenowl/widgets/expense_item.dart';
 import 'home_page_item.dart';
 
 class ExpenseListPage extends StatefulWidget with HomePageItem {
-  ExpenseListPage({super.key});
-
-  final ScrollController scrollController = ScrollController();
+  const ExpenseListPage({super.key});
 
   @override
   _ExpensePageState createState() => _ExpensePageState();
@@ -32,24 +29,21 @@ class ExpenseListPage extends StatefulWidget with HomePageItem {
   @override
   void onSelected(BuildContext context, bool alreadySelected) {
     BlocProvider.of<ExpenseListCubit>(context).refresh();
-    if (scrollController.hasClients) scrollController.jumpTo(0);
+    // if (scrollController.hasClients) scrollController.jumpTo(0);
   }
 
   @override
-  bool isActive(BuildContext context) =>
-      BlocProvider.of<SettingsCubit>(context)
-          .state
-          .serverSettings
-          .featureExpenses ??
-      false;
+  bool isActive(BuildContext context) => false;
 
   @override
   Widget? floatingActionButton(BuildContext context) {
     if (!App.isOffline) {
       return OpenContainer(
+        useRootNavigator: true,
         transitionType: ContainerTransitionType.fade,
         openBuilder: (BuildContext ctx, VoidCallback _) {
           return AddUpdateExpensePage(
+            household: BlocProvider.of<ExpenseListCubit>(context).household,
             users: BlocProvider.of<ExpenseListCubit>(context).state.users,
           );
         },
@@ -91,15 +85,17 @@ class ExpenseListPage extends StatefulWidget with HomePageItem {
 }
 
 class _ExpensePageState extends State<ExpenseListPage> {
+  final ScrollController scrollController = ScrollController();
+
   @override
   void initState() {
     super.initState();
-    widget.scrollController.addListener(_scrollListen);
+    scrollController.addListener(_scrollListen);
   }
 
   @override
   void dispose() {
-    widget.scrollController.removeListener(_scrollListen);
+    scrollController.removeListener(_scrollListen);
     super.dispose();
   }
 
@@ -109,13 +105,13 @@ class _ExpensePageState extends State<ExpenseListPage> {
 
     return SafeArea(
       child: Scrollbar(
-        controller: widget.scrollController,
+        controller: scrollController,
         child: RefreshIndicator(
           onRefresh: cubit.refresh,
           child: BlocBuilder<ExpenseListCubit, ExpenseListCubitState>(
             bloc: cubit,
             builder: (context, state) => CustomScrollView(
-              controller: widget.scrollController,
+              controller: scrollController,
               slivers: [
                 SliverPadding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -138,6 +134,10 @@ class _ExpensePageState extends State<ExpenseListPage> {
                               onTap: () => Navigator.of(context).push(
                                 MaterialPageRoute(
                                   builder: (context) => ExpenseOverviewPage(
+                                    household:
+                                        BlocProvider.of<ExpenseListCubit>(
+                                                context)
+                                            .household,
                                     initialSorting: state.sorting,
                                   ),
                                 ),
@@ -316,8 +316,8 @@ class _ExpensePageState extends State<ExpenseListPage> {
   }
 
   void _scrollListen() {
-    if ((widget.scrollController.position.pixels ==
-        widget.scrollController.position.maxScrollExtent)) {
+    if ((scrollController.position.pixels ==
+        scrollController.position.maxScrollExtent)) {
       BlocProvider.of<ExpenseListCubit>(context).loadMore();
     }
   }

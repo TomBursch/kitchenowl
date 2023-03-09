@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/cubits/auth_cubit.dart';
+import 'package:kitchenowl/cubits/expense_list_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/models/expense.dart';
 import 'package:kitchenowl/models/user.dart';
@@ -42,6 +43,7 @@ class ExpenseItemWidget extends StatelessWidget {
     }
 
     return OpenContainer<UpdateEnum>(
+      useRootNavigator: true,
       closedColor: ElevationOverlay.applySurfaceTint(
         Theme.of(context).colorScheme.surface,
         Theme.of(context).colorScheme.surfaceTint,
@@ -80,6 +82,7 @@ class ExpenseItemWidget extends StatelessWidget {
       ),
       onClosed: _handleUpdate,
       openBuilder: (context, toggle) => ExpensePage(
+        household: BlocProvider.of<ExpenseListCubit>(context).household,
         expense: expense,
         users: users,
       ),

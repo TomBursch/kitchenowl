@@ -22,9 +22,12 @@ class RecipeCreateFab extends StatelessWidget {
       openIcon: const Icon(Icons.add),
       children: [
         OpenContainer(
+          useRootNavigator: true,
           transitionType: ContainerTransitionType.fade,
           openBuilder: (BuildContext context, VoidCallback _) {
-            return const AddUpdateRecipePage();
+            return AddUpdateRecipePage(
+              household: BlocProvider.of<RecipeListCubit>(context).household,
+            );
           },
           openColor: Theme.of(context).scaffoldBackgroundColor,
           onClosed: (data) {
@@ -74,6 +77,7 @@ class RecipeCreateFab extends StatelessWidget {
             final res =
                 await Navigator.of(context).push<UpdateEnum>(MaterialPageRoute(
               builder: (context) => RecipeScraperPage(
+                household: BlocProvider.of<RecipeListCubit>(context).household,
                 url: url,
               ),
             ));

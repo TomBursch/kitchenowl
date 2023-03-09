@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/models/recipe.dart';
 import 'package:kitchenowl/services/transaction_handler.dart';
@@ -7,15 +8,17 @@ import 'package:kitchenowl/services/transactions/planner.dart';
 import 'package:kitchenowl/services/transactions/shoppinglist.dart';
 
 class PlannerCubit extends Cubit<PlannerCubitState> {
+  final Household household;
   bool _refreshLock = false;
 
-  PlannerCubit() : super(const LoadingPlannerCubitState()) {
+  PlannerCubit(this.household) : super(const LoadingPlannerCubitState()) {
     refresh();
   }
 
   Future<void> remove(Recipe recipe, [int? day]) async {
     await TransactionHandler.getInstance()
         .runTransaction(TransactionPlannerRemoveRecipe(
+      household: household,
       recipe: recipe,
       day: day,
     ));
@@ -24,7 +27,11 @@ class PlannerCubit extends Cubit<PlannerCubitState> {
 
   Future<void> add(Recipe recipe, [int? day]) async {
     await TransactionHandler.getInstance()
-        .runTransaction(TransactionPlannerAddRecipe(recipe: recipe, day: day));
+        .runTransaction(TransactionPlannerAddRecipe(
+      household: household,
+      recipe: recipe,
+      day: day,
+    ));
     await refresh();
   }
 
@@ -32,11 +39,17 @@ class PlannerCubit extends Cubit<PlannerCubitState> {
     if (_refreshLock) return;
     _refreshLock = true;
     final planned = TransactionHandler.getInstance()
-        .runTransaction(TransactionPlannerGetPlannedRecipes());
+        .runTransaction(TransactionPlannerGetPlannedRecipes(
+      household: household,
+    ));
     final recent = TransactionHandler.getInstance()
-        .runTransaction(TransactionPlannerGetRecentPlannedRecipes());
+        .runTransaction(TransactionPlannerGetRecentPlannedRecipes(
+      household: household,
+    ));
     final suggested = TransactionHandler.getInstance()
-        .runTransaction(TransactionPlannerGetSuggestedRecipes());
+        .runTransaction(TransactionPlannerGetSuggestedRecipes(
+      household: household,
+    ));
 
     emit(LoadedPlannerCubitState(
       await planned,
@@ -49,7 +62,9 @@ class PlannerCubit extends Cubit<PlannerCubitState> {
   Future<void> refreshSuggestions() async {
     if (state is LoadedPlannerCubitState) {
       final suggested = await TransactionHandler.getInstance()
-          .runTransaction(TransactionPlannerRefreshSuggestedRecipes());
+          .runTransaction(TransactionPlannerRefreshSuggestedRecipes(
+        household: household,
+      ));
       emit((state as LoadedPlannerCubitState)
           .copyWith(suggestedRecipes: suggested));
     }

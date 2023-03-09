@@ -5,6 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/enums/shoppinglist_sorting.dart';
 import 'package:kitchenowl/models/category.dart';
+import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/models/shoppinglist.dart';
 import 'package:kitchenowl/services/storage/storage.dart';
@@ -15,6 +16,7 @@ import 'package:kitchenowl/services/transaction_handler.dart';
 enum ShoppinglistStyle { grid, list }
 
 class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
+  final Household household;
   Future<void>? _refreshThread;
   String? _refreshCurrentQuery;
 
@@ -22,7 +24,8 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
       ? (state as SearchShoppinglistCubitState).query
       : "";
 
-  ShoppinglistCubit() : super(const LoadingShoppinglistCubitState()) {
+  ShoppinglistCubit(this.household)
+      : super(const LoadingShoppinglistCubitState()) {
     PreferenceStorage.getInstance().readInt(key: 'itemSorting').then((i) {
       if (i != null && state.sorting.index != i) {
         setSorting(
@@ -158,7 +161,7 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
     }
 
     final shoppingLists = TransactionHandler.getInstance()
-        .runTransaction(TransactionShoppingListGet());
+        .runTransaction(TransactionShoppingListGet(household: household));
 
     final shoppinglist = state.selectedShoppinglist;
 
@@ -171,7 +174,7 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
     );
 
     Future<List<Category>> categories = TransactionHandler.getInstance()
-        .runTransaction(TransactionCategoriesGet());
+        .runTransaction(TransactionCategoriesGet(household: household));
 
     if (query != null && query.isNotEmpty) {
       // Split query into name and description
@@ -185,7 +188,10 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
 
       Future<List<Item>> searchItems = TransactionHandler.getInstance()
           .runTransaction(
-            TransactionShoppingListSearchItem(query: queryName),
+            TransactionShoppingListSearchItem(
+              household: household,
+              query: queryName,
+            ),
           )
           .then((items) => items
               .map((e) => ItemWithDescription.fromItem(

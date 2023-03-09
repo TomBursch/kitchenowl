@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:kitchenowl/app.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 
 enum ViewsEnum {
-  shoppingList,
+  items,
   recipes,
-  mealPlanner,
+  planner,
   balances,
   profile;
 
@@ -20,13 +21,13 @@ enum ViewsEnum {
     ][index];
   }
 
-  IconData toIcon() {
-    return const [
+  IconData toIcon(BuildContext context) {
+    return [
       Icons.shopping_bag_outlined,
       Icons.receipt,
       Icons.calendar_today_rounded,
       Icons.account_balance_rounded,
-      Icons.person,
+      App.isOffline ? Icons.cloud_off_rounded : Icons.person,
     ][index];
   }
 
@@ -50,12 +51,12 @@ enum ViewsEnum {
 
   static ViewsEnum? parse(String str) {
     switch (str) {
-      case 'shoppingList':
-        return ViewsEnum.shoppingList;
+      case 'items':
+        return ViewsEnum.items;
       case 'recipes':
         return ViewsEnum.recipes;
-      case 'mealPlanner':
-        return ViewsEnum.mealPlanner;
+      case 'planner':
+        return ViewsEnum.planner;
       case 'balances':
         return ViewsEnum.balances;
       case 'profile':

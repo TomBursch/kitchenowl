@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/kitchenowl.dart';
+import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/models/update_value.dart';
 import 'package:kitchenowl/pages/item_page.dart';
@@ -8,18 +9,19 @@ import 'package:kitchenowl/pages/item_search_page.dart';
 import 'package:kitchenowl/widgets/shopping_item.dart';
 
 class StringItemMatch extends StatelessWidget {
+  final Household household;
   final String string;
   final RecipeItem? item;
   final void Function(RecipeItem?) itemSelected;
   final bool optional;
 
   StringItemMatch({
-    Key? key,
+    super.key,
+    required this.household,
     required this.itemSelected,
     required this.string,
     this.item,
-  })  : optional = item?.optional ?? false,
-        super(key: key);
+  }) : optional = item?.optional ?? false;
 
   @override
   Widget build(BuildContext context) {
@@ -85,6 +87,7 @@ class StringItemMatch extends StatelessWidget {
     final items =
         await Navigator.of(context).push<List<Item>>(MaterialPageRoute(
               builder: (context) => ItemSearchPage(
+                household: household,
                 multiple: false,
                 title: string,
                 selectedItems: item != null ? [item!] : const [],

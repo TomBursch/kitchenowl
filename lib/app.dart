@@ -8,13 +8,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:go_router/go_router.dart';
 import 'package:kitchenowl/cubits/auth_cubit.dart';
 import 'package:kitchenowl/cubits/settings_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/expense.dart';
+import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/models/recipe.dart';
 import 'package:kitchenowl/pages/expense_page.dart';
+import 'package:kitchenowl/pages/household_page/_export.dart';
+import 'package:kitchenowl/pages/household_list_page.dart';
 import 'package:kitchenowl/pages/login_page.dart';
 import 'package:kitchenowl/pages/onboarding_page.dart';
 import 'package:kitchenowl/pages/page_not_found.dart';
@@ -23,9 +27,10 @@ import 'package:kitchenowl/pages/recipe_scraper_page.dart';
 import 'package:kitchenowl/pages/setup_page.dart';
 import 'package:kitchenowl/pages/splash_page.dart';
 import 'package:kitchenowl/pages/unreachable_page.dart';
-import 'package:kitchenowl/pages/home_page.dart';
+import 'package:kitchenowl/pages/household_page.dart';
 import 'package:kitchenowl/pages/unsupported_page.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
+import 'package:kitchenowl/styles/colors.dart';
 import 'package:kitchenowl/styles/themes.dart';
 import 'package:share_handler/share_handler.dart';
 
@@ -50,7 +55,6 @@ class App extends StatefulWidget {
 
 class _AppState extends State<App> {
   StreamSubscription? _intentDataStreamSubscription;
-  BuildContext? _sharedContext;
 
   @override
   void initState() {
@@ -83,93 +87,54 @@ class _AppState extends State<App> {
           BlocProvider.value(value: widget._authCubit),
           BlocProvider.value(value: widget._settingsCubit),
         ],
-        child: BlocBuilder<SettingsCubit, SettingsState>(
-          builder: (context, state) =>
-              DynamicColorBuilder(builder: (lightDynamic, darkDynamic) {
-            ColorScheme lightColorScheme = AppThemes.lightScheme;
-            ColorScheme darkColorScheme = AppThemes.darkScheme;
+        child: BlocListener<AuthCubit, AuthState>(
+          bloc: widget._authCubit,
+          listener: (context, state) {
+            if (state is Setup) _router.go("/setup");
+            if (state is Onboarding) _router.go("/onboarding");
+            if (state is Unauthenticated) _router.go("/signin");
+            if (state is Unreachable) _router.go("/unreachable");
+            if (state is Unsupported) _router.go("/unsupported");
+            if (state is LoadingOnboard) _router.go("/");
+            if (state is Loading) _router.go("/");
+            if (state is Authenticated) _router.go("/household/1");
+          },
+          child: BlocBuilder<SettingsCubit, SettingsState>(
+            builder: (context, state) =>
+                DynamicColorBuilder(builder: (lightDynamic, darkDynamic) {
+              ColorScheme lightColorScheme = AppThemes.lightScheme;
+              ColorScheme darkColorScheme = AppThemes.darkScheme;
 
-            if (state.dynamicAccentColor &&
-                lightDynamic != null &&
-                darkDynamic != null) {
-              // On Android S+ devices, use the provided dynamic color scheme.
-              // (Recommended) Harmonize the dynamic color scheme' built-in semantic colors.
-              lightColorScheme = lightDynamic.harmonized();
-              darkColorScheme = darkDynamic.harmonized();
-            }
+              if (state.dynamicAccentColor &&
+                  lightDynamic != null &&
+                  darkDynamic != null) {
+                // On Android S+ devices, use the provided dynamic color scheme.
+                // (Recommended) Harmonize the dynamic color scheme' built-in semantic colors.
+                lightColorScheme = lightDynamic.harmonized();
+                darkColorScheme = darkDynamic.harmonized();
+              }
 
-            return MaterialApp(
-              onGenerateTitle: (BuildContext context) =>
-                  AppLocalizations.of(context)!.appTitle,
-              localizationsDelegates: AppLocalizations.localizationsDelegates,
-              supportedLocales:
-                  const [Locale('en')] + AppLocalizations.supportedLocales,
-              theme: AppThemes.light(lightColorScheme),
-              darkTheme: AppThemes.dark(darkColorScheme),
-              themeMode: state.themeMode,
-              debugShowCheckedModeBanner: false,
-              restorationScopeId: "com.tombursch.kitchenowl",
-              onGenerateRoute: _onGenerateRoute,
-              onUnknownRoute: (_) => MaterialPageRoute<dynamic>(
-                builder: (_) => const PageNotFound(),
-                settings: const RouteSettings(name: "/404"),
-              ),
-              home: Builder(builder: (context) {
-                _sharedContext = context;
-
-                return AnnotatedRegion<SystemUiOverlayStyle>(
+              return MaterialApp.router(
+                builder: (context, child) =>
+                    AnnotatedRegion<SystemUiOverlayStyle>(
                   value: _getSystemUI(context, state),
-                  child: BlocBuilder<AuthCubit, AuthState>(
-                    bloc: widget._authCubit,
-                    builder: (context, state) => PageTransitionSwitcher(
-                      transitionBuilder: (
-                        Widget child,
-                        Animation<double> animation,
-                        Animation<double> secondaryAnimation,
-                      ) {
-                        return SharedAxisTransition(
-                          animation: animation,
-                          secondaryAnimation: secondaryAnimation,
-                          transitionType: SharedAxisTransitionType.horizontal,
-                          child: child,
-                        );
-                      },
-                      child: Builder(
-                        key: ValueKey(state.orderId),
-                        builder: (context) {
-                          if (state is Setup) return const SetupPage();
-                          if (state is Onboarding) {
-                            return const OnboardingPage();
-                          }
-                          if (state is Unauthenticated) {
-                            return const LoginPage();
-                          }
-                          if (state is Authenticated) return const HomePage();
-                          if (state is Unreachable) {
-                            return const UnreachablePage();
-                          }
-                          if (state is Unsupported) {
-                            return UnsupportedPage(
-                              unsupportedBackend: state.unsupportedBackend,
-                              canForceOfflineMode: state.canForceOfflineMode,
-                            );
-                          }
-                          if (state is LoadingOnboard) {
-                            return SplashPage(
-                              message: AppLocalizations.of(context)!
-                                  .onboardingLoading,
-                            );
-                          }
-
-                          return const SplashPage();
-                        },
-                      ),
-                    ),
-                  ),
-                );
-              }),
-            );
-          }),
+                  child: child ?? const SizedBox(),
+                ),
+                onGenerateTitle: (BuildContext context) =>
+                    AppLocalizations.of(context)!.appTitle,
+                localizationsDelegates: AppLocalizations.localizationsDelegates,
+                supportedLocales:
+                    const [Locale('en')] + AppLocalizations.supportedLocales,
+                theme: AppThemes.light(lightColorScheme),
+                darkTheme: AppThemes.dark(darkColorScheme),
+                themeMode: state.themeMode,
+                color: AppColors.green,
+                debugShowCheckedModeBanner: false,
+                restorationScopeId: "com.tombursch.kitchenowl",
+                routerConfig: _router,
+              );
+            }),
+          ),
         ),
       ),
     );
@@ -213,55 +178,181 @@ class _AppState extends State<App> {
   }
 
   void _handleSharedMedia(SharedMedia media) {
-    if (mounted && media.content != null && _sharedContext != null) {
-      Navigator.of(_sharedContext!).push<UpdateEnum>(MaterialPageRoute(
-        builder: (context) => RecipeScraperPage(
-          url: media.content!,
-        ),
-      ));
+    if (mounted && media.content != null) {
+      _router.goNamed("scrape", queryParams: {"url": media.content!});
     }
-  }
-
-  Route<dynamic>? _onGenerateRoute(settings) {
-    if (settings.name == null || !ApiService.getInstance().isAuthenticated()) {
-      return null;
-    }
-
-    final List<String> path = settings.name!
-        .replaceAllMapped(RegExp("""^/|/\$"""), (match) => "")
-        .split('/');
-
-    switch (path.first) {
-      case "recipe":
-        if (path.length > 1 || settings.arguments is Recipe) {
-          return MaterialPageRoute<UpdateEnum>(
-            builder: (context) => RecipePage(
-              recipe: (settings.arguments as Recipe?) ??
-                  Recipe(
-                    id: int.tryParse(path[1]),
-                  ),
-            ),
-            settings: settings,
-          );
-        }
-        break;
-      case "expense":
-        if (path.length > 1 ||
-            settings.arguments is List && settings.arguments.length == 2) {
-          return MaterialPageRoute<UpdateEnum>(
-            builder: (context) => ExpensePage(
-              expense: (settings.arguments?[0] as Expense?) ??
-                  Expense(
-                    id: int.tryParse(path[1]),
-                    paidById: 0,
-                  ),
-              users: settings.arguments?[1] ?? const [],
-            ),
-            settings: settings,
-          );
-        }
-    }
-
-    return null;
   }
 }
+
+final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>();
+
+// GoRouter configuration
+final _router = GoRouter(
+  navigatorKey: _rootNavigatorKey,
+  redirect: (BuildContext context, GoRouterState state) {
+    final authState = BlocProvider.of<AuthCubit>(context).state;
+    if (authState is Setup) return "/setup";
+    if (authState is Onboarding) return "/onboarding";
+    if (authState is Unauthenticated) return "/signin";
+    if (authState is Unreachable) return "/unreachable";
+    if (authState is Unsupported) return "/unsupported";
+    if (authState is LoadingOnboard) return "/";
+    if (authState is Loading) return "/";
+
+    return null;
+  },
+  errorBuilder: (context, state) => const PageNotFound(),
+  routes: [
+    GoRoute(
+      path: '/',
+      builder: (context, state) => const SplashPage(),
+      redirect: (BuildContext context, GoRouterState state) {
+        final authState = BlocProvider.of<AuthCubit>(context).state;
+        if (authState is! LoadingOnboard && authState is! Loading) {
+          return "/household";
+        }
+
+        return null;
+      },
+    ),
+    GoRoute(
+      path: '/setup',
+      builder: (context, state) => const SetupPage(),
+      redirect: (BuildContext context, GoRouterState state) {
+        final authState = BlocProvider.of<AuthCubit>(context).state;
+
+        return (authState is! Setup) ? "/" : null;
+      },
+    ),
+    GoRoute(
+      path: '/onboarding',
+      builder: (context, state) => const OnboardingPage(),
+      redirect: (BuildContext context, GoRouterState state) {
+        final authState = BlocProvider.of<AuthCubit>(context).state;
+
+        return (authState is! Onboarding) ? "/" : null;
+      },
+    ),
+    GoRoute(
+      path: '/signin',
+      builder: (context, state) => const LoginPage(),
+      redirect: (BuildContext context, GoRouterState state) {
+        final authState = BlocProvider.of<AuthCubit>(context).state;
+
+        return (authState is! Unauthenticated) ? "/" : null;
+      },
+    ),
+    GoRoute(
+      path: '/unsupported',
+      builder: (context, state) => const UnsupportedPage(),
+      redirect: (BuildContext context, GoRouterState state) {
+        final authState = BlocProvider.of<AuthCubit>(context).state;
+
+        return (authState is! Unsupported) ? "/" : null;
+      },
+    ),
+    GoRoute(
+      path: '/unreachable',
+      builder: (context, state) => const UnreachablePage(),
+      redirect: (BuildContext context, GoRouterState state) {
+        final authState = BlocProvider.of<AuthCubit>(context).state;
+
+        return (authState is! Unreachable) ? "/" : null;
+      },
+    ),
+    GoRoute(
+      path: "/household",
+      builder: (context, state) => const HouseholdListPage(),
+      routes: [
+        GoRoute(
+          name: "hosehold",
+          path: ":id",
+          builder: (context, state) => const SplashPage(),
+          redirect: (context, state) {
+            if (state.subloc == state.location) return "/household/1/items";
+
+            return null;
+          },
+          routes: [
+            ShellRoute(
+              builder: (context, state, child) => HouseholdPage(
+                household: Household(
+                  id: int.tryParse(state.params['id'] ?? '') ?? -1,
+                ),
+                child: child,
+              ),
+              routes: [
+                GoRoute(
+                  path: "items",
+                  builder: (context, state) => const ShoppinglistPage(),
+                ),
+                GoRoute(
+                  path: "recipes",
+                  builder: (context, state) => const RecipeListPage(),
+                  routes: [
+                    GoRoute(
+                      parentNavigatorKey: _rootNavigatorKey,
+                      path: ':recipeId',
+                      builder: (context, state) => RecipePage(
+                        recipe: (state.extra as Recipe?) ??
+                            Recipe(
+                              id: int.tryParse(state.params['recipeId'] ?? ''),
+                            ),
+                      ),
+                    ),
+                    GoRoute(
+                      parentNavigatorKey: _rootNavigatorKey,
+                      name: 'scrape',
+                      path: 'scrape',
+                      builder: (context, state) => RecipeScraperPage(
+                        url: state.queryParams['url']!,
+                        household: Household(
+                          id: int.tryParse(state.params['id'] ?? '') ?? -1,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                GoRoute(
+                  path: "planner",
+                  builder: (context, state) => const PlannerPage(),
+                ),
+                GoRoute(
+                  path: "balances",
+                  builder: (context, state) => const ExpenseListPage(),
+                ),
+                GoRoute(
+                  path: "profile",
+                  builder: (context, state) => const ProfilePage(),
+                ),
+              ],
+            ),
+            GoRoute(
+              parentNavigatorKey: _rootNavigatorKey,
+              path: 'expenses/:expenseId',
+              builder: (context, state) => ExpensePage(
+                household:
+                    Household(id: int.tryParse(state.params['id'] ?? '') ?? -1),
+                expense: ((state.extra as List?)?[0] as Expense?) ??
+                    Expense(
+                      id: int.tryParse(state.params['expenseId'] ?? ''),
+                      paidById: 0,
+                    ),
+                users: (state.extra as List?)?[1] ?? const [],
+              ),
+            ),
+          ],
+        ),
+      ],
+    ),
+    // GoRoute(
+    //   path: '/recipes/:id',
+    //   builder: (context, state) => RecipePage(
+    //     recipe: (state.extra as Recipe?) ??
+    //         Recipe(
+    //           id: int.tryParse(state.params['id'] ?? ''),
+    //         ),
+    //   ),
+    // ),
+  ],
+);

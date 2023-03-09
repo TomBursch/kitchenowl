@@ -5,14 +5,19 @@ import 'package:kitchenowl/cubits/expense_category_add_update_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/expense_category.dart';
+import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/widgets/expense_category_icon.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
 class AddUpdateExpenseCategoryPage extends StatefulWidget {
+  final Household household;
   final ExpenseCategory? category;
 
-  const AddUpdateExpenseCategoryPage({Key? key, this.category})
-      : super(key: key);
+  const AddUpdateExpenseCategoryPage({
+    super.key,
+    this.category,
+    required this.household,
+  });
 
   @override
   _AddUpdateExpenseCategoryPageState createState() =>
@@ -34,6 +39,7 @@ class _AddUpdateExpenseCategoryPageState
       nameController.text = widget.category!.name;
     }
     cubit = AddUpdateExpenseCategoryCubit(
+      widget.household,
       widget.category ?? const ExpenseCategory(),
     );
   }

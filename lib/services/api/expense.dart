@@ -3,12 +3,14 @@ import 'dart:convert';
 import 'package:kitchenowl/enums/expenselist_sorting.dart';
 import 'package:kitchenowl/models/expense.dart';
 import 'package:kitchenowl/models/expense_category.dart';
+import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
 
 extension ExpenseApi on ApiService {
   static const baseRoute = '/expense';
 
-  Future<List<Expense>?> getAllExpenses([
+  Future<List<Expense>?> getAllExpenses(
+    Household household, [
     ExpenselistSorting sorting = ExpenselistSorting.all,
     Expense? startAfter,
   ]) async {
@@ -32,7 +34,7 @@ extension ExpenseApi on ApiService {
     return Expense.fromJson(jsonDecode(res.body));
   }
 
-  Future<bool> addExpense(Expense expense) async {
+  Future<bool> addExpense(Household household, Expense expense) async {
     final body = expense.toJson();
     final res = await post(baseRoute, jsonEncode(body));
 
@@ -52,8 +54,10 @@ extension ExpenseApi on ApiService {
     return res.statusCode == 200;
   }
 
-  Future<List<ExpenseCategory>?> getExpenseCategories() async {
-    final res = await get('$baseRoute/categories');
+  Future<List<ExpenseCategory>?> getExpenseCategories(
+    Household household,
+  ) async {
+    final res = await get('${householdPath(household)}$baseRoute/categories');
     if (res.statusCode != 200) return null;
 
     final body = List.from(jsonDecode(res.body));
@@ -61,9 +65,12 @@ extension ExpenseApi on ApiService {
     return body.map((e) => ExpenseCategory.fromJson(e)).toList();
   }
 
-  Future<bool> addExpenseCategory(ExpenseCategory category) async {
+  Future<bool> addExpenseCategory(
+    Household household,
+    ExpenseCategory category,
+  ) async {
     final res = await post(
-      '$baseRoute/categories',
+      '${householdPath(household)}$baseRoute/categories',
       jsonEncode(category.toJson()),
     );
 
@@ -85,11 +92,13 @@ extension ExpenseApi on ApiService {
     return res.statusCode == 200;
   }
 
-  Future<Map<int, Map<int, double>>?> getExpenseOverview([
+  Future<Map<int, Map<int, double>>?> getExpenseOverview(
+    Household household, [
     ExpenselistSorting sorting = ExpenselistSorting.all,
     int? months,
   ]) async {
-    String url = '$baseRoute/overview?view=${sorting.index}';
+    String url =
+        '${householdPath(household)}$baseRoute/overview?view=${sorting.index}';
 
     if (months != null) {
       url += '&months=$months';

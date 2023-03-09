@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:kitchenowl/enums/shoppinglist_sorting.dart';
+import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/models/shoppinglist.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
@@ -10,7 +11,7 @@ extension ShoppinglistApi on ApiService {
   static route([ShoppingList? shoppinglist]) =>
       "$baseRoute/${shoppinglist?.id ?? 1}";
 
-  Future<List<ShoppingList>?> getShoppingLists() async {
+  Future<List<ShoppingList>?> getShoppingLists(Household household) async {
     final res = await get(baseRoute);
     if (res.statusCode != 200) return null;
 
@@ -19,7 +20,10 @@ extension ShoppinglistApi on ApiService {
     return body.map((e) => ShoppingList.fromJson(e)).toList();
   }
 
-  Future<bool> addShoppingList(ShoppingList shoppingList) async {
+  Future<bool> addShoppingList(
+    Household household,
+    ShoppingList shoppingList,
+  ) async {
     final res = await post(
       baseRoute,
       jsonEncode(shoppingList.toJson()),

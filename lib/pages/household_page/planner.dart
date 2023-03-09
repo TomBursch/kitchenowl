@@ -22,7 +22,7 @@ class PlannerPage extends StatefulWidget with HomePageItem {
   _PlannerPageState createState() => _PlannerPageState();
 
   @override
-  ViewsEnum type() => ViewsEnum.mealPlanner;
+  ViewsEnum type() => ViewsEnum.planner;
 
   @override
   void onSelected(BuildContext context, bool alreadySelected) {
@@ -30,12 +30,7 @@ class PlannerPage extends StatefulWidget with HomePageItem {
   }
 
   @override
-  bool isActive(BuildContext context) =>
-      BlocProvider.of<SettingsCubit>(context)
-          .state
-          .serverSettings
-          .featurePlanner ??
-      false;
+  bool isActive(BuildContext context) => false;
 }
 
 class _PlannerPageState extends State<PlannerPage> {

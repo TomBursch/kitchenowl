@@ -112,10 +112,7 @@ class _OnboardingSettingsPageState extends State<OnboardingSettingsPage> {
                 username: widget.username,
                 name: widget.name,
                 password: widget.password,
-                settings: ServerSettings(
-                  featurePlanner: featurePlanner,
-                  featureExpenses: featureExpenses,
-                ),
+                settings: const ServerSettings(),
                 language: language,
               );
             },

@@ -5,7 +5,6 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/config.dart';
-import 'package:kitchenowl/enums/views_enum.dart';
 import 'package:kitchenowl/models/server_settings.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
 import 'package:kitchenowl/services/storage/storage.dart';
@@ -45,9 +44,7 @@ class SettingsCubit extends Cubit<SettingsState> {
           "{}",
     ));
 
-    if (ApiService.getInstance().serverSettings.featureExpenses != null ||
-        ApiService.getInstance().serverSettings.featurePlanner != null ||
-        ApiService.getInstance().serverSettings.viewOrdering != null) {
+    if (ApiService.getInstance().serverSettings != null) {
       serverSettings = ApiService.getInstance().serverSettings;
     }
 
@@ -69,7 +66,7 @@ class SettingsCubit extends Cubit<SettingsState> {
         .writeBool(key: 'dynamicAccentColor', value: dynamicAccentColor);
     emit(state.copyWith(dynamicAccentColor: dynamicAccentColor));
   }
-
+/*
   void setView(ViewsEnum view, bool value) {
     if (view == ViewsEnum.mealPlanner) {
       final settings = state.serverSettings.copyWith(featurePlanner: value);
@@ -112,7 +109,7 @@ class SettingsCubit extends Cubit<SettingsState> {
     ApiService.getInstance().setSettings(const ServerSettings(
       viewOrdering: [],
     ));
-  }
+  }*/
 }
 
 class SettingsState extends Equatable {
@@ -141,14 +138,14 @@ class SettingsState extends Equatable {
   @override
   List<Object?> get props => [themeMode, serverSettings, dynamicAccentColor];
 
-  bool isViewActive(ViewsEnum view) {
-    if (view == ViewsEnum.mealPlanner) {
-      return serverSettings.featurePlanner ?? true;
-    }
-    if (view == ViewsEnum.balances) {
-      return serverSettings.featureExpenses ?? true;
-    }
+  // bool isViewActive(ViewsEnum view) {
+  //   if (view == ViewsEnum.mealPlanner) {
+  //     return serverSettings.featurePlanner ?? true;
+  //   }
+  //   if (view == ViewsEnum.balances) {
+  //     return serverSettings.featureExpenses ?? true;
+  //   }
 
-    return true;
-  }
+  //   return true;
+  // }
 }

@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/cubits/recipe_add_update_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
+import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/models/recipe.dart';
 import 'package:kitchenowl/models/update_value.dart';
@@ -14,12 +15,14 @@ import 'package:kitchenowl/widgets/recipe_time_settings.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
 class AddUpdateRecipePage extends StatefulWidget {
+  final Household household;
   final Recipe recipe;
 
   const AddUpdateRecipePage({
-    Key? key,
+    super.key,
+    required this.household,
     this.recipe = const Recipe(),
-  }) : super(key: key);
+  });
 
   @override
   _AddUpdateRecipePageState createState() => _AddUpdateRecipePageState();
@@ -46,7 +49,7 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
     if (widget.recipe.source.isNotEmpty) {
       sourceController.text = widget.recipe.source;
     }
-    cubit = AddUpdateRecipeCubit(widget.recipe, !isUpdate);
+    cubit = AddUpdateRecipeCubit(widget.household, widget.recipe, !isUpdate);
   }
 
   @override
@@ -423,6 +426,7 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
     final items =
         await Navigator.of(context).push<List<Item>>(MaterialPageRoute(
               builder: (context) => ItemSearchPage(
+                household: widget.household,
                 title: AppLocalizations.of(context)!.itemsAdd,
                 selectedItems: cubit.state.items
                     .where((e) => e.optional == optional)

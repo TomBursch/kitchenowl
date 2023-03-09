@@ -18,7 +18,7 @@ class ShoppinglistPage extends StatefulWidget with HomePageItem {
   _ShoppinglistPageState createState() => _ShoppinglistPageState();
 
   @override
-  ViewsEnum type() => ViewsEnum.shoppingList;
+  ViewsEnum type() => ViewsEnum.items;
 
   @override
   void onSelected(BuildContext context, bool alreadySelected) {

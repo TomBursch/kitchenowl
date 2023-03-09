@@ -7,6 +7,7 @@ import 'package:kitchenowl/cubits/recipe_cubit.dart';
 import 'package:kitchenowl/cubits/settings_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/helpers/url_launcher.dart';
+import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/models/recipe.dart';
 import 'package:kitchenowl/pages/recipe_add_update_page.dart';
@@ -15,14 +16,16 @@ import 'package:kitchenowl/widgets/recipe_source_chip.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 class RecipePage extends StatefulWidget {
+  final Household? household;
   final Recipe recipe;
   final bool updateOnPlanningEdit;
 
   const RecipePage({
-    Key? key,
+    super.key,
     required this.recipe,
+    this.household,
     this.updateOnPlanningEdit = false,
-  }) : super(key: key);
+  });
 
   @override
   _RecipePageState createState() => _RecipePageState();
@@ -34,7 +37,7 @@ class _RecipePageState extends State<RecipePage> {
   @override
   void initState() {
     super.initState();
-    cubit = RecipeCubit(widget.recipe);
+    cubit = RecipeCubit(household: widget.household, recipe: widget.recipe);
   }
 
   @override
@@ -76,12 +79,13 @@ class _RecipePageState extends State<RecipePage> {
                         : null,
                     pinned: true,
                     actions: [
-                      if (!App.isOffline)
+                      if (!App.isOffline && widget.household != null)
                         LoadingIconButton(
                           onPressed: () async {
                             final res = await Navigator.of(context)
                                 .push<UpdateEnum>(MaterialPageRoute(
                               builder: (context) => AddUpdateRecipePage(
+                                household: widget.household!,
                                 recipe: state.recipe,
                               ),
                             ));
@@ -269,11 +273,7 @@ class _RecipePageState extends State<RecipePage> {
                       ),
                     ),
                   ),
-                  if (BlocProvider.of<SettingsCubit>(context)
-                          .state
-                          .serverSettings
-                          .featurePlanner ??
-                      false)
+                  if (widget.household != null)
                     SliverPadding(
                       padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
                       sliver: SliverToBoxAdapter(

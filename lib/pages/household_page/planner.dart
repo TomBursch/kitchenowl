@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:kitchenowl/cubits/planner_cubit.dart';
-import 'package:kitchenowl/cubits/settings_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
-import 'package:kitchenowl/enums/views_enum.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/models/recipe.dart';
@@ -13,24 +11,16 @@ import 'package:kitchenowl/pages/recipe_page.dart';
 import 'package:kitchenowl/widgets/recipe_card.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
-import 'home_page_item.dart';
-
-class PlannerPage extends StatefulWidget with HomePageItem {
-  const PlannerPage({Key? key}) : super(key: key);
+class PlannerPage extends StatefulWidget {
+  const PlannerPage({super.key});
 
   @override
   _PlannerPageState createState() => _PlannerPageState();
 
   @override
-  ViewsEnum type() => ViewsEnum.planner;
-
-  @override
   void onSelected(BuildContext context, bool alreadySelected) {
     BlocProvider.of<PlannerCubit>(context).refresh();
   }
-
-  @override
-  bool isActive(BuildContext context) => false;
 }
 
 class _PlannerPageState extends State<PlannerPage> {

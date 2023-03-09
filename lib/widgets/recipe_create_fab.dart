@@ -1,11 +1,11 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:kitchenowl/cubits/recipe_list_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/pages/recipe_add_update_page.dart';
-import 'package:kitchenowl/pages/recipe_scraper_page.dart';
 
 class RecipeCreateFab extends StatelessWidget {
   final _fabKey = GlobalKey<ExpandableFabState>();
@@ -59,6 +59,7 @@ class RecipeCreateFab extends StatelessWidget {
           },
         ),
         FloatingActionButton(
+          heroTag: null,
           onPressed: () async {
             final url = await showDialog<String>(
               context: context,
@@ -74,13 +75,21 @@ class RecipeCreateFab extends StatelessWidget {
             );
             if (url == null) return;
 
-            final res =
-                await Navigator.of(context).push<UpdateEnum>(MaterialPageRoute(
-              builder: (context) => RecipeScraperPage(
-                household: BlocProvider.of<RecipeListCubit>(context).household,
-                url: url,
-              ),
-            ));
+            final res = null;
+
+            // final res =
+            //     await Navigator.of(context).push<UpdateEnum>(MaterialPageRoute(
+            //   builder: (context) => RecipeScraperPage(
+            //     household: BlocProvider.of<RecipeListCubit>(context).household,
+            //     url: url,
+            //   ),
+            // ));
+
+            context.go(Uri(
+              path:
+                  "/household/${BlocProvider.of<RecipeListCubit>(context).household.id}/recipes/scrape",
+              queryParameters: {"url": url},
+            ).toString());
 
             _fabKey.currentState?.reset();
             if (res == UpdateEnum.updated) {

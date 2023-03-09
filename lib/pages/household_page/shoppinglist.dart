@@ -9,16 +9,11 @@ import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/widgets/choice_scroll.dart';
 import 'package:kitchenowl/widgets/home_page/sliver_category_item_grid_list.dart';
 
-import 'home_page_item.dart';
-
-class ShoppinglistPage extends StatefulWidget with HomePageItem {
-  const ShoppinglistPage({Key? key}) : super(key: key);
+class ShoppinglistPage extends StatefulWidget {
+  const ShoppinglistPage({super.key});
 
   @override
   _ShoppinglistPageState createState() => _ShoppinglistPageState();
-
-  @override
-  ViewsEnum type() => ViewsEnum.items;
 
   @override
   void onSelected(BuildContext context, bool alreadySelected) {

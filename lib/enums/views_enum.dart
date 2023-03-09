@@ -1,6 +1,9 @@
+import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:kitchenowl/app.dart';
 import 'package:kitchenowl/kitchenowl.dart';
+import 'package:kitchenowl/widgets/expense_create_fab.dart';
+import 'package:kitchenowl/widgets/recipe_create_fab.dart';
 
 enum ViewsEnum {
   items,
@@ -39,6 +42,17 @@ enum ViewsEnum {
       true,
       false,
     ][index];
+  }
+
+  Widget? floatingActionButton(BuildContext context) {
+    switch (this) {
+      case ViewsEnum.recipes:
+        return !App.isOffline ? RecipeCreateFab() : null;
+      case ViewsEnum.balances:
+        return !App.isOffline ? const ExpenseCreateFab() : null;
+      default:
+        return null;
+    }
   }
 
   /// Adds all missing views

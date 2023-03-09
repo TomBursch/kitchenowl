@@ -8,11 +8,11 @@ import 'package:kitchenowl/services/api/api_service.dart';
 
 extension ShoppinglistApi on ApiService {
   static const baseRoute = '/shoppinglist';
-  static route([ShoppingList? shoppinglist]) =>
-      "$baseRoute/${shoppinglist?.id ?? 1}";
+  String route({Household? household, ShoppingList? shoppinglist}) =>
+      "${household != null ? householdPath(household) : ""}$baseRoute${shoppinglist?.id != null ? "/${shoppinglist!.id}" : ""}";
 
   Future<List<ShoppingList>?> getShoppingLists(Household household) async {
-    final res = await get(baseRoute);
+    final res = await get(route(household: household));
     if (res.statusCode != 200) return null;
 
     final body = List.from(jsonDecode(res.body));
@@ -25,24 +25,31 @@ extension ShoppinglistApi on ApiService {
     ShoppingList shoppingList,
   ) async {
     final res = await post(
-      baseRoute,
+      route(household: household),
       jsonEncode(shoppingList.toJson()),
     );
 
     return res.statusCode == 200;
   }
 
-  Future<bool> updateShoppingList(ShoppingList shoppingList) async {
+  Future<bool> updateShoppingList(
+    Household household,
+    ShoppingList shoppingList,
+  ) async {
     final res = await post(
-      '$baseRoute/${shoppingList.id}',
+      route(household: household, shoppinglist: shoppingList),
       jsonEncode(shoppingList.toJson()),
     );
 
     return res.statusCode == 200;
   }
 
-  Future<bool> deleteShoppingList(ShoppingList shoppingList) async {
-    final res = await delete('$baseRoute/${shoppingList.id}');
+  Future<bool> deleteShoppingList(
+    Household household,
+    ShoppingList shoppingList,
+  ) async {
+    final res =
+        await delete(route(household: household, shoppinglist: shoppingList));
 
     return res.statusCode == 200;
   }
@@ -51,8 +58,9 @@ extension ShoppinglistApi on ApiService {
     ShoppingList shoppinglist, [
     ShoppinglistSorting sorting = ShoppinglistSorting.alphabetical,
   ]) async {
-    final res =
-        await get('${route(shoppinglist)}/items?orderby=${sorting.index}');
+    final res = await get(
+      '${route(shoppinglist: shoppinglist)}/items?orderby=${sorting.index}',
+    );
     if (res.statusCode != 200) return null;
 
     final body = List.from(jsonDecode(res.body));
@@ -63,7 +71,7 @@ extension ShoppinglistApi on ApiService {
   Future<List<ItemWithDescription>?> getRecentItems(
     ShoppingList shoppinglist,
   ) async {
-    final res = await get('${route(shoppinglist)}/recent-items');
+    final res = await get('${route(shoppinglist: shoppinglist)}/recent-items');
     if (res.statusCode != 200) return null;
 
     final body = List.from(jsonDecode(res.body));
@@ -78,8 +86,10 @@ extension ShoppinglistApi on ApiService {
   ]) async {
     final data = {'name': name};
     if (description != null) data['description'] = description;
-    final res =
-        await post('${route(shoppinglist)}/add-item-by-name', jsonEncode(data));
+    final res = await post(
+      '${route(shoppinglist: shoppinglist)}/add-item-by-name',
+      jsonEncode(data),
+    );
 
     return res.statusCode == 200;
   }
@@ -99,8 +109,10 @@ extension ShoppinglistApi on ApiService {
     String description,
   ) async {
     final data = {'description': description};
-    final res =
-        await post('${route(shoppinglist)}/item/${item.id}', jsonEncode(data));
+    final res = await post(
+      '${route(shoppinglist: shoppinglist)}/item/${item.id}',
+      jsonEncode(data),
+    );
 
     return res.statusCode == 200;
   }
@@ -111,7 +123,7 @@ extension ShoppinglistApi on ApiService {
     DateTime? time,
   ]) async {
     final res = await delete(
-      '${route(shoppinglist)}/item',
+      '${route(shoppinglist: shoppinglist)}/item',
       body: jsonEncode({
         'item_id': item.id,
         if (time != null) 'removed_at': time.toUtc().millisecondsSinceEpoch,

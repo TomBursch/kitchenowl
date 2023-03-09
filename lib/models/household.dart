@@ -1,5 +1,6 @@
 import 'package:kitchenowl/enums/views_enum.dart';
 import 'package:kitchenowl/models/model.dart';
+import 'package:kitchenowl/models/user.dart';
 
 class Household extends Model {
   final int id;
@@ -7,6 +8,7 @@ class Household extends Model {
   final bool? featurePlanner;
   final bool? featureExpenses;
   final List<ViewsEnum>? viewOrdering;
+  final List<User>? member;
 
   const Household({
     required this.id,
@@ -14,6 +16,7 @@ class Household extends Model {
     this.featurePlanner,
     this.featureExpenses,
     this.viewOrdering,
+    this.member,
   });
 
   factory Household.fromJson(Map<String, dynamic> map) {

@@ -46,7 +46,7 @@ class RecipeItemWidget extends StatelessWidget {
           onTap: (kIsWeb || Platform.isIOS)
               ? () async {
                   context.go(
-                    "/recipes/${recipe.id}",
+                    "/recipes/details/${recipe.id}",
                     extra: recipe,
                   );
                   // _handleUpdate(res);

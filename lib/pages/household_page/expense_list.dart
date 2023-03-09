@@ -1,4 +1,3 @@
-import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -6,81 +5,22 @@ import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:kitchenowl/app.dart';
 import 'package:kitchenowl/cubits/expense_list_cubit.dart';
 import 'package:kitchenowl/enums/expenselist_sorting.dart';
-import 'package:kitchenowl/enums/update_enum.dart';
-import 'package:kitchenowl/enums/views_enum.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/user.dart';
-import 'package:kitchenowl/pages/expense_add_update_page.dart';
 import 'package:kitchenowl/pages/expense_overview_page.dart';
 import 'package:kitchenowl/widgets/chart_pie_current_month.dart';
 import 'package:kitchenowl/widgets/expense_item.dart';
 
-import 'home_page_item.dart';
-
-class ExpenseListPage extends StatefulWidget with HomePageItem {
+class ExpenseListPage extends StatefulWidget {
   const ExpenseListPage({super.key});
 
   @override
   _ExpensePageState createState() => _ExpensePageState();
 
   @override
-  ViewsEnum type() => ViewsEnum.balances;
-
-  @override
   void onSelected(BuildContext context, bool alreadySelected) {
     BlocProvider.of<ExpenseListCubit>(context).refresh();
     // if (scrollController.hasClients) scrollController.jumpTo(0);
-  }
-
-  @override
-  bool isActive(BuildContext context) => false;
-
-  @override
-  Widget? floatingActionButton(BuildContext context) {
-    if (!App.isOffline) {
-      return OpenContainer(
-        useRootNavigator: true,
-        transitionType: ContainerTransitionType.fade,
-        openBuilder: (BuildContext ctx, VoidCallback _) {
-          return AddUpdateExpensePage(
-            household: BlocProvider.of<ExpenseListCubit>(context).household,
-            users: BlocProvider.of<ExpenseListCubit>(context).state.users,
-          );
-        },
-        openColor: Theme.of(context).scaffoldBackgroundColor,
-        onClosed: (data) {
-          if (data == UpdateEnum.updated) {
-            BlocProvider.of<ExpenseListCubit>(context).refresh();
-          }
-        },
-        closedElevation: 4.0,
-        closedShape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(
-            Radius.circular(14),
-          ),
-        ),
-        closedColor:
-            Theme.of(context).floatingActionButtonTheme.backgroundColor ??
-                Theme.of(context).colorScheme.secondary,
-        closedBuilder: (
-          BuildContext context,
-          VoidCallback openContainer,
-        ) {
-          return SizedBox(
-            height: 56,
-            width: 56,
-            child: Center(
-              child: Icon(
-                Icons.add,
-                color: Theme.of(context).colorScheme.onSecondary,
-              ),
-            ),
-          );
-        },
-      );
-    }
-
-    return null;
   }
 }
 

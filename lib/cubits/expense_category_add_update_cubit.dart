@@ -31,10 +31,13 @@ class AddUpdateExpenseCategoryCubit
           ),
         );
       } else {
-        await ApiService.getInstance().updateExpenseCategory(category.copyWith(
-          name: _state.name,
-          color: Nullable(_state.color),
-        ));
+        await ApiService.getInstance().updateExpenseCategory(
+          household,
+          category.copyWith(
+            name: _state.name,
+            color: Nullable(_state.color),
+          ),
+        );
       }
     }
   }

@@ -14,7 +14,7 @@ extension ExpenseApi on ApiService {
     ExpenselistSorting sorting = ExpenselistSorting.all,
     Expense? startAfter,
   ]) async {
-    String url = '$baseRoute?view=${sorting.index}';
+    String url = '${householdPath(household)}$baseRoute?view=${sorting.index}';
     if (startAfter != null) {
       url += '&startAfterId=${startAfter.id}';
     }
@@ -36,7 +36,8 @@ extension ExpenseApi on ApiService {
 
   Future<bool> addExpense(Household household, Expense expense) async {
     final body = expense.toJson();
-    final res = await post(baseRoute, jsonEncode(body));
+    final res =
+        await post("${householdPath(household)}$baseRoute", jsonEncode(body));
 
     return res.statusCode == 200;
   }
@@ -77,9 +78,12 @@ extension ExpenseApi on ApiService {
     return res.statusCode == 200;
   }
 
-  Future<bool> updateExpenseCategory(ExpenseCategory category) async {
+  Future<bool> updateExpenseCategory(
+    Household household,
+    ExpenseCategory category,
+  ) async {
     final res = await post(
-      '$baseRoute/categories/${category.id}',
+      '${householdPath(household)}$baseRoute/categories/${category.id}',
       jsonEncode(category.toJson()),
     );
 

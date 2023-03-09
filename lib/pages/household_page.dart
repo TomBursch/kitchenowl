@@ -6,11 +6,9 @@ import 'package:kitchenowl/cubits/auth_cubit.dart';
 import 'package:kitchenowl/cubits/expense_list_cubit.dart';
 import 'package:kitchenowl/cubits/planner_cubit.dart';
 import 'package:kitchenowl/cubits/recipe_list_cubit.dart';
-import 'package:kitchenowl/cubits/settings_cubit.dart';
 import 'package:kitchenowl/cubits/shoppinglist_cubit.dart';
 import 'package:kitchenowl/enums/views_enum.dart';
 import 'package:kitchenowl/models/household.dart';
-import 'package:kitchenowl/pages/household_page/_export.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
 class HouseholdPage extends StatefulWidget {
@@ -67,78 +65,74 @@ class _HouseholdPageState extends State<HouseholdPage> {
       ],
       child: BlocBuilder<AuthCubit, AuthState>(
         builder: (context, state) {
-          return BlocBuilder<SettingsCubit, SettingsState>(
-            builder: (context, state) {
-              List<ViewsEnum> _pages = ViewsEnum.values;
+          List<ViewsEnum> pages = ViewsEnum.values;
+          int _selectedIndex = pages.indexWhere(
+            (e) => GoRouter.of(context).location.contains(e.toString()),
+          );
 
-              final bool useBottomNavigationBar = getValueForScreenType<bool>(
-                context: context,
-                mobile: true,
-                tablet: false,
-                desktop: false,
-              );
+          final bool useBottomNavigationBar = getValueForScreenType<bool>(
+            context: context,
+            mobile: true,
+            tablet: false,
+            desktop: false,
+          );
 
-              Widget body = Align(
-                alignment: Alignment.topCenter,
-                child: ConstrainedBox(
-                  constraints: const BoxConstraints.expand(width: 1600),
-                  child: widget.child,
+          Widget body = Align(
+            alignment: Alignment.topCenter,
+            child: ConstrainedBox(
+              constraints: const BoxConstraints.expand(width: 1600),
+              child: widget.child,
+            ),
+          );
+
+          if (!useBottomNavigationBar) {
+            final bool extendedRail = getValueForScreenType<bool>(
+              context: context,
+              mobile: false,
+              tablet: false,
+              desktop: true,
+            );
+            body = Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                SafeArea(
+                  child: NavigationRail(
+                    extended: extendedRail,
+                    destinations: pages
+                        .map((e) => NavigationRailDestination(
+                              icon: Icon(e.toIcon(context)),
+                              label: Text(e.toLocalizedString(context)),
+                            ))
+                        .toList(),
+                    selectedIndex: _selectedIndex,
+                    onDestinationSelected: (i) =>
+                        _onItemTapped(context, pages[i]),
+                  ),
                 ),
-              );
+                Expanded(child: body),
+              ],
+            );
+          }
 
-              if (!useBottomNavigationBar) {
-                final bool extendedRail = getValueForScreenType<bool>(
-                  context: context,
-                  mobile: false,
-                  tablet: false,
-                  desktop: true,
-                );
-                body = Row(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    SafeArea(
-                      child: NavigationRail(
-                        extended: extendedRail,
-                        destinations: _pages
-                            .map((e) => NavigationRailDestination(
-                                  icon: Icon(e.toIcon(context)),
-                                  label: Text(e.toLocalizedString(context)),
-                                ))
-                            .toList(),
-                        selectedIndex: _pages.indexWhere((e) =>
-                            GoRouter.of(context)
-                                .location
-                                .endsWith(e.toString())),
-                        onDestinationSelected: (i) =>
-                            _onItemTapped(context, _pages[i]),
-                      ),
-                    ),
-                    Expanded(child: body),
-                  ],
-                );
-              }
-
-              return Scaffold(
-                body: body,
-                // floatingActionButton:
-                //     widget.child.floatingActionButton(context),
-                bottomNavigationBar: useBottomNavigationBar
-                    ? NavigationBar(
-                        labelBehavior:
-                            NavigationDestinationLabelBehavior.onlyShowSelected,
-                        destinations: _pages
-                            .map((e) => NavigationDestination(
-                                  icon: Icon(e.toIcon(context)),
-                                  label: e.toLocalizedString(context),
-                                ))
-                            .toList(),
-                        selectedIndex: 0,
-                        onDestinationSelected: (i) =>
-                            _onItemTapped(context, _pages[i]),
-                      )
-                    : null,
-              );
-            },
+          return Scaffold(
+            body: body,
+            floatingActionButton:
+                pages[_selectedIndex].floatingActionButton(context),
+            bottomNavigationBar: useBottomNavigationBar
+                ? NavigationBar(
+                    labelBehavior:
+                        NavigationDestinationLabelBehavior.onlyShowSelected,
+                    destinations: pages
+                        .map((e) => NavigationDestination(
+                              icon: Icon(e.toIcon(context)),
+                              label: e.toLocalizedString(context),
+                            ))
+                        .toList(),
+                    selectedIndex: 0,
+                    onDestinationSelected: (i) =>
+                        _onItemTapped(context, pages[i]),
+                  )
+                : null,
           );
         },
       ),

@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:animations/animations.dart';
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +10,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kitchenowl/cubits/auth_cubit.dart';
 import 'package:kitchenowl/cubits/settings_cubit.dart';
-import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/expense.dart';
 import 'package:kitchenowl/models/household.dart';
@@ -29,7 +27,6 @@ import 'package:kitchenowl/pages/splash_page.dart';
 import 'package:kitchenowl/pages/unreachable_page.dart';
 import 'package:kitchenowl/pages/household_page.dart';
 import 'package:kitchenowl/pages/unsupported_page.dart';
-import 'package:kitchenowl/services/api/api_service.dart';
 import 'package:kitchenowl/styles/colors.dart';
 import 'package:kitchenowl/styles/themes.dart';
 import 'package:share_handler/share_handler.dart';
@@ -179,7 +176,7 @@ class _AppState extends State<App> {
 
   void _handleSharedMedia(SharedMedia media) {
     if (mounted && media.content != null) {
-      _router.goNamed("scrape", queryParams: {"url": media.content!});
+      _router.go("/household/1/recipes/scrape?url=\"${media.content!}\"");
     }
   }
 }
@@ -269,7 +266,7 @@ final _router = GoRouter(
           path: ":id",
           builder: (context, state) => const SplashPage(),
           redirect: (context, state) {
-            if (state.subloc == state.location) return "/household/1/items";
+            if (state.subloc == state.location) return "${state.subloc}/items";
 
             return null;
           },
@@ -292,7 +289,7 @@ final _router = GoRouter(
                   routes: [
                     GoRoute(
                       parentNavigatorKey: _rootNavigatorKey,
-                      path: ':recipeId',
+                      path: 'details/:recipeId',
                       builder: (context, state) => RecipePage(
                         recipe: (state.extra as Recipe?) ??
                             Recipe(
@@ -302,7 +299,6 @@ final _router = GoRouter(
                     ),
                     GoRoute(
                       parentNavigatorKey: _rootNavigatorKey,
-                      name: 'scrape',
                       path: 'scrape',
                       builder: (context, state) => RecipeScraperPage(
                         url: state.queryParams['url']!,

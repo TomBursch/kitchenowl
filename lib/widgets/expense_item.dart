@@ -81,7 +81,7 @@ class ExpenseItemWidget extends StatelessWidget {
         ),
       ),
       onClosed: _handleUpdate,
-      openBuilder: (context, toggle) => ExpensePage(
+      openBuilder: (ctx, toggle) => ExpensePage(
         household: BlocProvider.of<ExpenseListCubit>(context).household,
         expense: expense,
         users: users,

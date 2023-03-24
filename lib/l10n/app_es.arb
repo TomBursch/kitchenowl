@@ -374,5 +374,7 @@
     "placeholders": {
       "shoppingList": {}
     }
-  }
+  },
+  "changeIcon": "Cambiar el ícono",
+  "@changeIcon": {}
 }

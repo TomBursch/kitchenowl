@@ -268,5 +268,15 @@
   "forceOfflineMode": "Paksa mode luring",
   "@forceOfflineMode": {},
   "income": "Pemasukan",
-  "@income": {}
+  "@income": {},
+  "tags": "Tag",
+  "@tags": {},
+  "tagDeleteConfirmation": "Apa kamu yakin ingin menghapus {tag}? Hal ini akan menghapus tag tersebut dari resep yang memilikinya.",
+  "@tagDeleteConfirmation": {
+    "placeholders": {
+      "tag": {}
+    }
+  },
+  "tagDelete": "Hapus tag",
+  "@tagDelete": {}
 }

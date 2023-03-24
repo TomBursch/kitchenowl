@@ -374,5 +374,7 @@
   "shoppingListEdit": "Modifica la lista della spesa",
   "@shoppingListEdit": {},
   "unsavedChangesBody": "Sei sicuro/a di voler tornare indietro?",
-  "@unsavedChangesBody": {}
+  "@unsavedChangesBody": {},
+  "changeIcon": "Cambia l'icona",
+  "@changeIcon": {}
 }

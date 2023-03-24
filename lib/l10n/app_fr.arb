@@ -374,5 +374,7 @@
     }
   },
   "unsavedChangesBody": "Êtes-vous sûr·e de vouloir revenir en arrière ?",
-  "@unsavedChangesBody": {}
+  "@unsavedChangesBody": {},
+  "changeIcon": "Changer d'icône",
+  "@changeIcon": {}
 }

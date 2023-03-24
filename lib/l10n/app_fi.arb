@@ -354,5 +354,11 @@
     "placeholders": {
       "token": {}
     }
-  }
+  },
+  "changeIcon": "Vaihda kuvake",
+  "@changeIcon": {},
+  "features": "Ominaisuudet",
+  "@features": {},
+  "lltCreate": "Luo pitkäikäinen merkki",
+  "@lltCreate": {}
 }

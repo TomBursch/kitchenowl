@@ -24,7 +24,7 @@ class RecipeCreateFab extends StatelessWidget {
         OpenContainer(
           useRootNavigator: true,
           transitionType: ContainerTransitionType.fade,
-          openBuilder: (BuildContext context, VoidCallback _) {
+          openBuilder: (BuildContext ctx, VoidCallback _) {
             return AddUpdateRecipePage(
               household: BlocProvider.of<RecipeListCubit>(context).household,
             );
@@ -78,7 +78,7 @@ class RecipeCreateFab extends StatelessWidget {
             final res = null;
 
             // final res =
-            //     await Navigator.of(context).push<UpdateEnum>(MaterialPageRoute(
+            //     await Navigator.of(context, rootNavigator: true).push<UpdateEnum>(MaterialPageRoute(
             //   builder: (context) => RecipeScraperPage(
             //     household: BlocProvider.of<RecipeListCubit>(context).household,
             //     url: url,

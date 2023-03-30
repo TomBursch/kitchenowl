@@ -6,6 +6,7 @@ import 'package:kitchenowl/app.dart';
 import 'package:kitchenowl/cubits/expense_list_cubit.dart';
 import 'package:kitchenowl/enums/expenselist_sorting.dart';
 import 'package:kitchenowl/kitchenowl.dart';
+import 'package:kitchenowl/models/member.dart';
 import 'package:kitchenowl/models/user.dart';
 import 'package:kitchenowl/pages/expense_overview_page.dart';
 import 'package:kitchenowl/widgets/chart_pie_current_month.dart';
@@ -71,13 +72,15 @@ class _ExpensePageState extends State<ExpenseListPage> {
                             InkWell(
                               borderRadius: BorderRadius.circular(50),
                               child: const Icon(Icons.bar_chart_rounded),
-                              onTap: () => Navigator.of(context).push(
+                              onTap: () =>
+                                  Navigator.of(context, rootNavigator: true)
+                                      .push(
                                 MaterialPageRoute(
-                                  builder: (context) => ExpenseOverviewPage(
+                                  builder: (ctx) => ExpenseOverviewPage(
                                     household:
                                         BlocProvider.of<ExpenseListCubit>(
-                                                context)
-                                            .household,
+                                      context,
+                                    ).household,
                                     initialSorting: state.sorting,
                                   ),
                                 ),
@@ -108,7 +111,7 @@ class _ExpensePageState extends State<ExpenseListPage> {
                         ),
                     ]),
                   ),
-                if (state.users.isNotEmpty) ...[
+                if (state.household.member?.isNotEmpty ?? false) ...[
                   SliverToBoxAdapter(
                     child: AnimatedCrossFade(
                       crossFadeState: state.sorting == ExpenselistSorting.all ||
@@ -117,7 +120,9 @@ class _ExpensePageState extends State<ExpenseListPage> {
                           : CrossFadeState.showSecond,
                       duration: const Duration(milliseconds: 100),
                       firstChild: SizedBox(
-                        height: (state.users.length * 60 + 30).toDouble(),
+                        height:
+                            ((state.household.member?.length ?? 0) * 60 + 30)
+                                .toDouble(),
                         child: _getBarChart(context, state),
                       ),
                       secondChild: Padding(
@@ -194,7 +199,6 @@ class _ExpensePageState extends State<ExpenseListPage> {
                           sizeFactor: animation,
                           child: ExpenseItemWidget(
                             expense: state.expenses[i],
-                            users: state.users,
                             onUpdated: cubit.refresh,
                             displayPersonalAmount:
                                 state.sorting == ExpenselistSorting.personal,
@@ -206,7 +210,6 @@ class _ExpensePageState extends State<ExpenseListPage> {
                           sizeFactor: animation,
                           child: ExpenseItemWidget(
                             expense: expense,
-                            users: state.users,
                             onUpdated: cubit.refresh,
                             displayPersonalAmount:
                                 state.sorting == ExpenselistSorting.personal,
@@ -264,7 +267,7 @@ class _ExpensePageState extends State<ExpenseListPage> {
 
   // ignore: long-method
   Widget _getBarChart(BuildContext context, ExpenseListCubitState state) {
-    double maxBalance = state.users
+    double maxBalance = (state.household.member ?? [])
         .fold<double>(0.0, (p, e) => e.balance.abs() > p ? e.balance.abs() : p);
     maxBalance = maxBalance > 0 ? maxBalance : 1;
 
@@ -272,30 +275,30 @@ class _ExpensePageState extends State<ExpenseListPage> {
 
     return charts.BarChart(
       [
-        charts.Series<User, String>(
+        charts.Series<Member, String>(
           id: 'Balance',
-          data: state.users,
-          colorFn: (user, _) => charts.Color(
+          data: state.household.member ?? [],
+          colorFn: (member, _) => charts.Color(
             r: Theme.of(context).colorScheme.primary.red,
             g: Theme.of(context).colorScheme.primary.green,
             b: Theme.of(context).colorScheme.primary.blue,
           ),
-          domainFn: (user, _) => user.username,
-          measureFn: (user, _) => user.balance,
-          labelAccessorFn: (user, _) =>
-              "  ${user.name}: ${NumberFormat.simpleCurrency().format(user.balance)}",
+          domainFn: (member, _) => member.username,
+          measureFn: (member, _) => member.balance,
+          labelAccessorFn: (member, _) =>
+              "  ${member.name}: ${NumberFormat.simpleCurrency().format(member.balance)}",
         ),
         charts.Series<User, String>(
           id: 'zero',
-          domainFn: (user, _) => user.username,
-          measureFn: (user, _) => 0,
-          data: state.users,
-          colorFn: (user, _) => charts.Color(
+          domainFn: (member, _) => member.username,
+          measureFn: (member, _) => 0,
+          data: state.household.member ?? [],
+          colorFn: (member, _) => charts.Color(
             r: zeroDividerColor.red,
             g: zeroDividerColor.green,
             b: zeroDividerColor.blue,
           ),
-          strokeWidthPxFn: (user, _) => 5,
+          strokeWidthPxFn: (member, _) => 5,
         )..setAttribute(charts.rendererIdKey, 'zero'),
       ],
       vertical: false,

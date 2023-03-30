@@ -10,6 +10,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kitchenowl/cubits/auth_cubit.dart';
 import 'package:kitchenowl/cubits/settings_cubit.dart';
+import 'package:kitchenowl/helpers/fade_through_transition_page.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/expense.dart';
 import 'package:kitchenowl/models/household.dart';
@@ -86,6 +87,9 @@ class _AppState extends State<App> {
         ],
         child: BlocListener<AuthCubit, AuthState>(
           bloc: widget._authCubit,
+          listenWhen: (previous, current) =>
+              previous != current &&
+              !(previous is Authenticated && current is Authenticated),
           listener: (context, state) {
             if (state is Setup) _router.go("/setup");
             if (state is Onboarding) _router.go("/onboarding");
@@ -262,7 +266,7 @@ final _router = GoRouter(
       builder: (context, state) => const HouseholdListPage(),
       routes: [
         GoRoute(
-          name: "hosehold",
+          name: "household",
           path: ":id",
           builder: (context, state) => const SplashPage(),
           redirect: (context, state) {
@@ -281,11 +285,19 @@ final _router = GoRouter(
               routes: [
                 GoRoute(
                   path: "items",
-                  builder: (context, state) => const ShoppinglistPage(),
+                  pageBuilder: (context, state) => FadeThroughTransitionPage(
+                    key: state.pageKey,
+                    name: state.name,
+                    child: const ShoppinglistPage(),
+                  ),
                 ),
                 GoRoute(
                   path: "recipes",
-                  builder: (context, state) => const RecipeListPage(),
+                  pageBuilder: (context, state) => FadeThroughTransitionPage(
+                    key: state.pageKey,
+                    name: state.name,
+                    child: const RecipeListPage(),
+                  ),
                   routes: [
                     GoRoute(
                       parentNavigatorKey: _rootNavigatorKey,
@@ -295,6 +307,12 @@ final _router = GoRouter(
                             Recipe(
                               id: int.tryParse(state.params['recipeId'] ?? ''),
                             ),
+                        household: Household(
+                          id: int.tryParse(state.params['id'] ?? '') ?? -1,
+                        ),
+                        updateOnPlanningEdit:
+                            state.queryParams['updateOnPlanningEdit'] ==
+                                true.toString(),
                       ),
                     ),
                     GoRoute(
@@ -311,15 +329,27 @@ final _router = GoRouter(
                 ),
                 GoRoute(
                   path: "planner",
-                  builder: (context, state) => const PlannerPage(),
+                  pageBuilder: (context, state) => FadeThroughTransitionPage(
+                    key: state.pageKey,
+                    name: state.name,
+                    child: const PlannerPage(),
+                  ),
                 ),
                 GoRoute(
                   path: "balances",
-                  builder: (context, state) => const ExpenseListPage(),
+                  pageBuilder: (context, state) => FadeThroughTransitionPage(
+                    key: state.pageKey,
+                    name: state.name,
+                    child: const ExpenseListPage(),
+                  ),
                 ),
                 GoRoute(
                   path: "profile",
-                  builder: (context, state) => const ProfilePage(),
+                  pageBuilder: (context, state) => FadeThroughTransitionPage(
+                    key: state.pageKey,
+                    name: state.name,
+                    child: const ProfilePage(),
+                  ),
                 ),
               ],
             ),
@@ -327,14 +357,13 @@ final _router = GoRouter(
               parentNavigatorKey: _rootNavigatorKey,
               path: 'expenses/:expenseId',
               builder: (context, state) => ExpensePage(
-                household:
+                household: (state.extra as List?)?[0] ??
                     Household(id: int.tryParse(state.params['id'] ?? '') ?? -1),
-                expense: ((state.extra as List?)?[0] as Expense?) ??
+                expense: ((state.extra as List?)?[1] as Expense?) ??
                     Expense(
                       id: int.tryParse(state.params['expenseId'] ?? ''),
                       paidById: 0,
                     ),
-                users: (state.extra as List?)?[1] ?? const [],
               ),
             ),
           ],

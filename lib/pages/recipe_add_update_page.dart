@@ -423,23 +423,24 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
   }
 
   Future<void> _updateItems(BuildContext context, bool optional) async {
-    final items =
-        await Navigator.of(context).push<List<Item>>(MaterialPageRoute(
-              builder: (context) => ItemSearchPage(
-                household: widget.household,
-                title: AppLocalizations.of(context)!.itemsAdd,
-                selectedItems: cubit.state.items
-                    .where((e) => e.optional == optional)
-                    .map((e) => e.toItemWithDescription())
-                    .toList(),
-              ),
-            )) ??
-            [];
+    final items = await Navigator.of(context, rootNavigator: true)
+            .push<List<Item>>(MaterialPageRoute(
+          builder: (context) => ItemSearchPage(
+            household: widget.household,
+            title: AppLocalizations.of(context)!.itemsAdd,
+            selectedItems: cubit.state.items
+                .where((e) => e.optional == optional)
+                .map((e) => e.toItemWithDescription())
+                .toList(),
+          ),
+        )) ??
+        [];
     cubit.updateFromItemList(items, optional);
   }
 
   Future<void> _editItem(BuildContext context, RecipeItem item) async {
-    final res = await Navigator.of(context).push<UpdateValue<RecipeItem>>(
+    final res = await Navigator.of(context, rootNavigator: true)
+        .push<UpdateValue<RecipeItem>>(
       MaterialPageRoute(
         builder: (BuildContext context) => ItemPage(
           item: item,

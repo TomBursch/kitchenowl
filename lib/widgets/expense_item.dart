@@ -8,21 +8,18 @@ import 'package:kitchenowl/cubits/auth_cubit.dart';
 import 'package:kitchenowl/cubits/expense_list_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/models/expense.dart';
-import 'package:kitchenowl/models/user.dart';
 import 'package:kitchenowl/pages/expense_page.dart';
 import 'package:intl/intl.dart';
 import 'package:kitchenowl/widgets/expense_category_icon.dart';
 
 class ExpenseItemWidget extends StatelessWidget {
   final Expense expense;
-  final List<User> users;
   final void Function()? onUpdated;
   final bool displayPersonalAmount;
 
   const ExpenseItemWidget({
     Key? key,
     required this.expense,
-    required this.users,
     this.onUpdated,
     this.displayPersonalAmount = false,
   }) : super(key: key);
@@ -71,9 +68,15 @@ class ExpenseItemWidget extends StatelessWidget {
               : null,
           onTap: (kIsWeb || Platform.isIOS)
               ? () async {
-                  final res = await Navigator.of(context).pushNamed<UpdateEnum>(
+                  final res = await Navigator.of(context, rootNavigator: true)
+                      .pushNamed<UpdateEnum>(
                     "/expense/${expense.id}",
-                    arguments: [expense, users],
+                    arguments: [
+                      BlocProvider.of<ExpenseListCubit>(context)
+                          .state
+                          .household,
+                      expense,
+                    ],
                   );
                   _handleUpdate(res);
                 }
@@ -82,9 +85,8 @@ class ExpenseItemWidget extends StatelessWidget {
       ),
       onClosed: _handleUpdate,
       openBuilder: (ctx, toggle) => ExpensePage(
-        household: BlocProvider.of<ExpenseListCubit>(context).household,
+        household: BlocProvider.of<ExpenseListCubit>(context).state.household,
         expense: expense,
-        users: users,
       ),
     );
   }

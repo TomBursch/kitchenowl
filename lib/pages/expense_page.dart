@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -6,20 +7,16 @@ import 'package:kitchenowl/cubits/expense_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/models/expense.dart';
 import 'package:kitchenowl/models/household.dart';
-import 'package:kitchenowl/models/user.dart';
 import 'package:kitchenowl/pages/expense_add_update_page.dart';
 import 'package:kitchenowl/kitchenowl.dart';
-import 'package:collection/collection.dart';
 
 class ExpensePage extends StatefulWidget {
   final Household household;
   final Expense expense;
-  final List<User> users;
 
   const ExpensePage({
     super.key,
     required this.expense,
-    required this.users,
     required this.household,
   });
 
@@ -33,7 +30,7 @@ class _ExpensePageState extends State<ExpensePage> {
   @override
   void initState() {
     super.initState();
-    cubit = ExpenseCubit(widget.expense, widget.users);
+    cubit = ExpenseCubit(widget.expense, widget.household);
   }
 
   @override
@@ -80,9 +77,8 @@ class _ExpensePageState extends State<ExpensePage> {
                             final res = await Navigator.of(context)
                                 .push<UpdateEnum>(MaterialPageRoute(
                               builder: (context) => AddUpdateExpensePage(
-                                household: widget.household,
+                                household: state.household,
                                 expense: state.expense,
-                                users: state.users,
                               ),
                             ));
                             if (res == UpdateEnum.updated) {
@@ -121,7 +117,7 @@ class _ExpensePageState extends State<ExpensePage> {
                           ),
                         ListTile(
                           title: Text(
-                            "${AppLocalizations.of(context)!.expensePaidBy} ${state.users.firstWhereOrNull(
+                            "${AppLocalizations.of(context)!.expensePaidBy} ${state.household.member?.firstWhereOrNull(
                                   (e) => e.id == state.expense.paidById,
                                 )?.name ?? AppLocalizations.of(context)!.other}",
                           ),
@@ -157,8 +153,8 @@ class _ExpensePageState extends State<ExpensePage> {
                     delegate: SliverChildBuilderDelegate(
                       (context, i) => ListTile(
                         title: Text(
-                          state.users
-                                  .firstWhereOrNull(
+                          state.household.member
+                                  ?.firstWhereOrNull(
                                     (e) =>
                                         e.id == state.expense.paidFor[i].userId,
                                   )

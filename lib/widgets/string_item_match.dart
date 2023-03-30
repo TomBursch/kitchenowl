@@ -84,16 +84,16 @@ class StringItemMatch extends StatelessWidget {
   }
 
   Future<void> _onPressed(BuildContext context) async {
-    final items =
-        await Navigator.of(context).push<List<Item>>(MaterialPageRoute(
-              builder: (context) => ItemSearchPage(
-                household: household,
-                multiple: false,
-                title: string,
-                selectedItems: item != null ? [item!] : const [],
-              ),
-            )) ??
-            [];
+    final items = await Navigator.of(context, rootNavigator: true)
+            .push<List<Item>>(MaterialPageRoute(
+          builder: (context) => ItemSearchPage(
+            household: household,
+            multiple: false,
+            title: string,
+            selectedItems: item != null ? [item!] : const [],
+          ),
+        )) ??
+        [];
     if (items.length == 1) {
       itemSelected(
         RecipeItem.fromItem(
@@ -105,7 +105,8 @@ class StringItemMatch extends StatelessWidget {
   }
 
   Future<void> _onLongPressed(BuildContext context) async {
-    final res = await Navigator.of(context).push<UpdateValue<RecipeItem>>(
+    final res = await Navigator.of(context, rootNavigator: true)
+        .push<UpdateValue<RecipeItem>>(
       MaterialPageRoute(
         builder: (BuildContext context) => ItemPage(
           item: item!,

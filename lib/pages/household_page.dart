@@ -30,7 +30,7 @@ class _HouseholdPageState extends State<HouseholdPage> {
   late final ShoppinglistCubit shoppingListCubit;
   late final RecipeListCubit recipeListCubit;
   late final PlannerCubit plannerCubit;
-  late final ExpenseListCubit expenseCubit;
+  late final ExpenseListCubit expenseListCubit;
 
   @override
   void initState() {
@@ -38,7 +38,7 @@ class _HouseholdPageState extends State<HouseholdPage> {
     shoppingListCubit = ShoppinglistCubit(widget.household);
     recipeListCubit = RecipeListCubit(widget.household);
     plannerCubit = PlannerCubit(widget.household);
-    expenseCubit = ExpenseListCubit(widget.household);
+    expenseListCubit = ExpenseListCubit(widget.household);
   }
 
   @override
@@ -46,7 +46,7 @@ class _HouseholdPageState extends State<HouseholdPage> {
     shoppingListCubit.close();
     recipeListCubit.close();
     plannerCubit.close();
-    expenseCubit.close();
+    expenseListCubit.close();
     super.dispose();
   }
 
@@ -61,7 +61,7 @@ class _HouseholdPageState extends State<HouseholdPage> {
         BlocProvider.value(value: shoppingListCubit),
         BlocProvider.value(value: recipeListCubit),
         BlocProvider.value(value: plannerCubit),
-        BlocProvider.value(value: expenseCubit),
+        BlocProvider.value(value: expenseListCubit),
       ],
       child: BlocBuilder<AuthCubit, AuthState>(
         builder: (context, state) {
@@ -69,6 +69,8 @@ class _HouseholdPageState extends State<HouseholdPage> {
           int _selectedIndex = pages.indexWhere(
             (e) => GoRouter.of(context).location.contains(e.toString()),
           );
+
+          if (_selectedIndex < 0) return const SizedBox();
 
           final bool useBottomNavigationBar = getValueForScreenType<bool>(
             context: context,
@@ -128,7 +130,7 @@ class _HouseholdPageState extends State<HouseholdPage> {
                               label: e.toLocalizedString(context),
                             ))
                         .toList(),
-                    selectedIndex: 0,
+                    selectedIndex: _selectedIndex,
                     onDestinationSelected: (i) =>
                         _onItemTapped(context, pages[i]),
                   )

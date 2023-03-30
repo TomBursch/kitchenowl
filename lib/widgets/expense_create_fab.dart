@@ -15,8 +15,7 @@ class ExpenseCreateFab extends StatelessWidget {
       transitionType: ContainerTransitionType.fade,
       openBuilder: (BuildContext ctx, VoidCallback _) {
         return AddUpdateExpensePage(
-          household: BlocProvider.of<ExpenseListCubit>(context).household,
-          users: BlocProvider.of<ExpenseListCubit>(context).state.users,
+          household: BlocProvider.of<ExpenseListCubit>(context).state.household,
         );
       },
       openColor: Theme.of(context).scaffoldBackgroundColor,

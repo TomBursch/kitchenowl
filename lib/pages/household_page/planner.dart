@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:kitchenowl/cubits/planner_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
@@ -7,7 +8,6 @@ import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/models/recipe.dart';
 import 'package:kitchenowl/pages/item_selection_page.dart';
-import 'package:kitchenowl/pages/recipe_page.dart';
 import 'package:kitchenowl/widgets/recipe_card.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
@@ -317,14 +317,20 @@ class _PlannerPageState extends State<PlannerPage> {
     PlannerCubit cubit,
     Recipe recipe,
   ) async {
-    final res = await Navigator.of(context).push<UpdateEnum>(
-      MaterialPageRoute(
-        builder: (context) => RecipePage(
-          recipe: recipe,
-          updateOnPlanningEdit: true,
-        ),
-      ),
-    );
+    final res = await context
+        .push<UpdateEnum>(
+      Uri(
+        path:
+            "/household/${BlocProvider.of<PlannerCubit>(context).household.id}/recipes/details/${recipe.id}",
+        queryParameters: {
+          "updateOnPlanningEdit": true.toString(),
+        },
+      ).toString(),
+      extra: recipe,
+    )
+        .then((value) {
+      return value;
+    });
     if (res == UpdateEnum.updated || res == UpdateEnum.deleted) {
       cubit.refresh();
     }
@@ -334,7 +340,7 @@ class _PlannerPageState extends State<PlannerPage> {
     BuildContext context,
     PlannerCubit cubit,
   ) async {
-    await Navigator.of(context).push<List<RecipeItem>>(
+    await Navigator.of(context, rootNavigator: true).push<List<RecipeItem>>(
       MaterialPageRoute(
         builder: (context) => ItemSelectionPage(
           selectText: AppLocalizations.of(context)!.addNumberIngredients,

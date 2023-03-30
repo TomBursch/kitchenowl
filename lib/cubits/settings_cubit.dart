@@ -66,50 +66,6 @@ class SettingsCubit extends Cubit<SettingsState> {
         .writeBool(key: 'dynamicAccentColor', value: dynamicAccentColor);
     emit(state.copyWith(dynamicAccentColor: dynamicAccentColor));
   }
-/*
-  void setView(ViewsEnum view, bool value) {
-    if (view == ViewsEnum.mealPlanner) {
-      final settings = state.serverSettings.copyWith(featurePlanner: value);
-      emit(state.copyWith(serverSettings: settings));
-      PreferenceStorage.getInstance()
-          .write(key: 'serverSettings', value: jsonEncode(settings.toJson()));
-      ApiService.getInstance()
-          .setSettings(ServerSettings(featurePlanner: value));
-    }
-    if (view == ViewsEnum.balances) {
-      final settings = state.serverSettings.copyWith(featureExpenses: value);
-      emit(state.copyWith(serverSettings: settings));
-      PreferenceStorage.getInstance()
-          .write(key: 'serverSettings', value: jsonEncode(settings.toJson()));
-      ApiService.getInstance()
-          .setSettings(ServerSettings(featureExpenses: value));
-    }
-  }
-
-  void reorderView(int oldIndex, int newIndex) {
-    final l = List.of(state.serverSettings.viewOrdering!);
-    l.insert(newIndex, l.removeAt(oldIndex));
-    final settings = state.serverSettings.copyWith(viewOrdering: l);
-    emit(state.copyWith(serverSettings: settings));
-    PreferenceStorage.getInstance()
-        .write(key: 'serverSettings', value: jsonEncode(settings.toJson()));
-    ApiService.getInstance().setSettings(ServerSettings(viewOrdering: l));
-  }
-
-  void resetViewOrder() {
-    final settings =
-        state.serverSettings.copyWith(viewOrdering: ViewsEnum.values);
-    emit(state.copyWith(serverSettings: settings));
-    PreferenceStorage.getInstance().write(
-      key: 'serverSettings',
-      value: jsonEncode(
-        settings.copyWith(viewOrdering: const []).toJson(),
-      ),
-    );
-    ApiService.getInstance().setSettings(const ServerSettings(
-      viewOrdering: [],
-    ));
-  }*/
 }
 
 class SettingsState extends Equatable {
@@ -137,15 +93,4 @@ class SettingsState extends Equatable {
 
   @override
   List<Object?> get props => [themeMode, serverSettings, dynamicAccentColor];
-
-  // bool isViewActive(ViewsEnum view) {
-  //   if (view == ViewsEnum.mealPlanner) {
-  //     return serverSettings.featurePlanner ?? true;
-  //   }
-  //   if (view == ViewsEnum.balances) {
-  //     return serverSettings.featureExpenses ?? true;
-  //   }
-
-  //   return true;
-  // }
 }

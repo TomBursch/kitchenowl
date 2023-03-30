@@ -2,10 +2,13 @@ import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:kitchenowl/app.dart';
 import 'package:kitchenowl/config.dart';
 import 'package:kitchenowl/cubits/auth_cubit.dart';
+import 'package:kitchenowl/cubits/expense_list_cubit.dart';
 import 'package:kitchenowl/cubits/settings_cubit.dart';
+import 'package:kitchenowl/pages/settings_household_page.dart';
 import 'package:kitchenowl/pages/settings_server_page.dart';
 import 'package:kitchenowl/pages/settings_user_page.dart';
 import 'package:kitchenowl/kitchenowl.dart';
@@ -115,18 +118,60 @@ class ProfilePage extends StatelessWidget {
                         ),
                       ),
                     ),
-                  if (!isOffline && user.hasAdminRights())
+                  if (!isOffline)
                     Card(
                       child: ListTile(
-                        title: Text(AppLocalizations.of(context)!.server),
-                        leading: const Icon(Icons.account_tree_rounded),
+                        title: Text(AppLocalizations.of(context)!.serverChange),
+                        leading: const Icon(Icons.swap_horiz_rounded),
                         minLeadingWidth: 16,
-                        onTap: () => Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => const SettingsServerPage(),
+                        onTap: () => context.go("/household"),
+                      ),
+                    ),
+                  if (!isOffline)
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Card(
+                            child: ListTile(
+                              title:
+                                  Text(AppLocalizations.of(context)!.household),
+                              leading: const Icon(Icons.house_rounded),
+                              minLeadingWidth: 16,
+                              onTap: () =>
+                                  Navigator.of(context, rootNavigator: true)
+                                      .push(
+                                MaterialPageRoute(
+                                  builder: (ctx) => SettingsHouseholdPage(
+                                    household:
+                                        BlocProvider.of<ExpenseListCubit>(
+                                      context,
+                                    ).household,
+                                  ),
+                                ),
+                              ),
+                            ),
                           ),
                         ),
-                      ),
+                        if (user.hasServerAdminRights())
+                          Expanded(
+                            child: Card(
+                              child: ListTile(
+                                title:
+                                    Text(AppLocalizations.of(context)!.server),
+                                leading: const Icon(Icons.account_tree_rounded),
+                                minLeadingWidth: 16,
+                                onTap: () =>
+                                    Navigator.of(context, rootNavigator: true)
+                                        .push(
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const SettingsServerPage(),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                      ],
                     ),
                   Row(
                     children: [
@@ -138,7 +183,9 @@ class ProfilePage extends StatelessWidget {
                               title: Text(AppLocalizations.of(context)!.user),
                               leading: const Icon(Icons.person),
                               minLeadingWidth: 16,
-                              onTap: () => Navigator.of(context).push(
+                              onTap: () =>
+                                  Navigator.of(context, rootNavigator: true)
+                                      .push(
                                 MaterialPageRoute(
                                   builder: (context) =>
                                       const SettingsUserPage(),
@@ -182,6 +229,7 @@ class ProfilePage extends StatelessWidget {
                   ),
                   LoadingTextButton(
                     onPressed: BlocProvider.of<AuthCubit>(context).logout,
+                    icon: const Icon(Icons.logout),
                     child: Text(AppLocalizations.of(context)!.logout),
                   ),
                 ],

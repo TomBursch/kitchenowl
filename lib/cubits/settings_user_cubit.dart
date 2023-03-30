@@ -21,7 +21,7 @@ class SettingsUserCubit extends Cubit<SettingsUserState> {
     user = userId != null
         ? await ApiService.getInstance().getUserById(userId!)
         : await ApiService.getInstance().getUser();
-    emit(state.copyWith(user: user, setAdmin: user?.admin));
+    emit(state.copyWith(user: user, setAdmin: user?.serverAdmin));
   }
 
   Future<void> updateUser({
@@ -37,8 +37,9 @@ class SettingsUserCubit extends Cubit<SettingsUserState> {
             userId!,
             name: name,
             password: password,
-            admin:
-                (state.setAdmin != state.user!.admin) ? state.setAdmin : null,
+            admin: (state.setAdmin != state.user!.serverAdmin)
+                ? state.setAdmin
+                : null,
           )
         : await ApiService.getInstance()
             .updateUser(name: name, password: password);

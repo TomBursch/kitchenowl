@@ -9,21 +9,18 @@ import 'package:kitchenowl/models/expense.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/expense_category.dart';
 import 'package:kitchenowl/models/household.dart';
-import 'package:kitchenowl/models/user.dart';
 import 'package:kitchenowl/widgets/expense_add_update/paid_for_widget.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
 class AddUpdateExpensePage extends StatefulWidget {
   final Household household;
   final Expense? expense;
-  final List<User> users;
 
-  const AddUpdateExpensePage({
+  AddUpdateExpensePage({
     super.key,
     this.expense,
-    required this.users,
     required this.household,
-  });
+  }) : assert(household.member != null);
 
   @override
   _AddUpdateExpensePageState createState() => _AddUpdateExpensePageState();
@@ -47,15 +44,16 @@ class _AddUpdateExpensePageState extends State<AddUpdateExpensePage> {
     if (widget.expense == null) {
       amountController.text = 0.toStringAsFixed(2);
       cubit = AddUpdateExpenseCubit(
-          widget.household,
-          Expense(
-            amount: 0,
-            paidById: BlocProvider.of<AuthCubit>(context).getUser()?.id ??
-                widget.users[0].id,
-            paidFor: widget.users
-                .map((e) => PaidForModel(userId: e.id, factor: 1))
-                .toList(),
-          ));
+        widget.household,
+        Expense(
+          amount: 0,
+          paidById: BlocProvider.of<AuthCubit>(context).getUser()?.id ??
+              widget.household.member![0].id,
+          paidFor: widget.household.member!
+              .map((e) => PaidForModel(userId: e.id, factor: 1))
+              .toList(),
+        ),
+      );
     } else {
       cubit = AddUpdateExpenseCubit(widget.household, widget.expense!);
     }
@@ -331,7 +329,7 @@ class _AddUpdateExpensePageState extends State<AddUpdateExpensePage> {
                               onChanged: (id) {
                                 if (id != null) cubit.setPaidById(id);
                               },
-                              items: widget.users
+                              items: (widget.household.member ?? const [])
                                   .map(
                                     (user) => DropdownMenuItem<int>(
                                       value: user.id,
@@ -356,10 +354,10 @@ class _AddUpdateExpensePageState extends State<AddUpdateExpensePage> {
               SliverList(
                 delegate: SliverChildBuilderDelegate(
                   (context, i) => PaidForWidget(
-                    user: widget.users[i],
+                    user: widget.household.member![i],
                     cubit: cubit,
                   ),
-                  childCount: widget.users.length,
+                  childCount: widget.household.member?.length ?? 0,
                 ),
               ),
               if (isUpdate)

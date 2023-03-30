@@ -59,10 +59,11 @@ class SliverItemGridList<T extends Item> extends StatelessWidget {
                 onPressed: onPressed,
                 onLongPressed: (onLongPressed ??
                         Nullable((Item item) async {
-                          final res = await Navigator.of(context)
-                              .push<UpdateValue<Item>>(
+                          final res =
+                              await Navigator.of(context, rootNavigator: true)
+                                  .push<UpdateValue<Item>>(
                             MaterialPageRoute(
-                              builder: (BuildContext context) => ItemPage(
+                              builder: (context) => ItemPage(
                                 item: item,
                                 shoppingList: shoppingList,
                                 categories: categories ?? const [],

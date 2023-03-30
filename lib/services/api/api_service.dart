@@ -19,6 +19,7 @@ export 'expense.dart';
 export 'tag.dart';
 export 'upload.dart';
 export 'category.dart';
+export 'household.dart';
 
 enum Connection {
   disconnected,

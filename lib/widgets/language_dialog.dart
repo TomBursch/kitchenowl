@@ -6,12 +6,14 @@ class LanguageDialog extends StatefulWidget {
   final String title;
   final String doneText;
   final String cancelText;
+  final String? initialLanguage;
 
   const LanguageDialog({
     Key? key,
     this.title = "",
     this.doneText = "",
     this.cancelText = "",
+    this.initialLanguage,
   }) : super(key: key);
 
   @override
@@ -20,6 +22,12 @@ class LanguageDialog extends StatefulWidget {
 
 class _LanguageDialogState extends State<LanguageDialog> {
   String? language;
+
+  @override
+  void initState() {
+    super.initState();
+    language = widget.initialLanguage;
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kitchenowl/app.dart';
 import 'package:kitchenowl/kitchenowl.dart';
+import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/widgets/expense_create_fab.dart';
 import 'package:kitchenowl/widgets/recipe_create_fab.dart';
 
@@ -52,6 +53,17 @@ enum ViewsEnum {
       default:
         return null;
     }
+  }
+
+  bool isViewActive(Household household) {
+    if (this == ViewsEnum.planner) {
+      return household.featurePlanner ?? true;
+    }
+    if (this == ViewsEnum.balances) {
+      return household.featureExpenses ?? true;
+    }
+
+    return true;
   }
 
   /// Adds all missing views

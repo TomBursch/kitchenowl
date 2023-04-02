@@ -40,9 +40,10 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
   Future<void> search(String query) => refresh(query: query);
 
   Future<void> add(String name, [String? description]) async {
+    if (state.selectedShoppinglist == null) return;
     await TransactionHandler.getInstance()
         .runTransaction(TransactionShoppingListAddItem(
-      shoppinglist: state.selectedShoppinglist,
+      shoppinglist: state.selectedShoppinglist!,
       name: name,
       description: description ?? '',
     ));
@@ -51,6 +52,7 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
 
   Future<void> remove(ShoppinglistItem item) async {
     final _state = state;
+    if (_state.selectedShoppinglist == null) return;
     final l = List.of(_state.listItems);
     l.remove(item);
     final recent = List.of(_state.recentItems);
@@ -77,7 +79,7 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
     }
     if (!await TransactionHandler.getInstance()
         .runTransaction(TransactionShoppingListDeleteItem(
-      shoppinglist: _state.selectedShoppinglist,
+      shoppinglist: _state.selectedShoppinglist!,
       item: item,
     ))) {
       await refresh();
@@ -160,10 +162,13 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
       ));
     }
 
-    final shoppingLists = TransactionHandler.getInstance()
+    final shoppingLists = await TransactionHandler.getInstance()
         .runTransaction(TransactionShoppingListGet(household: household));
 
-    final shoppinglist = state.selectedShoppinglist;
+    final shoppinglist =
+        state.selectedShoppinglist ?? shoppingLists.firstOrNull;
+
+    if (shoppinglist == null) return;
 
     Future<List<ShoppinglistItem>> items =
         TransactionHandler.getInstance().runTransaction(
@@ -212,7 +217,7 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
         ));
       }
       resState = SearchShoppinglistCubitState(
-        shoppinglists: await shoppingLists,
+        shoppinglists: shoppingLists,
         selectedShoppinglist: shoppinglist,
         result: loadedItems,
         query: query,
@@ -227,7 +232,7 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
         shoppinglist: shoppinglist,
       ));
       resState = ShoppinglistCubitState(
-        shoppinglists: await shoppingLists,
+        shoppinglists: shoppingLists,
         selectedShoppinglist: shoppinglist,
         listItems: await items,
         recentItems: await recent,
@@ -260,7 +265,7 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
 
 class ShoppinglistCubitState extends Equatable {
   final List<ShoppingList> shoppinglists;
-  final ShoppingList selectedShoppinglist;
+  final ShoppingList? selectedShoppinglist;
   final List<ShoppinglistItem> listItems;
   final List<ItemWithDescription> recentItems;
   final List<Category> categories;
@@ -269,7 +274,7 @@ class ShoppinglistCubitState extends Equatable {
 
   const ShoppinglistCubitState({
     this.shoppinglists = const [],
-    this.selectedShoppinglist = const ShoppingList.def(),
+    required this.selectedShoppinglist,
     this.listItems = const [],
     this.recentItems = const [],
     this.categories = const [],
@@ -343,7 +348,7 @@ class SearchShoppinglistCubitState extends ShoppinglistCubitState {
 
   const SearchShoppinglistCubitState({
     super.shoppinglists = const [],
-    super.selectedShoppinglist = const ShoppingList.def(),
+    required super.selectedShoppinglist,
     super.listItems = const [],
     super.recentItems = const [],
     super.categories = const [],

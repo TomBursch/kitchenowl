@@ -16,11 +16,6 @@ class PlannerPage extends StatefulWidget {
 
   @override
   _PlannerPageState createState() => _PlannerPageState();
-
-  @override
-  void onSelected(BuildContext context, bool alreadySelected) {
-    BlocProvider.of<PlannerCubit>(context).refresh();
-  }
 }
 
 class _PlannerPageState extends State<PlannerPage> {

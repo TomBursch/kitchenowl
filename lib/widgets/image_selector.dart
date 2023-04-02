@@ -10,7 +10,7 @@ class ImageSelector extends StatelessWidget {
   const ImageSelector({
     super.key,
     this.image,
-    required this.originalImage,
+    this.originalImage = "",
     required this.setImage,
   });
 

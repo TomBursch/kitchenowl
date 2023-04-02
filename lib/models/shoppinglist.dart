@@ -6,10 +6,6 @@ class ShoppingList extends Model {
 
   const ShoppingList({this.id, required this.name});
 
-  const ShoppingList.def()
-      : id = 1,
-        name = "";
-
   factory ShoppingList.fromJson(Map<String, dynamic> map) => ShoppingList(
         id: map['id'],
         name: map['name'],

@@ -1,4 +1,3 @@
-import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -21,42 +20,19 @@ class RecipeCreateFab extends StatelessWidget {
       distance: 70,
       openIcon: const Icon(Icons.add),
       children: [
-        OpenContainer(
-          useRootNavigator: true,
-          transitionType: ContainerTransitionType.fade,
+        KitchenOwlFab(
           openBuilder: (BuildContext ctx, VoidCallback _) {
             return AddUpdateRecipePage(
               household: BlocProvider.of<RecipeListCubit>(context).household,
             );
           },
-          openColor: Theme.of(context).scaffoldBackgroundColor,
           onClosed: (data) {
             _fabKey.currentState?.reset();
             if (data == UpdateEnum.updated) {
               BlocProvider.of<RecipeListCubit>(context).refresh();
             }
           },
-          closedElevation: 4,
-          closedShape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(
-              Radius.circular(14),
-            ),
-          ),
-          closedColor:
-              Theme.of(context).floatingActionButtonTheme.backgroundColor ??
-                  Theme.of(context).colorScheme.secondary,
-          closedBuilder: (BuildContext context, VoidCallback openContainer) {
-            return SizedBox(
-              height: 56,
-              width: 56,
-              child: Center(
-                child: Icon(
-                  Icons.note_add_rounded,
-                  color: Theme.of(context).colorScheme.onSecondary,
-                ),
-              ),
-            );
-          },
+          icon: Icons.note_add_rounded,
         ),
         FloatingActionButton(
           heroTag: null,

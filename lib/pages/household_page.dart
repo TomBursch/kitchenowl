@@ -1,9 +1,8 @@
-import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:kitchenowl/cubits/auth_cubit.dart';
 import 'package:kitchenowl/cubits/expense_list_cubit.dart';
+import 'package:kitchenowl/cubits/household_cubit.dart';
 import 'package:kitchenowl/cubits/planner_cubit.dart';
 import 'package:kitchenowl/cubits/recipe_list_cubit.dart';
 import 'package:kitchenowl/cubits/shoppinglist_cubit.dart';
@@ -27,6 +26,7 @@ class HouseholdPage extends StatefulWidget {
 class _HouseholdPageState extends State<HouseholdPage> {
   static const int _bottomAppBarSize = 5;
 
+  late final HouseholdCubit householdCubit;
   late final ShoppinglistCubit shoppingListCubit;
   late final RecipeListCubit recipeListCubit;
   late final PlannerCubit plannerCubit;
@@ -35,6 +35,7 @@ class _HouseholdPageState extends State<HouseholdPage> {
   @override
   void initState() {
     super.initState();
+    householdCubit = HouseholdCubit(widget.household);
     shoppingListCubit = ShoppinglistCubit(widget.household);
     recipeListCubit = RecipeListCubit(widget.household);
     plannerCubit = PlannerCubit(widget.household);
@@ -43,6 +44,7 @@ class _HouseholdPageState extends State<HouseholdPage> {
 
   @override
   void dispose() {
+    householdCubit.close();
     shoppingListCubit.close();
     recipeListCubit.close();
     plannerCubit.close();
@@ -50,27 +52,63 @@ class _HouseholdPageState extends State<HouseholdPage> {
     super.dispose();
   }
 
-  void _onItemTapped(BuildContext context, ViewsEnum page) {
-    context.go("/household/${widget.household.id}/${page.toString()}");
+  void _onItemTapped(
+    BuildContext context,
+    ViewsEnum tapped,
+    ViewsEnum current,
+  ) {
+    householdCubit.refresh();
+    switch (tapped) {
+      case ViewsEnum.items:
+        if (tapped == current) {
+          shoppingListCubit.refresh(query: '');
+        } else {
+          shoppingListCubit.refresh();
+        }
+        break;
+      case ViewsEnum.recipes:
+        if (tapped == current) {
+          recipeListCubit.refresh("");
+        } else {
+          recipeListCubit.refresh();
+        }
+        break;
+      case ViewsEnum.planner:
+        plannerCubit.refresh();
+        break;
+      case ViewsEnum.balances:
+        expenseListCubit.refresh();
+        break;
+      default:
+        break;
+    }
+    context.go("/household/${widget.household.id}/${tapped.toString()}");
   }
 
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
+        BlocProvider.value(value: householdCubit),
         BlocProvider.value(value: shoppingListCubit),
         BlocProvider.value(value: recipeListCubit),
         BlocProvider.value(value: plannerCubit),
         BlocProvider.value(value: expenseListCubit),
       ],
-      child: BlocBuilder<AuthCubit, AuthState>(
+      child: BlocBuilder<HouseholdCubit, HouseholdState>(
         builder: (context, state) {
-          List<ViewsEnum> pages = ViewsEnum.values;
+          List<ViewsEnum> pages =
+              (state.household.viewOrdering ?? ViewsEnum.values)
+                  .where((e) => e.isViewActive(state.household))
+                  .toList();
+
           int _selectedIndex = pages.indexWhere(
             (e) => GoRouter.of(context).location.contains(e.toString()),
           );
 
-          if (_selectedIndex < 0) return const SizedBox();
+          if (_selectedIndex < 0) {
+            return const SizedBox();
+          }
 
           final bool useBottomNavigationBar = getValueForScreenType<bool>(
             context: context,
@@ -108,7 +146,7 @@ class _HouseholdPageState extends State<HouseholdPage> {
                         .toList(),
                     selectedIndex: _selectedIndex,
                     onDestinationSelected: (i) =>
-                        _onItemTapped(context, pages[i]),
+                        _onItemTapped(context, pages[i], pages[_selectedIndex]),
                   ),
                 ),
                 Expanded(child: body),
@@ -132,7 +170,7 @@ class _HouseholdPageState extends State<HouseholdPage> {
                         .toList(),
                     selectedIndex: _selectedIndex,
                     onDestinationSelected: (i) =>
-                        _onItemTapped(context, pages[i]),
+                        _onItemTapped(context, pages[i], pages[_selectedIndex]),
                   )
                 : null,
           );

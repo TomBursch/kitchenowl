@@ -33,7 +33,7 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
   final TextEditingController descController = TextEditingController();
   final TextEditingController yieldsController = TextEditingController();
   final TextEditingController sourceController = TextEditingController();
-  late AddUpdateRecipeCubit cubit;
+  late final AddUpdateRecipeCubit cubit;
   bool isUpdate = false;
   bool isAdvancedTime = false;
 

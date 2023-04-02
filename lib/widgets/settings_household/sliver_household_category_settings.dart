@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:kitchenowl/cubits/settings_household_cubit.dart';
+import 'package:kitchenowl/cubits/household_add_update/household_update_cubit.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/widgets/dismissible_card.dart';
 import 'package:reorderables/reorderables.dart';
@@ -36,7 +36,7 @@ class SliverHouseholdCategorySettings extends StatelessWidget {
                   },
                 );
                 if (res != null) {
-                  BlocProvider.of<SettingsHouseholdCubit>(context)
+                  BlocProvider.of<HouseholdUpdateCubit>(context)
                       .addCategory(res);
                 }
               },
@@ -45,20 +45,20 @@ class SliverHouseholdCategorySettings extends StatelessWidget {
           ],
         ),
       ),
-      BlocBuilder<SettingsHouseholdCubit, SettingsHouseholdState>(
+      BlocBuilder<HouseholdUpdateCubit, HouseholdUpdateState>(
         buildWhen: (prev, curr) =>
             prev.categories != curr.categories ||
-            prev is LoadingSettingsHouseholdState,
+            prev is LoadingHouseholdUpdateState,
         builder: (context, state) {
-          if (state is LoadingSettingsHouseholdState) {
+          if (state is LoadingHouseholdUpdateState) {
             return const SliverToBoxAdapter(
               child: Center(child: CircularProgressIndicator()),
             );
           }
 
           return ReorderableSliverList(
-            onReorder: BlocProvider.of<SettingsHouseholdCubit>(context)
-                .reorderCategory,
+            onReorder:
+                BlocProvider.of<HouseholdUpdateCubit>(context).reorderCategory,
             buildDraggableFeedback: (_, c, w) => ConstrainedBox(
               constraints: c,
               child: w,
@@ -83,8 +83,7 @@ class SliverHouseholdCategorySettings extends StatelessWidget {
                   ));
                 },
                 onDismissed: (direction) {
-                  BlocProvider.of<SettingsHouseholdCubit>(context)
-                      .deleteCategory(
+                  BlocProvider.of<HouseholdUpdateCubit>(context).deleteCategory(
                     state.categories.elementAt(i),
                   );
                 },
@@ -108,7 +107,7 @@ class SliverHouseholdCategorySettings extends StatelessWidget {
                     },
                   );
                   if (res != null) {
-                    BlocProvider.of<SettingsHouseholdCubit>(context)
+                    BlocProvider.of<HouseholdUpdateCubit>(context)
                         .updateCategory(
                       state.categories.elementAt(i).copyWith(name: res),
                     );

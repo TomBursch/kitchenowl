@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:kitchenowl/cubits/settings_household_cubit.dart';
+import 'package:kitchenowl/cubits/household_add_update/household_add_update_cubit.dart';
 import 'package:kitchenowl/enums/views_enum.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
@@ -9,14 +9,23 @@ import 'package:reorderables/reorderables.dart';
 
 import 'view_settings_list_tile.dart';
 
-class SliverHouseholdFeatureSettings extends StatelessWidget {
-  const SliverHouseholdFeatureSettings({super.key});
+class SliverHouseholdFeatureSettings<
+    Cubit extends HouseholdAddUpdateCubit<State>,
+    State extends HouseholdAddUpdateState> extends StatelessWidget {
+  final bool languageCanBeChanged;
+  final bool askConfirmation;
+
+  const SliverHouseholdFeatureSettings({
+    super.key,
+    this.languageCanBeChanged = false,
+    this.askConfirmation = true,
+  });
 
   @override
   Widget build(BuildContext context) {
     return SliverList(
       delegate: SliverChildListDelegate([
-        BlocBuilder<SettingsHouseholdCubit, SettingsHouseholdState>(
+        BlocBuilder<Cubit, State>(
           builder: (context, state) => Row(
             children: [
               Expanded(
@@ -27,8 +36,7 @@ class SliverHouseholdFeatureSettings extends StatelessWidget {
               ),
               if (state.viewOrdering != ViewsEnum.values)
                 IconButton(
-                  onPressed: BlocProvider.of<SettingsHouseholdCubit>(context)
-                      .resetViewOrder,
+                  onPressed: BlocProvider.of<Cubit>(context).resetViewOrder,
                   icon: const Icon(Icons.restart_alt_rounded),
                   padding: EdgeInsets.zero,
                 ),
@@ -36,14 +44,13 @@ class SliverHouseholdFeatureSettings extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 8),
-        BlocBuilder<SettingsHouseholdCubit, SettingsHouseholdState>(
+        BlocBuilder<Cubit, State>(
           builder: (context, state) => ReorderableColumn(
-            onReorder:
-                BlocProvider.of<SettingsHouseholdCubit>(context).reorderView,
+            onReorder: BlocProvider.of<Cubit>(context).reorderView,
             children: state.viewOrdering
                 .sublist(0, state.viewOrdering.length - 1)
                 .map(
-                  (view) => ViewSettingsListTile(
+                  (view) => ViewSettingsListTile<Cubit>(
                     key: ValueKey(view),
                     view: view,
                     isActive: state.isViewActive(view),
@@ -61,36 +68,54 @@ class SliverHouseholdFeatureSettings extends StatelessWidget {
           title: Text(AppLocalizations.of(context)!.language),
           leading: const Icon(Icons.language_rounded),
           contentPadding: const EdgeInsets.only(left: 20, right: 5),
-          trailing: LoadingElevatedButton(
-            child: Text(AppLocalizations.of(context)!.add),
-            onPressed: () async {
-              final language = await showDialog<String>(
-                context: context,
-                builder: (BuildContext context) {
-                  return LanguageDialog(
-                    title: AppLocalizations.of(context)!.language,
-                    doneText: AppLocalizations.of(context)!.add,
-                    cancelText: AppLocalizations.of(context)!.cancel,
-                  );
-                },
-              );
-              if (language == null) return;
-              final confirm = await askForConfirmation(
-                context: context,
-                confirmText: AppLocalizations.of(context)!.add,
-                title: Text(
-                  AppLocalizations.of(context)!.addLanguage,
-                ),
-                content: Text(
-                  AppLocalizations.of(context)!.addLanguageConfirm(language),
-                ),
-              );
-              if (!confirm) return;
-              await ApiService.getInstance().importLanguage(
-                BlocProvider.of<SettingsHouseholdCubit>(context).household,
-                language,
-              );
-            },
+          trailing: FutureBuilder<Map<String, String>?>(
+            initialData: const {},
+            future: ApiService.getInstance().getSupportedLanguages(),
+            builder: (context, data) => BlocBuilder<Cubit, State>(
+              buildWhen: (previous, current) =>
+                  previous.language != current.language,
+              builder: (context, state) {
+                if (state.language != null && !languageCanBeChanged) {
+                  return Text(data.data?[state.language!] ?? state.language!);
+                }
+
+                return LoadingElevatedButton(
+                  child: Text(data.data?[state.language] ??
+                      state.language ??
+                      AppLocalizations.of(context)!.add),
+                  onPressed: () async {
+                    final language = await showDialog<String>(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return LanguageDialog(
+                          title: AppLocalizations.of(context)!.language,
+                          doneText: AppLocalizations.of(context)!.add,
+                          cancelText: AppLocalizations.of(context)!.cancel,
+                          initialLanguage: state.language ??
+                              AppLocalizations.of(context)!.localeName,
+                        );
+                      },
+                    );
+                    if (language == null) return;
+                    if (askConfirmation) {
+                      final confirm = await askForConfirmation(
+                        context: context,
+                        confirmText: AppLocalizations.of(context)!.add,
+                        title: Text(
+                          AppLocalizations.of(context)!.addLanguage,
+                        ),
+                        content: Text(
+                          AppLocalizations.of(context)!
+                              .addLanguageConfirm(language),
+                        ),
+                      );
+                      if (!confirm) return;
+                    }
+                    BlocProvider.of<Cubit>(context).setLanguage(language);
+                  },
+                );
+              },
+            ),
           ),
         ),
       ]),

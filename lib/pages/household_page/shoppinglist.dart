@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/cubits/shoppinglist_cubit.dart';
 import 'package:kitchenowl/enums/shoppinglist_sorting.dart';
-import 'package:kitchenowl/enums/views_enum.dart';
 import 'package:kitchenowl/models/category.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/kitchenowl.dart';
@@ -14,15 +13,6 @@ class ShoppinglistPage extends StatefulWidget {
 
   @override
   _ShoppinglistPageState createState() => _ShoppinglistPageState();
-
-  @override
-  void onSelected(BuildContext context, bool alreadySelected) {
-    if (alreadySelected) {
-      BlocProvider.of<ShoppinglistCubit>(context).refresh(query: '');
-    } else {
-      BlocProvider.of<ShoppinglistCubit>(context).refresh();
-    }
-  }
 }
 
 class _ShoppinglistPageState extends State<ShoppinglistPage> {
@@ -190,7 +180,8 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                                             shoppinglist.name,
                                             style: TextStyle(
                                               color: shoppinglist.id ==
-                                                      state.selectedShoppinglist
+                                                      state
+                                                          .selectedShoppinglist!
                                                           .id
                                                   ? Theme.of(context)
                                                       .colorScheme
@@ -199,7 +190,7 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                                             ),
                                           ),
                                           selected: shoppinglist.id ==
-                                              state.selectedShoppinglist.id,
+                                              state.selectedShoppinglist!.id,
                                           selectedColor: Theme.of(context)
                                               .colorScheme
                                               .secondary,

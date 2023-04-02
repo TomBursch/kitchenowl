@@ -13,15 +13,6 @@ class RecipeListPage extends StatefulWidget {
 
   @override
   _RecipeListPageState createState() => _RecipeListPageState();
-
-  @override
-  void onSelected(BuildContext context, bool alreadySelected) {
-    if (alreadySelected) {
-      BlocProvider.of<RecipeListCubit>(context).refresh("");
-    } else {
-      BlocProvider.of<RecipeListCubit>(context).refresh();
-    }
-  }
 }
 
 class _RecipeListPageState extends State<RecipeListPage> {

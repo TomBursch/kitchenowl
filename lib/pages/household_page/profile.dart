@@ -6,9 +6,9 @@ import 'package:go_router/go_router.dart';
 import 'package:kitchenowl/app.dart';
 import 'package:kitchenowl/config.dart';
 import 'package:kitchenowl/cubits/auth_cubit.dart';
-import 'package:kitchenowl/cubits/expense_list_cubit.dart';
+import 'package:kitchenowl/cubits/household_cubit.dart';
 import 'package:kitchenowl/cubits/settings_cubit.dart';
-import 'package:kitchenowl/pages/settings_household_page.dart';
+import 'package:kitchenowl/pages/household_update_page.dart';
 import 'package:kitchenowl/pages/settings_server_page.dart';
 import 'package:kitchenowl/pages/settings_user_page.dart';
 import 'package:kitchenowl/kitchenowl.dart';
@@ -130,28 +130,35 @@ class ProfilePage extends StatelessWidget {
                   if (!isOffline)
                     Row(
                       children: [
-                        Expanded(
-                          child: Card(
-                            child: ListTile(
-                              title:
-                                  Text(AppLocalizations.of(context)!.household),
-                              leading: const Icon(Icons.house_rounded),
-                              minLeadingWidth: 16,
-                              onTap: () =>
-                                  Navigator.of(context, rootNavigator: true)
-                                      .push(
-                                MaterialPageRoute(
-                                  builder: (ctx) => SettingsHouseholdPage(
-                                    household:
-                                        BlocProvider.of<ExpenseListCubit>(
-                                      context,
-                                    ).household,
-                                  ),
+                        if (true)
+                          Expanded(
+                            child: Card(
+                              child: ListTile(
+                                title: Text(
+                                  AppLocalizations.of(context)!.household,
                                 ),
+                                leading: const Icon(Icons.house_rounded),
+                                minLeadingWidth: 16,
+                                onTap: () async {
+                                  await Navigator.of(
+                                    context,
+                                    rootNavigator: true,
+                                  ).push(
+                                    MaterialPageRoute(
+                                      builder: (ctx) => HouseholdUpdatePage(
+                                        household:
+                                            BlocProvider.of<HouseholdCubit>(
+                                          context,
+                                        ).state.household,
+                                      ),
+                                    ),
+                                  );
+                                  BlocProvider.of<HouseholdCubit>(context)
+                                      .refresh();
+                                },
                               ),
                             ),
                           ),
-                        ),
                         if (user.hasServerAdminRights())
                           Expanded(
                             child: Card(

@@ -24,3 +24,4 @@ export 'sliver_implicit_animated_list.dart';
 export 'kitchenowl_choice_chip.dart';
 export 'left_right_wrap.dart';
 export 'trailing_icon_text_button.dart';
+export 'kitchenowl_fab.dart';

@@ -5,6 +5,8 @@ import 'package:kitchenowl/models/model.dart';
 class Household extends Model {
   final int id;
   final String name;
+  final String? image;
+  final String? language;
   final bool? featurePlanner;
   final bool? featureExpenses;
   final List<ViewsEnum>? viewOrdering;
@@ -13,6 +15,8 @@ class Household extends Model {
   const Household({
     required this.id,
     this.name = '',
+    this.image,
+    this.language,
     this.featurePlanner,
     this.featureExpenses,
     this.viewOrdering,
@@ -35,6 +39,8 @@ class Household extends Model {
     return Household(
       id: map['id'],
       name: map['name'],
+      image: map['photo'],
+      language: map['language'],
       featurePlanner: map['planner_feature'] ?? false,
       featureExpenses: map['expenses_feature'] ?? false,
       viewOrdering: viewOrdering,
@@ -44,6 +50,8 @@ class Household extends Model {
 
   Household copyWith({
     String? name,
+    String? image,
+    String? language,
     bool? featurePlanner,
     bool? featureExpenses,
     List<ViewsEnum>? viewOrdering,
@@ -51,6 +59,8 @@ class Household extends Model {
       Household(
         id: id,
         name: name ?? this.name,
+        image: image ?? this.image,
+        language: language ?? this.language,
         featurePlanner: featurePlanner ?? this.featurePlanner,
         featureExpenses: featureExpenses ?? this.featureExpenses,
         viewOrdering: viewOrdering ?? this.viewOrdering,
@@ -60,6 +70,8 @@ class Household extends Model {
   List<Object?> get props => [
         id,
         name,
+        image,
+        language,
         featurePlanner,
         featureExpenses,
         viewOrdering,
@@ -76,6 +88,12 @@ class Household extends Model {
     Map<String, dynamic> data = {
       "name": name,
     };
+    if (image != null) {
+      data['photo'] = image;
+    }
+    if (language != null) {
+      data['language'] = language;
+    }
     if (featurePlanner != null) {
       data['planner_feature'] = featurePlanner;
     }

@@ -412,4 +412,13 @@ class ApiService {
 
     return res.statusCode == 200;
   }
+
+  Future<Map<String, String>?> getSupportedLanguages() async {
+    final res = await get(
+      '/health/8M4F88S8ooi4sMbLBfkkV7ctWwgibW6V/supported-languages',
+    );
+    if (res.statusCode != 200) return null;
+
+    return Map<String, String>.from((jsonDecode(res.body)));
+  }
 }

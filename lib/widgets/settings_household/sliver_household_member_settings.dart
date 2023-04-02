@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/cubits/auth_cubit.dart';
-import 'package:kitchenowl/cubits/settings_household_cubit.dart';
+import 'package:kitchenowl/cubits/household_add_update/household_update_cubit.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/member.dart';
 import 'package:kitchenowl/widgets/dismissible_card.dart';
@@ -32,11 +32,11 @@ class SliverHouseholdMemberSettings extends StatelessWidget {
           ),
         ]),
       ),
-      BlocBuilder<SettingsHouseholdCubit, SettingsHouseholdState>(
+      BlocBuilder<HouseholdUpdateCubit, HouseholdUpdateState>(
         buildWhen: (prev, curr) =>
-            prev.member != curr.member || prev is LoadingSettingsHouseholdState,
+            prev.member != curr.member || prev is LoadingHouseholdUpdateState,
         builder: (context, state) {
-          if (state is LoadingSettingsHouseholdState) {
+          if (state is LoadingHouseholdUpdateState) {
             return const SliverToBoxAdapter(
               child: Center(child: CircularProgressIndicator()),
             );

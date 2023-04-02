@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:kitchenowl/cubits/settings_household_cubit.dart';
+import 'package:kitchenowl/cubits/household_add_update/household_update_cubit.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/widgets/dismissible_card.dart';
 import 'package:sliver_tools/sliver_tools.dart';
@@ -35,7 +35,7 @@ class SliverHouseholdShoppinglistSettings extends StatelessWidget {
                   },
                 );
                 if (res != null) {
-                  BlocProvider.of<SettingsHouseholdCubit>(context)
+                  BlocProvider.of<HouseholdUpdateCubit>(context)
                       .addShoppingList(res);
                 }
               },
@@ -44,12 +44,12 @@ class SliverHouseholdShoppinglistSettings extends StatelessWidget {
           ],
         ),
       ),
-      BlocBuilder<SettingsHouseholdCubit, SettingsHouseholdState>(
+      BlocBuilder<HouseholdUpdateCubit, HouseholdUpdateState>(
         buildWhen: (prev, curr) =>
             prev.shoppingLists != curr.shoppingLists ||
-            prev is LoadingSettingsHouseholdState,
+            prev is LoadingHouseholdUpdateState,
         builder: (context, state) {
-          if (state is LoadingSettingsHouseholdState) {
+          if (state is LoadingHouseholdUpdateState) {
             return const SliverToBoxAdapter(
               child: Center(child: CircularProgressIndicator()),
             );
@@ -78,7 +78,7 @@ class SliverHouseholdShoppinglistSettings extends StatelessWidget {
                   ));
                 },
                 onDismissed: (direction) {
-                  BlocProvider.of<SettingsHouseholdCubit>(context)
+                  BlocProvider.of<HouseholdUpdateCubit>(context)
                       .deleteShoppingList(
                     state.shoppingLists.elementAt(i),
                   );
@@ -107,7 +107,7 @@ class SliverHouseholdShoppinglistSettings extends StatelessWidget {
                     },
                   );
                   if (res != null) {
-                    BlocProvider.of<SettingsHouseholdCubit>(context)
+                    BlocProvider.of<HouseholdUpdateCubit>(context)
                         .updateShoppingList(
                       state.shoppingLists.elementAt(i).copyWith(name: res),
                     );

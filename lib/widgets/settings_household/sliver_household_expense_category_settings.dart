@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:kitchenowl/cubits/settings_household_cubit.dart';
+import 'package:kitchenowl/cubits/household_add_update/household_update_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/expense_category.dart';
@@ -13,11 +13,11 @@ class SliverHouseholdExpenseCategorySettings extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<SettingsHouseholdCubit, SettingsHouseholdState>(
+    return BlocBuilder<HouseholdUpdateCubit, HouseholdUpdateState>(
       buildWhen: (prev, curr) =>
           prev.featureExpenses != curr.featureExpenses ||
           prev.expenseCategories != curr.expenseCategories ||
-          prev is LoadingSettingsHouseholdState,
+          prev is LoadingHouseholdUpdateState,
       builder: (context, state) {
         if (!state.featureExpenses) {
           return const SliverToBoxAdapter(
@@ -25,7 +25,7 @@ class SliverHouseholdExpenseCategorySettings extends StatelessWidget {
           );
         }
 
-        if (state is LoadingSettingsHouseholdState) {
+        if (state is LoadingHouseholdUpdateState) {
           return SliverList(
             delegate: SliverChildListDelegate([
               Text(
@@ -54,16 +54,16 @@ class SliverHouseholdExpenseCategorySettings extends StatelessWidget {
                   onPressed: () async {
                     final res = await Navigator.of(context).push<UpdateEnum>(
                       MaterialPageRoute(
-                        builder: (context) => AddUpdateExpenseCategoryPage(
+                        builder: (ctx) => AddUpdateExpenseCategoryPage(
                           household:
-                              BlocProvider.of<SettingsHouseholdCubit>(context)
+                              BlocProvider.of<HouseholdUpdateCubit>(context)
                                   .household,
                         ),
                       ),
                     );
                     if (res == UpdateEnum.updated ||
                         res == UpdateEnum.updated) {
-                      BlocProvider.of<SettingsHouseholdCubit>(
+                      BlocProvider.of<HouseholdUpdateCubit>(
                         context,
                       ).refresh();
                     }
@@ -95,7 +95,7 @@ class SliverHouseholdExpenseCategorySettings extends StatelessWidget {
                   ));
                 },
                 onDismissed: (direction) {
-                  BlocProvider.of<SettingsHouseholdCubit>(context)
+                  BlocProvider.of<HouseholdUpdateCubit>(context)
                       .deleteExpenseCategory(
                     state.expenseCategories.elementAt(i),
                   );
@@ -107,14 +107,13 @@ class SliverHouseholdExpenseCategorySettings extends StatelessWidget {
                   final res = await Navigator.of(context)
                       .push<UpdateEnum>(MaterialPageRoute(
                     builder: (context) => AddUpdateExpenseCategoryPage(
-                      household:
-                          BlocProvider.of<SettingsHouseholdCubit>(context)
-                              .household,
+                      household: BlocProvider.of<HouseholdUpdateCubit>(context)
+                          .household,
                       category: state.expenseCategories.elementAt(i),
                     ),
                   ));
                   if (res == UpdateEnum.updated || res == UpdateEnum.updated) {
-                    BlocProvider.of<SettingsHouseholdCubit>(context).refresh();
+                    BlocProvider.of<HouseholdUpdateCubit>(context).refresh();
                   }
                 },
               ),

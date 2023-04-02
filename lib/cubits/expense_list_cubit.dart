@@ -7,14 +7,13 @@ import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/services/storage/storage.dart';
 import 'package:kitchenowl/services/transaction_handler.dart';
 import 'package:kitchenowl/services/transactions/expense.dart';
-import 'package:kitchenowl/services/transactions/household.dart';
 
 class ExpenseListCubit extends Cubit<ExpenseListCubitState> {
   final Household household;
   Future<void>? _refreshThread;
 
   ExpenseListCubit(this.household)
-      : super(LoadingExpenseListCubitState(household: household)) {
+      : super(const LoadingExpenseListCubitState()) {
     PreferenceStorage.getInstance().readInt(key: 'expenseSorting').then((i) {
       if (i != null && state.sorting.index != i) {
         setSorting(
@@ -83,8 +82,6 @@ class ExpenseListCubit extends Cubit<ExpenseListCubitState> {
 
   Future<void> _refresh() async {
     final sorting = state.sorting;
-    final fHousehold = TransactionHandler.getInstance()
-        .runTransaction(TransactionHouseholdGet(household: household));
     final categories = TransactionHandler.getInstance()
         .runTransaction(TransactionExpenseCategoriesGet(household: household));
     final expenses = TransactionHandler.getInstance()
@@ -105,7 +102,6 @@ class ExpenseListCubit extends Cubit<ExpenseListCubitState> {
     }
 
     emit(ExpenseListCubitState(
-      household: await fHousehold,
       expenses: await expenses,
       sorting: sorting,
       categories: await categories,
@@ -116,7 +112,6 @@ class ExpenseListCubit extends Cubit<ExpenseListCubitState> {
 }
 
 class ExpenseListCubitState extends Equatable {
-  final Household household;
   final List<Expense> expenses;
   final ExpenselistSorting sorting;
   final List<ExpenseCategory> categories;
@@ -124,7 +119,6 @@ class ExpenseListCubitState extends Equatable {
   final bool allLoaded;
 
   const ExpenseListCubitState({
-    required this.household,
     this.expenses = const [],
     this.sorting = ExpenselistSorting.all,
     this.allLoaded = false,
@@ -133,7 +127,6 @@ class ExpenseListCubitState extends Equatable {
   });
 
   ExpenseListCubitState copyWith({
-    Household? household,
     List<Expense>? expenses,
     ExpenselistSorting? sorting,
     bool? allLoaded,
@@ -141,7 +134,6 @@ class ExpenseListCubitState extends Equatable {
     Map<int, double>? categoryOverview,
   }) =>
       ExpenseListCubitState(
-        household: household ?? this.household,
         expenses: expenses ?? this.expenses,
         sorting: sorting ?? this.sorting,
         allLoaded: allLoaded ?? this.allLoaded,
@@ -151,16 +143,15 @@ class ExpenseListCubitState extends Equatable {
 
   @override
   List<Object?> get props =>
-      <Object>[sorting, categoryOverview, household] + categories + expenses;
+      <Object>[sorting, categoryOverview] + categories + expenses;
 }
 
 class LoadingExpenseListCubitState extends ExpenseListCubitState {
-  const LoadingExpenseListCubitState({required super.household, super.sorting});
+  const LoadingExpenseListCubitState({super.sorting});
 
   @override
   // ignore: long-parameter-list
   ExpenseListCubitState copyWith({
-    Household? household,
     List<Expense>? expenses,
     ExpenselistSorting? sorting,
     bool? allLoaded,
@@ -168,7 +159,6 @@ class LoadingExpenseListCubitState extends ExpenseListCubitState {
     Map<int, double>? categoryOverview,
   }) =>
       LoadingExpenseListCubitState(
-        household: household ?? this.household,
         sorting: sorting ?? this.sorting,
       );
 }

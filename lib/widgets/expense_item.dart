@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/cubits/auth_cubit.dart';
-import 'package:kitchenowl/cubits/expense_list_cubit.dart';
+import 'package:kitchenowl/cubits/household_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/models/expense.dart';
 import 'package:kitchenowl/pages/expense_page.dart';
@@ -72,9 +72,7 @@ class ExpenseItemWidget extends StatelessWidget {
                       .pushNamed<UpdateEnum>(
                     "/expense/${expense.id}",
                     arguments: [
-                      BlocProvider.of<ExpenseListCubit>(context)
-                          .state
-                          .household,
+                      BlocProvider.of<HouseholdCubit>(context).state.household,
                       expense,
                     ],
                   );
@@ -85,7 +83,7 @@ class ExpenseItemWidget extends StatelessWidget {
       ),
       onClosed: _handleUpdate,
       openBuilder: (ctx, toggle) => ExpensePage(
-        household: BlocProvider.of<ExpenseListCubit>(context).state.household,
+        household: BlocProvider.of<HouseholdCubit>(context).state.household,
         expense: expense,
       ),
     );

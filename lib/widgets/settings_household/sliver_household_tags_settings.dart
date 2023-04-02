@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:kitchenowl/cubits/settings_household_cubit.dart';
+import 'package:kitchenowl/cubits/household_add_update/household_update_cubit.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/tag.dart';
 import 'package:kitchenowl/widgets/dismissible_card.dart';
@@ -36,7 +36,7 @@ class SliverHouseholdTagsSettings extends StatelessWidget {
                   },
                 );
                 if (res != null) {
-                  BlocProvider.of<SettingsHouseholdCubit>(context).addTag(res);
+                  BlocProvider.of<HouseholdUpdateCubit>(context).addTag(res);
                 }
               },
               padding: EdgeInsets.zero,
@@ -44,11 +44,11 @@ class SliverHouseholdTagsSettings extends StatelessWidget {
           ],
         ),
       ),
-      BlocBuilder<SettingsHouseholdCubit, SettingsHouseholdState>(
+      BlocBuilder<HouseholdUpdateCubit, HouseholdUpdateState>(
         buildWhen: (prev, curr) =>
-            prev.tags != curr.tags || prev is LoadingSettingsHouseholdState,
+            prev.tags != curr.tags || prev is LoadingHouseholdUpdateState,
         builder: (context, state) {
-          if (state is LoadingSettingsHouseholdState) {
+          if (state is LoadingHouseholdUpdateState) {
             return const SliverToBoxAdapter(
               child: Center(child: CircularProgressIndicator()),
             );
@@ -73,7 +73,7 @@ class SliverHouseholdTagsSettings extends StatelessWidget {
                   ));
                 },
                 onDismissed: (direction) {
-                  BlocProvider.of<SettingsHouseholdCubit>(context)
+                  BlocProvider.of<HouseholdUpdateCubit>(context)
                       .deleteTag(state.tags.elementAt(i));
                 },
                 title: Text(state.tags.elementAt(i).name),
@@ -92,7 +92,7 @@ class SliverHouseholdTagsSettings extends StatelessWidget {
                     },
                   );
                   if (res != null) {
-                    BlocProvider.of<SettingsHouseholdCubit>(context).updateTag(
+                    BlocProvider.of<HouseholdUpdateCubit>(context).updateTag(
                       state.tags.elementAt(i).copyWith(name: res),
                     );
                   }

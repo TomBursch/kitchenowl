@@ -28,12 +28,15 @@ import 'package:kitchenowl/pages/splash_page.dart';
 import 'package:kitchenowl/pages/unreachable_page.dart';
 import 'package:kitchenowl/pages/household_page.dart';
 import 'package:kitchenowl/pages/unsupported_page.dart';
+import 'package:kitchenowl/services/transaction_handler.dart';
 import 'package:kitchenowl/styles/colors.dart';
 import 'package:kitchenowl/styles/themes.dart';
 import 'package:share_handler/share_handler.dart';
 
 class App extends StatefulWidget {
   static App? _instance;
+  final TransactionHandler transactionHandler =
+      TransactionHandler.getInstance(); // ToDo refactor to repository pattern
   final SettingsCubit _settingsCubit = SettingsCubit();
   final AuthCubit _authCubit = AuthCubit();
 
@@ -43,7 +46,7 @@ class App extends StatefulWidget {
   static bool get isForcedOffline =>
       _instance!._authCubit.state.forcedOfflineMode;
 
-  App({Key? key}) : super(key: key) {
+  App({super.key}) {
     _instance = this;
   }
 
@@ -80,61 +83,65 @@ class _AppState extends State<App> {
           currentFocus.focusedChild?.unfocus();
         }
       },
-      child: MultiBlocProvider(
-        providers: [
-          BlocProvider.value(value: widget._authCubit),
-          BlocProvider.value(value: widget._settingsCubit),
-        ],
-        child: BlocListener<AuthCubit, AuthState>(
-          bloc: widget._authCubit,
-          listenWhen: (previous, current) =>
-              previous != current &&
-              !(previous is Authenticated && current is Authenticated),
-          listener: (context, state) {
-            if (state is Setup) _router.go("/setup");
-            if (state is Onboarding) _router.go("/onboarding");
-            if (state is Unauthenticated) _router.go("/signin");
-            if (state is Unreachable) _router.go("/unreachable");
-            if (state is Unsupported) _router.go("/unsupported");
-            if (state is LoadingOnboard) _router.go("/");
-            if (state is Loading) _router.go("/");
-            if (state is Authenticated) _router.go("/household/1");
-          },
-          child: BlocBuilder<SettingsCubit, SettingsState>(
-            builder: (context, state) =>
-                DynamicColorBuilder(builder: (lightDynamic, darkDynamic) {
-              ColorScheme lightColorScheme = AppThemes.lightScheme;
-              ColorScheme darkColorScheme = AppThemes.darkScheme;
+      child: RepositoryProvider.value(
+        value: widget.transactionHandler,
+        child: MultiBlocProvider(
+          providers: [
+            BlocProvider.value(value: widget._authCubit),
+            BlocProvider.value(value: widget._settingsCubit),
+          ],
+          child: BlocListener<AuthCubit, AuthState>(
+            bloc: widget._authCubit,
+            listenWhen: (previous, current) =>
+                previous != current &&
+                !(previous is Authenticated && current is Authenticated),
+            listener: (context, state) {
+              if (state is Setup) _router.go("/setup");
+              if (state is Onboarding) _router.go("/onboarding");
+              if (state is Unauthenticated) _router.go("/signin");
+              if (state is Unreachable) _router.go("/unreachable");
+              if (state is Unsupported) _router.go("/unsupported");
+              if (state is LoadingOnboard) _router.go("/");
+              if (state is Loading) _router.go("/");
+              if (state is Authenticated) _router.go("/household/1");
+            },
+            child: BlocBuilder<SettingsCubit, SettingsState>(
+              builder: (context, state) =>
+                  DynamicColorBuilder(builder: (lightDynamic, darkDynamic) {
+                ColorScheme lightColorScheme = AppThemes.lightScheme;
+                ColorScheme darkColorScheme = AppThemes.darkScheme;
 
-              if (state.dynamicAccentColor &&
-                  lightDynamic != null &&
-                  darkDynamic != null) {
-                // On Android S+ devices, use the provided dynamic color scheme.
-                // (Recommended) Harmonize the dynamic color scheme' built-in semantic colors.
-                lightColorScheme = lightDynamic.harmonized();
-                darkColorScheme = darkDynamic.harmonized();
-              }
+                if (state.dynamicAccentColor &&
+                    lightDynamic != null &&
+                    darkDynamic != null) {
+                  // On Android S+ devices, use the provided dynamic color scheme.
+                  // (Recommended) Harmonize the dynamic color scheme' built-in semantic colors.
+                  lightColorScheme = lightDynamic.harmonized();
+                  darkColorScheme = darkDynamic.harmonized();
+                }
 
-              return MaterialApp.router(
-                builder: (context, child) =>
-                    AnnotatedRegion<SystemUiOverlayStyle>(
-                  value: _getSystemUI(context, state),
-                  child: child ?? const SizedBox(),
-                ),
-                onGenerateTitle: (BuildContext context) =>
-                    AppLocalizations.of(context)!.appTitle,
-                localizationsDelegates: AppLocalizations.localizationsDelegates,
-                supportedLocales:
-                    const [Locale('en')] + AppLocalizations.supportedLocales,
-                theme: AppThemes.light(lightColorScheme),
-                darkTheme: AppThemes.dark(darkColorScheme),
-                themeMode: state.themeMode,
-                color: AppColors.green,
-                debugShowCheckedModeBanner: false,
-                restorationScopeId: "com.tombursch.kitchenowl",
-                routerConfig: _router,
-              );
-            }),
+                return MaterialApp.router(
+                  builder: (context, child) =>
+                      AnnotatedRegion<SystemUiOverlayStyle>(
+                    value: _getSystemUI(context, state),
+                    child: child ?? const SizedBox(),
+                  ),
+                  onGenerateTitle: (BuildContext context) =>
+                      AppLocalizations.of(context)!.appTitle,
+                  localizationsDelegates:
+                      AppLocalizations.localizationsDelegates,
+                  supportedLocales:
+                      const [Locale('en')] + AppLocalizations.supportedLocales,
+                  theme: AppThemes.light(lightColorScheme),
+                  darkTheme: AppThemes.dark(darkColorScheme),
+                  themeMode: state.themeMode,
+                  color: AppColors.green,
+                  debugShowCheckedModeBanner: false,
+                  restorationScopeId: "com.tombursch.kitchenowl",
+                  routerConfig: _router,
+                );
+              }),
+            ),
           ),
         ),
       ),

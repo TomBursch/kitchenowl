@@ -1,7 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/models/household.dart';
-import 'package:kitchenowl/services/api/api_service.dart';
+import 'package:kitchenowl/services/transaction_handler.dart';
+import 'package:kitchenowl/services/transactions/household.dart';
 
 class HouseholdListCubit extends Cubit<HouseholdListState> {
   HouseholdListCubit() : super(const LoadingHouseholdListState([])) {
@@ -9,8 +10,8 @@ class HouseholdListCubit extends Cubit<HouseholdListState> {
   }
 
   Future<void> refresh() async {
-    Future<List<Household>?> households =
-        ApiService.getInstance().getAllHouseholds();
+    Future<List<Household>?> households = TransactionHandler.getInstance()
+        .runTransaction(TransactionHouseholdGetAll());
 
     emit(HouseholdListState(
       await households ?? [],

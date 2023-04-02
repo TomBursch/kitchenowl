@@ -1,6 +1,7 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:kitchenowl/cubits/settings_household_cubit.dart';
+import 'package:kitchenowl/cubits/household_add_update/household_update_cubit.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/widgets/settings_household/sliver_household_category_settings.dart';
@@ -10,22 +11,22 @@ import 'package:kitchenowl/widgets/settings_household/sliver_household_member_se
 import 'package:kitchenowl/widgets/settings_household/sliver_household_shoppinglist_settings.dart';
 import 'package:kitchenowl/widgets/settings_household/sliver_household_tags_settings.dart';
 
-class SettingsHouseholdPage extends StatefulWidget {
+class HouseholdUpdatePage extends StatefulWidget {
   final Household household;
 
-  const SettingsHouseholdPage({super.key, required this.household});
+  const HouseholdUpdatePage({super.key, required this.household});
 
   @override
-  _SettingsHouseholdPageState createState() => _SettingsHouseholdPageState();
+  _HouseholdUpdatePageState createState() => _HouseholdUpdatePageState();
 }
 
-class _SettingsHouseholdPageState extends State<SettingsHouseholdPage> {
-  late SettingsHouseholdCubit cubit;
+class _HouseholdUpdatePageState extends State<HouseholdUpdatePage> {
+  late HouseholdUpdateCubit cubit;
 
   @override
   void initState() {
     super.initState();
-    cubit = SettingsHouseholdCubit(widget.household);
+    cubit = HouseholdUpdateCubit(widget.household);
   }
 
   @override
@@ -56,7 +57,8 @@ class _SettingsHouseholdPageState extends State<SettingsHouseholdPage> {
                     scrollBehavior: const MaterialScrollBehavior()
                         .copyWith(scrollbars: false),
                     slivers: const [
-                      SliverHouseholdFeatureSettings(),
+                      SliverHouseholdFeatureSettings<HouseholdUpdateCubit,
+                          HouseholdUpdateState>(),
                       SliverHouseholdShoppinglistSettings(),
                       SliverHouseholdCategorySettings(),
                       SliverHouseholdTagsSettings(),

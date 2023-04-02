@@ -29,4 +29,13 @@ extension HouseholdApi on ApiService {
 
     return res.statusCode == 200;
   }
+
+  Future<bool> addHousehold(Household household) async {
+    final res = await post(
+      baseRoute,
+      jsonEncode(household.toJson()),
+    );
+
+    return res.statusCode == 200;
+  }
 }

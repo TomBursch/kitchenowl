@@ -2,16 +2,20 @@ import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:kitchenowl/enums/views_enum.dart';
 import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/models/server_settings.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
 import 'package:kitchenowl/services/storage/storage.dart';
+import 'package:kitchenowl/services/transaction_handler.dart';
+import 'package:kitchenowl/services/transactions/household.dart';
 
 class HouseholdCubit extends Cubit<HouseholdState> {
-  HouseholdCubit() : super(const HouseholdState()) {
-    ApiService.getInstance().addSettingsListener(serverSettingsUpdated);
-    load();
+  HouseholdCubit(Household household)
+      : super(HouseholdState(
+          household: household,
+        )) {
+    // ApiService.getInstance().addSettingsListener(serverSettingsUpdated);
+    refresh();
   }
 
   Future<void> serverSettingsUpdated() async {
@@ -34,7 +38,16 @@ class HouseholdCubit extends Cubit<HouseholdState> {
       serverSettings = ApiService.getInstance().serverSettings;
     }
 
-    emit(HouseholdState());
+    // emit(HouseholdState());
+  }
+
+  Future<void> refresh() async {
+    emit(state.copyWith(
+      household: await TransactionHandler.getInstance()
+          .runTransaction(TransactionHouseholdGet(
+        household: state.household,
+      )),
+    ));
   }
 
   // void setView(ViewsEnum view, bool value) {
@@ -84,10 +97,10 @@ class HouseholdCubit extends Cubit<HouseholdState> {
 }
 
 class HouseholdState extends Equatable {
-  final Household? household;
+  final Household household;
 
   const HouseholdState({
-    this.household,
+    required this.household,
   });
 
   HouseholdState copyWith({
@@ -99,15 +112,4 @@ class HouseholdState extends Equatable {
 
   @override
   List<Object?> get props => [household];
-
-  bool isViewActive(ViewsEnum view) {
-    if (view == ViewsEnum.planner) {
-      return household?.featurePlanner ?? true;
-    }
-    if (view == ViewsEnum.balances) {
-      return household?.featureExpenses ?? true;
-    }
-
-    return true;
-  }
 }

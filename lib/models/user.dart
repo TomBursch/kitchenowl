@@ -5,6 +5,7 @@ class User extends Model {
   final int id;
   final String username;
   final String name;
+  final String image;
   final bool serverAdmin;
   final List<Token>? tokens;
 
@@ -12,6 +13,7 @@ class User extends Model {
     required this.id,
     required this.name,
     required this.username,
+    this.image = "",
     this.serverAdmin = false,
     this.tokens,
   });
@@ -26,6 +28,7 @@ class User extends Model {
       id: map['id'],
       username: map['username'],
       name: map['name'],
+      image: map['photo'] ?? '',
       serverAdmin: map['admin'] ?? false,
       tokens: tokens,
     );
@@ -37,6 +40,7 @@ class User extends Model {
   @override
   Map<String, dynamic> toJson() => {
         "name": name,
+        "photo": image,
       };
 
   @override

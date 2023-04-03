@@ -5,7 +5,7 @@ import 'package:kitchenowl/models/model.dart';
 class Household extends Model {
   final int id;
   final String name;
-  final String? image;
+  final String image;
   final String? language;
   final bool? featurePlanner;
   final bool? featureExpenses;
@@ -15,7 +15,7 @@ class Household extends Model {
   const Household({
     required this.id,
     this.name = '',
-    this.image,
+    this.image = '',
     this.language,
     this.featurePlanner,
     this.featureExpenses,
@@ -39,7 +39,7 @@ class Household extends Model {
     return Household(
       id: map['id'],
       name: map['name'],
-      image: map['photo'],
+      image: map['photo'] ?? '',
       language: map['language'],
       featurePlanner: map['planner_feature'] ?? false,
       featureExpenses: map['expenses_feature'] ?? false,
@@ -88,7 +88,7 @@ class Household extends Model {
     Map<String, dynamic> data = {
       "name": name,
     };
-    if (image != null) {
+    if (image.isNotEmpty) {
       data['photo'] = image;
     }
     if (language != null) {
@@ -112,5 +112,7 @@ class Household extends Model {
   Map<String, dynamic> toJsonWithId() => toJson()
     ..addAll({
       "id": id,
+      if (member?.isNotEmpty ?? false)
+        "member": member!.map((e) => e.toJsonWithId()).toList(),
     });
 }

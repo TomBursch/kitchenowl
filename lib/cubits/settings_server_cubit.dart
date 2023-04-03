@@ -29,7 +29,7 @@ class SettingsServerCubit extends Cubit<SettingsServerState> {
   }
 
   Future<bool> deleteUser(User user) async {
-    final res = await ApiService.getInstance().removeUser(user);
+    final res = await ApiService.getInstance().deleteUser(user);
     refresh();
 
     return res;

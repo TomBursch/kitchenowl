@@ -30,15 +30,23 @@ class ProfilePage extends StatelessWidget {
           padding: const EdgeInsets.fromLTRB(16, 64, 16, 16),
           sliver: SliverList(
             delegate: SliverChildListDelegate([
-              Icon(
-                Icons.account_circle_rounded,
-                size: 90,
-                color: Theme.of(context).colorScheme.secondary,
+              CircleAvatar(
+                foregroundImage: user.image.isEmpty
+                    ? null
+                    : getImageProvider(
+                        context,
+                        user.image,
+                      ),
+                radius: 45,
+                child: Text(user.name.substring(0, 1), textScaleFactor: 2),
               ),
-              Text(
-                user.name,
-                style: Theme.of(context).textTheme.headlineSmall,
-                textAlign: TextAlign.center,
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                child: Text(
+                  user.name,
+                  style: Theme.of(context).textTheme.headlineSmall,
+                  textAlign: TextAlign.center,
+                ),
               ),
             ]),
           ),
@@ -55,28 +63,30 @@ class ProfilePage extends StatelessWidget {
                     title: Text(AppLocalizations.of(context)!.themeMode),
                     leading: const Icon(Icons.nights_stay_sharp),
                     contentPadding: const EdgeInsets.only(left: 20, right: 5),
-                    trailing: DropdownButton(
-                      value: state.themeMode,
-                      items: [
-                        DropdownMenuItem(
+                    horizontalTitleGap: 0,
+                    trailing: SegmentedButton(
+                      selected: {state.themeMode},
+                      segments: [
+                        ButtonSegment(
                           value: ThemeMode.light,
-                          child: Text(AppLocalizations.of(context)!.themeLight),
+                          icon: const Icon(Icons.light_mode_rounded),
+                          label: Text(AppLocalizations.of(context)!.themeLight),
                         ),
-                        DropdownMenuItem(
+                        ButtonSegment(
                           value: ThemeMode.dark,
-                          child: Text(AppLocalizations.of(context)!.themeDark),
+                          icon: const Icon(Icons.dark_mode_rounded),
+                          label: Text(AppLocalizations.of(context)!.themeDark),
                         ),
-                        DropdownMenuItem(
+                        ButtonSegment(
                           value: ThemeMode.system,
-                          child:
+                          icon: const Icon(Icons.brightness_medium_outlined),
+                          label:
                               Text(AppLocalizations.of(context)!.themeSystem),
                         ),
                       ],
-                      onChanged: (ThemeMode? value) {
-                        if (value != null) {
-                          BlocProvider.of<SettingsCubit>(context)
-                              .setTheme(value);
-                        }
+                      onSelectionChanged: (Set<ThemeMode> value) {
+                        BlocProvider.of<SettingsCubit>(context)
+                            .setTheme(value.first);
                       },
                     ),
                   ),
@@ -87,6 +97,7 @@ class ProfilePage extends StatelessWidget {
                           AppLocalizations.of(context)!.dynamicAccentColor,
                         ),
                         leading: const Icon(Icons.color_lens_rounded),
+                        horizontalTitleGap: 0,
                         contentPadding:
                             const EdgeInsets.only(left: 20, right: 0),
                         trailing: KitchenOwlSwitch(
@@ -105,6 +116,7 @@ class ProfilePage extends StatelessWidget {
                       title:
                           Text(AppLocalizations.of(context)!.forceOfflineMode),
                       leading: const Icon(Icons.mobiledata_off_outlined),
+                      horizontalTitleGap: 0,
                       contentPadding: const EdgeInsets.only(left: 20, right: 0),
                       trailing: BlocBuilder<AuthCubit, AuthState>(
                         buildWhen: (previous, current) =>

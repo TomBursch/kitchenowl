@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:kitchenowl/models/household.dart';
+import 'package:kitchenowl/models/member.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
 
 extension HouseholdApi on ApiService {
@@ -34,6 +35,33 @@ extension HouseholdApi on ApiService {
     final res = await post(
       baseRoute,
       jsonEncode(household.toJson()),
+    );
+
+    return res.statusCode == 200;
+  }
+
+  Future<bool> deleteHousehold(Household household) async {
+    final res = await delete('$baseRoute/${household.id}');
+
+    return res.statusCode == 200;
+  }
+
+  Future<bool> removeHouseholdMember(
+    Household household,
+    Member member,
+  ) async {
+    final res = await delete('$baseRoute/${household.id}/member/${member.id}');
+
+    return res.statusCode == 200;
+  }
+
+  Future<bool> putHouseholdMember(
+    Household household,
+    Member member,
+  ) async {
+    final res = await put(
+      '$baseRoute/${household.id}/member/${member.id}',
+      jsonEncode(member.toJson()),
     );
 
     return res.statusCode == 200;

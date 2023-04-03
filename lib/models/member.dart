@@ -15,6 +15,18 @@ class Member extends User {
     this.balance = 0,
   });
 
+  factory Member.fromUser(
+    User user, {
+    bool admin = false,
+  }) {
+    return Member(
+      id: user.id,
+      name: user.name,
+      username: user.username,
+      admin: admin,
+    );
+  }
+
   factory Member.fromJson(Map<String, dynamic> map) {
     return Member(
       id: map['id'],

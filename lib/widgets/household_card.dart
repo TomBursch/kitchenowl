@@ -28,7 +28,7 @@ class HouseholdCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            if (household.image != null)
+            if (household.image.isNotEmpty)
               ClipRRect(
                 borderRadius: const BorderRadius.vertical(
                   bottom: Radius.circular(14),
@@ -39,7 +39,7 @@ class HouseholdCard extends StatelessWidget {
                     fit: BoxFit.cover,
                     image: getImageProvider(
                       context,
-                      household.image!,
+                      household.image,
                     ),
                   ),
                 ),

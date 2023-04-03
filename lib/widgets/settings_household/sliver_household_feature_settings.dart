@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/cubits/household_add_update/household_add_update_cubit.dart';
@@ -34,7 +35,7 @@ class SliverHouseholdFeatureSettings<
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
               ),
-              if (state.viewOrdering != ViewsEnum.values)
+              if (!listEquals(state.viewOrdering, ViewsEnum.values))
                 IconButton(
                   onPressed: BlocProvider.of<Cubit>(context).resetViewOrder,
                   icon: const Icon(Icons.restart_alt_rounded),

@@ -13,8 +13,9 @@ class HouseholdListPage extends StatefulWidget {
   State<HouseholdListPage> createState() => _HouseholdListPageState();
 }
 
-class _HouseholdListPageState extends State<HouseholdListPage> {
+class _HouseholdListPageState extends State<HouseholdListPage> with RouteAware {
   late final HouseholdListCubit cubit;
+  RouteObserver? routeObserver;
 
   @override
   void initState() {
@@ -23,9 +24,27 @@ class _HouseholdListPageState extends State<HouseholdListPage> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final newRouteObserver =
+        RepositoryProvider.of<RouteObserver<ModalRoute>>(context);
+    if (routeObserver != newRouteObserver) {
+      routeObserver?.unsubscribe(this);
+      newRouteObserver.subscribe(this, ModalRoute.of(context)!);
+      routeObserver = newRouteObserver;
+    }
+  }
+
+  @override
   void dispose() {
+    routeObserver?.unsubscribe(this);
     cubit.close();
     super.dispose();
+  }
+
+  @override
+  void didPopNext() {
+    cubit.refresh();
   }
 
   @override

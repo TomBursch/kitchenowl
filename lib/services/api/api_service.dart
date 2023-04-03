@@ -196,6 +196,22 @@ class ApiService {
         },
       );
 
+  Future<http.Response> put(
+    String url,
+    dynamic body, {
+    Encoding? encoding,
+    Duration? timeout,
+  }) =>
+      _handleRequest(
+        timeout: timeout,
+        () => _client.put(
+          Uri.parse(baseUrl + url),
+          body: body,
+          headers: headers,
+          encoding: encoding,
+        ),
+      );
+
   Future<http.Response> delete(
     String url, {
     dynamic body,

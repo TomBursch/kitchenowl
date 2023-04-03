@@ -67,6 +67,14 @@ class SettingsUserCubit extends Cubit<SettingsUserState> {
     final success = await ApiService.getInstance().deleteLongLivedToken(token);
     if (success) refresh();
   }
+
+  Future<bool> deleteUser() async {
+    if (state.user != null) {
+      return ApiService.getInstance().deleteUser(state.user!);
+    }
+
+    return false;
+  }
 }
 
 class SettingsUserState extends Equatable {

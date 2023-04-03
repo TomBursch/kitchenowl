@@ -53,7 +53,7 @@ class ServerUserCard extends StatelessWidget {
         final res =
             await Navigator.of(context).push<UpdateEnum>(MaterialPageRoute(
           builder: (context) => SettingsUserPage(
-            userId: user.id,
+            user: user,
           ),
         ));
         if (res == UpdateEnum.updated) {

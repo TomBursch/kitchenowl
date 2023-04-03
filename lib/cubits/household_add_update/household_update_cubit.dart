@@ -63,8 +63,11 @@ class HouseholdUpdateCubit
   }
 
   @override
-  void setImage(NamedByteArray image) {
-    // TODO: implement setImage
+  void setImage(NamedByteArray image) async {
+    final imageUrl =
+        image.isEmpty ? '' : await ApiService.getInstance().uploadBytes(image);
+    emit(state.copyWith(image: imageUrl));
+    saveHousehold();
   }
 
   @override
@@ -93,8 +96,11 @@ class HouseholdUpdateCubit
     saveHousehold();
   }
 
-  void saveHousehold() {
-    ApiService.getInstance().updateHousehold(household.copyWith(
+  Future<bool> saveHousehold() {
+    return ApiService.getInstance().updateHousehold(household.copyWith(
+      name: state.name,
+      image: state.image,
+      language: state.language,
       featureExpenses: state.featureExpenses,
       featurePlanner: state.featurePlanner,
       viewOrdering: state.viewOrdering,
@@ -209,15 +215,32 @@ class HouseholdUpdateCubit
 
   @override
   Future<void> setLanguage(String langCode) {
-    return ApiService.getInstance().importLanguage(
-      household,
-      langCode,
-    );
+    if (state.language?.isNotEmpty ?? false) return Future.value();
+
+    emit(state.copyWith(language: langCode));
+
+    return saveHousehold();
+  }
+
+  Future<void> removeMember(Member member) {
+    return ApiService.getInstance()
+        .removeHouseholdMember(household, member)
+        .then((value) => refresh());
+  }
+
+  Future<void> putMember(Member member) {
+    return ApiService.getInstance()
+        .putHouseholdMember(household, member)
+        .then((value) => refresh());
+  }
+
+  Future<bool> deleteHousehold() {
+    return ApiService.getInstance().deleteHousehold(household);
   }
 }
 
 class HouseholdUpdateState extends HouseholdAddUpdateState {
-  final String? image;
+  final String image;
   final List<Member> member;
   final List<ShoppingList> shoppingLists;
   final Set<Tag> tags;
@@ -226,7 +249,8 @@ class HouseholdUpdateState extends HouseholdAddUpdateState {
 
   const HouseholdUpdateState({
     super.name,
-    this.image,
+    this.image = "",
+    super.language,
     super.featurePlanner = true,
     super.featureExpenses = true,
     super.viewOrdering = ViewsEnum.values,
@@ -240,6 +264,7 @@ class HouseholdUpdateState extends HouseholdAddUpdateState {
   HouseholdUpdateState copyWith({
     String? name,
     String? image,
+    String? language,
     bool? featurePlanner,
     bool? featureExpenses,
     List<ViewsEnum>? viewOrdering,
@@ -252,6 +277,7 @@ class HouseholdUpdateState extends HouseholdAddUpdateState {
       HouseholdUpdateState(
         name: name ?? this.name,
         image: image ?? this.image,
+        language: language ?? this.language,
         featurePlanner: featurePlanner ?? this.featurePlanner,
         featureExpenses: featureExpenses ?? this.featureExpenses,
         viewOrdering: viewOrdering ?? this.viewOrdering,

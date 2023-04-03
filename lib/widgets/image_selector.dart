@@ -6,18 +6,20 @@ class ImageSelector extends StatelessWidget {
   final NamedByteArray? image;
   final String originalImage;
   final void Function(NamedByteArray) setImage;
+  final EdgeInsetsGeometry? padding;
 
   const ImageSelector({
     super.key,
     this.image,
     this.originalImage = "",
+    this.padding = const EdgeInsets.all(16),
     required this.setImage,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.all(16),
+      margin: padding,
       constraints: const BoxConstraints.expand(height: 80),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(14),

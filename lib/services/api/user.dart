@@ -85,9 +85,18 @@ extension UserApi on ApiService {
     return res.statusCode == 200;
   }
 
-  Future<bool> removeUser(User user) async {
+  Future<bool> deleteUser(User user) async {
     final res = await delete('$baseRoute/${user.id}');
 
     return res.statusCode == 200;
+  }
+
+  Future<List<User>?> searchUser(String query) async {
+    final res = await get('$baseRoute/search?query=$query');
+    if (res.statusCode != 200) return null;
+
+    final body = List.from(jsonDecode(res.body));
+
+    return body.map((e) => User.fromJson(e)).toList();
   }
 }

@@ -106,7 +106,7 @@ class SliverHouseholdExpenseCategorySettings extends StatelessWidget {
                 onTap: () async {
                   final res = await Navigator.of(context)
                       .push<UpdateEnum>(MaterialPageRoute(
-                    builder: (context) => AddUpdateExpenseCategoryPage(
+                    builder: (ctx) => AddUpdateExpenseCategoryPage(
                       household: BlocProvider.of<HouseholdUpdateCubit>(context)
                           .household,
                       category: state.expenseCategories.elementAt(i),

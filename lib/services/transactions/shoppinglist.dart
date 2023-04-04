@@ -18,14 +18,14 @@ class TransactionShoppingListGet extends Transaction<List<ShoppingList>> {
 
   @override
   Future<List<ShoppingList>> runLocal() async {
-    return await TempStorage.getInstance().readShoppingLists() ?? [];
+    return await TempStorage.getInstance().readShoppingLists(household) ?? [];
   }
 
   @override
   Future<List<ShoppingList>?> runOnline() async {
     final lists = await ApiService.getInstance().getShoppingLists(household);
     if (lists != null) {
-      TempStorage.getInstance().writeShoppingLists(lists);
+      TempStorage.getInstance().writeShoppingLists(household, lists);
     }
 
     return lists;
@@ -81,7 +81,21 @@ class TransactionShoppingListSearchItem extends Transaction<List<Item>> {
 
   @override
   Future<List<Item>> runLocal() async {
-    final shoppinglist = await TempStorage.getInstance().readItems() ?? [];
+    final shoppinglist = await TempStorage.getInstance()
+        .readShoppingLists(household)
+        .then(
+          (shoppingLists) => Future.wait<List<ShoppinglistItem>?>(
+            shoppingLists
+                    ?.map((shoppingList) =>
+                        TempStorage.getInstance().readItems(shoppingList))
+                    .toList() ??
+                [],
+          ),
+        )
+        .then<List<ShoppinglistItem>>((e) => e.fold<List<ShoppinglistItem>>(
+              [],
+              (p, e) => p + (e ?? []),
+            ));
     shoppinglist
         .retainWhere((e) => e.name.toLowerCase().contains(query.toLowerCase()));
 
@@ -304,9 +318,11 @@ class TransactionShoppingListUpdateItem extends Transaction<bool> {
 }
 
 class TransactionShoppingListAddRecipeItems extends Transaction<bool> {
+  final ShoppingList shoppinglist;
   final List<RecipeItem> items;
 
   TransactionShoppingListAddRecipeItems({
+    required this.shoppinglist,
     required this.items,
     DateTime? timestamp,
   }) : super.internal(
@@ -322,6 +338,7 @@ class TransactionShoppingListAddRecipeItems extends Transaction<bool> {
         List.from(map['items'].map((e) => RecipeItem.fromJson(e)));
 
     return TransactionShoppingListAddRecipeItems(
+      shoppinglist: ShoppingList.fromJson(map['shoppinglist']),
       items: items,
       timestamp: timestamp,
     );
@@ -333,12 +350,13 @@ class TransactionShoppingListAddRecipeItems extends Transaction<bool> {
   @override
   Map<String, dynamic> toJson() => super.toJson()
     ..addAll({
+      "shoppinglist": shoppinglist.toJsonWithId(),
       "items": items.map((e) => e.toJsonWithId()).toList(),
     });
 
   @override
   Future<bool> runLocal() async {
-    final list = await TempStorage.getInstance().readItems(null) ?? [];
+    final list = await TempStorage.getInstance().readItems(shoppinglist) ?? [];
     for (final item in items) {
       final int i = list.indexWhere((e) => e.id == item.id);
       if (i >= 0) {
@@ -348,13 +366,13 @@ class TransactionShoppingListAddRecipeItems extends Transaction<bool> {
         list.add(item.toShoppingListItem());
       }
     }
-    TempStorage.getInstance().writeItems(null, list);
+    TempStorage.getInstance().writeItems(shoppinglist, list);
 
     return true;
   }
 
   @override
   Future<bool?> runOnline() {
-    return ApiService.getInstance().addRecipeItems(items);
+    return ApiService.getInstance().addRecipeItems(shoppinglist, items);
   }
 }

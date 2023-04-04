@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +9,7 @@ import 'package:kitchenowl/config.dart';
 import 'package:kitchenowl/cubits/auth_cubit.dart';
 import 'package:kitchenowl/cubits/household_cubit.dart';
 import 'package:kitchenowl/cubits/settings_cubit.dart';
+import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/pages/household_update_page.dart';
 import 'package:kitchenowl/pages/settings_server_page.dart';
 import 'package:kitchenowl/pages/settings_user_page.dart';
@@ -130,47 +132,54 @@ class ProfilePage extends StatelessWidget {
                         ),
                       ),
                     ),
-                  if (!isOffline)
-                    Card(
-                      child: ListTile(
-                        title: Text(AppLocalizations.of(context)!.serverChange),
-                        leading: const Icon(Icons.swap_horiz_rounded),
-                        minLeadingWidth: 16,
-                        onTap: () => context.go("/household"),
-                      ),
+                  Card(
+                    child: ListTile(
+                      title: Text(AppLocalizations.of(context)!.serverChange),
+                      leading: const Icon(Icons.swap_horiz_rounded),
+                      minLeadingWidth: 16,
+                      onTap: () => context.go("/household"),
                     ),
+                  ),
                   if (!isOffline)
                     Row(
                       children: [
-                        if (true)
-                          Expanded(
-                            child: Card(
-                              child: ListTile(
-                                title: Text(
-                                  AppLocalizations.of(context)!.household,
-                                ),
-                                leading: const Icon(Icons.house_rounded),
-                                minLeadingWidth: 16,
-                                onTap: () async {
-                                  await Navigator.of(
-                                    context,
-                                    rootNavigator: true,
-                                  ).push(
-                                    MaterialPageRoute(
-                                      builder: (ctx) => HouseholdUpdatePage(
-                                        household:
-                                            BlocProvider.of<HouseholdCubit>(
-                                          context,
-                                        ).state.household,
+                        BlocBuilder<HouseholdCubit, HouseholdState>(
+                          builder: ((context, state) {
+                            if (!(state.household.member
+                                    ?.firstWhereOrNull(
+                                      (e) => user.id == e.id,
+                                    )
+                                    ?.hasAdminRights() ??
+                                true)) return const SizedBox();
+
+                            return Expanded(
+                              child: Card(
+                                child: ListTile(
+                                  title: Text(
+                                    AppLocalizations.of(context)!.household,
+                                  ),
+                                  leading: const Icon(Icons.house_rounded),
+                                  minLeadingWidth: 16,
+                                  onTap: () async {
+                                    final res = await Navigator.of(
+                                      context,
+                                      rootNavigator: true,
+                                    ).push<UpdateEnum>(
+                                      MaterialPageRoute(
+                                        builder: (ctx) => HouseholdUpdatePage(
+                                          household: state.household,
+                                        ),
                                       ),
-                                    ),
-                                  );
-                                  BlocProvider.of<HouseholdCubit>(context)
-                                      .refresh();
-                                },
+                                    );
+                                    if (res == UpdateEnum.deleted) return;
+                                    BlocProvider.of<HouseholdCubit>(context)
+                                        .refresh();
+                                  },
+                                ),
                               ),
-                            ),
-                          ),
+                            );
+                          }),
+                        ),
                         if (user.hasServerAdminRights())
                           Expanded(
                             child: Card(

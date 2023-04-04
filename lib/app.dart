@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:animations/animations.dart';
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +12,7 @@ import 'package:go_router/go_router.dart';
 import 'package:kitchenowl/cubits/auth_cubit.dart';
 import 'package:kitchenowl/cubits/settings_cubit.dart';
 import 'package:kitchenowl/helpers/fade_through_transition_page.dart';
+import 'package:kitchenowl/helpers/shared_axis_transition_page.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/expense.dart';
 import 'package:kitchenowl/models/household.dart';
@@ -32,6 +34,7 @@ import 'package:kitchenowl/services/transaction_handler.dart';
 import 'package:kitchenowl/styles/colors.dart';
 import 'package:kitchenowl/styles/themes.dart';
 import 'package:share_handler/share_handler.dart';
+import 'package:tuple/tuple.dart';
 
 class App extends StatefulWidget {
   static App? _instance;
@@ -105,9 +108,8 @@ class _AppState extends State<App> {
                 if (state is Unauthenticated) _router.go("/signin");
                 if (state is Unreachable) _router.go("/unreachable");
                 if (state is Unsupported) _router.go("/unsupported");
-                if (state is LoadingOnboard) _router.go("/");
                 if (state is Loading) _router.go("/");
-                if (state is Authenticated) _router.go("/household/1");
+                if (state is Authenticated) _router.go("/household");
               },
               child: BlocBuilder<SettingsCubit, SettingsState>(
                 builder: (context, state) =>
@@ -192,7 +194,8 @@ class _AppState extends State<App> {
 
   void _handleSharedMedia(SharedMedia media) {
     if (mounted && media.content != null) {
-      _router.go("/household/1/recipes/scrape?url=\"${media.content!}\"");
+      _router
+          .go("/household/1/recipes/scrape?url=\"${media.content!}\""); //TODO
     }
   }
 }
@@ -210,7 +213,6 @@ final _router = GoRouter(
     if (authState is Unauthenticated) return "/signin";
     if (authState is Unreachable) return "/unreachable";
     if (authState is Unsupported) return "/unsupported";
-    if (authState is LoadingOnboard) return "/";
     if (authState is Loading) return "/";
 
     return null;
@@ -220,10 +222,15 @@ final _router = GoRouter(
   routes: [
     GoRoute(
       path: '/',
-      builder: (context, state) => const SplashPage(),
+      pageBuilder: (context, state) => SharedAxisTransitionPage(
+        key: state.pageKey,
+        name: state.name,
+        transitionType: SharedAxisTransitionType.scaled,
+        child: const SplashPage(),
+      ),
       redirect: (BuildContext context, GoRouterState state) {
         final authState = BlocProvider.of<AuthCubit>(context).state;
-        if (authState is! LoadingOnboard && authState is! Loading) {
+        if (authState is! Loading) {
           return "/household";
         }
 
@@ -232,7 +239,11 @@ final _router = GoRouter(
     ),
     GoRoute(
       path: '/setup',
-      builder: (context, state) => const SetupPage(),
+      pageBuilder: (context, state) => SharedAxisTransitionPage(
+        key: state.pageKey,
+        name: state.name,
+        child: const SetupPage(),
+      ),
       redirect: (BuildContext context, GoRouterState state) {
         final authState = BlocProvider.of<AuthCubit>(context).state;
 
@@ -241,7 +252,11 @@ final _router = GoRouter(
     ),
     GoRoute(
       path: '/onboarding',
-      builder: (context, state) => const OnboardingPage(),
+      pageBuilder: (context, state) => SharedAxisTransitionPage(
+        key: state.pageKey,
+        name: state.name,
+        child: const OnboardingPage(),
+      ),
       redirect: (BuildContext context, GoRouterState state) {
         final authState = BlocProvider.of<AuthCubit>(context).state;
 
@@ -250,7 +265,11 @@ final _router = GoRouter(
     ),
     GoRoute(
       path: '/signin',
-      builder: (context, state) => const LoginPage(),
+      pageBuilder: (context, state) => SharedAxisTransitionPage(
+        key: state.pageKey,
+        name: state.name,
+        child: const LoginPage(),
+      ),
       redirect: (BuildContext context, GoRouterState state) {
         final authState = BlocProvider.of<AuthCubit>(context).state;
 
@@ -259,7 +278,12 @@ final _router = GoRouter(
     ),
     GoRoute(
       path: '/unsupported',
-      builder: (context, state) => const UnsupportedPage(),
+      pageBuilder: (context, state) => SharedAxisTransitionPage(
+        key: state.pageKey,
+        name: state.name,
+        transitionType: SharedAxisTransitionType.scaled,
+        child: const UnsupportedPage(),
+      ),
       redirect: (BuildContext context, GoRouterState state) {
         final authState = BlocProvider.of<AuthCubit>(context).state;
 
@@ -268,7 +292,12 @@ final _router = GoRouter(
     ),
     GoRoute(
       path: '/unreachable',
-      builder: (context, state) => const UnreachablePage(),
+      pageBuilder: (context, state) => SharedAxisTransitionPage(
+        key: state.pageKey,
+        name: state.name,
+        transitionType: SharedAxisTransitionType.scaled,
+        child: const UnreachablePage(),
+      ),
       redirect: (BuildContext context, GoRouterState state) {
         final authState = BlocProvider.of<AuthCubit>(context).state;
 
@@ -277,7 +306,12 @@ final _router = GoRouter(
     ),
     GoRoute(
       path: "/household",
-      builder: (context, state) => const HouseholdListPage(),
+      pageBuilder: (context, state) => SharedAxisTransitionPage(
+        key: state.pageKey,
+        name: state.name,
+        transitionType: SharedAxisTransitionType.scaled,
+        child: const HouseholdListPage(),
+      ),
       routes: [
         GoRoute(
           name: "household",
@@ -316,18 +350,27 @@ final _router = GoRouter(
                     GoRoute(
                       parentNavigatorKey: _rootNavigatorKey,
                       path: 'details/:recipeId',
-                      builder: (context, state) => RecipePage(
-                        recipe: (state.extra as Recipe?) ??
-                            Recipe(
-                              id: int.tryParse(state.params['recipeId'] ?? ''),
-                            ),
-                        household: Household(
-                          id: int.tryParse(state.params['id'] ?? '') ?? -1,
-                        ),
-                        updateOnPlanningEdit:
-                            state.queryParams['updateOnPlanningEdit'] ==
-                                true.toString(),
-                      ),
+                      builder: (context, state) {
+                        final extra =
+                            (state.extra as Tuple2<Household, Recipe>?);
+
+                        return RecipePage(
+                          recipe: extra?.item2 ??
+                              Recipe(
+                                id: int.tryParse(
+                                  state.params['recipeId'] ?? '',
+                                ),
+                              ),
+                          household: extra?.item1 ??
+                              Household(
+                                id: int.tryParse(state.params['id'] ?? '') ??
+                                    -1,
+                              ),
+                          updateOnPlanningEdit:
+                              state.queryParams['updateOnPlanningEdit'] ==
+                                  true.toString(),
+                        );
+                      },
                     ),
                     GoRoute(
                       parentNavigatorKey: _rootNavigatorKey,

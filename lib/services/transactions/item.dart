@@ -1,3 +1,4 @@
+import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/models/recipe.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
@@ -39,17 +40,23 @@ class TransactionItemUpdate extends Transaction<bool> {
 }
 
 class TransactionItemGetRecipes extends Transaction<List<Recipe>> {
+  final Household? household;
   final Item item;
 
-  TransactionItemGetRecipes({required this.item, DateTime? timestamp})
-      : super.internal(
+  TransactionItemGetRecipes({
+    required this.household,
+    required this.item,
+    DateTime? timestamp,
+  }) : super.internal(
           timestamp ?? DateTime.now(),
           "TransactionItemGetRecipes",
         );
 
   @override
   Future<List<Recipe>> runLocal() async {
-    final recipes = (await TempStorage.getInstance().readRecipes()) ?? [];
+    if (household == null) return [];
+    final recipes =
+        (await TempStorage.getInstance().readRecipes(household!)) ?? [];
     recipes.retainWhere((e) {
       e.items.retainWhere((e) => e.id == item.id);
 

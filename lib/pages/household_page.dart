@@ -95,7 +95,12 @@ class _HouseholdPageState extends State<HouseholdPage> {
         BlocProvider.value(value: plannerCubit),
         BlocProvider.value(value: expenseListCubit),
       ],
-      child: BlocBuilder<HouseholdCubit, HouseholdState>(
+      child: BlocConsumer<HouseholdCubit, HouseholdState>(
+        listener: (context, state) {
+          if (state is NotFoundHouseholdState) {
+            context.go("/household");
+          }
+        },
         builder: (context, state) {
           List<ViewsEnum> pages =
               (state.household.viewOrdering ?? ViewsEnum.values)

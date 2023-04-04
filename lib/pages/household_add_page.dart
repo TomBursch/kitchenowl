@@ -6,7 +6,9 @@ import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/widgets/settings_household/sliver_household_feature_settings.dart';
 
 class HouseholdAddPage extends StatefulWidget {
-  const HouseholdAddPage({super.key});
+  final String? locale;
+
+  const HouseholdAddPage({super.key, this.locale});
 
   @override
   State<HouseholdAddPage> createState() => _HouseholdAddPageState();
@@ -18,7 +20,7 @@ class _HouseholdAddPageState extends State<HouseholdAddPage> {
   @override
   void initState() {
     super.initState();
-    cubit = HouseholdAddCubit();
+    cubit = HouseholdAddCubit(widget.locale);
   }
 
   @override
@@ -68,6 +70,7 @@ class _HouseholdAddPageState extends State<HouseholdAddPage> {
                   HouseholdAddState>(
                 askConfirmation: false,
                 languageCanBeChanged: true,
+                showProfile: false,
               ),
             ),
             SliverPadding(

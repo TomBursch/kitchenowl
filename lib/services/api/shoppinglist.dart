@@ -33,11 +33,10 @@ extension ShoppinglistApi on ApiService {
   }
 
   Future<bool> updateShoppingList(
-    Household household,
     ShoppingList shoppingList,
   ) async {
     final res = await post(
-      route(household: household, shoppinglist: shoppingList),
+      route(shoppinglist: shoppingList),
       jsonEncode(shoppingList.toJson()),
     );
 
@@ -45,11 +44,9 @@ extension ShoppinglistApi on ApiService {
   }
 
   Future<bool> deleteShoppingList(
-    Household household,
     ShoppingList shoppingList,
   ) async {
-    final res =
-        await delete(route(household: household, shoppinglist: shoppingList));
+    final res = await delete(route(shoppinglist: shoppingList));
 
     return res.statusCode == 200;
   }
@@ -94,9 +91,12 @@ extension ShoppinglistApi on ApiService {
     return res.statusCode == 200;
   }
 
-  Future<bool> addRecipeItems(List<RecipeItem> items) async {
+  Future<bool> addRecipeItems(
+    ShoppingList shoppinglist,
+    List<RecipeItem> items,
+  ) async {
     final res = await post(
-      '${route()}/recipeitems',
+      '${route(shoppinglist: shoppinglist)}/recipeitems',
       jsonEncode({'items': items.map((e) => e.toJsonWithId()).toList()}),
     );
 

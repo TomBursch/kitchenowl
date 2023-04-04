@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
 import 'package:kitchenowl/services/storage/temp_storage.dart';
@@ -12,20 +13,21 @@ class TransactionHouseholdGetAll extends Transaction<List<Household>> {
 
   @override
   Future<List<Household>> runLocal() async {
-    // return (await TempStorage.getInstance().readUsers()) ?? const [];
-    return const [];
+    return (await TempStorage.getInstance().readHouseholds()) ?? const [];
   }
 
   @override
   Future<List<Household>?> runOnline() async {
     final households = await ApiService.getInstance().getAllHouseholds();
-    // if (users != null) TempStorage.getInstance().writeUsers(users);
+    if (households != null) {
+      TempStorage.getInstance().writeHouseholds(households);
+    }
 
     return households;
   }
 }
 
-class TransactionHouseholdGet extends Transaction<Household> {
+class TransactionHouseholdGet extends Transaction<Household?> {
   final Household household;
 
   TransactionHouseholdGet({required this.household, DateTime? timestamp})
@@ -35,16 +37,26 @@ class TransactionHouseholdGet extends Transaction<Household> {
         );
 
   @override
-  Future<Household> runLocal() async {
-    // return (await TempStorage.getInstance().readUsers()) ?? const [];
-    return household;
+  Future<Household?> runLocal() async {
+    return (await TempStorage.getInstance().readHouseholds())
+        ?.firstWhereOrNull((e) => e.id == household.id);
   }
 
   @override
   Future<Household?> runOnline() async {
-    final households = await ApiService.getInstance().getHousehold(household);
-    // if (users != null) TempStorage.getInstance().writeUsers(users);
+    final household =
+        await ApiService.getInstance().getHousehold(this.household);
+    if (household != null) {
+      final households = await TempStorage.getInstance().readHouseholds() ?? [];
+      final i = households.indexWhere((e) => e.id == household.id);
+      if (i >= 0) {
+        households[i] = household;
+      } else {
+        households.add(household);
+      }
+      TempStorage.getInstance().writeHouseholds(households);
+    }
 
-    return households;
+    return household;
   }
 }

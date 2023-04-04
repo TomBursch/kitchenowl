@@ -22,8 +22,12 @@ class HouseholdUpdateCubit
           featurePlanner: household.featurePlanner ?? true,
           viewOrdering: household.viewOrdering ?? ViewsEnum.values,
           member: household.member ?? const [],
+          language: household.language,
         )) {
     refresh();
+    ApiService.getInstance()
+        .getSupportedLanguages()
+        .then((value) => emit(state.copyWith(supportedLanguages: value)));
   }
 
   Future<void> refresh() async {
@@ -46,6 +50,9 @@ class HouseholdUpdateCubit
       featureExpenses: household.featureExpenses ?? true,
       featurePlanner: household.featurePlanner ?? true,
       viewOrdering: household.viewOrdering ?? ViewsEnum.values,
+      language: household.language,
+      supportedLanguages: state.supportedLanguages,
+      image: household.image,
       member: household.member ?? this.household.member ?? const [],
       shoppingLists: await shoppingLists ?? const [],
       tags: await tags ?? {},
@@ -130,9 +137,8 @@ class HouseholdUpdateCubit
   }
 
   Future<bool> deleteShoppingList(ShoppingList shoppingList) async {
-    if (shoppingList.id == 1) return false;
-    final res = await ApiService.getInstance()
-        .deleteShoppingList(household, shoppingList);
+    if (household.defaultShoppingList == shoppingList) return false;
+    final res = await ApiService.getInstance().deleteShoppingList(shoppingList);
     refresh();
 
     return res;
@@ -147,8 +153,7 @@ class HouseholdUpdateCubit
   }
 
   Future<bool> updateShoppingList(ShoppingList shoppingList) async {
-    final res = await ApiService.getInstance()
-        .updateShoppingList(household, shoppingList);
+    final res = await ApiService.getInstance().updateShoppingList(shoppingList);
     refresh();
 
     return res;
@@ -206,15 +211,14 @@ class HouseholdUpdateCubit
   }
 
   Future<bool> updateExpenseCategory(ExpenseCategory category) async {
-    final res = await ApiService.getInstance()
-        .updateExpenseCategory(household, category);
+    final res = await ApiService.getInstance().updateExpenseCategory(category);
     refresh();
 
     return res;
   }
 
   @override
-  Future<void> setLanguage(String langCode) {
+  Future<void> setLanguage(String? langCode) {
     if (state.language?.isNotEmpty ?? false) return Future.value();
 
     emit(state.copyWith(language: langCode));
@@ -254,6 +258,7 @@ class HouseholdUpdateState extends HouseholdAddUpdateState {
     super.featurePlanner = true,
     super.featureExpenses = true,
     super.viewOrdering = ViewsEnum.values,
+    super.supportedLanguages,
     this.member = const [],
     this.shoppingLists = const [],
     this.tags = const {},
@@ -268,6 +273,7 @@ class HouseholdUpdateState extends HouseholdAddUpdateState {
     bool? featurePlanner,
     bool? featureExpenses,
     List<ViewsEnum>? viewOrdering,
+    Map<String, String>? supportedLanguages,
     List<Member>? member,
     List<ShoppingList>? shoppingLists,
     Set<Tag>? tags,
@@ -281,6 +287,7 @@ class HouseholdUpdateState extends HouseholdAddUpdateState {
         featurePlanner: featurePlanner ?? this.featurePlanner,
         featureExpenses: featureExpenses ?? this.featureExpenses,
         viewOrdering: viewOrdering ?? this.viewOrdering,
+        supportedLanguages: supportedLanguages ?? this.supportedLanguages,
         member: member ?? this.member,
         shoppingLists: shoppingLists ?? this.shoppingLists,
         tags: tags ?? this.tags,
@@ -309,5 +316,34 @@ class LoadingHouseholdUpdateState extends HouseholdUpdateState {
     super.featurePlanner,
     super.viewOrdering,
     super.member,
+    super.language,
+    super.supportedLanguages,
   });
+
+  @override
+  // ignore: long-parameter-list
+  HouseholdUpdateState copyWith({
+    String? name,
+    String? image,
+    String? language,
+    bool? featurePlanner,
+    bool? featureExpenses,
+    List<ViewsEnum>? viewOrdering,
+    Map<String, String>? supportedLanguages,
+    List<Member>? member,
+    List<ShoppingList>? shoppingLists,
+    Set<Tag>? tags,
+    List<Category>? categories,
+    List<ExpenseCategory>? expenseCategories,
+  }) =>
+      LoadingHouseholdUpdateState(
+        name: name ?? this.name,
+        image: image ?? this.image,
+        language: language ?? this.language,
+        featurePlanner: featurePlanner ?? this.featurePlanner,
+        featureExpenses: featureExpenses ?? this.featureExpenses,
+        viewOrdering: viewOrdering ?? this.viewOrdering,
+        supportedLanguages: supportedLanguages ?? this.supportedLanguages,
+        member: member ?? this.member,
+      );
 }

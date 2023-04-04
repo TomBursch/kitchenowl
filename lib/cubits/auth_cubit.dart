@@ -1,7 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:kitchenowl/models/server_settings.dart';
 import 'package:kitchenowl/models/user.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
 import 'package:kitchenowl/services/storage/storage.dart';
@@ -140,16 +139,11 @@ class AuthCubit extends Cubit<AuthState> {
     required String username,
     required String name,
     required String password,
-    ServerSettings? settings,
-    String? language,
   }) async {
     emit(const Loading());
     if (await ApiService.getInstance().isOnboarding()) {
-      if (language != null) {
-        emit(const LoadingOnboard());
-      }
-      final token = await ApiService.getInstance()
-          .onboarding(username, name, password, settings, language);
+      final token =
+          await ApiService.getInstance().onboarding(username, name, password);
       if (token != null && ApiService.getInstance().isAuthenticated()) {
         await SecureStorage.getInstance().write(key: 'TOKEN', value: token);
       } else {
@@ -223,9 +217,7 @@ class AuthCubit extends Cubit<AuthState> {
 }
 
 abstract class AuthState extends Equatable {
-  final int orderId; // used by the ui
-
-  const AuthState(this.orderId);
+  const AuthState();
 
   bool get forcedOfflineMode => false;
 }
@@ -233,15 +225,16 @@ abstract class AuthState extends Equatable {
 class Authenticated extends AuthState {
   final User user;
 
-  const Authenticated(this.user) : super(3);
+  const Authenticated(this.user);
 
   @override
   List<Object?> get props => [user];
 }
 
 class AuthenticatedOffline extends Authenticated {
-  const AuthenticatedOffline(User user, this._forcedOfflineMode) : super(user);
   final bool _forcedOfflineMode;
+
+  const AuthenticatedOffline(User user, this._forcedOfflineMode) : super(user);
 
   @override
   List<Object?> get props => [user, _forcedOfflineMode];
@@ -251,42 +244,35 @@ class AuthenticatedOffline extends Authenticated {
 }
 
 class Onboarding extends AuthState {
-  const Onboarding() : super(1);
+  const Onboarding();
 
   @override
   List<Object?> get props => ["Onboarding"];
 }
 
 class Unauthenticated extends AuthState {
-  const Unauthenticated() : super(2);
+  const Unauthenticated();
 
   @override
   List<Object?> get props => ["Setup"];
 }
 
 class Setup extends AuthState {
-  const Setup() : super(0);
+  const Setup();
 
   @override
   List<Object?> get props => ["Unauthenticated"];
 }
 
 class Loading extends AuthState {
-  const Loading() : super(3);
+  const Loading();
 
   @override
   List<Object?> get props => ["Initial"];
 }
 
-class LoadingOnboard extends AuthState {
-  const LoadingOnboard() : super(4);
-
-  @override
-  List<Object?> get props => ["LoadingOnboarding"];
-}
-
 class Unreachable extends AuthState {
-  const Unreachable() : super(5);
+  const Unreachable();
 
   @override
   List<Object?> get props => ["Unreachable"];
@@ -296,8 +282,10 @@ class Unsupported extends AuthState {
   final bool unsupportedBackend;
   final bool canForceOfflineMode;
 
-  const Unsupported(this.unsupportedBackend, [this.canForceOfflineMode = false])
-      : super(6);
+  const Unsupported(
+    this.unsupportedBackend, [
+    this.canForceOfflineMode = false,
+  ]);
 
   @override
   List<Object?> get props =>

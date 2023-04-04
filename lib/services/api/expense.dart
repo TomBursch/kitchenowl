@@ -79,11 +79,10 @@ extension ExpenseApi on ApiService {
   }
 
   Future<bool> updateExpenseCategory(
-    Household household,
     ExpenseCategory category,
   ) async {
     final res = await post(
-      '${householdPath(household)}$baseRoute/categories/${category.id}',
+      '$baseRoute/categories/${category.id}',
       jsonEncode(category.toJson()),
     );
 

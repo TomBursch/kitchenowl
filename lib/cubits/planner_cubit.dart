@@ -71,10 +71,13 @@ class PlannerCubit extends Cubit<PlannerCubitState> {
   }
 
   Future<void> addItemsToList(List<RecipeItem> items) async {
-    await TransactionHandler.getInstance()
-        .runTransaction(TransactionShoppingListAddRecipeItems(
-      items: items,
-    ));
+    if (household.defaultShoppingList != null) {
+      await TransactionHandler.getInstance()
+          .runTransaction(TransactionShoppingListAddRecipeItems(
+        shoppinglist: household.defaultShoppingList!,
+        items: items,
+      ));
+    }
   }
 }
 

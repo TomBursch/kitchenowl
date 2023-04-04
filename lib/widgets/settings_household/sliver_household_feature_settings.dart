@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/cubits/household_add_update/household_add_update_cubit.dart';
 import 'package:kitchenowl/enums/views_enum.dart';
 import 'package:kitchenowl/kitchenowl.dart';
-import 'package:kitchenowl/services/api/api_service.dart';
 import 'package:kitchenowl/widgets/language_dialog.dart';
 import 'package:reorderables/reorderables.dart';
 
@@ -15,11 +14,13 @@ class SliverHouseholdFeatureSettings<
     State extends HouseholdAddUpdateState> extends StatelessWidget {
   final bool languageCanBeChanged;
   final bool askConfirmation;
+  final bool showProfile;
 
   const SliverHouseholdFeatureSettings({
     super.key,
     this.languageCanBeChanged = false,
     this.askConfirmation = true,
+    this.showProfile = true,
   });
 
   @override
@@ -60,44 +61,46 @@ class SliverHouseholdFeatureSettings<
                 .toList(),
           ),
         ),
-        const ViewSettingsListTile(
-          view: ViewsEnum.profile,
-          showHandleIfNotOptional: false,
-        ),
+        if (showProfile)
+          const ViewSettingsListTile(
+            view: ViewsEnum.profile,
+            showHandleIfNotOptional: false,
+          ),
         const Divider(),
         ListTile(
           title: Text(AppLocalizations.of(context)!.language),
           leading: const Icon(Icons.language_rounded),
           contentPadding: const EdgeInsets.only(left: 20, right: 5),
-          trailing: FutureBuilder<Map<String, String>?>(
-            initialData: const {},
-            future: ApiService.getInstance().getSupportedLanguages(),
-            builder: (context, data) => BlocBuilder<Cubit, State>(
-              buildWhen: (previous, current) =>
-                  previous.language != current.language,
-              builder: (context, state) {
-                if (state.language != null && !languageCanBeChanged) {
-                  return Text(data.data?[state.language!] ?? state.language!);
-                }
+          trailing: BlocBuilder<Cubit, State>(
+            buildWhen: (previous, current) =>
+                previous.language != current.language ||
+                previous.supportedLanguages != current.supportedLanguages,
+            builder: (context, state) {
+              if (state.language != null && !languageCanBeChanged) {
+                return Text(state.supportedLanguages?[state.language!] ??
+                    state.language!);
+              }
 
-                return LoadingElevatedButton(
-                  child: Text(data.data?[state.language] ??
-                      state.language ??
-                      AppLocalizations.of(context)!.add),
-                  onPressed: () async {
-                    final language = await showDialog<String>(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return LanguageDialog(
-                          title: AppLocalizations.of(context)!.language,
-                          doneText: AppLocalizations.of(context)!.add,
-                          cancelText: AppLocalizations.of(context)!.cancel,
-                          initialLanguage: state.language ??
-                              AppLocalizations.of(context)!.localeName,
-                        );
-                      },
-                    );
-                    if (language == null) return;
+              return LoadingElevatedButton(
+                child: Text(state.supportedLanguages?[state.language] ??
+                    state.language ??
+                    AppLocalizations.of(context)!.add),
+                onPressed: () async {
+                  final language = await showDialog<String>(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return LanguageDialog(
+                        title: AppLocalizations.of(context)!.language,
+                        doneText: AppLocalizations.of(context)!.add,
+                        initialLanguage: state.language ??
+                            AppLocalizations.of(context)!.localeName,
+                        supportedLanguages: state.supportedLanguages,
+                      );
+                    },
+                  );
+                  if (language == null) {
+                    BlocProvider.of<Cubit>(context).setLanguage(language);
+                  } else {
                     if (askConfirmation) {
                       final confirm = await askForConfirmation(
                         context: context,
@@ -113,10 +116,10 @@ class SliverHouseholdFeatureSettings<
                       if (!confirm) return;
                     }
                     BlocProvider.of<Cubit>(context).setLanguage(language);
-                  },
-                );
-              },
-            ),
+                  }
+                },
+              );
+            },
           ),
         ),
       ]),

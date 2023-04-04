@@ -73,10 +73,21 @@ class _SettingsUserPageState extends State<SettingsUserPage> {
                 child: ListView(
                   padding: const EdgeInsets.all(16),
                   children: [
-                    Icon(
-                      Icons.account_circle_rounded,
-                      size: 90,
-                      color: Theme.of(context).colorScheme.secondary,
+                    BlocBuilder<SettingsUserCubit, SettingsUserState>(
+                      bloc: cubit,
+                      builder: (context, state) => CircleAvatar(
+                        foregroundImage: state.user?.image.isEmpty ?? true
+                            ? null
+                            : getImageProvider(
+                                context,
+                                state.user!.image,
+                              ),
+                        radius: 45,
+                        child: Text(
+                          nameController.text.substring(0, 1),
+                          textScaleFactor: 2,
+                        ),
+                      ),
                     ),
                     TextField(
                       controller: usernameController,
@@ -283,6 +294,11 @@ class _SettingsUserPageState extends State<SettingsUserPage> {
                                 ),
                               ],
                       ),
+                    ),
+                    LoadingTextButton(
+                      onPressed: BlocProvider.of<AuthCubit>(context).logout,
+                      icon: const Icon(Icons.logout),
+                      child: Text(AppLocalizations.of(context)!.logout),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 16, bottom: 16),

@@ -2,14 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:kitchenowl/cubits/household_cubit.dart';
 import 'package:kitchenowl/cubits/planner_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/kitchenowl.dart';
+import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/models/recipe.dart';
 import 'package:kitchenowl/pages/item_selection_page.dart';
 import 'package:kitchenowl/widgets/recipe_card.dart';
 import 'package:responsive_builder/responsive_builder.dart';
+import 'package:tuple/tuple.dart';
 
 class PlannerPage extends StatefulWidget {
   const PlannerPage({super.key});
@@ -35,6 +38,7 @@ class _PlannerPageState extends State<PlannerPage> {
   @override
   Widget build(BuildContext context) {
     final cubit = BlocProvider.of<PlannerCubit>(context);
+    final household = BlocProvider.of<HouseholdCubit>(context).state.household;
 
     final weekdayMapping = {
       0: DateTime.monday,
@@ -95,7 +99,8 @@ class _PlannerPageState extends State<PlannerPage> {
                                     Theme.of(context).textTheme.headlineSmall,
                               ),
                             ),
-                            if (state.plannedRecipes.isNotEmpty)
+                            if (state.plannedRecipes.isNotEmpty &&
+                                household.defaultShoppingList != null)
                               InkWell(
                                 borderRadius: BorderRadius.circular(50),
                                 child:
@@ -312,16 +317,16 @@ class _PlannerPageState extends State<PlannerPage> {
     PlannerCubit cubit,
     Recipe recipe,
   ) async {
+    final household = BlocProvider.of<HouseholdCubit>(context).state.household;
     final res = await context
         .push<UpdateEnum>(
       Uri(
-        path:
-            "/household/${BlocProvider.of<PlannerCubit>(context).household.id}/recipes/details/${recipe.id}",
+        path: "/household/${household.id}/recipes/details/${recipe.id}",
         queryParameters: {
           "updateOnPlanningEdit": true.toString(),
         },
       ).toString(),
-      extra: recipe,
+      extra: Tuple2<Household, Recipe>(household, recipe),
     )
         .then((value) {
       return value;

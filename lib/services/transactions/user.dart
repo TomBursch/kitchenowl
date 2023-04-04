@@ -1,6 +1,5 @@
 import 'package:kitchenowl/models/user.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
-import 'package:kitchenowl/services/storage/temp_storage.dart';
 import 'package:kitchenowl/services/transaction.dart';
 
 class TransactionUserGetAll extends Transaction<List<User>> {
@@ -9,14 +8,11 @@ class TransactionUserGetAll extends Transaction<List<User>> {
 
   @override
   Future<List<User>> runLocal() async {
-    return (await TempStorage.getInstance().readUsers()) ?? const [];
+    return const [];
   }
 
   @override
   Future<List<User>?> runOnline() async {
-    final users = await ApiService.getInstance().getAllUsers();
-    if (users != null) TempStorage.getInstance().writeUsers(users);
-
-    return users;
+    return ApiService.getInstance().getAllUsers();
   }
 }

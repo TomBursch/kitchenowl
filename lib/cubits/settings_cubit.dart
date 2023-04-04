@@ -1,29 +1,14 @@
-import 'dart:convert';
-
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/config.dart';
-import 'package:kitchenowl/models/server_settings.dart';
-import 'package:kitchenowl/services/api/api_service.dart';
 import 'package:kitchenowl/services/storage/storage.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 class SettingsCubit extends Cubit<SettingsState> {
   SettingsCubit() : super(const SettingsState()) {
-    ApiService.getInstance().addSettingsListener(serverSettingsUpdated);
     load();
-  }
-
-  Future<void> serverSettingsUpdated() async {
-    await PreferenceStorage.getInstance().write(
-      key: 'serverSettings',
-      value: jsonEncode(ApiService.getInstance().serverSettings.toJson()),
-    );
-    emit(state.copyWith(
-      serverSettings: ApiService.getInstance().serverSettings,
-    ));
   }
 
   Future<void> load() async {
@@ -39,18 +24,8 @@ class SettingsCubit extends Cubit<SettingsState> {
       themeMode = ThemeMode.values[(await themeModeIndex)!];
     }
 
-    ServerSettings serverSettings = ServerSettings.fromJson(jsonDecode(
-      (await PreferenceStorage.getInstance().read(key: 'serverSettings')) ??
-          "{}",
-    ));
-
-    if (ApiService.getInstance().serverSettings != null) {
-      serverSettings = ApiService.getInstance().serverSettings;
-    }
-
     emit(SettingsState(
       themeMode: themeMode,
-      serverSettings: serverSettings,
       dynamicAccentColor: await dynamicAccentColor ?? false,
     ));
   }
@@ -70,27 +45,23 @@ class SettingsCubit extends Cubit<SettingsState> {
 
 class SettingsState extends Equatable {
   final ThemeMode themeMode;
-  final ServerSettings serverSettings;
   final bool dynamicAccentColor;
 
   const SettingsState({
     this.themeMode = ThemeMode.system,
-    this.serverSettings = const ServerSettings(),
     this.dynamicAccentColor = false,
   });
 
   SettingsState copyWith({
     ThemeMode? themeMode,
     bool? forcedOfflineMode,
-    ServerSettings? serverSettings,
     bool? dynamicAccentColor,
   }) =>
       SettingsState(
         themeMode: themeMode ?? this.themeMode,
-        serverSettings: serverSettings ?? this.serverSettings,
         dynamicAccentColor: dynamicAccentColor ?? this.dynamicAccentColor,
       );
 
   @override
-  List<Object?> get props => [themeMode, serverSettings, dynamicAccentColor];
+  List<Object?> get props => [themeMode, dynamicAccentColor];
 }

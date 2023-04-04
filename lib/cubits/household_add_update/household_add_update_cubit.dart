@@ -17,7 +17,7 @@ abstract class HouseholdAddUpdateCubit<State extends HouseholdAddUpdateState>
 
   void resetViewOrder();
 
-  Future<void> setLanguage(String langCode);
+  Future<void> setLanguage(String? langCode);
 }
 
 abstract class HouseholdAddUpdateState extends Equatable {
@@ -27,12 +27,15 @@ abstract class HouseholdAddUpdateState extends Equatable {
   final bool featureExpenses;
   final List<ViewsEnum> viewOrdering;
 
+  final Map<String, String>? supportedLanguages;
+
   const HouseholdAddUpdateState({
     this.name = "",
     this.language,
     this.featurePlanner = true,
     this.featureExpenses = true,
     this.viewOrdering = ViewsEnum.values,
+    this.supportedLanguages,
   });
 
   @override
@@ -42,6 +45,7 @@ abstract class HouseholdAddUpdateState extends Equatable {
         featurePlanner,
         featureExpenses,
         viewOrdering,
+        supportedLanguages,
       ];
 
   bool isViewActive(ViewsEnum view) {

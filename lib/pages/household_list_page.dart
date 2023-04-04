@@ -4,6 +4,7 @@ import 'package:kitchenowl/app.dart';
 import 'package:kitchenowl/cubits/household_list_cubit.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/pages/household_add_page.dart';
+import 'package:kitchenowl/pages/settings_user_page.dart';
 import 'package:kitchenowl/widgets/household_card.dart';
 
 class HouseholdListPage extends StatefulWidget {
@@ -53,7 +54,9 @@ class _HouseholdListPageState extends State<HouseholdListPage> with RouteAware {
       floatingActionButton: App.isOffline
           ? null
           : KitchenOwlFab(
-              openBuilder: (context, _) => const HouseholdAddPage(),
+              openBuilder: (context, _) => HouseholdAddPage(
+                locale: AppLocalizations.of(context)!.localeName,
+              ),
               onClosed: (data) => cubit.refresh(),
             ),
       body: RefreshIndicator(
@@ -66,9 +69,25 @@ class _HouseholdListPageState extends State<HouseholdListPage> with RouteAware {
                 SliverPadding(
                   padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
                   sliver: SliverToBoxAdapter(
-                    child: Text(
-                      AppLocalizations.of(context)!.household, // TODO
-                      style: Theme.of(context).textTheme.headlineLarge,
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            AppLocalizations.of(context)!.household, // TODO
+                            style: Theme.of(context).textTheme.headlineLarge,
+                          ),
+                        ),
+                        IconButton(
+                          tooltip: AppLocalizations.of(context)!.profile,
+                          onPressed: () =>
+                              Navigator.of(context, rootNavigator: true).push(
+                            MaterialPageRoute(
+                              builder: (context) => const SettingsUserPage(),
+                            ),
+                          ),
+                          icon: const Icon(Icons.manage_accounts_rounded),
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -85,6 +104,7 @@ class _HouseholdListPageState extends State<HouseholdListPage> with RouteAware {
                 ),
                 if (state.households.isEmpty)
                   SliverFillRemaining(
+                    hasScrollBody: false,
                     child: Center(
                       child: Text(
                         AppLocalizations.of(context)!.recipeEmpty, // TODO

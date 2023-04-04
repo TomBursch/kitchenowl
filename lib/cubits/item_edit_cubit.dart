@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/category.dart';
+import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/models/recipe.dart';
 import 'package:kitchenowl/models/shoppinglist.dart';
@@ -11,6 +12,7 @@ import 'package:kitchenowl/services/transactions/item.dart';
 import 'package:kitchenowl/services/transactions/shoppinglist.dart';
 
 class ItemEditCubit<T extends Item> extends Cubit<ItemEditState> {
+  final Household? household;
   final T _item;
   final ShoppingList? shoppingList;
 
@@ -29,7 +31,7 @@ class ItemEditCubit<T extends Item> extends Cubit<ItemEditState> {
     ) as T;
   }
 
-  ItemEditCubit({required T item, this.shoppingList})
+  ItemEditCubit({required T item, required this.household, this.shoppingList})
       : _item = item,
         super(ItemEditState(
           description: (item is ItemWithDescription) ? item.description : '',
@@ -43,7 +45,10 @@ class ItemEditCubit<T extends Item> extends Cubit<ItemEditState> {
   Future<void> refresh() async {
     if (_item.id != null) {
       final recipes = (await TransactionHandler.getInstance()
-          .runTransaction(TransactionItemGetRecipes(item: _item)))
+          .runTransaction(TransactionItemGetRecipes(
+        household: household,
+        item: _item,
+      )))
         ..sort(((a, b) {
           if (a.isPlanned == b.isPlanned) {
             return 0;

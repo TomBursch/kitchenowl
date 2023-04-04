@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kitchenowl/cubits/household_cubit.dart';
 import 'package:kitchenowl/cubits/shoppinglist_cubit.dart';
 import 'package:kitchenowl/enums/shoppinglist_sorting.dart';
 import 'package:kitchenowl/models/category.dart';
@@ -87,6 +88,9 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                             items: state.result,
                             categories: state.categories,
                             shoppingList: state.selectedShoppinglist,
+                            household: BlocProvider.of<HouseholdCubit>(context)
+                                .state
+                                .household,
                             onRefresh: cubit.refresh,
                             selected: (item) => item is ShoppinglistItem,
                             isLoading: state is LoadingShoppinglistCubitState,
@@ -115,6 +119,9 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                         items: state.listItems,
                         categories: state.categories,
                         shoppingList: state.selectedShoppinglist,
+                        household: BlocProvider.of<HouseholdCubit>(context)
+                            .state
+                            .household,
                         isList: state.style == ShoppinglistStyle.list,
                         selected: (_) => true,
                         isLoading: state is LoadingShoppinglistCubitState,
@@ -239,6 +246,9 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                           onPressed: (ItemWithDescription item) =>
                               cubit.add(item.name, item.description),
                           categories: state.categories,
+                          household: BlocProvider.of<HouseholdCubit>(context)
+                              .state
+                              .household,
                           shoppingList: state.selectedShoppinglist,
                           onRefresh: cubit.refresh,
                           isDescriptionEditable: false,

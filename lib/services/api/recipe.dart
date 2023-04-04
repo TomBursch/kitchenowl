@@ -51,7 +51,10 @@ extension RecipeApi on ApiService {
   }
 
   Future<bool> addRecipe(Household household, Recipe recipe) async {
-    final res = await post(baseRoute, jsonEncode(recipe.toJson()));
+    final res = await post(
+      householdPath(household) + baseRoute,
+      jsonEncode(recipe.toJson()),
+    );
 
     return res.statusCode == 200;
   }
@@ -70,7 +73,7 @@ extension RecipeApi on ApiService {
   }
 
   Future<RecipeScrape?> scrapeRecipe(String url) async {
-    final res = await post('/recipe/scrape', jsonEncode({'url': url}));
+    final res = await post('$baseRoute/scrape', jsonEncode({'url': url}));
     if (res.statusCode != 200) return null;
 
     final body = jsonDecode(res.body);

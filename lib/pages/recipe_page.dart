@@ -4,7 +4,6 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:intl/intl.dart';
 import 'package:kitchenowl/app.dart';
 import 'package:kitchenowl/cubits/recipe_cubit.dart';
-import 'package:kitchenowl/cubits/settings_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/helpers/url_launcher.dart';
 import 'package:kitchenowl/models/household.dart';
@@ -255,24 +254,27 @@ class _RecipePageState extends State<RecipePage> {
                       onLongPressed:
                           const Nullable<void Function(RecipeItem)>.empty(),
                     ),
-                  SliverPadding(
-                    padding: const EdgeInsets.all(16),
-                    sliver: SliverToBoxAdapter(
-                      child: BlocBuilder<RecipeCubit, RecipeState>(
-                        bloc: cubit,
-                        builder: (context, state) => LoadingElevatedButton(
-                          onPressed: state.selectedItems.isEmpty
-                              ? null
-                              : cubit.addItemsToList,
-                          child: Text(
-                            AppLocalizations.of(context)!.addNumberIngredients(
-                              state.selectedItems.length,
+                  if (widget.household != null &&
+                      widget.household!.defaultShoppingList != null)
+                    SliverPadding(
+                      padding: const EdgeInsets.all(16),
+                      sliver: SliverToBoxAdapter(
+                        child: BlocBuilder<RecipeCubit, RecipeState>(
+                          bloc: cubit,
+                          builder: (context, state) => LoadingElevatedButton(
+                            onPressed: state.selectedItems.isEmpty
+                                ? null
+                                : cubit.addItemsToList,
+                            child: Text(
+                              AppLocalizations.of(context)!
+                                  .addNumberIngredients(
+                                state.selectedItems.length,
+                              ),
                             ),
                           ),
                         ),
                       ),
                     ),
-                  ),
                   if (widget.household != null)
                     SliverPadding(
                       padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),

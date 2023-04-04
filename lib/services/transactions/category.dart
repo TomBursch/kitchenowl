@@ -12,14 +12,15 @@ class TransactionCategoriesGet extends Transaction<List<Category>> {
 
   @override
   Future<List<Category>> runLocal() async {
-    return await TempStorage.getInstance().readCategories() ?? const [];
+    return await TempStorage.getInstance().readCategories(household) ??
+        const [];
   }
 
   @override
   Future<List<Category>?> runOnline() async {
     final categories = await ApiService.getInstance().getCategories(household);
     if (categories != null) {
-      TempStorage.getInstance().writeCategories(categories);
+      TempStorage.getInstance().writeCategories(household, categories);
     }
 
     return categories;

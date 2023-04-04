@@ -225,6 +225,7 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
         categories: await categories,
         style: state.style,
         sorting: state.sorting,
+        recentItems: state.recentItems,
       );
     } else {
       final recent = TransactionHandler.getInstance()

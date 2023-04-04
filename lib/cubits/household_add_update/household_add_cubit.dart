@@ -1,12 +1,21 @@
 import 'package:kitchenowl/enums/views_enum.dart';
 import 'package:kitchenowl/helpers/named_bytearray.dart';
 import 'package:kitchenowl/models/household.dart';
+import 'package:kitchenowl/models/nullable.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
 
 import 'household_add_update_cubit.dart';
 
 class HouseholdAddCubit extends HouseholdAddUpdateCubit<HouseholdAddState> {
-  HouseholdAddCubit() : super(const HouseholdAddState());
+  HouseholdAddCubit(String? locale) : super(const HouseholdAddState()) {
+    ApiService.getInstance()
+        .getSupportedLanguages()
+        .then((value) => emit(state.copyWith(
+              supportedLanguages: value,
+              language: Nullable(state.language ??
+                  ((value?.containsKey(locale) ?? false) ? locale : null)),
+            )));
+  }
 
   @override
   void setName(String name) {
@@ -62,8 +71,8 @@ class HouseholdAddCubit extends HouseholdAddUpdateCubit<HouseholdAddState> {
   }
 
   @override
-  Future<void> setLanguage(String langCode) {
-    emit(state.copyWith(language: langCode));
+  Future<void> setLanguage(String? langCode) {
+    emit(state.copyWith(language: Nullable(langCode)));
 
     return Future.value();
   }
@@ -79,27 +88,30 @@ class HouseholdAddState extends HouseholdAddUpdateState {
     super.featurePlanner = true,
     super.featureExpenses = true,
     super.viewOrdering = ViewsEnum.values,
+    super.supportedLanguages,
   });
 
   HouseholdAddState copyWith({
     String? name,
     NamedByteArray? image,
-    String? language,
+    Nullable<String>? language,
     bool? featurePlanner,
     bool? featureExpenses,
     List<ViewsEnum>? viewOrdering,
+    Map<String, String>? supportedLanguages,
   }) =>
       HouseholdAddState(
         name: name ?? this.name,
         image: image ?? this.image,
-        language: language ?? this.language,
+        language: (language ?? Nullable(this.language)).value,
         featurePlanner: featurePlanner ?? this.featurePlanner,
         featureExpenses: featureExpenses ?? this.featureExpenses,
         viewOrdering: viewOrdering ?? this.viewOrdering,
+        supportedLanguages: supportedLanguages ?? this.supportedLanguages,
       );
 
   @override
   List<Object?> get props => super.props + [image];
 
-  bool isValid() => name.isNotEmpty;
+  bool isValid() => name.replaceAll(" ", "").isNotEmpty;
 }

@@ -16,13 +16,15 @@ class TransactionRecipeGetRecipes extends Transaction<List<Recipe>> {
 
   @override
   Future<List<Recipe>> runLocal() async {
-    return await TempStorage.getInstance().readRecipes() ?? [];
+    return await TempStorage.getInstance().readRecipes(household) ?? [];
   }
 
   @override
   Future<List<Recipe>?> runOnline() async {
     final recipes = await ApiService.getInstance().getRecipes(household);
-    if (recipes != null) TempStorage.getInstance().writeRecipes(recipes);
+    if (recipes != null) {
+      TempStorage.getInstance().writeRecipes(household, recipes);
+    }
 
     return recipes;
   }
@@ -43,7 +45,7 @@ class TransactionRecipeGetRecipesFiltered extends Transaction<List<Recipe>> {
 
   @override
   Future<List<Recipe>> runLocal() async {
-    return (await TempStorage.getInstance().readRecipes())
+    return (await TempStorage.getInstance().readRecipes(household))
             ?.where((recipe) => recipe.tags.any((tag) => filter.contains(tag)))
             .toList() ??
         [];
@@ -90,7 +92,8 @@ class TransactionRecipeSearchRecipes extends Transaction<List<Recipe>> {
 
   @override
   Future<List<Recipe>> runLocal() async {
-    final recipes = await TempStorage.getInstance().readRecipes() ?? [];
+    final recipes =
+        await TempStorage.getInstance().readRecipes(household) ?? [];
     recipes
         .retainWhere((e) => e.name.toLowerCase().contains(query.toLowerCase()));
 
@@ -101,7 +104,8 @@ class TransactionRecipeSearchRecipes extends Transaction<List<Recipe>> {
   Future<List<Recipe>?> runOnline() async {
     final ids = await ApiService.getInstance().searchRecipe(household, query);
     if (ids == null) return [];
-    final recipes = (await TempStorage.getInstance().readRecipes() ?? [])
+    final recipes = (await TempStorage.getInstance().readRecipes(household) ??
+        [])
       ..retainWhere((e) => ids.contains(e.id));
 
     return recipes;

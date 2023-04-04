@@ -32,7 +32,6 @@ class AddUpdateExpenseCategoryCubit
         );
       } else {
         await ApiService.getInstance().updateExpenseCategory(
-          household,
           category.copyWith(
             name: _state.name,
             color: Nullable(_state.color),

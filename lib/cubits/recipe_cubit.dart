@@ -53,12 +53,15 @@ class RecipeCubit extends Cubit<RecipeState> {
   }
 
   Future<void> addItemsToList() async {
-    await TransactionHandler.getInstance()
-        .runTransaction(TransactionShoppingListAddRecipeItems(
-      items: state.dynamicRecipe.items
-          .where((item) => state.selectedItems.contains(item.name))
-          .toList(),
-    ));
+    if (household != null && household!.defaultShoppingList != null) {
+      await TransactionHandler.getInstance()
+          .runTransaction(TransactionShoppingListAddRecipeItems(
+        shoppinglist: household!.defaultShoppingList!,
+        items: state.dynamicRecipe.items
+            .where((item) => state.selectedItems.contains(item.name))
+            .toList(),
+      ));
+    }
   }
 
   Future<void> addRecipeToPlanner({int? day, bool updateOnAdd = false}) async {

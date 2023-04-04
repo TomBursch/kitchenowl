@@ -1,6 +1,7 @@
 import 'package:kitchenowl/enums/views_enum.dart';
 import 'package:kitchenowl/models/member.dart';
 import 'package:kitchenowl/models/model.dart';
+import 'package:kitchenowl/models/shoppinglist.dart';
 
 class Household extends Model {
   final int id;
@@ -11,6 +12,7 @@ class Household extends Model {
   final bool? featureExpenses;
   final List<ViewsEnum>? viewOrdering;
   final List<Member>? member;
+  final ShoppingList? defaultShoppingList;
 
   const Household({
     required this.id,
@@ -21,6 +23,7 @@ class Household extends Model {
     this.featureExpenses,
     this.viewOrdering,
     this.member,
+    this.defaultShoppingList,
   });
 
   factory Household.fromJson(Map<String, dynamic> map) {
@@ -45,6 +48,9 @@ class Household extends Model {
       featureExpenses: map['expenses_feature'] ?? false,
       viewOrdering: viewOrdering,
       member: member,
+      defaultShoppingList: map.containsKey("default_shopping_list")
+          ? ShoppingList.fromJson(map['default_shopping_list'])
+          : null,
     );
   }
 
@@ -76,6 +82,7 @@ class Household extends Model {
         featureExpenses,
         viewOrdering,
         member,
+        defaultShoppingList,
       ];
 
   @override
@@ -114,5 +121,7 @@ class Household extends Model {
       "id": id,
       if (member?.isNotEmpty ?? false)
         "member": member!.map((e) => e.toJsonWithId()).toList(),
+      if (defaultShoppingList != null)
+        "default_shopping_list": defaultShoppingList!.toJsonWithId(),
     });
 }

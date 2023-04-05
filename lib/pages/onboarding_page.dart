@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/cubits/auth_cubit.dart';
 import 'package:kitchenowl/kitchenowl.dart';
+import 'package:kitchenowl/widgets/create_user_form_fields.dart';
 
 class OnboardingPage extends StatefulWidget {
   const OnboardingPage({super.key});
@@ -36,67 +37,11 @@ class _OnboardingPageState extends State<OnboardingPage> {
                   children: [
                     const Spacer(),
                     Text(AppLocalizations.of(context)!.onboardingTitle),
-                    TextFormField(
-                      controller: usernameController,
-                      autofocus: true,
-                      autofillHints: const [
-                        AutofillHints.newUsername,
-                        AutofillHints.username,
-                      ],
-                      textInputAction: TextInputAction.next,
-                      inputFormatters: [
-                        TextInputFormatter.withFunction(
-                          (oldValue, newValue) => newValue.copyWith(
-                            text: newValue.text.toLowerCase(),
-                          ),
-                        ),
-                      ],
-                      autovalidateMode: AutovalidateMode.onUserInteraction,
-                      decoration: InputDecoration(
-                        labelText: AppLocalizations.of(context)!.username,
-                      ),
-                      validator: (s) => s == null || s.isEmpty
-                          ? AppLocalizations.of(context)!.fieldCannotBeEmpty(
-                              AppLocalizations.of(context)!.username,
-                            )
-                          : null,
-                    ),
-                    TextFormField(
-                      controller: nameController,
-                      textInputAction: TextInputAction.next,
-                      autovalidateMode: AutovalidateMode.onUserInteraction,
-                      autofillHints: const [
-                        AutofillHints.name,
-                        AutofillHints.nickname,
-                      ],
-                      textCapitalization: TextCapitalization.sentences,
-                      decoration: InputDecoration(
-                        labelText: AppLocalizations.of(context)!.name,
-                      ),
-                      validator: (s) => s == null || s.isEmpty
-                          ? AppLocalizations.of(context)!.fieldCannotBeEmpty(
-                              AppLocalizations.of(context)!.name,
-                            )
-                          : null,
-                    ),
-                    TextFormField(
-                      controller: passwordController,
-                      obscureText: true,
-                      autofillHints: const [
-                        AutofillHints.newPassword,
-                        AutofillHints.password,
-                      ],
-                      textInputAction: TextInputAction.next,
-                      onFieldSubmitted: (text) => _submit(context),
-                      autovalidateMode: AutovalidateMode.onUserInteraction,
-                      decoration: InputDecoration(
-                        labelText: AppLocalizations.of(context)!.password,
-                      ),
-                      validator: (s) => s == null || s.isEmpty
-                          ? AppLocalizations.of(context)!.fieldCannotBeEmpty(
-                              AppLocalizations.of(context)!.password,
-                            )
-                          : null,
+                    CreateUserFormFields(
+                      usernameController: usernameController,
+                      nameController: nameController,
+                      passwordController: passwordController,
+                      submit: _submit,
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 16, bottom: 8),

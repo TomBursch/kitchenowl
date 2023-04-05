@@ -43,7 +43,7 @@ class Member extends User {
 
   @override
   Map<String, dynamic> toJson() => {
-        "name": name,
+        "admin": admin,
       };
 
   @override
@@ -55,6 +55,16 @@ class Member extends User {
         "admin": serverAdmin,
         "expense_balance": balance,
       };
+
+  Member copyWith({bool? admin}) => Member(
+        id: id,
+        name: name,
+        username: username,
+        admin: admin ?? this.admin,
+        balance: balance,
+        owner: owner,
+        serverAdmin: serverAdmin,
+      );
 
   bool hasAdminRights() => super.hasServerAdminRights() || admin || owner;
 }

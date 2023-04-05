@@ -50,70 +50,78 @@ class _HouseholdListPageState extends State<HouseholdListPage> with RouteAware {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      floatingActionButton: App.isOffline
-          ? null
-          : KitchenOwlFab(
-              openBuilder: (context, _) => HouseholdAddPage(
-                locale: AppLocalizations.of(context)!.localeName,
+    return BlocProvider.value(
+      value: cubit,
+      child: Scaffold(
+        floatingActionButton: App.isOffline
+            ? null
+            : KitchenOwlFab(
+                openBuilder: (context, _) => HouseholdAddPage(
+                  locale: AppLocalizations.of(context)!.localeName,
+                ),
+                onClosed: (data) => cubit.refresh(),
               ),
-              onClosed: (data) => cubit.refresh(),
-            ),
-      body: RefreshIndicator(
-        onRefresh: cubit.refresh,
-        child: SafeArea(
-          child: BlocBuilder<HouseholdListCubit, HouseholdListState>(
-            bloc: cubit,
-            builder: (context, state) => CustomScrollView(
-              slivers: [
-                SliverPadding(
-                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-                  sliver: SliverToBoxAdapter(
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            AppLocalizations.of(context)!.household, // TODO
-                            style: Theme.of(context).textTheme.headlineLarge,
-                          ),
-                        ),
-                        IconButton(
-                          tooltip: AppLocalizations.of(context)!.profile,
-                          onPressed: () =>
-                              Navigator.of(context, rootNavigator: true).push(
-                            MaterialPageRoute(
-                              builder: (context) => const SettingsUserPage(),
+        body: RefreshIndicator(
+          onRefresh: cubit.refresh,
+          child: SafeArea(
+            bottom: false,
+            child: BlocBuilder<HouseholdListCubit, HouseholdListState>(
+              bloc: cubit,
+              builder: (context, state) => CustomScrollView(
+                slivers: [
+                  SliverPadding(
+                    padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+                    sliver: SliverToBoxAdapter(
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              AppLocalizations.of(context)!.households,
+                              style: Theme.of(context).textTheme.headlineLarge,
                             ),
                           ),
-                          icon: const Icon(Icons.manage_accounts_rounded),
+                          IconButton(
+                            tooltip: AppLocalizations.of(context)!.profile,
+                            onPressed: () =>
+                                Navigator.of(context, rootNavigator: true).push(
+                              MaterialPageRoute(
+                                builder: (context) => const SettingsUserPage(),
+                              ),
+                            ),
+                            icon: const Icon(Icons.manage_accounts_rounded),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SliverPadding(
+                    padding: const EdgeInsets.all(16),
+                    sliver: SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                        (context, i) => HouseholdCard(
+                          household: state.households[i],
                         ),
-                      ],
-                    ),
-                  ),
-                ),
-                SliverPadding(
-                  padding: const EdgeInsets.all(16),
-                  sliver: SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                      (context, i) => HouseholdCard(
-                        household: state.households[i],
-                      ),
-                      childCount: state.households.length,
-                    ),
-                  ),
-                ),
-                if (state.households.isEmpty)
-                  SliverFillRemaining(
-                    hasScrollBody: false,
-                    child: Center(
-                      child: Text(
-                        AppLocalizations.of(context)!.recipeEmpty, // TODO
-                        style: Theme.of(context).textTheme.titleMedium,
-                        textAlign: TextAlign.center,
+                        childCount: state.households.length,
                       ),
                     ),
                   ),
-              ],
+                  if (state.households.isEmpty)
+                    SliverFillRemaining(
+                      hasScrollBody: false,
+                      child: Center(
+                        child: Text(
+                          AppLocalizations.of(context)!.householdEmpty,
+                          style: Theme.of(context).textTheme.titleMedium,
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                  SliverToBoxAdapter(
+                    child:
+                        SizedBox(height: MediaQuery.of(context).padding.bottom),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

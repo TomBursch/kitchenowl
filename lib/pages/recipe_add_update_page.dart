@@ -49,7 +49,7 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
     if (widget.recipe.source.isNotEmpty) {
       sourceController.text = widget.recipe.source;
     }
-    cubit = AddUpdateRecipeCubit(widget.household, widget.recipe, !isUpdate);
+    cubit = AddUpdateRecipeCubit(widget.household, widget.recipe);
   }
 
   @override
@@ -122,6 +122,8 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                       buildWhen: (previous, current) =>
                           previous.image != current.image,
                       builder: (context, state) => ImageSelector(
+                        tooltip:
+                            AppLocalizations.of(context)!.recipeImageSelect,
                         image: state.image,
                         originalImage: cubit.recipe.image,
                         setImage: cubit.setImage,
@@ -131,7 +133,7 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                       padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
                       child: TextField(
                         controller: nameController,
-                        onChanged: (s) => cubit.setName(s),
+                        onChanged: cubit.setName,
                         textInputAction: TextInputAction.next,
                         textCapitalization: TextCapitalization.sentences,
                         decoration: InputDecoration(
@@ -143,7 +145,7 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                       padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
                       child: TextField(
                         controller: sourceController,
-                        onChanged: (s) => cubit.setSource(s),
+                        onChanged: cubit.setSource,
                         textInputAction: TextInputAction.next,
                         decoration: InputDecoration(
                           labelText: AppLocalizations.of(context)!.recipeSource,
@@ -249,7 +251,7 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                         padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
                         child: TextField(
                           controller: descController,
-                          onChanged: (s) => cubit.setDescription(s),
+                          onChanged: cubit.setDescription,
                           textCapitalization: TextCapitalization.sentences,
                           maxLines: null,
                           decoration: InputDecoration(
@@ -315,7 +317,7 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                   builder: (context, state) => SliverItemGridList(
                     items: state.items.where((e) => !e.optional).toList(),
                     selected: (item) => true,
-                    onPressed: (RecipeItem item) => cubit.removeItem(item),
+                    onPressed: cubit.removeItem,
                     onLongPressed:
                         Nullable((RecipeItem item) => _editItem(context, item)),
                   ),
@@ -347,7 +349,7 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                   builder: (context, state) => SliverItemGridList(
                     items: state.items.where((e) => e.optional).toList(),
                     selected: (item) => true,
-                    onPressed: (RecipeItem item) => cubit.removeItem(item),
+                    onPressed: cubit.removeItem,
                     onLongPressed:
                         Nullable((RecipeItem item) => _editItem(context, item)),
                   ),

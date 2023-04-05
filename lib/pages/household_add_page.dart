@@ -35,8 +35,8 @@ class _HouseholdAddPageState extends State<HouseholdAddPage> {
       value: cubit,
       child: Scaffold(
         appBar: AppBar(
-            // title: ,// TODO
-            ),
+          title: Text(AppLocalizations.of(context)!.householdNew),
+        ),
         body: CustomScrollView(
           primary: true,
           slivers: [
@@ -87,7 +87,7 @@ class _HouseholdAddPageState extends State<HouseholdAddPage> {
                           }
                         : null,
                     child: Text(
-                      AppLocalizations.of(context)!.add, // TODO: text
+                      AppLocalizations.of(context)!.add,
                     ),
                   ),
                 ),

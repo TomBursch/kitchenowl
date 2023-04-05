@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:animations/animations.dart';
+import 'package:collection/collection.dart';
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -323,29 +324,40 @@ final _router = GoRouter(
         transitionType: SharedAxisTransitionType.scaled,
         child: const HouseholdListPage(),
       ),
+      redirect: (context, state) {
+        final id = int.tryParse(state.params['id'] ?? '');
+        if (id != null) {
+          PreferenceStorage.getInstance().writeInt(
+            key: 'lastHouseholdId',
+            value: id,
+          );
+        } else {
+          PreferenceStorage.getInstance().delete(
+            key: 'lastHouseholdId',
+          );
+        }
+
+        return null;
+      },
       routes: [
         GoRoute(
           name: "household",
           path: ":id",
           builder: (context, state) => const SplashPage(),
           redirect: (context, state) {
-            final id = int.tryParse(state.params['id'] ?? '');
-            if (id != null) {
-              PreferenceStorage.getInstance().writeInt(
-                key: 'lastHouseholdId',
-                value: id,
-              );
+            if (state.subloc == state.location) {
+              return "${state.subloc}/${(state.extra as Household?)?.viewOrdering?.firstOrNull.toString() ?? "items"}";
             }
-            if (state.subloc == state.location) return "${state.subloc}/items";
 
             return null;
           },
           routes: [
             ShellRoute(
               builder: (context, state, child) => HouseholdPage(
-                household: Household(
-                  id: int.tryParse(state.params['id'] ?? '') ?? -1,
-                ),
+                household: (state.extra as Household?) ??
+                    Household(
+                      id: int.tryParse(state.params['id'] ?? '') ?? -1,
+                    ),
                 child: child,
               ),
               routes: [

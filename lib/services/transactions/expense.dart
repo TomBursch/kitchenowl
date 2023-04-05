@@ -193,9 +193,10 @@ class TransactionExpenseCategoriesGet
     extends Transaction<List<ExpenseCategory>> {
   final Household household;
 
-  TransactionExpenseCategoriesGet(
-      {DateTime? timestamp, required this.household})
-      : super.internal(
+  TransactionExpenseCategoriesGet({
+    DateTime? timestamp,
+    required this.household,
+  }) : super.internal(
           timestamp ?? DateTime.now(),
           "TransactionExpenseCategoriesGet",
         );

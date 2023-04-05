@@ -7,6 +7,7 @@ import 'package:kitchenowl/models/member.dart';
 import 'package:kitchenowl/models/user.dart';
 import 'package:kitchenowl/pages/user_search_page.dart';
 import 'package:kitchenowl/widgets/dismissible_card.dart';
+import 'package:kitchenowl/widgets/settings_household/update_member_bottom_sheet.dart';
 import 'package:kitchenowl/widgets/user_list_tile.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
@@ -22,7 +23,7 @@ class SliverHouseholdMemberSettings extends StatelessWidget {
             children: [
               Expanded(
                 child: Text(
-                  '${AppLocalizations.of(context)!.users}:',
+                  '${AppLocalizations.of(context)!.members}:',
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
               ),
@@ -30,6 +31,7 @@ class SliverHouseholdMemberSettings extends StatelessWidget {
                 height: 40,
                 child: LoadingIconButton(
                   icon: const Icon(Icons.add),
+                  tooltip: AppLocalizations.of(context)!.memberAdd,
                   onPressed: () async {
                     final user = await Navigator.of(context)
                         .push<User>(MaterialPageRoute(
@@ -101,35 +103,12 @@ class SliverHouseholdMemberSettings extends StatelessWidget {
                 onTap: () async {
                   showModalBottomSheet<void>(
                     context: context,
-                    builder: (BuildContext context) {
-                      return SizedBox(
-                        height: 200,
-                        child: Column(
-                          children: [
-                            UserListTile(
-                              user: state.member[i],
-                            ),
-                            const Divider(),
-                            ListTile(
-                              title: Text(AppLocalizations.of(context)!.admin),
-                              leading: const Icon(
-                                Icons.admin_panel_settings_rounded,
-                              ),
-                              trailing: KitchenOwlSwitch(
-                                value: state.member[i].hasAdminRights(),
-                                // onChanged: cubit.setAdmin,
-                              ),
-                            ),
-                            ElevatedButton(
-                              onPressed: null,
-                              child: Text(
-                                AppLocalizations.of(context)!.userDelete,
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
-                    },
+                    builder: (ctx) => BlocProvider<HouseholdUpdateCubit>.value(
+                      value: BlocProvider.of<HouseholdUpdateCubit>(context),
+                      child: UpdateMemberBottomSheet(
+                        member: state.member[i],
+                      ),
+                    ),
                   );
                 },
               ),
@@ -140,7 +119,7 @@ class SliverHouseholdMemberSettings extends StatelessWidget {
       SliverList(
         delegate: SliverChildListDelegate([
           Text(
-            AppLocalizations.of(context)!.swipeToDelete,
+            AppLocalizations.of(context)!.swipeToRemove,
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.bodySmall,
           ),

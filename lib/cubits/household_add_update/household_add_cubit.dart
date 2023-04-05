@@ -59,7 +59,7 @@ class HouseholdAddCubit extends HouseholdAddUpdateCubit<HouseholdAddState> {
           : await ApiService.getInstance().uploadBytes(_state.image!);
     }
 
-    ApiService.getInstance().addHousehold(Household(
+    await ApiService.getInstance().addHousehold(Household(
       id: 0,
       name: _state.name,
       image: image ?? '',

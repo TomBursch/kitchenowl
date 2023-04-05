@@ -33,7 +33,7 @@ class _UserSearchPageState extends State<UserSearchPage> {
   @override
   Widget build(BuildContext context) {
     final appbar = AppBar(
-      title: Text(AppLocalizations.of(context)!.user), // TODO
+      title: Text(AppLocalizations.of(context)!.memberAdd),
       flexibleSpace: Align(
         alignment: Alignment.bottomCenter,
         child: SizedBox(
@@ -68,7 +68,7 @@ class _UserSearchPageState extends State<UserSearchPage> {
                     ),
                     padding: EdgeInsets.zero,
                   ),
-                  hintText: AppLocalizations.of(context)!.searchHint, // TODO
+                  hintText: AppLocalizations.of(context)!.userSearchHint,
                 ),
               ),
             ),

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/cubits/settings_server_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/kitchenowl.dart';
+import 'package:kitchenowl/widgets/create_user_form_fields.dart';
 
 class CreateUserPage extends StatefulWidget {
   const CreateUserPage({Key? key}) : super(key: key);
@@ -38,61 +39,10 @@ class _CreateUserPageState extends State<CreateUserPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        TextFormField(
-                          controller: usernameController,
-                          autofocus: true,
-                          autofillHints: const [
-                            AutofillHints.newUsername,
-                            AutofillHints.username,
-                          ],
-                          textInputAction: TextInputAction.next,
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
-                          decoration: InputDecoration(
-                            labelText: AppLocalizations.of(context)!.username,
-                          ),
-                          validator: (s) => s == null || s.isEmpty
-                              ? AppLocalizations.of(context)!
-                                  .fieldCannotBeEmpty(
-                                  AppLocalizations.of(context)!.username,
-                                )
-                              : null,
-                        ),
-                        TextFormField(
-                          controller: nameController,
-                          textInputAction: TextInputAction.next,
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
-                          autofillHints: const [
-                            AutofillHints.name,
-                            AutofillHints.nickname,
-                          ],
-                          decoration: InputDecoration(
-                            labelText: AppLocalizations.of(context)!.name,
-                          ),
-                          validator: (s) => s == null || s.isEmpty
-                              ? AppLocalizations.of(context)!
-                                  .fieldCannotBeEmpty(
-                                  AppLocalizations.of(context)!.name,
-                                )
-                              : null,
-                        ),
-                        TextFormField(
-                          controller: passwordController,
-                          obscureText: true,
-                          autofillHints: const [
-                            AutofillHints.newPassword,
-                            AutofillHints.password,
-                          ],
-                          textInputAction: TextInputAction.next,
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
-                          decoration: InputDecoration(
-                            labelText: AppLocalizations.of(context)!.password,
-                          ),
-                          validator: (s) => s == null || s.isEmpty
-                              ? AppLocalizations.of(context)!
-                                  .fieldCannotBeEmpty(
-                                  AppLocalizations.of(context)!.password,
-                                )
-                              : null,
+                        CreateUserFormFields(
+                          usernameController: usernameController,
+                          nameController: nameController,
+                          passwordController: passwordController,
                         ),
                         Padding(
                           padding: const EdgeInsets.only(top: 16),

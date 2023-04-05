@@ -134,7 +134,8 @@ class ProfilePage extends StatelessWidget {
                     ),
                   Card(
                     child: ListTile(
-                      title: Text(AppLocalizations.of(context)!.serverChange),
+                      title:
+                          Text(AppLocalizations.of(context)!.householdSwitch),
                       leading: const Icon(Icons.swap_horiz_rounded),
                       minLeadingWidth: 16,
                       onTap: () => context.go("/household"),

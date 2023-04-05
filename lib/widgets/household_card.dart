@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:kitchenowl/cubits/auth_cubit.dart';
+import 'package:kitchenowl/cubits/household_list_cubit.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/household.dart';
 
@@ -22,8 +23,39 @@ class HouseholdCard extends StatelessWidget {
     return Card(
       child: InkWell(
         onTap: () => context.go(
-          '/household/${household.id}',
+          '/household/${household.id}/${household.viewOrdering?.firstOrNull.toString()}',
           extra: household,
+        ),
+        onLongPress: () => showModalBottomSheet<void>(
+          context: context,
+          builder: (ctx) => SafeArea(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ListTile(
+                  leading: const Icon(Icons.home_rounded),
+                  title: Text(household.name),
+                  subtitle: household.member == null
+                      ? null
+                      : Text(
+                          "${AppLocalizations.of(ctx)!.members}: ${household.member!.length}",
+                        ),
+                ),
+                const Divider(),
+                LoadingElevatedButton(
+                  onPressed: member == null || member.owner
+                      ? null
+                      : () async {
+                          await BlocProvider.of<HouseholdListCubit>(context)
+                              .leaveHousehold(household, member);
+                          Navigator.of(ctx).pop();
+                        },
+                  child: Text(AppLocalizations.of(ctx)!.householdLeave),
+                ),
+                const SizedBox(height: 16),
+              ],
+            ),
+          ),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,

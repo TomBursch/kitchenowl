@@ -24,7 +24,7 @@ class SliverHouseholdDangerZone extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text(
-              '${AppLocalizations.of(context)!.users}:', //TODO
+              '${AppLocalizations.of(context)!.dangerZone}:',
               style: Theme.of(context).textTheme.titleLarge,
             ),
             const SizedBox(height: 16),
@@ -41,10 +41,10 @@ class SliverHouseholdDangerZone extends StatelessWidget {
                 final confirm = await askForConfirmation(
                   context: context,
                   title: Text(
-                    AppLocalizations.of(context)!.delete, //TODO
+                    AppLocalizations.of(context)!.householdDelete,
                   ),
                   content: Text(
-                    AppLocalizations.of(context)!.userDeleteConfirmation(
+                    AppLocalizations.of(context)!.householdDeleteConfirmation(
                       BlocProvider.of<HouseholdUpdateCubit>(context)
                           .household
                           .name,
@@ -58,7 +58,7 @@ class SliverHouseholdDangerZone extends StatelessWidget {
                   }
                 }
               },
-              child: Text(AppLocalizations.of(context)!.delete),
+              child: Text(AppLocalizations.of(context)!.householdDelete),
             ),
           ],
         ),

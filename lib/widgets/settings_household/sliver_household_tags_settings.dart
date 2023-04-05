@@ -23,6 +23,7 @@ class SliverHouseholdTagsSettings extends StatelessWidget {
             ),
             IconButton(
               icon: const Icon(Icons.add),
+              tooltip: AppLocalizations.of(context)!.addTag,
               onPressed: () async {
                 final res = await showDialog<String>(
                   context: context,

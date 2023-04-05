@@ -70,7 +70,8 @@ class SettingsUserCubit extends Cubit<SettingsUserState> {
 
   Future<bool> deleteUser() async {
     if (state.user != null) {
-      return ApiService.getInstance().deleteUser(state.user!);
+      return ApiService.getInstance()
+          .deleteUser(userId != null ? state.user! : null);
     }
 
     return false;

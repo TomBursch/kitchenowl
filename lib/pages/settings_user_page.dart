@@ -324,6 +324,7 @@ class _SettingsUserPageState extends State<SettingsUserPage> {
                           );
                           if (confirm) {
                             if (await cubit.deleteUser() && mounted) {
+                              BlocProvider.of<AuthCubit>(context).logout();
                               Navigator.of(context).pop(UpdateEnum.deleted);
                             }
                           }

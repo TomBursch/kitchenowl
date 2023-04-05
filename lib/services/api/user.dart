@@ -85,8 +85,10 @@ extension UserApi on ApiService {
     return res.statusCode == 200;
   }
 
-  Future<bool> deleteUser(User user) async {
-    final res = await delete('$baseRoute/${user.id}');
+  Future<bool> deleteUser([User? user]) async {
+    final res = user != null
+        ? await delete('$baseRoute/${user.id}')
+        : await delete(baseRoute);
 
     return res.statusCode == 200;
   }

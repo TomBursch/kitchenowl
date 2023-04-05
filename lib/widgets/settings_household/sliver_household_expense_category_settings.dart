@@ -51,6 +51,7 @@ class SliverHouseholdExpenseCategorySettings extends StatelessWidget {
                 ),
                 IconButton(
                   icon: const Icon(Icons.add),
+                  tooltip: AppLocalizations.of(context)!.addCategory,
                   onPressed: () async {
                     final res = await Navigator.of(context).push<UpdateEnum>(
                       MaterialPageRoute(

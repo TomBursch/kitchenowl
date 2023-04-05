@@ -39,6 +39,7 @@ class SliverHouseholdFeatureSettings<
               if (!listEquals(state.viewOrdering, ViewsEnum.values))
                 IconButton(
                   onPressed: BlocProvider.of<Cubit>(context).resetViewOrder,
+                  tooltip: AppLocalizations.of(context)!.reset,
                   icon: const Icon(Icons.restart_alt_rounded),
                   padding: EdgeInsets.zero,
                 ),
@@ -84,14 +85,14 @@ class SliverHouseholdFeatureSettings<
               return LoadingElevatedButton(
                 child: Text(state.supportedLanguages?[state.language] ??
                     state.language ??
-                    AppLocalizations.of(context)!.add),
+                    AppLocalizations.of(context)!.set),
                 onPressed: () async {
                   final language = await showDialog<String>(
                     context: context,
                     builder: (BuildContext context) {
                       return LanguageDialog(
                         title: AppLocalizations.of(context)!.language,
-                        doneText: AppLocalizations.of(context)!.add,
+                        doneText: AppLocalizations.of(context)!.set,
                         initialLanguage: state.language ??
                             AppLocalizations.of(context)!.localeName,
                         supportedLanguages: state.supportedLanguages,
@@ -104,7 +105,7 @@ class SliverHouseholdFeatureSettings<
                     if (askConfirmation) {
                       final confirm = await askForConfirmation(
                         context: context,
-                        confirmText: AppLocalizations.of(context)!.add,
+                        confirmText: AppLocalizations.of(context)!.set,
                         title: Text(
                           AppLocalizations.of(context)!.addLanguage,
                         ),

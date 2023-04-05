@@ -11,7 +11,7 @@
   "@addItemTitle": {},
   "addLanguage": "Add Language",
   "@addLanguage": {},
-  "addLanguageConfirm": "Are you sure you want to add language '{lang}'? This (right now) cannot be undone.",
+  "addLanguageConfirm": "Are you sure you want to set the language to '{lang}'? This cannot be undone and will items and categories to your household.",
   "@addLanguageConfirm": {
     "placeholders": {
       "lang": {}

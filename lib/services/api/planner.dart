@@ -1,18 +1,19 @@
 import 'dart:convert';
 import 'package:kitchenowl/models/household.dart';
+import 'package:kitchenowl/models/planner.dart';
 import 'package:kitchenowl/models/recipe.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
 
 extension PlannerApi on ApiService {
   static const baseRoute = '/planner';
 
-  Future<List<Recipe>?> getPlannedRecipes(Household household) async {
-    final res = await get('${householdPath(household)}$baseRoute/recipes');
+  Future<List<RecipePlan>?> getPlanned(Household household) async {
+    final res = await get('${householdPath(household)}$baseRoute');
     if (res.statusCode != 200) return null;
 
     final body = List.from(jsonDecode(res.body));
 
-    return body.map((e) => Recipe.fromJson(e)).toList();
+    return body.map((e) => RecipePlan.fromJson(e)).toList();
   }
 
   Future<bool> addPlannedRecipe(

@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/models/item.dart';
+import 'package:kitchenowl/models/planner.dart';
 import 'package:kitchenowl/models/recipe.dart';
 import 'package:kitchenowl/models/shoppinglist.dart';
 import 'package:kitchenowl/services/transaction_handler.dart';
@@ -95,41 +96,39 @@ class LoadingPlannerCubitState extends PlannerCubitState {
 }
 
 class LoadedPlannerCubitState extends PlannerCubitState {
-  final List<Recipe> plannedRecipes;
+  final List<RecipePlan> recipePlans;
   final List<Recipe> recentRecipes;
   final List<Recipe> suggestedRecipes;
 
   const LoadedPlannerCubitState([
-    this.plannedRecipes = const [],
+    this.recipePlans = const [],
     this.recentRecipes = const [],
     this.suggestedRecipes = const [],
   ]);
 
   @override
   List<Object?> get props =>
-      plannedRecipes.cast<Object?>() + recentRecipes + suggestedRecipes;
+      recipePlans.cast<Object?>() + recentRecipes + suggestedRecipes;
 
   LoadedPlannerCubitState copyWith({
-    List<Recipe>? plannedRecipes,
+    List<RecipePlan>? recipePlans,
     Map<int, List<Recipe>>? plannedRecipeDayMap,
     List<Recipe>? recentRecipes,
     List<Recipe>? suggestedRecipes,
   }) =>
       LoadedPlannerCubitState(
-        plannedRecipes ?? this.plannedRecipes,
+        recipePlans ?? this.recipePlans,
         recentRecipes ?? this.recentRecipes,
         suggestedRecipes ?? this.suggestedRecipes,
       );
 
-  List<Recipe> getPlannedWithoutDay() {
-    return plannedRecipes
-        .where((element) => element.plannedDays.isEmpty)
+  List<RecipePlan> getPlannedWithoutDay() {
+    return recipePlans
+        .where((element) => element.day == null || element.day! < 0)
         .toList();
   }
 
-  List<Recipe> getPlannedOfDay(int day) {
-    return plannedRecipes
-        .where((element) => element.plannedDays.contains(day))
-        .toList();
+  List<RecipePlan> getPlannedOfDay(int day) {
+    return recipePlans.where((element) => element.day == day).toList();
   }
 }

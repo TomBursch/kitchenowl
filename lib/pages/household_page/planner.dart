@@ -100,7 +100,7 @@ class _PlannerPageState extends State<PlannerPage> {
                                     Theme.of(context).textTheme.headlineSmall,
                               ),
                             ),
-                            if (state.plannedRecipes.isNotEmpty &&
+                            if (state.recipePlans.isNotEmpty &&
                                 household.defaultShoppingList != null)
                               Tooltip(
                                 message: AppLocalizations.of(context)!.itemsAdd,
@@ -118,7 +118,7 @@ class _PlannerPageState extends State<PlannerPage> {
                       ),
                     ),
                   ),
-                  if (state.plannedRecipes.isEmpty)
+                  if (state.recipePlans.isEmpty)
                     SliverToBoxAdapter(
                       child: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 16),
@@ -141,7 +141,7 @@ class _PlannerPageState extends State<PlannerPage> {
                           crossAxisAlignment: WrapCrossAlignment.end,
                           alignment: WrapAlignment.start,
                           children: [
-                            for (final recipe in state.getPlannedWithoutDay())
+                            for (final plan in state.getPlannedWithoutDay())
                               KitchenOwlFractionallySizedBox(
                                 widthFactor: (1 /
                                     DynamicStyling.itemCrossAxisCount(
@@ -154,22 +154,22 @@ class _PlannerPageState extends State<PlannerPage> {
                                 child: AspectRatio(
                                   aspectRatio: 1,
                                   child: SelectableButtonCard(
-                                    key: Key(recipe.name),
-                                    title: recipe.name,
+                                    key: ValueKey(plan.recipe.id),
+                                    title: plan.recipe.name,
                                     selected: true,
                                     onPressed: () {
-                                      cubit.remove(recipe);
+                                      cubit.remove(plan.recipe);
                                     },
                                     onLongPressed: () => _openRecipePage(
                                       context,
                                       cubit,
-                                      recipe,
+                                      plan.recipe,
                                     ),
                                   ),
                                 ),
                               ),
                             for (int day = 0; day < 7; day++)
-                              for (final recipe in state.getPlannedOfDay(day))
+                              for (final plan in state.getPlannedOfDay(day))
                                 KitchenOwlFractionallySizedBox(
                                   widthFactor: (1 /
                                       DynamicStyling.itemCrossAxisCount(
@@ -184,8 +184,7 @@ class _PlannerPageState extends State<PlannerPage> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.stretch,
                                     children: [
-                                      if (recipe ==
-                                          state.getPlannedOfDay(day)[0])
+                                      if (plan == state.getPlannedOfDay(day)[0])
                                         Padding(
                                           padding:
                                               const EdgeInsets.only(top: 5),
@@ -199,21 +198,21 @@ class _PlannerPageState extends State<PlannerPage> {
                                       AspectRatio(
                                         aspectRatio: 1,
                                         child: SelectableButtonCard(
-                                          key: Key(
-                                            recipe.name,
+                                          key: ValueKey(
+                                            plan.recipe.id,
                                           ),
-                                          title: recipe.name,
+                                          title: plan.recipe.name,
                                           selected: true,
                                           onPressed: () {
                                             cubit.remove(
-                                              recipe,
+                                              plan.recipe,
                                               day,
                                             );
                                           },
                                           onLongPressed: () => _openRecipePage(
                                             context,
                                             cubit,
-                                            recipe,
+                                            plan.recipe,
                                           ),
                                         ),
                                       ),
@@ -355,7 +354,7 @@ class _PlannerPageState extends State<PlannerPage> {
       MaterialPageRoute(
         builder: (ctx) => ItemSelectionPage(
           selectText: AppLocalizations.of(ctx)!.addNumberIngredients,
-          recipes: (cubit.state as LoadedPlannerCubitState).plannedRecipes,
+          plans: (cubit.state as LoadedPlannerCubitState).recipePlans,
           title: AppLocalizations.of(ctx)!.addItemTitle,
           handleResult: (res) async {
             if (res.isNotEmpty &&

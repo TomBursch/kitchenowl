@@ -361,27 +361,30 @@ class _AddUpdateExpensePageState extends State<AddUpdateExpensePage> {
                 ),
               ),
               if (isUpdate)
-                SliverToBoxAdapter(
-                  child: LoadingElevatedButton(
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all<Color>(
-                        Colors.redAccent,
+                SliverPadding(
+                  padding: const EdgeInsets.all(16),
+                  sliver: SliverToBoxAdapter(
+                    child: LoadingElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                          Colors.redAccent,
+                        ),
+                        foregroundColor: MaterialStateProperty.all<Color>(
+                          Colors.white,
+                        ),
                       ),
-                      foregroundColor: MaterialStateProperty.all<Color>(
-                        Colors.white,
-                      ),
+                      onPressed: () async {
+                        await cubit.deleteExpense();
+                        if (!mounted) return;
+                        Navigator.of(context).pop(UpdateEnum.deleted);
+                      },
+                      child: Text(AppLocalizations.of(context)!.delete),
                     ),
-                    onPressed: () async {
-                      await cubit.deleteExpense();
-                      if (!mounted) return;
-                      Navigator.of(context).pop(UpdateEnum.deleted);
-                    },
-                    child: Text(AppLocalizations.of(context)!.delete),
                   ),
                 ),
               if (!mobileLayout)
                 SliverPadding(
-                  padding: EdgeInsets.fromLTRB(0, isUpdate ? 0 : 16, 0, 16),
+                  padding: EdgeInsets.fromLTRB(16, isUpdate ? 0 : 16, 16, 16),
                   sliver: SliverToBoxAdapter(
                     child: BlocBuilder<AddUpdateExpenseCubit,
                         AddUpdateExpenseState>(

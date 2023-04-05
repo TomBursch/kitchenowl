@@ -101,12 +101,16 @@ class _PlannerPageState extends State<PlannerPage> {
                             ),
                             if (state.plannedRecipes.isNotEmpty &&
                                 household.defaultShoppingList != null)
-                              InkWell(
-                                borderRadius: BorderRadius.circular(50),
-                                child:
-                                    const Icon(Icons.add_shopping_cart_rounded),
-                                onTap: () =>
-                                    _openItemSelectionPage(context, cubit),
+                              Tooltip(
+                                message: AppLocalizations.of(context)!.itemsAdd,
+                                child: InkWell(
+                                  borderRadius: BorderRadius.circular(50),
+                                  child: const Icon(
+                                    Icons.add_shopping_cart_rounded,
+                                  ),
+                                  onTap: () =>
+                                      _openItemSelectionPage(context, cubit),
+                                ),
                               ),
                           ],
                         ),

@@ -202,6 +202,8 @@ class _SettingsUserPageState extends State<SettingsUserPage> {
                                   title:
                                       '${AppLocalizations.of(context)!.llts}:',
                                   icon: const Icon(Icons.add),
+                                  tooltip:
+                                      AppLocalizations.of(context)!.lltCreate,
                                   onPressed: () => _createLLTflow(context),
                                 ),
                                 const SizedBox(height: 8),

@@ -70,19 +70,24 @@ class _ExpensePageState extends State<ExpenseListPage> {
                                 ),
                               ),
                               if (state.expenses.isNotEmpty)
-                                InkWell(
-                                  borderRadius: BorderRadius.circular(50),
-                                  child: const Icon(Icons.bar_chart_rounded),
-                                  onTap: () =>
-                                      Navigator.of(context, rootNavigator: true)
-                                          .push(
-                                    MaterialPageRoute(
-                                      builder: (ctx) => ExpenseOverviewPage(
-                                        household:
-                                            BlocProvider.of<ExpenseListCubit>(
-                                          context,
-                                        ).household,
-                                        initialSorting: state.sorting,
+                                Tooltip(
+                                  message:
+                                      AppLocalizations.of(context)!.overview,
+                                  child: InkWell(
+                                    borderRadius: BorderRadius.circular(50),
+                                    child: const Icon(Icons.bar_chart_rounded),
+                                    onTap: () => Navigator.of(
+                                      context,
+                                      rootNavigator: true,
+                                    ).push(
+                                      MaterialPageRoute(
+                                        builder: (ctx) => ExpenseOverviewPage(
+                                          household:
+                                              BlocProvider.of<ExpenseListCubit>(
+                                            context,
+                                          ).household,
+                                          initialSorting: state.sorting,
+                                        ),
                                       ),
                                     ),
                                   ),

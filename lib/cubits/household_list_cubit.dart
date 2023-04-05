@@ -21,11 +21,9 @@ class HouseholdListCubit extends Cubit<HouseholdListState> {
   }
 
   Future<void> leaveHousehold(Household household, Member member) async {
-    if (!member.owner) {
-      await ApiService.getInstance().removeHouseholdMember(household, member);
+    await ApiService.getInstance().removeHouseholdMember(household, member);
 
-      return refresh();
-    }
+    return refresh();
   }
 }
 

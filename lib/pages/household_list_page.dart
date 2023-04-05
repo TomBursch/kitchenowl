@@ -108,12 +108,18 @@ class _HouseholdListPageState extends State<HouseholdListPage> with RouteAware {
                   if (state.households.isEmpty)
                     SliverFillRemaining(
                       hasScrollBody: false,
-                      child: Center(
-                        child: Text(
-                          AppLocalizations.of(context)!.householdEmpty,
-                          style: Theme.of(context).textTheme.titleMedium,
-                          textAlign: TextAlign.center,
-                        ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          const Icon(Icons.now_widgets_rounded),
+                          const SizedBox(height: 16),
+                          Text(
+                            AppLocalizations.of(context)!.householdEmpty,
+                            style: Theme.of(context).textTheme.titleMedium,
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
                       ),
                     ),
                   SliverToBoxAdapter(

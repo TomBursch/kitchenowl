@@ -73,6 +73,7 @@ class _ExpensePageState extends State<ExpensePage> {
                     actions: [
                       if (!App.isOffline)
                         LoadingIconButton(
+                          tooltip: AppLocalizations.of(context)!.expenseEdit,
                           onPressed: () async {
                             final res = await Navigator.of(context)
                                 .push<UpdateEnum>(MaterialPageRoute(

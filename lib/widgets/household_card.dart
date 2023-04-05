@@ -43,7 +43,7 @@ class HouseholdCard extends StatelessWidget {
                 ),
                 const Divider(),
                 LoadingElevatedButton(
-                  onPressed: member == null || member.owner
+                  onPressed: member == null
                       ? null
                       : () async {
                           await BlocProvider.of<HouseholdListCubit>(context)

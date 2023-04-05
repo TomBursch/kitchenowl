@@ -80,6 +80,7 @@ class _RecipePageState extends State<RecipePage> {
                     actions: [
                       if (!App.isOffline && widget.household != null)
                         LoadingIconButton(
+                          tooltip: AppLocalizations.of(context)!.recipeEdit,
                           onPressed: () async {
                             final res = await Navigator.of(context)
                                 .push<UpdateEnum>(MaterialPageRoute(

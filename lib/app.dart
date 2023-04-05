@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +17,8 @@ import 'package:kitchenowl/services/transaction_handler.dart';
 import 'package:kitchenowl/styles/colors.dart';
 import 'package:kitchenowl/styles/themes.dart';
 import 'package:share_handler/share_handler.dart';
+import 'package:image_picker_android/image_picker_android.dart';
+import 'package:image_picker_platform_interface/image_picker_platform_interface.dart';
 
 class App extends StatefulWidget {
   static App? _instance;
@@ -49,6 +52,16 @@ class _AppState extends State<App> {
       final handler = ShareHandlerPlatform.instance;
       _intentDataStreamSubscription =
           handler.sharedMediaStream.listen(_handleSharedMedia);
+    }
+
+    final ImagePickerPlatform imagePickerPlatform =
+        ImagePickerPlatform.instance;
+    if (imagePickerPlatform is ImagePickerAndroid) {
+      DeviceInfoPlugin().androidInfo.then((value) {
+        if (value.version.sdkInt >= 30) {
+          imagePickerPlatform.useAndroidPhotoPicker = true;
+        }
+      });
     }
   }
 

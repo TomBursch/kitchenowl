@@ -2,47 +2,42 @@ from flask import jsonify, Blueprint
 from flask_jwt_extended import jwt_required
 from app import db
 from app.models import Item, Shoppinglist, History, Status, Association, ShoppinglistItems
-from app.helpers import validate_args
+from app.helpers import validate_args, authorize_household
 from .schemas import (RemoveItem, UpdateDescription,
                       AddItemByName, CreateList, AddRecipeItems, GetItems, UpdateList)
-from app.errors import NotFoundRequest, ForbiddenRequest
+from app.errors import NotFoundRequest, InvalidUsage
 from datetime import datetime, timedelta, timezone
 import app.util.description_merger as description_merger
 
 
 shoppinglist = Blueprint('shoppinglist', __name__)
+shoppinglistHousehold = Blueprint('shoppinglist', __name__)
 
 
-@shoppinglist.before_app_first_request
-def before_first_request():
-    # Add default shoppinglist
-    if (not Shoppinglist.find_by_id(1)):
-        Shoppinglist(
-            name='Default'
-        ).save()
-
-
-@shoppinglist.route('', methods=['POST'])
+@shoppinglistHousehold.route('', methods=['POST'])
 @jwt_required()
+@authorize_household()
 @validate_args(CreateList)
-def createShoppinglist(args):
-    return jsonify(Shoppinglist(name=args['name']).save().obj_to_dict())
+def createShoppinglist(args, household_id):
+    return jsonify(Shoppinglist(name=args['name'], household_id=household_id).save().obj_to_dict())
 
 
-@shoppinglist.route('', methods=['GET'])
+@shoppinglistHousehold.route('', methods=['GET'])
 @jwt_required()
-def getShoppinglists():
-    shoppinglists = Shoppinglist.all()
+@authorize_household()
+def getShoppinglists(household_id):
+    shoppinglists = Shoppinglist.all_from_household(household_id)
     return jsonify([e.obj_to_dict() for e in shoppinglists])
 
 
-@shoppinglist.route('/<id>', methods=['POST'])
+@shoppinglist.route('/<int:id>', methods=['POST'])
 @jwt_required()
 @validate_args(UpdateList)
 def updateShoppinglist(args, id):
     shoppinglist = Shoppinglist.find_by_id(id)
     if not shoppinglist:
         raise NotFoundRequest()
+    shoppinglist.checkAuthorized()
 
     if 'name' in args:
         shoppinglist.name = args['name']
@@ -51,36 +46,43 @@ def updateShoppinglist(args, id):
     return jsonify(shoppinglist.obj_to_dict())
 
 
-@shoppinglist.route('/<id>', methods=['DELETE'])
+@shoppinglist.route('/<int:id>', methods=['DELETE'])
 @jwt_required()
 def deleteShoppinglist(id):
     shoppinglist = Shoppinglist.find_by_id(id)
     if not shoppinglist:
         raise NotFoundRequest()
+    shoppinglist.checkAuthorized()
     if shoppinglist.isDefault():
-        return ForbiddenRequest()
+        raise InvalidUsage()
     shoppinglist.delete()
 
     return jsonify({'msg': 'DONE'})
 
 
-@shoppinglist.route('/<id>/item/<item_id>', methods=['POST'])
+@shoppinglist.route('/<int:id>/item/<int:item_id>', methods=['POST'])
 @jwt_required()
 @validate_args(UpdateDescription)
 def updateItemDescription(args, id, item_id):
     con = ShoppinglistItems.find_by_ids(id, item_id)
     if not con:
         raise NotFoundRequest()
+    con.shoppinglist.checkAuthorized()
 
     con.description = args['description'] or ''
     con.save()
     return jsonify(con.obj_to_item_dict())
 
 
-@shoppinglist.route('/<id>/items', methods=['GET'])
+@shoppinglist.route('/<int:id>/items', methods=['GET'])
 @jwt_required()
 @validate_args(GetItems)
 def getAllShoppingListItems(args, id):
+    shoppinglist = Shoppinglist.find_by_id(id)
+    if not shoppinglist:
+        raise NotFoundRequest()
+    shoppinglist.checkAuthorized()
+
     orderby = [Item.name]
     if ('orderby' in args):
         if (args['orderby'] == 1):
@@ -94,9 +96,14 @@ def getAllShoppingListItems(args, id):
     return jsonify([e.obj_to_item_dict() for e in items])
 
 
-@shoppinglist.route('/<id>/recent-items', methods=['GET'])
+@shoppinglist.route('/<int:id>/recent-items', methods=['GET'])
 @jwt_required()
 def getRecentItems(id):
+    shoppinglist = Shoppinglist.find_by_id(id)
+    if not shoppinglist:
+        raise NotFoundRequest()
+    shoppinglist.checkAuthorized()
+
     items = History.get_recent(id)
     return jsonify([e.item.obj_to_dict() | {'description': e.description} for e in items])
 
@@ -142,9 +149,14 @@ def getSuggestionsBasedOnFrequency(id, item_count):
     return suggestions
 
 
-@shoppinglist.route('/<id>/suggested-items', methods=['GET'])
+@shoppinglist.route('/<int:id>/suggested-items', methods=['GET'])
 @jwt_required()
 def getSuggestedItems(id):
+    shoppinglist = Shoppinglist.find_by_id(id)
+    if not shoppinglist:
+        raise NotFoundRequest()
+    shoppinglist.checkAuthorized()
+
     item_suggestion_count = 9
     suggestions = []
 
@@ -156,16 +168,19 @@ def getSuggestedItems(id):
     return jsonify([item.obj_to_dict() for item in suggestions])
 
 
-@shoppinglist.route('/<id>/add-item-by-name', methods=['POST'])
+@shoppinglist.route('/<int:id>/add-item-by-name', methods=['POST'])
 @jwt_required()
 @validate_args(AddItemByName)
 def addShoppinglistItemByName(args, id):
     shoppinglist = Shoppinglist.find_by_id(id)
     if not shoppinglist:
         raise NotFoundRequest()
-    item = Item.find_by_name(args['name'])
+    shoppinglist.checkAuthorized()
+
+    item = Item.find_by_name(shoppinglist.household_id, args['name'])
     if not item:
-        item = Item.create_by_name(args['name'])
+        item = Item.create_by_name(shoppinglist.household_id, args['name'])
+    # item.checkAuthorized()
 
     con = ShoppinglistItems.find_by_ids(shoppinglist.id, item.id)
     if not con:
@@ -180,13 +195,15 @@ def addShoppinglistItemByName(args, id):
     return jsonify(item.obj_to_dict())
 
 
-@shoppinglist.route('/<id>/item', methods=['DELETE'])
+@shoppinglist.route('/<int:id>/item', methods=['DELETE'])
 @jwt_required()
 @validate_args(RemoveItem)
 def removeShoppinglistItem(args, id):
     shoppinglist = Shoppinglist.find_by_id(id)
     if not shoppinglist:
         raise NotFoundRequest()
+    shoppinglist.checkAuthorized()
+
     item = Item.find_by_id(args['item_id'])
     if not item:
         item = Item.find_by_name(args['name'])
@@ -206,13 +223,14 @@ def removeShoppinglistItem(args, id):
     return jsonify({'msg': "DONE"})
 
 
-@shoppinglist.route('/<id>/recipeitems', methods=['POST'])
+@shoppinglist.route('/<int:id>/recipeitems', methods=['POST'])
 @jwt_required()
 @validate_args(AddRecipeItems)
 def addRecipeItems(args, id):
     shoppinglist = Shoppinglist.find_by_id(id)
     if not shoppinglist:
         raise NotFoundRequest()
+    shoppinglist.checkAuthorized()
 
     try:
         for recipeItem in args['items']:

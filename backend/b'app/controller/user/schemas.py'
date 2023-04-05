@@ -22,6 +22,7 @@ class UpdateUser(Schema):
     name = fields.String(
         validate=lambda a: a and not a.isspace()
     )
+    photo = fields.String()
     username = fields.String(
         validate=lambda a: a and not a.isspace(),
         load_only=True,
@@ -32,4 +33,11 @@ class UpdateUser(Schema):
     )
     admin = fields.Boolean(
         load_only=True,
+    )
+
+
+class SearchByNameRequest(Schema):
+    query = fields.String(
+        required=True,
+        validate=lambda a: a and not a.isspace()
     )

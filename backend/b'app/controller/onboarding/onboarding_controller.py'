@@ -1,7 +1,6 @@
 from app.helpers import validate_args
 from flask import jsonify, Blueprint
-from app.models import User, Settings, Token
-from app.service.export_import import importFromLanguage
+from app.models import User, Token
 from .schemas import OnboardSchema
 
 onboarding = Blueprint('onboarding', __name__)
@@ -19,17 +18,8 @@ def onboard(args):
     if User.count() > 0:
         return jsonify({'msg': "Onboarding not allowed"}), 403
 
-    if 'planner_feature' in args or 'expenses_feature' in args:
-        settings = Settings.get()
-        if 'planner_feature' in args:
-            settings.planner_feature = args['planner_feature']
-        if 'expenses_feature' in args:
-            settings.expenses_feature = args['expenses_feature']
-        settings.save()
-    if 'language' in args:
-        importFromLanguage(args['language'], bulkSave=True)
     username = args['username'].lower()
-    user = User.create(username, args['password'], args['name'], owner=True)
+    user = User.create(username, args['password'], args['name'], admin=True)
 
     device = "Unkown"
     if "device" in args:

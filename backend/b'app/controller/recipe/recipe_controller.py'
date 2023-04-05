@@ -9,7 +9,7 @@ from app.errors import NotFoundRequest
 from app.models.recipe import RecipeItems, RecipeTags
 from flask import jsonify, Blueprint
 from flask_jwt_extended import jwt_required
-from app.helpers import validate_args
+from app.helpers import validate_args, authorize_household
 from app.models import Recipe, Item, Tag
 from recipe_scrapers import scrape_me
 from recipe_scrapers._exceptions import SchemaOrgException
@@ -17,30 +17,35 @@ from werkzeug.utils import secure_filename
 from .schemas import SearchByNameRequest, AddRecipe, UpdateRecipe, GetAllFilterRequest, ScrapeRecipe
 
 recipe = Blueprint('recipe', __name__)
+recipeHousehold = Blueprint('recipe', __name__)
 
 
-@recipe.route('/', methods=['GET'])
+@recipeHousehold.route('', methods=['GET'])
 @jwt_required()
-def getAllRecipes():
-    return jsonify([e.obj_to_full_dict() for e in Recipe.all_by_name()])
+@authorize_household()
+def getAllRecipes(household_id):
+    return jsonify([e.obj_to_full_dict() for e in Recipe.all_from_household_by_name(household_id)])
 
 
-@recipe.route('/<id>', methods=['GET'])
+@recipe.route('/<int:id>', methods=['GET'])
 @jwt_required()
 def getRecipeById(id):
     recipe = Recipe.find_by_id(id)
     if not recipe:
         raise NotFoundRequest()
+    recipe.checkAuthorized()
     return jsonify(recipe.obj_to_full_dict())
 
 
-@recipe.route('', methods=['POST'])
+@recipeHousehold.route('', methods=['POST'])
 @jwt_required()
+@authorize_household()
 @validate_args(AddRecipe)
-def addRecipe(args):
+def addRecipe(args, household_id):
     recipe = Recipe()
     recipe.name = args['name']
     recipe.description = args['description']
+    recipe.household_id = household_id
     if 'time' in args:
         recipe.time = args['time']
     if 'cook_time' in args:
@@ -56,9 +61,9 @@ def addRecipe(args):
     recipe.save()
     if 'items' in args:
         for recipeItem in args['items']:
-            item = Item.find_by_name(recipeItem['name'])
+            item = Item.find_by_name(household_id, recipeItem['name'])
             if not item:
-                item = Item.create_by_name(recipeItem['name'])
+                item = Item.create_by_name(household_id, recipeItem['name'])
             con = RecipeItems(
                 description=recipeItem['description'],
                 optional=recipeItem['optional']
@@ -68,9 +73,9 @@ def addRecipe(args):
             con.save()
     if 'tags' in args:
         for tagName in args['tags']:
-            tag = Tag.find_by_name(tagName)
+            tag = Tag.find_by_name(household_id, tagName)
             if not tag:
-                tag = Tag.create_by_name(tagName)
+                tag = Tag.create_by_name(household_id, tagName)
             con = RecipeTags()
             con.tag = tag
             con.recipe = recipe
@@ -78,13 +83,15 @@ def addRecipe(args):
     return jsonify(recipe.obj_to_dict())
 
 
-@recipe.route('/<id>', methods=['POST'])
+@recipe.route('/<int:id>', methods=['POST'])
 @jwt_required()
 @validate_args(UpdateRecipe)
 def updateRecipe(args, id):  # noqa: C901
     recipe = Recipe.find_by_id(id)
     if not recipe:
         raise NotFoundRequest()
+    recipe.checkAuthorized()
+
     if 'name' in args:
         recipe.name = args['name']
     if 'description' in args:
@@ -108,9 +115,10 @@ def updateRecipe(args, id):  # noqa: C901
             if con.item.name not in item_names:
                 con.delete()
         for recipeItem in args['items']:
-            item = Item.find_by_name(recipeItem['name'])
+            item = Item.find_by_name(recipe.household_id, recipeItem['name'])
             if not item:
-                item = Item.create_by_name(recipeItem['name'])
+                item = Item.create_by_name(
+                    recipe.household_id, recipeItem['name'])
             con = RecipeItems.find_by_ids(recipe.id, item.id)
             if con:
                 if 'description' in recipeItem:
@@ -130,9 +138,9 @@ def updateRecipe(args, id):  # noqa: C901
             if con.tag.name not in args['tags']:
                 con.delete()
         for recipeTag in args['tags']:
-            tag = Tag.find_by_name(recipeTag)
+            tag = Tag.find_by_name(recipe.household_id, recipeTag)
             if not tag:
-                tag = Tag.create_by_name(recipeTag)
+                tag = Tag.create_by_name(recipe.household_id, recipeTag)
             con = RecipeTags.find_by_ids(recipe.id, tag.id)
             if not con:
                 con = RecipeTags()
@@ -142,30 +150,37 @@ def updateRecipe(args, id):  # noqa: C901
     return jsonify(recipe.obj_to_dict())
 
 
-@recipe.route('/<id>', methods=['DELETE'])
+@recipe.route('/<int:id>', methods=['DELETE'])
 @jwt_required()
 def deleteRecipeById(id):
-    Recipe.delete_by_id(id)
+    recipe = Recipe.find_by_id(id)
+    if not recipe:
+        raise NotFoundRequest()
+    recipe.checkAuthorized()
+    recipe.delete()
     return jsonify({'msg': 'DONE'})
 
 
-@recipe.route('/search', methods=['GET'])
+@recipeHousehold.route('/search', methods=['GET'])
 @jwt_required()
+@authorize_household()
 @validate_args(SearchByNameRequest)
-def searchRecipeByName(args):
+def searchRecipeByName(args, household_id):
     if 'only_ids' in args and args['only_ids']:
         return jsonify([e.id for e in Recipe.search_name(args['query'])])
-    return jsonify([e.obj_to_dict() for e in Recipe.search_name(args['query'])])
+    return jsonify([e.obj_to_dict() for e in Recipe.search_name(household_id, args['query'])])
 
 
-@recipe.route('/filter', methods=['POST'])
+@recipeHousehold.route('/filter', methods=['POST'])
 @jwt_required()
+@authorize_household()
 @validate_args(GetAllFilterRequest)
-def getAllFiltered(args):
-    return jsonify([e.obj_to_full_dict() for e in Recipe.all_by_name_with_filter(args["filter"])])
+def getAllFiltered(args, household_id):
+    return jsonify([e.obj_to_full_dict() for e in Recipe.all_by_name_with_filter(household_id, args["filter"])])
 
 
 @recipe.route('/scrape', methods=['GET', 'POST'])
+@jwt_required()
 @validate_args(ScrapeRecipe)
 def scrapeRecipe(args):
     scraper = scrape_me(args['url'], wild_mode=True)

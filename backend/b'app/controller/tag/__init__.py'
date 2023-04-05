@@ -1,1 +1,1 @@
-from .tag_controller import tag
+from .tag_controller import tag, tagHousehold

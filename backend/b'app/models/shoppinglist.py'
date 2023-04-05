@@ -1,22 +1,28 @@
 from typing import Self
 from app import db
-from app.helpers import DbModelMixin, TimestampMixin
+from app.helpers import DbModelMixin, TimestampMixin, DbModelAuthorizeMixin
 
 
-class Shoppinglist(db.Model, DbModelMixin, TimestampMixin):
+class Shoppinglist(db.Model, DbModelMixin, TimestampMixin, DbModelAuthorizeMixin):
     __tablename__ = 'shoppinglist'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(128), unique=True)
+    name = db.Column(db.String(128))
 
+    household_id = db.Column(db.Integer, db.ForeignKey('household.id'), nullable=False)
+
+    household = db.relationship("Household", uselist=False)
     items = db.relationship('ShoppinglistItems', cascade="all, delete-orphan")
 
-    @classmethod
-    def getDefault(cls) -> Self:
-        return cls.find_by_id(1)
+    history = db.relationship(
+        "History", back_populates="shoppinglist", cascade="all, delete-orphan")
 
-    def isDefault(self) -> bool:
-        return self.id == 1
+    @classmethod
+    def getDefault(cls, household_id: int) -> Self:
+        return cls.query.filter(cls.household_id == household_id).order_by(cls.id).first()
+
+    def isDefault(self, household_id: int) -> bool:
+        return self.id == self.getDefault(household_id).id
 
 
 class ShoppinglistItems(db.Model, DbModelMixin, TimestampMixin):

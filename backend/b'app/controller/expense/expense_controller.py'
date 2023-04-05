@@ -7,18 +7,20 @@ from flask import jsonify, Blueprint
 from flask_jwt_extended import current_user, jwt_required
 from sqlalchemy import func
 from app import db
-from app.helpers import validate_args, admin_required
-from app.models import Expense, ExpensePaidFor, User, ExpenseCategory
+from app.helpers import validate_args, authorize_household, RequiredRights
+from app.models import Expense, ExpensePaidFor, ExpenseCategory, HouseholdMember
 from .schemas import GetExpenses, AddExpense, UpdateExpense, AddExpenseCategory, UpdateExpenseCategory, GetExpenseOverview
 
 expense = Blueprint('expense', __name__)
+expenseHousehold = Blueprint('expense', __name__)
 
 
-@expense.route('', methods=['GET'])
+@expenseHousehold.route('', methods=['GET'])
 @jwt_required()
+@authorize_household()
 @validate_args(GetExpenses)
-def getAllExpenses(args):
-    filter = []
+def getAllExpenses(args, household_id):
+    filter = [Expense.household_id == household_id]
     if ('startAfterId' in args):
         filter.append(Expense.id < args['startAfterId'])
 
@@ -33,25 +35,28 @@ def getAllExpenses(args):
                     ])
 
 
-@expense.route('/<id>', methods=['GET'])
+@expense.route('/<int:id>', methods=['GET'])
 @jwt_required()
 def getExpenseById(id):
     expense = Expense.find_by_id(id)
     if not expense:
         raise NotFoundRequest()
+    expense.checkAuthorized()
     return jsonify(expense.obj_to_full_dict())
 
 
-@expense.route('', methods=['POST'])
+@expenseHousehold.route('', methods=['POST'])
 @jwt_required()
+@authorize_household()
 @validate_args(AddExpense)
-def addExpense(args):
-    user = User.find_by_id(args['paid_by']['id'])
-    if not user:
+def addExpense(args, household_id):
+    member = HouseholdMember.find_by_ids(household_id, args['paid_by']['id'])
+    if not member:
         raise NotFoundRequest()
     expense = Expense()
     expense.name = args['name']
     expense.amount = args['amount']
+    expense.household_id = household_id
     if 'date' in args:
         expense.date = datetime.fromtimestamp(
             args['date']/1000, timezone.utc)
@@ -61,36 +66,38 @@ def addExpense(args):
         if args['category'] is not None:
             category = ExpenseCategory.find_by_id(args['category'])
             expense.category = category
-    expense.paid_by = user
+    expense.paid_by_id = member.user_id
     expense.save()
-    user.expense_balance = (user.expense_balance or 0) + expense.amount
-    user.save()
+    member.expense_balance = (member.expense_balance or 0) + expense.amount
+    member.save()
     factor_sum = 0
     for user_data in args['paid_for']:
-        if User.find_by_id(user_data['id']):
+        if HouseholdMember.find_by_ids(household_id, user_data['id']):
             factor_sum += user_data['factor']
     for user_data in args['paid_for']:
-        user_for = User.find_by_id(user_data['id'])
-        if user_for:
+        member_for = HouseholdMember.find_by_ids(household_id, user_data['id'])
+        if member_for:
             con = ExpensePaidFor(
                 factor=user_data['factor'],
             )
-            con.user = user_for
+            con.user_id = member_for.user_id
             con.expense = expense
             con.save()
-            user_for.expense_balance = (
-                user_for.expense_balance or 0) - (con.factor / factor_sum) * expense.amount
-            user_for.save()
+            member_for.expense_balance = (
+                member_for.expense_balance or 0) - (con.factor / factor_sum) * expense.amount
+            member_for.save()
     return jsonify(expense.obj_to_dict())
 
 
-@expense.route('/<id>', methods=['POST'])
+@expense.route('/<int:id>', methods=['POST'])
 @jwt_required()
 @validate_args(UpdateExpense)
 def updateExpense(args, id):  # noqa: C901
     expense = Expense.find_by_id(id)
     if not expense:
         raise NotFoundRequest()
+    expense.checkAuthorized()
+
     if 'name' in args:
         expense.name = args['name']
     if 'amount' in args:
@@ -107,9 +114,10 @@ def updateExpense(args, id):  # noqa: C901
         else:
             expense.category = None
     if 'paid_by' in args:
-        user = User.find_by_id(args['paid_by']['id'])
-        if user:
-            expense.paid_by = user
+        member = HouseholdMember.find_by_ids(
+            expense.household_id, args['paid_by']['id'])
+        if member:
+            expense.paid_by_id = member.user_id
     expense.save()
     if 'paid_for' in args:
         for con in expense.paid_for:
@@ -117,9 +125,10 @@ def updateExpense(args, id):  # noqa: C901
             if con.user.id not in user_ids:
                 con.delete()
         for user_data in args['paid_for']:
-            user = User.find_by_id(user_data['id'])
-            if user:
-                con = ExpensePaidFor.find_by_ids(expense.id, user.id)
+            member = HouseholdMember.find_by_ids(
+                expense.household_id, user_data['id'])
+            if member:
+                con = ExpensePaidFor.find_by_ids(expense.id, member.user_id)
                 if con:
                     if 'factor' in user_data and user_data['factor']:
                         con.factor = user_data['factor']
@@ -128,51 +137,60 @@ def updateExpense(args, id):  # noqa: C901
                         factor=user_data['factor'],
                     )
                     con.expense = expense
-                    con.user = user
+                    con.user_id = member.user_id
                 con.save()
-    recalculateBalances()
+    recalculateBalances(expense.household_id)
     return jsonify(expense.obj_to_dict())
 
 
-@expense.route('/<id>', methods=['DELETE'])
+@expense.route('/<int:id>', methods=['DELETE'])
 @jwt_required()
 def deleteExpenseById(id):
-    Expense.delete_by_id(id)
-    recalculateBalances()
+    expense = Expense.find_by_id(id)
+    if not expense:
+        raise NotFoundRequest()
+    expense.checkAuthorized()
+
+    expense.delete()
+    recalculateBalances(expense.household_id)
     return jsonify({'msg': 'DONE'})
 
 
-@expense.route('/recalculate-balances')
+@expenseHousehold.route('/recalculate-balances')
 @jwt_required()
-@admin_required
-def calculateBalances():
-    recalculateBalances()
+@authorize_household(required=RequiredRights.ADMIN)
+def calculateBalances(household_id):
+    recalculateBalances(household_id)
 
 
-def recalculateBalances():
-    for user in User.all():
-        user.expense_balance = float(Expense.query.with_entities(func.sum(
-            Expense.amount).label("balance")).filter(Expense.paid_by == user).first().balance or 0)
-        for expense in ExpensePaidFor.query.filter(ExpensePaidFor.user_id == user.id).all():
+def recalculateBalances(household_id):
+    for member in HouseholdMember.find_by_household(household_id):
+        member.expense_balance = float(Expense.query.with_entities(func.sum(
+            Expense.amount).label("balance")).filter(Expense.paid_by_id == member.user_id, Expense.household_id == household_id).first().balance or 0)
+        for paid_for in ExpensePaidFor.query.filter(ExpensePaidFor.user_id == member.user_id, ExpensePaidFor.expense_id.in_(db.session.query(Expense.id).filter(
+                Expense.household_id == household_id).scalar_subquery())).all():
             factor_sum = Expense.query.with_entities(func.sum(
                 ExpensePaidFor.factor).label("factor_sum"))\
-                .filter(ExpensePaidFor.expense_id == expense.expense_id).first().factor_sum
-            user.expense_balance = user.expense_balance - \
-                (expense.factor / factor_sum) * expense.expense.amount
-        user.save()
+                .filter(ExpensePaidFor.expense_id == paid_for.expense_id).first().factor_sum
+            member.expense_balance = member.expense_balance - \
+                (paid_for.factor / factor_sum) * paid_for.expense.amount
+        member.save()
 
 
-@expense.route('/categories', methods=['GET'])
+@expenseHousehold.route('/categories', methods=['GET'])
 @jwt_required()
-def getExpenseCategories():
-    return jsonify([e.obj_to_dict() for e in ExpenseCategory.all_by_name()])
+@authorize_household()
+def getExpenseCategories(household_id):
+    return jsonify([e.obj_to_dict() for e in ExpenseCategory.all_from_household_by_name(household_id)])
 
 
-@expense.route('/overview', methods=['GET'])
+@expenseHousehold.route('/overview', methods=['GET'])
 @jwt_required()
+@authorize_household()
 @validate_args(GetExpenseOverview)
-def getExpenseOverview(args):
-    categories = list(map(lambda x: x.id, ExpenseCategory.all_by_name()))
+def getExpenseOverview(args, household_id):
+    categories = list(
+        map(lambda x: x.id, ExpenseCategory.all_from_household_by_name(household_id)))
     categories.append(-1)
     thisMonthStart = datetime.utcnow().date().replace(day=1)
 
@@ -180,6 +198,7 @@ def getExpenseOverview(args):
 
     factor = 1
     query = Expense.query\
+        .filter(Expense.household_id == household_id)\
         .group_by(Expense.category_id)\
         .join(Expense.category, isouter=True)
 
@@ -217,33 +236,38 @@ def getExpenseOverview(args):
     return jsonify(byMonth)
 
 
-@expense.route('/categories', methods=['POST'])
+@expenseHousehold.route('/categories', methods=['POST'])
 @jwt_required()
+@authorize_household()
 @validate_args(AddExpenseCategory)
-def addExpenseCategory(args):
+def addExpenseCategory(args, household_id):
     category = ExpenseCategory()
     category.name = args['name']
     category.color = args['color']
+    category.household_id = household_id
     category.save()
     return jsonify(category.obj_to_dict())
 
 
-@expense.route('/categories/<id>', methods=['DELETE'])
+@expense.route('/categories/<int:id>', methods=['DELETE'])
 @jwt_required()
-@admin_required
 def deleteExpenseCategoryById(id):
-    ExpenseCategory.delete_by_id(id)
+    category = ExpenseCategory.find_by_id(id)
+    if not category:
+        raise NotFoundRequest()
+    category.checkAuthorized()
+    category.delete()
     return jsonify({'msg': 'DONE'})
 
 
-@expense.route('/categories/<id>', methods=['POST'])
+@expense.route('/categories/<int:id>', methods=['POST'])
 @jwt_required()
 @validate_args(UpdateExpenseCategory)
 def updateExpenseCategory(args, id):
     category = ExpenseCategory.find_by_id(id)
-
     if not category:
         raise NotFoundRequest()
+    category.checkAuthorized()
 
     if 'name' in args:
         category.name = args['name']

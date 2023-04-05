@@ -1,10 +1,10 @@
 from datetime import datetime
 from typing import Self
 from app import db
-from app.helpers import DbModelMixin, TimestampMixin
+from app.helpers import DbModelMixin, TimestampMixin, DbModelAuthorizeMixin
 
 
-class Expense(db.Model, DbModelMixin, TimestampMixin):
+class Expense(db.Model, DbModelMixin, TimestampMixin, DbModelAuthorizeMixin):
     __tablename__ = 'expense'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -14,7 +14,9 @@ class Expense(db.Model, DbModelMixin, TimestampMixin):
     category_id = db.Column(db.Integer, db.ForeignKey('expense_category.id'))
     photo = db.Column(db.String())
     paid_by_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    household_id = db.Column(db.Integer, db.ForeignKey('household.id'), nullable=False)
 
+    household = db.relationship("Household", uselist=False)
     category = db.relationship("ExpenseCategory")
     paid_by = db.relationship("User")
     paid_for = db.relationship(

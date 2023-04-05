@@ -1,4 +1,4 @@
-from app.helpers import validate_args
+from app.helpers import validate_args, authorize_household
 from flask import jsonify, Blueprint
 from app.errors import NotFoundRequest
 from flask_jwt_extended import jwt_required
@@ -6,40 +6,46 @@ from app.models import Category
 from .schemas import AddCategory, DeleteCategory, UpdateCategory
 
 category = Blueprint('category', __name__)
+categoryHousehold = Blueprint('category', __name__)
 
 
-@category.route('', methods=['GET'])
+@categoryHousehold.route('', methods=['GET'])
 @jwt_required()
-def getAllCategories():
-    return jsonify([e.obj_to_dict() for e in Category.all_by_ordering()])
+@authorize_household()
+def getAllCategories(household_id):
+    return jsonify([e.obj_to_dict() for e in Category.all_by_ordering(household_id)])
 
 
-@category.route('/<id>', methods=['GET'])
+@category.route('/<int:id>', methods=['GET'])
 @jwt_required()
 def getCategory(id):
     category = Category.find_by_id(id)
     if not category:
         raise NotFoundRequest()
+    category.checkAuthorized()
     return jsonify(category.obj_to_dict())
 
 
-@category.route('', methods=['POST'])
+@categoryHousehold.route('', methods=['POST'])
 @jwt_required()
+@authorize_household()
 @validate_args(AddCategory)
-def addCategory(args):
+def addCategory(args, household_id):
     category = Category()
     category.name = args['name']
+    category.household_id = household_id
     category.save()
     return jsonify(category.obj_to_dict())
 
 
-@category.route('/<id>', methods=['POST'])
+@category.route('/<int:id>', methods=['POST', 'PATCH'])
 @jwt_required()
 @validate_args(UpdateCategory)
 def updateCategory(args, id):
     category = Category.find_by_id(id)
     if not category:
         raise NotFoundRequest()
+    category.checkAuthorized()
 
     if 'name' in args:
         category.name = args['name']
@@ -49,19 +55,25 @@ def updateCategory(args, id):
     return jsonify(category.obj_to_dict())
 
 
-@category.route('/<id>', methods=['DELETE'])
+@category.route('/<int:id>', methods=['DELETE'])
 @jwt_required()
 def deleteCategoryById(id):
-    Category.delete_by_id(id)
+    category = Category.find_by_id(id)
+    if not category:
+        raise NotFoundRequest()
+    category.checkAuthorized()
+
+    category.delete()
     return jsonify({'msg': 'DONE'})
 
 
-@category.route('', methods=['DELETE'])
+@categoryHousehold.route('', methods=['DELETE'])
 @jwt_required()
+@authorize_household()
 @validate_args(DeleteCategory)
-def deleteExpenseCategoryById(args):
+def deleteCategoryByName(args, household_id):
     if "name" in args:
-        category = Category.find_by_name(args['name'])
+        category = Category.find_by_name(args['name'], household_id)
         if category:
             category.delete()
             return jsonify({'msg': 'DONE'})

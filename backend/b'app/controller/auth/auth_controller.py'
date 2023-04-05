@@ -1,7 +1,7 @@
 from datetime import datetime
 from app.helpers import validate_args
 from flask import jsonify, Blueprint, request
-from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt
+from flask_jwt_extended import current_user, jwt_required, get_jwt
 from app.models import User, Token
 from app.errors import UnauthorizedRequest
 from .schemas import Login, CreateLongLivedToken
@@ -26,7 +26,7 @@ def check_if_token_revoked(jwt_header, jwt_payload: dict) -> bool:
 # identity when creating JWTs and converts it to a JSON serializable format.
 @jwt.user_identity_loader
 def user_identity_lookup(user: User):
-    return user.username
+    return user.id
 
 
 # Register a callback function that loads a user from your database whenever
@@ -36,7 +36,7 @@ def user_identity_lookup(user: User):
 @jwt.user_lookup_loader
 def user_lookup_callback(_jwt_header, jwt_data) -> User:
     identity = jwt_data["sub"]
-    return User.find_by_username(identity)
+    return User.find_by_id(identity)
 
 
 @auth.route('', methods=['POST'])
@@ -62,22 +62,11 @@ def login(args):
         'refresh_token': refreshToken
     })
 
-# Not in use as we are using the refresh token pattern
-# @auth.route('/fresh-login', methods=['POST'])
-# @validate_args(Login)
-# def fresh_login(args):
-#     username = args['username'].lower()
-#     user = User.find_by_username(username.lower())
-#     if not user or not user.check_password(args['password']):
-#         raise UnauthorizedRequest(message='Unauthorized')
-#     ret = {'access_token': create_access_token(identity=username, fresh=True)}
-#     return jsonify(ret), 200
-
 
 @auth.route('/refresh', methods=['GET'])
 @jwt_required(refresh=True)
 def refresh():
-    user = User.find_by_username(get_jwt_identity())
+    user = current_user
     if not user:
         raise UnauthorizedRequest(
             message='Unauthorized: IP {} refresh attemp with wrong username or password'.format(request.remote_addr))
@@ -117,7 +106,7 @@ def logout():
 @jwt_required()
 @validate_args(CreateLongLivedToken)
 def createLongLivedToken(args):
-    user = User.find_by_username(get_jwt_identity())
+    user = current_user
     if not user:
         raise UnauthorizedRequest(
             message='Unauthorized: IP {}'.format(request.remote_addr))
@@ -129,10 +118,10 @@ def createLongLivedToken(args):
     })
 
 
-@auth.route('llt/<id>', methods=['DELETE'])
+@auth.route('llt/<int:id>', methods=['DELETE'])
 @jwt_required()
 def deleteLongLivedToken(id):
-    user = User.find_by_username(get_jwt_identity())
+    user = current_user
     if not user:
         raise UnauthorizedRequest(
             message='Unauthorized: IP {}'.format(request.remote_addr))

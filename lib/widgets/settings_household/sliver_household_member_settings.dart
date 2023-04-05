@@ -8,7 +8,6 @@ import 'package:kitchenowl/models/user.dart';
 import 'package:kitchenowl/pages/user_search_page.dart';
 import 'package:kitchenowl/widgets/dismissible_card.dart';
 import 'package:kitchenowl/widgets/settings_household/update_member_bottom_sheet.dart';
-import 'package:kitchenowl/widgets/user_list_tile.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
 class SliverHouseholdMemberSettings extends StatelessWidget {

@@ -68,6 +68,5 @@ class _UpdateMemberBottomSheetState extends State<UpdateMemberBottomSheet> {
         ],
       ),
     );
-    ;
   }
 }

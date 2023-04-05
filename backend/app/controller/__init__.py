@@ -10,5 +10,6 @@ from .settings import *
 from .expense import *
 from .tag import *
 from .upload import *
+from .household import *
 from .category import *
 from .health_controller import health

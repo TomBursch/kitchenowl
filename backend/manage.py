@@ -21,12 +21,12 @@ What next?
                 print("No user found with that username")
             else:
                 newPW = input("Enter new password:")
-                if not newPW: 
+                if not newPW.strip(): 
                     print("Password cannot be empty")
                     continue
                 newPWRepeat = input("Repeat new password:")
-                if newPW == newPWRepeat:
-                    user.set_password(newPW)
+                if newPW.strip() == newPWRepeat.strip():
+                    user.set_password(newPW.strip())
         elif selection == "3":
             username = input("Enter the username:")
             user = User.find_by_username(username)

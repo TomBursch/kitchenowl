@@ -7,9 +7,17 @@ Create Date: 2022-12-18 23:01:04.874862
 """
 from alembic import op
 import sqlalchemy as sa
+from sqlalchemy import orm
 from app import db
 
-from app.models.expense import Expense
+DeclarativeBase = orm.declarative_base()
+
+
+class Expense(DeclarativeBase):
+    __tablename__ = 'expense'
+    id = sa.Column(sa.Integer, primary_key=True)
+    date = sa.Column(sa.DateTime)
+    created_at = sa.Column(sa.DateTime, nullable=False)
 
 
 # revision identifiers, used by Alembic.
@@ -22,18 +30,20 @@ depends_on = None
 def upgrade():
     with op.batch_alter_table('expense', schema=None) as batch_op:
         batch_op.add_column(sa.Column('date', sa.DateTime()))
-        
 
+    # Data migration
+    bind = op.get_bind()
+    session = orm.Session(bind=bind)
 
-    expenses = Expense.all()
+    expenses = session.query(Expense).all()
     for expense in expenses:
         expense.date = expense.created_at
-    
+
     try:
-        db.session.bulk_save_objects(expenses)
-        db.session.commit()
+        session.bulk_save_objects(expenses)
+        session.commit()
     except Exception as e:
-        db.session.rollback()
+        session.rollback()
         raise e
 
     with op.batch_alter_table('expense', schema=None) as batch_op:

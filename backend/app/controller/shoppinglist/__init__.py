@@ -1,1 +1,1 @@
-from .shoppinglist_controller import shoppinglist
+from .shoppinglist_controller import shoppinglist, shoppinglistHousehold

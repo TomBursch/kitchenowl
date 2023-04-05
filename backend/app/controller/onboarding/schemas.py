@@ -15,11 +15,6 @@ class OnboardSchema(Schema):
         required=True,
         validate=lambda a: a and not a.isspace()
     )
-    planner_feature = fields.Boolean()
-    expenses_feature = fields.Boolean()
-    language = fields.String(
-        validate=lambda a: a and not a.isspace() and a in SUPPORTED_LANGUAGES
-    )
     device = fields.String(
         required=False,
         validate=lambda a: a and not a.isspace(),

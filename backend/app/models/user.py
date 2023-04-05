@@ -12,13 +12,13 @@ class User(db.Model, DbModelMixin, TimestampMixin):
     username = db.Column(db.String(256), unique=True, nullable=False)
     password = db.Column(db.String(256), nullable=False)
     photo = db.Column(db.String())
-    owner = db.Column(db.Boolean(), default=False)
     admin = db.Column(db.Boolean(), default=False)
-
-    expense_balance = db.Column(db.Float(), default=0)
 
     tokens = db.relationship(
         'Token', back_populates='user', cascade="all, delete-orphan")
+
+    households = db.relationship(
+        'HouseholdMember', back_populates='user', cascade="all, delete-orphan")
 
     expenses_paid = db.relationship(
         'Expense', back_populates='paid_by', cascade="all, delete-orphan")
@@ -33,14 +33,15 @@ class User(db.Model, DbModelMixin, TimestampMixin):
 
     def obj_to_dict(self, skip_columns: list[str] = None, include_columns: list[str] = None) -> dict:
         if skip_columns:
-            skip_columns = skip_columns + ['password']
+            skip_columns = skip_columns + ['password', 'admin']
         else:
-            skip_columns = ['password']
+            skip_columns = ['password', 'admin']
         return super().obj_to_dict(skip_columns=skip_columns, include_columns=include_columns)
 
     def obj_to_full_dict(self) -> dict:
         from .token import Token
         res = self.obj_to_dict()
+        res['admin'] = self.admin
         tokens = Token.query.filter(Token.user_id == self.id, Token.type !=
                                     'access', ~Token.created_tokens.any(Token.type == 'refresh')).all()
         res['tokens'] = [e.obj_to_dict(
@@ -52,10 +53,20 @@ class User(db.Model, DbModelMixin, TimestampMixin):
         return cls.query.filter(cls.username == username).first()
 
     @classmethod
-    def create(cls, username: str, password: str, name: str, owner=False) -> Self:
+    def create(cls, username: str, password: str, name: str, admin=False) -> Self:
         return cls(
             username=username,
             password=bcrypt.generate_password_hash(password).decode('utf-8'),
             name=name,
-            owner=owner
+            admin=admin
         ).save()
+
+    @classmethod
+    def search_name(cls, name: str) -> list[Self]:
+        if '*' in name or '_' in name:
+            looking_for = name.replace('_', '__')\
+                .replace('*', '%')\
+                .replace('?', '_')
+        else:
+            looking_for = '%{0}%'.format(name)
+        return cls.query.filter(cls.name.ilike(looking_for) | cls.username.ilike(looking_for)).order_by(cls.name).limit(15)

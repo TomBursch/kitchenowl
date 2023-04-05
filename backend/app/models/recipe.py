@@ -1,15 +1,14 @@
 from __future__ import annotations
 from typing import Self
 from app import db
-from app.helpers import DbModelMixin, TimestampMixin
-from app.helpers.db_set_type import DbSetType
+from app.helpers import DbModelMixin, TimestampMixin, DbModelAuthorizeMixin
 from .item import Item
 from .tag import Tag
 from .planner import Planner
 from random import randint
 
 
-class Recipe(db.Model, DbModelMixin, TimestampMixin):
+class Recipe(db.Model, DbModelMixin, TimestampMixin, DbModelAuthorizeMixin):
     __tablename__ = 'recipe'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -23,7 +22,10 @@ class Recipe(db.Model, DbModelMixin, TimestampMixin):
     source = db.Column(db.String())
     suggestion_score = db.Column(db.Integer, server_default='0')
     suggestion_rank = db.Column(db.Integer, server_default='0')
+    household_id = db.Column(db.Integer, db.ForeignKey(
+        'household.id'), nullable=False)
 
+    household = db.relationship("Household", uselist=False)
     recipe_history = db.relationship(
         "RecipeHistory", back_populates="recipe", cascade="all, delete-orphan")
     items = db.relationship(
@@ -36,7 +38,7 @@ class Recipe(db.Model, DbModelMixin, TimestampMixin):
     def obj_to_dict(self) -> dict:
         res = super().obj_to_dict()
         res['planned'] = len(self.plans) > 0
-        res['planned_days'] = [plan.day for plan in self.plans if plan.day >=0 ]
+        res['planned_days'] = [plan.day for plan in self.plans if plan.day >= 0]
         return res
 
     def obj_to_full_dict(self) -> dict:
@@ -100,34 +102,35 @@ class Recipe(db.Model, DbModelMixin, TimestampMixin):
         db.session.commit()
 
     @classmethod
-    def find_suggestions(cls) -> list[Self]:
-        sq = db.session.query(Planner.recipe_id).group_by(Planner.recipe_id).scalar_subquery()
-        return cls.query.filter(cls.id.notin_(sq)).filter(  # noqa
+    def find_suggestions(cls, household_id: int,) -> list[Self]:
+        sq = db.session.query(Planner.recipe_id).group_by(
+            Planner.recipe_id).scalar_subquery()
+        return cls.query.filter(cls.household_id == household_id, cls.id.notin_(sq)).filter(  # noqa
             cls.suggestion_rank > 0).order_by(cls.suggestion_rank).all()
 
     @classmethod
-    def find_by_name(cls, name: str) -> Self:
-        return cls.query.filter(cls.name == name).first()
+    def find_by_name(cls, household_id: int, name: str) -> Self:
+        return cls.query.filter(cls.household_id == household_id, cls.name == name).first()
 
     @classmethod
     def find_by_id(cls, id: int) -> Self:
         return cls.query.filter(cls.id == id).first()
 
     @classmethod
-    def search_name(cls, name: str) -> list[Self]:
+    def search_name(cls, household_id: int, name: str) -> list[Self]:
         if '*' in name or '_' in name:
             looking_for = name.replace('_', '__')\
                 .replace('*', '%')\
                 .replace('?', '_')
         else:
             looking_for = '%{0}%'.format(name)
-        return cls.query.filter(cls.name.ilike(looking_for)).order_by(cls.name).all()
+        return cls.query.filter(cls.household_id == household_id, cls.name.ilike(looking_for)).order_by(cls.name).all()
 
     @classmethod
-    def all_by_name_with_filter(cls, filter: list[str]) -> list[Self]:
+    def all_by_name_with_filter(cls, household_id: int, filter: list[str]) -> list[Self]:
         sq = db.session.query(RecipeTags.recipe_id).join(RecipeTags.tag).filter(
             Tag.name.in_(filter)).subquery()
-        return db.session.query(cls).filter(cls.id.in_(sq)).order_by(cls.name).all()
+        return db.session.query(cls).filter(cls.household_id == household_id, cls.id.in_(sq)).order_by(cls.name).all()
 
 
 class RecipeItems(db.Model, DbModelMixin, TimestampMixin):

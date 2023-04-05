@@ -6,7 +6,7 @@ from app.helpers import DbModelMixin, TimestampMixin
 class Settings(db.Model, DbModelMixin, TimestampMixin):
     __tablename__ = 'settings'
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, nullable=False)
 
     @classmethod
     def get(cls) -> Self:

@@ -213,11 +213,11 @@ def upgrade():
             hm.expense_balance = user.expense_balance
             models.append(hm)
 
-        models.append(settings)
         models.append(household)
         models += users
         
         try:
+            session.delete(settings)
             session.bulk_save_objects(models)
             session.commit()
         except Exception as e:

@@ -357,6 +357,8 @@
       "tag": {}
     }
   },
+  "tagEdit": "Edit Tag",
+  "@tagEdit": {},
   "tags": "Tags",
   "@tags": {},
   "themeDark": "Dark",

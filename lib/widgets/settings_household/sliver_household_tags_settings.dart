@@ -83,7 +83,7 @@ class SliverHouseholdTagsSettings extends StatelessWidget {
                     context: context,
                     builder: (BuildContext context) {
                       return TextDialog(
-                        title: AppLocalizations.of(context)!.addTag,
+                        title: AppLocalizations.of(context)!.tagEdit,
                         doneText: AppLocalizations.of(context)!.rename,
                         hintText: AppLocalizations.of(context)!.name,
                         initialText: state.tags.elementAt(i).name,

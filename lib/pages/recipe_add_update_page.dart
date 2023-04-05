@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/cubits/recipe_add_update_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
+import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/models/recipe.dart';
 import 'package:kitchenowl/models/update_value.dart';
@@ -14,12 +15,14 @@ import 'package:kitchenowl/widgets/recipe_time_settings.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
 class AddUpdateRecipePage extends StatefulWidget {
+  final Household household;
   final Recipe recipe;
 
   const AddUpdateRecipePage({
-    Key? key,
+    super.key,
+    required this.household,
     this.recipe = const Recipe(),
-  }) : super(key: key);
+  });
 
   @override
   _AddUpdateRecipePageState createState() => _AddUpdateRecipePageState();
@@ -30,7 +33,7 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
   final TextEditingController descController = TextEditingController();
   final TextEditingController yieldsController = TextEditingController();
   final TextEditingController sourceController = TextEditingController();
-  late AddUpdateRecipeCubit cubit;
+  late final AddUpdateRecipeCubit cubit;
   bool isUpdate = false;
   bool isAdvancedTime = false;
 
@@ -46,7 +49,7 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
     if (widget.recipe.source.isNotEmpty) {
       sourceController.text = widget.recipe.source;
     }
-    cubit = AddUpdateRecipeCubit(widget.recipe, !isUpdate);
+    cubit = AddUpdateRecipeCubit(widget.household, widget.recipe);
   }
 
   @override
@@ -119,6 +122,8 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                       buildWhen: (previous, current) =>
                           previous.image != current.image,
                       builder: (context, state) => ImageSelector(
+                        tooltip:
+                            AppLocalizations.of(context)!.recipeImageSelect,
                         image: state.image,
                         originalImage: cubit.recipe.image,
                         setImage: cubit.setImage,
@@ -128,7 +133,7 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                       padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
                       child: TextField(
                         controller: nameController,
-                        onChanged: (s) => cubit.setName(s),
+                        onChanged: cubit.setName,
                         textInputAction: TextInputAction.next,
                         textCapitalization: TextCapitalization.sentences,
                         decoration: InputDecoration(
@@ -140,7 +145,7 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                       padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
                       child: TextField(
                         controller: sourceController,
-                        onChanged: (s) => cubit.setSource(s),
+                        onChanged: cubit.setSource,
                         textInputAction: TextInputAction.next,
                         decoration: InputDecoration(
                           labelText: AppLocalizations.of(context)!.recipeSource,
@@ -246,7 +251,7 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                         padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
                         child: TextField(
                           controller: descController,
-                          onChanged: (s) => cubit.setDescription(s),
+                          onChanged: cubit.setDescription,
                           textCapitalization: TextCapitalization.sentences,
                           maxLines: null,
                           decoration: InputDecoration(
@@ -312,7 +317,7 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                   builder: (context, state) => SliverItemGridList(
                     items: state.items.where((e) => !e.optional).toList(),
                     selected: (item) => true,
-                    onPressed: (RecipeItem item) => cubit.removeItem(item),
+                    onPressed: cubit.removeItem,
                     onLongPressed:
                         Nullable((RecipeItem item) => _editItem(context, item)),
                   ),
@@ -344,7 +349,7 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                   builder: (context, state) => SliverItemGridList(
                     items: state.items.where((e) => e.optional).toList(),
                     selected: (item) => true,
-                    onPressed: (RecipeItem item) => cubit.removeItem(item),
+                    onPressed: cubit.removeItem,
                     onLongPressed:
                         Nullable((RecipeItem item) => _editItem(context, item)),
                   ),
@@ -420,22 +425,24 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
   }
 
   Future<void> _updateItems(BuildContext context, bool optional) async {
-    final items =
-        await Navigator.of(context).push<List<Item>>(MaterialPageRoute(
-              builder: (context) => ItemSearchPage(
-                title: AppLocalizations.of(context)!.itemsAdd,
-                selectedItems: cubit.state.items
-                    .where((e) => e.optional == optional)
-                    .map((e) => e.toItemWithDescription())
-                    .toList(),
-              ),
-            )) ??
-            [];
+    final items = await Navigator.of(context, rootNavigator: true)
+            .push<List<Item>>(MaterialPageRoute(
+          builder: (context) => ItemSearchPage(
+            household: widget.household,
+            title: AppLocalizations.of(context)!.itemsAdd,
+            selectedItems: cubit.state.items
+                .where((e) => e.optional == optional)
+                .map((e) => e.toItemWithDescription())
+                .toList(),
+          ),
+        )) ??
+        [];
     cubit.updateFromItemList(items, optional);
   }
 
   Future<void> _editItem(BuildContext context, RecipeItem item) async {
-    final res = await Navigator.of(context).push<UpdateValue<RecipeItem>>(
+    final res = await Navigator.of(context, rootNavigator: true)
+        .push<UpdateValue<RecipeItem>>(
       MaterialPageRoute(
         builder: (BuildContext context) => ItemPage(
           item: item,

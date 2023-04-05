@@ -1,33 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kitchenowl/cubits/household_cubit.dart';
 import 'package:kitchenowl/cubits/shoppinglist_cubit.dart';
 import 'package:kitchenowl/enums/shoppinglist_sorting.dart';
-import 'package:kitchenowl/enums/views_enum.dart';
 import 'package:kitchenowl/models/category.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/widgets/choice_scroll.dart';
 import 'package:kitchenowl/widgets/home_page/sliver_category_item_grid_list.dart';
 
-import 'home_page_item.dart';
-
-class ShoppinglistPage extends StatefulWidget with HomePageItem {
-  const ShoppinglistPage({Key? key}) : super(key: key);
+class ShoppinglistPage extends StatefulWidget {
+  const ShoppinglistPage({super.key});
 
   @override
   _ShoppinglistPageState createState() => _ShoppinglistPageState();
-
-  @override
-  ViewsEnum type() => ViewsEnum.shoppingList;
-
-  @override
-  void onSelected(BuildContext context, bool alreadySelected) {
-    if (alreadySelected) {
-      BlocProvider.of<ShoppinglistCubit>(context).refresh(query: '');
-    } else {
-      BlocProvider.of<ShoppinglistCubit>(context).refresh();
-    }
-  }
 }
 
 class _ShoppinglistPageState extends State<ShoppinglistPage> {
@@ -102,6 +88,9 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                             items: state.result,
                             categories: state.categories,
                             shoppingList: state.selectedShoppinglist,
+                            household: BlocProvider.of<HouseholdCubit>(context)
+                                .state
+                                .household,
                             onRefresh: cubit.refresh,
                             selected: (item) => item is ShoppinglistItem,
                             isLoading: state is LoadingShoppinglistCubitState,
@@ -130,6 +119,9 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                         items: state.listItems,
                         categories: state.categories,
                         shoppingList: state.selectedShoppinglist,
+                        household: BlocProvider.of<HouseholdCubit>(context)
+                            .state
+                            .household,
                         isList: state.style == ShoppinglistStyle.list,
                         selected: (_) => true,
                         isLoading: state is LoadingShoppinglistCubitState,
@@ -195,7 +187,8 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                                             shoppinglist.name,
                                             style: TextStyle(
                                               color: shoppinglist.id ==
-                                                      state.selectedShoppinglist
+                                                      state
+                                                          .selectedShoppinglist!
                                                           .id
                                                   ? Theme.of(context)
                                                       .colorScheme
@@ -204,7 +197,7 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                                             ),
                                           ),
                                           selected: shoppinglist.id ==
-                                              state.selectedShoppinglist.id,
+                                              state.selectedShoppinglist!.id,
                                           selectedColor: Theme.of(context)
                                               .colorScheme
                                               .secondary,
@@ -253,6 +246,9 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                           onPressed: (ItemWithDescription item) =>
                               cubit.add(item.name, item.description),
                           categories: state.categories,
+                          household: BlocProvider.of<HouseholdCubit>(context)
+                              .state
+                              .household,
                           shoppingList: state.selectedShoppinglist,
                           onRefresh: cubit.refresh,
                           isDescriptionEditable: false,

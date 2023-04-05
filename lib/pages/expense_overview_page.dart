@@ -4,14 +4,17 @@ import 'package:intl/intl.dart';
 import 'package:kitchenowl/cubits/expense_overview_cubit.dart';
 import 'package:kitchenowl/enums/expenselist_sorting.dart';
 import 'package:kitchenowl/kitchenowl.dart';
+import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/widgets/chart_pie_current_month.dart';
 import 'package:kitchenowl/widgets/chart_bar_months.dart';
 
 class ExpenseOverviewPage extends StatefulWidget {
+  final Household household;
   final ExpenselistSorting initialSorting;
 
   const ExpenseOverviewPage({
     super.key,
+    required this.household,
     this.initialSorting = ExpenselistSorting.all,
   });
 
@@ -25,7 +28,7 @@ class _ExpenseOverviewPageState extends State<ExpenseOverviewPage> {
   @override
   void initState() {
     super.initState();
-    cubit = ExpenseOverviewCubit(widget.initialSorting);
+    cubit = ExpenseOverviewCubit(widget.household, widget.initialSorting);
   }
 
   @override

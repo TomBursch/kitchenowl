@@ -1,9 +1,12 @@
+import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/models/tag.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
 import 'package:kitchenowl/services/transaction.dart';
 
 class TransactionTagGetAll extends Transaction<Set<Tag>> {
-  TransactionTagGetAll({DateTime? timestamp})
+  final Household household;
+
+  TransactionTagGetAll({DateTime? timestamp, required this.household})
       : super.internal(timestamp ?? DateTime.now(), "TransactionTagGetAll");
 
   @override
@@ -13,6 +16,6 @@ class TransactionTagGetAll extends Transaction<Set<Tag>> {
 
   @override
   Future<Set<Tag>?> runOnline() async {
-    return await ApiService.getInstance().getAllTags();
+    return await ApiService.getInstance().getAllTags(household);
   }
 }

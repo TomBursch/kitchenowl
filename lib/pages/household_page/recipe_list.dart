@@ -2,41 +2,17 @@ import 'package:azlistview/azlistview.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:kitchenowl/app.dart';
 import 'package:kitchenowl/cubits/recipe_list_cubit.dart';
-import 'package:kitchenowl/enums/views_enum.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/widgets/choice_scroll.dart';
-import 'package:kitchenowl/widgets/recipe_create_fab.dart';
 import 'package:kitchenowl/widgets/recipe_item.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
-import 'home_page_item.dart';
-
-class RecipeListPage extends StatefulWidget with HomePageItem {
-  const RecipeListPage({Key? key}) : super(key: key);
+class RecipeListPage extends StatefulWidget {
+  const RecipeListPage({super.key});
 
   @override
   _RecipeListPageState createState() => _RecipeListPageState();
-
-  @override
-  IconData icon(BuildContext context) => Icons.receipt_rounded;
-
-  @override
-  ViewsEnum type() => ViewsEnum.recipes;
-
-  @override
-  void onSelected(BuildContext context, bool alreadySelected) {
-    if (alreadySelected) {
-      BlocProvider.of<RecipeListCubit>(context).refresh("");
-    } else {
-      BlocProvider.of<RecipeListCubit>(context).refresh();
-    }
-  }
-
-  @override
-  Widget? floatingActionButton(BuildContext context) =>
-      !App.isOffline ? RecipeCreateFab() : null;
 }
 
 class _RecipeListPageState extends State<RecipeListPage> {

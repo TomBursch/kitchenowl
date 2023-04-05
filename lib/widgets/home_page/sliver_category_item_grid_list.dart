@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kitchenowl/cubits/household_cubit.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/category.dart';
 import 'package:kitchenowl/models/item.dart';
@@ -92,6 +94,8 @@ class _SliverCategoryItemGridListState<T extends Item>
                   onLongPressed: widget.onLongPressed,
                   items: widget.items,
                   categories: widget.categories,
+                  household:
+                      BlocProvider.of<HouseholdCubit>(context).state.household,
                   shoppingList: widget.shoppingList,
                   isList: widget.isList,
                   selected: widget.selected,

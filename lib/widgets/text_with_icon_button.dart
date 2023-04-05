@@ -4,6 +4,7 @@ class TextWithIconButton extends StatelessWidget {
   final String title;
   final TextStyle? style;
   final Widget icon;
+  final String? tooltip;
   final void Function()? onPressed;
 
   const TextWithIconButton({
@@ -11,6 +12,7 @@ class TextWithIconButton extends StatelessWidget {
     required this.title,
     this.style,
     required this.icon,
+    this.tooltip,
     this.onPressed,
   });
 
@@ -27,6 +29,7 @@ class TextWithIconButton extends StatelessWidget {
         IconButton(
           icon: icon,
           onPressed: onPressed,
+          tooltip: tooltip,
           padding: EdgeInsets.zero,
         ),
       ],

@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
+import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/models/recipe.dart';
 import 'package:kitchenowl/services/transaction_handler.dart';
@@ -9,7 +10,10 @@ import 'package:kitchenowl/services/transactions/recipe.dart';
 import 'package:kitchenowl/services/transactions/shoppinglist.dart';
 
 class RecipeCubit extends Cubit<RecipeState> {
-  RecipeCubit(Recipe recipe) : super(RecipeState(recipe: recipe)) {
+  final Household? household;
+
+  RecipeCubit({this.household, required Recipe recipe})
+      : super(RecipeState(recipe: recipe)) {
     refresh();
   }
 
@@ -49,21 +53,27 @@ class RecipeCubit extends Cubit<RecipeState> {
   }
 
   Future<void> addItemsToList() async {
-    await TransactionHandler.getInstance()
-        .runTransaction(TransactionShoppingListAddRecipeItems(
-      items: state.dynamicRecipe.items
-          .where((item) => state.selectedItems.contains(item.name))
-          .toList(),
-    ));
+    if (household != null && household!.defaultShoppingList != null) {
+      await TransactionHandler.getInstance()
+          .runTransaction(TransactionShoppingListAddRecipeItems(
+        shoppinglist: household!.defaultShoppingList!,
+        items: state.dynamicRecipe.items
+            .where((item) => state.selectedItems.contains(item.name))
+            .toList(),
+      ));
+    }
   }
 
   Future<void> addRecipeToPlanner({int? day, bool updateOnAdd = false}) async {
-    await TransactionHandler.getInstance()
-        .runTransaction(TransactionPlannerAddRecipe(
-      recipe: state.recipe,
-      day: day,
-    ));
-    if (updateOnAdd) setUpdateState(UpdateEnum.updated);
+    if (household != null) {
+      await TransactionHandler.getInstance()
+          .runTransaction(TransactionPlannerAddRecipe(
+        household: household!,
+        recipe: state.recipe,
+        day: day,
+      ));
+      if (updateOnAdd) setUpdateState(UpdateEnum.updated);
+    }
   }
 }
 

@@ -3,9 +3,14 @@ import 'dart:io';
 import 'package:animations/animations.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import 'package:kitchenowl/cubits/household_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
+import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/models/recipe.dart';
 import 'package:kitchenowl/pages/recipe_page.dart';
+import 'package:tuple/tuple.dart';
 
 class RecipeItemWidget extends StatelessWidget {
   final Recipe recipe;
@@ -22,6 +27,7 @@ class RecipeItemWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return OpenContainer<UpdateEnum>(
+      useRootNavigator: true,
       closedColor: ElevationOverlay.applySurfaceTint(
         Theme.of(context).colorScheme.surface,
         Theme.of(context).colorScheme.surfaceTint,
@@ -43,20 +49,23 @@ class RecipeItemWidget extends StatelessWidget {
           subtitle: description,
           onTap: (kIsWeb || Platform.isIOS)
               ? () async {
-                  final res = await Navigator.of(context).pushNamed<UpdateEnum>(
-                    "/recipe/${recipe.id}",
-                    arguments: recipe,
+                  final household =
+                      BlocProvider.of<HouseholdCubit>(context).state.household;
+                  context.go(
+                    "/household/${household.id}/recipes/details/${recipe.id}",
+                    extra: Tuple2<Household, Recipe>(household, recipe),
                   );
-                  _handleUpdate(res);
+                  // _handleUpdate(res);
                 }
               : toggle,
         ),
       ),
       openBuilder: (
-        BuildContext context,
+        BuildContext ctx,
         toggle,
       ) =>
           RecipePage(
+        household: BlocProvider.of<HouseholdCubit>(context).state.household,
         recipe: recipe,
       ),
     );

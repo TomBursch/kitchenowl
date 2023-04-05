@@ -5,17 +5,17 @@ import 'package:kitchenowl/cubits/auth_cubit.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 
 class UnsupportedPage extends StatelessWidget {
-  final bool unsupportedBackend;
-  final bool canForceOfflineMode;
-
-  const UnsupportedPage({
-    Key? key,
-    required this.unsupportedBackend,
-    this.canForceOfflineMode = false,
-  }) : super(key: key);
+  const UnsupportedPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final unsupportedBackend =
+        (BlocProvider.of<AuthCubit>(context).state as Unsupported)
+            .unsupportedBackend;
+    final canForceOfflineMode =
+        (BlocProvider.of<AuthCubit>(context).state as Unsupported)
+            .canForceOfflineMode;
+
     return Scaffold(
       body: SafeArea(
         child: Center(

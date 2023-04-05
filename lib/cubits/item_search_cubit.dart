@@ -1,11 +1,14 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
 import 'package:collection/collection.dart';
 
 class ItemSearchCubit extends Cubit<ItemSearchState> {
-  ItemSearchCubit(List<Item> selectedItems)
+  final Household household;
+
+  ItemSearchCubit(this.household, List<Item> selectedItems)
       : super(ItemSearchState(selectedItems, '', const []));
 
   void itemSelected(Item item) {
@@ -31,7 +34,8 @@ class ItemSearchCubit extends Cubit<ItemSearchState> {
 
       List<Item> items = [];
       for (Item item
-          in (await ApiService.getInstance().searchItem(queryName) ?? [])) {
+          in (await ApiService.getInstance().searchItem(household, queryName) ??
+              [])) {
         String description = state.selectedItems
                 .whereType<ItemWithDescription>()
                 .firstWhereOrNull((e) => e.name == item.name)

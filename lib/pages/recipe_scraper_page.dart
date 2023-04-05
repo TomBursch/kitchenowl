@@ -3,15 +3,18 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/cubits/recipe_scraper_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/kitchenowl.dart';
+import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/pages/recipe_add_update_page.dart';
 import 'package:kitchenowl/widgets/string_item_match.dart';
 
 class RecipeScraperPage extends StatefulWidget {
   final String url;
+  final Household household;
 
   const RecipeScraperPage({
     super.key,
     required this.url,
+    required this.household,
   });
 
   @override
@@ -73,6 +76,7 @@ class _RecipeScraperPageState extends State<RecipeScraperPage> {
                           children: state.items.entries.map(
                             (entry) {
                               return StringItemMatch(
+                                household: widget.household,
                                 string: entry.key,
                                 item: entry.value,
                                 itemSelected: (item) {
@@ -97,6 +101,7 @@ class _RecipeScraperPageState extends State<RecipeScraperPage> {
                                   final res = await Navigator.of(context)
                                       .push<UpdateEnum>(MaterialPageRoute(
                                     builder: (context) => AddUpdateRecipePage(
+                                      household: widget.household,
                                       recipe: cubit.getRecipe()!,
                                     ),
                                   ));

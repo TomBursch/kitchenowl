@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/helpers/named_bytearray.dart';
+import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/models/recipe.dart';
 import 'package:kitchenowl/models/tag.dart';
@@ -9,11 +10,15 @@ import 'package:kitchenowl/services/transaction_handler.dart';
 import 'package:kitchenowl/services/transactions/tag.dart';
 
 class AddUpdateRecipeCubit extends Cubit<AddUpdateRecipeState> {
+  final Household household;
   final Recipe recipe;
   bool hasChanges;
 
-  AddUpdateRecipeCubit([this.recipe = const Recipe(), this.hasChanges = false])
-      : super(AddUpdateRecipeState(
+  AddUpdateRecipeCubit(
+    this.household, [
+    this.recipe = const Recipe(),
+    this.hasChanges = false,
+  ]) : super(AddUpdateRecipeState(
           description: recipe.description,
           name: recipe.name,
           time: recipe.time,
@@ -30,7 +35,7 @@ class AddUpdateRecipeCubit extends Cubit<AddUpdateRecipeState> {
 
   Future<void> getTags() async {
     final tags = await TransactionHandler.getInstance()
-        .runTransaction(TransactionTagGetAll());
+        .runTransaction(TransactionTagGetAll(household: household));
     emit(state.copyWith(tags: tags));
   }
 
@@ -45,18 +50,21 @@ class AddUpdateRecipeCubit extends Cubit<AddUpdateRecipeState> {
             : await ApiService.getInstance().uploadBytes(_state.image!);
       }
       if (recipe.id == null) {
-        await ApiService.getInstance().addRecipe(Recipe(
-          name: _state.name,
-          description: _state.description,
-          time: _state.time,
-          cookTime: _state.cookTime,
-          prepTime: _state.prepTime,
-          yields: _state.yields,
-          source: _state.source,
-          image: image ?? recipe.image,
-          items: _state.items,
-          tags: _state.selectedTags,
-        ));
+        await ApiService.getInstance().addRecipe(
+          household,
+          Recipe(
+            name: _state.name,
+            description: _state.description,
+            time: _state.time,
+            cookTime: _state.cookTime,
+            prepTime: _state.prepTime,
+            yields: _state.yields,
+            source: _state.source,
+            image: image ?? recipe.image,
+            items: _state.items,
+            tags: _state.selectedTags,
+          ),
+        );
       } else {
         await ApiService.getInstance().updateRecipe(recipe.copyWith(
           name: _state.name,

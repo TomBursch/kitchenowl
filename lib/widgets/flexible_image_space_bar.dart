@@ -35,7 +35,8 @@ class FlexibleImageSpaceBar extends StatelessWidget {
       }),
       background: imageUrl.isNotEmpty
           ? GestureDetector(
-              onTap: () => Navigator.of(context).push(MaterialPageRoute(
+              onTap: () => Navigator.of(context, rootNavigator: true)
+                  .push(MaterialPageRoute(
                 builder: (context) => PhotoViewPage(
                   title: title,
                   imageProvider: getImageProvider(

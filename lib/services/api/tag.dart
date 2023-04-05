@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/models/recipe.dart';
 import 'package:kitchenowl/models/tag.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
@@ -6,8 +7,8 @@ import 'package:kitchenowl/services/api/api_service.dart';
 extension TagApi on ApiService {
   static const baseRoute = '/tag';
 
-  Future<Set<Tag>?> getAllTags() async {
-    final res = await get(baseRoute);
+  Future<Set<Tag>?> getAllTags(Household household) async {
+    final res = await get(householdPath(household) + baseRoute);
     if (res.statusCode != 200) return null;
 
     final body = List.from(jsonDecode(res.body));
@@ -15,8 +16,11 @@ extension TagApi on ApiService {
     return body.map((e) => Tag.fromJson(e)).toSet();
   }
 
-  Future<bool> addTag(Tag tag) async {
-    final res = await post(baseRoute, json.encode(tag.toJson()));
+  Future<bool> addTag(Household household, Tag tag) async {
+    final res = await post(
+      householdPath(household) + baseRoute,
+      json.encode(tag.toJson()),
+    );
 
     return res.statusCode == 200;
   }
@@ -43,15 +47,6 @@ extension TagApi on ApiService {
     final body = List.from(jsonDecode(res.body));
 
     return body.map((e) => Recipe.fromJson(e)).toList();
-  }
-
-  Future<Set<Tag>?> searchTags(String query) async {
-    final res = await get('$baseRoute/search?query=$query');
-    if (res.statusCode != 200) return null;
-
-    final body = List.from(jsonDecode(res.body));
-
-    return body.map((e) => Tag.fromJson(e)).toSet();
   }
 
   Future<bool> deleteTag(Tag tag) async {

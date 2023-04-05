@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:kitchenowl/cubits/settings_cubit.dart';
+import 'package:kitchenowl/cubits/household_add_update/household_add_update_cubit.dart';
 import 'package:kitchenowl/enums/views_enum.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 
-class ViewSettingsListTile extends StatelessWidget {
+class ViewSettingsListTile<Cubit extends HouseholdAddUpdateCubit>
+    extends StatelessWidget {
   final ViewsEnum view;
   final bool isActive;
   final bool showHandleIfNotOptional;
@@ -22,7 +23,7 @@ class ViewSettingsListTile extends StatelessWidget {
       title: Text(
         view.toLocalizedString(context),
       ),
-      leading: Icon(view.toIcon()),
+      leading: Icon(view.toIcon(context)),
       contentPadding: const EdgeInsets.only(left: 20, right: 0),
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
@@ -31,7 +32,7 @@ class ViewSettingsListTile extends StatelessWidget {
             KitchenOwlSwitch(
               value: isActive,
               onChanged: (value) =>
-                  BlocProvider.of<SettingsCubit>(context).setView(view, value),
+                  BlocProvider.of<Cubit>(context).setView(view, value),
             ),
           if (view.isOptional())
             const VerticalDivider(

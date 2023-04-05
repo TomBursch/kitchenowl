@@ -1,41 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:kitchenowl/cubits/household_cubit.dart';
 import 'package:kitchenowl/cubits/planner_cubit.dart';
-import 'package:kitchenowl/cubits/settings_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
-import 'package:kitchenowl/enums/views_enum.dart';
 import 'package:kitchenowl/kitchenowl.dart';
+import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/models/recipe.dart';
 import 'package:kitchenowl/pages/item_selection_page.dart';
-import 'package:kitchenowl/pages/recipe_page.dart';
 import 'package:kitchenowl/widgets/recipe_card.dart';
 import 'package:responsive_builder/responsive_builder.dart';
+import 'package:tuple/tuple.dart';
 
-import 'home_page_item.dart';
-
-class PlannerPage extends StatefulWidget with HomePageItem {
-  const PlannerPage({Key? key}) : super(key: key);
+class PlannerPage extends StatefulWidget {
+  const PlannerPage({super.key});
 
   @override
   _PlannerPageState createState() => _PlannerPageState();
-
-  @override
-  ViewsEnum type() => ViewsEnum.mealPlanner;
-
-  @override
-  void onSelected(BuildContext context, bool alreadySelected) {
-    BlocProvider.of<PlannerCubit>(context).refresh();
-  }
-
-  @override
-  bool isActive(BuildContext context) =>
-      BlocProvider.of<SettingsCubit>(context)
-          .state
-          .serverSettings
-          .featurePlanner ??
-      false;
 }
 
 class _PlannerPageState extends State<PlannerPage> {
@@ -55,6 +38,7 @@ class _PlannerPageState extends State<PlannerPage> {
   @override
   Widget build(BuildContext context) {
     final cubit = BlocProvider.of<PlannerCubit>(context);
+    final household = BlocProvider.of<HouseholdCubit>(context).state.household;
 
     final weekdayMapping = {
       0: DateTime.monday,
@@ -115,13 +99,18 @@ class _PlannerPageState extends State<PlannerPage> {
                                     Theme.of(context).textTheme.headlineSmall,
                               ),
                             ),
-                            if (state.plannedRecipes.isNotEmpty)
-                              InkWell(
-                                borderRadius: BorderRadius.circular(50),
-                                child:
-                                    const Icon(Icons.add_shopping_cart_rounded),
-                                onTap: () =>
-                                    _openItemSelectionPage(context, cubit),
+                            if (state.plannedRecipes.isNotEmpty &&
+                                household.defaultShoppingList != null)
+                              Tooltip(
+                                message: AppLocalizations.of(context)!.itemsAdd,
+                                child: InkWell(
+                                  borderRadius: BorderRadius.circular(50),
+                                  child: const Icon(
+                                    Icons.add_shopping_cart_rounded,
+                                  ),
+                                  onTap: () =>
+                                      _openItemSelectionPage(context, cubit),
+                                ),
                               ),
                           ],
                         ),
@@ -332,14 +321,20 @@ class _PlannerPageState extends State<PlannerPage> {
     PlannerCubit cubit,
     Recipe recipe,
   ) async {
-    final res = await Navigator.of(context).push<UpdateEnum>(
-      MaterialPageRoute(
-        builder: (context) => RecipePage(
-          recipe: recipe,
-          updateOnPlanningEdit: true,
-        ),
-      ),
-    );
+    final household = BlocProvider.of<HouseholdCubit>(context).state.household;
+    final res = await context
+        .push<UpdateEnum>(
+      Uri(
+        path: "/household/${household.id}/recipes/details/${recipe.id}",
+        queryParameters: {
+          "updateOnPlanningEdit": true.toString(),
+        },
+      ).toString(),
+      extra: Tuple2<Household, Recipe>(household, recipe),
+    )
+        .then((value) {
+      return value;
+    });
     if (res == UpdateEnum.updated || res == UpdateEnum.deleted) {
       cubit.refresh();
     }
@@ -349,7 +344,7 @@ class _PlannerPageState extends State<PlannerPage> {
     BuildContext context,
     PlannerCubit cubit,
   ) async {
-    await Navigator.of(context).push<List<RecipeItem>>(
+    await Navigator.of(context, rootNavigator: true).push<List<RecipeItem>>(
       MaterialPageRoute(
         builder: (context) => ItemSelectionPage(
           selectText: AppLocalizations.of(context)!.addNumberIngredients,

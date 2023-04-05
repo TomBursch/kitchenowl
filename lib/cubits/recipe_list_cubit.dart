@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/models/recipe.dart';
 import 'package:kitchenowl/models/tag.dart';
 import 'package:kitchenowl/services/transaction_handler.dart';
@@ -7,11 +8,12 @@ import 'package:kitchenowl/services/transactions/recipe.dart';
 import 'package:kitchenowl/services/transactions/tag.dart';
 
 class RecipeListCubit extends Cubit<RecipeListState> {
+  final Household household;
   List<Recipe> recipeList = [];
   Future<void>? _refreshThread;
   String? _refreshCurrentQuery;
 
-  RecipeListCubit() : super(const LoadingRecipeListState()) {
+  RecipeListCubit(this.household) : super(const LoadingRecipeListState()) {
     refresh();
   }
 
@@ -83,9 +85,12 @@ class RecipeListCubit extends Cubit<RecipeListState> {
 
     if (query != null && query.isNotEmpty) {
       final tags = TransactionHandler.getInstance()
-          .runTransaction(TransactionTagGetAll());
+          .runTransaction(TransactionTagGetAll(household: household));
       final items = TransactionHandler.getInstance()
-          .runTransaction(TransactionRecipeSearchRecipes(query: query));
+          .runTransaction(TransactionRecipeSearchRecipes(
+        household: household,
+        query: query,
+      ));
 
       _state = SearchRecipeListState(
         query: query,
@@ -94,9 +99,9 @@ class RecipeListCubit extends Cubit<RecipeListState> {
       );
     } else {
       final tags = TransactionHandler.getInstance()
-          .runTransaction(TransactionTagGetAll());
+          .runTransaction(TransactionTagGetAll(household: household));
       recipeList = await TransactionHandler.getInstance()
-          .runTransaction(TransactionRecipeGetRecipes());
+          .runTransaction(TransactionRecipeGetRecipes(household: household));
       Set<Tag> filter = const {};
       if (state is FilteredListRecipeListState && (query == null)) {
         filter = state.selectedTags;

@@ -4,13 +4,17 @@ class LoadingIconButton extends StatefulWidget {
   final Widget icon;
   final Color? loadingColor;
   final Future Function()? onPressed;
+  final EdgeInsetsGeometry? padding;
+  final String? tooltip;
 
   const LoadingIconButton({
-    Key? key,
+    super.key,
     required this.icon,
     this.loadingColor,
     this.onPressed,
-  }) : super(key: key);
+    this.padding,
+    this.tooltip,
+  });
 
   @override
   State<LoadingIconButton> createState() => _LoadingIconButtonState();
@@ -22,6 +26,7 @@ class _LoadingIconButtonState extends State<LoadingIconButton> {
   @override
   Widget build(BuildContext context) => !isLoading
       ? IconButton(
+          tooltip: widget.tooltip,
           onPressed: widget.onPressed != null
               ? () async {
                   setState(() {
@@ -36,6 +41,7 @@ class _LoadingIconButtonState extends State<LoadingIconButton> {
                 }
               : null,
           icon: widget.icon,
+          padding: widget.padding,
         )
       : Padding(
           padding: const EdgeInsets.all(16),

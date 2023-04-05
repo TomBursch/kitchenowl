@@ -2,14 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:kitchenowl/cubits/auth_cubit.dart';
 import 'package:kitchenowl/cubits/settings_user_cubit.dart';
 import 'package:kitchenowl/enums/token_type_enum.dart';
+import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/token.dart';
+import 'package:kitchenowl/models/user.dart';
 
 class SettingsUserPage extends StatefulWidget {
-  final int? userId;
-  const SettingsUserPage({Key? key, this.userId}) : super(key: key);
+  final User? user;
+  const SettingsUserPage({super.key, this.user});
 
   @override
   _SettingsUserPageState createState() => _SettingsUserPageState();
@@ -24,7 +27,12 @@ class _SettingsUserPageState extends State<SettingsUserPage> {
   @override
   void initState() {
     super.initState();
-    cubit = SettingsUserCubit(widget.userId);
+    cubit = SettingsUserCubit(widget.user?.id);
+    final user = widget.user ?? BlocProvider.of<AuthCubit>(context).getUser();
+    if (user != null) {
+      usernameController.text = user.username;
+      nameController.text = user.name;
+    }
   }
 
   @override
@@ -65,10 +73,21 @@ class _SettingsUserPageState extends State<SettingsUserPage> {
                 child: ListView(
                   padding: const EdgeInsets.all(16),
                   children: [
-                    Icon(
-                      Icons.account_circle_rounded,
-                      size: 90,
-                      color: Theme.of(context).colorScheme.secondary,
+                    BlocBuilder<SettingsUserCubit, SettingsUserState>(
+                      bloc: cubit,
+                      builder: (context, state) => CircleAvatar(
+                        foregroundImage: state.user?.image.isEmpty ?? true
+                            ? null
+                            : getImageProvider(
+                                context,
+                                state.user!.image,
+                              ),
+                        radius: 45,
+                        child: Text(
+                          nameController.text.substring(0, 1),
+                          textScaleFactor: 2,
+                        ),
+                      ),
                     ),
                     TextField(
                       controller: usernameController,
@@ -183,6 +202,8 @@ class _SettingsUserPageState extends State<SettingsUserPage> {
                                   title:
                                       '${AppLocalizations.of(context)!.llts}:',
                                   icon: const Icon(Icons.add),
+                                  tooltip:
+                                      AppLocalizations.of(context)!.lltCreate,
                                   onPressed: () => _createLLTflow(context),
                                 ),
                                 const SizedBox(height: 8),
@@ -274,6 +295,43 @@ class _SettingsUserPageState extends State<SettingsUserPage> {
                                   },
                                 ),
                               ],
+                      ),
+                    ),
+                    LoadingTextButton(
+                      onPressed: BlocProvider.of<AuthCubit>(context).logout,
+                      icon: const Icon(Icons.logout),
+                      child: Text(AppLocalizations.of(context)!.logout),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 16, bottom: 16),
+                      child: LoadingElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                            Colors.redAccent,
+                          ),
+                          foregroundColor: MaterialStateProperty.all<Color>(
+                            Colors.white,
+                          ),
+                        ),
+                        onPressed: () async {
+                          final confirm = await askForConfirmation(
+                            context: context,
+                            title: Text(
+                              AppLocalizations.of(context)!.userDelete,
+                            ),
+                            content: Text(AppLocalizations.of(context)!
+                                .userDeleteConfirmation(
+                              nameController.text,
+                            )),
+                          );
+                          if (confirm) {
+                            if (await cubit.deleteUser() && mounted) {
+                              BlocProvider.of<AuthCubit>(context).logout();
+                              Navigator.of(context).pop(UpdateEnum.deleted);
+                            }
+                          }
+                        },
+                        child: Text(AppLocalizations.of(context)!.delete),
                       ),
                     ),
                     SizedBox(height: MediaQuery.of(context).padding.bottom),

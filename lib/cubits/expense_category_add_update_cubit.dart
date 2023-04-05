@@ -3,13 +3,18 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/expense_category.dart';
+import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
 
 class AddUpdateExpenseCategoryCubit
     extends Cubit<AddUpdateExpenseCategoryState> {
+  final Household household;
   final ExpenseCategory category;
-  AddUpdateExpenseCategoryCubit([this.category = const ExpenseCategory()])
-      : super(AddUpdateExpenseCategoryState(
+
+  AddUpdateExpenseCategoryCubit(
+    this.household, [
+    this.category = const ExpenseCategory(),
+  ]) : super(AddUpdateExpenseCategoryState(
           name: category.name,
           color: category.color,
         ));
@@ -18,15 +23,20 @@ class AddUpdateExpenseCategoryCubit
     final _state = state;
     if (_state.isValid()) {
       if (category.id == null) {
-        await ApiService.getInstance().addExpenseCategory(ExpenseCategory(
-          name: _state.name,
-          color: _state.color,
-        ));
+        await ApiService.getInstance().addExpenseCategory(
+          household,
+          ExpenseCategory(
+            name: _state.name,
+            color: _state.color,
+          ),
+        );
       } else {
-        await ApiService.getInstance().updateExpenseCategory(category.copyWith(
-          name: _state.name,
-          color: Nullable(_state.color),
-        ));
+        await ApiService.getInstance().updateExpenseCategory(
+          category.copyWith(
+            name: _state.name,
+            color: Nullable(_state.color),
+          ),
+        );
       }
     }
   }

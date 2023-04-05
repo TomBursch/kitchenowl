@@ -1,20 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/cubits/item_search_cubit.dart';
+import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 
 class ItemSearchPage extends StatefulWidget {
+  final Household household;
   final bool multiple;
   final List<Item> selectedItems;
   final String? title;
 
   const ItemSearchPage({
-    Key? key,
+    super.key,
+    required this.household,
     this.multiple = true,
     this.title,
     this.selectedItems = const [],
-  }) : super(key: key);
+  });
 
   @override
   _ItemSearchPageState createState() => _ItemSearchPageState();
@@ -27,7 +30,7 @@ class _ItemSearchPageState extends State<ItemSearchPage> {
   @override
   void initState() {
     super.initState();
-    cubit = ItemSearchCubit(widget.selectedItems);
+    cubit = ItemSearchCubit(widget.household, widget.selectedItems);
   }
 
   @override

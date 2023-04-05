@@ -4,13 +4,18 @@ import 'package:kitchenowl/helpers/named_bytearray.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/expense.dart';
 import 'package:kitchenowl/models/expense_category.dart';
+import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/models/user.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
 
 class AddUpdateExpenseCubit extends Cubit<AddUpdateExpenseState> {
+  final Household household;
+
   final Expense expense;
-  AddUpdateExpenseCubit([this.expense = const Expense(paidById: 0)])
-      : super(AddUpdateExpenseState(
+  AddUpdateExpenseCubit(
+    this.household, [
+    this.expense = const Expense(paidById: 0),
+  ]) : super(AddUpdateExpenseState(
           amount: expense.amount.abs(),
           date: expense.date ?? DateTime.now(),
           isIncome: expense.amount < 0,
@@ -34,15 +39,18 @@ class AddUpdateExpenseCubit extends Cubit<AddUpdateExpenseState> {
             : await ApiService.getInstance().uploadBytes(_state.image!);
       }
       if (expense.id == null) {
-        await ApiService.getInstance().addExpense(Expense(
-          amount: amount,
-          name: _state.name,
-          date: _state.date,
-          image: image ?? expense.image,
-          paidById: _state.paidBy,
-          paidFor: _state.paidFor,
-          category: _state.category,
-        ));
+        await ApiService.getInstance().addExpense(
+          household,
+          Expense(
+            amount: amount,
+            name: _state.name,
+            date: _state.date,
+            image: image ?? expense.image,
+            paidById: _state.paidBy,
+            paidFor: _state.paidFor,
+            category: _state.category,
+          ),
+        );
       } else {
         await ApiService.getInstance().updateExpense(expense.copyWith(
           name: _state.name,
@@ -141,7 +149,8 @@ class AddUpdateExpenseCubit extends Cubit<AddUpdateExpenseState> {
 
   Future<void> _getCategories() async {
     final categories =
-        (await ApiService.getInstance().getExpenseCategories()) ?? const [];
+        (await ApiService.getInstance().getExpenseCategories(household)) ??
+            const [];
     final category = state.category;
     if (category != null && !categories.contains(category)) {
       categories.add(category);

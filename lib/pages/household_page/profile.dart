@@ -1,20 +1,22 @@
+import 'package:collection/collection.dart';
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:kitchenowl/app.dart';
 import 'package:kitchenowl/config.dart';
 import 'package:kitchenowl/cubits/auth_cubit.dart';
+import 'package:kitchenowl/cubits/household_cubit.dart';
 import 'package:kitchenowl/cubits/settings_cubit.dart';
-import 'package:kitchenowl/enums/views_enum.dart';
+import 'package:kitchenowl/enums/update_enum.dart';
+import 'package:kitchenowl/pages/household_update_page.dart';
 import 'package:kitchenowl/pages/settings_server_page.dart';
 import 'package:kitchenowl/pages/settings_user_page.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 
-import 'home_page_item.dart';
-
-class ProfilePage extends StatelessWidget with HomePageItem {
-  const ProfilePage({Key? key}) : super(key: key);
+class ProfilePage extends StatelessWidget {
+  const ProfilePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -30,15 +32,23 @@ class ProfilePage extends StatelessWidget with HomePageItem {
           padding: const EdgeInsets.fromLTRB(16, 64, 16, 16),
           sliver: SliverList(
             delegate: SliverChildListDelegate([
-              Icon(
-                Icons.account_circle_rounded,
-                size: 90,
-                color: Theme.of(context).colorScheme.secondary,
+              CircleAvatar(
+                foregroundImage: user.image.isEmpty
+                    ? null
+                    : getImageProvider(
+                        context,
+                        user.image,
+                      ),
+                radius: 45,
+                child: Text(user.name.substring(0, 1), textScaleFactor: 2),
               ),
-              Text(
-                user.name,
-                style: Theme.of(context).textTheme.headlineSmall,
-                textAlign: TextAlign.center,
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                child: Text(
+                  user.name,
+                  style: Theme.of(context).textTheme.headlineSmall,
+                  textAlign: TextAlign.center,
+                ),
               ),
             ]),
           ),
@@ -55,28 +65,30 @@ class ProfilePage extends StatelessWidget with HomePageItem {
                     title: Text(AppLocalizations.of(context)!.themeMode),
                     leading: const Icon(Icons.nights_stay_sharp),
                     contentPadding: const EdgeInsets.only(left: 20, right: 5),
-                    trailing: DropdownButton(
-                      value: state.themeMode,
-                      items: [
-                        DropdownMenuItem(
+                    horizontalTitleGap: 0,
+                    trailing: SegmentedButton(
+                      selected: {state.themeMode},
+                      segments: [
+                        ButtonSegment(
                           value: ThemeMode.light,
-                          child: Text(AppLocalizations.of(context)!.themeLight),
+                          icon: const Icon(Icons.light_mode_rounded),
+                          label: Text(AppLocalizations.of(context)!.themeLight),
                         ),
-                        DropdownMenuItem(
+                        ButtonSegment(
                           value: ThemeMode.dark,
-                          child: Text(AppLocalizations.of(context)!.themeDark),
+                          icon: const Icon(Icons.dark_mode_rounded),
+                          label: Text(AppLocalizations.of(context)!.themeDark),
                         ),
-                        DropdownMenuItem(
+                        ButtonSegment(
                           value: ThemeMode.system,
-                          child:
+                          icon: const Icon(Icons.brightness_medium_outlined),
+                          label:
                               Text(AppLocalizations.of(context)!.themeSystem),
                         ),
                       ],
-                      onChanged: (ThemeMode? value) {
-                        if (value != null) {
-                          BlocProvider.of<SettingsCubit>(context)
-                              .setTheme(value);
-                        }
+                      onSelectionChanged: (Set<ThemeMode> value) {
+                        BlocProvider.of<SettingsCubit>(context)
+                            .setTheme(value.first);
                       },
                     ),
                   ),
@@ -87,6 +99,7 @@ class ProfilePage extends StatelessWidget with HomePageItem {
                           AppLocalizations.of(context)!.dynamicAccentColor,
                         ),
                         leading: const Icon(Icons.color_lens_rounded),
+                        horizontalTitleGap: 0,
                         contentPadding:
                             const EdgeInsets.only(left: 20, right: 0),
                         trailing: KitchenOwlSwitch(
@@ -105,6 +118,7 @@ class ProfilePage extends StatelessWidget with HomePageItem {
                       title:
                           Text(AppLocalizations.of(context)!.forceOfflineMode),
                       leading: const Icon(Icons.mobiledata_off_outlined),
+                      horizontalTitleGap: 0,
                       contentPadding: const EdgeInsets.only(left: 20, right: 0),
                       trailing: BlocBuilder<AuthCubit, AuthState>(
                         buildWhen: (previous, current) =>
@@ -118,18 +132,75 @@ class ProfilePage extends StatelessWidget with HomePageItem {
                         ),
                       ),
                     ),
-                  if (!isOffline && user.hasAdminRights())
-                    Card(
-                      child: ListTile(
-                        title: Text(AppLocalizations.of(context)!.server),
-                        leading: const Icon(Icons.account_tree_rounded),
-                        minLeadingWidth: 16,
-                        onTap: () => Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => const SettingsServerPage(),
-                          ),
+                  Card(
+                    child: ListTile(
+                      title:
+                          Text(AppLocalizations.of(context)!.householdSwitch),
+                      leading: const Icon(Icons.swap_horiz_rounded),
+                      minLeadingWidth: 16,
+                      onTap: () => context.go("/household"),
+                    ),
+                  ),
+                  if (!isOffline)
+                    Row(
+                      children: [
+                        BlocBuilder<HouseholdCubit, HouseholdState>(
+                          builder: ((context, state) {
+                            if (!(state.household.member
+                                    ?.firstWhereOrNull(
+                                      (e) => user.id == e.id,
+                                    )
+                                    ?.hasAdminRights() ??
+                                true)) return const SizedBox();
+
+                            return Expanded(
+                              child: Card(
+                                child: ListTile(
+                                  title: Text(
+                                    AppLocalizations.of(context)!.household,
+                                  ),
+                                  leading: const Icon(Icons.house_rounded),
+                                  minLeadingWidth: 16,
+                                  onTap: () async {
+                                    final res = await Navigator.of(
+                                      context,
+                                      rootNavigator: true,
+                                    ).push<UpdateEnum>(
+                                      MaterialPageRoute(
+                                        builder: (ctx) => HouseholdUpdatePage(
+                                          household: state.household,
+                                        ),
+                                      ),
+                                    );
+                                    if (res == UpdateEnum.deleted) return;
+                                    BlocProvider.of<HouseholdCubit>(context)
+                                        .refresh();
+                                  },
+                                ),
+                              ),
+                            );
+                          }),
                         ),
-                      ),
+                        if (user.hasServerAdminRights())
+                          Expanded(
+                            child: Card(
+                              child: ListTile(
+                                title:
+                                    Text(AppLocalizations.of(context)!.server),
+                                leading: const Icon(Icons.account_tree_rounded),
+                                minLeadingWidth: 16,
+                                onTap: () =>
+                                    Navigator.of(context, rootNavigator: true)
+                                        .push(
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const SettingsServerPage(),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                      ],
                     ),
                   Row(
                     children: [
@@ -141,7 +212,9 @@ class ProfilePage extends StatelessWidget with HomePageItem {
                               title: Text(AppLocalizations.of(context)!.user),
                               leading: const Icon(Icons.person),
                               minLeadingWidth: 16,
-                              onTap: () => Navigator.of(context).push(
+                              onTap: () =>
+                                  Navigator.of(context, rootNavigator: true)
+                                      .push(
                                 MaterialPageRoute(
                                   builder: (context) =>
                                       const SettingsUserPage(),
@@ -185,6 +258,7 @@ class ProfilePage extends StatelessWidget with HomePageItem {
                   ),
                   LoadingTextButton(
                     onPressed: BlocProvider.of<AuthCubit>(context).logout,
+                    icon: const Icon(Icons.logout),
                     child: Text(AppLocalizations.of(context)!.logout),
                   ),
                 ],
@@ -195,11 +269,4 @@ class ProfilePage extends StatelessWidget with HomePageItem {
       ],
     );
   }
-
-  @override
-  IconData icon(context) =>
-      App.isOffline ? Icons.cloud_off_rounded : type().toIcon();
-
-  @override
-  ViewsEnum type() => ViewsEnum.profile;
 }

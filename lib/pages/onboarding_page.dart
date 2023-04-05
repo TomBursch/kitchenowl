@@ -1,58 +1,65 @@
-import 'package:animations/animations.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:kitchenowl/pages/onboarding/onboarding_settings_page.dart';
-import 'package:kitchenowl/pages/onboarding/onboarding_user_page.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kitchenowl/cubits/auth_cubit.dart';
+import 'package:kitchenowl/kitchenowl.dart';
+import 'package:kitchenowl/widgets/create_user_form_fields.dart';
 
 class OnboardingPage extends StatefulWidget {
-  const OnboardingPage({Key? key}) : super(key: key);
+  const OnboardingPage({super.key});
 
   @override
   State<OnboardingPage> createState() => _OnboardingPageState();
 }
 
 class _OnboardingPageState extends State<OnboardingPage> {
-  int _step = 0;
-  bool _reverse = false;
-
-  String _username = '';
-  String _password = '';
-  String _name = '';
+  final TextEditingController usernameController = TextEditingController();
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: PageTransitionSwitcher(
-        reverse: _reverse,
-        transitionBuilder: (
-          Widget child,
-          Animation<double> animation,
-          Animation<double> secondaryAnimation,
-        ) {
-          return SharedAxisTransition(
-            animation: animation,
-            secondaryAnimation: secondaryAnimation,
-            transitionType: SharedAxisTransitionType.horizontal,
-            child: child,
-          );
-        },
-        child: SafeArea(
-          key: ValueKey(_step),
-          child: Align(
-            alignment: Alignment.topCenter,
-            child: ConstrainedBox(
-              constraints: const BoxConstraints.expand(width: 600),
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: _step == 0
-                    ? OnboardingUserPage(
-                        next: _next,
-                      )
-                    : OnboardingSettingsPage(
-                        username: _username,
-                        name: _name,
-                        password: _password,
-                        back: _back,
+      body: SafeArea(
+        child: Align(
+          alignment: Alignment.topCenter,
+          child: ConstrainedBox(
+            constraints: const BoxConstraints.expand(width: 600),
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Spacer(),
+                    Text(AppLocalizations.of(context)!.onboardingTitle),
+                    CreateUserFormFields(
+                      usernameController: usernameController,
+                      nameController: nameController,
+                      passwordController: passwordController,
+                      submit: _submit,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 16, bottom: 8),
+                      child: ElevatedButton(
+                        onPressed: () => _submit(context),
+                        child: Text(AppLocalizations.of(context)!.start),
                       ),
+                    ),
+                    const Spacer(),
+                    if (!kIsWeb)
+                      TextButton.icon(
+                        icon: const Icon(Icons.swap_horiz_rounded),
+                        label: Text(AppLocalizations.of(context)!.serverChange),
+                        onPressed: () =>
+                            BlocProvider.of<AuthCubit>(context).removeServer(),
+                      ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -61,24 +68,13 @@ class _OnboardingPageState extends State<OnboardingPage> {
     );
   }
 
-  void _next({
-    required String username,
-    required String name,
-    required String password,
-  }) {
-    _username = username;
-    _name = name;
-    _password = password;
-    setState(() {
-      _reverse = false;
-      _step = 1;
-    });
-  }
-
-  void _back() {
-    setState(() {
-      _reverse = true;
-      _step = 0;
-    });
+  void _submit(BuildContext context) {
+    if (_formKey.currentState!.validate()) {
+      BlocProvider.of<AuthCubit>(context).onboard(
+        username: usernameController.text,
+        name: nameController.text,
+        password: passwordController.text,
+      );
+    }
   }
 }

@@ -2,13 +2,15 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/enums/expenselist_sorting.dart';
 import 'package:kitchenowl/models/expense_category.dart';
+import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/services/transaction_handler.dart';
 import 'package:kitchenowl/services/transactions/expense.dart';
 
 class ExpenseOverviewCubit extends Cubit<ExpenseOverviewState> {
+  final Household household;
   Future<void>? _refreshThread;
 
-  ExpenseOverviewCubit(ExpenselistSorting initialSorting)
+  ExpenseOverviewCubit(this.household, ExpenselistSorting initialSorting)
       : super(ExpenseOverviewLoading(initialSorting)) {
     refresh();
   }
@@ -32,9 +34,10 @@ class ExpenseOverviewCubit extends Cubit<ExpenseOverviewState> {
   Future<void> _refresh() async {
     final sorting = state.sorting;
     final categories = TransactionHandler.getInstance()
-        .runTransaction(TransactionExpenseCategoriesGet());
+        .runTransaction(TransactionExpenseCategoriesGet(household: household));
     final overview = await TransactionHandler.getInstance()
         .runTransaction(TransactionExpenseGetOverview(
+      household: household,
       sorting: sorting,
       months: 5,
     ));

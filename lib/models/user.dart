@@ -5,20 +5,17 @@ class User extends Model {
   final int id;
   final String username;
   final String name;
-  final bool owner;
-  final bool admin;
+  final String image;
+  final bool serverAdmin;
   final List<Token>? tokens;
-
-  final double balance;
 
   const User({
     required this.id,
     required this.name,
     required this.username,
-    this.owner = false,
-    this.admin = false,
+    this.image = "",
+    this.serverAdmin = false,
     this.tokens,
-    this.balance = 0,
   });
 
   factory User.fromJson(Map<String, dynamic> map) {
@@ -31,20 +28,19 @@ class User extends Model {
       id: map['id'],
       username: map['username'],
       name: map['name'],
-      owner: map['owner'] ?? false,
-      admin: map['admin'] ?? false,
-      balance: map['expense_balance'] ?? 0,
+      image: map['photo'] ?? '',
+      serverAdmin: map['admin'] ?? false,
       tokens: tokens,
     );
   }
 
   @override
-  List<Object?> get props =>
-      [id, name, username, owner, admin, balance, tokens];
+  List<Object?> get props => [id, name, username, serverAdmin, tokens];
 
   @override
   Map<String, dynamic> toJson() => {
         "name": name,
+        "photo": image,
       };
 
   @override
@@ -52,10 +48,8 @@ class User extends Model {
         "id": id,
         "username": username,
         "name": name,
-        "owner": owner,
-        "admin": admin,
-        "expense_balance": balance,
+        "admin": serverAdmin,
       };
 
-  bool hasAdminRights() => admin || owner;
+  bool hasServerAdminRights() => serverAdmin;
 }

@@ -6,18 +6,22 @@ class ImageSelector extends StatelessWidget {
   final NamedByteArray? image;
   final String originalImage;
   final void Function(NamedByteArray) setImage;
+  final EdgeInsetsGeometry? padding;
+  final String? tooltip;
 
   const ImageSelector({
     super.key,
     this.image,
-    required this.originalImage,
+    this.originalImage = "",
+    this.padding = const EdgeInsets.all(16),
     required this.setImage,
+    this.tooltip,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.all(16),
+      margin: padding,
       constraints: const BoxConstraints.expand(height: 80),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(14),
@@ -38,10 +42,11 @@ class ImageSelector extends StatelessWidget {
             ? const Icon(Icons.edit)
             : const Icon(Icons.add_photo_alternate_rounded),
         color: Theme.of(context).colorScheme.secondary,
+        tooltip: tooltip ?? AppLocalizations.of(context)!.imageSelect,
         onPressed: () async {
           NamedByteArray? file = await selectFile(
             context: context,
-            title: AppLocalizations.of(context)!.recipeImageSelect,
+            title: tooltip ?? AppLocalizations.of(context)!.imageSelect,
             deleteOption: hasDominantImage(),
           );
           if (file != null) {

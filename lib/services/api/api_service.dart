@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:kitchenowl/config.dart';
 import 'package:kitchenowl/helpers/named_bytearray.dart';
-import 'package:kitchenowl/models/server_settings.dart';
+import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/models/token.dart';
 import 'package:tuple/tuple.dart';
 
@@ -18,6 +18,7 @@ export 'expense.dart';
 export 'tag.dart';
 export 'upload.dart';
 export 'category.dart';
+export 'household.dart';
 
 enum Connection {
   disconnected,
@@ -41,6 +42,8 @@ class ApiService {
   // ignore: constant_identifier_names
   static const String _API_PATH = "/api";
 
+  String householdPath(Household household) => "/household/${household.id}";
+
   static ApiService? _instance;
   final _client = http.Client();
   final String baseUrl;
@@ -54,9 +57,6 @@ class ApiService {
   static final ValueNotifier<Connection> _connectionNotifier =
       ValueNotifier<Connection>(Connection.undefined);
 
-  static final ValueNotifier<ServerSettings> _settingsNotifier =
-      ValueNotifier<ServerSettings>(const ServerSettings());
-
   ApiService._internal(this.baseUrl) {
     _connectionNotifier.value = Connection.undefined;
   }
@@ -68,8 +68,6 @@ class ApiService {
   }
 
   Connection get connectionStatus => _connectionNotifier.value;
-
-  ServerSettings get serverSettings => _settingsNotifier.value;
 
   set refreshToken(String newRefreshToken) => _refreshToken = newRefreshToken;
 
@@ -90,14 +88,6 @@ class ApiService {
 
   void removeListener(void Function() f) {
     _connectionNotifier.removeListener(f);
-  }
-
-  void addSettingsListener(void Function() f) {
-    _settingsNotifier.addListener(f);
-  }
-
-  void removeSettingsListener(void Function() f) {
-    _settingsNotifier.removeListener(f);
   }
 
   static void setTokenRotationHandler(void Function(String) handler) {
@@ -134,8 +124,6 @@ class ApiService {
                 (int.tryParse((await Config.packageInfo)?.buildNumber ?? '0') ??
                     0) &&
             (healthy.item2!['version'] ?? 0) >= Config.MIN_BACKEND_VERSION) {
-          _settingsNotifier.value = ServerSettings.fromJson(healthy.item2!);
-
           await getInstance().refreshAuth()
               ? status = Connection.authenticated
               : status = Connection.connected;
@@ -190,6 +178,22 @@ class ApiService {
 
           return http.Response.fromStream(await _client.send(request));
         },
+      );
+
+  Future<http.Response> put(
+    String url,
+    dynamic body, {
+    Encoding? encoding,
+    Duration? timeout,
+  }) =>
+      _handleRequest(
+        timeout: timeout,
+        () => _client.put(
+          Uri.parse(baseUrl + url),
+          body: body,
+          headers: headers,
+          encoding: encoding,
+        ),
       );
 
   Future<http.Response> delete(
@@ -330,8 +334,6 @@ class ApiService {
     String username,
     String name,
     String password,
-    ServerSettings? settings,
-    String? language,
   ) async {
     if (!(await isOnboarding())) return null;
     final Map<String, dynamic> sendBody = {
@@ -339,17 +341,6 @@ class ApiService {
       'name': name,
       'password': password,
     };
-    if (settings != null) {
-      if (settings.featurePlanner != null) {
-        sendBody['planner_feature'] = settings.featurePlanner!;
-      }
-      if (settings.featureExpenses != null) {
-        sendBody['expenses_feature'] = settings.featureExpenses!;
-      }
-    }
-    if (language != null) {
-      sendBody['language'] = language;
-    }
 
     if (await Config.deviceName != null) {
       sendBody['device'] = await Config.deviceName;
@@ -365,31 +356,11 @@ class ApiService {
       headers['Authorization'] = 'Bearer ${body['access_token']}';
       _refreshToken = body['refresh_token'];
       _setConnectionState(Connection.authenticated);
-      if (settings != null) {
-        _settingsNotifier.value = settings;
-      }
 
       return _refreshToken;
     }
 
     return null;
-  }
-
-  Future<ServerSettings?> getSettings() async {
-    final res = await get('/settings');
-    if (res.statusCode != 200) return null;
-    _settingsNotifier.value = ServerSettings.fromJson(jsonDecode(res.body));
-
-    return _settingsNotifier.value;
-  }
-
-  Future<bool> setSettings(ServerSettings settings) async {
-    final res = await post('/settings', jsonEncode(settings.toJson()));
-    if (res.statusCode == 200) {
-      _settingsNotifier.value = ServerSettings.fromJson(jsonDecode(res.body));
-    }
-
-    return res.statusCode == 200;
   }
 
   Future<String?> createLongLivedToken(String name) async {
@@ -407,5 +378,14 @@ class ApiService {
     final res = await delete('/auth/llt/${token.id}');
 
     return res.statusCode == 200;
+  }
+
+  Future<Map<String, String>?> getSupportedLanguages() async {
+    final res = await get(
+      '/health/8M4F88S8ooi4sMbLBfkkV7ctWwgibW6V/supported-languages',
+    );
+    if (res.statusCode != 200) return null;
+
+    return Map<String, String>.from((jsonDecode(res.body)));
   }
 }

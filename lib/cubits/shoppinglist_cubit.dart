@@ -5,6 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/enums/shoppinglist_sorting.dart';
 import 'package:kitchenowl/models/category.dart';
+import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/models/shoppinglist.dart';
 import 'package:kitchenowl/services/storage/storage.dart';
@@ -15,6 +16,7 @@ import 'package:kitchenowl/services/transaction_handler.dart';
 enum ShoppinglistStyle { grid, list }
 
 class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
+  final Household household;
   Future<void>? _refreshThread;
   String? _refreshCurrentQuery;
 
@@ -22,7 +24,8 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
       ? (state as SearchShoppinglistCubitState).query
       : "";
 
-  ShoppinglistCubit() : super(const LoadingShoppinglistCubitState()) {
+  ShoppinglistCubit(this.household)
+      : super(const LoadingShoppinglistCubitState()) {
     PreferenceStorage.getInstance().readInt(key: 'itemSorting').then((i) {
       if (i != null && state.sorting.index != i) {
         setSorting(
@@ -37,9 +40,10 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
   Future<void> search(String query) => refresh(query: query);
 
   Future<void> add(String name, [String? description]) async {
+    if (state.selectedShoppinglist == null) return;
     await TransactionHandler.getInstance()
         .runTransaction(TransactionShoppingListAddItem(
-      shoppinglist: state.selectedShoppinglist,
+      shoppinglist: state.selectedShoppinglist!,
       name: name,
       description: description ?? '',
     ));
@@ -48,6 +52,7 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
 
   Future<void> remove(ShoppinglistItem item) async {
     final _state = state;
+    if (_state.selectedShoppinglist == null) return;
     final l = List.of(_state.listItems);
     l.remove(item);
     final recent = List.of(_state.recentItems);
@@ -74,7 +79,7 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
     }
     if (!await TransactionHandler.getInstance()
         .runTransaction(TransactionShoppingListDeleteItem(
-      shoppinglist: _state.selectedShoppinglist,
+      shoppinglist: _state.selectedShoppinglist!,
       item: item,
     ))) {
       await refresh();
@@ -157,10 +162,13 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
       ));
     }
 
-    final shoppingLists = TransactionHandler.getInstance()
-        .runTransaction(TransactionShoppingListGet());
+    final shoppingLists = await TransactionHandler.getInstance()
+        .runTransaction(TransactionShoppingListGet(household: household));
 
-    final shoppinglist = state.selectedShoppinglist;
+    final shoppinglist =
+        state.selectedShoppinglist ?? shoppingLists.firstOrNull;
+
+    if (shoppinglist == null) return;
 
     Future<List<ShoppinglistItem>> items =
         TransactionHandler.getInstance().runTransaction(
@@ -171,7 +179,7 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
     );
 
     Future<List<Category>> categories = TransactionHandler.getInstance()
-        .runTransaction(TransactionCategoriesGet());
+        .runTransaction(TransactionCategoriesGet(household: household));
 
     if (query != null && query.isNotEmpty) {
       // Split query into name and description
@@ -185,7 +193,10 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
 
       Future<List<Item>> searchItems = TransactionHandler.getInstance()
           .runTransaction(
-            TransactionShoppingListSearchItem(query: queryName),
+            TransactionShoppingListSearchItem(
+              household: household,
+              query: queryName,
+            ),
           )
           .then((items) => items
               .map((e) => ItemWithDescription.fromItem(
@@ -206,7 +217,7 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
         ));
       }
       resState = SearchShoppinglistCubitState(
-        shoppinglists: await shoppingLists,
+        shoppinglists: shoppingLists,
         selectedShoppinglist: shoppinglist,
         result: loadedItems,
         query: query,
@@ -214,6 +225,7 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
         categories: await categories,
         style: state.style,
         sorting: state.sorting,
+        recentItems: state.recentItems,
       );
     } else {
       final recent = TransactionHandler.getInstance()
@@ -221,7 +233,7 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
         shoppinglist: shoppinglist,
       ));
       resState = ShoppinglistCubitState(
-        shoppinglists: await shoppingLists,
+        shoppinglists: shoppingLists,
         selectedShoppinglist: shoppinglist,
         listItems: await items,
         recentItems: await recent,
@@ -254,7 +266,7 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
 
 class ShoppinglistCubitState extends Equatable {
   final List<ShoppingList> shoppinglists;
-  final ShoppingList selectedShoppinglist;
+  final ShoppingList? selectedShoppinglist;
   final List<ShoppinglistItem> listItems;
   final List<ItemWithDescription> recentItems;
   final List<Category> categories;
@@ -263,7 +275,7 @@ class ShoppinglistCubitState extends Equatable {
 
   const ShoppinglistCubitState({
     this.shoppinglists = const [],
-    this.selectedShoppinglist = const ShoppingList.def(),
+    required this.selectedShoppinglist,
     this.listItems = const [],
     this.recentItems = const [],
     this.categories = const [],
@@ -337,7 +349,7 @@ class SearchShoppinglistCubitState extends ShoppinglistCubitState {
 
   const SearchShoppinglistCubitState({
     super.shoppinglists = const [],
-    super.selectedShoppinglist = const ShoppingList.def(),
+    required super.selectedShoppinglist,
     super.listItems = const [],
     super.recentItems = const [],
     super.categories = const [],

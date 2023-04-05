@@ -1,0 +1,120 @@
+{
+  "about": "Rólunk",
+  "@about": {},
+  "add": "Hozzáadás",
+  "@add": {},
+  "addCategory": "Kategória hozzáadása",
+  "@addCategory": {},
+  "addDescriptionFromSource": "Leírás hozzáadása a forrásból",
+  "@addDescriptionFromSource": {},
+  "addItemTitle": "Elemek hozzáadása",
+  "@addItemTitle": {},
+  "addLanguage": "Nyelv hozzáadása",
+  "@addLanguage": {},
+  "addLanguageConfirm": "Biztosan hozzá szeretné adni a(z) '{lang}' nyelvet? Ez (jelenleg) nem vonható vissza.",
+  "@addLanguageConfirm": {
+    "placeholders": {
+      "lang": {}
+    }
+  },
+  "addNumberIngredients": "Adjon hozzá {number} összetevőt",
+  "@addNumberIngredients": {
+    "placeholders": {
+      "number": {}
+    }
+  },
+  "addRecipeToPlanner": "Hozzáadás az étkezési tervhez",
+  "@addRecipeToPlanner": {},
+  "addRecipeToPlannerShort": "Hozzáadás az étkezési tervhez",
+  "@addRecipeToPlannerShort": {},
+  "address": "Cím",
+  "@address": {},
+  "addShoppingList": "Bevásárló listához adás",
+  "@addShoppingList": {},
+  "addTag": "Címke hozzáadása",
+  "@addTag": {},
+  "admin": "Admin",
+  "@admin": {},
+  "appDescription": "A KitchenOwl segít megszervezni élelmiszerboltos életét.",
+  "@appDescription": {},
+  "appLegal": "2021 A KitchenOwl Fejlesztői",
+  "@appLegal": {},
+  "appTitle": "KitchenOwl",
+  "@appTitle": {
+    "description": "The title of the app"
+  },
+  "back": "Vissza",
+  "@back": {},
+  "balances": "Egyenlegek",
+  "@balances": {},
+  "camera": "Kamera",
+  "@camera": {},
+  "cancel": "Vissza",
+  "@cancel": {},
+  "categories": "Kategóriák",
+  "@categories": {},
+  "category": "Kategória",
+  "@category": {},
+  "categoryDelete": "Kategória törlése",
+  "@categoryDelete": {},
+  "categoryDeleteConfirmation": "Biztosan törli a következőt: {category}? Ezzel eltávolítja a kategóriát az összes elemből.",
+  "@categoryDeleteConfirmation": {
+    "placeholders": {
+      "category": {}
+    }
+  },
+  "categoryEdit": "Kategória szerkesztése",
+  "@categoryEdit": {},
+  "categoryExpenseDeleteConfirmation": "Biztosan törli a következőt: {category}? Ezzel eltávolítja a kategóriát az összes kiadás közül.",
+  "@categoryExpenseDeleteConfirmation": {
+    "placeholders": {
+      "category": {}
+    }
+  },
+  "changeIcon": "Ikon módosítása",
+  "@changeIcon": {},
+  "colorSelect": "Válasszon egy színt",
+  "@colorSelect": {},
+  "cookingTime": "Főzési idő",
+  "@cookingTime": {},
+  "copied": "Másolva",
+  "@copied": {},
+  "darkmode": "Sötét mód",
+  "@darkmode": {},
+  "date": "Dátum",
+  "@date": {},
+  "defaultWord": "Alapértelmezett",
+  "@defaultWord": {},
+  "delete": "Töröl",
+  "@delete": {},
+  "description": "Leírás",
+  "@description": {},
+  "done": "Kész",
+  "@done": {},
+  "dynamicAccentColor": "Dinamikus kiemelő szín",
+  "@dynamicAccentColor": {},
+  "error": "Hiba történt",
+  "@error": {},
+  "expense": "Költség",
+  "@expense": {},
+  "expenseAdd": "Költség hozzáadása",
+  "@expenseAdd": {},
+  "expenseAmount": "Összeg",
+  "@expenseAmount": {},
+  "expenseCategories": "Költségkategóriák",
+  "@expenseCategories": {},
+  "expenseEdit": "Költség szerkesztése",
+  "@expenseEdit": {},
+  "expenseEmpty": "Nincs költség, kezdje azzal, hogy létrehoz egyet!",
+  "@expenseEmpty": {},
+  "expenseFactor": "Tényező",
+  "@expenseFactor": {},
+  "expenseOverviewComparedToPreviousMonth": "Az előző hónapokhoz képest",
+  "@expenseOverviewComparedToPreviousMonth": {},
+  "expenseOverviewTotalTitle": "Összes kiadás {month}:",
+  "@expenseOverviewTotalTitle": {
+    "placeholders": {
+      "month": {}
+    }
+  }
+}

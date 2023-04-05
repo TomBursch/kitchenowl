@@ -354,5 +354,25 @@
   "more": "Mere",
   "@more": {},
   "colorSelect": "Vælg en farve",
-  "@colorSelect": {}
+  "@colorSelect": {},
+  "addShoppingList": "Tilføj indkøbsliste",
+  "@addShoppingList": {},
+  "defaultWord": "Standard",
+  "@defaultWord": {},
+  "shoppingListDelete": "Slet indkøbsliste",
+  "@shoppingListDelete": {},
+  "shoppingListDeleteConfirmation": "Er du sikker på, du vil slette {shoppingList}?",
+  "@shoppingListDeleteConfirmation": {
+    "placeholders": {
+      "shoppingList": {}
+    }
+  },
+  "shoppingListEdit": "Rediger indkøbsliste",
+  "@shoppingListEdit": {},
+  "yes": "Ja",
+  "@yes": {},
+  "unsavedChangesTitle": "Du har ændringer der ikke er gemt",
+  "@unsavedChangesTitle": {},
+  "unsavedChangesBody": "Er du sikker på, du vil gå tilbage?",
+  "@unsavedChangesBody": {}
 }

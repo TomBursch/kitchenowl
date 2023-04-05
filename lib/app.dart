@@ -30,6 +30,7 @@ import 'package:kitchenowl/pages/splash_page.dart';
 import 'package:kitchenowl/pages/unreachable_page.dart';
 import 'package:kitchenowl/pages/household_page.dart';
 import 'package:kitchenowl/pages/unsupported_page.dart';
+import 'package:kitchenowl/services/storage/storage.dart';
 import 'package:kitchenowl/services/transaction_handler.dart';
 import 'package:kitchenowl/styles/colors.dart';
 import 'package:kitchenowl/styles/themes.dart';
@@ -109,7 +110,12 @@ class _AppState extends State<App> {
                 if (state is Unreachable) _router.go("/unreachable");
                 if (state is Unsupported) _router.go("/unsupported");
                 if (state is Loading) _router.go("/");
-                if (state is Authenticated) _router.go("/household");
+                if (state is Authenticated) {
+                  PreferenceStorage.getInstance()
+                      .readInt(key: 'lastHouseholdId')
+                      .then((id) =>
+                          _router.go("/household${id == null ? "" : "/$id"}"));
+                }
               },
               child: BlocBuilder<SettingsCubit, SettingsState>(
                 builder: (context, state) =>
@@ -194,8 +200,13 @@ class _AppState extends State<App> {
 
   void _handleSharedMedia(SharedMedia media) {
     if (mounted && media.content != null) {
-      _router
-          .go("/household/1/recipes/scrape?url=\"${media.content!}\""); //TODO
+      PreferenceStorage.getInstance()
+          .readInt(key: 'lastHouseholdId')
+          .then((id) {
+        if (id != null) {
+          _router.go("/household/$id/recipes/scrape?url=\"${media.content!}\"");
+        }
+      });
     }
   }
 }
@@ -318,6 +329,13 @@ final _router = GoRouter(
           path: ":id",
           builder: (context, state) => const SplashPage(),
           redirect: (context, state) {
+            final id = int.tryParse(state.params['id'] ?? '');
+            if (id != null) {
+              PreferenceStorage.getInstance().writeInt(
+                key: 'lastHouseholdId',
+                value: id,
+              );
+            }
             if (state.subloc == state.location) return "${state.subloc}/items";
 
             return null;

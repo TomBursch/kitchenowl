@@ -174,6 +174,7 @@ class AuthCubit extends Cubit<AuthState> {
     emit(const Loading());
     await SecureStorage.getInstance().delete(key: 'TOKEN');
     await TempStorage.getInstance().clearAll();
+    await PreferenceStorage.getInstance().delete(key: "lastHouseholdId");
     await ApiService.getInstance().logout();
     if (ApiService.getInstance().connectionStatus == Connection.disconnected) {
       emit(const Unreachable());

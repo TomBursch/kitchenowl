@@ -40,7 +40,7 @@ class _LanguageDialogState extends State<LanguageDialog> {
         items: [
           DropdownMenuItem(
             value: null,
-            child: Text("None"),
+            child: Text(AppLocalizations.of(context)!.none),
           ),
           for (final e in (widget.supportedLanguages?.entries ??
               const <MapEntry<String, String>>[]))

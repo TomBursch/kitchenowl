@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/cubits/household_add_update/household_update_cubit.dart';
-import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/widgets/settings_household/sliver_household_category_settings.dart';

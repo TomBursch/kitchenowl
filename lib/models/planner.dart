@@ -25,11 +25,14 @@ class RecipePlan extends Model {
 
   @override
   Map<String, dynamic> toJson() => {
-        "recipe": recipe.toJson(),
-        "day": day,
-        "yields": yields,
+        "recipe_id": recipe.id,
+        if (day != null) "day": day,
+        if (yields != null) "yields": yields,
       };
 
   @override
-  Map<String, dynamic> toJsonWithId() => toJson();
+  Map<String, dynamic> toJsonWithId() => toJson()
+    ..addAll({
+      "recipe": recipe.toJson(),
+    });
 }

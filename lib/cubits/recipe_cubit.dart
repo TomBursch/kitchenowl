@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/models/item.dart';
+import 'package:kitchenowl/models/planner.dart';
 import 'package:kitchenowl/models/recipe.dart';
 import 'package:kitchenowl/services/transaction_handler.dart';
 import 'package:kitchenowl/services/transactions/planner.dart';
@@ -61,8 +62,14 @@ class RecipeCubit extends Cubit<RecipeState> {
       await TransactionHandler.getInstance()
           .runTransaction(TransactionPlannerAddRecipe(
         household: household!,
-        recipe: state.recipe,
-        day: day,
+        recipePlan: RecipePlan(
+          recipe: state.recipe,
+          day: day,
+          yields: state.recipe.yields != state.selectedYields &&
+                  state.selectedYields > 0
+              ? state.selectedYields
+              : null,
+        ),
       ));
       if (updateOnAdd) setUpdateState(UpdateEnum.updated);
     }

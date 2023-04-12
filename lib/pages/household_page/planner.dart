@@ -157,6 +157,7 @@ class _PlannerPageState extends State<PlannerPage> {
                                     key: ValueKey(plan.recipe.id),
                                     title: plan.recipe.name,
                                     selected: true,
+                                    description: plan.yields?.toString(),
                                     onPressed: () {
                                       cubit.remove(plan.recipe);
                                     },

@@ -31,8 +31,7 @@ class PlannerCubit extends Cubit<PlannerCubitState> {
     await TransactionHandler.getInstance()
         .runTransaction(TransactionPlannerAddRecipe(
       household: household,
-      recipe: recipe,
-      day: day,
+      recipePlan: RecipePlan(recipe: recipe, day: day),
     ));
     await refresh();
   }

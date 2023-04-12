@@ -84,13 +84,11 @@ class TransactionPlannerGetSuggestedRecipes extends Transaction<List<Recipe>> {
 
 class TransactionPlannerAddRecipe extends Transaction<bool> {
   final Household household;
-  final Recipe recipe;
-  final int? day;
+  final RecipePlan recipePlan;
 
   TransactionPlannerAddRecipe({
     required this.household,
-    required this.recipe,
-    this.day,
+    required this.recipePlan,
     DateTime? timestamp,
   }) : super.internal(
           timestamp ?? DateTime.now(),
@@ -103,8 +101,7 @@ class TransactionPlannerAddRecipe extends Transaction<bool> {
   ) =>
       TransactionPlannerAddRecipe(
         household: Household.fromJson(map['household']),
-        recipe: Recipe.fromJson(map['recipe']),
-        day: map['day'],
+        recipePlan: RecipePlan.fromJson(map['recipePlan']),
         timestamp: timestamp,
       );
 
@@ -115,8 +112,7 @@ class TransactionPlannerAddRecipe extends Transaction<bool> {
   Map<String, dynamic> toJson() => super.toJson()
     ..addAll({
       "household": household.toJsonWithId(),
-      "recipe": recipe.toJsonWithId(),
-      "day": day,
+      "recipePlan": recipePlan.toJsonWithId(),
     });
 
   @override
@@ -126,7 +122,7 @@ class TransactionPlannerAddRecipe extends Transaction<bool> {
 
   @override
   Future<bool?> runOnline() {
-    return ApiService.getInstance().addPlannedRecipe(household, recipe, day);
+    return ApiService.getInstance().addPlannedRecipe(household, recipePlan);
   }
 }
 

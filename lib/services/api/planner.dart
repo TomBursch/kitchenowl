@@ -18,14 +18,11 @@ extension PlannerApi on ApiService {
 
   Future<bool> addPlannedRecipe(
     Household household,
-    Recipe recipe,
-    int? day,
+    RecipePlan recipePlan,
   ) async {
-    final body = {"recipe_id": recipe.id};
-    if (day != null) body['day'] = day;
     final res = await post(
       '${householdPath(household)}$baseRoute/recipe',
-      jsonEncode(body),
+      jsonEncode(recipePlan.toJson()),
     );
 
     return res.statusCode == 200;

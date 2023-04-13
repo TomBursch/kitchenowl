@@ -78,6 +78,7 @@ class _SettingsServerPageState extends State<SettingsServerPage> {
                               ),
                               IconButton(
                                 icon: const Icon(Icons.add),
+                                tooltip: AppLocalizations.of(context)!.userAdd,
                                 onPressed: () async {
                                   final res = await Navigator.of(context)
                                       .push<UpdateEnum>(MaterialPageRoute(

@@ -40,6 +40,7 @@ class StringItemMatch extends StatelessWidget {
               trailing: item != null
                   ? IconButton(
                       onPressed: () => itemSelected(null),
+                      tooltip: AppLocalizations.of(context)!.remove,
                       icon: const Icon(Icons.close),
                     )
                   : null,

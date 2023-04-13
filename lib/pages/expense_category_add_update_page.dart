@@ -71,6 +71,7 @@ class _AddUpdateExpenseCategoryPageState
               bloc: cubit,
               builder: (context, state) => LoadingIconButton(
                 icon: const Icon(Icons.save_rounded),
+                tooltip: AppLocalizations.of(context)!.save,
                 onPressed: state.isValid()
                     ? () async {
                         await cubit.saveCategory();

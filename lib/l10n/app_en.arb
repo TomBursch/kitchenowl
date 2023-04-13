@@ -305,6 +305,8 @@
   "@recipesSuggested": {},
   "refresh": "Refresh",
   "@refresh": {},
+  "remove": "Remove",
+  "@remove": {},
   "rename": "Rename",
   "@rename": {},
   "reset": "Reset",

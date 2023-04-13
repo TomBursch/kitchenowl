@@ -17,11 +17,13 @@ import 'package:responsive_builder/responsive_builder.dart';
 class AddUpdateRecipePage extends StatefulWidget {
   final Household household;
   final Recipe recipe;
+  final bool canSaveWithoutChanges;
 
   const AddUpdateRecipePage({
     super.key,
     required this.household,
     this.recipe = const Recipe(),
+    this.canSaveWithoutChanges = false,
   });
 
   @override
@@ -49,7 +51,11 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
     if (widget.recipe.source.isNotEmpty) {
       sourceController.text = widget.recipe.source;
     }
-    cubit = AddUpdateRecipeCubit(widget.household, widget.recipe);
+    cubit = AddUpdateRecipeCubit(
+      widget.household,
+      widget.recipe,
+      widget.canSaveWithoutChanges,
+    );
   }
 
   @override
@@ -97,6 +103,7 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                 builder: (context, state) {
                   return LoadingIconButton(
                     icon: const Icon(Icons.save_rounded),
+                    tooltip: AppLocalizations.of(context)!.save,
                     onPressed: state.isValid() && cubit.hasChanges
                         ? () async {
                             await cubit.saveRecipe();
@@ -201,24 +208,29 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                                       Theme.of(context).colorScheme.secondary,
                                 ))
                             .toList();
-                        Widget widget = GestureDetector(
-                          onTap: () async {
-                            final res = await showDialog<String>(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return TextDialog(
-                                  title: AppLocalizations.of(context)!.addTag,
-                                  doneText: AppLocalizations.of(context)!.add,
-                                  hintText: AppLocalizations.of(context)!.name,
-                                  isInputValid: (s) => s.isNotEmpty,
-                                );
-                              },
-                            );
-                            if (res != null) {
-                              cubit.addTag(res);
-                            }
-                          },
-                          child: const Icon(Icons.add),
+                        Widget widget = Tooltip(
+                          message: AppLocalizations.of(context)!.addTag,
+                          child: InkWell(
+                            borderRadius: BorderRadius.circular(50),
+                            onTap: () async {
+                              final res = await showDialog<String>(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return TextDialog(
+                                    title: AppLocalizations.of(context)!.addTag,
+                                    doneText: AppLocalizations.of(context)!.add,
+                                    hintText:
+                                        AppLocalizations.of(context)!.name,
+                                    isInputValid: (s) => s.isNotEmpty,
+                                  );
+                                },
+                              );
+                              if (res != null) {
+                                cubit.addTag(res);
+                              }
+                            },
+                            child: const Icon(Icons.add),
+                          ),
                         );
 
                         if (children.isEmpty) {
@@ -302,6 +314,7 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                           ),
                           IconButton(
                             icon: const Icon(Icons.add),
+                            tooltip: AppLocalizations.of(context)!.addItemTitle,
                             onPressed: () => _updateItems(context, false),
                             padding: EdgeInsets.zero,
                           ),
@@ -335,6 +348,7 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                         ),
                         IconButton(
                           icon: const Icon(Icons.add),
+                          tooltip: AppLocalizations.of(context)!.addItemTitle,
                           onPressed: () => _updateItems(context, true),
                           padding: EdgeInsets.zero,
                         ),

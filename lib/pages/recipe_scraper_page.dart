@@ -103,6 +103,7 @@ class _RecipeScraperPageState extends State<RecipeScraperPage> {
                                     builder: (context) => AddUpdateRecipePage(
                                       household: widget.household,
                                       recipe: cubit.getRecipe()!,
+                                      canSaveWithoutChanges: true,
                                     ),
                                   ));
                                   if (res == UpdateEnum.updated) {

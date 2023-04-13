@@ -33,8 +33,7 @@ class ServerUserCard extends StatelessWidget {
       onDismissed: (direction) {
         BlocProvider.of<SettingsServerCubit>(context).deleteUser(user);
       },
-      title: Text(user.name),
-      subtitle: Text(user.username +
+      title: Text(user.name +
           ((user.id ==
                   (BlocProvider.of<AuthCubit>(
                     context,
@@ -43,6 +42,7 @@ class ServerUserCard extends StatelessWidget {
                       .id)
               ? ' (${AppLocalizations.of(context)!.you})'
               : '')),
+      subtitle: Text("@${user.username}"),
       trailing: user.hasServerAdminRights()
           ? Icon(
               Icons.admin_panel_settings_rounded,

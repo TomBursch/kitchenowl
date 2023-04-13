@@ -11,12 +11,12 @@ import 'package:kitchenowl/cubits/household_cubit.dart';
 import 'package:kitchenowl/cubits/settings_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/pages/household_update_page.dart';
-import 'package:kitchenowl/pages/settings_server_page.dart';
+import 'package:kitchenowl/pages/settings_server_user_page.dart';
 import 'package:kitchenowl/pages/settings_user_page.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 
-class ProfilePage extends StatelessWidget {
-  const ProfilePage({super.key});
+class MorePage extends StatelessWidget {
+  const MorePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -194,7 +194,7 @@ class ProfilePage extends StatelessWidget {
                                         .push(
                                   MaterialPageRoute(
                                     builder: (context) =>
-                                        const SettingsServerPage(),
+                                        const SettingsServerUserPage(),
                                   ),
                                 ),
                               ),

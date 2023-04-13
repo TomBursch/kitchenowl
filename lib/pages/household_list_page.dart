@@ -4,7 +4,7 @@ import 'package:kitchenowl/app.dart';
 import 'package:kitchenowl/cubits/household_list_cubit.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/pages/household_add_page.dart';
-import 'package:kitchenowl/pages/settings_user_page.dart';
+import 'package:kitchenowl/pages/profile_page.dart';
 import 'package:kitchenowl/widgets/household_card.dart';
 
 class HouseholdListPage extends StatefulWidget {
@@ -85,7 +85,7 @@ class _HouseholdListPageState extends State<HouseholdListPage> with RouteAware {
                             onPressed: () =>
                                 Navigator.of(context, rootNavigator: true).push(
                               MaterialPageRoute(
-                                builder: (context) => const SettingsUserPage(),
+                                builder: (context) => const ProfilePage(),
                               ),
                             ),
                             icon: const Icon(Icons.manage_accounts_rounded),

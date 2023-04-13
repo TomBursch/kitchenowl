@@ -9,6 +9,8 @@ import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/token.dart';
 import 'package:kitchenowl/models/user.dart';
+import 'package:kitchenowl/pages/settings_user_password_page.dart';
+import 'package:kitchenowl/pages/settings_user_sessions_page.dart';
 
 class SettingsUserPage extends StatefulWidget {
   final User? user;
@@ -21,7 +23,6 @@ class SettingsUserPage extends StatefulWidget {
 class _SettingsUserPageState extends State<SettingsUserPage> {
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController nameController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
   late SettingsUserCubit cubit;
 
   @override
@@ -133,174 +134,35 @@ class _SettingsUserPageState extends State<SettingsUserPage> {
                         child: Text(AppLocalizations.of(context)!.save),
                       ),
                     ),
-                    TextField(
-                      controller: passwordController,
-                      autofillHints: const [AutofillHints.newPassword],
-                      obscureText: true,
-                      textInputAction: TextInputAction.done,
-                      decoration: InputDecoration(
-                        labelText: AppLocalizations.of(context)!.password,
-                      ),
+                    ListTile(
+                      title: Text(AppLocalizations.of(context)!.passwordSave),
+                      trailing: const Icon(Icons.arrow_forward_ios_rounded),
+                      contentPadding: EdgeInsets.zero,
+                      onTap: () async {
+                        final res = await Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => SettingsUserPasswordPage(),
+                          ),
+                        );
+                        if (res != null) {
+                          cubit.updateUser(
+                            context: context,
+                            password: res,
+                          );
+                        }
+                      },
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 16, bottom: 16),
-                      child: LoadingElevatedButton(
-                        onPressed: () => cubit.updateUser(
-                          context: context,
-                          password: passwordController.text,
+                    ListTile(
+                      title: Text(AppLocalizations.of(context)!.sessions),
+                      trailing: const Icon(Icons.arrow_forward_ios_rounded),
+                      contentPadding: EdgeInsets.zero,
+                      onTap: () => Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => SettingsUserSessionsPage(
+                            cubit: cubit,
+                          ),
                         ),
-                        child: Text(AppLocalizations.of(context)!.passwordSave),
                       ),
-                    ),
-                    BlocBuilder<SettingsUserCubit, SettingsUserState>(
-                      bloc: cubit,
-                      buildWhen: (prev, curr) =>
-                          prev.user?.tokens != curr.user?.tokens,
-                      builder: (context, state) => Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        mainAxisSize: MainAxisSize.min,
-                        children: (state.user?.tokens?.isEmpty ?? true)
-                            ? const []
-                            : [
-                                if (state.user!.tokens!
-                                    .where(
-                                      (e) => e.type == TokenTypeEnum.refresh,
-                                    )
-                                    .isNotEmpty) ...[
-                                  Text(
-                                    '${AppLocalizations.of(context)!.sessions}:',
-                                    style:
-                                        Theme.of(context).textTheme.titleLarge,
-                                  ),
-                                  const SizedBox(height: 8),
-                                  ListView.builder(
-                                    shrinkWrap: true,
-                                    physics:
-                                        const NeverScrollableScrollPhysics(),
-                                    padding: EdgeInsets.zero,
-                                    itemCount: state.user?.tokens
-                                            ?.where((e) =>
-                                                e.type == TokenTypeEnum.refresh)
-                                            .length ??
-                                        0,
-                                    itemBuilder: (context, i) => Card(
-                                      child: ListTile(
-                                        title: Text(
-                                          state.user!.tokens!
-                                              .where((e) =>
-                                                  e.type ==
-                                                  TokenTypeEnum.refresh)
-                                              .elementAt(i)
-                                              .name,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(height: 8),
-                                ],
-                                TextWithIconButton(
-                                  title:
-                                      '${AppLocalizations.of(context)!.llts}:',
-                                  icon: const Icon(Icons.add),
-                                  tooltip:
-                                      AppLocalizations.of(context)!.lltCreate,
-                                  onPressed: () => _createLLTflow(context),
-                                ),
-                                const SizedBox(height: 8),
-                                ListView.builder(
-                                  shrinkWrap: true,
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  padding: EdgeInsets.zero,
-                                  itemCount: state.user?.tokens
-                                          ?.where(
-                                            (e) =>
-                                                e.type ==
-                                                TokenTypeEnum.longlived,
-                                          )
-                                          .length ??
-                                      0,
-                                  itemBuilder: (context, i) {
-                                    final token = state.user!.tokens!
-                                        .where(
-                                          (e) =>
-                                              e.type == TokenTypeEnum.longlived,
-                                        )
-                                        .elementAt(i);
-
-                                    return Dismissible(
-                                      key: ValueKey<Token>(token),
-                                      confirmDismiss: (direction) async {
-                                        return (await askForConfirmation(
-                                          context: context,
-                                          title: Text(
-                                            AppLocalizations.of(context)!
-                                                .lltDelete,
-                                          ),
-                                          content: Text(
-                                            AppLocalizations.of(context)!
-                                                .lltDeleteConfirmation(
-                                              token.name,
-                                            ),
-                                          ),
-                                        ));
-                                      },
-                                      onDismissed: (direction) {
-                                        cubit.deleteLongLivedToken(
-                                          token,
-                                        );
-                                      },
-                                      background: Container(
-                                        alignment: Alignment.centerLeft,
-                                        padding:
-                                            const EdgeInsets.only(left: 16),
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(14),
-                                          color: Colors.redAccent,
-                                        ),
-                                        child: const Icon(
-                                          Icons.delete,
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                      secondaryBackground: Container(
-                                        alignment: Alignment.centerRight,
-                                        padding:
-                                            const EdgeInsets.only(right: 16),
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(14),
-                                          color: Colors.redAccent,
-                                        ),
-                                        child: const Icon(
-                                          Icons.delete,
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                      child: Card(
-                                        child: ListTile(
-                                          title: Text(
-                                            token.name,
-                                          ),
-                                          subtitle: token.lastUsedAt != null
-                                              ? Text(
-                                                  "${AppLocalizations.of(context)!.lastUsed}: ${DateFormat.yMMMEd().add_jm().format(
-                                                        token.lastUsedAt!,
-                                                      )}",
-                                                )
-                                              : null,
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                ),
-                              ],
-                      ),
-                    ),
-                    LoadingTextButton(
-                      onPressed: BlocProvider.of<AuthCubit>(context).logout,
-                      icon: const Icon(Icons.logout),
-                      child: Text(AppLocalizations.of(context)!.logout),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 16, bottom: 16),
@@ -341,76 +203,6 @@ class _SettingsUserPageState extends State<SettingsUserPage> {
             ),
           ),
         ),
-      ),
-    );
-  }
-
-  // ignore: long-method
-  void _createLLTflow(BuildContext context) async {
-    final confirm = await askForConfirmation(
-      context: context,
-      title: Text(
-        AppLocalizations.of(context)!.lltWarningTitle,
-      ),
-      content: Text(
-        AppLocalizations.of(context)!.lltWarningContent,
-      ),
-      confirmText: AppLocalizations.of(context)!.okay,
-    );
-    if (!confirm) return;
-
-    final name = await showDialog<String>(
-      context: context,
-      builder: (BuildContext context) {
-        return TextDialog(
-          title: AppLocalizations.of(context)!.lltCreate,
-          doneText: AppLocalizations.of(context)!.add,
-          hintText: AppLocalizations.of(context)!.name,
-          isInputValid: (s) => s.isNotEmpty,
-        );
-      },
-    );
-    if (name == null) return;
-
-    final token = await cubit.addLongLivedToken(name);
-
-    if (token == null || token.isEmpty) return;
-
-    await askForConfirmation(
-      context: context,
-      showCancel: false,
-      confirmText: AppLocalizations.of(context)!.done,
-      title: Text(AppLocalizations.of(context)!.lltNotShownAgain),
-      content: Row(
-        children: [
-          Expanded(
-            child: SelectableText(token),
-          ),
-          Builder(builder: (context) {
-            return IconButton(
-              onPressed: () {
-                Clipboard.setData(
-                  ClipboardData(
-                    text: token,
-                  ),
-                );
-                Navigator.of(context).pop();
-                showSnackbar(
-                  context: context,
-                  content: Text(
-                    AppLocalizations.of(
-                      context,
-                    )!
-                        .copied,
-                  ),
-                );
-              },
-              icon: const Icon(
-                Icons.copy_rounded,
-              ),
-            );
-          }),
-        ],
       ),
     );
   }

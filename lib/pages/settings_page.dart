@@ -1,4 +1,3 @@
-import 'package:collection/collection.dart';
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +13,7 @@ import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/helpers/url_launcher.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/household.dart';
+import 'package:kitchenowl/pages/household_member_page.dart';
 import 'package:kitchenowl/pages/household_update_page.dart';
 import 'package:kitchenowl/pages/settings_server_user_page.dart';
 import 'package:kitchenowl/pages/settings_user_page.dart';
@@ -35,6 +35,10 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
+    if (BlocProvider.of<AuthCubit>(context).state is! Authenticated) {
+      return const SizedBox();
+    }
+
     final user =
         (BlocProvider.of<AuthCubit>(context).state as Authenticated).user;
     final isOffline = App.isOffline;
@@ -159,7 +163,7 @@ class _SettingsPageState extends State<SettingsPage> {
             ]),
           ),
         ),
-        if (!isOffline && widget.household != null)
+        if (widget.household != null)
           SliverList(
             delegate: SliverChildListDelegate([
               Padding(
@@ -174,28 +178,33 @@ class _SettingsPageState extends State<SettingsPage> {
                 leading: const Icon(Icons.swap_horiz_rounded),
                 onTap: () => context.go("/household"),
               ),
+              ListTile(
+                title: Text(
+                  AppLocalizations.of(context)!.members,
+                ),
+                leading: const Icon(Icons.group_rounded),
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (ctx) => HouseholdMemberPage(
+                      household: widget.household!,
+                    ),
+                  ),
+                ),
+              ),
             ]),
           ),
         if (!isOffline &&
             widget.household != null &&
-            (widget.household!.member
-                    ?.firstWhereOrNull(
-                      (e) => user.id == e.id,
-                    )
-                    ?.hasAdminRights() ??
-                false))
+            widget.household!.hasAdminRights(user))
           SliverList(
             delegate: SliverChildListDelegate([
               ListTile(
                 title: Text(
-                  AppLocalizations.of(context)!.household,
+                  AppLocalizations.of(context)!.settings,
                 ),
                 leading: const Icon(Icons.house_rounded),
                 onTap: () async {
-                  final res = await Navigator.of(
-                    context,
-                    rootNavigator: true,
-                  ).push<UpdateEnum>(
+                  final res = await Navigator.of(context).push<UpdateEnum>(
                     MaterialPageRoute(
                       builder: (ctx) => HouseholdUpdatePage(
                         household: widget.household!,
@@ -261,7 +270,7 @@ class _SettingsPageState extends State<SettingsPage> {
               leading: const Icon(Icons.privacy_tip_rounded),
               onTap: () => openUrl(
                 context,
-                "https://tombursch.github.io/kitchenowl/about/app-privacy-policy/",
+                "https://tombursch.github.io/kitchenowl/about/privacy",
               ),
             ),
             ListTile(

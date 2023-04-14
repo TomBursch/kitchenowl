@@ -75,23 +75,8 @@ class _ItemSearchPageState extends State<ItemSearchPage> {
                     cubit.itemSelected(cubit.state.searchResults.first);
                   }
                 },
-                decoration: InputDecoration(
-                  prefixIcon: const Icon(Icons.search),
-                  suffixIcon: IconButton(
-                    onPressed: () {
-                      if (searchController.text.isNotEmpty) {
-                        cubit.search('');
-                      }
-                      FocusScope.of(context).unfocus();
-                    },
-                    icon: const Icon(
-                      Icons.close,
-                      color: Colors.grey,
-                    ),
-                    padding: EdgeInsets.zero,
-                  ),
-                  hintText: AppLocalizations.of(context)!.searchHint,
-                ),
+                hintText: AppLocalizations.of(context)!.searchHint,
+                labelText: const Nullable.empty(),
               ),
             ),
           ),

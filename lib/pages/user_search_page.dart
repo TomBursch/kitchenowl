@@ -53,23 +53,8 @@ class _UserSearchPageState extends State<UserSearchPage> {
                 autofocus: true,
                 alwaysExpanded: true,
                 textInputAction: TextInputAction.search,
-                decoration: InputDecoration(
-                  prefixIcon: const Icon(Icons.search),
-                  suffixIcon: IconButton(
-                    onPressed: () {
-                      if (searchController.text.isNotEmpty) {
-                        cubit.search('');
-                      }
-                      FocusScope.of(context).unfocus();
-                    },
-                    icon: const Icon(
-                      Icons.close,
-                      color: Colors.grey,
-                    ),
-                    padding: EdgeInsets.zero,
-                  ),
-                  hintText: AppLocalizations.of(context)!.userSearchHint,
-                ),
+                hintText: AppLocalizations.of(context)!.userSearchHint,
+                labelText: const Nullable.empty(),
               ),
             ),
           ),

@@ -31,7 +31,6 @@ class SettingsUserSessionsPage extends StatelessWidget {
                   .isNotEmpty)
                 SliverText(
                   '${AppLocalizations.of(context)!.sessions}:',
-                  padding: const EdgeInsets.only(bottom: 8),
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
               SliverList(
@@ -54,7 +53,7 @@ class SettingsUserSessionsPage extends StatelessWidget {
                 ),
               ),
               SliverPadding(
-                padding: const EdgeInsets.only(bottom: 8),
+                padding: const EdgeInsets.only(top: 8),
                 sliver: SliverToBoxAdapter(
                   child: TextWithIconButton(
                     title: '${AppLocalizations.of(context)!.llts}:',

@@ -21,7 +21,6 @@ class HouseholdUpdateCubit
           featureExpenses: household.featureExpenses ?? true,
           featurePlanner: household.featurePlanner ?? true,
           viewOrdering: household.viewOrdering ?? ViewsEnum.values,
-          member: household.member ?? const [],
           language: household.language,
         )) {
     refresh();
@@ -53,7 +52,6 @@ class HouseholdUpdateCubit
       language: household.language,
       supportedLanguages: state.supportedLanguages,
       image: household.image,
-      member: household.member ?? this.household.member ?? const [],
       shoppingLists: await shoppingLists ?? const [],
       tags: await tags ?? {},
       categories: await categories ?? const [],
@@ -226,18 +224,6 @@ class HouseholdUpdateCubit
     return saveHousehold();
   }
 
-  Future<void> removeMember(Member member) {
-    return ApiService.getInstance()
-        .removeHouseholdMember(household, member)
-        .then((value) => refresh());
-  }
-
-  Future<void> putMember(Member member) {
-    return ApiService.getInstance()
-        .putHouseholdMember(household, member)
-        .then((value) => refresh());
-  }
-
   Future<bool> deleteHousehold() {
     return ApiService.getInstance().deleteHousehold(household);
   }
@@ -245,7 +231,6 @@ class HouseholdUpdateCubit
 
 class HouseholdUpdateState extends HouseholdAddUpdateState {
   final String image;
-  final List<Member> member;
   final List<ShoppingList> shoppingLists;
   final Set<Tag> tags;
   final List<Category> categories;
@@ -259,7 +244,6 @@ class HouseholdUpdateState extends HouseholdAddUpdateState {
     super.featureExpenses = true,
     super.viewOrdering = ViewsEnum.values,
     super.supportedLanguages,
-    this.member = const [],
     this.shoppingLists = const [],
     this.tags = const {},
     this.categories = const [],
@@ -288,7 +272,6 @@ class HouseholdUpdateState extends HouseholdAddUpdateState {
         featureExpenses: featureExpenses ?? this.featureExpenses,
         viewOrdering: viewOrdering ?? this.viewOrdering,
         supportedLanguages: supportedLanguages ?? this.supportedLanguages,
-        member: member ?? this.member,
         shoppingLists: shoppingLists ?? this.shoppingLists,
         tags: tags ?? this.tags,
         categories: categories ?? this.categories,
@@ -300,7 +283,6 @@ class HouseholdUpdateState extends HouseholdAddUpdateState {
       super.props +
       [
         image,
-        member,
         shoppingLists,
         tags,
         categories,
@@ -315,7 +297,6 @@ class LoadingHouseholdUpdateState extends HouseholdUpdateState {
     super.featureExpenses,
     super.featurePlanner,
     super.viewOrdering,
-    super.member,
     super.language,
     super.supportedLanguages,
   });
@@ -344,6 +325,5 @@ class LoadingHouseholdUpdateState extends HouseholdUpdateState {
         featureExpenses: featureExpenses ?? this.featureExpenses,
         viewOrdering: viewOrdering ?? this.viewOrdering,
         supportedLanguages: supportedLanguages ?? this.supportedLanguages,
-        member: member ?? this.member,
       );
 }

@@ -7,7 +7,6 @@ import 'package:kitchenowl/widgets/settings_household/sliver_household_category_
 import 'package:kitchenowl/widgets/settings_household/sliver_household_danger_zone.dart';
 import 'package:kitchenowl/widgets/settings_household/sliver_household_expense_category_settings.dart';
 import 'package:kitchenowl/widgets/settings_household/sliver_household_feature_settings.dart';
-import 'package:kitchenowl/widgets/settings_household/sliver_household_member_settings.dart';
 import 'package:kitchenowl/widgets/settings_household/sliver_household_shoppinglist_settings.dart';
 import 'package:kitchenowl/widgets/settings_household/sliver_household_tags_settings.dart';
 
@@ -92,7 +91,6 @@ class _HouseholdUpdatePageState extends State<HouseholdUpdatePage> {
                       const SliverHouseholdCategorySettings(),
                       const SliverHouseholdTagsSettings(),
                       const SliverHouseholdExpenseCategorySettings(),
-                      const SliverHouseholdMemberSettings(),
                       const SliverHouseholdDangerZone(),
                       SliverToBoxAdapter(
                         child: SizedBox(

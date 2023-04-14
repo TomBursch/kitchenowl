@@ -1,4 +1,6 @@
 from typing import Self
+
+from flask_jwt_extended import current_user
 from app import db
 from app.helpers import DbModelMixin, TimestampMixin
 from app.config import bcrypt
@@ -33,9 +35,13 @@ class User(db.Model, DbModelMixin, TimestampMixin):
 
     def obj_to_dict(self, skip_columns: list[str] = None, include_columns: list[str] = None) -> dict:
         if skip_columns:
-            skip_columns = skip_columns + ['password', 'admin']
+            skip_columns = skip_columns + ['password']
         else:
-            skip_columns = ['password', 'admin']
+            skip_columns = ['password']
+
+        if not current_user or not current_user.admin:
+            skip_columns = skip_columns + ['admin'] # Filter out admin status if current user is not an admin
+
         return super().obj_to_dict(skip_columns=skip_columns, include_columns=include_columns)
 
     def obj_to_full_dict(self) -> dict:

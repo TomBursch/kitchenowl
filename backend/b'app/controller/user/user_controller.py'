@@ -84,7 +84,7 @@ def updateUserById(args, id):
     if 'photo' in args:
         user.photo = args['photo']
     if 'admin' in args:
-        user.admin = args['admin'] or user.owner
+        user.admin = args['admin']
     user.save()
     return jsonify({'msg': 'DONE'})
 

@@ -4,7 +4,7 @@ import 'package:kitchenowl/cubits/settings_server_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/pages/settings/create_user_page.dart';
-import 'package:kitchenowl/widgets/settings_server/server_user_card.dart';
+import 'package:kitchenowl/widgets/settings/server_user_card.dart';
 
 class SettingsServerUserPage extends StatefulWidget {
   const SettingsServerUserPage({super.key});
@@ -72,13 +72,10 @@ class _SettingsServerUserPageState extends State<SettingsServerUserPage> {
                     );
                   }
 
-                  return SliverPadding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    sliver: SliverList(
-                      delegate: SliverChildBuilderDelegate(
-                        childCount: state.users.length,
-                        (context, i) => ServerUserCard(user: state.users[i]),
-                      ),
+                  return SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      childCount: state.users.length,
+                      (context, i) => ServerUserListTile(user: state.users[i]),
                     ),
                   );
                 },

@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 import 'package:kitchenowl/cubits/settings_user_cubit.dart';
 import 'package:kitchenowl/enums/token_type_enum.dart';
 import 'package:kitchenowl/kitchenowl.dart';
-import 'package:kitchenowl/models/token.dart';
+import 'package:kitchenowl/widgets/settings/token_card.dart';
 
 class SettingsUserSessionsPage extends StatelessWidget {
   final SettingsUserCubit cubit;
@@ -18,128 +17,82 @@ class SettingsUserSessionsPage extends StatelessWidget {
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.sessions),
       ),
-      body: BlocBuilder<SettingsUserCubit, SettingsUserState>(
-        bloc: cubit,
-        buildWhen: (prev, curr) => prev.user?.tokens != curr.user?.tokens,
-        builder: (context, state) => CustomScrollView(slivers: [
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (context, i) => Card(
-                child: ListTile(
-                  title: Text(
-                    state.user!.tokens!
-                        .where((e) => e.type == TokenTypeEnum.refresh)
-                        .elementAt(i)
-                        .name,
-                  ),
-                ),
-              ),
-              childCount: state.user?.tokens
-                      ?.where((e) => e.type == TokenTypeEnum.refresh)
-                      .length ??
-                  0,
-            ),
-          ),
-          SliverList(
-            delegate: SliverChildListDelegate([
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: BlocBuilder<SettingsUserCubit, SettingsUserState>(
+          bloc: cubit,
+          buildWhen: (prev, curr) => prev.user?.tokens != curr.user?.tokens,
+          builder: (context, state) => CustomScrollView(
+            slivers: [
               if (state.user!.tokens!
                   .where(
                     (e) => e.type == TokenTypeEnum.refresh,
                   )
-                  .isNotEmpty) ...[
-                Text(
+                  .isNotEmpty)
+                SliverText(
                   '${AppLocalizations.of(context)!.sessions}:',
+                  padding: const EdgeInsets.only(bottom: 8),
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
-                const SizedBox(height: 8),
-              ],
-              TextWithIconButton(
-                title: '${AppLocalizations.of(context)!.llts}:',
-                icon: const Icon(Icons.add),
-                tooltip: AppLocalizations.of(context)!.lltCreate,
-                onPressed: () => _createLLTflow(context),
-              ),
-              const SizedBox(height: 8),
-            ]),
-          ),
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-              childCount: state.user?.tokens
-                      ?.where(
-                        (e) => e.type == TokenTypeEnum.longlived,
-                      )
-                      .length ??
-                  0,
-              (context, i) {
-                final token = state.user!.tokens!
-                    .where(
-                      (e) => e.type == TokenTypeEnum.longlived,
-                    )
-                    .elementAt(i);
+              SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (context, i) {
+                    final token = state.user!.tokens!
+                        .where(
+                          (e) => e.type == TokenTypeEnum.refresh,
+                        )
+                        .elementAt(i);
 
-                return Dismissible(
-                  key: ValueKey<Token>(token),
-                  confirmDismiss: (direction) async {
-                    return (await askForConfirmation(
-                      context: context,
-                      title: Text(
-                        AppLocalizations.of(context)!.lltDelete,
-                      ),
-                      content: Text(
-                        AppLocalizations.of(context)!.lltDeleteConfirmation(
-                          token.name,
-                        ),
-                      ),
-                    ));
-                  },
-                  onDismissed: (direction) {
-                    cubit.deleteLongLivedToken(
-                      token,
+                    return TokenCard(
+                      token: token,
                     );
                   },
-                  background: Container(
-                    alignment: Alignment.centerLeft,
-                    padding: const EdgeInsets.only(left: 16),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(14),
-                      color: Colors.redAccent,
-                    ),
-                    child: const Icon(
-                      Icons.delete,
-                      color: Colors.white,
-                    ),
+                  childCount: state.user?.tokens
+                          ?.where((e) => e.type == TokenTypeEnum.refresh)
+                          .length ??
+                      0,
+                ),
+              ),
+              SliverPadding(
+                padding: const EdgeInsets.only(bottom: 8),
+                sliver: SliverToBoxAdapter(
+                  child: TextWithIconButton(
+                    title: '${AppLocalizations.of(context)!.llts}:',
+                    icon: const Icon(Icons.add),
+                    tooltip: AppLocalizations.of(context)!.lltCreate,
+                    onPressed: () => _createLLTflow(context),
                   ),
-                  secondaryBackground: Container(
-                    alignment: Alignment.centerRight,
-                    padding: const EdgeInsets.only(right: 16),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(14),
-                      color: Colors.redAccent,
-                    ),
-                    child: const Icon(
-                      Icons.delete,
-                      color: Colors.white,
-                    ),
-                  ),
-                  child: Card(
-                    child: ListTile(
-                      title: Text(
-                        token.name,
-                      ),
-                      subtitle: token.lastUsedAt != null
-                          ? Text(
-                              "${AppLocalizations.of(context)!.lastUsed}: ${DateFormat.yMMMEd().add_jm().format(
-                                    token.lastUsedAt!,
-                                  )}",
-                            )
-                          : null,
-                    ),
-                  ),
-                );
-              },
-            ),
+                ),
+              ),
+              SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (context, i) {
+                    final token = state.user!.tokens!
+                        .where(
+                          (e) => e.type == TokenTypeEnum.longlived,
+                        )
+                        .elementAt(i);
+
+                    return TokenCard(
+                      token: token,
+                      onLogout: () {
+                        cubit.deleteLongLivedToken(
+                          token,
+                        );
+                      },
+                    );
+                  },
+                  childCount: state.user?.tokens
+                          ?.where(
+                            (e) => e.type == TokenTypeEnum.longlived,
+                          )
+                          .length ??
+                      0,
+                ),
+              ),
+            ],
           ),
-        ]),
+        ),
       ),
     );
   }

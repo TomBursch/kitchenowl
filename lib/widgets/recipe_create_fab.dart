@@ -51,7 +51,7 @@ class RecipeCreateFab extends StatelessWidget {
             );
             if (url == null) return;
 
-            final res = null;
+            const res = null;
 
             // final res =
             //     await Navigator.of(context, rootNavigator: true).push<UpdateEnum>(MaterialPageRoute(

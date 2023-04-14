@@ -248,7 +248,7 @@ final router = GoRouter(
                   pageBuilder: (context, state) => FadeThroughTransitionPage(
                     key: state.pageKey,
                     name: state.name,
-                    child: const MorePage(),
+                    child: const ProfilePage(),
                   ),
                 ),
               ],

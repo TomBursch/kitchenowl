@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 import 'package:kitchenowl/cubits/auth_cubit.dart';
 import 'package:kitchenowl/cubits/settings_user_cubit.dart';
-import 'package:kitchenowl/enums/token_type_enum.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/kitchenowl.dart';
-import 'package:kitchenowl/models/token.dart';
 import 'package:kitchenowl/models/user.dart';
 import 'package:kitchenowl/pages/settings_user_password_page.dart';
 import 'package:kitchenowl/pages/settings_user_sessions_page.dart';
@@ -18,6 +14,10 @@ class SettingsUserPage extends StatefulWidget {
 
   @override
   _SettingsUserPageState createState() => _SettingsUserPageState();
+}
+
+enum _UserAction {
+  delete;
 }
 
 class _SettingsUserPageState extends State<SettingsUserPage> {
@@ -52,6 +52,7 @@ class _SettingsUserPageState extends State<SettingsUserPage> {
       },
       child: BlocListener<SettingsUserCubit, SettingsUserState>(
         bloc: cubit,
+        listenWhen: (previous, current) => previous.user != current.user,
         listener: (context, state) {
           if (state.user != null) {
             usernameController.text = state.user?.username ?? '';
@@ -60,11 +61,53 @@ class _SettingsUserPageState extends State<SettingsUserPage> {
         },
         child: Scaffold(
           appBar: AppBar(
-            title: Text(AppLocalizations.of(context)!.user),
+            title: Text(cubit.userId == null
+                ? AppLocalizations.of(context)!.profile
+                : AppLocalizations.of(context)!.user),
             leading: BackButton(
               onPressed: () =>
                   Navigator.of(context).pop(cubit.state.updateState),
             ),
+            actions: [
+              PopupMenuButton(
+                itemBuilder: (BuildContext context) =>
+                    <PopupMenuEntry<_UserAction>>[
+                  PopupMenuItem<_UserAction>(
+                    value: _UserAction.delete,
+                    child: Text(cubit.userId == null
+                        ? AppLocalizations.of(context)!.accountDelete
+                        : AppLocalizations.of(context)!.userDelete),
+                  ),
+                ],
+                onSelected: (value) async {
+                  switch (value) {
+                    case _UserAction.delete:
+                      final confirm = await askForConfirmation(
+                        context: context,
+                        title: Text(
+                          cubit.userId == null
+                              ? AppLocalizations.of(context)!.accountDelete
+                              : AppLocalizations.of(context)!.userDelete,
+                        ),
+                        content: Text(cubit.userId == null
+                            ? AppLocalizations.of(context)!
+                                .accountDeleteConfirmation
+                            : AppLocalizations.of(context)!
+                                .userDeleteConfirmation(
+                                nameController.text,
+                              )),
+                      );
+                      if (confirm) {
+                        if (await cubit.deleteUser() && mounted) {
+                          BlocProvider.of<AuthCubit>(context).logout();
+                          Navigator.of(context).pop(UpdateEnum.deleted);
+                        }
+                      }
+                      break;
+                  }
+                },
+              ),
+            ],
           ),
           body: Align(
             alignment: Alignment.topCenter,
@@ -107,6 +150,7 @@ class _SettingsUserPageState extends State<SettingsUserPage> {
                         labelText: AppLocalizations.of(context)!.name,
                       ),
                     ),
+                    const SizedBox(height: 8),
                     if (cubit.userId != null)
                       BlocBuilder<SettingsUserCubit, SettingsUserState>(
                         bloc: cubit,
@@ -116,7 +160,7 @@ class _SettingsUserPageState extends State<SettingsUserPage> {
                             leading:
                                 const Icon(Icons.admin_panel_settings_rounded),
                             contentPadding:
-                                const EdgeInsets.only(left: 0, right: 0),
+                                const EdgeInsets.symmetric(horizontal: 0),
                             trailing: KitchenOwlSwitch(
                               value: state.setAdmin,
                               onChanged: cubit.setAdmin,
@@ -124,8 +168,9 @@ class _SettingsUserPageState extends State<SettingsUserPage> {
                           );
                         },
                       ),
+                    const SizedBox(height: 8),
                     Padding(
-                      padding: const EdgeInsets.only(top: 16, bottom: 8),
+                      padding: const EdgeInsets.only(bottom: 32),
                       child: LoadingElevatedButton(
                         onPressed: () => cubit.updateUser(
                           context: context,
@@ -134,9 +179,12 @@ class _SettingsUserPageState extends State<SettingsUserPage> {
                         child: Text(AppLocalizations.of(context)!.save),
                       ),
                     ),
+                    const Divider(),
                     ListTile(
                       title: Text(AppLocalizations.of(context)!.passwordSave),
+                      leading: const Icon(Icons.lock_rounded),
                       trailing: const Icon(Icons.arrow_forward_ios_rounded),
+                      horizontalTitleGap: 8,
                       contentPadding: EdgeInsets.zero,
                       onTap: () async {
                         final res = await Navigator.of(context).push(
@@ -152,50 +200,21 @@ class _SettingsUserPageState extends State<SettingsUserPage> {
                         }
                       },
                     ),
-                    ListTile(
-                      title: Text(AppLocalizations.of(context)!.sessions),
-                      trailing: const Icon(Icons.arrow_forward_ios_rounded),
-                      contentPadding: EdgeInsets.zero,
-                      onTap: () => Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => SettingsUserSessionsPage(
-                            cubit: cubit,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 16, bottom: 16),
-                      child: LoadingElevatedButton(
-                        style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all<Color>(
-                            Colors.redAccent,
-                          ),
-                          foregroundColor: MaterialStateProperty.all<Color>(
-                            Colors.white,
-                          ),
-                        ),
-                        onPressed: () async {
-                          final confirm = await askForConfirmation(
-                            context: context,
-                            title: Text(
-                              AppLocalizations.of(context)!.userDelete,
+                    if (cubit.userId == null)
+                      ListTile(
+                        title: Text(AppLocalizations.of(context)!.sessions),
+                        leading: const Icon(Icons.devices_rounded),
+                        trailing: const Icon(Icons.arrow_forward_ios_rounded),
+                        horizontalTitleGap: 8,
+                        contentPadding: EdgeInsets.zero,
+                        onTap: () => Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => SettingsUserSessionsPage(
+                              cubit: cubit,
                             ),
-                            content: Text(AppLocalizations.of(context)!
-                                .userDeleteConfirmation(
-                              nameController.text,
-                            )),
-                          );
-                          if (confirm) {
-                            if (await cubit.deleteUser() && mounted) {
-                              BlocProvider.of<AuthCubit>(context).logout();
-                              Navigator.of(context).pop(UpdateEnum.deleted);
-                            }
-                          }
-                        },
-                        child: Text(AppLocalizations.of(context)!.delete),
+                          ),
+                        ),
                       ),
-                    ),
                     SizedBox(height: MediaQuery.of(context).padding.bottom),
                   ],
                 ),

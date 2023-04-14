@@ -76,11 +76,19 @@ class CreateUserFormFields extends StatelessWidget {
           decoration: InputDecoration(
             labelText: AppLocalizations.of(context)!.password,
           ),
-          validator: (s) => s == null || s.isEmpty
-              ? AppLocalizations.of(context)!.fieldCannotBeEmpty(
-                  AppLocalizations.of(context)!.password,
-                )
-              : null,
+          validator: (s) {
+            if (s == null || s.isEmpty) {
+              return AppLocalizations.of(context)!.fieldCannotBeEmpty(
+                AppLocalizations.of(context)!.password,
+              );
+            }
+
+            if (s.length < 4) {
+              return AppLocalizations.of(context)!.passwordFieldTooShort;
+            }
+
+            return null;
+          },
         ),
       ],
     );

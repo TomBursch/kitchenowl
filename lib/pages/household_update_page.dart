@@ -94,6 +94,11 @@ class _HouseholdUpdatePageState extends State<HouseholdUpdatePage> {
                       const SliverHouseholdExpenseCategorySettings(),
                       const SliverHouseholdMemberSettings(),
                       const SliverHouseholdDangerZone(),
+                      SliverToBoxAdapter(
+                        child: SizedBox(
+                          height: MediaQuery.of(context).padding.bottom,
+                        ),
+                      ),
                     ],
                   ),
                 ),

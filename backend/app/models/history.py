@@ -23,7 +23,8 @@ class History(db.Model, DbModelMixin, TimestampMixin):
     item_id = db.Column(db.Integer, db.ForeignKey('item.id'))
 
     item = db.relationship("Item", uselist=False, back_populates="history")
-    shoppinglist = db.relationship("Shoppinglist", uselist=False, back_populates="history")
+    shoppinglist = db.relationship(
+        "Shoppinglist", uselist=False, back_populates="history")
 
     status = db.Column(db.Enum(Status))
     description = db.Column('description', db.String())
@@ -73,10 +74,10 @@ class History(db.Model, DbModelMixin, TimestampMixin):
         return cls.query.all()
 
     @classmethod
-    def get_recent(cls, shoppinglist_id: int) -> list[Self]:
+    def get_recent(cls, shoppinglist_id: int, limit: int = 9) -> list[Self]:
         sq = db.session.query(
             ShoppinglistItems.item_id).subquery().select()
         sq2 = db.session.query(func.max(cls.id)).filter(cls.status == Status.DROPPED).filter(
             cls.item_id.notin_(sq)).group_by(cls.item_id).join(cls.item).subquery().select()
         return cls.query.filter(
-            cls.shoppinglist_id == shoppinglist_id).filter(cls.id.in_(sq2)).order_by(cls.id.desc()).limit(9)
+            cls.shoppinglist_id == shoppinglist_id).filter(cls.id.in_(sq2)).order_by(cls.id.desc()).limit(limit)

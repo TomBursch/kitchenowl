@@ -33,6 +33,7 @@ class CreateList(Schema):
         validate=lambda a: a and not a.isspace()
     )
 
+
 class UpdateList(Schema):
     name = fields.String(
         validate=lambda a: a and not a.isspace()
@@ -41,6 +42,13 @@ class UpdateList(Schema):
 
 class GetItems(Schema):
     orderby = fields.Integer()
+
+
+class GetRecentItems(Schema):
+    limit = fields.Integer(
+        load_default=9,
+        validate=lambda x: x > 0 and x < 50
+    )
 
 
 class UpdateDescription(Schema):

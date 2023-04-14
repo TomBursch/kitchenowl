@@ -4,7 +4,7 @@ from app import db
 from app.models import Item, Shoppinglist, History, Status, Association, ShoppinglistItems
 from app.helpers import validate_args, authorize_household
 from .schemas import (RemoveItem, UpdateDescription,
-                      AddItemByName, CreateList, AddRecipeItems, GetItems, UpdateList)
+                      AddItemByName, CreateList, AddRecipeItems, GetItems, UpdateList, GetRecentItems)
 from app.errors import NotFoundRequest, InvalidUsage
 from datetime import datetime, timedelta, timezone
 import app.util.description_merger as description_merger
@@ -98,13 +98,14 @@ def getAllShoppingListItems(args, id):
 
 @shoppinglist.route('/<int:id>/recent-items', methods=['GET'])
 @jwt_required()
-def getRecentItems(id):
+@validate_args(GetRecentItems)
+def getRecentItems(args, id):
     shoppinglist = Shoppinglist.find_by_id(id)
     if not shoppinglist:
         raise NotFoundRequest()
     shoppinglist.checkAuthorized()
 
-    items = History.get_recent(id)
+    items = History.get_recent(id, args["limit"])
     return jsonify([e.item.obj_to_dict() | {'description': e.description} for e in items])
 
 

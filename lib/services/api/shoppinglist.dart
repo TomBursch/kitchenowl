@@ -66,9 +66,12 @@ extension ShoppinglistApi on ApiService {
   }
 
   Future<List<ItemWithDescription>?> getRecentItems(
-    ShoppingList shoppinglist,
-  ) async {
-    final res = await get('${route(shoppinglist: shoppinglist)}/recent-items');
+    ShoppingList shoppinglist, [
+    int limit = 9,
+  ]) async {
+    final res = await get(
+      '${route(shoppinglist: shoppinglist)}/recent-items?limit=$limit',
+    );
     if (res.statusCode != 200) return null;
 
     final body = List.from(jsonDecode(res.body));

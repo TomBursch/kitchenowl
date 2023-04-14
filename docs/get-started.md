@@ -6,9 +6,9 @@ Please take a quick look at [Tips & Tricks](tips-and-tricks.md) to get the best 
 ## 🗄️ Server Install
 
 You can either install only the backend or add the web-app to it. [Docker](https://docs.docker.com/engine/install/) is required.
-There are three tags available: `latest`, `beta` and `dev`. `latest` is the most current stable release and is the default. `beta` corresponds to the most recent prerealese and might have some experimental features. The `dev` tag is directly build from the main branch and should not be used in production. Release notes can be found on the [releases page](https://github.com/TomBursch/kitchenowl/releases).
+There are three tags available: `latest`, `beta` and `dev`. `latest` is the most current stable release and is the default. `beta` corresponds to the most recent prerelease and might have some experimental features. The `dev` tag is directly build from the main branch and should not be used in production. Release notes can be found on the [releases page](https://github.com/TomBursch/kitchenowl/releases).
 
-=== "Backend and Web-app (recommended)"
+=== "Backend and Web-app"
 
     Recommended using [docker-compose](https://docs.docker.com/compose/):
 
@@ -40,10 +40,10 @@ There are three tags available: `latest`, `beta` and `dev`. `latest` is the most
     networks:
         default:
     ```
-    2. Change default values such as `JWT_SECRET_KEY` and the URLs (corresponding to the ones your instance will be running on)
+    2. Change the default value for `JWT_SECRET_KEY`
     3. Run `docker-compose up -d`
 === "Advanced settings"
-    There are a few options for advanced setup. Customize it using enviroment variables.
+    There are a few options for advanced setup. Customize it using environment variables.
 
     - Frontend `tombursch/kitchenowl-web`:
         - `BACK_URL` (defaut: `back:5000`): Allows to set a custom address for the backend. Needs to be a uwsgi portocol endpoint.
@@ -51,7 +51,7 @@ There are three tags available: `latest`, `beta` and `dev`. `latest` is the most
         - `FRONT_URL`: Adds custom cors header for the set URL.
         - `HTTP_PORT` (defaut: `80`): Set a custom port for the http server. Usually this should be changed using docker port mapping.
 
-=== "Backend only (legacy)"
+ <!-- === "Backend only (legacy)"
 
     Using docker cli:
 
@@ -61,10 +61,10 @@ There are three tags available: `latest`, `beta` and `dev`. `latest` is the most
 
     ```
     docker run -d -p 5000:80 --name=kitchenowl --restart=unless-stopped -v kitchenowl_data:/data tombursch/kitchenowl:latest
-    ```
+    ``` -->
 
 !!! danger "Important"
-    We recommend running KitchenOwl behind a reverse proxy with https (e.g. [nginx](https://nginx.org/en/docs/http/configuring_https_servers.html]))
+    We recommend running KitchenOwl behind a reverse proxy with HTTPS (e.g. [nginx](https://nginx.org/en/docs/http/configuring_https_servers.html]))
 
     It is also important that you have HTTP Strict Transport Security enabled and the proper headers applied to your responses or you could be subject to a javascript hijack.
 
@@ -77,7 +77,7 @@ There are three tags available: `latest`, `beta` and `dev`. `latest` is the most
 ## ⏫ Migrating from Older Versions
 
 ### v0.3.3
-Starting from version 0.3.3 `tombursch/kitchenowl-web:latest` ignores the `front_url` enviroment variable and in most cases is not needed in `tombursch/kitchenowl:latest`.
+Starting from version 0.3.3 `tombursch/kitchenowl-web:latest` ignores the `front_url` environment variable and in most cases is not needed in `tombursch/kitchenowl:latest`.
 
 ### v0.0.33
-Starting from version 0.0.33 the frontend routes requests to the backend. Thus only one port has to be accessible. However, the backend can be hosted in standalone mode as it was before (see legacy server install).
+Starting from version 0.0.33 the frontend routes requests to the backend. Thus, only one port has to be accessible. However, the backend can be hosted in standalone mode as it was before (see legacy server install).

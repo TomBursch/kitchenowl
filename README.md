@@ -49,7 +49,7 @@
  🍫 🥘 🍽
 </h3>
 
-KitchenOwl is a smart self-hosted grocery list and recipe manager. Easily add items to your shopping list before you go shopping. You can also create recipes and get suggestions on what you want to cook. Track your expenses so you know how much you've spend.
+KitchenOwl is a smart self-hosted grocery list and recipe manager. Easily add items to your shopping list before you go shopping. You can also create recipes and get suggestions on what you want to cook. Track your expenses so you know how much you've spent.
 
 - Native Mobile/Web/Desktop apps with a great design
 - Add items to your shopping list and sync them with multiple users
@@ -102,7 +102,7 @@ You can help translate the App into your language by using [Weblate](https://hos
 
 ## 🛎️ Stay Up-to-Date
 
-KitchenOwl is moving fast, to stay updated consider starring and watching the releases of this repositories.
+KitchenOwl is moving fast, to stay updated consider starring and watching the releases of this repository.
 
 ### 💬 Status
 - [x] Public Alpha: Still working on stuff (sometimes things might break)
@@ -116,7 +116,7 @@ KitchenOwl is moving fast, to stay updated consider starring and watching the re
 - [DockerHub](https://hub.docker.com/repository/docker/tombursch/kitchenowl)
 - Owl icon taken from [Freepik](https://www.flaticon.com/authors/freepik)
 - [Recipe scrapers](https://github.com/hhursev/recipe-scrapers) used for scraping recipes from the web
-- [Weblate](https://weblate.org/) is helping with continuous localization as part of their ongoing support for libre software projects.
+- [Weblate](https://weblate.org/) is helping with continuous localization as part of their ongoing support for open-source software projects.
 
 ### 🔨 Built With
 

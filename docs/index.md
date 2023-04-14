@@ -43,9 +43,9 @@ The following features have been implemented, but most of them can be disabled w
 ### Recipes
 
 - Manage and create recipes and add them to your shopping list
-- You don't have to do that by hand, just scrape the off the web
+- You don't have to do that by hand, just scrape them off the web
 
-### Mealplanner
+### Meal planner
 
 - Create a meal plan to always know what you'll be eating
 - Get suggestions on what to eat next

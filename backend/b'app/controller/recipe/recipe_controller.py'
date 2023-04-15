@@ -13,6 +13,7 @@ from app.helpers import validate_args, authorize_household
 from app.models import Recipe, Item, Tag
 from recipe_scrapers import scrape_me
 from recipe_scrapers._exceptions import SchemaOrgException
+from ingredient_parser import parse_ingredient
 from werkzeug.utils import secure_filename
 from .schemas import SearchByNameRequest, AddRecipe, UpdateRecipe, GetAllFilterRequest, ScrapeRecipe
 
@@ -218,7 +219,16 @@ def scrapeRecipe(args):
     recipe.source = args['url']
     items = {}
     for ingredient in scraper.ingredients():
-        items[ingredient] = None
+        parsed = parse_ingredient(ingredient)
+        item = Item.find_by_name(1, parsed['name'])
+        if not item:
+            item = Item(name=parsed['name'])
+
+        items[ingredient] = item.obj_to_dict() | {
+            "description": ' '.join(
+                filter(None, [parsed['quantity'] + parsed['unit'], parsed['comment']])),
+            "optional": False,
+        }
     return jsonify({
         'recipe': recipe.obj_to_dict(),
         'items': items,

@@ -17,7 +17,9 @@ import 'package:kitchenowl/services/transaction_handler.dart';
 import 'package:kitchenowl/styles/colors.dart';
 import 'package:kitchenowl/styles/themes.dart';
 import 'package:share_handler/share_handler.dart';
+// ignore: depend_on_referenced_packages
 import 'package:image_picker_android/image_picker_android.dart';
+// ignore: depend_on_referenced_packages
 import 'package:image_picker_platform_interface/image_picker_platform_interface.dart';
 
 class App extends StatefulWidget {

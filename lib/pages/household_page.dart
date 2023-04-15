@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:kitchenowl/cubits/auth_cubit.dart';
 import 'package:kitchenowl/cubits/expense_list_cubit.dart';
 import 'package:kitchenowl/cubits/household_cubit.dart';
 import 'package:kitchenowl/cubits/planner_cubit.dart';
@@ -141,17 +142,22 @@ class _HouseholdPageState extends State<HouseholdPage> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 SafeArea(
-                  child: NavigationRail(
-                    extended: extendedRail,
-                    destinations: pages
-                        .map((e) => NavigationRailDestination(
-                              icon: Icon(e.toIcon(context)),
-                              label: Text(e.toLocalizedString(context)),
-                            ))
-                        .toList(),
-                    selectedIndex: _selectedIndex,
-                    onDestinationSelected: (i) =>
-                        _onItemTapped(context, pages[i], pages[_selectedIndex]),
+                  child: BlocBuilder<AuthCubit, AuthState>(
+                    builder: (context, state) => NavigationRail(
+                      extended: extendedRail,
+                      destinations: pages
+                          .map((e) => NavigationRailDestination(
+                                icon: Icon(e.toIcon(context)),
+                                label: Text(e.toLocalizedString(context)),
+                              ))
+                          .toList(),
+                      selectedIndex: _selectedIndex,
+                      onDestinationSelected: (i) => _onItemTapped(
+                        context,
+                        pages[i],
+                        pages[_selectedIndex],
+                      ),
+                    ),
                   ),
                 ),
                 Expanded(child: body),
@@ -164,18 +170,23 @@ class _HouseholdPageState extends State<HouseholdPage> {
             floatingActionButton:
                 pages[_selectedIndex].floatingActionButton(context),
             bottomNavigationBar: useBottomNavigationBar
-                ? NavigationBar(
-                    labelBehavior:
-                        NavigationDestinationLabelBehavior.onlyShowSelected,
-                    destinations: pages
-                        .map((e) => NavigationDestination(
-                              icon: Icon(e.toIcon(context)),
-                              label: e.toLocalizedString(context),
-                            ))
-                        .toList(),
-                    selectedIndex: _selectedIndex,
-                    onDestinationSelected: (i) =>
-                        _onItemTapped(context, pages[i], pages[_selectedIndex]),
+                ? BlocBuilder<AuthCubit, AuthState>(
+                    builder: (context, state) => NavigationBar(
+                      labelBehavior:
+                          NavigationDestinationLabelBehavior.onlyShowSelected,
+                      destinations: pages
+                          .map((e) => NavigationDestination(
+                                icon: Icon(e.toIcon(context)),
+                                label: e.toLocalizedString(context),
+                              ))
+                          .toList(),
+                      selectedIndex: _selectedIndex,
+                      onDestinationSelected: (i) => _onItemTapped(
+                        context,
+                        pages[i],
+                        pages[_selectedIndex],
+                      ),
+                    ),
                   )
                 : null,
           );

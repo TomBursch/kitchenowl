@@ -1,18 +1,12 @@
-import 'package:collection/collection.dart';
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:kitchenowl/app.dart';
-import 'package:kitchenowl/config.dart';
 import 'package:kitchenowl/cubits/auth_cubit.dart';
 import 'package:kitchenowl/cubits/household_cubit.dart';
 import 'package:kitchenowl/cubits/settings_cubit.dart';
-import 'package:kitchenowl/enums/update_enum.dart';
-import 'package:kitchenowl/pages/household_update_page.dart';
-import 'package:kitchenowl/pages/settings_server_page.dart';
-import 'package:kitchenowl/pages/settings_user_page.dart';
+import 'package:kitchenowl/pages/settings_page.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -22,7 +16,8 @@ class ProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final user =
         (BlocProvider.of<AuthCubit>(context).state as Authenticated).user;
-    final isOffline = App.isOffline;
+
+    final householdCubit = BlocProvider.of<HouseholdCubit>(context);
 
     return CustomScrollView(
       primary: true,
@@ -57,7 +52,7 @@ class ProfilePage extends StatelessWidget {
           builder: (context, state) => SliverFillRemaining(
             hasScrollBody: false,
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(16, 0, 16, 4),
+              padding: const EdgeInsets.fromLTRB(8, 0, 8, 6),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -102,6 +97,10 @@ class ProfilePage extends StatelessWidget {
                         horizontalTitleGap: 0,
                         contentPadding:
                             const EdgeInsets.only(left: 20, right: 0),
+                        onTap: () => BlocProvider.of<SettingsCubit>(context)
+                            .setUseDynamicAccentColor(
+                          !state.dynamicAccentColor,
+                        ),
                         trailing: KitchenOwlSwitch(
                           value: state.dynamicAccentColor,
                           onChanged: (value) =>
@@ -120,6 +119,12 @@ class ProfilePage extends StatelessWidget {
                       leading: const Icon(Icons.mobiledata_off_outlined),
                       horizontalTitleGap: 0,
                       contentPadding: const EdgeInsets.only(left: 20, right: 0),
+                      onTap: () => BlocProvider.of<AuthCubit>(context)
+                          .setForcedOfflineMode(
+                        !BlocProvider.of<AuthCubit>(context)
+                            .state
+                            .forcedOfflineMode,
+                      ),
                       trailing: BlocBuilder<AuthCubit, AuthState>(
                         buildWhen: (previous, current) =>
                             previous.forcedOfflineMode !=
@@ -134,132 +139,33 @@ class ProfilePage extends StatelessWidget {
                     ),
                   Card(
                     child: ListTile(
-                      title:
-                          Text(AppLocalizations.of(context)!.householdSwitch),
+                      title: Text(
+                        AppLocalizations.of(context)!.householdSwitch,
+                      ),
                       leading: const Icon(Icons.swap_horiz_rounded),
                       minLeadingWidth: 16,
                       onTap: () => context.go("/household"),
                     ),
                   ),
-                  if (!isOffline)
-                    Row(
-                      children: [
-                        BlocBuilder<HouseholdCubit, HouseholdState>(
-                          builder: ((context, state) {
-                            if (!(state.household.member
-                                    ?.firstWhereOrNull(
-                                      (e) => user.id == e.id,
-                                    )
-                                    ?.hasAdminRights() ??
-                                true)) return const SizedBox();
-
-                            return Expanded(
-                              child: Card(
-                                child: ListTile(
-                                  title: Text(
-                                    AppLocalizations.of(context)!.household,
-                                  ),
-                                  leading: const Icon(Icons.house_rounded),
-                                  minLeadingWidth: 16,
-                                  onTap: () async {
-                                    final res = await Navigator.of(
-                                      context,
-                                      rootNavigator: true,
-                                    ).push<UpdateEnum>(
-                                      MaterialPageRoute(
-                                        builder: (ctx) => HouseholdUpdatePage(
-                                          household: state.household,
-                                        ),
-                                      ),
-                                    );
-                                    if (res == UpdateEnum.deleted) return;
-                                    BlocProvider.of<HouseholdCubit>(context)
-                                        .refresh();
-                                  },
-                                ),
-                              ),
-                            );
-                          }),
-                        ),
-                        if (user.hasServerAdminRights())
-                          Expanded(
-                            child: Card(
-                              child: ListTile(
-                                title:
-                                    Text(AppLocalizations.of(context)!.server),
-                                leading: const Icon(Icons.account_tree_rounded),
-                                minLeadingWidth: 16,
-                                onTap: () =>
-                                    Navigator.of(context, rootNavigator: true)
-                                        .push(
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        const SettingsServerPage(),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                      ],
-                    ),
-                  Row(
-                    children: [
-                      if (!isOffline)
-                        Expanded(
-                          child: Card(
-                            child: ListTile(
-                              shape: Theme.of(context).cardTheme.shape,
-                              title: Text(AppLocalizations.of(context)!.user),
-                              leading: const Icon(Icons.person),
-                              minLeadingWidth: 16,
-                              onTap: () =>
-                                  Navigator.of(context, rootNavigator: true)
-                                      .push(
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      const SettingsUserPage(),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      Expanded(
-                        child: Card(
-                          child: ListTile(
-                            title: Text(AppLocalizations.of(context)!.about),
-                            leading: const Icon(Icons.privacy_tip_rounded),
-                            minLeadingWidth: 16,
-                            onTap: () => showAboutDialog(
-                              context: context,
-                              applicationVersion:
-                                  Config.packageInfoSync?.version,
-                              applicationLegalese:
-                                  '\u{a9} ${AppLocalizations.of(context)!.appLegal}',
-                              applicationIcon: ConstrainedBox(
-                                constraints: const BoxConstraints.expand(
-                                  width: 64,
-                                  height: 64,
-                                ),
-                                child: Image.asset(
-                                  'assets/icon/icon.png',
-                                ),
-                              ),
-                              children: [
-                                const SizedBox(height: 24),
-                                Text(
-                                  AppLocalizations.of(context)!.appDescription,
-                                ),
-                              ],
+                  Card(
+                    child: ListTile(
+                      title: Text(
+                        AppLocalizations.of(context)!.settings,
+                      ),
+                      leading: const Icon(Icons.manage_accounts_rounded),
+                      minLeadingWidth: 16,
+                      onTap: () =>
+                          Navigator.of(context, rootNavigator: true).push(
+                        MaterialPageRoute(
+                          builder: (context) => BlocProvider.value(
+                            value: householdCubit,
+                            child: SettingsPage(
+                              household: householdCubit.state.household,
                             ),
                           ),
                         ),
                       ),
-                    ],
-                  ),
-                  LoadingTextButton(
-                    onPressed: BlocProvider.of<AuthCubit>(context).logout,
-                    icon: const Icon(Icons.logout),
-                    child: Text(AppLocalizations.of(context)!.logout),
+                    ),
                   ),
                 ],
               ),

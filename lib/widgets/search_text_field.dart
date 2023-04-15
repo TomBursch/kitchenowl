@@ -10,8 +10,9 @@ class SearchTextField extends StatefulWidget {
   final TextInputAction? textInputAction;
   final bool autofocus;
   final bool clearOnSubmit;
-  final InputDecoration? decoration;
   final bool alwaysExpanded;
+  final Nullable<String>? labelText;
+  final String? hintText;
 
   /// Search dealy in milliseconds.
   /// Set it to 0 to remove the debouncer
@@ -26,8 +27,9 @@ class SearchTextField extends StatefulWidget {
     this.autofocus = false,
     this.clearOnSubmit = true,
     this.searchDelay = 200,
-    this.decoration,
     this.alwaysExpanded = false,
+    this.labelText,
+    this.hintText,
   });
 
   @override
@@ -118,38 +120,34 @@ class _SearchTextFieldState extends State<SearchTextField> {
           scrollPadding: EdgeInsets.zero,
           maxLines: 1,
           textAlignVertical: TextAlignVertical.center,
-          decoration: widget.decoration?.applyDefaults(InputDecorationTheme(
-                isDense: true,
-                border: const OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(14)),
-                ),
-                fillColor: Theme.of(context).colorScheme.background,
-              )) ??
-              InputDecoration(
-                isDense: true,
-                fillColor: Theme.of(context).colorScheme.background,
-                border: const OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(14)),
-                ),
-                prefixIcon: const Icon(Icons.search),
-                suffixIcon: showSuffix
-                    ? IconButton(
-                        onPressed: () {
-                          _debouncer?.cancel();
-                          if (widget.controller.text.isNotEmpty) {
-                            widget.controller.clear();
-                            widget.onSearch('');
-                          }
-                          FocusScope.of(context).unfocus();
-                        },
-                        icon: const Icon(
-                          Icons.close,
-                          color: Colors.grey,
-                        ),
-                      )
-                    : null,
-                labelText: AppLocalizations.of(context)!.searchHint,
-              ),
+          decoration: InputDecoration(
+            isDense: true,
+            fillColor: Theme.of(context).colorScheme.background,
+            border: const OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(14)),
+            ),
+            prefixIcon: const Icon(Icons.search),
+            suffixIcon: showSuffix
+                ? IconButton(
+                    onPressed: () {
+                      _debouncer?.cancel();
+                      if (widget.controller.text.isNotEmpty) {
+                        widget.controller.clear();
+                        widget.onSearch('');
+                      }
+                      FocusScope.of(context).unfocus();
+                    },
+                    icon: const Icon(
+                      Icons.close,
+                      color: Colors.grey,
+                    ),
+                  )
+                : null,
+            labelText: (widget.labelText ??
+                    Nullable(AppLocalizations.of(context)!.searchHint))
+                .value,
+            hintText: widget.hintText,
+          ),
         ),
       ),
     );

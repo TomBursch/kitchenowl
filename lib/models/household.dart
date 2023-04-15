@@ -1,7 +1,9 @@
+import 'package:collection/collection.dart';
 import 'package:kitchenowl/enums/views_enum.dart';
 import 'package:kitchenowl/models/member.dart';
 import 'package:kitchenowl/models/model.dart';
 import 'package:kitchenowl/models/shoppinglist.dart';
+import 'package:kitchenowl/models/user.dart';
 
 class Household extends Model {
   final int id;
@@ -124,4 +126,11 @@ class Household extends Model {
       if (defaultShoppingList != null)
         "default_shopping_list": defaultShoppingList!.toJsonWithId(),
     });
+
+  bool hasAdminRights(User user) => (member
+          ?.firstWhereOrNull(
+            (e) => user.id == e.id,
+          )
+          ?.hasAdminRights() ??
+      false);
 }

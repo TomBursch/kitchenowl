@@ -38,6 +38,8 @@ COPY migrations /usr/src/kitchenowl/migrations
 WORKDIR /usr/src/kitchenowl
 VOLUME ["/data"]
 
+RUN python -c "import nltk; nltk.download('averaged_perceptron_tagger')"
+
 ENV STORAGE_PATH='/data'
 ENV JWT_SECRET_KEY='PLEASE_CHANGE_ME'
 ENV DEBUG='False'

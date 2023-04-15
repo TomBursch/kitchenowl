@@ -26,6 +26,7 @@ greenlet==2.0.2
 html-text==0.5.2
 html5lib==1.1
 idna==3.4
+ingredient-parser-nlp==0.1.0b1
 iniconfig==2.0.0
 isodate==0.6.1
 itsdangerous==2.1.2
@@ -43,6 +44,7 @@ mccabe==0.7.0
 mf2py==1.1.2
 mlxtend==0.22.0
 mypy-extensions==1.0.0
+nltk==3.8.1
 numpy==1.24.2
 packaging==23.0
 pandas==2.0.0
@@ -58,6 +60,7 @@ PyJWT==2.6.0
 pyparsing==3.0.9
 pyRdfa3==3.5.3
 pytest==7.2.2
+python-crfsuite==0.9.9
 python-dateutil==2.8.2
 python-editor==1.0.4
 pytz==2023.3
@@ -76,8 +79,10 @@ SQLAlchemy==2.0.8
 threadpoolctl==3.1.0
 toml==0.10.2
 tomli==2.0.1
+tqdm==4.65.0
 typed-ast==1.5.4
 types-beautifulsoup4==4.12.0.1
+types-html5lib==1.1.11.10
 types-requests==2.28.11.17
 types-urllib3==1.26.25.10
 typing_extensions==4.5.0

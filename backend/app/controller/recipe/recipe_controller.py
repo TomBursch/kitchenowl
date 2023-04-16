@@ -182,6 +182,7 @@ def getAllFiltered(args, household_id):
 
 @recipeHousehold.route('/scrape', methods=['GET', 'POST'])
 @jwt_required()
+@authorize_household()
 @validate_args(ScrapeRecipe)
 def scrapeRecipe(args, household_id):
     scraper = scrape_me(args['url'], wild_mode=True)

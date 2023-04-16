@@ -111,9 +111,12 @@ class TransactionShoppingListSearchItem extends Transaction<List<Item>> {
 class TransactionShoppingListGetRecentItems
     extends Transaction<List<ItemWithDescription>> {
   final ShoppingList shoppinglist;
+  final int itemsCount;
+
   TransactionShoppingListGetRecentItems({
     DateTime? timestamp,
     required this.shoppinglist,
+    required this.itemsCount,
   }) : super.internal(
           timestamp ?? DateTime.now(),
           "TransactionShoppingListGetRecentItems",
@@ -143,7 +146,8 @@ class TransactionShoppingListGetRecentItems
 
   @override
   Future<List<ItemWithDescription>?> runOnline() async {
-    return await ApiService.getInstance().getRecentItems(shoppinglist);
+    return await ApiService.getInstance()
+        .getRecentItems(shoppinglist, itemsCount);
   }
 }
 

@@ -195,19 +195,10 @@ class _RecipePageState extends State<RecipePage> {
                                 style: Theme.of(context).textTheme.titleLarge,
                               ),
                             ),
-                            IconButton(
-                              onPressed: state.selectedYields <= 1
-                                  ? null
-                                  : cubit.decreaseSelectedYields,
-                              icon: const Icon(Icons.remove),
-                            ),
-                            Text(
-                              state.selectedYields.toString(),
-                              style: Theme.of(context).textTheme.titleLarge,
-                            ),
-                            IconButton(
-                              onPressed: cubit.increaseSelectedYields,
-                              icon: const Icon(Icons.add),
+                            NumberSelector(
+                              value: state.selectedYields,
+                              setValue: cubit.setSelectedYields,
+                              lowerBound: 1,
                             ),
                           ],
                         ),

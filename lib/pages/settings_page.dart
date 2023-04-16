@@ -160,6 +160,19 @@ class _SettingsPageState extends State<SettingsPage> {
                     ),
                   ),
                 ),
+              ListTile(
+                title: Text(
+                  AppLocalizations.of(context)!.itemsRecent,
+                ),
+                leading: const Icon(Icons.numbers_rounded),
+                trailing: NumberSelector(
+                  value: state.recentItemsCount,
+                  setValue: BlocProvider.of<SettingsCubit>(context)
+                      .setRecentItemsCount,
+                  lowerBound: 3,
+                  upperBound: 30,
+                ),
+              ),
             ]),
           ),
         ),

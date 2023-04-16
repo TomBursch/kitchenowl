@@ -16,6 +16,8 @@ class SettingsCubit extends Cubit<SettingsState> {
         PreferenceStorage.getInstance().readInt(key: 'themeMode');
     final dynamicAccentColor =
         PreferenceStorage.getInstance().readBool(key: 'dynamicAccentColor');
+    final recentItemsCount =
+        PreferenceStorage.getInstance().readInt(key: 'recentItemsCount');
     Config.deviceInfo = DeviceInfoPlugin().deviceInfo;
     Config.packageInfo = PackageInfo.fromPlatform();
 
@@ -27,6 +29,7 @@ class SettingsCubit extends Cubit<SettingsState> {
     emit(SettingsState(
       themeMode: themeMode,
       dynamicAccentColor: await dynamicAccentColor ?? false,
+      recentItemsCount: await recentItemsCount ?? 9,
     ));
   }
 
@@ -41,27 +44,38 @@ class SettingsCubit extends Cubit<SettingsState> {
         .writeBool(key: 'dynamicAccentColor', value: dynamicAccentColor);
     emit(state.copyWith(dynamicAccentColor: dynamicAccentColor));
   }
+
+  void setRecentItemsCount(int recentItemsCount) {
+    if (recentItemsCount > 0) {
+      PreferenceStorage.getInstance()
+          .writeInt(key: 'recentItemsCount', value: recentItemsCount);
+      emit(state.copyWith(recentItemsCount: recentItemsCount));
+    }
+  }
 }
 
 class SettingsState extends Equatable {
   final ThemeMode themeMode;
   final bool dynamicAccentColor;
+  final int recentItemsCount;
 
   const SettingsState({
     this.themeMode = ThemeMode.system,
     this.dynamicAccentColor = false,
+    this.recentItemsCount = 9,
   });
 
   SettingsState copyWith({
     ThemeMode? themeMode,
-    bool? forcedOfflineMode,
     bool? dynamicAccentColor,
+    int? recentItemsCount,
   }) =>
       SettingsState(
         themeMode: themeMode ?? this.themeMode,
         dynamicAccentColor: dynamicAccentColor ?? this.dynamicAccentColor,
+        recentItemsCount: recentItemsCount ?? this.recentItemsCount,
       );
 
   @override
-  List<Object?> get props => [themeMode, dynamicAccentColor];
+  List<Object?> get props => [themeMode, dynamicAccentColor, recentItemsCount];
 }

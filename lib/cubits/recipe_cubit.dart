@@ -27,14 +27,6 @@ class RecipeCubit extends Cubit<RecipeState> {
     emit(state.copyWith(selectedItems: selectedItems));
   }
 
-  void increaseSelectedYields() {
-    setSelectedYields(state.selectedYields + 1);
-  }
-
-  void decreaseSelectedYields() {
-    setSelectedYields(state.selectedYields - 1);
-  }
-
   void setSelectedYields(int selectedYields) {
     emit(state.copyWith(
       selectedYields: selectedYields,

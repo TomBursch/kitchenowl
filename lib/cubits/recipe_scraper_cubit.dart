@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/models/recipe.dart';
 import 'package:kitchenowl/models/recipe_scrape.dart';
@@ -7,13 +8,15 @@ import 'package:kitchenowl/services/api/api_service.dart';
 
 class RecipeScraperCubit extends Cubit<RecipeScraperState> {
   final String url;
+  final Household household;
 
-  RecipeScraperCubit(this.url) : super(RecipeScraperLoadingState()) {
+  RecipeScraperCubit(this.household, this.url)
+      : super(RecipeScraperLoadingState()) {
     scrapeRecipe();
   }
 
   Future<void> scrapeRecipe() async {
-    final res = await ApiService.getInstance().scrapeRecipe(url);
+    final res = await ApiService.getInstance().scrapeRecipe(household, url);
 
     if (res != null) {
       emit(RecipeScraperLoadedState.fromScrape(res));

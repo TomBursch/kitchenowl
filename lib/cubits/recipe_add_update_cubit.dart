@@ -105,7 +105,8 @@ class AddUpdateRecipeCubit extends Cubit<AddUpdateRecipeState> {
 
   Future<void> setDescriptionFromSource() async {
     final source = state.source;
-    final scrape = await ApiService.getInstance().scrapeRecipe(source);
+    final scrape =
+        await ApiService.getInstance().scrapeRecipe(household, source);
     if (scrape != null && scrape.recipe.description.isNotEmpty) {
       setDescription(scrape.recipe.description);
     }

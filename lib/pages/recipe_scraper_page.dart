@@ -27,7 +27,7 @@ class _RecipeScraperPageState extends State<RecipeScraperPage> {
   @override
   void initState() {
     super.initState();
-    cubit = RecipeScraperCubit(widget.url);
+    cubit = RecipeScraperCubit(widget.household, widget.url);
   }
 
   @override

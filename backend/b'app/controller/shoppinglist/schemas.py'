@@ -47,7 +47,7 @@ class GetItems(Schema):
 class GetRecentItems(Schema):
     limit = fields.Integer(
         load_default=9,
-        validate=lambda x: x > 0 and x < 50
+        validate=lambda x: x > 0 and x <= 60
     )
 
 

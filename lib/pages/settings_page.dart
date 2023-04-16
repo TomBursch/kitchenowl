@@ -84,7 +84,7 @@ class _SettingsPageState extends State<SettingsPage> {
           builder: (context, state) => SliverList(
             delegate: SliverChildListDelegate([
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
+                padding: const EdgeInsets.fromLTRB(8, 8, 8, 2),
                 child: Text(
                   AppLocalizations.of(context)!.general.toUpperCase(),
                   style: Theme.of(context).textTheme.labelMedium,
@@ -167,7 +167,7 @@ class _SettingsPageState extends State<SettingsPage> {
           SliverList(
             delegate: SliverChildListDelegate([
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
+                padding: const EdgeInsets.fromLTRB(8, 8, 8, 2),
                 child: Text(
                   AppLocalizations.of(context)!.household.toUpperCase(),
                   style: Theme.of(context).textTheme.labelMedium,
@@ -221,7 +221,7 @@ class _SettingsPageState extends State<SettingsPage> {
           SliverList(
             delegate: SliverChildListDelegate([
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
+                padding: const EdgeInsets.fromLTRB(8, 8, 8, 2),
                 child: Text(
                   "${AppLocalizations.of(context)!.server.toUpperCase()} (${Uri.parse(ApiService.getInstance().baseUrl).authority})",
                   style: Theme.of(context).textTheme.labelMedium,
@@ -243,7 +243,7 @@ class _SettingsPageState extends State<SettingsPage> {
         SliverList(
           delegate: SliverChildListDelegate([
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
+              padding: const EdgeInsets.fromLTRB(8, 8, 8, 2),
               child: Text(
                 AppLocalizations.of(context)!.about.toUpperCase(),
                 style: Theme.of(context).textTheme.labelMedium,
@@ -263,6 +263,14 @@ class _SettingsPageState extends State<SettingsPage> {
               onTap: () => openUrl(
                 context,
                 "https://github.com/TomBursch/kitchenowl/issues/new/choose",
+              ),
+            ),
+            ListTile(
+              title: Text(AppLocalizations.of(context)!.helpTranslate),
+              leading: const Icon(Icons.translate_rounded),
+              onTap: () => openUrl(
+                context,
+                "https://hosted.weblate.org/engage/kitchenowl",
               ),
             ),
             ListTile(

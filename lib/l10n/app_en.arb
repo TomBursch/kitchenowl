@@ -145,6 +145,8 @@
   "@grid": {},
   "go": "Go",
   "@go": {},
+  "helpTranslate": "Help translate",
+  "@helpTranslate": {},
   "household": "Household",
   "@household": {},
   "householdDelete": "Delete Household",

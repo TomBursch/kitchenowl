@@ -19,12 +19,13 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
   final Household household;
   Future<void>? _refreshThread;
   String? _refreshCurrentQuery;
+  int Function() recentItemCountProvider;
 
   String get query => (state is SearchShoppinglistCubitState)
       ? (state as SearchShoppinglistCubitState).query
       : "";
 
-  ShoppinglistCubit(this.household)
+  ShoppinglistCubit(this.household, this.recentItemCountProvider)
       : super(const LoadingShoppinglistCubitState()) {
     PreferenceStorage.getInstance().readInt(key: 'itemSorting').then((i) {
       if (i != null && state.sorting.index != i) {
@@ -231,6 +232,7 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
       final recent = TransactionHandler.getInstance()
           .runTransaction(TransactionShoppingListGetRecentItems(
         shoppinglist: shoppinglist,
+        itemsCount: recentItemCountProvider(),
       ));
       resState = ShoppinglistCubitState(
         shoppinglists: shoppingLists,

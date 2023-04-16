@@ -180,10 +180,10 @@ def getAllFiltered(args, household_id):
     return jsonify([e.obj_to_full_dict() for e in Recipe.all_by_name_with_filter(household_id, args["filter"])])
 
 
-@recipe.route('/scrape', methods=['GET', 'POST'])
+@recipeHousehold.route('/scrape', methods=['GET', 'POST'])
 @jwt_required()
 @validate_args(ScrapeRecipe)
-def scrapeRecipe(args):
+def scrapeRecipe(args, household_id):
     scraper = scrape_me(args['url'], wild_mode=True)
     recipe = Recipe()
     recipe.name = scraper.title()
@@ -220,7 +220,7 @@ def scrapeRecipe(args):
     items = {}
     for ingredient in scraper.ingredients():
         parsed = parse_ingredient(ingredient)
-        item = Item.find_by_name(1, parsed['name'])
+        item = Item.find_by_name(household_id, parsed['name'])
         if not item:
             item = Item(name=parsed['name'])
 

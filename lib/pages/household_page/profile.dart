@@ -55,63 +55,8 @@ class ProfilePage extends StatelessWidget {
               padding: const EdgeInsets.fromLTRB(8, 0, 8, 6),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  ListTile(
-                    title: Text(AppLocalizations.of(context)!.themeMode),
-                    leading: const Icon(Icons.nights_stay_sharp),
-                    contentPadding: const EdgeInsets.only(left: 20, right: 5),
-                    horizontalTitleGap: 0,
-                    trailing: SegmentedButton(
-                      selected: {state.themeMode},
-                      segments: [
-                        ButtonSegment(
-                          value: ThemeMode.light,
-                          icon: const Icon(Icons.light_mode_rounded),
-                          label: Text(AppLocalizations.of(context)!.themeLight),
-                        ),
-                        ButtonSegment(
-                          value: ThemeMode.dark,
-                          icon: const Icon(Icons.dark_mode_rounded),
-                          label: Text(AppLocalizations.of(context)!.themeDark),
-                        ),
-                        ButtonSegment(
-                          value: ThemeMode.system,
-                          icon: const Icon(Icons.brightness_medium_outlined),
-                          label:
-                              Text(AppLocalizations.of(context)!.themeSystem),
-                        ),
-                      ],
-                      onSelectionChanged: (Set<ThemeMode> value) {
-                        BlocProvider.of<SettingsCubit>(context)
-                            .setTheme(value.first);
-                      },
-                    ),
-                  ),
-                  DynamicColorBuilder(builder: (dynamicLight, dynamicDark) {
-                    if (dynamicLight != null && dynamicDark != null) {
-                      return ListTile(
-                        title: Text(
-                          AppLocalizations.of(context)!.dynamicAccentColor,
-                        ),
-                        leading: const Icon(Icons.color_lens_rounded),
-                        horizontalTitleGap: 0,
-                        contentPadding:
-                            const EdgeInsets.only(left: 20, right: 0),
-                        onTap: () => BlocProvider.of<SettingsCubit>(context)
-                            .setUseDynamicAccentColor(
-                          !state.dynamicAccentColor,
-                        ),
-                        trailing: KitchenOwlSwitch(
-                          value: state.dynamicAccentColor,
-                          onChanged: (value) =>
-                              BlocProvider.of<SettingsCubit>(context)
-                                  .setUseDynamicAccentColor(value),
-                        ),
-                      );
-                    }
-
-                    return const SizedBox();
-                  }),
                   if (!kIsWeb)
                     ListTile(
                       title:
@@ -137,35 +82,43 @@ class ProfilePage extends StatelessWidget {
                         ),
                       ),
                     ),
-                  Card(
-                    child: ListTile(
-                      title: Text(
-                        AppLocalizations.of(context)!.householdSwitch,
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Card(
+                          child: ListTile(
+                            title: Text(
+                              AppLocalizations.of(context)!.householdSwitch,
+                            ),
+                            leading: const Icon(Icons.swap_horiz_rounded),
+                            minLeadingWidth: 16,
+                            onTap: () => context.go("/household"),
+                          ),
+                        ),
                       ),
-                      leading: const Icon(Icons.swap_horiz_rounded),
-                      minLeadingWidth: 16,
-                      onTap: () => context.go("/household"),
-                    ),
-                  ),
-                  Card(
-                    child: ListTile(
-                      title: Text(
-                        AppLocalizations.of(context)!.settings,
-                      ),
-                      leading: const Icon(Icons.manage_accounts_rounded),
-                      minLeadingWidth: 16,
-                      onTap: () =>
-                          Navigator.of(context, rootNavigator: true).push(
-                        MaterialPageRoute(
-                          builder: (context) => BlocProvider.value(
-                            value: householdCubit,
-                            child: SettingsPage(
-                              household: householdCubit.state.household,
+                      Expanded(
+                        child: Card(
+                          child: ListTile(
+                            title: Text(
+                              AppLocalizations.of(context)!.settings,
+                            ),
+                            leading: const Icon(Icons.manage_accounts_rounded),
+                            minLeadingWidth: 16,
+                            onTap: () =>
+                                Navigator.of(context, rootNavigator: true).push(
+                              MaterialPageRoute(
+                                builder: (context) => BlocProvider.value(
+                                  value: householdCubit,
+                                  child: SettingsPage(
+                                    household: householdCubit.state.household,
+                                  ),
+                                ),
+                              ),
                             ),
                           ),
                         ),
                       ),
-                    ),
+                    ],
                   ),
                 ],
               ),

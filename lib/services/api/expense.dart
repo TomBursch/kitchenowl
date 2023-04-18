@@ -13,7 +13,7 @@ extension ExpenseApi on ApiService {
     required Household household,
     ExpenselistSorting sorting = ExpenselistSorting.all,
     Expense? startAfter,
-    List<ExpenseCategory>? filter,
+    List<ExpenseCategory?>? filter,
   }) async {
     String url = '${householdPath(household)}$baseRoute?view=${sorting.index}';
     if (startAfter != null) {
@@ -21,7 +21,7 @@ extension ExpenseApi on ApiService {
     }
     if (filter != null && filter.isNotEmpty) {
       for (final c in filter) {
-        url += '&filter=${c.id}';
+        url += '&filter=${c?.id ?? ""}';
       }
     }
 

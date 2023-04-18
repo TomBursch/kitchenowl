@@ -11,6 +11,7 @@ import 'package:kitchenowl/models/member.dart';
 import 'package:kitchenowl/models/user.dart';
 import 'package:kitchenowl/pages/expense_overview_page.dart';
 import 'package:kitchenowl/widgets/chart_pie_current_month.dart';
+import 'package:kitchenowl/widgets/choice_scroll.dart';
 import 'package:kitchenowl/widgets/expense_item.dart';
 
 class ExpenseListPage extends StatefulWidget {
@@ -162,24 +163,77 @@ class _ExpensePageState extends State<ExpenseListPage> {
                           ),
                         ),
                       ),
-                    if (state.expenses.isNotEmpty)
-                      SliverPadding(
-                        padding: const EdgeInsets.only(right: 16),
-                        sliver: SliverToBoxAdapter(
-                          child: Align(
-                            alignment: Alignment.centerRight,
-                            child: TrailingIconTextButton(
-                              text: state.sorting == ExpenselistSorting.all
-                                  ? AppLocalizations.of(context)!.household
-                                  : state.sorting == ExpenselistSorting.personal
-                                      ? AppLocalizations.of(context)!.personal
-                                      : AppLocalizations.of(context)!.other,
-                              icon: const Icon(Icons.sort),
-                              onPressed: cubit.incrementSorting,
-                            ),
+                    SliverToBoxAdapter(
+                      child: LeftRightWrap(
+                        left: (state.categories.isEmpty)
+                            ? const SizedBox()
+                            : ChoiceScroll(
+                                children: state.categories.map((category) {
+                                  return Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 4,
+                                    ),
+                                    child: FilterChip(
+                                      label: Text(
+                                        category.name,
+                                        style: TextStyle(
+                                          color: state.filter.contains(category)
+                                              ? Theme.of(context)
+                                                  .colorScheme
+                                                  .onPrimary
+                                              : null,
+                                        ),
+                                      ),
+                                      selected: state.filter.contains(category),
+                                      selectedColor: Theme.of(context)
+                                          .colorScheme
+                                          .secondary,
+                                      onSelected: (v) =>
+                                          cubit.setFilter(category, v),
+                                    ),
+                                  );
+                                }).toList()
+                                  ..insert(
+                                    0,
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 4,
+                                      ),
+                                      child: FilterChip(
+                                        label: Text(
+                                          AppLocalizations.of(context)!.none,
+                                          style: TextStyle(
+                                            color: state.filter.contains(null)
+                                                ? Theme.of(context)
+                                                    .colorScheme
+                                                    .onPrimary
+                                                : null,
+                                          ),
+                                        ),
+                                        selected: state.filter.contains(null),
+                                        selectedColor: Theme.of(context)
+                                            .colorScheme
+                                            .secondary,
+                                        onSelected: (v) =>
+                                            cubit.setFilter(null, v),
+                                      ),
+                                    ),
+                                  ),
+                              ),
+                        right: Padding(
+                          padding: const EdgeInsets.only(right: 16),
+                          child: TrailingIconTextButton(
+                            text: state.sorting == ExpenselistSorting.all
+                                ? AppLocalizations.of(context)!.household
+                                : state.sorting == ExpenselistSorting.personal
+                                    ? AppLocalizations.of(context)!.personal
+                                    : AppLocalizations.of(context)!.other,
+                            icon: const Icon(Icons.sort),
+                            onPressed: cubit.incrementSorting,
                           ),
                         ),
                       ),
+                    ),
                     if (state.expenses.isNotEmpty)
                       SliverPadding(
                         padding: const EdgeInsets.symmetric(horizontal: 16),

@@ -8,11 +8,13 @@ import 'package:kitchenowl/services/transaction.dart';
 class TransactionExpenseGetAll extends Transaction<List<Expense>> {
   final ExpenselistSorting sorting;
   final Household household;
+  final List<ExpenseCategory?>? filter;
 
   TransactionExpenseGetAll({
     DateTime? timestamp,
     required this.household,
     this.sorting = ExpenselistSorting.all,
+    this.filter,
   }) : super.internal(timestamp ?? DateTime.now(), "TransactionExpenseGetAll");
 
   @override
@@ -22,7 +24,11 @@ class TransactionExpenseGetAll extends Transaction<List<Expense>> {
 
   @override
   Future<List<Expense>?> runOnline() async {
-    return await ApiService.getInstance().getAllExpenses(household, sorting);
+    return await ApiService.getInstance().getAllExpenses(
+      household: household,
+      sorting: sorting,
+      filter: filter,
+    );
   }
 }
 
@@ -30,12 +36,14 @@ class TransactionExpenseGetMore extends Transaction<List<Expense>> {
   final ExpenselistSorting sorting;
   final Expense lastExpense;
   final Household household;
+  final List<ExpenseCategory?>? filter;
 
   TransactionExpenseGetMore({
     DateTime? timestamp,
     required this.household,
     this.sorting = ExpenselistSorting.all,
     required this.lastExpense,
+    this.filter,
   }) : super.internal(timestamp ?? DateTime.now(), "TransactionExpenseGetMore");
 
   @override
@@ -45,8 +53,12 @@ class TransactionExpenseGetMore extends Transaction<List<Expense>> {
 
   @override
   Future<List<Expense>?> runOnline() async {
-    return await ApiService.getInstance()
-        .getAllExpenses(household, sorting, lastExpense);
+    return await ApiService.getInstance().getAllExpenses(
+      household: household,
+      sorting: sorting,
+      startAfter: lastExpense,
+      filter: filter,
+    );
   }
 }
 

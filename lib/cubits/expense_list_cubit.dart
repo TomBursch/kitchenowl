@@ -59,6 +59,17 @@ class ExpenseListCubit extends Cubit<ExpenseListCubitState> {
     refresh();
   }
 
+  void setFilter(ExpenseCategory? category, bool selected) {
+    final filter = List.of(state.filter);
+    if (selected) {
+      filter.add(category);
+    } else {
+      filter.removeWhere((e) => e?.id == category?.id);
+    }
+    emit(state.copyWith(filter: filter));
+    refresh();
+  }
+
   Future<void> loadMore() async {
     if (state.allLoaded) return;
 
@@ -67,6 +78,7 @@ class ExpenseListCubit extends Cubit<ExpenseListCubitState> {
       household: household,
       sorting: state.sorting,
       lastExpense: state.expenses.last,
+      filter: state.filter,
     ));
     emit(state.copyWith(
       expenses: List.from(state.expenses + await moreExpenses),
@@ -82,12 +94,14 @@ class ExpenseListCubit extends Cubit<ExpenseListCubitState> {
 
   Future<void> _refresh() async {
     final sorting = state.sorting;
+    final filter = state.filter;
     final categories = TransactionHandler.getInstance()
         .runTransaction(TransactionExpenseCategoriesGet(household: household));
     final expenses = TransactionHandler.getInstance()
         .runTransaction(TransactionExpenseGetAll(
       household: household,
       sorting: sorting,
+      filter: filter,
     ));
 
     Future<Map<int, double>>? categoryOverview;
@@ -105,7 +119,9 @@ class ExpenseListCubit extends Cubit<ExpenseListCubitState> {
       expenses: await expenses,
       sorting: sorting,
       categories: await categories,
+      allLoaded: (await expenses).length < 30,
       categoryOverview: (await categoryOverview) ?? state.categoryOverview,
+      filter: filter,
     ));
     _refreshThread = null;
   }
@@ -117,6 +133,7 @@ class ExpenseListCubitState extends Equatable {
   final List<ExpenseCategory> categories;
   final Map<int, double> categoryOverview;
   final bool allLoaded;
+  final List<ExpenseCategory?> filter;
 
   const ExpenseListCubitState({
     this.expenses = const [],
@@ -124,6 +141,7 @@ class ExpenseListCubitState extends Equatable {
     this.allLoaded = false,
     this.categories = const [],
     this.categoryOverview = const {},
+    this.filter = const [],
   });
 
   ExpenseListCubitState copyWith({
@@ -132,6 +150,7 @@ class ExpenseListCubitState extends Equatable {
     bool? allLoaded,
     List<ExpenseCategory>? categories,
     Map<int, double>? categoryOverview,
+    List<ExpenseCategory?>? filter,
   }) =>
       ExpenseListCubitState(
         expenses: expenses ?? this.expenses,
@@ -139,15 +158,16 @@ class ExpenseListCubitState extends Equatable {
         allLoaded: allLoaded ?? this.allLoaded,
         categories: categories ?? this.categories,
         categoryOverview: categoryOverview ?? this.categoryOverview,
+        filter: filter ?? this.filter,
       );
 
   @override
   List<Object?> get props =>
-      <Object>[sorting, categoryOverview] + categories + expenses;
+      <Object>[sorting, categoryOverview, filter] + categories + expenses;
 }
 
 class LoadingExpenseListCubitState extends ExpenseListCubitState {
-  const LoadingExpenseListCubitState({super.sorting});
+  const LoadingExpenseListCubitState({super.sorting, super.filter});
 
   @override
   // ignore: long-parameter-list
@@ -157,8 +177,10 @@ class LoadingExpenseListCubitState extends ExpenseListCubitState {
     bool? allLoaded,
     List<ExpenseCategory>? categories,
     Map<int, double>? categoryOverview,
+    List<ExpenseCategory?>? filter,
   }) =>
       LoadingExpenseListCubitState(
         sorting: sorting ?? this.sorting,
+        filter: filter ?? this.filter,
       );
 }

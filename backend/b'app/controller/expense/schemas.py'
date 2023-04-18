@@ -3,12 +3,19 @@ from marshmallow import fields, Schema
 from app.util import MultiDictList
 
 
+class CustomInteger(fields.Integer):
+    def _deserialize(self, value, attr, data, **kwargs):
+        if not value:
+            return None
+        return super()._deserialize(value, attr, data, **kwargs)
+
+
 class GetExpenses(Schema):
     view = fields.Integer()
     startAfterId = fields.Integer(
         validate=lambda a: a >= 0
     )
-    filter = MultiDictList(fields.Integer(
+    filter = MultiDictList(CustomInteger(
         allow_none=True
     ))
 

@@ -9,14 +9,20 @@ import 'package:kitchenowl/services/api/api_service.dart';
 extension ExpenseApi on ApiService {
   static const baseRoute = '/expense';
 
-  Future<List<Expense>?> getAllExpenses(
-    Household household, [
+  Future<List<Expense>?> getAllExpenses({
+    required Household household,
     ExpenselistSorting sorting = ExpenselistSorting.all,
     Expense? startAfter,
-  ]) async {
+    List<ExpenseCategory>? filter,
+  }) async {
     String url = '${householdPath(household)}$baseRoute?view=${sorting.index}';
     if (startAfter != null) {
       url += '&startAfterId=${startAfter.id}';
+    }
+    if (filter != null && filter.isNotEmpty) {
+      for (final c in filter) {
+        url += '&filter=${c.id}';
+      }
     }
 
     final res = await get(url);

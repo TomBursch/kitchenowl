@@ -21,13 +21,16 @@ expenseHousehold = Blueprint('expense', __name__)
 @validate_args(GetExpenses)
 def getAllExpenses(args, household_id):
     filter = [Expense.household_id == household_id]
-    if ('startAfterId' in args):
+    if 'startAfterId' in args:
         filter.append(Expense.id < args['startAfterId'])
 
-    if ('view' in args and args['view'] == 1):
+    if 'view' in args and args['view'] == 1:
         subquery = db.session.query(ExpensePaidFor.expense_id).filter(
             ExpensePaidFor.user_id == current_user.id).scalar_subquery()
         filter.append(Expense.id.in_(subquery))
+
+    if 'filter' in args:
+        filter.append(Expense.category_id.in_(args['filter']))
 
     return jsonify([e.obj_to_full_dict() for e
                     in Expense.query.order_by(desc(Expense.date)).filter(*filter)

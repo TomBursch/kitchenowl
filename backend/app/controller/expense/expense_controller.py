@@ -2,6 +2,7 @@ import calendar
 from datetime import datetime, timezone
 from dateutil.relativedelta import relativedelta
 from sqlalchemy.sql.expression import desc
+from sqlalchemy import or_
 from app.errors import NotFoundRequest
 from flask import jsonify, Blueprint
 from flask_jwt_extended import current_user, jwt_required
@@ -30,7 +31,11 @@ def getAllExpenses(args, household_id):
         filter.append(Expense.id.in_(subquery))
 
     if 'filter' in args:
-        filter.append(Expense.category_id.in_(args['filter']))
+        if None in args['filter']:
+            filter.append(or_(Expense.category_id == None,
+                          Expense.category_id.in_(args['filter'])))
+        else:
+            filter.append(Expense.category_id.in_(args['filter']))
 
     return jsonify([e.obj_to_full_dict() for e
                     in Expense.query.order_by(desc(Expense.date)).filter(*filter)

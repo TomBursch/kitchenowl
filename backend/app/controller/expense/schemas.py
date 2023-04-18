@@ -1,11 +1,16 @@
 from marshmallow import fields, Schema
 
+from app.util import MultiDictList
+
 
 class GetExpenses(Schema):
     view = fields.Integer()
     startAfterId = fields.Integer(
         validate=lambda a: a >= 0
     )
+    filter = MultiDictList(fields.Integer(
+        allow_none=True
+    ))
 
 
 class AddExpense(Schema):

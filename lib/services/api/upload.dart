@@ -10,6 +10,6 @@ extension UploadApi on ApiService {
     if (res.statusCode != 200) return null;
     final body = jsonDecode(res.body);
 
-    return body['name'];
+    return body['filename'];
   }
 }

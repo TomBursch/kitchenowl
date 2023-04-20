@@ -96,6 +96,9 @@ class UpdateExpenseCategory(Schema):
 
 class GetExpenseOverview(Schema):
     view = fields.Integer()
-    months = fields.Integer(
+    frame = fields.Integer(
+        validate=lambda a: a >= 0 and a <= 3
+    )
+    steps = fields.Integer(
         validate=lambda a: a > 0
     )

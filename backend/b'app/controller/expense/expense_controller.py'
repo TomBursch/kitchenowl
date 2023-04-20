@@ -1,5 +1,5 @@
 import calendar
-from datetime import datetime, timezone
+from datetime import time, datetime, timezone, timedelta
 from dateutil.relativedelta import relativedelta
 from sqlalchemy.sql.expression import desc
 from sqlalchemy import or_
@@ -206,7 +206,8 @@ def getExpenseOverview(args, household_id):
     categories.append(-1)
     thisMonthStart = datetime.utcnow().date().replace(day=1)
 
-    months = args['months'] if 'months' in args else 5
+    steps = args['steps'] if 'steps' in args else 5
+    frame = args['frame'] if args['frame'] != None else 2
 
     factor = 1
     query = Expense.query\
@@ -228,24 +229,39 @@ def getExpenseOverview(args, household_id):
 
         query = query.filter(Expense.id.in_(filterQuery)).join(s2)
 
-    def getOverviewForMonthAgo(monthAgo: int):
-        monthStart = thisMonthStart - relativedelta(months=monthAgo)
-        monthEnd = monthStart.replace(day=calendar.monthrange(
-            monthStart.year, monthStart.month)[1])
+    def getFilterForStepAgo(stepAgo: int):
+        start = None
+        end = None
+        if frame == 0:
+            start = datetime.utcnow().date() - timedelta(days=stepAgo)
+            end = start + timedelta(hours=24)
+        elif frame == 1:
+            start = datetime.utcnow().date() - relativedelta(days=7, weekday=calendar.MONDAY, weeks=stepAgo)
+            end = start + timedelta(days=7)
+        elif frame == 2:
+            start = thisMonthStart - relativedelta(months=stepAgo)
+            end = start + relativedelta(months=1)
+        elif frame == 3:
+            start = datetime.utcnow().date().replace(day=1, month=1) - relativedelta(years=stepAgo)
+            end = start + relativedelta(years=1)
+
+        return Expense.date >= start, Expense.date <= end
+
+    def getOverviewForStepAgo(stepAgo: int):
         return {
             (e.id or -1): (float(e.balance) or 0) for e in
             query
             .with_entities(ExpenseCategory.id.label("id"), func.sum(Expense.amount * factor).label("balance"))
-            .filter(Expense.date >= monthStart, Expense.date <= monthEnd)
+            .filter(*getFilterForStepAgo(stepAgo))
             .all()
         }
 
-    value = [getOverviewForMonthAgo(i) for i in range(0, months)]
+    value = [getOverviewForStepAgo(i) for i in range(0, steps)]
 
-    byMonth = {i: {category: (value[i][category] if category in value[i] else 0.0)
-                   for category in categories} for i in range(0, months)}
+    byStep = {i: {category: (value[i][category] if category in value[i] else 0.0)
+                  for category in categories} for i in range(0, steps)}
 
-    return jsonify(byMonth)
+    return jsonify(byStep)
 
 
 @expenseHousehold.route('/categories', methods=['POST'])

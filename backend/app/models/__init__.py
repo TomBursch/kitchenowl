@@ -13,3 +13,4 @@ from .expense_category import ExpenseCategory
 from .category import Category
 from .token import Token
 from .household import Household, HouseholdMember
+from .file import File

@@ -9,7 +9,7 @@ from flask_jwt_extended import current_user, jwt_required
 from sqlalchemy import func
 from app import db
 from app.helpers import validate_args, authorize_household, RequiredRights
-from app.models import Expense, ExpensePaidFor, ExpenseCategory, HouseholdMember
+from app.models import Expense, ExpensePaidFor, ExpenseCategory, HouseholdMember, File
 from .schemas import GetExpenses, AddExpense, UpdateExpense, AddExpenseCategory, UpdateExpenseCategory, GetExpenseOverview
 
 expense = Blueprint('expense', __name__)
@@ -69,7 +69,9 @@ def addExpense(args, household_id):
         expense.date = datetime.fromtimestamp(
             args['date']/1000, timezone.utc)
     if 'photo' in args:
-        expense.photo = args['photo']
+        f = File.find(args['photo'])
+        if f and f.created_by == current_user.id:
+            expense.photo = f.filename
     if 'category' in args:
         if args['category'] is not None:
             category = ExpenseCategory.find_by_id(args['category'])
@@ -114,7 +116,9 @@ def updateExpense(args, id):  # noqa: C901
         expense.date = datetime.fromtimestamp(
             args['date']/1000, timezone.utc)
     if 'photo' in args:
-        expense.photo = args['photo']
+        f = File.find(args['photo'])
+        if f and f.created_by == current_user.id:
+            expense.photo = f.filename
     if 'category' in args:
         if args['category'] is not None:
             category = ExpenseCategory.find_by_id(args['category'])

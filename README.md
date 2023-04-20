@@ -126,7 +126,9 @@ KitchenOwl is moving fast, to stay updated consider starring and watching the re
 
 ## 🍀 Contributors
 
-[//]: contributor-faces
+<a href="https://github.com/tombursch/KitchenOwl/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=tombursch/KitchenOwl" />
+</a>
 
 ## 📜 License
 

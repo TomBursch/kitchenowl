@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/enums/expenselist_sorting.dart';
+import 'package:kitchenowl/enums/timeframe.dart';
 import 'package:kitchenowl/models/expense_category.dart';
 import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/services/transaction_handler.dart';
@@ -39,7 +40,8 @@ class ExpenseOverviewCubit extends Cubit<ExpenseOverviewState> {
         .runTransaction(TransactionExpenseGetOverview(
       household: household,
       sorting: sorting,
-      months: 5,
+      timeframe: Timeframe.monthly,
+      steps: 5,
     ));
     if (overview.isEmpty) {
       _refreshThread = null;

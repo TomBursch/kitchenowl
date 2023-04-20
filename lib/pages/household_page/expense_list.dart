@@ -6,12 +6,14 @@ import 'package:kitchenowl/app.dart';
 import 'package:kitchenowl/cubits/expense_list_cubit.dart';
 import 'package:kitchenowl/cubits/household_cubit.dart';
 import 'package:kitchenowl/enums/expenselist_sorting.dart';
+import 'package:kitchenowl/enums/timeframe.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/member.dart';
 import 'package:kitchenowl/models/user.dart';
 import 'package:kitchenowl/pages/expense_overview_page.dart';
 import 'package:kitchenowl/widgets/chart_pie_current_month.dart';
 import 'package:kitchenowl/widgets/choice_scroll.dart';
+import 'package:kitchenowl/widgets/expense/timeframe_dropdown_button.dart';
 import 'package:kitchenowl/widgets/expense_item.dart';
 
 class ExpenseListPage extends StatefulWidget {
@@ -70,29 +72,32 @@ class _ExpensePageState extends State<ExpenseListPage> {
                                       Theme.of(context).textTheme.headlineSmall,
                                 ),
                               ),
-                              if (state.expenses.isNotEmpty)
-                                Tooltip(
-                                  message:
-                                      AppLocalizations.of(context)!.overview,
-                                  child: InkWell(
-                                    borderRadius: BorderRadius.circular(50),
-                                    child: const Icon(Icons.bar_chart_rounded),
-                                    onTap: () => Navigator.of(
-                                      context,
-                                      rootNavigator: true,
-                                    ).push(
-                                      MaterialPageRoute(
-                                        builder: (ctx) => ExpenseOverviewPage(
-                                          household:
-                                              BlocProvider.of<ExpenseListCubit>(
-                                            context,
-                                          ).household,
-                                          initialSorting: state.sorting,
-                                        ),
+                              TimeframeDropdownButton(
+                                value: state.timeframe,
+                                onChanged: cubit.setTimeframe,
+                              ),
+                              const SizedBox(width: 16),
+                              Tooltip(
+                                message: AppLocalizations.of(context)!.overview,
+                                child: InkWell(
+                                  borderRadius: BorderRadius.circular(50),
+                                  child: const Icon(Icons.bar_chart_rounded),
+                                  onTap: () => Navigator.of(
+                                    context,
+                                    rootNavigator: true,
+                                  ).push(
+                                    MaterialPageRoute(
+                                      builder: (ctx) => ExpenseOverviewPage(
+                                        household:
+                                            BlocProvider.of<ExpenseListCubit>(
+                                          context,
+                                        ).household,
+                                        initialSorting: state.sorting,
                                       ),
                                     ),
                                   ),
                                 ),
+                              ),
                             ],
                           ),
                         ),
@@ -136,10 +141,10 @@ class _ExpensePageState extends State<ExpenseListPage> {
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
                                         Text(
-                                          DateFormat.MMMM()
-                                                  .dateSymbols
-                                                  .STANDALONEMONTHS[
-                                              DateTime.now().month - 1],
+                                          state.timeframe.getStringFromDateTime(
+                                            context,
+                                            DateTime.now(),
+                                          ),
                                           style: Theme.of(context)
                                               .textTheme
                                               .headlineSmall,
@@ -168,6 +173,8 @@ class _ExpensePageState extends State<ExpenseListPage> {
                         left: (state.categories.isEmpty)
                             ? const SizedBox()
                             : ChoiceScroll(
+                                collapsable: true,
+                                icon: Icons.filter_list_rounded,
                                 children: state.categories.map((category) {
                                   return Padding(
                                     padding: const EdgeInsets.symmetric(

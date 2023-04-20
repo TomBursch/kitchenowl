@@ -13,6 +13,8 @@ class Expense extends Model {
   final int paidById;
   final List<PaidForModel> paidFor;
 
+  bool get isIncome => amount < 0;
+
   const Expense({
     this.id,
     this.name = '',

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:kitchenowl/enums/expenselist_sorting.dart';
+import 'package:kitchenowl/enums/timeframe.dart';
 import 'package:kitchenowl/models/expense.dart';
 import 'package:kitchenowl/models/expense_category.dart';
 import 'package:kitchenowl/models/household.dart';
@@ -104,13 +105,14 @@ extension ExpenseApi on ApiService {
   Future<Map<int, Map<int, double>>?> getExpenseOverview(
     Household household, [
     ExpenselistSorting sorting = ExpenselistSorting.all,
-    int? months,
+    Timeframe timeframe = Timeframe.monthly,
+    int? steps,
   ]) async {
     String url =
-        '${householdPath(household)}$baseRoute/overview?view=${sorting.index}';
+        '${householdPath(household)}$baseRoute/overview?view=${sorting.index}&frame=${timeframe.index}';
 
-    if (months != null) {
-      url += '&months=$months';
+    if (steps != null) {
+      url += '&steps=$steps';
     }
 
     final res = await get(url);

@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/enums/expenselist_sorting.dart';
+import 'package:kitchenowl/enums/timeframe.dart';
 import 'package:kitchenowl/models/expense.dart';
 import 'package:kitchenowl/models/expense_category.dart';
 import 'package:kitchenowl/models/household.dart';
@@ -59,6 +60,11 @@ class ExpenseListCubit extends Cubit<ExpenseListCubitState> {
     refresh();
   }
 
+  void setTimeframe(Timeframe? timeframe) {
+    emit(state.copyWith(timeframe: timeframe));
+    refresh();
+  }
+
   void setFilter(ExpenseCategory? category, bool selected) {
     final filter = List.of(state.filter);
     if (selected) {
@@ -94,6 +100,7 @@ class ExpenseListCubit extends Cubit<ExpenseListCubitState> {
 
   Future<void> _refresh() async {
     final sorting = state.sorting;
+    final timeframe = state.timeframe;
     final filter = state.filter;
     final categories = TransactionHandler.getInstance()
         .runTransaction(TransactionExpenseCategoriesGet(household: household));
@@ -110,7 +117,8 @@ class ExpenseListCubit extends Cubit<ExpenseListCubitState> {
           .runTransaction(TransactionExpenseGetOverview(
             household: household,
             sorting: state.sorting,
-            months: 1,
+            timeframe: timeframe,
+            steps: 1,
           ))
           .then<Map<int, double>>((v) => v[0] ?? const {});
     }
@@ -121,6 +129,7 @@ class ExpenseListCubit extends Cubit<ExpenseListCubitState> {
       categories: await categories,
       allLoaded: (await expenses).length < 30,
       categoryOverview: (await categoryOverview) ?? state.categoryOverview,
+      timeframe: timeframe,
       filter: filter,
     ));
     _refreshThread = null;
@@ -133,6 +142,7 @@ class ExpenseListCubitState extends Equatable {
   final List<ExpenseCategory> categories;
   final Map<int, double> categoryOverview;
   final bool allLoaded;
+  final Timeframe timeframe;
   final List<ExpenseCategory?> filter;
 
   const ExpenseListCubitState({
@@ -141,6 +151,7 @@ class ExpenseListCubitState extends Equatable {
     this.allLoaded = false,
     this.categories = const [],
     this.categoryOverview = const {},
+    this.timeframe = Timeframe.monthly,
     this.filter = const [],
   });
 
@@ -150,6 +161,7 @@ class ExpenseListCubitState extends Equatable {
     bool? allLoaded,
     List<ExpenseCategory>? categories,
     Map<int, double>? categoryOverview,
+    Timeframe? timeframe,
     List<ExpenseCategory?>? filter,
   }) =>
       ExpenseListCubitState(
@@ -158,16 +170,23 @@ class ExpenseListCubitState extends Equatable {
         allLoaded: allLoaded ?? this.allLoaded,
         categories: categories ?? this.categories,
         categoryOverview: categoryOverview ?? this.categoryOverview,
+        timeframe: timeframe ?? this.timeframe,
         filter: filter ?? this.filter,
       );
 
   @override
   List<Object?> get props =>
-      <Object>[sorting, categoryOverview, filter] + categories + expenses;
+      <Object>[sorting, categoryOverview, timeframe, filter] +
+      categories +
+      expenses;
 }
 
 class LoadingExpenseListCubitState extends ExpenseListCubitState {
-  const LoadingExpenseListCubitState({super.sorting, super.filter});
+  const LoadingExpenseListCubitState({
+    super.sorting,
+    super.timeframe,
+    super.filter,
+  });
 
   @override
   // ignore: long-parameter-list
@@ -177,10 +196,12 @@ class LoadingExpenseListCubitState extends ExpenseListCubitState {
     bool? allLoaded,
     List<ExpenseCategory>? categories,
     Map<int, double>? categoryOverview,
+    Timeframe? timeframe,
     List<ExpenseCategory?>? filter,
   }) =>
       LoadingExpenseListCubitState(
         sorting: sorting ?? this.sorting,
+        timeframe: timeframe ?? this.timeframe,
         filter: filter ?? this.filter,
       );
 }

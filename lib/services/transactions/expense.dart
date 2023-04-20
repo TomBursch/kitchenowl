@@ -1,4 +1,5 @@
 import 'package:kitchenowl/enums/expenselist_sorting.dart';
+import 'package:kitchenowl/enums/timeframe.dart';
 import 'package:kitchenowl/models/expense.dart';
 import 'package:kitchenowl/models/expense_category.dart';
 import 'package:kitchenowl/models/household.dart';
@@ -177,13 +178,15 @@ class TransactionExpenseGetOverview
     extends Transaction<Map<int, Map<int, double>>> {
   final Household household;
   final ExpenselistSorting sorting;
-  final int months;
+  final Timeframe timeframe;
+  final int steps;
 
   TransactionExpenseGetOverview({
     DateTime? timestamp,
     required this.household,
     this.sorting = ExpenselistSorting.all,
-    this.months = 1,
+    this.timeframe = Timeframe.monthly,
+    this.steps = 1,
   }) : super.internal(
           timestamp ?? DateTime.now(),
           "TransactionExpenseGetOverview",
@@ -197,7 +200,7 @@ class TransactionExpenseGetOverview
   @override
   Future<Map<int, Map<int, double>>?> runOnline() async {
     return await ApiService.getInstance()
-        .getExpenseOverview(household, sorting, months);
+        .getExpenseOverview(household, sorting, timeframe, steps);
   }
 }
 

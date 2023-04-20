@@ -321,7 +321,10 @@ class _AddUpdateExpensePageState extends State<AddUpdateExpensePage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              AppLocalizations.of(context)!.expensePaidBy,
+                              state.isIncome
+                                  ? AppLocalizations.of(context)!
+                                      .expenseReceivedBy
+                                  : AppLocalizations.of(context)!.expensePaidBy,
                               style: Theme.of(context).textTheme.bodySmall,
                             ),
                             DropdownButton<int>(
@@ -343,9 +346,16 @@ class _AddUpdateExpensePageState extends State<AddUpdateExpensePage> {
                         ),
                       ),
                       const SizedBox(height: 16),
-                      Text(
-                        AppLocalizations.of(context)!.expensePaidFor,
-                        style: Theme.of(context).textTheme.bodySmall,
+                      BlocBuilder<AddUpdateExpenseCubit, AddUpdateExpenseState>(
+                        bloc: cubit,
+                        buildWhen: (previous, current) =>
+                            previous.isIncome != current.isIncome,
+                        builder: (context, state) => Text(
+                          state.isIncome
+                              ? AppLocalizations.of(context)!.expenseReceivedFor
+                              : AppLocalizations.of(context)!.expensePaidFor,
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
                       ),
                       const Divider(),
                     ],

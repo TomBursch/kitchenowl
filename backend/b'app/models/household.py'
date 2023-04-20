@@ -8,11 +8,11 @@ class Household(db.Model, DbModelMixin, TimestampMixin):
     __tablename__ = 'household'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(128))
-    photo = db.Column(db.String())
+    name = db.Column(db.String(128), nullable=False)
+    photo = db.Column(db.String(), db.ForeignKey('file.filename'))
     language = db.Column(db.String())
-    planner_feature = db.Column(db.Boolean(), default=True)
-    expenses_feature = db.Column(db.Boolean(), default=True)
+    planner_feature = db.Column(db.Boolean(), nullable=False, default=True)
+    expenses_feature = db.Column(db.Boolean(), nullable=False, default=True)
 
     view_ordering = db.Column(DbListType(), default=list())
 
@@ -34,6 +34,7 @@ class Household(db.Model, DbModelMixin, TimestampMixin):
         'Shoppinglist', back_populates='household', cascade="all, delete-orphan")
     member = db.relationship(
         'HouseholdMember', back_populates='household', cascade="all, delete-orphan")
+    photo_file = db.relationship("File", back_populates='household', uselist=False)
 
     def obj_to_dict(self) -> dict:
         res = super().obj_to_dict()

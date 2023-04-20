@@ -3,7 +3,7 @@ from app.helpers.server_admin_required import server_admin_required
 from app.helpers import validate_args
 from flask import jsonify, Blueprint
 from flask_jwt_extended import current_user, jwt_required
-from app.models import User
+from app.models import User, File
 from .schemas import CreateUser, UpdateUser, SearchByNameRequest
 
 
@@ -58,13 +58,17 @@ def deleteUserById(id):
 @jwt_required()
 @validate_args(UpdateUser)
 def updateUser(args):
-    user = current_user
+    user: User = current_user
     if not user:
         raise NotFoundRequest()
     if 'name' in args:
         user.name = args['name']
     if 'password' in args:
         user.set_password(args['password'])
+    if 'photo' in args:
+        f = File.find(args['photo'])
+        if f and f.created_by == user.id:
+            user.photo = f.filename
     user.save()
     return jsonify({'msg': 'DONE'})
 

@@ -12,7 +12,7 @@ class Expense(db.Model, DbModelMixin, TimestampMixin, DbModelAuthorizeMixin):
     amount = db.Column(db.Float())
     date = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
     category_id = db.Column(db.Integer, db.ForeignKey('expense_category.id'))
-    photo = db.Column(db.String())
+    photo = db.Column(db.String(), db.ForeignKey('file.filename'))
     paid_by_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     household_id = db.Column(db.Integer, db.ForeignKey('household.id'), nullable=False)
 
@@ -21,6 +21,7 @@ class Expense(db.Model, DbModelMixin, TimestampMixin, DbModelAuthorizeMixin):
     paid_by = db.relationship("User")
     paid_for = db.relationship(
         'ExpensePaidFor', back_populates='expense', cascade="all, delete-orphan")
+    photo_file = db.relationship("File", back_populates='expense', uselist=False)
 
     def obj_to_full_dict(self) -> dict:
         res = super().obj_to_dict()

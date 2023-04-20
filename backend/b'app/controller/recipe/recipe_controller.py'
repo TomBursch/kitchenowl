@@ -8,9 +8,9 @@ from app.config import UPLOAD_FOLDER
 from app.errors import NotFoundRequest
 from app.models.recipe import RecipeItems, RecipeTags
 from flask import jsonify, Blueprint
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import current_user, jwt_required
 from app.helpers import validate_args, authorize_household
-from app.models import Recipe, Item, Tag
+from app.models import Recipe, Item, Tag, File
 from recipe_scrapers import scrape_me
 from recipe_scrapers._exceptions import SchemaOrgException
 from ingredient_parser import parse_ingredient
@@ -243,9 +243,12 @@ def upload_file_if_needed(url: str):
         ext = guess_extension(resp.headers['content-type'])
         if allowed_file('file' + ext):
             filename = secure_filename(str(uuid.uuid4()) + ext)
+            File(filename=filename, created_by=current_user.id).save()
             with open(os.path.join(UPLOAD_FOLDER, filename), "wb") as o:
                 o.write(resp.content)
             return filename
     elif url is not None:
-        return url
+        f = File.find(url)
+        if f and f.created_by == current_user.id:
+            return f.filename
     return None

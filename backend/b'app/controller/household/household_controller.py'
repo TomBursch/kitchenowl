@@ -3,7 +3,7 @@ from app.helpers import validate_args, authorize_household, RequiredRights
 from flask import jsonify, Blueprint
 from app.errors import NotFoundRequest
 from flask_jwt_extended import current_user, jwt_required
-from app.models import Household, HouseholdMember, Shoppinglist
+from app.models import Household, HouseholdMember, Shoppinglist, File
 from app.service.export_import import importLanguage
 from .schemas import AddHousehold, UpdateHousehold, UpdateHouseholdMember
 
@@ -33,7 +33,9 @@ def addHousehold(args):
     household = Household()
     household.name = args['name']
     if 'photo' in args:
-        household.photo = args['photo']
+        f = File.find(args['photo'])
+        if f and f.created_by == current_user.id:
+            household.photo = f.filename
     if 'language' in args and args['language'] in SUPPORTED_LANGUAGES:
         household.language = args['language']
     if 'planner_feature' in args:
@@ -70,7 +72,9 @@ def updateHousehold(args, household_id):
     if 'name' in args:
         household.name = args['name']
     if 'photo' in args:
-        household.photo = args['photo']
+        f = File.find(args['photo'])
+        if f and f.created_by == current_user.id:
+            household.photo = f.filename
     if 'language' in args and not household.language and args['language'] in SUPPORTED_LANGUAGES:
         household.language = args['language']
         importLanguage(household.id, household.language)

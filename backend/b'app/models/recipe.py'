@@ -14,7 +14,7 @@ class Recipe(db.Model, DbModelMixin, TimestampMixin, DbModelAuthorizeMixin):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(128))
     description = db.Column(db.String())
-    photo = db.Column(db.String())
+    photo = db.Column(db.String(), db.ForeignKey('file.filename'))
     time = db.Column(db.Integer)
     cook_time = db.Column(db.Integer)
     prep_time = db.Column(db.Integer)
@@ -34,6 +34,7 @@ class Recipe(db.Model, DbModelMixin, TimestampMixin, DbModelAuthorizeMixin):
         'RecipeTags', back_populates='recipe', cascade="all, delete-orphan")
     plans = db.relationship(
         'Planner', back_populates='recipe', cascade="all, delete-orphan")
+    photo_file = db.relationship("File", back_populates='recipe', uselist=False)
 
     def obj_to_dict(self) -> dict:
         res = super().obj_to_dict()

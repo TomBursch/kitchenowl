@@ -13,7 +13,7 @@ class User(db.Model, DbModelMixin, TimestampMixin):
     name = db.Column(db.String(128))
     username = db.Column(db.String(256), unique=True, nullable=False)
     password = db.Column(db.String(256), nullable=False)
-    photo = db.Column(db.String())
+    photo = db.Column(db.String(), db.ForeignKey('file.filename'))
     admin = db.Column(db.Boolean(), default=False)
 
     tokens = db.relationship(
@@ -26,6 +26,7 @@ class User(db.Model, DbModelMixin, TimestampMixin):
         'Expense', back_populates='paid_by', cascade="all, delete-orphan")
     expenses_paid_for = db.relationship(
         'ExpensePaidFor', back_populates='user', cascade="all, delete-orphan")
+    photo_file = db.relationship("File", back_populates='profile_picture', foreign_keys=[photo], uselist=False)
 
     def check_password(self, password: str) -> bool:
         return bcrypt.check_password_hash(self.password, password)

@@ -88,7 +88,7 @@ def add_cors_headers(response):
         return response
     r = request.referrer[:-1]
     url = os.environ['FRONT_URL'] if 'FRONT_URL' in os.environ else None
-    if url and r == url:
+    if app.debug or url and r == url:
         response.headers.add('Access-Control-Allow-Origin', r)
         response.headers.add('Access-Control-Allow-Credentials', 'true')
         response.headers.add('Access-Control-Allow-Headers', 'Content-Type')

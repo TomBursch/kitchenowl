@@ -39,11 +39,14 @@ class SelectableButtonCard extends StatelessWidget {
             if (icon != null)
               Padding(
                 padding: const EdgeInsets.fromLTRB(8, 4, 8, 12),
-                child: Icon(
-                  icon,
-                  size: 64,
-                  color:
-                      selected ? Theme.of(context).colorScheme.onPrimary : null,
+                child: LayoutBuilder(
+                  builder: (context, constraint) => Icon(
+                    icon,
+                    size: constraint.maxWidth / 2.4,
+                    color: selected
+                        ? Theme.of(context).colorScheme.onPrimary
+                        : null,
+                  ),
                 ),
               ),
             Text(

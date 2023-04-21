@@ -64,9 +64,12 @@ class RecipeItemWidget extends StatelessWidget {
         BuildContext ctx,
         toggle,
       ) =>
-          RecipePage(
-        household: BlocProvider.of<HouseholdCubit>(context).state.household,
-        recipe: recipe,
+          BlocProvider.value(
+        value: BlocProvider.of<HouseholdCubit>(context),
+        child: RecipePage(
+          household: BlocProvider.of<HouseholdCubit>(context).state.household,
+          recipe: recipe,
+        ),
       ),
     );
   }

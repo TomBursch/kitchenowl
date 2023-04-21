@@ -95,11 +95,6 @@ class _ExpenseOverviewPageState extends State<ExpenseOverviewPage> {
                 slivers: [
                   SliverList(
                     delegate: SliverChildListDelegate([
-                      // Text(
-                      //   AppLocalizations.of(context)!
-                      //       .expenseOverviewComparedToPreviousMonth,
-                      //   style: Theme.of(context).textTheme.headlineSmall,
-                      // ),
                       const SizedBox(height: 32),
                       SizedBox(
                         height: 300,
@@ -119,14 +114,14 @@ class _ExpenseOverviewPageState extends State<ExpenseOverviewPage> {
                                   .expenseOverviewTotalTitle(
                                 _monthOffsetToString(state.selectedMonthIndex),
                               ),
-                              style: Theme.of(context).textTheme.headlineSmall,
+                              style: Theme.of(context).textTheme.titleMedium,
                             ),
                           ),
                           Text(
                             NumberFormat.simpleCurrency().format(
                               totalForSelectedMonth,
                             ),
-                            style: Theme.of(context).textTheme.headlineSmall,
+                            style: Theme.of(context).textTheme.titleMedium,
                           ),
                         ],
                       ),
@@ -140,6 +135,7 @@ class _ExpenseOverviewPageState extends State<ExpenseOverviewPage> {
                             .categoryOverviewsByCategory[
                                 state.selectedMonthIndex]!
                             .entries
+                            .sorted((a, b) => b.value.compareTo(a.value))
                             .elementAt(i);
                         final amount = entry.value;
                         final category = entry.key < 0

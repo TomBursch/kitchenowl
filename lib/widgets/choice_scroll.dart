@@ -4,12 +4,14 @@ class ChoiceScroll extends StatefulWidget {
   final List<Widget> children;
   final bool collapsable;
   final IconData? icon;
+  final void Function()? onCollapse;
 
   const ChoiceScroll({
     super.key,
     required this.children,
     this.collapsable = false,
     this.icon,
+    this.onCollapse,
   });
 
   @override
@@ -35,6 +37,9 @@ class _ChoiceScrollState extends State<ChoiceScroll> {
             onPressed: () {
               setState(() {
                 collapsed = !collapsed;
+                if (collapsed && widget.onCollapse != null) {
+                  widget.onCollapse!();
+                }
               });
             },
             icon: Icon(
@@ -50,7 +55,7 @@ class _ChoiceScrollState extends State<ChoiceScroll> {
 
     if (widget.collapsable) {
       child = AnimatedSize(
-        duration: const Duration(milliseconds: 100),
+        duration: const Duration(milliseconds: 300),
         child: child,
       );
     }

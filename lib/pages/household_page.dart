@@ -1,4 +1,8 @@
+import 'dart:io';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kitchenowl/app.dart';
@@ -92,109 +96,118 @@ class _HouseholdPageState extends State<HouseholdPage> {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider.value(value: householdCubit),
-        BlocProvider.value(value: shoppingListCubit),
-        BlocProvider.value(value: recipeListCubit),
-        BlocProvider.value(value: plannerCubit),
-        BlocProvider.value(value: expenseListCubit),
-      ],
-      child: BlocConsumer<HouseholdCubit, HouseholdState>(
-        listener: (context, state) {
-          if (state is NotFoundHouseholdState) {
-            context.go("/household");
-          }
-        },
-        builder: (context, state) {
-          List<ViewsEnum> pages =
-              (state.household.viewOrdering ?? ViewsEnum.values)
-                  .where((e) => e.isViewActive(state.household))
-                  .toList();
+    return WillPopScope(
+      onWillPop: () async {
+        if (!kIsWeb && Platform.isAndroid) {
+          SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+        }
 
-          int _selectedIndex = pages.indexWhere(
-            (e) => GoRouter.of(context).location.contains(e.toString()),
-          );
+        return false;
+      },
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider.value(value: householdCubit),
+          BlocProvider.value(value: shoppingListCubit),
+          BlocProvider.value(value: recipeListCubit),
+          BlocProvider.value(value: plannerCubit),
+          BlocProvider.value(value: expenseListCubit),
+        ],
+        child: BlocConsumer<HouseholdCubit, HouseholdState>(
+          listener: (context, state) {
+            if (state is NotFoundHouseholdState) {
+              context.go("/household");
+            }
+          },
+          builder: (context, state) {
+            List<ViewsEnum> pages =
+                (state.household.viewOrdering ?? ViewsEnum.values)
+                    .where((e) => e.isViewActive(state.household))
+                    .toList();
 
-          if (_selectedIndex < 0) {
-            return const SizedBox();
-          }
-
-          final bool useBottomNavigationBar = getValueForScreenType<bool>(
-            context: context,
-            mobile: true,
-            tablet: false,
-            desktop: false,
-          );
-
-          Widget body = Align(
-            alignment: Alignment.topCenter,
-            child: ConstrainedBox(
-              constraints: const BoxConstraints.expand(width: 1600),
-              child: widget.child,
-            ),
-          );
-
-          if (!useBottomNavigationBar) {
-            final bool extendedRail = getValueForScreenType<bool>(
-              context: context,
-              mobile: false,
-              tablet: false,
-              desktop: true,
+            int _selectedIndex = pages.indexWhere(
+              (e) => GoRouter.of(context).location.contains(e.toString()),
             );
-            body = Row(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                SafeArea(
-                  child: BlocBuilder<AuthCubit, AuthState>(
-                    builder: (context, state) => NavigationRail(
-                      extended: extendedRail,
-                      destinations: pages
-                          .map((e) => NavigationRailDestination(
-                                icon: Icon(e.toIcon(context)),
-                                label: Text(e.toLocalizedString(context)),
-                              ))
-                          .toList(),
-                      selectedIndex: _selectedIndex,
-                      onDestinationSelected: (i) => _onItemTapped(
-                        context,
-                        pages[i],
-                        pages[_selectedIndex],
+
+            if (_selectedIndex < 0) {
+              return const SizedBox();
+            }
+
+            final bool useBottomNavigationBar = getValueForScreenType<bool>(
+              context: context,
+              mobile: true,
+              tablet: false,
+              desktop: false,
+            );
+
+            Widget body = Align(
+              alignment: Alignment.topCenter,
+              child: ConstrainedBox(
+                constraints: const BoxConstraints.expand(width: 1600),
+                child: widget.child,
+              ),
+            );
+
+            if (!useBottomNavigationBar) {
+              final bool extendedRail = getValueForScreenType<bool>(
+                context: context,
+                mobile: false,
+                tablet: false,
+                desktop: true,
+              );
+              body = Row(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  SafeArea(
+                    child: BlocBuilder<AuthCubit, AuthState>(
+                      builder: (context, state) => NavigationRail(
+                        extended: extendedRail,
+                        destinations: pages
+                            .map((e) => NavigationRailDestination(
+                                  icon: Icon(e.toIcon(context)),
+                                  label: Text(e.toLocalizedString(context)),
+                                ))
+                            .toList(),
+                        selectedIndex: _selectedIndex,
+                        onDestinationSelected: (i) => _onItemTapped(
+                          context,
+                          pages[i],
+                          pages[_selectedIndex],
+                        ),
                       ),
                     ),
                   ),
-                ),
-                Expanded(child: body),
-              ],
-            );
-          }
+                  Expanded(child: body),
+                ],
+              );
+            }
 
-          return Scaffold(
-            body: body,
-            floatingActionButton:
-                pages[_selectedIndex].floatingActionButton(context),
-            bottomNavigationBar: useBottomNavigationBar
-                ? BlocBuilder<AuthCubit, AuthState>(
-                    builder: (context, state) => NavigationBar(
-                      labelBehavior:
-                          NavigationDestinationLabelBehavior.onlyShowSelected,
-                      destinations: pages
-                          .map((e) => NavigationDestination(
-                                icon: Icon(e.toIcon(context)),
-                                label: e.toLocalizedString(context),
-                              ))
-                          .toList(),
-                      selectedIndex: _selectedIndex,
-                      onDestinationSelected: (i) => _onItemTapped(
-                        context,
-                        pages[i],
-                        pages[_selectedIndex],
+            return Scaffold(
+              body: body,
+              floatingActionButton:
+                  pages[_selectedIndex].floatingActionButton(context),
+              bottomNavigationBar: useBottomNavigationBar
+                  ? BlocBuilder<AuthCubit, AuthState>(
+                      builder: (context, state) => NavigationBar(
+                        labelBehavior:
+                            NavigationDestinationLabelBehavior.onlyShowSelected,
+                        destinations: pages
+                            .map((e) => NavigationDestination(
+                                  icon: Icon(e.toIcon(context)),
+                                  label: e.toLocalizedString(context),
+                                ))
+                            .toList(),
+                        selectedIndex: _selectedIndex,
+                        onDestinationSelected: (i) => _onItemTapped(
+                          context,
+                          pages[i],
+                          pages[_selectedIndex],
+                        ),
                       ),
-                    ),
-                  )
-                : null,
-          );
-        },
+                    )
+                  : null,
+            );
+          },
+        ),
       ),
     );
   }

@@ -201,7 +201,10 @@ class _AppState extends State<App> {
           .readInt(key: 'lastHouseholdId')
           .then((id) {
         if (id != null) {
-          router.go("/household/$id/recipes/scrape?url=\"${media.content!}\"");
+          router.go(Uri(
+            path: "/household/$id/recipes/scrape",
+            queryParameters: {"url": media.content!},
+          ).toString());
         }
       });
     }

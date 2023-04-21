@@ -167,7 +167,9 @@ final router = GoRouter(
           routes: [
             ShellRoute(
               builder: (context, state, child) => HouseholdPage(
-                household: (state.extra as Household?) ??
+                household: ((state.extra is Household?)
+                        ? (state.extra as Household?)
+                        : null) ??
                     Household(
                       id: int.tryParse(state.params['id'] ?? '') ?? -1,
                     ),
@@ -257,9 +259,10 @@ final router = GoRouter(
               parentNavigatorKey: _rootNavigatorKey,
               path: 'expenses/:expenseId',
               builder: (context, state) => ExpensePage(
-                household: (state.extra as List?)?[0] ??
+                household: (state.extra as Tuple2<Household, Expense>?)
+                        ?.item1 ??
                     Household(id: int.tryParse(state.params['id'] ?? '') ?? -1),
-                expense: ((state.extra as List?)?[1] as Expense?) ??
+                expense: (state.extra as Tuple2<Household, Expense>?)?.item2 ??
                     Expense(
                       id: int.tryParse(state.params['expenseId'] ?? ''),
                       paidById: 0,

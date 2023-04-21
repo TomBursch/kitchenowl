@@ -76,6 +76,13 @@ class ExpenseListCubit extends Cubit<ExpenseListCubitState> {
     refresh();
   }
 
+  void clearFilter() {
+    if (state.filter.isNotEmpty) {
+      emit(state.copyWith(filter: const []));
+      refresh();
+    }
+  }
+
   Future<void> loadMore() async {
     if (state.allLoaded) return;
 

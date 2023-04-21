@@ -4,13 +4,16 @@ import 'package:animations/animations.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:kitchenowl/cubits/auth_cubit.dart';
 import 'package:kitchenowl/cubits/household_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/models/expense.dart';
+import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/pages/expense_page.dart';
 import 'package:intl/intl.dart';
 import 'package:kitchenowl/widgets/expense_category_icon.dart';
+import 'package:tuple/tuple.dart';
 
 class ExpenseItemWidget extends StatelessWidget {
   final Expense expense;
@@ -68,15 +71,13 @@ class ExpenseItemWidget extends StatelessWidget {
               : null,
           onTap: (kIsWeb || Platform.isIOS)
               ? () async {
-                  final res = await Navigator.of(context, rootNavigator: true)
-                      .pushNamed<UpdateEnum>(
-                    "/expense/${expense.id}",
-                    arguments: [
-                      BlocProvider.of<HouseholdCubit>(context).state.household,
-                      expense,
-                    ],
+                  final household =
+                      BlocProvider.of<HouseholdCubit>(context).state.household;
+                  context.go(
+                    "/household/${household.id}/expenses/${expense.id}",
+                    extra: Tuple2<Household, Expense>(household, expense),
                   );
-                  _handleUpdate(res);
+                  // _handleUpdate(res);
                 }
               : toggle,
         ),

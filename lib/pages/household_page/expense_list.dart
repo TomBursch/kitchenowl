@@ -176,6 +176,7 @@ class _ExpensePageState extends State<ExpenseListPage> {
                             : ChoiceScroll(
                                 collapsable: true,
                                 icon: Icons.filter_list_rounded,
+                                onCollapse: cubit.clearFilter,
                                 children: state.categories.map((category) {
                                   return Padding(
                                     padding: const EdgeInsets.symmetric(

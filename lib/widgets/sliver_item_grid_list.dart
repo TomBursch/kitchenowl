@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kitchenowl/cubits/household_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/category.dart';
@@ -67,12 +69,15 @@ class SliverItemGridList<T extends Item> extends StatelessWidget {
                               await Navigator.of(context, rootNavigator: true)
                                   .push<UpdateValue<Item>>(
                             MaterialPageRoute(
-                              builder: (context) => ItemPage(
-                                item: item,
-                                household: household,
-                                shoppingList: shoppingList,
-                                categories: categories ?? const [],
-                                isDescriptionEditable: isDescriptionEditable,
+                              builder: (ctx) => BlocProvider.value(
+                                value: BlocProvider.of<HouseholdCubit>(context),
+                                child: ItemPage(
+                                  item: item,
+                                  household: household,
+                                  shoppingList: shoppingList,
+                                  categories: categories ?? const [],
+                                  isDescriptionEditable: isDescriptionEditable,
+                                ),
                               ),
                             ),
                           );
@@ -95,7 +100,7 @@ class SliverItemGridList<T extends Item> extends StatelessWidget {
               builder: (context, constraints) => SliverGrid(
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount:
-                      (constraints.crossAxisExtent ~/ 135).clamp(1, 9),
+                      (constraints.crossAxisExtent ~/ 115).clamp(1, 9),
                   childAspectRatio: 1,
                 ),
                 delegate: delegate,

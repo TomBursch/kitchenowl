@@ -1,7 +1,6 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/expense_category.dart';
 
 class ChartBarMonths extends StatefulWidget {
@@ -24,9 +23,6 @@ class ChartBarMonths extends StatefulWidget {
 }
 
 class _ChartBarMonthsState extends State<ChartBarMonths> {
-  static const double barWidth = 35;
-  static const double barSpacing = 45;
-
   @override
   Widget build(BuildContext context) {
     final minY = widget.data
@@ -44,82 +40,90 @@ class _ChartBarMonthsState extends State<ChartBarMonths> {
         .values
         .fold<double>(0, (p, e) => p > e ? p : e);
 
-    return BarChart(
-      swapAnimationDuration: const Duration(milliseconds: 150),
-      swapAnimationCurve: Curves.linear,
-      BarChartData(
-        alignment: BarChartAlignment.center,
-        groupsSpace: barSpacing,
-        minY: minY.toDouble(),
-        maxY: maxY.toDouble(),
-        baselineY: 0,
-        barTouchData: BarTouchData(
-          enabled: true,
-          handleBuiltInTouches: false,
-          touchCallback: (event, response) {
-            if (response != null &&
-                response.spot != null &&
-                event is FlTapUpEvent) {
-              widget.onMonthSelect(response.spot!.touchedBarGroup.x);
-            }
-          },
-          mouseCursorResolver: (event, response) {
-            return response == null || response.spot == null
-                ? MouseCursor.defer
-                : SystemMouseCursors.click;
-          },
-        ),
-        titlesData: FlTitlesData(
-          show: true,
-          bottomTitles: AxisTitles(
-            sideTitles: SideTitles(
-              showTitles: true,
-              reservedSize: 32,
-              getTitlesWidget: bottomTitles,
-            ),
-          ),
-          leftTitles: AxisTitles(
-            sideTitles: SideTitles(
-              showTitles: true,
-              getTitlesWidget: leftTitles,
-              reservedSize: 45,
-            ),
-          ),
-          rightTitles: AxisTitles(),
-          topTitles: AxisTitles(),
-        ),
-        gridData: FlGridData(
-          show: true,
-          checkToShowHorizontalLine: (value) => value % 5 == 0,
-          getDrawingHorizontalLine: (value) {
-            if (value == 0) {
-              return FlLine(
-                color: Theme.of(context).colorScheme.onSurface,
-                strokeWidth: 2,
-              );
-            }
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        double barWidth = constraints.maxWidth > 600 ? 50 : 35;
+        double barSpacing = constraints.maxWidth / 5 - barWidth - 10;
 
-            return FlLine(
-              color: Theme.of(context).dividerColor,
-              strokeWidth: 0.8,
-            );
-          },
-          drawVerticalLine: false,
-        ),
-        borderData: FlBorderData(
-          show: false,
-        ),
-        barGroups: widget.data.entries
-            .toList()
-            .reversed
-            .map(
-              (e) => generateGroup(
-                e.key,
-                e.value,
+        return BarChart(
+          swapAnimationDuration: const Duration(milliseconds: 150),
+          swapAnimationCurve: Curves.linear,
+          BarChartData(
+            alignment: BarChartAlignment.center,
+            groupsSpace: barSpacing,
+            minY: minY.toDouble(),
+            maxY: maxY.toDouble(),
+            baselineY: 0,
+            barTouchData: BarTouchData(
+              enabled: true,
+              handleBuiltInTouches: false,
+              touchCallback: (event, response) {
+                if (response != null &&
+                    response.spot != null &&
+                    event is FlTapUpEvent) {
+                  widget.onMonthSelect(response.spot!.touchedBarGroup.x);
+                }
+              },
+              mouseCursorResolver: (event, response) {
+                return response == null || response.spot == null
+                    ? MouseCursor.defer
+                    : SystemMouseCursors.click;
+              },
+            ),
+            titlesData: FlTitlesData(
+              show: true,
+              bottomTitles: AxisTitles(
+                sideTitles: SideTitles(
+                  showTitles: true,
+                  reservedSize: 32,
+                  getTitlesWidget: bottomTitles,
+                ),
               ),
-            )
-            .toList(),
-      ),
+              leftTitles: AxisTitles(
+                sideTitles: SideTitles(
+                  showTitles: true,
+                  getTitlesWidget: leftTitles,
+                  reservedSize: 45,
+                ),
+              ),
+              rightTitles: AxisTitles(),
+              topTitles: AxisTitles(),
+            ),
+            gridData: FlGridData(
+              show: true,
+              checkToShowHorizontalLine: (value) => value % 5 == 0,
+              getDrawingHorizontalLine: (value) {
+                if (value == 0) {
+                  return FlLine(
+                    color: Theme.of(context).colorScheme.onSurface,
+                    strokeWidth: 2,
+                  );
+                }
+
+                return FlLine(
+                  color: Theme.of(context).dividerColor,
+                  strokeWidth: 0.8,
+                );
+              },
+              drawVerticalLine: false,
+            ),
+            borderData: FlBorderData(
+              show: false,
+            ),
+            barGroups: widget.data.entries
+                .toList()
+                .reversed
+                .map(
+                  (e) => generateGroup(
+                    e.key,
+                    e.value,
+                    barWidth,
+                  ),
+                )
+                .toList(),
+          ),
+        );
+      },
     );
   }
 
@@ -155,6 +159,7 @@ class _ChartBarMonthsState extends State<ChartBarMonths> {
   BarChartGroupData generateGroup(
     int month,
     Map<int, double> values,
+    double width,
   ) {
     final isTop = values.values.any((e) => e > 0);
     final isBottom = values.values.any((e) => e < 0);
@@ -168,7 +173,7 @@ class _ChartBarMonthsState extends State<ChartBarMonths> {
         BarChartRodData(
           fromY: sumNeg,
           toY: sumPos,
-          width: barWidth,
+          width: width,
           color: Colors.transparent,
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(isTop ? 14 : 0),

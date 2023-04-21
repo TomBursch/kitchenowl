@@ -75,7 +75,7 @@ class _ChartPieCurrentMonthState extends State<ChartPieCurrentMonth> {
 
       return PieChartSectionData(
         color: _colorFn(e.key),
-        value: e.value.abs(),
+        value: e.value < 0 ? 0 : e.value,
         radius: radius,
         badgeWidget: Card(
           child: AnimatedSize(
@@ -101,7 +101,7 @@ class _ChartPieCurrentMonthState extends State<ChartPieCurrentMonth> {
           ),
         ),
         showTitle: false,
-        badgePositionPercentageOffset: 1.05,
+        badgePositionPercentageOffset: isTouched ? 0 : 1,
       );
     }).toList();
   }

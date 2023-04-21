@@ -1,4 +1,5 @@
 import 'package:kitchenowl/enums/expenselist_sorting.dart';
+import 'package:kitchenowl/enums/timeframe.dart';
 import 'package:kitchenowl/models/expense.dart';
 import 'package:kitchenowl/models/expense_category.dart';
 import 'package:kitchenowl/models/household.dart';
@@ -8,11 +9,13 @@ import 'package:kitchenowl/services/transaction.dart';
 class TransactionExpenseGetAll extends Transaction<List<Expense>> {
   final ExpenselistSorting sorting;
   final Household household;
+  final List<ExpenseCategory?>? filter;
 
   TransactionExpenseGetAll({
     DateTime? timestamp,
     required this.household,
     this.sorting = ExpenselistSorting.all,
+    this.filter,
   }) : super.internal(timestamp ?? DateTime.now(), "TransactionExpenseGetAll");
 
   @override
@@ -22,7 +25,11 @@ class TransactionExpenseGetAll extends Transaction<List<Expense>> {
 
   @override
   Future<List<Expense>?> runOnline() async {
-    return await ApiService.getInstance().getAllExpenses(household, sorting);
+    return await ApiService.getInstance().getAllExpenses(
+      household: household,
+      sorting: sorting,
+      filter: filter,
+    );
   }
 }
 
@@ -30,12 +37,14 @@ class TransactionExpenseGetMore extends Transaction<List<Expense>> {
   final ExpenselistSorting sorting;
   final Expense lastExpense;
   final Household household;
+  final List<ExpenseCategory?>? filter;
 
   TransactionExpenseGetMore({
     DateTime? timestamp,
     required this.household,
     this.sorting = ExpenselistSorting.all,
     required this.lastExpense,
+    this.filter,
   }) : super.internal(timestamp ?? DateTime.now(), "TransactionExpenseGetMore");
 
   @override
@@ -45,8 +54,12 @@ class TransactionExpenseGetMore extends Transaction<List<Expense>> {
 
   @override
   Future<List<Expense>?> runOnline() async {
-    return await ApiService.getInstance()
-        .getAllExpenses(household, sorting, lastExpense);
+    return await ApiService.getInstance().getAllExpenses(
+      household: household,
+      sorting: sorting,
+      startAfter: lastExpense,
+      filter: filter,
+    );
   }
 }
 
@@ -165,13 +178,15 @@ class TransactionExpenseGetOverview
     extends Transaction<Map<int, Map<int, double>>> {
   final Household household;
   final ExpenselistSorting sorting;
-  final int months;
+  final Timeframe timeframe;
+  final int steps;
 
   TransactionExpenseGetOverview({
     DateTime? timestamp,
     required this.household,
     this.sorting = ExpenselistSorting.all,
-    this.months = 1,
+    this.timeframe = Timeframe.monthly,
+    this.steps = 1,
   }) : super.internal(
           timestamp ?? DateTime.now(),
           "TransactionExpenseGetOverview",
@@ -185,7 +200,7 @@ class TransactionExpenseGetOverview
   @override
   Future<Map<int, Map<int, double>>?> runOnline() async {
     return await ApiService.getInstance()
-        .getExpenseOverview(household, sorting, months);
+        .getExpenseOverview(household, sorting, timeframe, steps);
   }
 }
 

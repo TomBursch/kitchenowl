@@ -6,11 +6,14 @@ import 'package:kitchenowl/app.dart';
 import 'package:kitchenowl/cubits/expense_list_cubit.dart';
 import 'package:kitchenowl/cubits/household_cubit.dart';
 import 'package:kitchenowl/enums/expenselist_sorting.dart';
+import 'package:kitchenowl/enums/timeframe.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/member.dart';
 import 'package:kitchenowl/models/user.dart';
 import 'package:kitchenowl/pages/expense_overview_page.dart';
 import 'package:kitchenowl/widgets/chart_pie_current_month.dart';
+import 'package:kitchenowl/widgets/choice_scroll.dart';
+import 'package:kitchenowl/widgets/expense/timeframe_dropdown_button.dart';
 import 'package:kitchenowl/widgets/expense_item.dart';
 
 class ExpenseListPage extends StatefulWidget {
@@ -69,29 +72,33 @@ class _ExpensePageState extends State<ExpenseListPage> {
                                       Theme.of(context).textTheme.headlineSmall,
                                 ),
                               ),
-                              if (state.expenses.isNotEmpty)
-                                Tooltip(
-                                  message:
-                                      AppLocalizations.of(context)!.overview,
-                                  child: InkWell(
-                                    borderRadius: BorderRadius.circular(50),
-                                    child: const Icon(Icons.bar_chart_rounded),
-                                    onTap: () => Navigator.of(
-                                      context,
-                                      rootNavigator: true,
-                                    ).push(
-                                      MaterialPageRoute(
-                                        builder: (ctx) => ExpenseOverviewPage(
-                                          household:
-                                              BlocProvider.of<ExpenseListCubit>(
-                                            context,
-                                          ).household,
-                                          initialSorting: state.sorting,
-                                        ),
+                              if (state.sorting == ExpenselistSorting.personal)
+                                TimeframeDropdownButton(
+                                  value: state.timeframe,
+                                  onChanged: cubit.setTimeframe,
+                                ),
+                              const SizedBox(width: 16),
+                              Tooltip(
+                                message: AppLocalizations.of(context)!.overview,
+                                child: InkWell(
+                                  borderRadius: BorderRadius.circular(50),
+                                  child: const Icon(Icons.bar_chart_rounded),
+                                  onTap: () => Navigator.of(
+                                    context,
+                                    rootNavigator: true,
+                                  ).push(
+                                    MaterialPageRoute(
+                                      builder: (ctx) => ExpenseOverviewPage(
+                                        household:
+                                            BlocProvider.of<ExpenseListCubit>(
+                                          context,
+                                        ).household,
+                                        initialSorting: state.sorting,
                                       ),
                                     ),
                                   ),
                                 ),
+                              ),
                             ],
                           ),
                         ),
@@ -135,10 +142,10 @@ class _ExpensePageState extends State<ExpenseListPage> {
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
                                         Text(
-                                          DateFormat.MMMM()
-                                                  .dateSymbols
-                                                  .STANDALONEMONTHS[
-                                              DateTime.now().month - 1],
+                                          state.timeframe.getStringFromDateTime(
+                                            context,
+                                            DateTime.now(),
+                                          ),
                                           style: Theme.of(context)
                                               .textTheme
                                               .headlineSmall,
@@ -162,24 +169,79 @@ class _ExpensePageState extends State<ExpenseListPage> {
                           ),
                         ),
                       ),
-                    if (state.expenses.isNotEmpty)
-                      SliverPadding(
-                        padding: const EdgeInsets.only(right: 16),
-                        sliver: SliverToBoxAdapter(
-                          child: Align(
-                            alignment: Alignment.centerRight,
-                            child: TrailingIconTextButton(
-                              text: state.sorting == ExpenselistSorting.all
-                                  ? AppLocalizations.of(context)!.household
-                                  : state.sorting == ExpenselistSorting.personal
-                                      ? AppLocalizations.of(context)!.personal
-                                      : AppLocalizations.of(context)!.other,
-                              icon: const Icon(Icons.sort),
-                              onPressed: cubit.incrementSorting,
-                            ),
+                    SliverToBoxAdapter(
+                      child: LeftRightWrap(
+                        left: (state.categories.isEmpty)
+                            ? const SizedBox()
+                            : ChoiceScroll(
+                                collapsable: true,
+                                icon: Icons.filter_list_rounded,
+                                children: state.categories.map((category) {
+                                  return Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 4,
+                                    ),
+                                    child: FilterChip(
+                                      label: Text(
+                                        category.name,
+                                        style: TextStyle(
+                                          color: state.filter.contains(category)
+                                              ? Theme.of(context)
+                                                  .colorScheme
+                                                  .onPrimary
+                                              : null,
+                                        ),
+                                      ),
+                                      selected: state.filter.contains(category),
+                                      selectedColor: Theme.of(context)
+                                          .colorScheme
+                                          .secondary,
+                                      onSelected: (v) =>
+                                          cubit.setFilter(category, v),
+                                    ),
+                                  );
+                                }).toList()
+                                  ..insert(
+                                    0,
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 4,
+                                      ),
+                                      child: FilterChip(
+                                        label: Text(
+                                          AppLocalizations.of(context)!.other,
+                                          style: TextStyle(
+                                            color: state.filter.contains(null)
+                                                ? Theme.of(context)
+                                                    .colorScheme
+                                                    .onPrimary
+                                                : null,
+                                          ),
+                                        ),
+                                        selected: state.filter.contains(null),
+                                        selectedColor: Theme.of(context)
+                                            .colorScheme
+                                            .secondary,
+                                        onSelected: (v) =>
+                                            cubit.setFilter(null, v),
+                                      ),
+                                    ),
+                                  ),
+                              ),
+                        right: Padding(
+                          padding: const EdgeInsets.only(right: 16),
+                          child: TrailingIconTextButton(
+                            text: state.sorting == ExpenselistSorting.all
+                                ? AppLocalizations.of(context)!.household
+                                : state.sorting == ExpenselistSorting.personal
+                                    ? AppLocalizations.of(context)!.personal
+                                    : AppLocalizations.of(context)!.other,
+                            icon: const Icon(Icons.sort),
+                            onPressed: cubit.incrementSorting,
                           ),
                         ),
                       ),
+                    ),
                     if (state.expenses.isNotEmpty)
                       SliverPadding(
                         padding: const EdgeInsets.symmetric(horizontal: 16),

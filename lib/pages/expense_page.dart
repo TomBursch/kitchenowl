@@ -106,7 +106,7 @@ class _ExpensePageState extends State<ExpensePage> {
                         ),
                         Text(
                           NumberFormat.simpleCurrency()
-                              .format(state.expense.amount),
+                              .format(state.expense.amount.abs()),
                           style: Theme.of(context).textTheme.displayMedium,
                           textAlign: TextAlign.center,
                         ),
@@ -118,13 +118,13 @@ class _ExpensePageState extends State<ExpensePage> {
                           ),
                         ListTile(
                           title: Text(
-                            "${AppLocalizations.of(context)!.expensePaidBy} ${state.household.member?.firstWhereOrNull(
+                            "${state.expense.isIncome ? AppLocalizations.of(context)!.expenseReceivedBy : AppLocalizations.of(context)!.expensePaidBy} ${state.household.member?.firstWhereOrNull(
                                   (e) => e.id == state.expense.paidById,
                                 )?.name ?? AppLocalizations.of(context)!.other}",
                           ),
                           trailing: state.expense.date != null
                               ? Text(
-                                  DateFormat.yMMMMEEEEd()
+                                  DateFormat.yMMMEd()
                                       .add_jm()
                                       .format(state.expense.date!),
                                 )
@@ -137,7 +137,7 @@ class _ExpensePageState extends State<ExpensePage> {
                             children: [
                               Expanded(
                                 child: Text(
-                                  '${AppLocalizations.of(context)!.expensePaidFor}:',
+                                  '${state.expense.isIncome ? AppLocalizations.of(context)!.expenseReceivedFor : AppLocalizations.of(context)!.expensePaidFor}:',
                                   style:
                                       Theme.of(context).textTheme.titleMedium,
                                 ),
@@ -164,9 +164,10 @@ class _ExpensePageState extends State<ExpensePage> {
                         ),
                         subtitle: Text(NumberFormat.simpleCurrency().format(
                           (state.expense.amount *
-                              state.expense.paidFor[i].factor /
-                              state.expense.paidFor
-                                  .fold(0, (p, v) => p + v.factor)),
+                                  state.expense.paidFor[i].factor /
+                                  state.expense.paidFor
+                                      .fold(0, (p, v) => p + v.factor))
+                              .abs(),
                         )),
                         trailing: Text(
                           state.expense.paidFor[i].factor.toString(),

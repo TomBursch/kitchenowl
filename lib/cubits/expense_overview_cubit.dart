@@ -12,7 +12,7 @@ class ExpenseOverviewCubit extends Cubit<ExpenseOverviewState> {
   Future<void>? _refreshThread;
 
   ExpenseOverviewCubit(this.household, ExpenselistSorting initialSorting)
-      : super(ExpenseOverviewLoading(initialSorting)) {
+      : super(ExpenseOverviewLoading(sorting: initialSorting)) {
     refresh();
   }
 
@@ -24,6 +24,10 @@ class ExpenseOverviewCubit extends Cubit<ExpenseOverviewState> {
   void setSorting(ExpenselistSorting sorting) {
     emit(state.copyWith(sorting: sorting));
     refresh();
+  }
+
+  void setSelectedMonth(int month) {
+    emit(state.copyWith(selectedMonthIndex: month));
   }
 
   Future<void> refresh() {
@@ -61,25 +65,37 @@ class ExpenseOverviewCubit extends Cubit<ExpenseOverviewState> {
 
 abstract class ExpenseOverviewState extends Equatable {
   final ExpenselistSorting sorting;
+  final int selectedMonthIndex;
 
-  const ExpenseOverviewState(this.sorting);
+  const ExpenseOverviewState({
+    required this.sorting,
+    this.selectedMonthIndex = 0,
+  });
 
   ExpenseOverviewState copyWith({
     ExpenselistSorting? sorting,
+    int? selectedMonthIndex,
   });
 }
 
 class ExpenseOverviewLoading extends ExpenseOverviewState {
-  const ExpenseOverviewLoading(super.sorting);
+  const ExpenseOverviewLoading({
+    required super.sorting,
+    super.selectedMonthIndex,
+  });
 
   @override
   ExpenseOverviewState copyWith({
     ExpenselistSorting? sorting,
+    int? selectedMonthIndex,
   }) =>
-      ExpenseOverviewLoading(sorting ?? this.sorting);
+      ExpenseOverviewLoading(
+        sorting: sorting ?? this.sorting,
+        selectedMonthIndex: selectedMonthIndex ?? this.selectedMonthIndex,
+      );
 
   @override
-  List<Object?> get props => [sorting];
+  List<Object?> get props => [sorting, selectedMonthIndex];
 }
 
 class ExpenseOverviewLoaded extends ExpenseOverviewState {
@@ -89,8 +105,9 @@ class ExpenseOverviewLoaded extends ExpenseOverviewState {
   const ExpenseOverviewLoaded({
     required this.categories,
     required this.categoryOverviewsByCategory,
-    required ExpenselistSorting sorting,
-  }) : super(sorting);
+    required super.sorting,
+    super.selectedMonthIndex = 0,
+  });
 
   double getTotalForMonth(int i) {
     return categoryOverviewsByCategory[i]?.values.reduce((v, e) => v + e) ?? 0;
@@ -99,13 +116,16 @@ class ExpenseOverviewLoaded extends ExpenseOverviewState {
   @override
   ExpenseOverviewState copyWith({
     ExpenselistSorting? sorting,
+    int? selectedMonthIndex,
   }) =>
       ExpenseOverviewLoaded(
         sorting: sorting ?? this.sorting,
         categoryOverviewsByCategory: categoryOverviewsByCategory,
         categories: categories,
+        selectedMonthIndex: selectedMonthIndex ?? this.selectedMonthIndex,
       );
 
   @override
-  List<Object?> get props => [sorting, categories, categoryOverviewsByCategory];
+  List<Object?> get props =>
+      [sorting, selectedMonthIndex, categories, categoryOverviewsByCategory];
 }

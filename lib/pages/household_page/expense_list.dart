@@ -72,10 +72,11 @@ class _ExpensePageState extends State<ExpenseListPage> {
                                       Theme.of(context).textTheme.headlineSmall,
                                 ),
                               ),
-                              TimeframeDropdownButton(
-                                value: state.timeframe,
-                                onChanged: cubit.setTimeframe,
-                              ),
+                              if (state.sorting == ExpenselistSorting.personal)
+                                TimeframeDropdownButton(
+                                  value: state.timeframe,
+                                  onChanged: cubit.setTimeframe,
+                                ),
                               const SizedBox(width: 16),
                               Tooltip(
                                 message: AppLocalizations.of(context)!.overview,
@@ -208,7 +209,7 @@ class _ExpensePageState extends State<ExpenseListPage> {
                                       ),
                                       child: FilterChip(
                                         label: Text(
-                                          AppLocalizations.of(context)!.none,
+                                          AppLocalizations.of(context)!.other,
                                           style: TextStyle(
                                             color: state.filter.contains(null)
                                                 ? Theme.of(context)

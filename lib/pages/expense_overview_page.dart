@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -7,6 +8,7 @@ import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/widgets/chart_pie_current_month.dart';
 import 'package:kitchenowl/widgets/chart_bar_months.dart';
+import 'package:kitchenowl/widgets/expense_category_icon.dart';
 
 class ExpenseOverviewPage extends StatefulWidget {
   final Household household;
@@ -73,10 +75,10 @@ class _ExpenseOverviewPageState extends State<ExpenseOverviewPage> {
           const SizedBox(width: 8),
         ],
       ),
-      body: Align(
-        alignment: Alignment.topCenter,
-        child: ConstrainedBox(
-          constraints: const BoxConstraints.expand(width: 1600),
+      body: ConstrainedBox(
+        constraints: const BoxConstraints.expand(width: 1600),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           child: BlocBuilder<ExpenseOverviewCubit, ExpenseOverviewState>(
             bloc: cubit,
             buildWhen: (previous, current) =>
@@ -86,53 +88,91 @@ class _ExpenseOverviewPageState extends State<ExpenseOverviewPage> {
                 return const Center(child: CircularProgressIndicator());
               }
 
-              return ListView(
-                padding: const EdgeInsets.all(16),
-                children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          AppLocalizations.of(context)!
-                              .expenseOverviewTotalTitle(
-                            _monthOffsetToString(0),
-                          ),
-                          style: Theme.of(context).textTheme.headlineSmall,
+              final totalForSelectedMonth =
+                  state.getTotalForMonth(state.selectedMonthIndex);
+
+              return CustomScrollView(
+                slivers: [
+                  SliverList(
+                    delegate: SliverChildListDelegate([
+                      // Text(
+                      //   AppLocalizations.of(context)!
+                      //       .expenseOverviewComparedToPreviousMonth,
+                      //   style: Theme.of(context).textTheme.headlineSmall,
+                      // ),
+                      const SizedBox(height: 32),
+                      SizedBox(
+                        height: 300,
+                        child: ChartBarMonths(
+                          data: state.categoryOverviewsByCategory,
+                          categories: state.categories,
+                          onMonthSelect: cubit.setSelectedMonth,
+                          selectedMonth: state.selectedMonthIndex,
                         ),
                       ),
-                      Text(
-                        NumberFormat.simpleCurrency()
-                            .format(state.getTotalForMonth(0)),
-                        style: Theme.of(context).textTheme.headlineSmall,
+                      const SizedBox(height: 32),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              AppLocalizations.of(context)!
+                                  .expenseOverviewTotalTitle(
+                                _monthOffsetToString(state.selectedMonthIndex),
+                              ),
+                              style: Theme.of(context).textTheme.headlineSmall,
+                            ),
+                          ),
+                          Text(
+                            NumberFormat.simpleCurrency().format(
+                              totalForSelectedMonth,
+                            ),
+                            style: Theme.of(context).textTheme.headlineSmall,
+                          ),
+                        ],
                       ),
-                    ],
+                      const Divider(),
+                    ]),
                   ),
-                  if (state.categoryOverviewsByCategory[0]!.values
-                          .reduce((a, b) => a + b) !=
-                      0)
-                    SizedBox(
-                      height: (MediaQuery.of(context).size.width - 32)
-                          .clamp(270, 450),
-                      child: ChartPieCurrentMonth(
-                        data: state.categoryOverviewsByCategory[0]!,
-                        categories: state.categories,
-                        availableHeight:
-                            (MediaQuery.of(context).size.width - 32)
-                                .clamp(270, 450),
-                      ),
+                  SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      (context, i) {
+                        final entry = state
+                            .categoryOverviewsByCategory[
+                                state.selectedMonthIndex]!
+                            .entries
+                            .elementAt(i);
+                        final amount = entry.value;
+                        final category = entry.key < 0
+                            ? null
+                            : state.categories
+                                .firstWhereOrNull((e) => e.id == entry.key);
+
+                        return Card(
+                          child: ListTile(
+                            leading: ExpenseCategoryIcon(
+                              name: category?.name ?? '🪙',
+                              color: category?.color,
+                            ),
+                            title: Text(category?.name ??
+                                AppLocalizations.of(context)!.other),
+                            trailing: Text(
+                              NumberFormat.simpleCurrency().format(amount),
+                            ),
+                            subtitle: Text(NumberFormat.percentPattern()
+                                .format(amount / totalForSelectedMonth)),
+                          ),
+                        );
+                      },
+                      childCount: state
+                              .categoryOverviewsByCategory[
+                                  state.selectedMonthIndex]
+                              ?.length ??
+                          0,
                     ),
-                  const Divider(),
-                  Text(
-                    AppLocalizations.of(context)!
-                        .expenseOverviewComparedToPreviousMonth,
-                    style: Theme.of(context).textTheme.headlineSmall,
                   ),
-                  const SizedBox(height: 32),
-                  SizedBox(
-                    height: 300,
-                    child: ChartBarMonths(
-                      data: state.categoryOverviewsByCategory,
-                      categories: state.categories,
+                  SliverToBoxAdapter(
+                    child: SizedBox(
+                      height: MediaQuery.of(context).padding.bottom + 16,
                     ),
                   ),
                 ],

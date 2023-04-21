@@ -7,11 +7,15 @@ import 'package:kitchenowl/models/expense_category.dart';
 class ChartBarMonths extends StatefulWidget {
   final Map<int, Map<int, double>> data;
   final Map<int, ExpenseCategory> categoriesById;
+  final void Function(int) onMonthSelect;
+  final int selectedMonth;
 
   ChartBarMonths({
     super.key,
     required this.data,
     required List<ExpenseCategory> categories,
+    required this.onMonthSelect,
+    required this.selectedMonth,
   }) : categoriesById =
             Map.fromEntries(categories.map((e) => MapEntry(e.id!, e)));
 
@@ -50,34 +54,20 @@ class _ChartBarMonthsState extends State<ChartBarMonths> {
         maxY: maxY.toDouble(),
         baselineY: 0,
         barTouchData: BarTouchData(
-          touchTooltipData: BarTouchTooltipData(
-            tooltipBgColor: Theme.of(context).colorScheme.surfaceVariant,
-            tooltipRoundedRadius: 14,
-            maxContentWidth: 400,
-            getTooltipItem: (group, groupIndex, rod, rodIndex) =>
-                BarTooltipItem(
-              '',
-              const TextStyle(),
-              children: [
-                TextSpan(
-                  text: "${_monthOffsetToString(group.x)}\n",
-                  style: Theme.of(context).textTheme.titleMedium!,
-                ),
-                ...widget.data[group.x]!.entries
-                    .where((e) => e.value != 0)
-                    .map((e) => TextSpan(
-                          text:
-                              "${widget.categoriesById[e.key]?.name ?? AppLocalizations.of(context)!.other}: ${NumberFormat.simpleCurrency().format(e.value)}\n",
-                        ))
-                    .toList()
-                    .reversed,
-                TextSpan(
-                  text:
-                      "\n${AppLocalizations.of(context)!.total}: ${NumberFormat.simpleCurrency().format(widget.data[group.x]!.values.reduce((v, e) => v + e))}",
-                ),
-              ],
-            ),
-          ),
+          enabled: true,
+          handleBuiltInTouches: false,
+          touchCallback: (event, response) {
+            if (response != null &&
+                response.spot != null &&
+                event is FlTapUpEvent) {
+              widget.onMonthSelect(response.spot!.touchedBarGroup.x);
+            }
+          },
+          mouseCursorResolver: (event, response) {
+            return response == null || response.spot == null
+                ? MouseCursor.defer
+                : SystemMouseCursors.click;
+          },
         ),
         titlesData: FlTitlesData(
           show: true,
@@ -186,7 +176,12 @@ class _ChartBarMonthsState extends State<ChartBarMonths> {
             bottomLeft: Radius.circular(isBottom ? 14 : 0),
             bottomRight: Radius.circular(isBottom ? 14 : 0),
           ),
-          rodStackItems: generateStack(values, isTouched: false),
+          borderSide: BorderSide(
+            color: Theme.of(context).colorScheme.onBackground,
+            width: widget.selectedMonth == month ? 5 : 0,
+          ),
+          rodStackItems:
+              generateStack(values, isTouched: widget.selectedMonth == month),
         ),
       ],
     );
@@ -204,10 +199,6 @@ class _ChartBarMonthsState extends State<ChartBarMonths> {
         e.value > 0 ? sumPos : sumNeg,
         (e.value > 0 ? sumPos : sumNeg) + e.value,
         _colorFn(e.key),
-        BorderSide(
-          color: Colors.white,
-          width: isTouched ? 2 : 0,
-        ),
       );
 
       if (e.value > 0) {

@@ -5,7 +5,7 @@
   "@addCategory": {},
   "addLanguage": "Añadir idioma",
   "@addLanguage": {},
-  "addLanguageConfirm": "¿Está seguro de que desea añadir el idioma '{lang}'? Esto (por ahora) no se puede deshacer.",
+  "addLanguageConfirm": "¿Está seguro de que desea establecer el idioma en '{lang}'? Esto no se puede deshacer y añadirá artículos y categorías a su hogar.",
   "@addLanguageConfirm": {
     "placeholders": {
       "lang": {}
@@ -376,5 +376,73 @@
     }
   },
   "changeIcon": "Cambiar el ícono",
-  "@changeIcon": {}
+  "@changeIcon": {},
+  "dangerZone": "Zona peligrosa",
+  "@dangerZone": {},
+  "householdDelete": "Borrar hogar",
+  "@householdDelete": {},
+  "householdEmpty": "Sin hogares, ¡empieza por crear uno!",
+  "@householdEmpty": {},
+  "householdLeave": "Salir del hogar",
+  "@householdLeave": {},
+  "householdNew": "Nuevo hogar",
+  "@householdNew": {},
+  "households": "Hogares",
+  "@households": {},
+  "householdSwitch": "Cambiar de hogar",
+  "@householdSwitch": {},
+  "member": "Miembro",
+  "@member": {},
+  "memberRemove": "Borrar un miembro",
+  "@memberRemove": {},
+  "members": "Miembros",
+  "@members": {},
+  "reset": "Restaurar",
+  "@reset": {},
+  "set": "Establecer",
+  "@set": {},
+  "swipeToRemove": "Deslizar para eliminar",
+  "@swipeToRemove": {},
+  "userSearchHint": "Introduce un nombre",
+  "@userSearchHint": {},
+  "householdDeleteConfirmation": "¿Estás seguro de que deseas eliminar {household}? Esto eliminará cualquier artículo, receta y gastos de las existencias.",
+  "@householdDeleteConfirmation": {
+    "placeholders": {
+      "household": {}
+    }
+  },
+  "imageSelect": "Selecciona una imagen",
+  "@imageSelect": {},
+  "memberAdd": "Añadir un miembro",
+  "@memberAdd": {},
+  "tagEdit": "Editar la etiqueta",
+  "@tagEdit": {},
+  "remove": "Eliminar",
+  "@remove": {},
+  "accountDelete": "Eliminar la cuenta",
+  "@accountDelete": {},
+  "accountDeleteConfirmation": "¿Seguro que quieres eliminar tu cuenta?",
+  "@accountDeleteConfirmation": {},
+  "general": "General",
+  "@general": {},
+  "logoutName": "Cerrar sesión {name}",
+  "@logoutName": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "privacyPolicy": "Política de privacidad",
+  "@privacyPolicy": {},
+  "reportIssue": "Notifica un problema",
+  "@reportIssue": {},
+  "settings": "Ajustes",
+  "@settings": {},
+  "passwordFieldTooShort": "Contraseña demasiado corta",
+  "@passwordFieldTooShort": {},
+  "passwordRepeat": "Repite la contraseña",
+  "@passwordRepeat": {},
+  "helpTranslate": "Ayuda en la traducción",
+  "@helpTranslate": {},
+  "passwordRepeatNoMatch": "Las contraseñas no coinciden",
+  "@passwordRepeatNoMatch": {}
 }

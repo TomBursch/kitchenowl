@@ -252,8 +252,12 @@ class ApiService {
           jsonDecode(res.body)['msg'] == 'OK',
           jsonDecode(res.body),
         );
+      } else {
+        debugPrint("Health check: Response code ${res.statusCode}");
       }
-    } catch (_) {}
+    } catch (ex) {
+      debugPrint("Health check: ${ex.toString()}");
+    }
 
     return const Tuple2(false, null);
   }

@@ -1,0 +1,34 @@
+{
+  "accountDeleteConfirmation": "Esti sigur ca vrei sa-ti stergi contul?",
+  "@accountDeleteConfirmation": {},
+  "accountDelete": "Sterge Cont",
+  "@accountDelete": {},
+  "add": "Adauga",
+  "@add": {},
+  "addCategory": "Adauga Categorie",
+  "@addCategory": {},
+  "addDescriptionFromSource": "Adauga descriere de la sursa",
+  "@addDescriptionFromSource": {},
+  "addItemTitle": "Adauga Articole",
+  "@addItemTitle": {},
+  "addNumberIngredients": "Adauga {number} ingrediente",
+  "@addNumberIngredients": {
+    "placeholders": {
+      "number": {}
+    }
+  },
+  "addRecipeToPlanner": "Adăugați la planul de masă",
+  "@addRecipeToPlanner": {},
+  "address": "Adresa",
+  "@address": {},
+  "about": "Despre",
+  "@about": {},
+  "addLanguage": "Adauga Limba",
+  "@addLanguage": {},
+  "addLanguageConfirm": "Esti sigur ca vrei sa schimbi limba la '{lang}'? Aceasta actiune nu poate fi anulata si va adauga articole si categorii in casa ta.",
+  "@addLanguageConfirm": {
+    "placeholders": {
+      "lang": {}
+    }
+  }
+}

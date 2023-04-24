@@ -1,0 +1,70 @@
+{
+  "add": "Lägg till",
+  "@add": {},
+  "addCategory": "Lägg till kategori",
+  "@addCategory": {},
+  "addDescriptionFromSource": "Lägg till beskrivning från källa",
+  "@addDescriptionFromSource": {},
+  "addItemTitle": "Lägg till objekt",
+  "@addItemTitle": {},
+  "addNumberIngredients": "Lägg till {number} ingredienser",
+  "@addNumberIngredients": {
+    "placeholders": {
+      "number": {}
+    }
+  },
+  "addRecipeToPlanner": "Lägg till i måltidsplanen",
+  "@addRecipeToPlanner": {},
+  "appTitle": "KitchenOwl",
+  "@appTitle": {
+    "description": "The title of the app"
+  },
+  "cancel": "Avbryt",
+  "@cancel": {},
+  "category": "Kategori",
+  "@category": {},
+  "categoryDelete": "Ta bort kategori",
+  "@categoryDelete": {},
+  "about": "Om",
+  "@about": {},
+  "accountDelete": "Radera konto",
+  "@accountDelete": {},
+  "accountDeleteConfirmation": "Är du säker på att du vill radera ditt konto?",
+  "@accountDeleteConfirmation": {},
+  "addShoppingList": "Lägg till inköpslista",
+  "@addShoppingList": {},
+  "addLanguage": "Lägg till språk",
+  "@addLanguage": {},
+  "admin": "Admin",
+  "@admin": {},
+  "addLanguageConfirm": "Är du säker på att du vill ställa in språket till '{lang}'? Detta kan inte göras ogjort och kommer att lägga till artiklar och kategorier till ditt hushåll.",
+  "@addLanguageConfirm": {
+    "placeholders": {
+      "lang": {}
+    }
+  },
+  "addRecipeToPlannerShort": "Lägg till måltidsplanen",
+  "@addRecipeToPlannerShort": {},
+  "address": "Adress",
+  "@address": {},
+  "addTag": "Lägg till tagg",
+  "@addTag": {},
+  "back": "Tillbaka",
+  "@back": {},
+  "balances": "Saldon",
+  "@balances": {},
+  "categoryDeleteConfirmation": "Är du säker på att du vill ta bort {category}? Detta tar bort kategorin från alla objekt.",
+  "@categoryDeleteConfirmation": {
+    "placeholders": {
+      "category": {}
+    }
+  },
+  "appDescription": "KitchenOwl hjälper dig att organisera ditt matliv.",
+  "@appDescription": {},
+  "appLegal": "2021 KitchenOwl-författarna",
+  "@appLegal": {},
+  "camera": "Kamera",
+  "@camera": {},
+  "categories": "Kategorier",
+  "@categories": {}
+}

@@ -25,7 +25,7 @@ FROM python:3.11-slim as runner
 
 RUN apt-get update \
     && apt-get install --yes --no-install-recommends \
-        libxml2 \
+        libxml2 curl \
     && rm -rf /var/lib/apt/lists/*
 
 # Use virtual enviroment
@@ -39,6 +39,8 @@ COPY templates /usr/src/kitchenowl/templates
 COPY migrations /usr/src/kitchenowl/migrations
 WORKDIR /usr/src/kitchenowl
 VOLUME ["/data"]
+
+HEALTHCHECK --interval=60s --timeout=3s CMD curl -f http://localhost/api/health/8M4F88S8ooi4sMbLBfkkV7ctWwgibW6V || exit 1
 
 ENV STORAGE_PATH='/data'
 ENV JWT_SECRET_KEY='PLEASE_CHANGE_ME'

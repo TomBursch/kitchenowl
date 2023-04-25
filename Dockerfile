@@ -61,8 +61,7 @@ COPY --from=builder /usr/local/src/app/build/web /var/www/web/kitchenowl
 COPY docker-entrypoint-custom.sh /docker-entrypoint.d/01-kitchenowl-customization.sh
 COPY default.conf.template /etc/nginx/templates/
 
-HEALTHCHECK --interval=5m --timeout=3s \
-  CMD curl -f http://localhost/api/health/8M4F88S8ooi4sMbLBfkkV7ctWwgibW6V || exit 1
+HEALTHCHECK --interval=30s --timeout=3s CMD curl -f http://localhost/ || exit 1
 
 # Set ENV
 ENV BACK_URL='back:5000'

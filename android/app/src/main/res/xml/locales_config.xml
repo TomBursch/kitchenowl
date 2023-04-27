@@ -6,10 +6,13 @@
    <locale android:name="es"/>
    <locale android:name="fi"/>
    <locale android:name="fr"/>
+   <locale android:name="hu"/>
    <locale android:name="id"/>
    <locale android:name="it"/>
    <locale android:name="nb"/>
    <locale android:name="nl"/>
    <locale android:name="pa"/>
+   <locale android:name="ro"/>
+   <locale android:name="sv"/>
    <locale android:name="tr"/>
 </locale-config>

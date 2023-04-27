@@ -38,11 +38,14 @@
         <string>es</string>
 		<string>fi</string>
         <string>fr</string>
+		<string>hu</string>
 		<string>id</string>
         <string>it</string>
         <string>nb</string>
         <string>nl</string>
 		<string>pa</string>
+		<string>ro</string>
+		<string>sv</string>
 		<string>tr</string>
 	</array>
 	<key>CFBundleName</key>

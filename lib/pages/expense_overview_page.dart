@@ -6,7 +6,6 @@ import 'package:kitchenowl/cubits/expense_overview_cubit.dart';
 import 'package:kitchenowl/enums/expenselist_sorting.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/household.dart';
-import 'package:kitchenowl/widgets/chart_pie_current_month.dart';
 import 'package:kitchenowl/widgets/chart_bar_months.dart';
 import 'package:kitchenowl/widgets/expense_category_icon.dart';
 

@@ -6,7 +6,6 @@ import 'package:kitchenowl/app.dart';
 import 'package:kitchenowl/cubits/expense_list_cubit.dart';
 import 'package:kitchenowl/cubits/household_cubit.dart';
 import 'package:kitchenowl/enums/expenselist_sorting.dart';
-import 'package:kitchenowl/enums/timeframe.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/member.dart';
 import 'package:kitchenowl/models/user.dart';

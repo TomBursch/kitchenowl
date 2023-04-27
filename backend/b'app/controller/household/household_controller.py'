@@ -32,7 +32,7 @@ def getHousehold(household_id):
 def addHousehold(args):
     household = Household()
     household.name = args['name']
-    if 'photo' in args:
+    if 'photo' in args and args['photo'] != household.photo:
         f = File.find(args['photo'])
         if f and f.created_by == current_user.id:
             household.photo = f.filename
@@ -71,7 +71,7 @@ def updateHousehold(args, household_id):
 
     if 'name' in args:
         household.name = args['name']
-    if 'photo' in args:
+    if 'photo' in args and args['photo'] != household.photo:
         f = File.find(args['photo'])
         if f and f.created_by == current_user.id:
             household.photo = f.filename

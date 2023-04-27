@@ -68,7 +68,7 @@ def addExpense(args, household_id):
     if 'date' in args:
         expense.date = datetime.fromtimestamp(
             args['date']/1000, timezone.utc)
-    if 'photo' in args:
+    if 'photo' in args and args['photo'] != expense.photo:
         f = File.find(args['photo'])
         if f and f.created_by == current_user.id:
             expense.photo = f.filename
@@ -115,7 +115,7 @@ def updateExpense(args, id):  # noqa: C901
     if 'date' in args:
         expense.date = datetime.fromtimestamp(
             args['date']/1000, timezone.utc)
-    if 'photo' in args:
+    if 'photo' in args and args['photo'] != expense.photo:
         f = File.find(args['photo'])
         if f and f.created_by == current_user.id:
             expense.photo = f.filename

@@ -12,12 +12,12 @@ class ItemSelectionPage extends StatefulWidget {
   final Future<List<RecipeItem>> Function(List<RecipeItem>)? handleResult;
 
   const ItemSelectionPage({
-    Key? key,
+    super.key,
     this.title,
     this.recipes = const [],
     required this.selectText,
     this.handleResult,
-  }) : super(key: key);
+  });
 
   @override
   _ItemSelectionPageState createState() => _ItemSelectionPageState();

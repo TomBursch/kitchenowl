@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/models/recipe.dart';
+import 'package:kitchenowl/models/shoppinglist.dart';
 import 'package:kitchenowl/services/transaction_handler.dart';
 import 'package:kitchenowl/services/transactions/planner.dart';
 import 'package:kitchenowl/services/transactions/shoppinglist.dart';
@@ -70,14 +71,15 @@ class PlannerCubit extends Cubit<PlannerCubitState> {
     }
   }
 
-  Future<void> addItemsToList(List<RecipeItem> items) async {
-    if (household.defaultShoppingList != null) {
-      await TransactionHandler.getInstance()
-          .runTransaction(TransactionShoppingListAddRecipeItems(
-        shoppinglist: household.defaultShoppingList!,
-        items: items,
-      ));
-    }
+  Future<void> addItemsToList(
+    ShoppingList shoppingList,
+    List<RecipeItem> items,
+  ) {
+    return TransactionHandler.getInstance()
+        .runTransaction(TransactionShoppingListAddRecipeItems(
+      shoppinglist: shoppingList,
+      items: items,
+    ));
   }
 }
 

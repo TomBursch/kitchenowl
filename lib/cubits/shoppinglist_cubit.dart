@@ -58,7 +58,7 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
     l.remove(item);
     final recent = List.of(_state.recentItems);
     recent.insert(0, item);
-    if (recent.length > 8) {
+    if (recent.length > recentItemCountProvider()) {
       recent.removeLast();
     }
     if (_state is SearchShoppinglistCubitState) {

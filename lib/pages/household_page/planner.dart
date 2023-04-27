@@ -132,10 +132,10 @@ class _PlannerPageState extends State<PlannerPage> {
                         ),
                       ),
                     ),
-                  SliverLayoutBuilder(
-                    builder: (context, constraints) => SliverPadding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      sliver: SliverToBoxAdapter(
+                  SliverPadding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    sliver: SliverLayoutBuilder(
+                      builder: (context, constraints) => SliverToBoxAdapter(
                         child: Wrap(
                           crossAxisAlignment: WrapCrossAlignment.end,
                           alignment: WrapAlignment.start,
@@ -143,7 +143,7 @@ class _PlannerPageState extends State<PlannerPage> {
                             for (final recipe in state.getPlannedWithoutDay())
                               KitchenOwlFractionallySizedBox(
                                 widthFactor: (1 /
-                                    (constraints.crossAxisExtent ~/ 135)
+                                    (constraints.crossAxisExtent ~/ 115)
                                         .clamp(1, 9)),
                                 child: AspectRatio(
                                   aspectRatio: 1,
@@ -166,7 +166,7 @@ class _PlannerPageState extends State<PlannerPage> {
                               for (final recipe in state.getPlannedOfDay(day))
                                 KitchenOwlFractionallySizedBox(
                                   widthFactor: (1 /
-                                      (constraints.crossAxisExtent ~/ 135)
+                                      (constraints.crossAxisExtent ~/ 115)
                                           .clamp(1, 9)),
                                   child: Column(
                                     mainAxisSize: MainAxisSize.min,
@@ -346,13 +346,24 @@ class _PlannerPageState extends State<PlannerPage> {
   ) async {
     await Navigator.of(context, rootNavigator: true).push<List<RecipeItem>>(
       MaterialPageRoute(
-        builder: (context) => ItemSelectionPage(
-          selectText: AppLocalizations.of(context)!.addNumberIngredients,
+        builder: (ctx) => ItemSelectionPage(
+          selectText: AppLocalizations.of(ctx)!.addNumberIngredients,
           recipes: (cubit.state as LoadedPlannerCubitState).plannedRecipes,
-          title: AppLocalizations.of(context)!.addItemTitle,
+          title: AppLocalizations.of(ctx)!.addItemTitle,
           handleResult: (res) async {
-            if (res.isNotEmpty) {
-              await cubit.addItemsToList(res);
+            if (res.isNotEmpty &&
+                BlocProvider.of<HouseholdCubit>(context)
+                        .state
+                        .household
+                        .defaultShoppingList !=
+                    null) {
+              await cubit.addItemsToList(
+                BlocProvider.of<HouseholdCubit>(context)
+                    .state
+                    .household
+                    .defaultShoppingList!,
+                res,
+              );
             }
 
             return res;

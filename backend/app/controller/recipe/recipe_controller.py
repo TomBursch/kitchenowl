@@ -57,7 +57,7 @@ def addRecipe(args, household_id):
         recipe.yields = args['yields']
     if 'source' in args:
         recipe.source = args['source']
-    if 'photo' in args:
+    if 'photo' in args and args['photo'] != recipe.photo:
         recipe.photo = upload_file_if_needed(args['photo'])
     recipe.save()
     if 'items' in args:
@@ -107,7 +107,7 @@ def updateRecipe(args, id):  # noqa: C901
         recipe.yields = args['yields']
     if 'source' in args:
         recipe.source = args['source']
-    if 'photo' in args:
+    if 'photo' in args and args['photo'] != recipe.photo:
         recipe.photo = upload_file_if_needed(args['photo'])
     recipe.save()
     if 'items' in args:

@@ -297,7 +297,7 @@
   "@offlineMessage": {},
   "recipeDelete": "Borrar Receta",
   "@recipeDelete": {},
-  "other": "otro",
+  "other": "Otro",
   "@other": {},
   "swipeToDelete": "Desliza para borrar",
   "@swipeToDelete": {},
@@ -444,5 +444,17 @@
   "helpTranslate": "Ayuda en la traducción",
   "@helpTranslate": {},
   "passwordRepeatNoMatch": "Las contraseñas no coinciden",
-  "@passwordRepeatNoMatch": {}
+  "@passwordRepeatNoMatch": {},
+  "daily": "A diario",
+  "@daily": {},
+  "monthly": "Mensualmente",
+  "@monthly": {},
+  "weekly": "Semanalmente",
+  "@weekly": {},
+  "yearly": "Anualmente",
+  "@yearly": {},
+  "expenseReceivedBy": "Recibido por",
+  "@expenseReceivedBy": {},
+  "expenseReceivedFor": "Recibido por",
+  "@expenseReceivedFor": {}
 }

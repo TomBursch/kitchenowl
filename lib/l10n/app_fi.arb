@@ -360,5 +360,13 @@
   "features": "Ominaisuudet",
   "@features": {},
   "lltCreate": "Luo pitkäikäinen merkki",
-  "@lltCreate": {}
+  "@lltCreate": {},
+  "dangerZone": "Vaaravyöhyke",
+  "@dangerZone": {},
+  "accountDelete": "Poista tili",
+  "@accountDelete": {},
+  "accountDeleteConfirmation": "Haluatko varmasti poistaa tilisi?",
+  "@accountDeleteConfirmation": {},
+  "daily": "Päivittäin",
+  "@daily": {}
 }

@@ -181,7 +181,6 @@ def addShoppinglistItemByName(args, id):
     item = Item.find_by_name(shoppinglist.household_id, args['name'])
     if not item:
         item = Item.create_by_name(shoppinglist.household_id, args['name'])
-    # item.checkAuthorized()
 
     con = ShoppinglistItems.find_by_ids(shoppinglist.id, item.id)
     if not con:

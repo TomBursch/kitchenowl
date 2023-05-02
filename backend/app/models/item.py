@@ -54,10 +54,10 @@ class Item(db.Model, DbModelMixin, TimestampMixin, DbModelAuthorizeMixin):
     def save(self, keepDefault=False) -> Self:
         if not keepDefault:
             self.default = False
-        super().save()
+        return super().save()
 
     @classmethod
-    def create_by_name(cls, household_id: int, name: str, default=False) -> Self:
+    def create_by_name(cls, household_id: int, name: str, default: bool = False) -> Self:
         return cls(
             name=name.strip(),
             default=default,

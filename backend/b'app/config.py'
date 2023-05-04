@@ -1,9 +1,10 @@
 from datetime import timedelta
 from sqlalchemy import MetaData
 from sqlalchemy.engine import URL
+from werkzeug.exceptions import MethodNotAllowed
 from app.errors import NotFoundRequest, UnauthorizedRequest, ForbiddenRequest, InvalidUsage
 from app.util import KitchenOwlJSONProvider
-from flask import Flask, jsonify, request
+from flask import Flask, request
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
@@ -105,18 +106,21 @@ def add_cors_headers(response):
 def unhandled_exception(e):
     if type(e) is NotFoundRequest:
         app.logger.info(e)
-        return jsonify(message="Requested resource not found"), 404
+        return "Requested resource not found", 404
     if type(e) is ForbiddenRequest:
         app.logger.warning(e)
-        return jsonify(message="Request forbidden"), 403
+        return "Request forbidden", 403
     if type(e) is InvalidUsage:
         app.logger.warning(e)
-        return jsonify(message="Request invalid"), 400
+        return "Request invalid", 400
     if type(e) is UnauthorizedRequest:
         app.logger.warning(e)
-        return jsonify(message="Request unauthorized"), 401
+        return "Request unauthorized", 401
+    if type(e) is MethodNotAllowed:
+        app.logger.warning(e)
+        return "The method is not allowed for the requested URL", 405
     app.logger.error(e)
-    return jsonify(message="Something went wrong"), 500
+    return "Something went wrong", 500
 
 
 @app.errorhandler(404)

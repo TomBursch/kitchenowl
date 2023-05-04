@@ -21,16 +21,22 @@ class ExpenseCategory(db.Model, DbModelMixin, TimestampMixin, DbModelAuthorizeMi
         res = super().obj_to_dict()
         return res
 
+    def obj_to_export_dict(self) -> dict:
+        return {
+            'name': self.name,
+            'color': self.color,
+        }
+
     @classmethod
-    def find_by_name(cls, name: str, houshold_id: int) -> Self:
+    def find_by_name(cls, houshold_id: int, name: str) -> Self:
         return cls.query.filter(cls.name == name, cls.household_id == houshold_id).first()
 
     @classmethod
-    def find_by_id(cls, id) -> Self:
+    def find_by_id(cls, id: int) -> Self:
         return cls.query.filter(cls.id == id).first()
 
     @classmethod
-    def delete_by_name(cls, name: str, household_id: int):
-        mc = cls.find_by_name(name, household_id)
+    def delete_by_name(cls, household_id: int, name: str):
+        mc = cls.find_by_name(household_id, name)
         if mc:
             mc.delete()

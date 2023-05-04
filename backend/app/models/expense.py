@@ -32,6 +32,19 @@ class Expense(db.Model, DbModelMixin, TimestampMixin, DbModelAuthorizeMixin):
         if (self.category):
             res['category'] = self.category.obj_to_full_dict()
         return res
+    
+    def obj_to_export_dict(self) -> dict:
+        res = {
+            'name': self.name,
+            'amount': self.amount,
+            'date': self.date,
+            'photo': self.photo,
+            'paid_for': [{'factor': e.factor, 'username': e.user.username} for e in self.paid_for],
+            'paid_by': self.paid_by.username,
+        }
+        if (self.category):
+            res['category'] = self.category.obj_to_export_dict()
+        return res
 
     @classmethod
     def find_by_name(cls, name) -> Self:

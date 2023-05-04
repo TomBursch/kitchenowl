@@ -1,6 +1,6 @@
 from app import app
 from app.models import Household
-from app.service.export_import import importLanguage
+from app.service.import_language import importLanguage
 
 
 if __name__ == "__main__":

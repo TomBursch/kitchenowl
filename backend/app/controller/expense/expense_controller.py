@@ -1,5 +1,5 @@
 import calendar
-from datetime import time, datetime, timezone, timedelta
+from datetime import datetime, timezone, timedelta
 from dateutil.relativedelta import relativedelta
 from sqlalchemy.sql.expression import desc
 from sqlalchemy import or_
@@ -10,6 +10,7 @@ from sqlalchemy import func
 from app import db
 from app.helpers import validate_args, authorize_household, RequiredRights
 from app.models import Expense, ExpensePaidFor, ExpenseCategory, HouseholdMember, File
+from app.service.recalculate_balances import recalculateBalances
 from .schemas import GetExpenses, AddExpense, UpdateExpense, AddExpenseCategory, UpdateExpenseCategory, GetExpenseOverview
 
 expense = Blueprint('expense', __name__)
@@ -175,20 +176,6 @@ def calculateBalances(household_id):
     recalculateBalances(household_id)
 
 
-def recalculateBalances(household_id):
-    for member in HouseholdMember.find_by_household(household_id):
-        member.expense_balance = float(Expense.query.with_entities(func.sum(
-            Expense.amount).label("balance")).filter(Expense.paid_by_id == member.user_id, Expense.household_id == household_id).first().balance or 0)
-        for paid_for in ExpensePaidFor.query.filter(ExpensePaidFor.user_id == member.user_id, ExpensePaidFor.expense_id.in_(db.session.query(Expense.id).filter(
-                Expense.household_id == household_id).scalar_subquery())).all():
-            factor_sum = Expense.query.with_entities(func.sum(
-                ExpensePaidFor.factor).label("factor_sum"))\
-                .filter(ExpensePaidFor.expense_id == paid_for.expense_id).first().factor_sum
-            member.expense_balance = member.expense_balance - \
-                (paid_for.factor / factor_sum) * paid_for.expense.amount
-        member.save()
-
-
 @expenseHousehold.route('/categories', methods=['GET'])
 @jwt_required()
 @authorize_household()
@@ -236,13 +223,15 @@ def getExpenseOverview(args, household_id):
             start = datetime.utcnow().date() - timedelta(days=stepAgo)
             end = start + timedelta(hours=24)
         elif frame == 1:
-            start = datetime.utcnow().date() - relativedelta(days=7, weekday=calendar.MONDAY, weeks=stepAgo)
+            start = datetime.utcnow().date() - relativedelta(days=7,
+                                                             weekday=calendar.MONDAY, weeks=stepAgo)
             end = start + timedelta(days=7)
         elif frame == 2:
             start = thisMonthStart - relativedelta(months=stepAgo)
             end = start + relativedelta(months=1)
         elif frame == 3:
-            start = datetime.utcnow().date().replace(day=1, month=1) - relativedelta(years=stepAgo)
+            start = datetime.utcnow().date().replace(
+                day=1, month=1) - relativedelta(years=stepAgo)
             end = start + relativedelta(years=1)
 
         return Expense.date >= start, Expense.date <= end

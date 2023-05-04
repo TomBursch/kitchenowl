@@ -65,6 +65,7 @@ class Recipe(db.Model, DbModelMixin, TimestampMixin, DbModelAuthorizeMixin):
             "name": self.name,
             "description": self.description,
             "time": self.time,
+            "photo": self.photo,
             "cook_time": self.cook_time,
             "prep_time": self.prep_time,
             "yields": self.yields,

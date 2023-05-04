@@ -30,17 +30,30 @@ class Household(db.Model, DbModelMixin, TimestampMixin):
         'Expense', back_populates='household', cascade="all, delete-orphan")
     expenseCategories = db.relationship(
         'ExpenseCategory', back_populates='household', cascade="all, delete-orphan")
-    shoppinglists = db.relationship(
-        'Shoppinglist', back_populates='household', cascade="all, delete-orphan")
     member = db.relationship(
         'HouseholdMember', back_populates='household', cascade="all, delete-orphan")
-    photo_file = db.relationship("File", back_populates='household', uselist=False)
+    photo_file = db.relationship(
+        "File", back_populates='household', uselist=False)
 
     def obj_to_dict(self) -> dict:
         res = super().obj_to_dict()
         res['member'] = [m.obj_to_user_dict() for m in getattr(self, 'member')]
         res['default_shopping_list'] = self.shoppinglists[0].obj_to_dict()
         return res
+
+    def obj_to_export_dict(self) -> dict:
+        return {
+            'name': self.name,
+            'language': self.language,
+            'view_ordering': self.view_ordering,
+            'planner_feature': self.planner_feature,
+            'expenses_feature': self.expenses_feature,
+            'member': [m.user.username for m in getattr(self, 'member')],
+            'shoppinglists': [s.name for s in self.shoppinglists],
+            'recipes': [s.obj_to_export_dict() for s in self.recipes],
+            'items': [s.obj_to_export_dict() for s in self.items],
+            'expenses': [s.obj_to_export_dict() for s in self.expenses],
+        }
 
 
 class HouseholdMember(db.Model, DbModelMixin, TimestampMixin):

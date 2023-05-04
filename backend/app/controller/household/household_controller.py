@@ -4,7 +4,7 @@ from flask import jsonify, Blueprint
 from app.errors import NotFoundRequest
 from flask_jwt_extended import current_user, jwt_required
 from app.models import Household, HouseholdMember, Shoppinglist, File
-from app.service.export_import import importLanguage
+from app.service.import_language import importLanguage
 from .schemas import AddHousehold, UpdateHousehold, UpdateHouseholdMember
 
 household = Blueprint('household', __name__)

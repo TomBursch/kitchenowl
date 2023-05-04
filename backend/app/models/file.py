@@ -9,7 +9,7 @@ class File(db.Model, DbModelMixin, TimestampMixin, DbModelAuthorizeMixin):
     __tablename__ = 'file'
 
     filename = db.Column(db.String(), primary_key=True)
-    created_by = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
+    created_by = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
 
     created_by_user = db.relationship("User", foreign_keys=[created_by], uselist=False)
 

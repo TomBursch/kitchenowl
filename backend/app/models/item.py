@@ -47,6 +47,8 @@ class Item(db.Model, DbModelMixin, TimestampMixin, DbModelAuthorizeMixin):
         res = {
             "name": self.name,
         }
+        if self.icon:
+            res["icon"] = self.icon
         if self.category:
             res["category"] = self.category.name
         return res

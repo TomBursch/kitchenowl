@@ -1,6 +1,20 @@
-from app import app
-from app.models import User
+from os import listdir
+from os.path import isfile, join
+from app import app, db
+from app.config import UPLOAD_FOLDER
+from app.models import User, File
 
+def importFiles():
+    try:
+        filesInUploadFolder = [f for f in listdir(UPLOAD_FOLDER) if isfile(join(UPLOAD_FOLDER, f))]
+        files = [File(filename=f) for f in filesInUploadFolder if not File.find(f)]
+
+        db.session.bulk_save_objects(files)
+        db.session.commit()
+        print(f"-> Found {len(files)} new files in {UPLOAD_FOLDER}")
+    except Exception as e:
+        db.session.rollback()
+        raise e
 
 def manageUsers():
     while True:
@@ -44,9 +58,12 @@ if __name__ == "__main__":
             print("""
 Manage KitchenOwl\n---\nWhat do you want to do?
     1.  Manage users
+    2.  Import files
     (q) Exit""")
             selection = input("Your selection (q):")
             if selection == "1":
                 manageUsers()
+            elif selection == "2":
+                importFiles()
             else:
                 exit()

@@ -36,13 +36,14 @@ JWT_REFRESH_TOKEN_EXPIRES = timedelta(days=30)
 
 SUPPORTED_LANGUAGES = {
     'en': 'English',
+    'da': 'Dansk',
     'de': 'Deutsch',
     'es': 'Español',
     'fr': 'Français',
     'id': 'Bahasa Indonesia',
-    # 'nb_NO': '',
+    'nb_NO': 'Bokmål',
+    'pt': 'Português',
     'pt_BR': 'Português Brasileiro',
-    # 'pt': 'Português',
     'ru': 'русский язык',
 }
 

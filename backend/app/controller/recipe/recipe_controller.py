@@ -1,20 +1,16 @@
-import os
 import re
-import uuid
 
-import requests
-from app.util.filename_validator import allowed_file
-from app.config import UPLOAD_FOLDER
 from app.errors import NotFoundRequest
 from app.models.recipe import RecipeItems, RecipeTags
 from flask import jsonify, Blueprint
-from flask_jwt_extended import current_user, jwt_required
+from flask_jwt_extended import jwt_required
 from app.helpers import validate_args, authorize_household
-from app.models import Recipe, Item, Tag, File
+from app.models import Recipe, Item, Tag
 from recipe_scrapers import scrape_me
 from recipe_scrapers._exceptions import SchemaOrgException
 from ingredient_parser import parse_ingredient
-from werkzeug.utils import secure_filename
+
+from app.service.file_has_access_or_download import file_has_access_or_download
 from .schemas import SearchByNameRequest, AddRecipe, UpdateRecipe, GetAllFilterRequest, ScrapeRecipe
 
 recipe = Blueprint('recipe', __name__)
@@ -58,7 +54,7 @@ def addRecipe(args, household_id):
     if 'source' in args:
         recipe.source = args['source']
     if 'photo' in args and args['photo'] != recipe.photo:
-        recipe.photo = upload_file_if_needed(args['photo'])
+        recipe.photo = file_has_access_or_download(args['photo'], recipe.photo)
     recipe.save()
     if 'items' in args:
         for recipeItem in args['items']:
@@ -108,7 +104,7 @@ def updateRecipe(args, id):  # noqa: C901
     if 'source' in args:
         recipe.source = args['source']
     if 'photo' in args and args['photo'] != recipe.photo:
-        recipe.photo = upload_file_if_needed(args['photo'])
+        recipe.photo = file_has_access_or_download(args['photo'], recipe.photo)
     recipe.save()
     if 'items' in args:
         for con in recipe.items:
@@ -234,21 +230,3 @@ def scrapeRecipe(args, household_id):
         'recipe': recipe.obj_to_dict(),
         'items': items,
     })
-
-
-def upload_file_if_needed(url: str):
-    if url is not None and '/' in url:
-        from mimetypes import guess_extension
-        resp = requests.get(url)
-        ext = guess_extension(resp.headers['content-type'])
-        if allowed_file('file' + ext):
-            filename = secure_filename(str(uuid.uuid4()) + ext)
-            File(filename=filename, created_by=current_user.id).save()
-            with open(os.path.join(UPLOAD_FOLDER, filename), "wb") as o:
-                o.write(resp.content)
-            return filename
-    elif url is not None:
-        f = File.find(url)
-        if f and f.created_by == current_user.id:
-            return f.filename
-    return None

@@ -9,8 +9,9 @@ from flask_jwt_extended import current_user, jwt_required
 from sqlalchemy import func
 from app import db
 from app.helpers import validate_args, authorize_household, RequiredRights
-from app.models import Expense, ExpensePaidFor, ExpenseCategory, HouseholdMember, File
+from app.models import Expense, ExpensePaidFor, ExpenseCategory, HouseholdMember
 from app.service.recalculate_balances import recalculateBalances
+from app.service.file_has_access_or_download import file_has_access_or_download
 from .schemas import GetExpenses, AddExpense, UpdateExpense, AddExpenseCategory, UpdateExpenseCategory, GetExpenseOverview
 
 expense = Blueprint('expense', __name__)
@@ -70,9 +71,7 @@ def addExpense(args, household_id):
         expense.date = datetime.fromtimestamp(
             args['date']/1000, timezone.utc)
     if 'photo' in args and args['photo'] != expense.photo:
-        f = File.find(args['photo'])
-        if f and f.created_by == current_user.id:
-            expense.photo = f.filename
+        expense.photo = file_has_access_or_download(args['photo'], expense.photo)
     if 'category' in args:
         if args['category'] is not None:
             category = ExpenseCategory.find_by_id(args['category'])
@@ -117,9 +116,7 @@ def updateExpense(args, id):  # noqa: C901
         expense.date = datetime.fromtimestamp(
             args['date']/1000, timezone.utc)
     if 'photo' in args and args['photo'] != expense.photo:
-        f = File.find(args['photo'])
-        if f and f.created_by == current_user.id:
-            expense.photo = f.filename
+        expense.photo = file_has_access_or_download(args['photo'], expense.photo)
     if 'category' in args:
         if args['category'] is not None:
             category = ExpenseCategory.find_by_id(args['category'])

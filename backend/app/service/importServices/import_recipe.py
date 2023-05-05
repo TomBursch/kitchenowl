@@ -1,6 +1,6 @@
 
-from flask_jwt_extended import current_user
-from app.models import Recipe, RecipeTags, RecipeItems, Item, Tag, File
+from app.models import Recipe, RecipeTags, RecipeItems, Item, Tag
+from app.service.file_has_access_or_download import file_has_access_or_download
 
 
 def importRecipe(household_id: int, args: dict, override: bool = False):
@@ -28,9 +28,7 @@ def importRecipe(household_id: int, args: dict, override: bool = False):
     if 'source' in args:
         recipe.source = args['source']
     if 'photo' in args:
-        f = File.find(args['photo'])
-        if f and f.created_by == current_user.id:
-            recipe.photo = f.filename
+        recipe.photo = file_has_access_or_download(args['photo'])
 
     recipe.save()
 

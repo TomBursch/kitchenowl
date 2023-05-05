@@ -1,7 +1,7 @@
 
 from datetime import datetime, timezone
-from flask_jwt_extended import current_user
-from app.models import Household, Expense, ExpensePaidFor, File, ExpenseCategory
+from app.models import Household, Expense, ExpensePaidFor, ExpenseCategory
+from app.service.file_has_access_or_download import file_has_access_or_download
 
 
 def importExpense(household: Household, args: dict):
@@ -12,9 +12,7 @@ def importExpense(household: Household, args: dict):
         args['date']/1000, timezone.utc)
     expense.amount = args['amount']
     if 'photo' in args:
-        f = File.find(args['photo'])
-        if f and f.created_by == current_user.id:
-            expense.photo = f.filename
+        expense.photo = file_has_access_or_download(args['photo'])
     if 'category' in args:
         category = ExpenseCategory.find_by_name(
             household.id, args['category']['name'])

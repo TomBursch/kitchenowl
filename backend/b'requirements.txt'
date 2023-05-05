@@ -69,7 +69,7 @@ rdflib==6.3.2
 rdflib-jsonld==0.6.2
 recipe-scrapers==14.36.1
 regex==2023.3.23
-requests==2.29.0
+requests==2.30.0
 scikit-learn==1.2.2
 scipy==1.10.1
 setuptools-scm==7.1.0
@@ -83,7 +83,7 @@ tqdm==4.65.0
 typed-ast==1.5.4
 types-beautifulsoup4==4.12.0.4
 types-html5lib==1.1.11.13
-types-requests==2.29.0.0
+types-requests==2.30.0.0
 types-urllib3==1.26.25.12
 typing_extensions==4.5.0
 tzdata==2023.3

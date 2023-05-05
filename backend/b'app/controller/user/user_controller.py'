@@ -3,7 +3,8 @@ from app.helpers.server_admin_required import server_admin_required
 from app.helpers import validate_args
 from flask import jsonify, Blueprint
 from flask_jwt_extended import current_user, jwt_required
-from app.models import User, File
+from app.models import User
+from app.service.file_has_access_or_download import file_has_access_or_download
 from .schemas import CreateUser, UpdateUser, SearchByNameRequest
 
 
@@ -65,10 +66,8 @@ def updateUser(args):
         user.name = args['name']
     if 'password' in args:
         user.set_password(args['password'])
-    if 'photo' in args:
-        f = File.find(args['photo'])
-        if f and f.created_by == user.id:
-            user.photo = f.filename
+    if 'photo' in args and user.photo != args['photo']:
+        user.photo = file_has_access_or_download(args['photo'], user.photo)
     user.save()
     return jsonify({'msg': 'DONE'})
 
@@ -85,8 +84,8 @@ def updateUserById(args, id):
         user.name = args['name']
     if 'password' in args:
         user.set_password(args['password'])
-    if 'photo' in args:
-        user.photo = args['photo']
+    if 'photo' in args and user.photo != args['photo']:
+        user.photo = file_has_access_or_download(args['photo'], user.photo)
     if 'admin' in args:
         user.admin = args['admin']
     user.save()

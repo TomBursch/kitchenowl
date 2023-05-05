@@ -81,43 +81,35 @@ class ProfilePage extends StatelessWidget {
                         ),
                       ),
                     ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Card(
-                          child: ListTile(
-                            title: Text(
-                              AppLocalizations.of(context)!.householdSwitch,
-                            ),
-                            leading: const Icon(Icons.swap_horiz_rounded),
-                            minLeadingWidth: 16,
-                            onTap: () => context.go("/household"),
-                          ),
-                        ),
+                  Card(
+                    child: ListTile(
+                      title: Text(
+                        AppLocalizations.of(context)!.householdSwitch,
                       ),
-                      Expanded(
-                        child: Card(
-                          child: ListTile(
-                            title: Text(
-                              AppLocalizations.of(context)!.settings,
-                            ),
-                            leading: const Icon(Icons.manage_accounts_rounded),
-                            minLeadingWidth: 16,
-                            onTap: () =>
-                                Navigator.of(context, rootNavigator: true).push(
-                              MaterialPageRoute(
-                                builder: (context) => BlocProvider.value(
-                                  value: householdCubit,
-                                  child: SettingsPage(
-                                    household: householdCubit.state.household,
-                                  ),
-                                ),
-                              ),
+                      leading: const Icon(Icons.swap_horiz_rounded),
+                      minLeadingWidth: 16,
+                      onTap: () => context.go("/household"),
+                    ),
+                  ),
+                  Card(
+                    child: ListTile(
+                      title: Text(
+                        AppLocalizations.of(context)!.settings,
+                      ),
+                      leading: const Icon(Icons.manage_accounts_rounded),
+                      minLeadingWidth: 16,
+                      onTap: () =>
+                          Navigator.of(context, rootNavigator: true).push(
+                        MaterialPageRoute(
+                          builder: (context) => BlocProvider.value(
+                            value: householdCubit,
+                            child: SettingsPage(
+                              household: householdCubit.state.household,
                             ),
                           ),
                         ),
                       ),
-                    ],
+                    ),
                   ),
                 ],
               ),

@@ -56,6 +56,7 @@ class _ChoiceScrollState extends State<ChoiceScroll> {
     if (widget.collapsable) {
       child = AnimatedSize(
         duration: const Duration(milliseconds: 300),
+        alignment: Alignment.centerLeft,
         child: child,
       );
     }

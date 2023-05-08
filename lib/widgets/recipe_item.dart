@@ -51,11 +51,11 @@ class RecipeItemWidget extends StatelessWidget {
               ? () async {
                   final household =
                       BlocProvider.of<HouseholdCubit>(context).state.household;
-                  context.go(
+                  final res = await context.push<UpdateEnum>(
                     "/household/${household.id}/recipes/details/${recipe.id}",
                     extra: Tuple2<Household, Recipe>(household, recipe),
                   );
-                  // _handleUpdate(res);
+                  _handleUpdate(res);
                 }
               : toggle,
         ),

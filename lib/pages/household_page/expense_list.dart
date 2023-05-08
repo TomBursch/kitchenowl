@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:kitchenowl/app.dart';
@@ -9,7 +10,6 @@ import 'package:kitchenowl/enums/expenselist_sorting.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/member.dart';
 import 'package:kitchenowl/models/user.dart';
-import 'package:kitchenowl/pages/expense_overview_page.dart';
 import 'package:kitchenowl/widgets/chart_pie_current_month.dart';
 import 'package:kitchenowl/widgets/choice_scroll.dart';
 import 'package:kitchenowl/widgets/expense/timeframe_dropdown_button.dart';
@@ -82,20 +82,16 @@ class _ExpensePageState extends State<ExpenseListPage> {
                                 child: InkWell(
                                   borderRadius: BorderRadius.circular(50),
                                   child: const Icon(Icons.bar_chart_rounded),
-                                  onTap: () => Navigator.of(
-                                    context,
-                                    rootNavigator: true,
-                                  ).push(
-                                    MaterialPageRoute(
-                                      builder: (ctx) => ExpenseOverviewPage(
-                                        household:
-                                            BlocProvider.of<ExpenseListCubit>(
-                                          context,
-                                        ).household,
-                                        initialSorting: state.sorting,
-                                      ),
-                                    ),
-                                  ),
+                                  onTap: () {
+                                    final household =
+                                        BlocProvider.of<HouseholdCubit>(context)
+                                            .state
+                                            .household;
+                                    context.go(
+                                      "/household/${household.id}/balances/overview",
+                                      extra: state.sorting,
+                                    );
+                                  },
                                 ),
                               ),
                             ],

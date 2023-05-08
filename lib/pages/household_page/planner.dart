@@ -322,8 +322,7 @@ class _PlannerPageState extends State<PlannerPage> {
     Recipe recipe,
   ) async {
     final household = BlocProvider.of<HouseholdCubit>(context).state.household;
-    final res = await context
-        .push<UpdateEnum>(
+    final res = await context.push<UpdateEnum>(
       Uri(
         path: "/household/${household.id}/recipes/details/${recipe.id}",
         queryParameters: {
@@ -331,10 +330,7 @@ class _PlannerPageState extends State<PlannerPage> {
         },
       ).toString(),
       extra: Tuple2<Household, Recipe>(household, recipe),
-    )
-        .then((value) {
-      return value;
-    });
+    );
     if (res == UpdateEnum.updated || res == UpdateEnum.deleted) {
       cubit.refresh();
     }

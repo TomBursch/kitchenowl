@@ -73,7 +73,7 @@ class ExpenseItemWidget extends StatelessWidget {
               ? () async {
                   final household =
                       BlocProvider.of<HouseholdCubit>(context).state.household;
-                  context.go(
+                  context.push(
                     "/household/${household.id}/expenses/${expense.id}",
                     extra: Tuple2<Household, Expense>(household, expense),
                   );

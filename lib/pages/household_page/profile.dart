@@ -5,7 +5,6 @@ import 'package:go_router/go_router.dart';
 import 'package:kitchenowl/cubits/auth_cubit.dart';
 import 'package:kitchenowl/cubits/household_cubit.dart';
 import 'package:kitchenowl/cubits/settings_cubit.dart';
-import 'package:kitchenowl/pages/settings_page.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -98,16 +97,9 @@ class ProfilePage extends StatelessWidget {
                       ),
                       leading: const Icon(Icons.manage_accounts_rounded),
                       minLeadingWidth: 16,
-                      onTap: () =>
-                          Navigator.of(context, rootNavigator: true).push(
-                        MaterialPageRoute(
-                          builder: (context) => BlocProvider.value(
-                            value: householdCubit,
-                            child: SettingsPage(
-                              household: householdCubit.state.household,
-                            ),
-                          ),
-                        ),
+                      onTap: () => context.push(
+                        "/settings",
+                        extra: householdCubit.state.household,
                       ),
                     ),
                   ),

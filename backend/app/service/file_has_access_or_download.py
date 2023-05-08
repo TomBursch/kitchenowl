@@ -17,7 +17,7 @@ def file_has_access_or_download(newPhoto: str, oldPhoto: str = None) -> str:
         from mimetypes import guess_extension
         resp = requests.get(newPhoto)
         ext = guess_extension(resp.headers['content-type'])
-        if allowed_file('file' + ext):
+        if ext and allowed_file('file' + ext):
             filename = secure_filename(str(uuid.uuid4()) + ext)
             File(filename=filename, created_by=current_user.id).save()
             with open(os.path.join(UPLOAD_FOLDER, filename), "wb") as o:

@@ -7,7 +7,7 @@ body:
     id: url
     attributes:
       label: "URL to the Wiki page"
-      placeholder: "https://tombursch.github.io/kitchenowl/get-started/"
+      placeholder: "https://docs.kitchenowl.org/get-started/"
     validations:
       required: true
   - type: textarea

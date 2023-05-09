@@ -1,4 +1,5 @@
 site_name: KitchenOwl
+site_url: https://docs.kitchenowl.org/
 repo_url: https://github.com/tombursch/kitchenowl
 repo_name: tombursch/kitchenowl
 edit_uri: edit/main/docs/

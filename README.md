@@ -8,8 +8,8 @@
 
 <h4 align="center">
   <a href="https://matrix.to/#/#kitchenowl:matrix.org">Matrix</a> |
-  <a href="https://tombursch.github.io/kitchenowl/get-started/">Self-Hosting</a> |
-  <a href="https://tombursch.github.io/kitchenowl/">Docs</a>
+  <a href="https://docs.kitchenowl.orgget-started/">Self-Hosting</a> |
+  <a href="https://docs.kitchenowl.org">Docs</a>
 </h4>
 
 <h4 align="center">
@@ -60,7 +60,7 @@ KitchenOwl is a smart self-hosted grocery list and recipe manager. Easily add it
 
 Please keep in mind that this project is still in development.
 
-For a full list check out the [docs](https://tombursch.github.io/kitchenowl). For a list of planned features, take a look at the [Roadmap](https://github.com/users/TomBursch/projects/1)!
+For a full list check out the [docs](https://docs.kitchenowl.org). For a list of planned features, take a look at the [Roadmap](https://github.com/users/TomBursch/projects/1)!
 
 ## 📱 Screenshots
 
@@ -83,7 +83,7 @@ Get it in your favorite store or find the current release for your operating sys
 
 ## 🚀 Get started
 
-Please take a look at the [get started guide](https://tombursch.github.io/kitchenowl/get-started/).
+Please take a look at the [get started guide](https://docs.kitchenowl.orgget-started/).
 
 ## 🙌 Contributing
 
@@ -111,7 +111,7 @@ KitchenOwl is moving fast, to stay updated consider starring and watching the re
 
 ## 📚 Related
 
-- [Docs](https://tombursch.github.io/kitchenowl/)
+- [Docs](https://docs.kitchenowl.org)
 - [KitchenOwl Backend](https://github.com/TomBursch/kitchenowl-backend) Repository
 - [DockerHub](https://hub.docker.com/repository/docker/tombursch/kitchenowl)
 - Owl icon taken from [Freepik](https://www.flaticon.com/authors/freepik)

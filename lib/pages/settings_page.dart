@@ -291,7 +291,7 @@ class _SettingsPageState extends State<SettingsPage> {
               leading: const Icon(Icons.privacy_tip_rounded),
               onTap: () => openUrl(
                 context,
-                "https://tombursch.github.io/kitchenowl/about/privacy",
+                "https://docs.kitchenowl.org/about/privacy",
               ),
             ),
             ListTile(

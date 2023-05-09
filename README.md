@@ -8,7 +8,7 @@
 
 <h4 align="center">
   <a href="https://matrix.to/#/#kitchenowl:matrix.org">Matrix</a> |
-  <a href="https://docs.kitchenowl.orgget-started/">Self-Hosting</a> |
+  <a href="https://docs.kitchenowl.org/get-started/">Self-Hosting</a> |
   <a href="https://docs.kitchenowl.org">Docs</a>
 </h4>
 
@@ -83,7 +83,7 @@ Get it in your favorite store or find the current release for your operating sys
 
 ## 🚀 Get started
 
-Please take a look at the [get started guide](https://docs.kitchenowl.orgget-started/).
+Please take a look at the [get started guide](https://docs.kitchenowl.org/get-started/).
 
 ## 🙌 Contributing
 

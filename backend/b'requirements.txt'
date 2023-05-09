@@ -6,6 +6,7 @@ autopep8==2.0.2
 bcrypt==4.0.1
 beautifulsoup4==4.12.2
 black==23.1a1
+blinker==1.6.2
 certifi==2022.12.7
 cffi==1.15.1
 charset-normalizer==3.1.0
@@ -52,6 +53,7 @@ pathspec==0.11.1
 Pillow==9.5.0
 platformdirs==3.5.0
 pluggy==1.0.0
+psycopg2-binary==2.9.6
 py==1.11.0
 pycodestyle==2.10.0
 pycparser==2.21

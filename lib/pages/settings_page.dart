@@ -191,6 +191,18 @@ class _SettingsPageState extends State<SettingsPage> {
                 leading: const Icon(Icons.swap_horiz_rounded),
                 onTap: () => context.go("/household"),
               ),
+              if (!isOffline)
+                ListTile(
+                  title: Text(AppLocalizations.of(context)!.householdLeave),
+                  leading: const Icon(Icons.person_remove_rounded),
+                  onTap: () {
+                    ApiService.getInstance().removeHouseholdMember(
+                      widget.household!,
+                      BlocProvider.of<AuthCubit>(context).getUser()!,
+                    );
+                    context.go("/household");
+                  },
+                ),
               ListTile(
                 title: Text(
                   AppLocalizations.of(context)!.members,

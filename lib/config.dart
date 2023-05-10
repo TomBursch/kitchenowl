@@ -4,6 +4,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 abstract class Config {
   // ignore: constant_identifier_names
   static const int MIN_BACKEND_VERSION = 57;
+  static const String defaultServer = "https://app.kitchenowl.org";
   static Future<PackageInfo?>? _packageInfo; // Gets loaded by SettingsCubit
   static PackageInfo? _packageInfoSync;
   static Future<BaseDeviceInfo>? deviceInfo;

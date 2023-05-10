@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/models/member.dart';
+import 'package:kitchenowl/models/user.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
 
 extension HouseholdApi on ApiService {
@@ -48,9 +49,9 @@ extension HouseholdApi on ApiService {
 
   Future<bool> removeHouseholdMember(
     Household household,
-    Member member,
+    User user,
   ) async {
-    final res = await delete('$baseRoute/${household.id}/member/${member.id}');
+    final res = await delete('$baseRoute/${household.id}/member/${user.id}');
 
     return res.statusCode == 200;
   }

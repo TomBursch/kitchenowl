@@ -17,7 +17,14 @@ class _SetupPageState extends State<SetupPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        leading: BackButton(
+          onPressed: _setupDefault,
+        ),
+      ),
+      extendBodyBehindAppBar: true,
       body: SafeArea(
+        top: false,
         child: Align(
           alignment: Alignment.topCenter,
           child: ConstrainedBox(
@@ -70,5 +77,9 @@ class _SetupPageState extends State<SetupPage> {
     if (_formKey.currentState!.validate()) {
       BlocProvider.of<AuthCubit>(context).setupServer(urlController.text);
     }
+  }
+
+  void _setupDefault() {
+    BlocProvider.of<AuthCubit>(context).setupDefaultServer();
   }
 }

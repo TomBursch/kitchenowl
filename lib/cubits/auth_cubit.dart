@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kitchenowl/config.dart';
 import 'package:kitchenowl/models/user.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
 import 'package:kitchenowl/services/storage/storage.dart';
@@ -32,13 +33,10 @@ class AuthCubit extends Cubit<AuthState> {
         ? kDebugMode
             ? "http://localhost:5000"
             : Uri.base.origin
-        : await PreferenceStorage.getInstance().read(key: 'URL');
-    if (url != null && url.isNotEmpty) {
-      final token = await SecureStorage.getInstance().read(key: 'TOKEN');
-      _newConnection(url, token: token, storeData: false);
-    } else {
-      refresh();
-    }
+        : await PreferenceStorage.getInstance().read(key: 'URL') ??
+            Config.defaultServer;
+    final token = await SecureStorage.getInstance().read(key: 'TOKEN');
+    _newConnection(url, token: token, storeData: false);
   }
 
   Future<void> updateState() async {
@@ -107,6 +105,12 @@ class AuthCubit extends Cubit<AuthState> {
     if (kIsWeb) return;
     emit(const Loading());
     _newConnection(url);
+  }
+
+  void setupDefaultServer() async {
+    if (kIsWeb) return;
+    emit(const Loading());
+    _newConnection(Config.defaultServer, storeData: false);
   }
 
   User? getUser() {

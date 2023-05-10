@@ -41,6 +41,10 @@ What next?
                 newPWRepeat = input("Repeat new password:")
                 if newPW.strip() == newPWRepeat.strip():
                     user.set_password(newPW.strip())
+                    user.save()
+                else:
+                    print("Passwords do not match")
+                    continue
         elif selection == "3":
             username = input("Enter the username:")
             user = User.find_by_username(username)

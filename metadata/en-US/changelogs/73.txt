@@ -1,0 +1,7 @@
+One of the biggest update yet!
+- A single server can now host multiple households
+- Improved balances
+- Add Hungarian, Romanian, and Swedish translations
+- Many other fixes and improvements
+
+

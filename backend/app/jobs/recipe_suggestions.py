@@ -81,7 +81,6 @@ def computeRecipeSuggestions():
         # set suggestion_score to cooking_count
         r = Recipe.find_by_id(id)
         r.suggestion_score = cooking_count
-        print((r.id, cooking_count))
         db.session.add(r)
 
     # 2) do not suggest recent meals

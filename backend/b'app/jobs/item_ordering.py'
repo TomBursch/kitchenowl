@@ -10,16 +10,13 @@ def findItemOrdering(shopping_instances):
         sorter.updateMatrix(items)
     order = sorter.topologicalSort()
 
-    # reset ordering for all items
-    for item in Item.query.all():
-        item.ordering = 0
-
     # store the ordering directly in each item
     for ord in range(len(order)):
         item_id = order[ord]
         item = Item.find_by_id(item_id)
         if item:
             item.ordering = ord+1
+            db.session.add(item)
 
     # commit changes to db
     db.session.commit()
@@ -28,7 +25,6 @@ def findItemOrdering(shopping_instances):
 
 
 class ItemSort:
-
     def __init__(self):
         # stores the costs for ordering
         self.matrix = []
@@ -40,7 +36,7 @@ class ItemSort:
         # determines decay rate (must be between 0 and 1)
         self.decay = 0.75
 
-    def updateMatrix(self, lst):
+    def updateMatrix(self, lst: list):
         # extend matrix for unseed items
         for item in lst:
             if item not in self.indices:
@@ -67,7 +63,7 @@ class ItemSort:
                 predIndex = self.item_dict[pred]
                 self.matrix[index][predIndex] += cost
 
-    def topologicalSort(self):
+    def topologicalSort(self) -> list:
         mtx = copy.deepcopy(self.matrix)
         order = []
 

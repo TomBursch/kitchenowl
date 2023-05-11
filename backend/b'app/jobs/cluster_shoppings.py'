@@ -6,8 +6,8 @@ from dbscan1d.core import DBSCAN1D
 import numpy as np
 
 
-def clusterShoppings():
-    dropped = History.find_dropped_by_shoppinglist_id(1)
+def clusterShoppings(shoppinglist_id: int) -> list:
+    dropped = History.find_dropped_by_shoppinglist_id(shoppinglist_id)
 
     if (len(dropped) == 0):
         app.logger.info("no history to investigate")
@@ -43,8 +43,5 @@ def clusterShoppings():
     # remove duplicates in the instances
     shopping_instances = [list(set(instance))
                           for instance in shopping_instances]
-
-    app.logger.info('the found shopping instances are:')
-    app.logger.info(shopping_instances)
 
     return shopping_instances

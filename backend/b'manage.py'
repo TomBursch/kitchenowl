@@ -2,6 +2,7 @@ from os import listdir
 from os.path import isfile, join
 from app import app, db
 from app.config import UPLOAD_FOLDER
+from app.jobs import jobs
 from app.models import User, File
 
 def importFiles():
@@ -57,17 +58,24 @@ What next?
 
 # docker exec -it [backend container name] python manage.py
 if __name__ == "__main__":
-    with app.app_context():
-        while True:
-            print("""
+    while True:
+        print("""
 Manage KitchenOwl\n---\nWhat do you want to do?
-    1.  Manage users
-    2.  Import files
-    (q) Exit""")
-            selection = input("Your selection (q):")
-            if selection == "1":
+1.  Manage users
+2.  Import files
+3.  Run all jobs
+(q) Exit""")
+        selection = input("Your selection (q):")
+        if selection == "1":
+            with app.app_context():
                 manageUsers()
-            elif selection == "2":
+        elif selection == "2":
+            with app.app_context():
                 importFiles()
-            else:
-                exit()
+        elif selection == "3":
+            print("Starting jobs (might take a while)...")
+            jobs.daily()
+            jobs.halfHourly()
+            print("Done!")
+        else:
+            exit()

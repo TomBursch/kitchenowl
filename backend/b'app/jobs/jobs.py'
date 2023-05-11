@@ -1,32 +1,25 @@
-from app.jobs.recipe_suggestions import findMealInstancesFromHistory, computeRecipeSuggestions
+from app.jobs.recipe_suggestions import computeRecipeSuggestions
 from app import app, scheduler
-from app.models import Token
+from app.models import Token, Household, Shoppinglist
 from .item_ordering import findItemOrdering
 from .item_suggestions import findItemSuggestions
 from .cluster_shoppings import clusterShoppings
 
 
-# # for debugging:
-# @scheduler.task('interval', id='test', seconds=5)
-# def test():
-#     with app.app_context():
-#         app.logger.info("--- test analysis is starting ---")
-#         # recipe planner tasks
-#         meal_instances = findMealInstancesFromHistory()
-#         computeRecipeSuggestions(meal_instances)
-#         app.logger.info("--- test analysis is completed ---")
+# # for debugging run: FLASK_DEBUG=True python manage.py 
 
 @scheduler.task('cron', id='everyDay', day_of_week='*', hour='3')
 def daily():
     with app.app_context():
         app.logger.info("--- daily analysis is starting ---")
         # shopping tasks
-        shopping_instances = clusterShoppings()
-        findItemOrdering(shopping_instances)
-        findItemSuggestions(shopping_instances)
+        for household in Household.all():
+            shopping_instances = clusterShoppings(Shoppinglist.query.filter(Shoppinglist.household_id == household.id).first().id)
+            if shopping_instances:
+                findItemOrdering(shopping_instances)
+                findItemSuggestions(shopping_instances)
         # recipe planner tasks
-        meal_instances = findMealInstancesFromHistory()
-        computeRecipeSuggestions(meal_instances)
+        computeRecipeSuggestions()
         app.logger.info("--- daily analysis is completed ---")
 
 

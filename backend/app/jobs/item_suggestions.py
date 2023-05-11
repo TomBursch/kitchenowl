@@ -28,16 +28,13 @@ def findItemSuggestions(shopping_instances):
     single_items.insert(0, "single", [list(tup)[0]
                                       for tup in single_items["itemsets"]], False)
 
-    # reset ordering for all items
-    for item in Item.query.all():
-        item.support = 0
-
     # store support values
     for index, row in single_items.iterrows():
         item_id = row["single"]
         item = Item.find_by_id(item_id)
         if item:
             item.support = row["support"]
+            db.session.add(item)
 
     # commit changes to db
     db.session.commit()
@@ -61,6 +58,10 @@ def findItemSuggestions(shopping_instances):
 
     # store all new associations
     for index, rule in single_rules.iterrows():
-        Association.create(rule["antecedent"], rule["consequent"],
-                           rule["support"], rule["confidence"], rule["lift"])
+        a = Association(antecedent_id=rule["antecedent"],
+                        consequent_id=rule["consequent"],
+                        support=rule["support"],
+                        confidence=rule["confidence"],
+                        lift=rule["lift"])
+        db.session.add(a)
     app.logger.info("associations rules of size 2 were updated")

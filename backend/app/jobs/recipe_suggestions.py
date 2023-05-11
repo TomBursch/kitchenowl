@@ -2,6 +2,7 @@ from app.models import Recipe, RecipeHistory
 from app import app, db
 import datetime
 
+from app.models.recipe_history import Status
 
 # minimum hours on planner until a recipe is considered to have been cooked
 MEAL_THRESHOLD = 3
@@ -9,8 +10,8 @@ MEAL_THRESHOLD = 3
 
 def findMealInstancesFromHistory():
     return findMealInstances(
-        RecipeHistory.find_added(),
-        RecipeHistory.find_dropped())
+        RecipeHistory.query.filter(RecipeHistory.status == Status.ADDED).all(),
+        RecipeHistory.query.filter(RecipeHistory.status == Status.DROPPED).all())
 
 
 def findMealInstances(added, dropped):
@@ -55,7 +56,8 @@ def findMealInstances(added, dropped):
     return meals
 
 
-def computeRecipeSuggestions(meal_instances):
+def computeRecipeSuggestions():
+    meal_instances = findMealInstancesFromHistory()
     # group meals by their id
     meal_hist = dict()
     for m in meal_instances:
@@ -67,29 +69,31 @@ def computeRecipeSuggestions(meal_instances):
     # 0) reset all suggestion scores
     for r in Recipe.all():
         r.suggestion_score = 0
+        db.session.add(r)
 
     # 1) count cooked instances in last six months
-    six_months_ago = datetime.datetime.now() - datetime.timedelta(days=182)
+    six_months_ago = datetime.datetime.utcnow() - datetime.timedelta(days=182)
     for id in meal_hist:
         cooking_count = 0
         for cooked in meal_hist[id]:
             if cooked > six_months_ago:
                 cooking_count += 1
         # set suggestion_score to cooking_count
-        Recipe.find_by_id(id).suggestion_score = cooking_count
+        r = Recipe.find_by_id(id)
+        r.suggestion_score = cooking_count
+        print((r.id, cooking_count))
+        db.session.add(r)
 
     # 2) do not suggest recent meals
-    week_ago = datetime.datetime.now() - datetime.timedelta(days=7)
+    week_ago = datetime.datetime.utcnow() - datetime.timedelta(days=7)
     # find recently cooked meals
     for id in meal_hist:
         for cooked in meal_hist[id]:
             if cooked > week_ago:
-                Recipe.find_by_id(id).suggestion_score = 0
+                r = Recipe.find_by_id(id)
+                r.suggestion_score = 0
+                db.session.add(r)
 
     # commit changes to db
     db.session.commit()
     app.logger.info("computed and stored new suggestion scores")
-
-    # compute new suggestion ranking
-    Recipe.compute_suggestion_ranking()
-    app.logger.info("computed and stored new suggestion ranking")

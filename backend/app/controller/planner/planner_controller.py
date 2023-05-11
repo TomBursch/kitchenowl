@@ -99,11 +99,11 @@ def getSuggestedRecipes(household_id):
     return jsonify([r.obj_to_full_dict() for r in suggested_recipes])
 
 
-@plannerHousehold.route('/refresh-suggested-recipes', methods=['GET', 'POST'])
+@plannerHousehold.route('/refresh-suggested-recipes', methods=['GET'])
 @jwt_required()
 @authorize_household()
 def getRefreshedSuggestedRecipes(household_id):
     # re-compute suggestion ranking
-    Recipe.compute_suggestion_ranking()
+    Recipe.compute_suggestion_ranking(household_id)
     # return suggested recipes
-    return getSuggestedRecipes(household_id)
+    return getSuggestedRecipes(household_id=household_id)

@@ -34,7 +34,8 @@ class Recipe(db.Model, DbModelMixin, TimestampMixin, DbModelAuthorizeMixin):
         'RecipeTags', back_populates='recipe', cascade="all, delete-orphan")
     plans = db.relationship(
         'Planner', back_populates='recipe', cascade="all, delete-orphan")
-    photo_file = db.relationship("File", back_populates='recipe', uselist=False)
+    photo_file = db.relationship(
+        "File", back_populates='recipe', uselist=False)
 
     def obj_to_dict(self) -> dict:
         res = super().obj_to_dict()
@@ -76,13 +77,14 @@ class Recipe(db.Model, DbModelMixin, TimestampMixin, DbModelAuthorizeMixin):
         return res
 
     @classmethod
-    def compute_suggestion_ranking(cls):
+    def compute_suggestion_ranking(cls, household_id: int):
         # reset all suggestion ranks
-        for r in cls.all():
+        for r in cls.query.filter(cls.household_id == household_id).all():
             r.suggestion_rank = 0
+            db.session.add(r)
         # get all recipes with positive suggestion_score
-        recipes = cls.query.filter(  # noqa
-            cls.suggestion_score != 0).all()
+        recipes = cls.query.filter(
+            cls.household_id == household_id, cls.suggestion_score != 0).all()
         # compute the initial sum of all suggestion_scores
         suggestion_sum = 0
         for r in recipes:
@@ -99,6 +101,7 @@ class Recipe(db.Model, DbModelMixin, TimestampMixin, DbModelAuthorizeMixin):
                     current_rank += 1
                     suggestion_sum -= r.suggestion_score
                     to_be_removed = i
+                    db.session.add(r)
                     break
             recipes.pop(to_be_removed)
         db.session.commit()

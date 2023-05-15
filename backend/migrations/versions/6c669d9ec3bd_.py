@@ -212,6 +212,7 @@ def upgrade():
             hm.owner = user.owner
             hm.expense_balance = user.expense_balance
             models.append(hm)
+            user.admin = user.admin or user.owner
 
         models.append(household)
         models += users

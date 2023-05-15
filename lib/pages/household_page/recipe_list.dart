@@ -120,10 +120,10 @@ class _RecipeListPageState extends State<RecipeListPage> {
                   !listEquals(previous.recipes, current.recipes),
               builder: (context, state) {
                 if (state is! ListRecipeListState) {
-                  return Padding(
-                    padding: const EdgeInsets.only(left: 28, right: 12),
+                  return const Padding(
+                    padding: EdgeInsets.only(left: 28, right: 12),
                     child: Column(
-                      children: const [
+                      children: [
                         ShimmerCard(),
                         ShimmerCard(),
                         ShimmerCard(),

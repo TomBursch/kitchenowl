@@ -13,8 +13,8 @@ class ShimmerCard extends StatelessWidget {
         highlightColor: Colors.grey[300]!.withOpacity(.9),
         child: ListTile(
           trailing: trailing ?? const Icon(Icons.arrow_right_rounded),
-          title: Row(
-            children: const [
+          title: const Row(
+            children: [
               ShimmerText(),
               Spacer(),
             ],

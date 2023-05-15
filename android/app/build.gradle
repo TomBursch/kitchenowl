@@ -32,7 +32,8 @@ apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
-    compileSdkVersion 33
+    namespace "com.tombursch.kitchenowl"
+    compileSdkVersion flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
 
     compileOptions {
@@ -50,8 +51,8 @@ android {
 
     defaultConfig {
         applicationId "com.tombursch.kitchenowl"
-        minSdkVersion 19
-        targetSdkVersion 33
+        minSdkVersion 19 //flutter.minSdkVersion == 18
+        targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         resConfigs 'en', 'da', 'de', 'es', 'fi', 'fr', 'hu', 'id', 'it', 'nb', 'nl', 'pa', 'ro', 'sv', 'tr'

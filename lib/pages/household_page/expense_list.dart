@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
-import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:community_charts_flutter/community_charts_flutter.dart'
+    as charts;
 import 'package:kitchenowl/app.dart';
 import 'package:kitchenowl/cubits/expense_list_cubit.dart';
 import 'package:kitchenowl/cubits/household_cubit.dart';

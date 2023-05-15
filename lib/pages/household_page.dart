@@ -30,8 +30,6 @@ class HouseholdPage extends StatefulWidget {
 }
 
 class _HouseholdPageState extends State<HouseholdPage> {
-  static const int _bottomAppBarSize = 5;
-
   late final HouseholdCubit householdCubit;
   late final ShoppinglistCubit shoppingListCubit;
   late final RecipeListCubit recipeListCubit;

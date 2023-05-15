@@ -1,0 +1,8 @@
+One of the biggest update yet!
+- A single server can now host multiple households
+- Add icons to items
+- Improved balances
+- Add Hungarian, Romanian, and Swedish translations
+- Many other fixes and improvements
+
+

@@ -385,6 +385,12 @@
   "@householdEmpty": {},
   "householdLeave": "Haushalt verlassen",
   "@householdLeave": {},
+  "householdLeaveConfirmation": "Bist du sicher, dass du {household} verlassen möchtest?",
+  "@householdLeaveConfirmation": {
+    "placeholders": {
+      "household": {}
+    }
+  },
   "householdNew": "Neuer Haushalt",
   "@householdNew": {},
   "households": "Haushalte",

@@ -195,12 +195,25 @@ class _SettingsPageState extends State<SettingsPage> {
                 ListTile(
                   title: Text(AppLocalizations.of(context)!.householdLeave),
                   leading: const Icon(Icons.person_remove_rounded),
-                  onTap: () {
-                    ApiService.getInstance().removeHouseholdMember(
-                      widget.household!,
-                      BlocProvider.of<AuthCubit>(context).getUser()!,
+                  onTap: () async {
+                    final confirm = await askForConfirmation(
+                      context: context,
+                      title: Text(
+                        AppLocalizations.of(context)!.householdLeave,
+                      ),
+                      content: Text(
+                        AppLocalizations.of(context)!
+                            .householdLeaveConfirmation(widget.household!.name),
+                      ),
+                      confirmText: AppLocalizations.of(context)!.yes,
                     );
-                    context.go("/household");
+                    if (confirm) {
+                      ApiService.getInstance().removeHouseholdMember(
+                        widget.household!,
+                        BlocProvider.of<AuthCubit>(context).getUser()!,
+                      );
+                      context.go("/household");
+                    }
                   },
                 ),
               ListTile(

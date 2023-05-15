@@ -121,7 +121,7 @@ class SliverHouseholdShoppinglistSettings extends StatelessWidget {
       ),
       SliverToBoxAdapter(
         child: Text(
-          AppLocalizations.of(context)!.swipeToDeleteAndLongPressToReorder,
+          AppLocalizations.of(context)!.swipeToDelete,
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.bodySmall,
         ),

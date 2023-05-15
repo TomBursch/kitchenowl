@@ -167,6 +167,12 @@
   "@householdEmpty": {},
   "householdLeave": "Leave Household",
   "@householdLeave": {},
+  "householdLeaveConfirmation": "Are you sure you want to leave {household}?",
+  "@householdLeaveConfirmation": {
+    "placeholders": {
+      "household": {}
+    }
+  },
   "householdNew": "New Household",
   "@householdNew": {},
   "households": "Households",

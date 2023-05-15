@@ -55,7 +55,7 @@ android {
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
-        resConfigs 'en', 'da', 'de', 'es', 'fi', 'fr', 'hu', 'id', 'it', 'nb', 'nl', 'pa', 'ro', 'sv', 'tr'
+        resConfigs 'en', 'cs', 'da', 'de', 'es', 'fi', 'fr', 'hu', 'id', 'it', 'nb', 'nl', 'pa', 'ro', 'sv', 'tr'
     }
 
     signingConfigs {

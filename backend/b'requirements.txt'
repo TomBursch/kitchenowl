@@ -89,7 +89,7 @@ types-requests==2.30.0.0
 types-urllib3==1.26.25.13
 typing_extensions==4.5.0
 tzdata==2023.3
-tzlocal==4.3
+tzlocal==5.0
 urllib3==2.0.2
 uWSGI==2.0.21
 w3lib==2.1.1

@@ -257,7 +257,7 @@ class _PlannerPageState extends State<PlannerPage> {
                   ],
                   if (state.suggestedRecipes.isNotEmpty) ...[
                     SliverPadding(
-                      padding: const EdgeInsets.all(16),
+                      padding: const EdgeInsets.fromLTRB(16, 12, 8, 12),
                       sliver: SliverToBoxAdapter(
                         child: Row(
                           children: [
@@ -267,10 +267,10 @@ class _PlannerPageState extends State<PlannerPage> {
                                 style: Theme.of(context).textTheme.titleLarge,
                               ),
                             ),
-                            InkWell(
-                              borderRadius: BorderRadius.circular(50),
-                              onTap: cubit.refreshSuggestions,
-                              child: const Icon(Icons.refresh),
+                            LoadingIconButton(
+                              onPressed: cubit.refreshSuggestions,
+                              icon: const Icon(Icons.refresh),
+                              tooltip: AppLocalizations.of(context)!.refresh,
                             ),
                           ],
                         ),

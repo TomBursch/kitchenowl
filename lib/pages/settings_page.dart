@@ -378,8 +378,7 @@ class _SettingsPageState extends State<SettingsPage> {
     return Theme(
       data: Theme.of(context).copyWith(
         listTileTheme: Theme.of(context).listTileTheme.copyWith(
-              contentPadding: const EdgeInsets.only(left: 20, right: 5),
-              horizontalTitleGap: 8,
+              contentPadding: const EdgeInsets.only(left: 16, right: 5),
             ),
       ),
       child: Scaffold(

@@ -184,7 +184,6 @@ class _SettingsUserPageState extends State<SettingsUserPage> {
                       title: Text(AppLocalizations.of(context)!.passwordSave),
                       leading: const Icon(Icons.lock_rounded),
                       trailing: const Icon(Icons.arrow_forward_ios_rounded),
-                      horizontalTitleGap: 8,
                       contentPadding: EdgeInsets.zero,
                       onTap: () async {
                         final res = await Navigator.of(context).push(
@@ -205,7 +204,6 @@ class _SettingsUserPageState extends State<SettingsUserPage> {
                         title: Text(AppLocalizations.of(context)!.sessions),
                         leading: const Icon(Icons.devices_rounded),
                         trailing: const Icon(Icons.arrow_forward_ios_rounded),
-                        horizontalTitleGap: 8,
                         contentPadding: EdgeInsets.zero,
                         onTap: () => Navigator.of(context).push(
                           MaterialPageRoute(

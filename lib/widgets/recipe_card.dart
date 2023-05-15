@@ -140,6 +140,7 @@ class RecipeCard extends StatelessWidget {
                                 // Background color
                                 // ignore: deprecated_member_use
                                 primary: Theme.of(context).colorScheme.primary,
+                                padding: EdgeInsets.zero,
                               ).copyWith(
                                 elevation: ButtonStyleButton.allOrNull(0.0),
                               ),
@@ -156,6 +157,8 @@ class RecipeCard extends StatelessWidget {
                               // Background color
                               // ignore: deprecated_member_use
                               primary: Theme.of(context).colorScheme.primary,
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16),
                             ).copyWith(
                               elevation: ButtonStyleButton.allOrNull(0.0),
                             ),

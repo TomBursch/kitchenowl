@@ -60,7 +60,6 @@ class ProfilePage extends StatelessWidget {
                       title:
                           Text(AppLocalizations.of(context)!.forceOfflineMode),
                       leading: const Icon(Icons.mobiledata_off_outlined),
-                      horizontalTitleGap: 0,
                       contentPadding: const EdgeInsets.only(left: 20, right: 0),
                       onTap: () => BlocProvider.of<AuthCubit>(context)
                           .setForcedOfflineMode(

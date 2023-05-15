@@ -44,11 +44,14 @@ class _LoadingIconButtonState extends State<LoadingIconButton> {
           padding: widget.padding,
         )
       : Padding(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.symmetric(vertical: 8),
           child: AspectRatio(
             aspectRatio: 1,
-            child: CircularProgressIndicator(
-              color: widget.loadingColor,
+            child: Padding(
+              padding: const EdgeInsets.all(10),
+              child: CircularProgressIndicator(
+                color: widget.loadingColor,
+              ),
             ),
           ),
         );

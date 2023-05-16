@@ -93,29 +93,33 @@ class _SettingsPageState extends State<SettingsPage> {
               ListTile(
                 title: Text(AppLocalizations.of(context)!.themeMode),
                 leading: const Icon(Icons.nights_stay_sharp),
-                trailing: SegmentedButton(
-                  selected: {state.themeMode},
-                  segments: [
-                    ButtonSegment(
-                      value: ThemeMode.light,
-                      icon: const Icon(Icons.light_mode_rounded),
-                      label: Text(AppLocalizations.of(context)!.themeLight),
-                    ),
-                    ButtonSegment(
-                      value: ThemeMode.dark,
-                      icon: const Icon(Icons.dark_mode_rounded),
-                      label: Text(AppLocalizations.of(context)!.themeDark),
-                    ),
-                    ButtonSegment(
-                      value: ThemeMode.system,
-                      icon: const Icon(Icons.brightness_medium_outlined),
-                      label: Text(AppLocalizations.of(context)!.themeSystem),
-                    ),
-                  ],
-                  onSelectionChanged: (Set<ThemeMode> value) {
-                    BlocProvider.of<SettingsCubit>(context)
-                        .setTheme(value.first);
-                  },
+                titleAlignment: ListTileTitleAlignment.top,
+                subtitle: Padding(
+                  padding: const EdgeInsets.only(top: 6),
+                  child: SegmentedButton(
+                    selected: {state.themeMode},
+                    segments: [
+                      ButtonSegment(
+                        value: ThemeMode.light,
+                        icon: const Icon(Icons.light_mode_rounded),
+                        label: Text(AppLocalizations.of(context)!.themeLight),
+                      ),
+                      ButtonSegment(
+                        value: ThemeMode.dark,
+                        icon: const Icon(Icons.dark_mode_rounded),
+                        label: Text(AppLocalizations.of(context)!.themeDark),
+                      ),
+                      ButtonSegment(
+                        value: ThemeMode.system,
+                        icon: const Icon(Icons.brightness_medium_outlined),
+                        label: Text(AppLocalizations.of(context)!.themeSystem),
+                      ),
+                    ],
+                    onSelectionChanged: (Set<ThemeMode> value) {
+                      BlocProvider.of<SettingsCubit>(context)
+                          .setTheme(value.first);
+                    },
+                  ),
                 ),
               ),
               DynamicColorBuilder(builder: (dynamicLight, dynamicDark) {

@@ -31,11 +31,14 @@ import 'package:tuple/tuple.dart';
 final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>();
 final RouteObserver<ModalRoute> routeObserver = RouteObserver<ModalRoute>();
 
+String? initialLocation;
+
 // GoRouter configuration
 final router = GoRouter(
   navigatorKey: _rootNavigatorKey,
   redirect: (BuildContext context, GoRouterState state) {
     final authState = BlocProvider.of<AuthCubit>(context).state;
+    initialLocation ??= state.location;
     if (authState is Setup) return "/setup";
     if (authState is Onboarding) return "/onboarding";
     if (authState is Unauthenticated) return "/signin";

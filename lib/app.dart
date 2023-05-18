@@ -108,10 +108,14 @@ class _AppState extends State<App> {
                 if (state is Unsupported) router.go("/unsupported");
                 if (state is Loading) router.go("/");
                 if (state is Authenticated) {
-                  PreferenceStorage.getInstance()
-                      .readInt(key: 'lastHouseholdId')
-                      .then((id) =>
-                          router.go("/household${id == null ? "" : "/$id"}"));
+                  if (initialLocation != null && initialLocation != "/") {
+                    router.go(initialLocation!);
+                  } else {
+                    PreferenceStorage.getInstance()
+                        .readInt(key: 'lastHouseholdId')
+                        .then((id) =>
+                            router.go("/household${id == null ? "" : "/$id"}"));
+                  }
                 }
               },
               child: BlocBuilder<SettingsCubit, SettingsState>(

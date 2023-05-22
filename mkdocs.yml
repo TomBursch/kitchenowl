@@ -1,15 +1,19 @@
-site_name: KitchenOwl
+site_name: KitchenOwl Docs
 site_url: https://docs.kitchenowl.org/
 repo_url: https://github.com/tombursch/kitchenowl
 repo_name: tombursch/kitchenowl
 edit_uri: edit/main/docs/
-copyright: Copyright &copy; 2021 - 2022 Tom Bursch
+copyright: >
+  &copy; 2023 KitchenOwl - <a href="https://kitchenowl.org/imprint">Imprint</a>
 theme:
   name: material
   logo: img/icon.png
-  favicon: img/favicon.png
+  favicon: img/icon.png
   features:
     - content.tabs.link
+    - toc.follow
+    - navigation.tabs
+    - social
   palette:
     - media: "(prefers-color-scheme: light)"
       scheme: default
@@ -28,9 +32,13 @@ theme:
 extra:
   social:
     - icon: fontawesome/brands/github
-      link: https://github.com/tombursch
+      link: https://github.com/tombursch/kitchenowl
     - icon: fontawesome/brands/docker
       link: https://hub.docker.com/u/tombursch
+    - icon: fontawesome/solid/paper-plane
+      link: mailto:info@kitchenowl.org
+    - icon: fontawesome/solid/comment
+      link: https://matrix.to/#/#kitchenowl:matrix.org
 markdown_extensions:
   - admonition
   - attr_list
@@ -47,3 +55,5 @@ markdown_extensions:
       emoji_generator: !!python/name:materialx.emoji.to_svg
 extra_css:
   - stylesheets/extra.css
+plugins:
+  - search

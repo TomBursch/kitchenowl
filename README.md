@@ -7,9 +7,10 @@
 </p>
 
 <h4 align="center">
-  <a href="https://matrix.to/#/#kitchenowl:matrix.org">Matrix</a> |
-  <a href="https://docs.kitchenowl.org/get-started/">Self-Hosting</a> |
-  <a href="https://docs.kitchenowl.org">Docs</a>
+  <a href="https://kitchenowl.org">Website</a> |
+  <a href="https://docs.kitchenowl.org">Docs</a> |
+  <a href="https://docs.kitchenowl.org/getting-started/">Self-Hosting</a> |
+  <a href="https://matrix.to/#/#kitchenowl:matrix.org">Matrix</a>
 </h4>
 
 <h4 align="center">
@@ -60,21 +61,17 @@ KitchenOwl is a smart self-hosted grocery list and recipe manager. Easily add it
 
 Please keep in mind that this project is still in development.
 
-For a full list check out the [docs](https://docs.kitchenowl.org). For a list of planned features, take a look at the [Roadmap](https://github.com/users/TomBursch/projects/1)!
+For a full list check out the [website](https://kitchenowl.org). For a list of planned features, take a look at the [Roadmap](https://github.com/users/TomBursch/projects/1)!
 
 ## 📱 Screenshots
 
 <table>
   <tr>
-    <td><img alt="Groceries page" src="docs/img/screenshots/groceries.png"/></td>
-    <td><img alt="Recipe page" src="docs/img/screenshots/recipe.png"/></td>
-    <td><img alt="Plan page" src="docs/img/screenshots/plan.png"/></td>
-   </tr> 
-   <!-- <tr>
-      <td><img alt="Balance page" src="docs/img/screenshots/balance.png"/></td>
-      <td><img alt="Theme" src="docs/img/screenshots/theme.png"/></td>
-      <td><img alt="Suggestions page" src="docs/img/screenshots/suggestions.png"/></td>
-  </tr> -->
+    <td><img alt="Groceries page" src="metadata/en-US/images/phoneScreenshots/groceries.png"/></td>
+    <td><img alt="Recipe page" src="metadata/en-US/images/phoneScreenshots/recipe.png"/></td>
+    <td><img alt="Plan page" src="metadata/en-US/images/phoneScreenshots/plan.png"/></td>
+    <td><img alt="Expense page" src="metadata/en-US/images/phoneScreenshots/expenses.png"/></td>
+   </tr>
 </table>
 
 ## 🤖 App Install
@@ -83,7 +80,7 @@ Get it in your favorite store or find the current release for your operating sys
 
 ## 🚀 Get started
 
-Please take a look at the [get started guide](https://docs.kitchenowl.org/get-started/).
+Please take a look at the [get started guide](https://docs.kitchenowl.org/getting-started/).
 
 ## 🙌 Contributing
 
@@ -111,8 +108,10 @@ KitchenOwl is moving fast, to stay updated consider starring and watching the re
 
 ## 📚 Related
 
+- [Website](https://kitchenowl.org)
 - [Docs](https://docs.kitchenowl.org)
 - [KitchenOwl Backend](https://github.com/TomBursch/kitchenowl-backend) Repository
+- [KitchenOwl Website](https://github.com/TomBursch/kitchenowl-website) Repository
 - [DockerHub](https://hub.docker.com/repository/docker/tombursch/kitchenowl)
 - Owl icon taken from [Freepik](https://www.flaticon.com/authors/freepik)
 - [Recipe scrapers](https://github.com/hhursev/recipe-scrapers) used for scraping recipes from the web

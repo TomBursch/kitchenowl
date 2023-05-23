@@ -115,6 +115,20 @@ class _HouseholdPageState extends State<HouseholdPage> {
             if (state is NotFoundHouseholdState) {
               context.go("/household");
             }
+            List<ViewsEnum> pages =
+                (state.household.viewOrdering ?? ViewsEnum.values)
+                    .where((e) => e.isViewActive(state.household))
+                    .toList();
+
+            int _selectedIndex = pages.indexWhere(
+              (e) => GoRouter.of(context).location.contains(e.toString()),
+            );
+
+            if (_selectedIndex < 0) {
+              context.go(
+                "/household/${state.household.id}/${state.household.viewOrdering?.firstOrNull.toString() ?? "items"}",
+              );
+            }
           },
           builder: (context, state) {
             List<ViewsEnum> pages =
@@ -127,6 +141,10 @@ class _HouseholdPageState extends State<HouseholdPage> {
             );
 
             if (_selectedIndex < 0) {
+              context.go(
+                "/household/${state.household.id}/${state.household.viewOrdering?.firstOrNull.toString() ?? "items"}",
+              );
+
               return const SizedBox();
             }
 

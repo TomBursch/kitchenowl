@@ -311,8 +311,12 @@
   "@preparationTime": {},
   "privacyPolicy": "Privacy Policy",
   "@privacyPolicy": {},
-  "privacyPolicyAgree": "By creating an account you agree to our ",
-  "@privacyPolicyAgree": {},
+  "privacyPolicyAgree": "By creating an account you agree to our {privacyPolicy}",
+  "@privacyPolicyAgree": {
+    "placeholders": {
+      "privacyPolicy": {}
+    }
+  },
   "profile": "Profile",
   "@profile": {},
   "recipeAdd": "Add Recipe",

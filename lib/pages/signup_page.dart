@@ -1,6 +1,6 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:kitchenowl/app.dart';
 import 'package:kitchenowl/cubits/auth_cubit.dart';
 import 'package:kitchenowl/cubits/server_info_cubit.dart';
@@ -56,34 +56,31 @@ class _SignupPageState extends State<SignupPage> {
                         isValidUrl(privacyPolicyUrl))
                       Padding(
                         padding: const EdgeInsets.only(top: 16),
-                        child: RichText(
-                          text: TextSpan(
-                            style: Theme.of(context)
-                                .textTheme
-                                .labelSmall
-                                ?.copyWith(
+                        child: MarkdownBody(
+                          data:
+                              AppLocalizations.of(context)!.privacyPolicyAgree(
+                            "[${AppLocalizations.of(context)!.privacyPolicy}]($privacyPolicyUrl)",
+                          ),
+                          shrinkWrap: true,
+                          styleSheet: MarkdownStyleSheet.fromTheme(
+                            Theme.of(context),
+                          ).copyWith(
+                            p: Theme.of(context).textTheme.labelSmall?.copyWith(
                                   color: Theme.of(context)
                                       .textTheme
                                       .labelSmall
                                       ?.color
                                       ?.withOpacity(.3),
                                 ),
-                            text: AppLocalizations.of(context)!
-                                .privacyPolicyAgree,
-                            children: [
-                              TextSpan(
-                                text:
-                                    AppLocalizations.of(context)!.privacyPolicy,
-                                style: TextStyle(
-                                  color: Theme.of(context).colorScheme.primary,
-                                ),
-                                recognizer: TapGestureRecognizer()
-                                  ..onTap = () {
-                                    openUrl(context, privacyPolicyUrl);
-                                  },
-                              ),
-                            ],
+                            a: TextStyle(
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
                           ),
+                          onTapLink: (text, href, title) {
+                            if (href != null && isValidUrl(href)) {
+                              openUrl(context, href);
+                            }
+                          },
                         ),
                       ),
                     Padding(

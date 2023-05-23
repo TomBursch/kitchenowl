@@ -36,7 +36,7 @@ dependencies:
   shared_preferences: ^2.1.0
   flutter_bloc: ^8.1.2
   animations: ^2.0.7
-  shimmer: ^2.0.0
+  shimmer: ^3.0.0
   equatable: ^2.0.5
   url_launcher: ^6.1.10
   flutter_custom_tabs: ^1.0.4
@@ -45,7 +45,7 @@ dependencies:
   http: ^0.13.5
   diffutil_dart: ^3.0.0
 
-  responsive_builder: ^0.6.4
+  responsive_builder: ^0.7.0
   dynamic_color: ^1.6.3
 
   azlistview: ^2.0.0

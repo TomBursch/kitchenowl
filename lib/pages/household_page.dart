@@ -14,6 +14,7 @@ import 'package:kitchenowl/cubits/recipe_list_cubit.dart';
 import 'package:kitchenowl/cubits/shoppinglist_cubit.dart';
 import 'package:kitchenowl/enums/views_enum.dart';
 import 'package:kitchenowl/models/household.dart';
+import 'package:kitchenowl/pages/page_not_found.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
 class HouseholdPage extends StatefulWidget {
@@ -141,11 +142,7 @@ class _HouseholdPageState extends State<HouseholdPage> {
             );
 
             if (_selectedIndex < 0) {
-              context.go(
-                "/household/${state.household.id}/${state.household.viewOrdering?.firstOrNull.toString() ?? "items"}",
-              );
-
-              return const SizedBox();
+              return const PageNotFound();
             }
 
             final bool useBottomNavigationBar = getValueForScreenType<bool>(

@@ -1,7 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import 'package:kitchenowl/app.dart';
 import 'package:kitchenowl/cubits/auth_cubit.dart';
+import 'package:kitchenowl/cubits/server_info_cubit.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 
@@ -65,7 +68,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(top: 16, bottom: 8),
+                      padding: const EdgeInsets.only(top: 16, bottom: 10),
                       child: ElevatedButton(
                         onPressed: () =>
                             BlocProvider.of<AuthCubit>(context).login(
@@ -81,6 +84,34 @@ class _LoginPageState extends State<LoginPage> {
                         child: Text(AppLocalizations.of(context)!.login),
                       ),
                     ),
+                    if (App.serverInfo is ConnectedServerInfoState &&
+                        (App.serverInfo as ConnectedServerInfoState)
+                            .openRegistration) ...[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const SizedBox(
+                            width: 100,
+                            child: Divider(),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            child: Text(AppLocalizations.of(context)!.or),
+                          ),
+                          const SizedBox(
+                            width: 100,
+                            child: Divider(),
+                          ),
+                        ],
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 10, bottom: 8),
+                        child: ElevatedButton(
+                          onPressed: () => context.push("/register"),
+                          child: Text(AppLocalizations.of(context)!.signup),
+                        ),
+                      ),
+                    ],
                     const Spacer(),
                     if (!kIsWeb)
                       TextButton.icon(

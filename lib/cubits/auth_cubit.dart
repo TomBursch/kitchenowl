@@ -138,7 +138,6 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
-  // ignore: long-parameter-list
   void onboard({
     required String username,
     required String name,
@@ -152,6 +151,26 @@ class AuthCubit extends Cubit<AuthState> {
         await SecureStorage.getInstance().write(key: 'TOKEN', value: token);
       } else {
         updateState();
+      }
+    }
+  }
+
+  void signup({
+    required String username,
+    required String name,
+    required String password,
+    Function? wrongCredentialsCallback,
+  }) async {
+    emit(const Loading());
+    final token =
+        await ApiService.getInstance().signup(username, name, password);
+    if (token != null && ApiService.getInstance().isAuthenticated()) {
+      await SecureStorage.getInstance().write(key: 'TOKEN', value: token);
+    } else {
+      await updateState();
+      if (ApiService.getInstance().connectionStatus == Connection.connected &&
+          wrongCredentialsCallback != null) {
+        wrongCredentialsCallback();
       }
     }
   }

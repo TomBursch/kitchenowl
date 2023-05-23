@@ -8,6 +8,7 @@ import 'package:kitchenowl/app.dart';
 import 'package:kitchenowl/config.dart';
 import 'package:kitchenowl/cubits/auth_cubit.dart';
 import 'package:kitchenowl/cubits/household_cubit.dart';
+import 'package:kitchenowl/cubits/server_info_cubit.dart';
 import 'package:kitchenowl/cubits/settings_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/helpers/url_launcher.dart';
@@ -349,7 +350,7 @@ class _SettingsPageState extends State<SettingsPage> {
             Padding(
               padding: const EdgeInsets.fromLTRB(8, 8, 8, 4),
               child: Text(
-                "v${Config.packageInfoSync?.version} (${Config.packageInfoSync?.buildNumber})",
+                "v${Config.packageInfoSync?.version} (${Config.packageInfoSync?.buildNumber}) | Server v${(App.serverInfo as ConnectedServerInfoState).version}",
                 style: Theme.of(context).textTheme.labelSmall?.copyWith(
                       color: Theme.of(context)
                           .textTheme
@@ -361,7 +362,7 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
             ),
             Text(
-              '\u{a9}${AppLocalizations.of(context)!.appLegal}',
+              '\u{a9} ${AppLocalizations.of(context)!.appLegal}',
               style: Theme.of(context).textTheme.labelSmall?.copyWith(
                     color: Theme.of(context)
                         .textTheme

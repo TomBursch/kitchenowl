@@ -21,6 +21,7 @@ import 'package:kitchenowl/pages/recipe_page.dart';
 import 'package:kitchenowl/pages/recipe_scraper_page.dart';
 import 'package:kitchenowl/pages/settings_page.dart';
 import 'package:kitchenowl/pages/setup_page.dart';
+import 'package:kitchenowl/pages/signup_page.dart';
 import 'package:kitchenowl/pages/splash_page.dart';
 import 'package:kitchenowl/pages/unreachable_page.dart';
 import 'package:kitchenowl/pages/household_page.dart';
@@ -41,7 +42,9 @@ final router = GoRouter(
     initialLocation ??= state.location;
     if (authState is Setup) return "/setup";
     if (authState is Onboarding) return "/onboarding";
-    if (authState is Unauthenticated) return "/signin";
+    if (authState is Unauthenticated && state.location != "/register") {
+      return "/signin";
+    }
     if (authState is Unreachable) return "/unreachable";
     if (authState is Unsupported) return "/unsupported";
     if (authState is Loading) return "/";
@@ -100,6 +103,19 @@ final router = GoRouter(
         key: state.pageKey,
         name: state.name,
         child: const LoginPage(),
+      ),
+      redirect: (BuildContext context, GoRouterState state) {
+        final authState = BlocProvider.of<AuthCubit>(context).state;
+
+        return (authState is! Unauthenticated) ? "/" : null;
+      },
+    ),
+    GoRoute(
+      path: '/register',
+      pageBuilder: (context, state) => SharedAxisTransitionPage(
+        key: state.pageKey,
+        name: state.name,
+        child: const SignupPage(),
       ),
       redirect: (BuildContext context, GoRouterState state) {
         final authState = BlocProvider.of<AuthCubit>(context).state;

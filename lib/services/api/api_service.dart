@@ -57,6 +57,9 @@ class ApiService {
   static final ValueNotifier<Connection> _connectionNotifier =
       ValueNotifier<Connection>(Connection.undefined);
 
+  static final ValueNotifier<Map<String, dynamic>?> _serverInfoNotifier =
+      ValueNotifier<Map<String, dynamic>?>(null);
+
   ApiService._internal(this.baseUrl) {
     _connectionNotifier.value = Connection.undefined;
   }
@@ -69,6 +72,8 @@ class ApiService {
 
   Connection get connectionStatus => _connectionNotifier.value;
 
+  Map<String, dynamic>? get serverInfoMap => _serverInfoNotifier.value;
+
   set refreshToken(String newRefreshToken) => _refreshToken = newRefreshToken;
 
   bool isConnected() => _connectionNotifier.value != Connection.disconnected;
@@ -79,6 +84,7 @@ class ApiService {
   void dispose() {
     _instance = null;
     _connectionNotifier.value = Connection.undefined;
+    _serverInfoNotifier.value = null;
     _client.close();
   }
 
@@ -88,6 +94,14 @@ class ApiService {
 
   void removeListener(void Function() f) {
     _connectionNotifier.removeListener(f);
+  }
+
+  void addInfoListener(void Function() f) {
+    _serverInfoNotifier.addListener(f);
+  }
+
+  void removeInfoListener(void Function() f) {
+    _serverInfoNotifier.removeListener(f);
   }
 
   static void setTokenRotationHandler(void Function(String) handler) {
@@ -118,6 +132,7 @@ class ApiService {
     Connection status = Connection.disconnected;
     if (baseUrl.isNotEmpty) {
       final healthy = await getInstance().healthy();
+      _serverInfoNotifier.value = healthy.item2;
       if (healthy.item1) {
         if (healthy.item2 != null &&
             healthy.item2!['min_frontend_version'] <=
@@ -333,7 +348,34 @@ class ApiService {
     return body['onboarding'] as bool;
   }
 
-  // ignore: long-parameter-list
+  Future<String?> signup(
+    String username,
+    String name,
+    String password,
+  ) async {
+    final Map<String, dynamic> sendBody = {
+      'username': username,
+      'name': name,
+      'password': password,
+      if (await Config.deviceName != null) 'device': await Config.deviceName,
+    };
+
+    final res = await post(
+      '/auth/signup',
+      jsonEncode(sendBody),
+    );
+    if (res.statusCode == 200) {
+      final body = jsonDecode(res.body);
+      headers['Authorization'] = 'Bearer ${body['access_token']}';
+      _refreshToken = body['refresh_token'];
+      _setConnectionState(Connection.authenticated);
+
+      return _refreshToken;
+    }
+
+    return null;
+  }
+
   Future<String?> onboarding(
     String username,
     String name,
@@ -344,11 +386,8 @@ class ApiService {
       'username': username,
       'name': name,
       'password': password,
+      if (await Config.deviceName != null) 'device': await Config.deviceName,
     };
-
-    if (await Config.deviceName != null) {
-      sendBody['device'] = await Config.deviceName;
-    }
 
     final res = await post(
       '/onboarding',

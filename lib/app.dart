@@ -9,6 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:kitchenowl/cubits/auth_cubit.dart';
+import 'package:kitchenowl/cubits/server_info_cubit.dart';
 import 'package:kitchenowl/cubits/settings_cubit.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/router.dart';
@@ -28,6 +29,7 @@ class App extends StatefulWidget {
       TransactionHandler.getInstance(); // TODO refactor to repository pattern
   final SettingsCubit _settingsCubit = SettingsCubit();
   final AuthCubit _authCubit = AuthCubit();
+  final ServerInfoCubit _serverInfoCubit = ServerInfoCubit();
 
   static bool get isOffline =>
       _instance!._authCubit.state is AuthenticatedOffline || isForcedOffline;
@@ -36,6 +38,8 @@ class App extends StatefulWidget {
       _instance!._authCubit.state.forcedOfflineMode;
 
   static SettingsState get settings => _instance!._settingsCubit.state;
+
+  static ServerInfoState get serverInfo => _instance!._serverInfoCubit.state;
 
   App({super.key}) {
     _instance = this;
@@ -94,6 +98,7 @@ class _AppState extends State<App> {
             providers: [
               BlocProvider.value(value: widget._authCubit),
               BlocProvider.value(value: widget._settingsCubit),
+              BlocProvider.value(value: widget._serverInfoCubit),
             ],
             child: BlocListener<AuthCubit, AuthState>(
               bloc: widget._authCubit,

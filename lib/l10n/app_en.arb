@@ -393,6 +393,8 @@
   "@sortingAlphabetical": {},
   "sortingAlgorithmic": "Algorithmic",
   "@sortingAlgorithmic": {},
+  "supportDevelopment": "Support the development",
+  "@supportDevelopment": {},
   "swipeToDelete": "Swipe to delete",
   "@swipeToDelete": {},
   "swipeToDeleteAndLongPressToReorder": "Swipe to delete and long press to reorder",

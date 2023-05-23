@@ -44,6 +44,11 @@ class _SettingsPageState extends State<SettingsPage> {
         (BlocProvider.of<AuthCubit>(context).state as Authenticated).user;
     final isOffline = App.isOffline;
 
+    final String privacyPolicyUrl = (App.serverInfo is ConnectedServerInfoState)
+        ? (App.serverInfo as ConnectedServerInfoState).privacyPolicyUrl ??
+            "https://kitchenowl.org/privacy"
+        : "https://kitchenowl.org/privacy";
+
     final body = CustomScrollView(
       primary: true,
       slivers: [
@@ -317,12 +322,17 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
             ),
             ListTile(
-              title: Text(AppLocalizations.of(context)!.privacyPolicy),
-              leading: const Icon(Icons.privacy_tip_rounded),
+              title: Text(AppLocalizations.of(context)!.supportDevelopment),
+              leading: const Icon(Icons.volunteer_activism_rounded),
               onTap: () => openUrl(
                 context,
-                "https://docs.kitchenowl.org/about/privacy",
+                "https://liberapay.com/tombursch",
               ),
+            ),
+            ListTile(
+              title: Text(AppLocalizations.of(context)!.privacyPolicy),
+              leading: const Icon(Icons.privacy_tip_rounded),
+              onTap: () => openUrl(context, privacyPolicyUrl),
             ),
             ListTile(
               title: Text(MaterialLocalizations.of(context).licensesPageTitle),
@@ -330,8 +340,7 @@ class _SettingsPageState extends State<SettingsPage> {
               onTap: () => showLicensePage(
                 context: context,
                 applicationVersion: Config.packageInfoSync?.version,
-                applicationLegalese:
-                    '\u{a9} ${AppLocalizations.of(context)!.appLegal}',
+                applicationLegalese: '\u{a9} 2023 KitchenOwl',
               ),
             ),
             Center(
@@ -362,7 +371,7 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
             ),
             Text(
-              '\u{a9} ${AppLocalizations.of(context)!.appLegal}',
+              '\u{a9} 2023 KitchenOwl',
               style: Theme.of(context).textTheme.labelSmall?.copyWith(
                     color: Theme.of(context)
                         .textTheme

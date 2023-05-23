@@ -22,6 +22,8 @@ PROJECT_DIR = os.path.dirname(APP_DIR)
 UPLOAD_FOLDER = os.getenv('STORAGE_PATH', PROJECT_DIR) + '/upload'
 ALLOWED_FILE_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 
+PRIVACY_POLICY_URL = os.getenv('PRIVACY_POLICY_URL')
+
 DB_URL = URL.create(
     os.getenv('DB_DRIVER', "sqlite"),
     username=os.getenv('DB_USER'),

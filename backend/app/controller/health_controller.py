@@ -1,5 +1,5 @@
 from flask import jsonify, Blueprint
-from app.config import BACKEND_VERSION, MIN_FRONTEND_VERSION, PRIVACY_POLICY_URL
+from app.config import BACKEND_VERSION, MIN_FRONTEND_VERSION, PRIVACY_POLICY_URL, OPEN_REGISTRATION
 from app.models import Settings
 from app.config import SUPPORTED_LANGUAGES
 
@@ -15,6 +15,8 @@ def get_health():
     }
     if PRIVACY_POLICY_URL:
         info['privacy_policy'] = PRIVACY_POLICY_URL
+    if OPEN_REGISTRATION:
+        info['open_registration'] = True
     return jsonify(info)
 
 @health.route('/supported-languages', methods=['GET'])

@@ -3,9 +3,9 @@ from app.helpers import validate_args
 from flask import jsonify, Blueprint, request
 from flask_jwt_extended import current_user, jwt_required, get_jwt
 from app.models import User, Token
-from app.errors import UnauthorizedRequest
-from .schemas import Login, CreateLongLivedToken
-from app.config import jwt
+from app.errors import UnauthorizedRequest, InvalidUsage
+from .schemas import Login, Signup, CreateLongLivedToken
+from app.config import jwt, OPEN_REGISTRATION
 
 auth = Blueprint('auth', __name__)
 
@@ -61,6 +61,35 @@ def login(args):
         'access_token': accesssToken,
         'refresh_token': refreshToken
     })
+
+
+if OPEN_REGISTRATION:
+    @auth.route('signup', methods=['POST'])
+    @validate_args(Signup)
+    def signup(args):
+        username = args['username'].strip().lower()
+        user = User.find_by_username(username)
+        if user:
+            raise InvalidUsage()
+        
+        user = User(username=username, name=args['name'].strip())
+        user.set_password(args['password'])
+        user.save()
+
+        device = "Unkown"
+        if "device" in args:
+            device = args['device']
+
+        # Create refresh token
+        refreshToken, refreshModel = Token.create_refresh_token(user, device)
+
+        # Create first access token
+        accesssToken, _ = Token.create_access_token(user, refreshModel)
+
+        return jsonify({
+            'access_token': accesssToken,
+            'refresh_token': refreshToken
+        })
 
 
 @auth.route('/refresh', methods=['GET'])

@@ -13,8 +13,9 @@ user = Blueprint('user', __name__)
 
 @user.route('/all', methods=['GET'])
 @jwt_required()
+@server_admin_required()
 def getAllUsers():
-    return jsonify([e.obj_to_dict() for e in User.all_by_name()])
+    return jsonify([e.obj_to_dict(include_email=True) for e in User.all_by_name()])
 
 
 @user.route('', methods=['GET'])
@@ -30,7 +31,7 @@ def getUserById(id):
     user = User.find_by_id(id)
     if not user:
         raise NotFoundRequest()
-    return jsonify(user.obj_to_dict())
+    return jsonify(user.obj_to_dict(include_email=True))
 
 
 @user.route('', methods=['DELETE'])
@@ -63,9 +64,11 @@ def updateUser(args):
     if not user:
         raise NotFoundRequest()
     if 'name' in args:
-        user.name = args['name']
+        user.name = args['name'].strip()
     if 'password' in args:
         user.set_password(args['password'])
+    if 'email' in args:
+        user.email = args['email'].strip()
     if 'photo' in args and user.photo != args['photo']:
         user.photo = file_has_access_or_download(args['photo'], user.photo)
     user.save()
@@ -81,9 +84,11 @@ def updateUserById(args, id):
     if not user:
         raise NotFoundRequest()
     if 'name' in args:
-        user.name = args['name']
+        user.name = args['name'].strip()
     if 'password' in args:
         user.set_password(args['password'])
+    if 'email' in args:
+        user.email = args['email'].strip()
     if 'photo' in args and user.photo != args['photo']:
         user.photo = file_has_access_or_download(args['photo'], user.photo)
     if 'admin' in args:
@@ -97,7 +102,12 @@ def updateUserById(args, id):
 @server_admin_required()
 @validate_args(CreateUser)
 def createUser(args):
-    User.create(args['username'].lower(), args['password'], args['name'])
+    User.create(
+        args['username'],
+        args['password'], 
+        args['name'],
+        email=args['email'] if 'email' in args else None,
+    )
     return jsonify({'msg': 'DONE'})
 
 

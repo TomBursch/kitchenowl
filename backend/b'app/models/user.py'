@@ -12,8 +12,10 @@ class User(db.Model, DbModelMixin, TimestampMixin):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(128))
     username = db.Column(db.String(256), unique=True, nullable=False)
+    email = db.Column(db.String(256), unique=True, nullable=True)
     password = db.Column(db.String(256), nullable=False)
-    photo = db.Column(db.String(), db.ForeignKey('file.filename', use_alter=True))
+    photo = db.Column(db.String(), db.ForeignKey(
+        'file.filename', use_alter=True))
     admin = db.Column(db.Boolean(), default=False)
 
     tokens = db.relationship(
@@ -26,7 +28,8 @@ class User(db.Model, DbModelMixin, TimestampMixin):
         'Expense', back_populates='paid_by', cascade="all, delete-orphan")
     expenses_paid_for = db.relationship(
         'ExpensePaidFor', back_populates='user', cascade="all, delete-orphan")
-    photo_file = db.relationship("File", back_populates='profile_picture', foreign_keys=[photo], uselist=False)
+    photo_file = db.relationship(
+        "File", back_populates='profile_picture', foreign_keys=[photo], uselist=False)
 
     def check_password(self, password: str) -> bool:
         return bcrypt.check_password_hash(self.password, password)
@@ -34,14 +37,20 @@ class User(db.Model, DbModelMixin, TimestampMixin):
     def set_password(self, password: str):
         self.password = bcrypt.generate_password_hash(password).decode('utf-8')
 
-    def obj_to_dict(self, skip_columns: list[str] = None, include_columns: list[str] = None) -> dict:
+    def set_password(self, password: str):
+        self.password = bcrypt.generate_password_hash(password).decode('utf-8')
+
+    def obj_to_dict(self, include_email: bool = False, skip_columns: list[str] = None, include_columns: list[str] = None) -> dict:
         if skip_columns:
             skip_columns = skip_columns + ['password']
         else:
             skip_columns = ['password']
+        if not include_email:
+            skip_columns += ['email']
 
         if not current_user or not current_user.admin:
-            skip_columns = skip_columns + ['admin'] # Filter out admin status if current user is not an admin
+            # Filter out admin status if current user is not an admin
+            skip_columns = skip_columns + ['admin']
 
         return super().obj_to_dict(skip_columns=skip_columns, include_columns=include_columns)
 
@@ -49,6 +58,7 @@ class User(db.Model, DbModelMixin, TimestampMixin):
         from .token import Token
         res = self.obj_to_dict()
         res['admin'] = self.admin
+        res['email'] = self.email
         tokens = Token.query.filter(Token.user_id == self.id, Token.type !=
                                     'access', ~Token.created_tokens.any(Token.type == 'refresh')).all()
         res['tokens'] = [e.obj_to_dict(
@@ -60,11 +70,16 @@ class User(db.Model, DbModelMixin, TimestampMixin):
         return cls.query.filter(cls.username == username).first()
 
     @classmethod
-    def create(cls, username: str, password: str, name: str, admin=False) -> Self:
+    def find_by_email(cls, email: str) -> Self:
+        return cls.query.filter(cls.email == email).first()
+
+    @classmethod
+    def create(cls, username: str, password: str, name: str, email: str | None = None, admin: bool = False) -> Self:
         return cls(
-            username=username,
+            username=username.lower().strip().replace(" ", ""),
             password=bcrypt.generate_password_hash(password).decode('utf-8'),
-            name=name,
+            name=name.strip(),
+            email=email.strip() if email else None,
             admin=admin
         ).save()
 

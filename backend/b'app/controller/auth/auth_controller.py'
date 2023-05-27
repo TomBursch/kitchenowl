@@ -67,14 +67,17 @@ if OPEN_REGISTRATION:
     @auth.route('signup', methods=['POST'])
     @validate_args(Signup)
     def signup(args):
-        username = args['username'].strip().lower()
+        username = args['username'].strip().lower().replace(" ", "")
         user = User.find_by_username(username)
         if user:
             raise InvalidUsage()
-        
-        user = User(username=username, name=args['name'].strip())
-        user.set_password(args['password'])
-        user.save()
+
+        user = User.create(
+            username=username,
+            name=args['name'],
+            password=args['password'],
+            email=args['email'] if "email" in args else None,
+        )
 
         device = "Unkown"
         if "device" in args:

@@ -9,11 +9,12 @@ class OnboardSchema(Schema):
     )
     username = fields.String(
         required=True,
-        validate=lambda a: a and not a.isspace()
+        validate=lambda a: a and not a.isspace() and not "@" in a,
     )
     password = fields.String(
         required=True,
-        validate=lambda a: a and not a.isspace()
+        validate=lambda a: a and not a.isspace(),
+        load_only=True,
     )
     device = fields.String(
         required=False,

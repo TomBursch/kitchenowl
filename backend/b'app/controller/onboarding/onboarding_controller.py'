@@ -18,8 +18,7 @@ def onboard(args):
     if User.count() > 0:
         return jsonify({'msg': "Onboarding not allowed"}), 403
 
-    username = args['username'].lower()
-    user = User.create(username, args['password'], args['name'], admin=True)
+    user = User.create(args['username'], args['password'], args['name'], admin=True)
 
     device = "Unkown"
     if "device" in args:

@@ -24,6 +24,7 @@ ALLOWED_FILE_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 
 PRIVACY_POLICY_URL = os.getenv('PRIVACY_POLICY_URL')
 OPEN_REGISTRATION = os.getenv('OPEN_REGISTRATION', "False").lower() == "true"
+EMAIL_MANDATORY = os.getenv('EMAIL_MANDATORY', "False").lower() == "true"
 
 DB_URL = URL.create(
     os.getenv('DB_DRIVER', "sqlite"),

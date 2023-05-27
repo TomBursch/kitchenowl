@@ -1,5 +1,7 @@
 from marshmallow import fields, Schema
 
+from app.config import EMAIL_MANDATORY
+
 
 class CreateUser(Schema):
     name = fields.String(
@@ -8,7 +10,12 @@ class CreateUser(Schema):
     )
     username = fields.String(
         required=True,
-        validate=lambda a: a and not a.isspace(),
+        validate=lambda a: a and not a.isspace() and not "@" in a,
+        load_only=True,
+    )
+    email = fields.String(
+        required=False,
+        validate=lambda a: a and not a.isspace() and "@" in a,
         load_only=True,
     )
     password = fields.String(
@@ -24,7 +31,11 @@ class UpdateUser(Schema):
     )
     photo = fields.String()
     username = fields.String(
-        validate=lambda a: a and not a.isspace(),
+        validate=lambda a: a and not a.isspace() and not "@" in a,
+        load_only=True,
+    )
+    email = fields.String(
+        validate=lambda a: a and not a.isspace() and "@" in a,
         load_only=True,
     )
     password = fields.String(

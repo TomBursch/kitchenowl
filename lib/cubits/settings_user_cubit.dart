@@ -24,11 +24,13 @@ class SettingsUserCubit extends Cubit<SettingsUserState> {
     emit(state.copyWith(user: user, setAdmin: user?.serverAdmin));
   }
 
+  // ignore: long-parameter-list
   Future<void> updateUser({
     required BuildContext context,
     String? name,
     String? username,
     String? password,
+    String? email,
   }) async {
     if (state.user == null) return;
     bool res = false;
@@ -37,12 +39,16 @@ class SettingsUserCubit extends Cubit<SettingsUserState> {
             userId!,
             name: name,
             password: password,
+            email: email,
             admin: (state.setAdmin != state.user!.serverAdmin)
                 ? state.setAdmin
                 : null,
           )
-        : await ApiService.getInstance()
-            .updateUser(name: name, password: password);
+        : await ApiService.getInstance().updateUser(
+            name: name,
+            password: password,
+            email: email,
+          );
     if (res) {
       emit(state.copyWith(updateState: UpdateEnum.updated));
       if (userId == null) {

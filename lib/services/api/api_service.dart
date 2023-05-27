@@ -348,15 +348,17 @@ class ApiService {
     return body['onboarding'] as bool;
   }
 
-  Future<String?> signup(
-    String username,
-    String name,
-    String password,
-  ) async {
+  Future<String?> signup({
+    required String username,
+    required String name,
+    required String password,
+    required String email,
+  }) async {
     final Map<String, dynamic> sendBody = {
       'username': username,
       'name': name,
       'password': password,
+      if (email.isNotEmpty) 'email': email,
       if (await Config.deviceName != null) 'device': await Config.deviceName,
     };
 

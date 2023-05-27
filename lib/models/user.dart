@@ -5,6 +5,7 @@ class User extends Model {
   final int id;
   final String username;
   final String name;
+  final String? email;
   final String image;
   final bool serverAdmin;
   final List<Token>? tokens;
@@ -13,6 +14,7 @@ class User extends Model {
     required this.id,
     required this.name,
     required this.username,
+    this.email,
     this.image = "",
     this.serverAdmin = false,
     this.tokens,
@@ -28,6 +30,7 @@ class User extends Model {
       id: map['id'],
       username: map['username'],
       name: map['name'],
+      email: map['email'],
       image: map['photo'] ?? '',
       serverAdmin: map['admin'] ?? false,
       tokens: tokens,
@@ -35,12 +38,12 @@ class User extends Model {
   }
 
   @override
-  List<Object?> get props => [id, name, username, serverAdmin, tokens];
+  List<Object?> get props => [id, name, email, username, serverAdmin, tokens];
 
   @override
   Map<String, dynamic> toJson() => {
         "name": name,
-        "photo": image,
+        if (image.isNotEmpty) "photo": image,
       };
 
   @override

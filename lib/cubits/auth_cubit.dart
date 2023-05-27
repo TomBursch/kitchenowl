@@ -155,15 +155,21 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
+  // ignore: long-parameter-list
   void signup({
     required String username,
     required String name,
     required String password,
+    required String email,
     Function? wrongCredentialsCallback,
   }) async {
     emit(const Loading());
-    final token =
-        await ApiService.getInstance().signup(username, name, password);
+    final token = await ApiService.getInstance().signup(
+      username: username,
+      name: name,
+      email: email,
+      password: password,
+    );
     if (token != null && ApiService.getInstance().isAuthenticated()) {
       await SecureStorage.getInstance().write(key: 'TOKEN', value: token);
     } else {

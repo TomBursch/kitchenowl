@@ -4,7 +4,7 @@ import 'package:kitchenowl/kitchenowl.dart';
 
 class ImageSelector extends StatelessWidget {
   final NamedByteArray? image;
-  final String originalImage;
+  final String? originalImage;
   final void Function(NamedByteArray) setImage;
   final EdgeInsetsGeometry? padding;
   final String? tooltip;
@@ -12,7 +12,7 @@ class ImageSelector extends StatelessWidget {
   const ImageSelector({
     super.key,
     this.image,
-    this.originalImage = "",
+    this.originalImage,
     this.padding = const EdgeInsets.all(16),
     required this.setImage,
     this.tooltip,
@@ -60,7 +60,7 @@ class ImageSelector extends StatelessWidget {
   bool hasDominantImage() {
     if (image != null && image!.isNotEmpty) {
       return true;
-    } else if (image == null && originalImage.isNotEmpty) {
+    } else if (image == null && (originalImage?.isNotEmpty ?? false)) {
       return true;
     } else {
       return false;
@@ -70,10 +70,10 @@ class ImageSelector extends StatelessWidget {
   ImageProvider<Object>? getDominantImage(BuildContext context) {
     if (image != null && image!.isNotEmpty) {
       return MemoryImage(image!.bytes);
-    } else if (originalImage.isNotEmpty) {
+    } else if (originalImage?.isNotEmpty ?? false) {
       return getImageProvider(
         context,
-        originalImage,
+        originalImage!,
         maxWidth: MediaQuery.of(context).size.width.toInt(),
       );
     } else {

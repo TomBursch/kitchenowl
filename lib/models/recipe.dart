@@ -14,7 +14,7 @@ class Recipe extends Model implements ISuspensionBean {
   final int prepTime;
   final int yields;
   final String source;
-  final String image;
+  final String? image;
   final List<RecipeItem> items;
   final Set<Tag> tags;
 
@@ -28,7 +28,7 @@ class Recipe extends Model implements ISuspensionBean {
     this.prepTime = 0,
     this.yields = 0,
     this.source = '',
-    this.image = '',
+    this.image,
     this.items = const [],
     this.tags = const {},
     this.plannedDays = const {},
@@ -58,7 +58,7 @@ class Recipe extends Model implements ISuspensionBean {
       prepTime: map['prep_time'] ?? 0,
       yields: map['yields'] ?? 0,
       source: map['source'] ?? '',
-      image: map['photo'] ?? '',
+      image: map['photo'],
       items: items,
       tags: tags,
       plannedDays: plannedDays,
@@ -129,7 +129,7 @@ class Recipe extends Model implements ISuspensionBean {
         "prep_time": prepTime,
         "yields": yields,
         "source": source,
-        "photo": image,
+        if (image?.isNotEmpty ?? false) "photo": image,
         "items": items.map((e) => e.toJson()).toList(),
         "tags": tags.map((e) => e.toString()).toList(),
       };

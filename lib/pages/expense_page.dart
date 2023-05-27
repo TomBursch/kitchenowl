@@ -61,7 +61,7 @@ class _ExpensePageState extends State<ExpensePage> {
                       title: state.expense.name,
                       imageUrl: state.expense.image,
                     ),
-                    expandedHeight: state.expense.image.isNotEmpty
+                    expandedHeight: state.expense.image?.isNotEmpty ?? false
                         ? (MediaQuery.of(context).size.height / 3.5)
                             .clamp(160, 310)
                         : null,

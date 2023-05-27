@@ -27,11 +27,11 @@ class UserListTile extends StatelessWidget {
     return ListTile(
       contentPadding: contentPadding,
       leading: CircleAvatar(
-        foregroundImage: user.image.isEmpty
+        foregroundImage: user.image?.isEmpty ?? true
             ? null
             : getImageProvider(
                 context,
-                user.image,
+                user.image!,
               ),
         child: Text(user.name.substring(0, 1)),
       ),

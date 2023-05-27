@@ -124,11 +124,11 @@ class _SettingsUserPageState extends State<SettingsUserPage> {
                     BlocBuilder<SettingsUserCubit, SettingsUserState>(
                       bloc: cubit,
                       builder: (context, state) => CircleAvatar(
-                        foregroundImage: state.user?.image.isEmpty ?? true
+                        foregroundImage: state.user?.image?.isEmpty ?? true
                             ? null
                             : getImageProvider(
                                 context,
-                                state.user!.image,
+                                state.user!.image!,
                               ),
                         radius: 45,
                         child: Text(

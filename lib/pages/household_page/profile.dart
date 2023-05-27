@@ -26,11 +26,11 @@ class ProfilePage extends StatelessWidget {
           sliver: SliverList(
             delegate: SliverChildListDelegate([
               CircleAvatar(
-                foregroundImage: user.image.isEmpty
+                foregroundImage: user.image?.isEmpty ?? true
                     ? null
                     : getImageProvider(
                         context,
-                        user.image,
+                        user.image!,
                       ),
                 radius: 45,
                 child: Text(user.name.substring(0, 1), textScaleFactor: 2),

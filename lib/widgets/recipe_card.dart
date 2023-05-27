@@ -33,7 +33,7 @@ class RecipeCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              if (recipe.image.isNotEmpty)
+              if (recipe.image?.isNotEmpty ?? false)
                 Expanded(
                   flex: 3,
                   child: ClipRRect(
@@ -44,13 +44,13 @@ class RecipeCard extends StatelessWidget {
                       fit: BoxFit.cover,
                       image: getImageProvider(
                         context,
-                        recipe.image,
+                        recipe.image!,
                         maxWidth: 512,
                       ),
                     ),
                   ),
                 ),
-              if (recipe.image.isEmpty)
+              if (recipe.image?.isEmpty ?? false)
                 Expanded(
                   flex: 3,
                   child: Container(

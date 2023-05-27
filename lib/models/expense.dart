@@ -7,7 +7,7 @@ class Expense extends Model {
   final int? id;
   final String name;
   final double amount;
-  final String image;
+  final String? image;
   final DateTime? date;
   final ExpenseCategory? category;
   final int paidById;
@@ -19,7 +19,7 @@ class Expense extends Model {
     this.id,
     this.name = '',
     this.amount = 0,
-    this.image = "",
+    this.image,
     required this.paidById,
     this.paidFor = const [],
     this.date,
@@ -36,7 +36,7 @@ class Expense extends Model {
       id: map['id'],
       name: map['name'],
       amount: map['amount'],
-      image: map['photo'] ?? "",
+      image: map['photo'],
       category: map['category'] != null
           ? ExpenseCategory.fromJson(map['category'])
           : null,
@@ -78,7 +78,7 @@ class Expense extends Model {
     return {
       "name": name,
       "amount": amount,
-      "photo": image,
+      if (image?.isNotEmpty ?? false) "photo": image,
       'category': category?.id,
       "date": date!.toUtc().millisecondsSinceEpoch,
       "paid_by": {"id": paidById},

@@ -42,30 +42,40 @@ extension UserApi on ApiService {
     return null;
   }
 
-  Future<bool> updateUser({String? name, String? password}) async {
+  Future<bool> updateUser({
+    String? name,
+    String? password,
+    String? email,
+  }) async {
     if (!isAuthenticated()) return false;
 
-    final body = {};
-    if (name != null) body['name'] = name;
-    if (password != null) body['password'] = password;
+    final body = {
+      if (name != null) 'name': name,
+      if (password != null) 'password': password,
+      if (email != null) 'email': email,
+    };
 
     final res = await post(baseRoute, jsonEncode(body));
 
     return res.statusCode == 200;
   }
 
+  // ignore: long-parameter-list
   Future<bool> updateUserById(
     int userId, {
     String? name,
     String? password,
+    String? email,
     bool? admin,
   }) async {
     if (!isAuthenticated()) return false;
 
-    final body = {};
-    if (name != null) body['name'] = name;
-    if (password != null) body['password'] = password;
-    if (admin != null) body['admin'] = admin;
+    final body = {
+      if (name != null) 'name': name,
+      if (password != null) 'password': password,
+      if (email != null) 'email': email,
+      if (admin != null) 'admin': admin,
+    };
 
     final res = await post('$baseRoute/$userId', jsonEncode(body));
 

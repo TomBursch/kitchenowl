@@ -5,6 +5,7 @@ import 'package:kitchenowl/cubits/settings_user_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/user.dart';
+import 'package:kitchenowl/pages/settings_user_email_page.dart';
 import 'package:kitchenowl/pages/settings_user_password_page.dart';
 import 'package:kitchenowl/pages/settings_user_sessions_page.dart';
 
@@ -22,6 +23,7 @@ enum _UserAction {
 
 class _SettingsUserPageState extends State<SettingsUserPage> {
   final TextEditingController usernameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
   final TextEditingController nameController = TextEditingController();
   late SettingsUserCubit cubit;
 
@@ -32,6 +34,7 @@ class _SettingsUserPageState extends State<SettingsUserPage> {
     final user = widget.user ?? BlocProvider.of<AuthCubit>(context).getUser();
     if (user != null) {
       usernameController.text = user.username;
+      emailController.text = user.email ?? "";
       nameController.text = user.name;
     }
   }
@@ -56,6 +59,7 @@ class _SettingsUserPageState extends State<SettingsUserPage> {
         listener: (context, state) {
           if (state.user != null) {
             usernameController.text = state.user?.username ?? '';
+            emailController.text = state.user?.email ?? '';
             nameController.text = state.user?.name ?? '';
           }
         },
@@ -143,6 +147,15 @@ class _SettingsUserPageState extends State<SettingsUserPage> {
                       ),
                     ),
                     TextField(
+                      controller: emailController,
+                      autofocus: true,
+                      enabled: false,
+                      textInputAction: TextInputAction.next,
+                      decoration: InputDecoration(
+                        labelText: AppLocalizations.of(context)!.email,
+                      ),
+                    ),
+                    TextField(
                       controller: nameController,
                       textInputAction: TextInputAction.done,
                       textCapitalization: TextCapitalization.sentences,
@@ -195,6 +208,25 @@ class _SettingsUserPageState extends State<SettingsUserPage> {
                           cubit.updateUser(
                             context: context,
                             password: res,
+                          );
+                        }
+                      },
+                    ),
+                    ListTile(
+                      title: Text(AppLocalizations.of(context)!.emailUpdate),
+                      leading: const Icon(Icons.email_rounded),
+                      trailing: const Icon(Icons.arrow_forward_ios_rounded),
+                      contentPadding: EdgeInsets.zero,
+                      onTap: () async {
+                        final res = await Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => SettingsUserEmailPage(),
+                          ),
+                        );
+                        if (res != null) {
+                          cubit.updateUser(
+                            context: context,
+                            email: res,
                           );
                         }
                       },

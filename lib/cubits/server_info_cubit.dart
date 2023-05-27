@@ -37,12 +37,14 @@ class ConnectedServerInfoState extends ServerInfoState {
   final int minFrontendVersion;
   final String? privacyPolicyUrl;
   final bool openRegistration;
+  final bool emailMandatory;
 
   const ConnectedServerInfoState({
     required this.version,
     required this.minFrontendVersion,
     this.privacyPolicyUrl,
     this.openRegistration = false,
+    this.emailMandatory = false,
   });
 
   factory ConnectedServerInfoState.fromJson(Map<String, dynamic> data) =>
@@ -51,9 +53,15 @@ class ConnectedServerInfoState extends ServerInfoState {
         minFrontendVersion: data["min_frontend_version"],
         privacyPolicyUrl: data["privacy_policy"],
         openRegistration: data["open_registration"] ?? false,
+        emailMandatory: data["email_mandatory"] ?? false,
       );
 
   @override
-  List<Object?> get props =>
-      [version, minFrontendVersion, privacyPolicyUrl, openRegistration];
+  List<Object?> get props => [
+        version,
+        minFrontendVersion,
+        privacyPolicyUrl,
+        openRegistration,
+        emailMandatory,
+      ];
 }

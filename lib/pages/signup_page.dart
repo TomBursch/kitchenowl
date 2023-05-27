@@ -19,6 +19,7 @@ class _SignupPageState extends State<SignupPage> {
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController nameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -27,6 +28,9 @@ class _SignupPageState extends State<SignupPage> {
         (App.serverInfo is ConnectedServerInfoState)
             ? (App.serverInfo as ConnectedServerInfoState).privacyPolicyUrl
             : null;
+    final bool emailMandatory = (App.serverInfo is ConnectedServerInfoState)
+        ? (App.serverInfo as ConnectedServerInfoState).emailMandatory
+        : false;
 
     return Scaffold(
       appBar: AppBar(),
@@ -50,7 +54,9 @@ class _SignupPageState extends State<SignupPage> {
                       usernameController: usernameController,
                       nameController: nameController,
                       passwordController: passwordController,
+                      emailController: emailController,
                       submit: _submit,
+                      enableEmail: emailMandatory,
                     ),
                     if (privacyPolicyUrl != null &&
                         isValidUrl(privacyPolicyUrl))
@@ -106,6 +112,7 @@ class _SignupPageState extends State<SignupPage> {
       BlocProvider.of<AuthCubit>(context).signup(
         username: usernameController.text,
         name: nameController.text,
+        email: emailController.text,
         password: passwordController.text,
         wrongCredentialsCallback: () => showSnackbar(
           context: context,

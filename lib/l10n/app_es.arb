@@ -19,8 +19,6 @@
   "@admin": {},
   "appDescription": "KitchenOwl te ayuda a organizar tus compras de supermercado.",
   "@appDescription": {},
-  "appLegal": "2021 Los autores de The KitchenOwl",
-  "@appLegal": {},
   "appTitle": "KitchenOwl",
   "@appTitle": {
     "description": "The title of the app"
@@ -456,5 +454,27 @@
   "expenseReceivedBy": "Recibido por",
   "@expenseReceivedBy": {},
   "expenseReceivedFor": "Recibido por",
-  "@expenseReceivedFor": {}
+  "@expenseReceivedFor": {},
+  "householdLeaveConfirmation": "¿Estás seguro de que quieres dejar {household}?",
+  "@householdLeaveConfirmation": {
+    "placeholders": {
+      "household": {}
+    }
+  },
+  "accountCreate": "Crear una cuenta",
+  "@accountCreate": {},
+  "accountCreateTitle": "Crear una cuenta KitchenOwl",
+  "@accountCreateTitle": {},
+  "signup": "Regístrate",
+  "@signup": {},
+  "supportDevelopment": "Apoyar el desarrollo",
+  "@supportDevelopment": {},
+  "usernameUnavailable": "El nombre de usuario no está disponible",
+  "@usernameUnavailable": {},
+  "privacyPolicyAgree": "Al crear una cuenta, aceptas nuestras {privacyPolicy}",
+  "@privacyPolicyAgree": {
+    "placeholders": {
+      "privacyPolicy": {}
+    }
+  }
 }

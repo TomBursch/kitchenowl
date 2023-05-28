@@ -21,8 +21,8 @@ class Shoppinglist(db.Model, DbModelMixin, TimestampMixin, DbModelAuthorizeMixin
     def getDefault(cls, household_id: int) -> Self:
         return cls.query.filter(cls.household_id == household_id).order_by(cls.id).first()
 
-    def isDefault(self, household_id: int) -> bool:
-        return self.id == self.getDefault(household_id).id
+    def isDefault(self) -> bool:
+        return self.id == self.getDefault(self.household_id).id
 
 
 class ShoppinglistItems(db.Model, DbModelMixin, TimestampMixin):

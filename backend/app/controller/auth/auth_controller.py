@@ -70,7 +70,11 @@ if OPEN_REGISTRATION:
         username = args['username'].strip().lower().replace(" ", "")
         user = User.find_by_username(username)
         if user:
-            raise InvalidUsage()
+            return "Request invalid: username", 400
+        if "email" in args:
+            user = User.find_by_email(args['email'])
+            if user:
+                return "Request invalid: email", 400
 
         user = User.create(
             username=username,

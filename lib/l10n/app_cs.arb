@@ -75,7 +75,7 @@
   "@accountDeleteConfirmation": {},
   "add": "Přidat",
   "@add": {},
-  "addLanguageConfirm": "Jste si jistí že chcete prepnout do jazika '{lang}'? tuto změnu nejde zvrátit , přidané itemy a categorie .",
+  "addLanguageConfirm": "Jste si jistí že chcete prepnout do jazyka '{lang}'? tuto změnu nejde zvrátit, pridáte tím položky a kategorie do vaší domácnosti.",
   "@addLanguageConfirm": {
     "placeholders": {
       "lang": {}
@@ -100,5 +100,173 @@
   "delete": "Smazat",
   "@delete": {},
   "expenseAmount": "Oběm",
-  "@expenseAmount": {}
+  "@expenseAmount": {},
+  "itemDeleteConfirmation": "Jste si jistí že chcete smazat {item}? Odeberete tím položky ze všech receptů které ji obsahují.",
+  "@itemDeleteConfirmation": {
+    "placeholders": {
+      "item": {}
+    }
+  },
+  "itemsOptional": "Volitelné Položky",
+  "@itemsOptional": {},
+  "itemsRecent": "Naposledy použité Položky",
+  "@itemsRecent": {},
+  "lltWarningTitle": "Jste si jistí že víte co deláte ?",
+  "@lltWarningTitle": {},
+  "login": "Přihláření",
+  "@login": {},
+  "memberAdd": "Přidat Člena",
+  "@memberAdd": {},
+  "memberRemove": "Odebrat Člena",
+  "@memberRemove": {},
+  "members": "Členové",
+  "@members": {},
+  "minutesAbbrev": "minimum",
+  "@minutesAbbrev": {},
+  "monthly": "Měsíčně",
+  "@monthly": {},
+  "lltDelete": "Smazat dlouhodoný token",
+  "@lltDelete": {},
+  "householdLeaveConfirmation": "Jste si jistí že chcete opustit {household}?",
+  "@householdLeaveConfirmation": {
+    "placeholders": {
+      "household": {}
+    }
+  },
+  "language": "Jazyk",
+  "@language": {},
+  "lltNotShownAgain": "Uložit token, nebude možné jej znovu zobrazit!",
+  "@lltNotShownAgain": {},
+  "lastUsed": "Naposledy použito",
+  "@lastUsed": {},
+  "list": "List",
+  "@list": {},
+  "lltCreate": "Vytvořit Dlouhodobý Token",
+  "@lltCreate": {},
+  "llts": "Dkouhodobé tokeny",
+  "@llts": {},
+  "languageSelect": "Zvolte Jazyk",
+  "@languageSelect": {},
+  "lltDeleteConfirmation": "Jste si jistí že chcete smazat dlouhodobý token '{token}'? tuto akci nelze zvrátít.",
+  "@lltDeleteConfirmation": {
+    "placeholders": {
+      "token": {}
+    }
+  },
+  "appDescription": "KitchenOwl vám pomůže uspořádat vaše nakupování.",
+  "@appDescription": {},
+  "appTitle": "KitchenOwl",
+  "@appTitle": {
+    "description": "The title of the app"
+  },
+  "categoryExpenseDeleteConfirmation": "Jste si jistí že chcete smazat {category}? Tato akce odebere kategorii ze všech výdajů.",
+  "@categoryExpenseDeleteConfirmation": {
+    "placeholders": {
+      "category": {}
+    }
+  },
+  "expenseOverviewTotalTitle": "Celkoé výdaje za {month}:",
+  "@expenseOverviewTotalTitle": {
+    "placeholders": {
+      "month": {}
+    }
+  },
+  "expensePaidBy": "Zaplaceo",
+  "@expensePaidBy": {},
+  "expenseReceivedBy": "Zasláno",
+  "@expenseReceivedBy": {},
+  "fieldCannotBeEmpty": "{field} nesmí být prázdné.",
+  "@fieldCannotBeEmpty": {
+    "placeholders": {
+      "field": {}
+    }
+  },
+  "forceOfflineMode": "Vynutit offlien mód",
+  "@forceOfflineMode": {},
+  "dynamicAccentColor": "Dynamická barva Akcentu",
+  "@dynamicAccentColor": {},
+  "expensePaidFor": "Zaplaceno",
+  "@expensePaidFor": {},
+  "expenseReceivedFor": "Obdrženo od",
+  "@expenseReceivedFor": {},
+  "features": "Funkce",
+  "@features": {},
+  "gallery": "Galerie",
+  "@gallery": {},
+  "general": "Obecné",
+  "@general": {},
+  "helpTranslate": "Pomoci s překladem",
+  "@helpTranslate": {},
+  "household": "Domácnost",
+  "@household": {},
+  "householdDelete": "Smazat Domácnost",
+  "@householdDelete": {},
+  "grid": "Mřížka",
+  "@grid": {},
+  "householdDeleteConfirmation": "Ste si jistí že chcete smazat {household}? Odeberete tím všechny položky, recepty, a výdaje.",
+  "@householdDeleteConfirmation": {
+    "placeholders": {
+      "household": {}
+    }
+  },
+  "householdEmpty": "Žádná domácnost nenalezena, prosím vytvořte jednu!",
+  "@householdEmpty": {},
+  "householdLeave": "Opustit Domácnost",
+  "@householdLeave": {},
+  "householdNew": "Nová Domácnost",
+  "@householdNew": {},
+  "households": "Domácnosti",
+  "@households": {},
+  "householdSwitch": "Přepnmout Domácnost",
+  "@householdSwitch": {},
+  "imageSelect": "Zvolit Obrázek",
+  "@imageSelect": {},
+  "income": "Příjem",
+  "@income": {},
+  "itemDelete": "Smazat Položku",
+  "@itemDelete": {},
+  "items": "Položky",
+  "@items": {},
+  "itemsAdd": "Přidat Položky",
+  "@itemsAdd": {},
+  "loginTo": "Prihlásit se do",
+  "@loginTo": {},
+  "logout": "Odhlásit",
+  "@logout": {},
+  "logoutName": "Oshlásit {name}",
+  "@logoutName": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "mealPlanner": "Plánovaš jídla",
+  "@mealPlanner": {},
+  "member": "Člen",
+  "@member": {},
+  "more": "Více",
+  "@more": {},
+  "name": "Jméno",
+  "@name": {},
+  "next": "Další",
+  "@next": {},
+  "none": "Nic",
+  "@none": {},
+  "noTags": "Žádné štítky",
+  "@noTags": {},
+  "offlineMessage": "Jste offline",
+  "@offlineMessage": {},
+  "okay": "Dobře",
+  "@okay": {},
+  "onboardingSettingsTitle": "Hi {name}, pojdme nastavit server!",
+  "@onboardingSettingsTitle": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "onboardingTitle": "Pojdmě vytvořit uživatele",
+  "@onboardingTitle": {},
+  "optional": "Volitelný",
+  "@optional": {},
+  "or": "nebo",
+  "@or": {}
 }

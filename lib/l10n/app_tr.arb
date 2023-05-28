@@ -19,8 +19,6 @@
   "@addTag": {},
   "admin": "Yönetici",
   "@admin": {},
-  "appLegal": "2021 KitchenOwl Yazarları",
-  "@appLegal": {},
   "appTitle": "KitchenOwl",
   "@appTitle": {
     "description": "The title of the app"

@@ -37,8 +37,6 @@
   "@admin": {},
   "appDescription": "KitchenOwl hilft dir dein Lebensmitteleinkauf zu erleichtern.",
   "@appDescription": {},
-  "appLegal": "2021 Die KitchenOwl Autoren",
-  "@appLegal": {},
   "appTitle": "KitchenOwl",
   "@appTitle": {
     "description": "The title of the app"
@@ -462,5 +460,27 @@
   "weekly": "Wöchentlich",
   "@weekly": {},
   "yearly": "Jährlich",
-  "@yearly": {}
+  "@yearly": {},
+  "accountCreate": "Konto erstellen",
+  "@accountCreate": {},
+  "accountCreateTitle": "Erstelle dein KitchenOwl Konto",
+  "@accountCreateTitle": {},
+  "privacyPolicyAgree": "Durch das Erstellen eines Kontos stimmst du der {privacyPolicy} zu",
+  "@privacyPolicyAgree": {},
+  "signup": "Registrieren",
+  "@signup": {},
+  "supportDevelopment": "Unterstütze die Entwicklung",
+  "@supportDevelopment": {},
+  "usernameUnavailable": "Der Benutzername ist nicht verfügbar",
+  "@usernameUnavailable": {},
+  "email": "E-Mail",
+  "@email": {},
+  "emailInvalid": "Ungültige E-Mail",
+  "@emailInvalid": {},
+  "usernameInvalid": "Benutzername kann nicht '@' enthalten",
+  "@usernameInvalid": {},
+  "emailUpdate": "E-Mail aktualisieren",
+  "@emailUpdate": {},
+  "emailUsed": "Die E-Mail ist bereits mit einem Account verknüpft",
+  "@emailUsed": {}
 }

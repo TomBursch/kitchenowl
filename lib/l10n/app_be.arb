@@ -1,0 +1,44 @@
+{
+  "accountCreateTitle": "Стварыце свой уліковы запіс KitchenOwl",
+  "@accountCreateTitle": {},
+  "addLanguage": "Дадаць мову",
+  "@addLanguage": {},
+  "addLanguageConfirm": "Вы ўпэўнены, што жадаеце змяніць мову на '{lang}'? Гэта дзеянне нельга адрабіць, і да вашай сям'і будуць дададзены прадметы і катэгорыі.",
+  "@addLanguageConfirm": {
+    "placeholders": {
+      "lang": {}
+    }
+  },
+  "addNumberIngredients": "Дадайце {number} інгрэдыентаў",
+  "@addNumberIngredients": {
+    "placeholders": {
+      "number": {}
+    }
+  },
+  "addCategory": "Дадаць катэгорыю",
+  "@addCategory": {},
+  "accountCreate": "Стварыць уліковы запіс",
+  "@accountCreate": {},
+  "accountDelete": "Выдаліць уліковы запіс",
+  "@accountDelete": {},
+  "about": "Аб",
+  "@about": {},
+  "add": "Дадаць",
+  "@add": {},
+  "accountDeleteConfirmation": "Вы ўпэўнены, што хочаце выдаліць свой уліковы запіс?",
+  "@accountDeleteConfirmation": {},
+  "addDescriptionFromSource": "Дадайце апісанне з крыніцы",
+  "@addDescriptionFromSource": {},
+  "addTag": "Дадаць тэг",
+  "@addTag": {},
+  "addRecipeToPlanner": "Дадаць у план страў",
+  "@addRecipeToPlanner": {},
+  "addRecipeToPlannerShort": "Дадаць у план страў",
+  "@addRecipeToPlannerShort": {},
+  "address": "Адрас",
+  "@address": {},
+  "addShoppingList": "Дадаць спіс пакупак",
+  "@addShoppingList": {},
+  "admin": "Адмін",
+  "@admin": {}
+}

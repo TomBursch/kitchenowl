@@ -45,8 +45,6 @@
   "@admin": {},
   "appDescription": "KitchenOwl helps you organize your grocery life.",
   "@appDescription": {},
-  "appLegal": "2021 The KitchenOwl Authors",
-  "@appLegal": {},
   "appTitle": "KitchenOwl",
   "@appTitle": {
     "description": "The title of the app"

@@ -19,8 +19,6 @@
   "@admin": {},
   "appDescription": "KitchenOwl vous aide à organiser votre épicerie.",
   "@appDescription": {},
-  "appLegal": "2021 Les auteurs KitchenOwl",
-  "@appLegal": {},
   "appTitle": "KitchenOwl",
   "@appTitle": {
     "description": "The title of the app"
@@ -453,6 +451,12 @@
   "@expenseReceivedFor": {},
   "householdDeleteConfirmation": "Êtes-vous sûr·e de vouloir supprimer {household} ? Ceci supprimera tous les articles, les recettes et les dépenses.",
   "@householdDeleteConfirmation": {
+    "placeholders": {
+      "household": {}
+    }
+  },
+  "householdLeaveConfirmation": "Voulez-vous vraiment quitter {household} ?",
+  "@householdLeaveConfirmation": {
     "placeholders": {
       "household": {}
     }

@@ -71,7 +71,7 @@ class User(db.Model, DbModelMixin, TimestampMixin):
 
     @classmethod
     def find_by_email(cls, email: str) -> Self:
-        return cls.query.filter(cls.email == email).first()
+        return cls.query.filter(cls.email == email.strip()).first()
 
     @classmethod
     def create(cls, username: str, password: str, name: str, email: str | None = None, admin: bool = False) -> Self:

@@ -348,7 +348,7 @@ class ApiService {
     return body['onboarding'] as bool;
   }
 
-  Future<String?> signup({
+  Future<(String?, String?)> signup({
     required String username,
     required String name,
     required String password,
@@ -372,10 +372,10 @@ class ApiService {
       _refreshToken = body['refresh_token'];
       _setConnectionState(Connection.authenticated);
 
-      return _refreshToken;
+      return (_refreshToken, null);
     }
 
-    return null;
+    return (null, res.body);
   }
 
   Future<String?> onboarding(

@@ -111,6 +111,8 @@
   "@emailInvalid": {},
   "emailUpdate": "Update Email",
   "@emailUpdate": {},
+  "emailUsed": "The email is already associated with an account",
+  "@emailUsed": {},
   "error": "An error occured",
   "@error": {},
   "expense": "Expense",

@@ -69,7 +69,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 16, bottom: 10),
-                      child: ElevatedButton(
+                      child: LoadingElevatedButton(
                         onPressed: () =>
                             BlocProvider.of<AuthCubit>(context).login(
                           usernameController.text,

@@ -20,6 +20,7 @@ import 'package:kitchenowl/pages/page_not_found.dart';
 import 'package:kitchenowl/pages/recipe_page.dart';
 import 'package:kitchenowl/pages/recipe_scraper_page.dart';
 import 'package:kitchenowl/pages/settings_page.dart';
+import 'package:kitchenowl/pages/settings_user_page.dart';
 import 'package:kitchenowl/pages/setup_page.dart';
 import 'package:kitchenowl/pages/signup_page.dart';
 import 'package:kitchenowl/pages/splash_page.dart';
@@ -320,6 +321,13 @@ final router = GoRouter(
       builder: (context, state) => SettingsPage(
         household: state.extra as Household?,
       ),
+      routes: [
+        GoRoute(
+          path: 'account',
+          parentNavigatorKey: _rootNavigatorKey,
+          builder: (context, state) => const SettingsUserPage(),
+        ),
+      ],
     ),
     // GoRoute(
     //   path: '/recipes/:id',

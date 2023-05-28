@@ -156,15 +156,15 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   // ignore: long-parameter-list
-  void signup({
+  Future<void> signup({
     required String username,
     required String name,
     required String password,
     required String email,
-    Function? wrongCredentialsCallback,
+    Function(String?)? wrongCredentialsCallback,
   }) async {
     emit(const Loading());
-    final token = await ApiService.getInstance().signup(
+    final (token, msg) = await ApiService.getInstance().signup(
       username: username,
       name: name,
       email: email,
@@ -176,12 +176,12 @@ class AuthCubit extends Cubit<AuthState> {
       await updateState();
       if (ApiService.getInstance().connectionStatus == Connection.connected &&
           wrongCredentialsCallback != null) {
-        wrongCredentialsCallback();
+        wrongCredentialsCallback(msg);
       }
     }
   }
 
-  void login(
+  Future<void> login(
     String username,
     String password, [
     Function? wrongCredentialsCallback,

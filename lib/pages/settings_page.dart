@@ -17,7 +17,6 @@ import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/pages/household_member_page.dart';
 import 'package:kitchenowl/pages/household_update_page.dart';
 import 'package:kitchenowl/pages/settings_server_user_page.dart';
-import 'package:kitchenowl/pages/settings_user_page.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
 import 'package:kitchenowl/widgets/user_list_tile.dart';
 
@@ -69,11 +68,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     trailing: const Icon(Icons.arrow_forward_ios_rounded),
                     onTap: !isOffline
                         ? () async {
-                            final res =
-                                await Navigator.of(context, rootNavigator: true)
-                                    .push<UpdateEnum>(MaterialPageRoute(
-                              builder: (context) => const SettingsUserPage(),
-                            ));
+                            final res = await context.push("/settings/account");
                             if (res == UpdateEnum.updated) {
                               BlocProvider.of<AuthCubit>(context).refreshUser();
                             }

@@ -55,7 +55,6 @@ class _SignupPageState extends State<SignupPage> {
                       nameController: nameController,
                       passwordController: passwordController,
                       emailController: emailController,
-                      submit: _submit,
                       enableEmail: emailMandatory,
                     ),
                     if (privacyPolicyUrl != null &&
@@ -91,7 +90,7 @@ class _SignupPageState extends State<SignupPage> {
                       ),
                     Padding(
                       padding: const EdgeInsets.only(top: 16, bottom: 8),
-                      child: ElevatedButton(
+                      child: LoadingElevatedButton(
                         onPressed: () => _submit(context),
                         child:
                             Text(AppLocalizations.of(context)!.accountCreate),
@@ -107,21 +106,31 @@ class _SignupPageState extends State<SignupPage> {
     );
   }
 
-  void _submit(BuildContext context) {
+  Future<void> _submit(BuildContext context) async {
     if (_formKey.currentState!.validate()) {
-      BlocProvider.of<AuthCubit>(context).signup(
+      return BlocProvider.of<AuthCubit>(context).signup(
         username: usernameController.text,
         name: nameController.text,
         email: emailController.text,
         password: passwordController.text,
-        wrongCredentialsCallback: () => showSnackbar(
+        wrongCredentialsCallback: (msg) => showSnackbar(
           context: context,
           content: Text(
-            AppLocalizations.of(context)!.usernameUnavailable,
+            _extractErrorMessage(context, msg),
           ),
           width: null,
         ),
       );
     }
+  }
+
+  String _extractErrorMessage(BuildContext context, String? msg) {
+    if (msg == null) return AppLocalizations.of(context)!.error;
+    if (msg.contains("email")) return AppLocalizations.of(context)!.emailUsed;
+    if (msg.contains("username")) {
+      return AppLocalizations.of(context)!.usernameUnavailable;
+    }
+
+    return msg;
   }
 }

@@ -31,7 +31,7 @@ class User extends Model {
       username: map['username'],
       name: map['name'],
       email: map['email'],
-      image: map['photo'] ?? '',
+      image: map['photo'],
       serverAdmin: map['admin'] ?? false,
       tokens: tokens,
     );
@@ -43,7 +43,7 @@ class User extends Model {
   @override
   Map<String, dynamic> toJson() => {
         "name": name,
-        if (image?.isNotEmpty ?? false) "photo": image,
+        if (image != null) "photo": image,
       };
 
   @override

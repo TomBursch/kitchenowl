@@ -129,7 +129,7 @@ class Recipe extends Model implements ISuspensionBean {
         "prep_time": prepTime,
         "yields": yields,
         "source": source,
-        if (image?.isNotEmpty ?? false) "photo": image,
+        if (image != null) "photo": image,
         "items": items.map((e) => e.toJson()).toList(),
         "tags": tags.map((e) => e.toString()).toList(),
       };

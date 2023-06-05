@@ -78,7 +78,7 @@ class Expense extends Model {
     return {
       "name": name,
       "amount": amount,
-      if (image?.isNotEmpty ?? false) "photo": image,
+      if (image != null) "photo": image,
       'category': category?.id,
       "date": date!.toUtc().millisecondsSinceEpoch,
       "paid_by": {"id": paidById},

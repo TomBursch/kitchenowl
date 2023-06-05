@@ -230,7 +230,7 @@ class HouseholdUpdateCubit
 }
 
 class HouseholdUpdateState extends HouseholdAddUpdateState {
-  final String image;
+  final String? image;
   final List<ShoppingList> shoppingLists;
   final Set<Tag> tags;
   final List<Category> categories;
@@ -238,7 +238,7 @@ class HouseholdUpdateState extends HouseholdAddUpdateState {
 
   const HouseholdUpdateState({
     super.name,
-    this.image = "",
+    this.image,
     super.language,
     super.featurePlanner = true,
     super.featureExpenses = true,

@@ -14,7 +14,7 @@ import os
 
 
 MIN_FRONTEND_VERSION = 71
-BACKEND_VERSION = 66
+BACKEND_VERSION = 67
 
 APP_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_DIR = os.path.dirname(APP_DIR)

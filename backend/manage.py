@@ -4,6 +4,7 @@ from app import app, db
 from app.config import UPLOAD_FOLDER
 from app.jobs import jobs
 from app.models import User, File, Household, HouseholdMember
+from app.service.delete_unused import deleteEmptyHouseholds, deleteUnusedFiles
 
 def importFiles():
     try:
@@ -22,11 +23,14 @@ def manageHouseholds():
         print("""
 What next?
     1. List all households
+    2. Delete empty
     (q) Go back""")
         selection = input("Your selection (q):")
         if selection == "1":
             for h in Household.all():
                 print(f"Id {h.id}: {h.name} ({len(h.member)} members)")
+        if selection == "2":
+            print(f"Deleted {deleteEmptyHouseholds()} unused households")
         else:
             return
 
@@ -41,7 +45,7 @@ What next?
         selection = input("Your selection (q):")
         if selection == "1":
             for u in User.all():
-                print(f"@{u.username}: {u.name} (server admin: {u.admin})")
+                print(f"@{u.username} ({u.email}): {u.name} (server admin: {u.admin})")
         elif selection == "2":
             username = input("Enter the username:")
             user = User.find_by_username(username)
@@ -96,6 +100,21 @@ Settings for {user.name} (@{user.username}) (server admin: {user.admin})
         else:
             return
 
+def manageFiles():
+    while True:
+        print("""
+What next?
+    1. Import files
+    2. Delete unused files
+    (q) Go back""")
+        selection = input("Your selection (q):")
+        if selection == "1":
+            importFiles()
+        elif selection == "2":
+            print(f"Deleted {deleteUnusedFiles()} unused files")
+        else:
+            return
+
 # docker exec -it [backend container name] python manage.py
 if __name__ == "__main__":
     while True:
@@ -103,7 +122,7 @@ if __name__ == "__main__":
 Manage KitchenOwl\n---\nWhat do you want to do?
 1.  Manage users
 2.  Manage households
-3.  Import files
+3.  Manage images/files
 4.  Run all jobs
 (q) Exit""")
         selection = input("Your selection (q):")
@@ -115,7 +134,7 @@ Manage KitchenOwl\n---\nWhat do you want to do?
                 manageHouseholds()
         elif selection == "3":
             with app.app_context():
-                importFiles()
+                manageFiles()
         elif selection == "4":
             print("Starting jobs (might take a while)...")
             jobs.daily()

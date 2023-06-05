@@ -65,6 +65,16 @@ class User(db.Model, DbModelMixin, TimestampMixin):
             skip_columns=['user_id']) for e in tokens]
         return res
 
+    def delete(self):
+        """
+        Delete this instance of model from db
+        """
+        from app.models import File
+        for f in File.query.filter(File.created_by == self.id).all():
+            f.created_by = None
+            f.save()
+        super().delete()
+
     @classmethod
     def find_by_username(cls, username: str) -> Self:
         return cls.query.filter(cls.username == username).first()

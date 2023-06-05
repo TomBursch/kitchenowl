@@ -24,6 +24,8 @@ def file_has_access_or_download(newPhoto: str, oldPhoto: str = None) -> str:
                 o.write(resp.content)
             return filename
     elif newPhoto is not None:
+        if not newPhoto:
+            return None
         f = File.find(newPhoto)
         if f and (f.created_by == current_user.id or current_user.admin):
             return f.filename

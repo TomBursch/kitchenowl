@@ -454,5 +454,37 @@
   "daily": "Quotidiano",
   "@daily": {},
   "monthly": "Mensile",
-  "@monthly": {}
+  "@monthly": {},
+  "usernameUnavailable": "Lo username non è disponibile",
+  "@usernameUnavailable": {},
+  "emailUsed": "La email è già associata ad un account",
+  "@emailUsed": {},
+  "privacyPolicyAgree": "Creando un account accetti le nostre {privacyPolicy}",
+  "@privacyPolicyAgree": {
+    "placeholders": {
+      "privacyPolicy": {}
+    }
+  },
+  "signup": "Registrati",
+  "@signup": {},
+  "supportDevelopment": "Supporta lo sviluppo",
+  "@supportDevelopment": {},
+  "usernameInvalid": "Lo username non può contenere '@'",
+  "@usernameInvalid": {},
+  "householdLeaveConfirmation": "Sei sicuro di voler abbandonare {household}?",
+  "@householdLeaveConfirmation": {
+    "placeholders": {
+      "household": {}
+    }
+  },
+  "accountCreate": "Crea un account",
+  "@accountCreate": {},
+  "accountCreateTitle": "Crea il tuo KitchenOwl account",
+  "@accountCreateTitle": {},
+  "emailUpdate": "Aggiorna la tua Email",
+  "@emailUpdate": {},
+  "email": "Email",
+  "@email": {},
+  "emailInvalid": "Email invalida",
+  "@emailInvalid": {}
 }

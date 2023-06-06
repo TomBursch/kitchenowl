@@ -193,7 +193,7 @@
   "@optional": {},
   "or": "of",
   "@or": {},
-  "other": "overige",
+  "other": "Overige",
   "@other": {},
   "overview": "Overzicht",
   "@overview": {},
@@ -357,7 +357,7 @@
   "@dangerZone": {},
   "householdDelete": "Verwijder huishouden",
   "@householdDelete": {},
-  "householdEmpty": "Geen huishouden, start met een nieuwe aanmaken!",
+  "householdEmpty": "Geen huishouden, start met het aanmaken van een huishouden!",
   "@householdEmpty": {},
   "householdLeave": "Verlaat huishouden",
   "@householdLeave": {},
@@ -442,5 +442,49 @@
   "helpTranslate": "Help vertalen",
   "@helpTranslate": {},
   "households": "Huishoudens",
-  "@households": {}
+  "@households": {},
+  "emailUsed": "Dit emailadres is al gekoppeld aan een bestaand account",
+  "@emailUsed": {},
+  "householdLeaveConfirmation": "Weet je zeker dat je {household} wilt verlaten?",
+  "@householdLeaveConfirmation": {
+    "placeholders": {
+      "household": {}
+    }
+  },
+  "privacyPolicyAgree": "Door het aanmaken van een account ga je akkoord met onze {privacyPolicy}",
+  "@privacyPolicyAgree": {
+    "placeholders": {
+      "privacyPolicy": {}
+    }
+  },
+  "yearly": "Jaarlijks",
+  "@yearly": {},
+  "signup": "Registreren",
+  "@signup": {},
+  "supportDevelopment": "Ondersteun de ontwikkeling",
+  "@supportDevelopment": {},
+  "usernameInvalid": "Gebruikersnaam kan geen '@' bevatten",
+  "@usernameInvalid": {},
+  "usernameUnavailable": "Deze gebruikersnaam is niet beschikbaar",
+  "@usernameUnavailable": {},
+  "weekly": "Wekelijks",
+  "@weekly": {},
+  "daily": "Dagelijks",
+  "@daily": {},
+  "expenseReceivedBy": "Ontvangen door",
+  "@expenseReceivedBy": {},
+  "expenseReceivedFor": "Ontvangen voor",
+  "@expenseReceivedFor": {},
+  "monthly": "Maandelijks",
+  "@monthly": {},
+  "accountCreate": "Account aanmaken",
+  "@accountCreate": {},
+  "accountCreateTitle": "KitchenOwl account aanmaken",
+  "@accountCreateTitle": {},
+  "email": "Email",
+  "@email": {},
+  "emailInvalid": "Ongeldige email",
+  "@emailInvalid": {},
+  "emailUpdate": "Email updaten",
+  "@emailUpdate": {}
 }

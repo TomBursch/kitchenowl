@@ -20,8 +20,9 @@ class HouseholdCubit extends Cubit<HouseholdState> {
     );
     if (household == null) {
       emit(NotFoundHouseholdState(household: state.household));
+    } else {
+      emit(state.copyWith(household: household));
     }
-    emit(state.copyWith(household: household));
   }
 }
 

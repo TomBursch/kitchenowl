@@ -113,8 +113,8 @@ class _HouseholdPageState extends State<HouseholdPage> {
         ],
         child: BlocConsumer<HouseholdCubit, HouseholdState>(
           listener: (context, state) {
-            if (state is NotFoundHouseholdState) {
-              context.go("/household");
+            if (state is NotFoundHouseholdState && mounted) {
+              return context.go("/household");
             }
             List<ViewsEnum> pages =
                 (state.household.viewOrdering ?? ViewsEnum.values)
@@ -125,7 +125,7 @@ class _HouseholdPageState extends State<HouseholdPage> {
               (e) => GoRouter.of(context).location.contains(e.toString()),
             );
 
-            if (_selectedIndex < 0) {
+            if (_selectedIndex < 0 && mounted) {
               context.go(
                 "/household/${state.household.id}/${state.household.viewOrdering?.firstOrNull.toString() ?? "items"}",
               );
@@ -141,7 +141,7 @@ class _HouseholdPageState extends State<HouseholdPage> {
               (e) => GoRouter.of(context).location.contains(e.toString()),
             );
 
-            if (_selectedIndex < 0) {
+            if (_selectedIndex < 0 || state is NotFoundHouseholdState) {
               return const PageNotFound();
             }
 

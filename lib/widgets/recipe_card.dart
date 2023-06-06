@@ -50,7 +50,7 @@ class RecipeCard extends StatelessWidget {
                     ),
                   ),
                 ),
-              if (recipe.image?.isEmpty ?? false)
+              if (recipe.image?.isEmpty ?? true)
                 Expanded(
                   flex: 3,
                   child: Container(

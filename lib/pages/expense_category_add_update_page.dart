@@ -208,7 +208,7 @@ class _AddUpdateExpenseCategoryPageState
                         child: Text(
                           isUpdate
                               ? AppLocalizations.of(context)!.save
-                              : AppLocalizations.of(context)!.expenseAdd,
+                              : AppLocalizations.of(context)!.addCategory,
                         ),
                       ),
                     ),

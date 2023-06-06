@@ -7,7 +7,6 @@ import 'package:go_router/go_router.dart';
 import 'package:kitchenowl/app.dart';
 import 'package:kitchenowl/config.dart';
 import 'package:kitchenowl/cubits/auth_cubit.dart';
-import 'package:kitchenowl/cubits/household_cubit.dart';
 import 'package:kitchenowl/cubits/server_info_cubit.dart';
 import 'package:kitchenowl/cubits/settings_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
@@ -246,17 +245,13 @@ class _SettingsPageState extends State<SettingsPage> {
                   AppLocalizations.of(context)!.settings,
                 ),
                 leading: const Icon(Icons.house_rounded),
-                onTap: () async {
-                  final res = await Navigator.of(context).push<UpdateEnum>(
-                    MaterialPageRoute(
-                      builder: (ctx) => HouseholdUpdatePage(
-                        household: widget.household!,
-                      ),
+                onTap: () => Navigator.of(context).push<UpdateEnum>(
+                  MaterialPageRoute(
+                    builder: (ctx) => HouseholdUpdatePage(
+                      household: widget.household!,
                     ),
-                  );
-                  if (!mounted || res == UpdateEnum.deleted) return;
-                  BlocProvider.of<HouseholdCubit>(context).refresh();
-                },
+                  ),
+                ),
               ),
             ]),
           ),

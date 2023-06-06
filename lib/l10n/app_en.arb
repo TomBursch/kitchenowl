@@ -277,7 +277,7 @@
   "@okay": {},
   "onboardingLoading": "Importing language, this could take a while. Please be patient :)",
   "@onboardingLoading": {},
-  "onboardingSettingsTitle": "Hi {name}, let's setup the server!",
+  "onboardingSettingsTitle": "Hi {name}, let's set up the server!",
   "@onboardingSettingsTitle": {
     "placeholders": {
       "name": {}

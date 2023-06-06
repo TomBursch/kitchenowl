@@ -161,7 +161,7 @@
   "@okay": {},
   "onboardingLoading": "Importation de la langue. Ceci peut prendre un certain temps. Veuillez être patient·e :)",
   "@onboardingLoading": {},
-  "onboardingSettingsTitle": "Salut {name}, configurons le serveur !",
+  "onboardingSettingsTitle": "Salut {name}, configurons le serveur !",
   "@onboardingSettingsTitle": {
     "placeholders": {
       "name": {}

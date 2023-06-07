@@ -45,6 +45,7 @@ SUPPORTED_LANGUAGES = {
     'es': 'Español',
     'fr': 'Français',
     'id': 'Bahasa Indonesia',
+    'it': 'Italiano',
     'nb_NO': 'Bokmål',
     'nl': 'Nederlands',
     'pl': 'Polski',

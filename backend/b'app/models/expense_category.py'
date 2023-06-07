@@ -9,7 +9,7 @@ class ExpenseCategory(db.Model, DbModelMixin, TimestampMixin, DbModelAuthorizeMi
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(128))
-    color = db.Column(db.Integer)
+    color = db.Column(db.BigInteger)
     household_id = db.Column(db.Integer, db.ForeignKey(
         'household.id'), nullable=False)
 

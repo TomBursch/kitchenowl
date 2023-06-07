@@ -8,10 +8,10 @@ from app.models.recipe_history import Status
 MEAL_THRESHOLD = 3
 
 
-def findMealInstancesFromHistory():
+def findMealInstancesFromHistory(household_id: int):
     return findMealInstances(
-        RecipeHistory.query.filter(RecipeHistory.status == Status.ADDED).all(),
-        RecipeHistory.query.filter(RecipeHistory.status == Status.DROPPED).all())
+        RecipeHistory.query.filter(RecipeHistory.status == Status.ADDED, RecipeHistory.household_id == household_id).all(),
+        RecipeHistory.query.filter(RecipeHistory.status == Status.DROPPED, RecipeHistory.household_id == household_id).all())
 
 
 def findMealInstances(added, dropped):
@@ -56,8 +56,8 @@ def findMealInstances(added, dropped):
     return meals
 
 
-def computeRecipeSuggestions():
-    meal_instances = findMealInstancesFromHistory()
+def computeRecipeSuggestions(household_id: int):
+    meal_instances = findMealInstancesFromHistory(household_id)
     # group meals by their id
     meal_hist = dict()
     for m in meal_instances:
@@ -67,7 +67,7 @@ def computeRecipeSuggestions():
         meal_hist[id].append(m["cooked_at"])
 
     # 0) reset all suggestion scores
-    for r in Recipe.all():
+    for r in Recipe.all_from_household(household_id):
         r.suggestion_score = 0
         db.session.add(r)
 

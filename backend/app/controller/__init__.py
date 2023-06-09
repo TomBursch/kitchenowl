@@ -13,3 +13,4 @@ from .upload import *
 from .household import *
 from .category import *
 from .health_controller import health
+from .analytics import *

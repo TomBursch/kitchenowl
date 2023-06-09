@@ -42,8 +42,9 @@ class Token(db.Model, DbModelMixin, TimestampMixin):
     @classmethod
     def delete_expired_refresh(cls):
         filter_before = datetime.utcnow() - JWT_REFRESH_TOKEN_EXPIRES
-        db.session.query(cls).filter(cls.created_at <= filter_before, cls.type ==
-                                     'refresh', ~cls.created_tokens.any()).delete(synchronize_session=False)
+        for token in db.session.query(cls).filter(cls.created_at <= filter_before, cls.type ==
+                                     'refresh', ~cls.created_tokens.any()).all():
+            token.delete_token_familiy(commit=False)
         db.session.commit()
 
     @classmethod
@@ -55,7 +56,7 @@ class Token(db.Model, DbModelMixin, TimestampMixin):
 
     # Delete oldest refresh token -> log out device
     # Used e.g. when a refresh token is used twice
-    def delete_token_familiy(self):
+    def delete_token_familiy(self, commit=True):
         if (self.type != 'refresh'):
             return
         token = self
@@ -63,8 +64,10 @@ class Token(db.Model, DbModelMixin, TimestampMixin):
             if token.refresh_token:
                 token = token.refresh_token
             else:
-                token.delete()
+                db.session.delete(token)
                 token = None
+        if commit:
+            db.session.commit()
 
     def has_created_refresh_token(self) -> bool:
         return db.session.query(Token).filter(Token.refresh_token_id == self.id, Token.type == 'refresh').count() > 0

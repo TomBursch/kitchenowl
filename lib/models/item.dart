@@ -83,7 +83,7 @@ class ItemWithDescription extends Item {
 
   factory ItemWithDescription.fromItem({
     required Item item,
-    String description = '',
+    String? description,
   }) =>
       ItemWithDescription(
         id: item.id,
@@ -91,7 +91,8 @@ class ItemWithDescription extends Item {
         icon: item.icon,
         category: item.category,
         ordering: item.ordering,
-        description: description,
+        description: description ??
+            ((item is ItemWithDescription) ? item.description : ''),
       );
 
   @override

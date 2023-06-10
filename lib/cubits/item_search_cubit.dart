@@ -26,7 +26,7 @@ class ItemSearchCubit extends Cubit<ItemSearchState> {
     if (query.isNotEmpty) {
       final splitIndex = query.indexOf(',');
       String queryName = query;
-      String queryDescription = '';
+      String? queryDescription;
       if (splitIndex >= 0) {
         queryName = query.substring(0, splitIndex).trim();
         queryDescription = query.substring(splitIndex + 1).trim();
@@ -36,7 +36,7 @@ class ItemSearchCubit extends Cubit<ItemSearchState> {
       for (Item item
           in (await ApiService.getInstance().searchItem(household, queryName) ??
               [])) {
-        String description = state.selectedItems
+        String? description = state.selectedItems
                 .whereType<ItemWithDescription>()
                 .firstWhereOrNull((e) => e.name == item.name)
                 ?.description ??
@@ -50,7 +50,7 @@ class ItemSearchCubit extends Cubit<ItemSearchState> {
           items[0].name.toLowerCase() != queryName.toLowerCase()) {
         items.add(ItemWithDescription(
           name: queryName,
-          description: queryDescription,
+          description: queryDescription ?? '',
         ));
       }
       emit(ItemSearchState(state.selectedItems, query, items));

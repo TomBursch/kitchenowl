@@ -25,14 +25,17 @@ extension ItemApi on ApiService {
     return body.map((e) => Recipe.fromJson(e)).toList();
   }
 
-  Future<List<Item>?> searchItem(Household household, String query) async {
+  Future<List<ItemWithDescription>?> searchItem(
+    Household household,
+    String query,
+  ) async {
     final res =
         await get('${householdPath(household)}$baseRoute/search?query=$query');
     if (res.statusCode != 200) return null;
 
     final body = List.from(jsonDecode(res.body));
 
-    return body.map((e) => Item.fromJson(e)).toList();
+    return body.map((e) => ItemWithDescription.fromJson(e)).toList();
   }
 
   Future<bool> deleteItem(Item item) async {

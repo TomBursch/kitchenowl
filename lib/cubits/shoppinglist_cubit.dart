@@ -186,7 +186,7 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
       // Split query into name and description
       final splitIndex = query.indexOf(',');
       String queryName = query;
-      String queryDescription = '';
+      String? queryDescription;
       if (splitIndex >= 0) {
         queryName = query.substring(0, splitIndex).trim();
         queryDescription = query.substring(splitIndex + 1).trim();
@@ -214,7 +214,7 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
           loadedItems[0].name.toLowerCase() != queryName.toLowerCase()) {
         loadedItems.add(ItemWithDescription(
           name: queryName,
-          description: queryDescription,
+          description: queryDescription ?? '',
         ));
       }
       resState = SearchShoppinglistCubitState(

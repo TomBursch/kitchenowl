@@ -82,11 +82,12 @@ class HouseholdAddCubit extends HouseholdAddUpdateCubit<HouseholdAddState> {
     await ApiService.getInstance().addHousehold(Household(
       id: 0,
       name: _state.name,
-      image: image ?? '',
+      image: image,
       language: _state.language,
       featurePlanner: _state.featurePlanner,
       featureExpenses: _state.featureExpenses,
       viewOrdering: _state.viewOrdering,
+      member: _state.members,
     ));
   }
 

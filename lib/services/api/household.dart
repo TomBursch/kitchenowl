@@ -35,7 +35,11 @@ extension HouseholdApi on ApiService {
   Future<bool> addHousehold(Household household) async {
     final res = await post(
       baseRoute,
-      jsonEncode(household.toJson()),
+      jsonEncode(household.toJson()
+        ..addAll({
+          if (household.member != null)
+            "member": household.member!.map((e) => e.id).toList(),
+        })),
     );
 
     return res.statusCode == 200;

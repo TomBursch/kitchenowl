@@ -63,6 +63,7 @@ class _RecipePageState extends State<RecipePage> {
               child: CustomScrollView(
                 primary: true,
                 slivers: [
+                  // SliverCrossAxisGroup(), TODO wait for it to release and update tablet layout
                   SliverAppBar(
                     flexibleSpace: FlexibleImageSpaceBar(
                       title: state.recipe.name,
@@ -209,7 +210,7 @@ class _RecipePageState extends State<RecipePage> {
                       padding: const EdgeInsets.all(16),
                       sliver: SliverToBoxAdapter(
                         child: Text(
-                          '${AppLocalizations.of(context)!.items}:',
+                          '${AppLocalizations.of(context)!.ingredients}:',
                           style: Theme.of(context).textTheme.titleLarge,
                         ),
                       ),
@@ -230,7 +231,7 @@ class _RecipePageState extends State<RecipePage> {
                       padding: const EdgeInsets.all(16),
                       sliver: SliverToBoxAdapter(
                         child: Text(
-                          '${AppLocalizations.of(context)!.itemsOptional}:',
+                          '${AppLocalizations.of(context)!.ingredientsOptional}:',
                           style: Theme.of(context).textTheme.titleLarge,
                         ),
                       ),

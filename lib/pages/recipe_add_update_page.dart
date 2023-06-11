@@ -308,7 +308,7 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                         children: [
                           Expanded(
                             child: Text(
-                              '${AppLocalizations.of(context)!.items}:',
+                              '${AppLocalizations.of(context)!.ingredients}:',
                               style: Theme.of(context).textTheme.titleLarge,
                             ),
                           ),
@@ -342,7 +342,7 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                       children: [
                         Expanded(
                           child: Text(
-                            '${AppLocalizations.of(context)!.itemsOptional}:',
+                            '${AppLocalizations.of(context)!.ingredientsOptional}:',
                             style: Theme.of(context).textTheme.titleLarge,
                           ),
                         ),

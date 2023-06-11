@@ -3,7 +3,7 @@ from app.helpers import validate_args, authorize_household, RequiredRights
 from flask import jsonify, Blueprint
 from app.errors import NotFoundRequest
 from flask_jwt_extended import current_user, jwt_required
-from app.models import Household, HouseholdMember, Shoppinglist, File
+from app.models import Household, HouseholdMember, Shoppinglist, User
 from app.service.import_language import importLanguage
 from app.service.file_has_access_or_download import file_has_access_or_download
 from .schemas import AddHousehold, UpdateHousehold, UpdateHouseholdMember
@@ -50,6 +50,16 @@ def addHousehold(args):
     member.user_id = current_user.id
     member.owner = True
     member.save()
+
+    if 'member' in args:
+        print(args['member'])
+        for uid in args['member']:
+            if uid == current_user.id: continue
+            if not User.find_by_id(uid): continue
+            member = HouseholdMember()
+            member.household_id = household.id
+            member.user_id = uid
+            member.save()
 
     Shoppinglist(name="Default", household_id=household.id).save()
 

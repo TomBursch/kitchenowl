@@ -133,10 +133,12 @@ class _SettingsUserPageState extends State<SettingsUserPage> {
                                 state.user!.image!,
                               ),
                         radius: 45,
-                        child: Text(
-                          nameController.text.substring(0, 1),
-                          textScaleFactor: 2,
-                        ),
+                        child: nameController.text.isNotEmpty
+                            ? Text(
+                                nameController.text.substring(0, 1),
+                                textScaleFactor: 2,
+                              )
+                            : null,
                       ),
                     ),
                     TextField(

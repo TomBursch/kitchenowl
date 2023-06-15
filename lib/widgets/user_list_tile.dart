@@ -33,7 +33,7 @@ class UserListTile extends StatelessWidget {
                 context,
                 user.image!,
               ),
-        child: Text(user.name.substring(0, 1)),
+        child: user.name.isNotEmpty ? Text(user.name.substring(0, 1)) : null,
       ),
       enabled: !disabled,
       title: Text(user.name +

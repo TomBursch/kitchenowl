@@ -86,8 +86,8 @@ class _ChartBarMonthsState extends State<ChartBarMonths> {
                   reservedSize: 45,
                 ),
               ),
-              rightTitles: AxisTitles(),
-              topTitles: AxisTitles(),
+              rightTitles: const AxisTitles(),
+              topTitles: const AxisTitles(),
             ),
             gridData: FlGridData(
               show: true,

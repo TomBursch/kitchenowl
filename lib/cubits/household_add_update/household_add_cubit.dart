@@ -1,13 +1,18 @@
 import 'package:kitchenowl/enums/views_enum.dart';
 import 'package:kitchenowl/helpers/named_bytearray.dart';
 import 'package:kitchenowl/models/household.dart';
+import 'package:kitchenowl/models/member.dart';
 import 'package:kitchenowl/models/nullable.dart';
+import 'package:kitchenowl/models/user.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
 
 import 'household_add_update_cubit.dart';
 
 class HouseholdAddCubit extends HouseholdAddUpdateCubit<HouseholdAddState> {
-  HouseholdAddCubit(String? locale) : super(const HouseholdAddState()) {
+  HouseholdAddCubit(String? locale, User user)
+      : super(HouseholdAddState(
+          members: [Member.fromUser(user, admin: true)],
+        )) {
     ApiService.getInstance()
         .getSupportedLanguages()
         .then((value) => emit(state.copyWith(
@@ -49,6 +54,21 @@ class HouseholdAddCubit extends HouseholdAddUpdateCubit<HouseholdAddState> {
     emit(state.copyWith(viewOrdering: ViewsEnum.values));
   }
 
+  void removeMember(Member member) {
+    if (member.hasAdminRights()) return;
+    final l = List.of(state.members);
+    emit(state.copyWith(
+      members: l..removeWhere((m) => m.id == member.id),
+    ));
+  }
+
+  void addMember(Member member) {
+    final l = List.of(state.members);
+    emit(state.copyWith(
+      members: l..add(member),
+    ));
+  }
+
   Future<void> create() async {
     final _state = state;
     if (!_state.isValid()) return;
@@ -62,11 +82,12 @@ class HouseholdAddCubit extends HouseholdAddUpdateCubit<HouseholdAddState> {
     await ApiService.getInstance().addHousehold(Household(
       id: 0,
       name: _state.name,
-      image: image ?? '',
+      image: image,
       language: _state.language,
       featurePlanner: _state.featurePlanner,
       featureExpenses: _state.featureExpenses,
       viewOrdering: _state.viewOrdering,
+      member: _state.members,
     ));
   }
 
@@ -80,6 +101,7 @@ class HouseholdAddCubit extends HouseholdAddUpdateCubit<HouseholdAddState> {
 
 class HouseholdAddState extends HouseholdAddUpdateState {
   final NamedByteArray? image;
+  final List<Member> members;
 
   const HouseholdAddState({
     super.name = "",
@@ -89,6 +111,7 @@ class HouseholdAddState extends HouseholdAddUpdateState {
     super.featureExpenses = true,
     super.viewOrdering = ViewsEnum.values,
     super.supportedLanguages,
+    this.members = const [],
   });
 
   HouseholdAddState copyWith({
@@ -99,6 +122,7 @@ class HouseholdAddState extends HouseholdAddUpdateState {
     bool? featureExpenses,
     List<ViewsEnum>? viewOrdering,
     Map<String, String>? supportedLanguages,
+    List<Member>? members,
   }) =>
       HouseholdAddState(
         name: name ?? this.name,
@@ -108,10 +132,11 @@ class HouseholdAddState extends HouseholdAddUpdateState {
         featureExpenses: featureExpenses ?? this.featureExpenses,
         viewOrdering: viewOrdering ?? this.viewOrdering,
         supportedLanguages: supportedLanguages ?? this.supportedLanguages,
+        members: members ?? this.members,
       );
 
   @override
-  List<Object?> get props => super.props + [image];
+  List<Object?> get props => super.props + [image, members];
 
   bool isValid() => name.replaceAll(" ", "").isNotEmpty;
 }

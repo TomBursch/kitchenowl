@@ -14,7 +14,7 @@ import os
 
 
 MIN_FRONTEND_VERSION = 71
-BACKEND_VERSION = 68
+BACKEND_VERSION = 69
 
 APP_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_DIR = os.path.dirname(APP_DIR)
@@ -113,7 +113,7 @@ def add_cors_headers(response):
 
 
 @app.errorhandler(Exception)
-def unhandled_exception(e):
+def unhandled_exception(e: Exception):
     if type(e) is NotFoundRequest:
         app.logger.info(e)
         return "Requested resource not found", 404

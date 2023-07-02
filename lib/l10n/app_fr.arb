@@ -460,5 +460,35 @@
     "placeholders": {
       "household": {}
     }
-  }
+  },
+  "emailUsed": "Le courriel est déjà associé à un compte",
+  "@emailUsed": {},
+  "ingredients": "Ingrédients",
+  "@ingredients": {},
+  "ingredientsOptional": "Ingrédients optionnels",
+  "@ingredientsOptional": {},
+  "privacyPolicyAgree": "En créant un compte, vous acceptez notre {privacyPolicy}",
+  "@privacyPolicyAgree": {
+    "placeholders": {
+      "privacyPolicy": {}
+    }
+  },
+  "signup": "S'inscrire",
+  "@signup": {},
+  "supportDevelopment": "Soutenir le développement",
+  "@supportDevelopment": {},
+  "usernameInvalid": "Le nom d'utilisateur ne peut pas contenir « @ »",
+  "@usernameInvalid": {},
+  "usernameUnavailable": "Le nom d'utilisateur n'est pas disponible",
+  "@usernameUnavailable": {},
+  "accountCreate": "Créer un compte",
+  "@accountCreate": {},
+  "accountCreateTitle": "Créez votre compte KitchenOwl",
+  "@accountCreateTitle": {},
+  "email": "Courriel",
+  "@email": {},
+  "emailInvalid": "Courriel invalide",
+  "@emailInvalid": {},
+  "emailUpdate": "Mettre à jour le courriel",
+  "@emailUpdate": {}
 }

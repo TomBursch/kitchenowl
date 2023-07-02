@@ -486,5 +486,9 @@
   "emailInvalid": "Ongeldige email",
   "@emailInvalid": {},
   "emailUpdate": "Email updaten",
-  "@emailUpdate": {}
+  "@emailUpdate": {},
+  "ingredients": "Ingrediënten",
+  "@ingredients": {},
+  "ingredientsOptional": "Optionele Ingrediënten",
+  "@ingredientsOptional": {}
 }

@@ -17,7 +17,7 @@
       "lang": {}
     }
   },
-  "addNumberIngredients": "Füge {number} Produkte hinzu",
+  "addNumberIngredients": "Füge {number} Zutaten hinzu",
   "@addNumberIngredients": {
     "placeholders": {
       "number": {}
@@ -25,7 +25,7 @@
   },
   "addRecipeToPlanner": "Zum Essensplan hinzufügen",
   "@addRecipeToPlanner": {},
-  "addRecipeToPlannerShort": "Hinzufügen",
+  "addRecipeToPlannerShort": "Zum Speiseplan hinzufügen",
   "@addRecipeToPlannerShort": {},
   "address": "Adresse",
   "@address": {},
@@ -137,7 +137,7 @@
   "@itemDelete": {},
   "items": "Artikel",
   "@items": {},
-  "itemsAdd": "Hinzufügen",
+  "itemsAdd": "Elemente hinzufügen",
   "@itemsAdd": {},
   "itemDeleteConfirmation": "Bist du dir sicher, dass du {item} löschen möchtest? Diese Aktion entfernt den Artikel von allen Rezepten.",
   "@itemDeleteConfirmation": {
@@ -407,7 +407,7 @@
   "@reset": {},
   "set": "Setzen",
   "@set": {},
-  "swipeToRemove": "Wische zum Löschen",
+  "swipeToRemove": "Wische zum Entfernen",
   "@swipeToRemove": {},
   "tagEdit": "Markierung bearbeiten",
   "@tagEdit": {},
@@ -481,6 +481,23 @@
   "@usernameInvalid": {},
   "emailUpdate": "E-Mail aktualisieren",
   "@emailUpdate": {},
-  "emailUsed": "Die E-Mail ist bereits mit einem Account verknüpft",
-  "@emailUsed": {}
+  "emailUsed": "Die E-Mail ist bereits mit einem Konto verknüpft",
+  "@emailUsed": {},
+  "ingredients": "Zutaten",
+  "@ingredients": {},
+  "ingredientsOptional": "Optionale Zutaten",
+  "@ingredientsOptional": {},
+  "addedBy": "Hinzugefügt von {name}",
+  "@addedBy": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "owesAB": "{nameA} schuldet {nameB}",
+  "@owesAB": {
+    "placeholders": {
+      "nameA": {},
+      "nameB": {}
+    }
+  }
 }

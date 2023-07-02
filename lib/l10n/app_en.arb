@@ -303,6 +303,13 @@
   "@other": {},
   "overview": "Overview",
   "@overview": {},
+  "owesAB": "{nameA} owes {nameB}",
+  "@owesAB": {
+    "placeholders": {
+      "nameA": {},
+      "nameB": {}
+    }
+  },
   "pageNotFound": "Couldn't find this page",
   "@pageNotFound": {},
   "password": "Password",

@@ -15,6 +15,12 @@
   "@addCategory": {},
   "addDescriptionFromSource": "Add description from source",
   "@addDescriptionFromSource": {},
+  "addedBy": "Added by {name}",
+  "@addedBy": {
+    "placeholders": {
+      "name": {}
+    }
+  },
   "addItemTitle": "Add Items",
   "@addItemTitle": {},
   "addLanguage": "Add Language",

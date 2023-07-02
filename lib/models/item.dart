@@ -122,6 +122,9 @@ class ItemWithDescription extends Item {
 }
 
 class ShoppinglistItem extends ItemWithDescription {
+  final int? createdById;
+  final DateTime? createdAt;
+
   const ShoppinglistItem({
     super.id,
     required super.name,
@@ -129,6 +132,8 @@ class ShoppinglistItem extends ItemWithDescription {
     super.category,
     super.icon,
     super.ordering = 0,
+    this.createdById,
+    this.createdAt,
   });
 
   factory ShoppinglistItem.fromJson(Map<String, dynamic> map) {
@@ -140,6 +145,11 @@ class ShoppinglistItem extends ItemWithDescription {
       icon: map['icon'],
       category:
           map['category'] != null ? Category.fromJson(map['category']) : null,
+      createdAt: map['created_at'] != null
+          ? DateTime.fromMillisecondsSinceEpoch(map['created_at'], isUtc: true)
+              .toLocal()
+          : null,
+      createdById: map['created_by'],
     );
   }
 
@@ -169,6 +179,16 @@ class ShoppinglistItem extends ItemWithDescription {
         description: description ?? this.description,
         ordering: ordering,
       );
+
+  @override
+  List<Object?> get props => super.props + [createdAt, createdById];
+
+  @override
+  Map<String, dynamic> toJsonWithId() => super.toJsonWithId()
+    ..addAll({
+      "created_at": createdAt?.toUtc().millisecondsSinceEpoch,
+      "created_by": createdById,
+    });
 }
 
 class RecipeItem extends ItemWithDescription {

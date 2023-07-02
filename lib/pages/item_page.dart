@@ -1,5 +1,7 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:kitchenowl/app.dart';
 import 'package:kitchenowl/cubits/household_cubit.dart';
 import 'package:kitchenowl/cubits/item_edit_cubit.dart';
@@ -218,6 +220,33 @@ class _ItemPageState<T extends Item> extends State<ItemPage<T>> {
                               ),
                             ],
                           ),
+                          if (widget.item is ShoppinglistItem)
+                            ListTile(
+                              contentPadding: EdgeInsets.zero,
+                              title: Text(
+                                AppLocalizations.of(context)!
+                                    .addedBy(widget.household?.member
+                                            ?.firstWhereOrNull(
+                                              (e) =>
+                                                  e.id ==
+                                                  (widget.item
+                                                          as ShoppinglistItem)
+                                                      .createdById,
+                                            )
+                                            ?.name ??
+                                        AppLocalizations.of(context)!.other),
+                              ),
+                              trailing: (widget.item as ShoppinglistItem)
+                                          .createdAt !=
+                                      null
+                                  ? Text(
+                                      DateFormat.yMMMEd().add_jm().format(
+                                            (widget.item as ShoppinglistItem)
+                                                .createdAt!,
+                                          ),
+                                    )
+                                  : null,
+                            ),
                         ],
                       ),
                     ),

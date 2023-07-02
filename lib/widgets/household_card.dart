@@ -28,6 +28,7 @@ class HouseholdCard extends StatelessWidget {
         ),
         onLongPress: () => showModalBottomSheet<void>(
           context: context,
+          showDragHandle: true,
           builder: (ctx) => SafeArea(
             child: Column(
               mainAxisSize: MainAxisSize.min,

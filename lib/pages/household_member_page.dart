@@ -120,6 +120,7 @@ class _HouseholdMemberPageState extends State<HouseholdMemberPage> {
                             onTap: () async {
                               showModalBottomSheet<void>(
                                 context: context,
+                                showDragHandle: true,
                                 builder: (ctx) => UpdateMemberBottomSheet(
                                   member: state.member[i],
                                   allowEdit: hasAdminRights,

@@ -26,6 +26,7 @@ class TokenCard extends StatelessWidget {
             : null,
         onTap: () => showModalBottomSheet(
           context: context,
+          showDragHandle: true,
           builder: (context) => TokenBottomSheet(
             token: token,
             onLogout: onLogout,

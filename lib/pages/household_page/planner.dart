@@ -143,8 +143,9 @@ class _PlannerPageState extends State<PlannerPage> {
                             for (final recipe in state.getPlannedWithoutDay())
                               KitchenOwlFractionallySizedBox(
                                 widthFactor: (1 /
-                                    (constraints.crossAxisExtent ~/ 115)
-                                        .clamp(1, 9)),
+                                    DynamicStyling.itemCrossAxisCount(
+                                      constraints.crossAxisExtent,
+                                    )),
                                 child: AspectRatio(
                                   aspectRatio: 1,
                                   child: SelectableButtonCard(
@@ -166,8 +167,9 @@ class _PlannerPageState extends State<PlannerPage> {
                               for (final recipe in state.getPlannedOfDay(day))
                                 KitchenOwlFractionallySizedBox(
                                   widthFactor: (1 /
-                                      (constraints.crossAxisExtent ~/ 115)
-                                          .clamp(1, 9)),
+                                      DynamicStyling.itemCrossAxisCount(
+                                        constraints.crossAxisExtent,
+                                      )),
                                   child: Column(
                                     mainAxisSize: MainAxisSize.min,
                                     crossAxisAlignment:

@@ -26,7 +26,10 @@ class StringItemMatch extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FractionallySizedBox(
-      widthFactor: 1 / (MediaQuery.of(context).size.width ~/ 135).clamp(1, 9),
+      widthFactor: 1 /
+          DynamicStyling.itemCrossAxisCount(
+            MediaQuery.of(context).size.width - 32,
+          ),
       alignment: Alignment.topCenter,
       child: Column(
         mainAxisSize: MainAxisSize.min,

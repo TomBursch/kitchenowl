@@ -99,8 +99,9 @@ class SliverItemGridList<T extends Item> extends StatelessWidget {
           ? SliverLayoutBuilder(
               builder: (context, constraints) => SliverGrid(
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount:
-                      (constraints.crossAxisExtent ~/ 115).clamp(1, 9),
+                  crossAxisCount: DynamicStyling.itemCrossAxisCount(
+                    constraints.crossAxisExtent,
+                  ),
                   childAspectRatio: 1,
                 ),
                 delegate: delegate,

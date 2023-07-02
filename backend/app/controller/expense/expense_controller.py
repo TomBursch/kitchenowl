@@ -196,7 +196,7 @@ def getExpenseOverview(args, household_id):
     factor = 1
     query = Expense.query\
         .filter(Expense.household_id == household_id)\
-        .group_by(Expense.category_id)\
+        .group_by(Expense.category_id, ExpenseCategory.id)\
         .join(Expense.category, isouter=True)
 
     if ('view' in args and args['view'] == 1):

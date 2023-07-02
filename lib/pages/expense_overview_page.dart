@@ -6,6 +6,7 @@ import 'package:kitchenowl/cubits/expense_overview_cubit.dart';
 import 'package:kitchenowl/enums/expenselist_sorting.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/household.dart';
+import 'package:kitchenowl/widgets/chart_bar_member_distribution.dart';
 import 'package:kitchenowl/widgets/chart_bar_months.dart';
 import 'package:kitchenowl/widgets/expense_category_icon.dart';
 
@@ -163,6 +164,29 @@ class _ExpenseOverviewPageState extends State<ExpenseOverviewPage> {
                                   state.selectedMonthIndex]
                               ?.length ??
                           0,
+                    ),
+                  ),
+                  const SliverToBoxAdapter(
+                    child: Divider(),
+                  ),
+                  SliverToBoxAdapter(
+                    child: ChartBarMemberDistribution(
+                      household: state.household,
+                    ),
+                  ),
+                  SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      (context, i) => Card(
+                        child: ListTile(
+                          title: Text(AppLocalizations.of(context)!.owesAB(
+                            state.owes[i].$1.name,
+                            state.owes[i].$2.name,
+                          )),
+                          trailing: Text(NumberFormat.simpleCurrency()
+                              .format(state.owes[i].$3)),
+                        ),
+                      ),
+                      childCount: state.owes.length,
                     ),
                   ),
                   SliverToBoxAdapter(

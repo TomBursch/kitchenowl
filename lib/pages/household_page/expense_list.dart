@@ -2,15 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
-import 'package:community_charts_flutter/community_charts_flutter.dart'
-    as charts;
 import 'package:kitchenowl/app.dart';
 import 'package:kitchenowl/cubits/expense_list_cubit.dart';
 import 'package:kitchenowl/cubits/household_cubit.dart';
 import 'package:kitchenowl/enums/expenselist_sorting.dart';
 import 'package:kitchenowl/kitchenowl.dart';
-import 'package:kitchenowl/models/member.dart';
-import 'package:kitchenowl/models/user.dart';
+import 'package:kitchenowl/widgets/chart_bar_member_distribution.dart';
 import 'package:kitchenowl/widgets/chart_pie_current_month.dart';
 import 'package:kitchenowl/widgets/choice_scroll.dart';
 import 'package:kitchenowl/widgets/expense/timeframe_dropdown_button.dart';
@@ -109,13 +106,8 @@ class _ExpensePageState extends State<ExpenseListPage> {
                                   ? CrossFadeState.showFirst
                                   : CrossFadeState.showSecond,
                           duration: const Duration(milliseconds: 100),
-                          firstChild: SizedBox(
-                            height: ((householdState.household.member?.length ??
-                                            0) *
-                                        60 +
-                                    30)
-                                .toDouble(),
-                            child: _getBarChart(context, householdState),
+                          firstChild: ChartBarMemberDistribution(
+                            household: householdState.household,
                           ),
                           secondChild: Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -335,82 +327,5 @@ class _ExpensePageState extends State<ExpenseListPage> {
         scrollController.position.maxScrollExtent)) {
       BlocProvider.of<ExpenseListCubit>(context).loadMore();
     }
-  }
-
-  // ignore: long-method
-  Widget _getBarChart(BuildContext context, HouseholdState state) {
-    double maxBalance = (state.household.member ?? [])
-        .fold<double>(0.0, (p, e) => e.balance.abs() > p ? e.balance.abs() : p);
-    maxBalance = maxBalance > 0 ? maxBalance : 1;
-
-    final zeroDividerColor = Theme.of(context).colorScheme.onSurface;
-
-    return charts.BarChart(
-      [
-        charts.Series<Member, String>(
-          id: 'Balance',
-          data: state.household.member ?? [],
-          colorFn: (member, _) => charts.Color(
-            r: Theme.of(context).colorScheme.primary.red,
-            g: Theme.of(context).colorScheme.primary.green,
-            b: Theme.of(context).colorScheme.primary.blue,
-          ),
-          domainFn: (member, _) => member.username,
-          measureFn: (member, _) => member.balance,
-          labelAccessorFn: (member, _) =>
-              "  ${member.name}: ${NumberFormat.simpleCurrency().format(member.balance)}",
-        ),
-        charts.Series<User, String>(
-          id: 'zero',
-          domainFn: (member, _) => member.username,
-          measureFn: (member, _) => 0,
-          data: state.household.member ?? [],
-          colorFn: (member, _) => charts.Color(
-            r: zeroDividerColor.red,
-            g: zeroDividerColor.green,
-            b: zeroDividerColor.blue,
-          ),
-          strokeWidthPxFn: (member, _) => 5,
-        )..setAttribute(charts.rendererIdKey, 'zero'),
-      ],
-      vertical: false,
-      defaultRenderer: charts.BarRendererConfig(
-        barRendererDecorator: charts.BarLabelDecorator<String>(
-          insideLabelStyleSpec: charts.TextStyleSpec(
-            color: charts.Color(
-              r: Theme.of(context).colorScheme.onPrimary.red,
-              g: Theme.of(context).colorScheme.onPrimary.green,
-              b: Theme.of(context).colorScheme.onPrimary.blue,
-            ),
-          ),
-          outsideLabelStyleSpec: charts.TextStyleSpec(
-            color: charts.Color(
-              r: Theme.of(context).colorScheme.onBackground.red,
-              g: Theme.of(context).colorScheme.onBackground.green,
-              b: Theme.of(context).colorScheme.onBackground.blue,
-            ),
-          ),
-        ),
-        cornerStrategy: const charts.ConstCornerStrategy(14),
-      ),
-      customSeriesRenderers: [
-        charts.BarTargetLineRendererConfig<String>(
-          customRendererId: 'zero',
-        ),
-      ],
-      defaultInteractions: false,
-      primaryMeasureAxis: charts.NumericAxisSpec(
-        showAxisLine: false,
-        renderSpec: const charts.NoneRenderSpec(),
-        tickProviderSpec: charts.StaticNumericTickProviderSpec([
-          charts.TickSpec(-maxBalance),
-          const charts.TickSpec<double>(0.0),
-          charts.TickSpec(maxBalance),
-        ]),
-      ),
-      domainAxis: const charts.OrdinalAxisSpec(
-        renderSpec: charts.NoneRenderSpec(),
-      ),
-    );
   }
 }

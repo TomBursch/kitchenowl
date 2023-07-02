@@ -52,7 +52,6 @@ def addHousehold(args):
     member.save()
 
     if 'member' in args:
-        print(args['member'])
         for uid in args['member']:
             if uid == current_user.id: continue
             if not User.find_by_id(uid): continue

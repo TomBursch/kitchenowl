@@ -73,6 +73,10 @@ class User(db.Model, DbModelMixin, TimestampMixin):
         for f in File.query.filter(File.created_by == self.id).all():
             f.created_by = None
             f.save()
+        from app.models import ShoppinglistItems
+        for s in ShoppinglistItems.query.filter(ShoppinglistItems.created_by == self.id).all():
+            s.created_by = None
+            s.save()
         super().delete()
 
     @classmethod

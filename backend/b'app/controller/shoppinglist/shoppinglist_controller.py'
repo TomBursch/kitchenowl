@@ -1,5 +1,5 @@
 from flask import jsonify, Blueprint
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import current_user, jwt_required
 from app import db
 from app.models import Item, Shoppinglist, History, Status, Association, ShoppinglistItems
 from app.helpers import validate_args, authorize_household
@@ -186,6 +186,7 @@ def addShoppinglistItemByName(args, id):
     if not con:
         description = args['description'] if 'description' in args else ''
         con = ShoppinglistItems(description=description)
+        con.created_by = current_user.id
         con.item = item
         con.shoppinglist = shoppinglist
         con.save()
@@ -245,6 +246,7 @@ def addRecipeItems(args, id):
                     db.session.add(con)
                 else:
                     con = ShoppinglistItems(description=description)
+                    con.created_by = current_user.id
                     con.item = item
                     con.shoppinglist = shoppinglist
                     db.session.add(con)

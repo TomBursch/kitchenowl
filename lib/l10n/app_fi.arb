@@ -81,7 +81,7 @@
       "name": {}
     }
   },
-  "onboardingTitle": "Luodan uusi käyttäjä",
+  "onboardingTitle": "Luodaan uusi käyttäjä",
   "@onboardingTitle": {},
   "optional": "Valinnainen",
   "@optional": {},
@@ -297,7 +297,7 @@
   "@personal": {},
   "addDescriptionFromSource": "Lisää kuvaus lähteestä",
   "@addDescriptionFromSource": {},
-  "addLanguageConfirm": "Haluatko varmasti lisätä kielen '{lang}'? Tätä ei (juuri nyt) voi perua.",
+  "addLanguageConfirm": "Oletko varma, että haluat asettaa kieleksi '{lang}'? Tätä ei voi perua, ja se lisää kohteita ja kategorioita kotitalouteesi.",
   "@addLanguageConfirm": {
     "placeholders": {
       "lang": {}
@@ -361,10 +361,104 @@
   "@lltCreate": {},
   "dangerZone": "Vaaravyöhyke",
   "@dangerZone": {},
-  "accountDelete": "Poista tili",
+  "accountDelete": "Poista tunnus",
   "@accountDelete": {},
-  "accountDeleteConfirmation": "Haluatko varmasti poistaa tilisi?",
+  "accountDeleteConfirmation": "Haluatko varmasti poistaa tunnuksesi?",
   "@accountDeleteConfirmation": {},
   "daily": "Päivittäin",
-  "@daily": {}
+  "@daily": {},
+  "householdSwitch": "Vaihda kotitaloutta",
+  "@householdSwitch": {},
+  "imageSelect": "Valitse kuva",
+  "@imageSelect": {},
+  "passwordRepeat": "Toista salasana",
+  "@passwordRepeat": {},
+  "passwordRepeatNoMatch": "Salasanat eivät täsmää",
+  "@passwordRepeatNoMatch": {},
+  "privacyPolicy": "Tietosuojakäytäntö",
+  "@privacyPolicy": {},
+  "swipeToRemove": "Pyyhkäise poistaaksesi",
+  "@swipeToRemove": {},
+  "emailUsed": "Sähköposti on jo liitettynä tunnukseen",
+  "@emailUsed": {},
+  "households": "Kotitaloudet",
+  "@households": {},
+  "member": "Jäsen",
+  "@member": {},
+  "members": "Jäsenet",
+  "@members": {},
+  "passwordFieldTooShort": "Salasana on liian lyhyt",
+  "@passwordFieldTooShort": {},
+  "remove": "Poista",
+  "@remove": {},
+  "settings": "Asetukset",
+  "@settings": {},
+  "signup": "Rekisteröidy",
+  "@signup": {},
+  "supportDevelopment": "Tue sovelluskehitystä",
+  "@supportDevelopment": {},
+  "tagEdit": "Muokkaa tunnistetta",
+  "@tagEdit": {},
+  "usernameInvalid": "Käyttäjänimi ei voi sisältää merkkiä '@'",
+  "@usernameInvalid": {},
+  "usernameUnavailable": "Käyttäjänimi ei ole käytettävissä",
+  "@usernameUnavailable": {},
+  "reset": "Nollaa",
+  "@reset": {},
+  "set": "Aseta",
+  "@set": {},
+  "householdNew": "Uusi kotitalous",
+  "@householdNew": {},
+  "helpTranslate": "Auta kääntämisessä",
+  "@helpTranslate": {},
+  "householdLeaveConfirmation": "Haluatko varmasti poistua kotitaloudesta {household}?",
+  "@householdLeaveConfirmation": {
+    "placeholders": {
+      "household": {}
+    }
+  },
+  "userSearchHint": "Syötä nimi",
+  "@userSearchHint": {},
+  "general": "Yleinen",
+  "@general": {},
+  "householdDelete": "Poista kotitalous",
+  "@householdDelete": {},
+  "householdDeleteConfirmation": "Haluatko varmasti poistaa kotitalouden {household}? Samalla poistetaan kaikki reseptit, kulut ja tuotteet.",
+  "@householdDeleteConfirmation": {
+    "placeholders": {
+      "household": {}
+    }
+  },
+  "logoutName": "Kirjaa ulos {name}",
+  "@logoutName": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "memberAdd": "Lisää jäsen",
+  "@memberAdd": {},
+  "memberRemove": "Poista jäsen",
+  "@memberRemove": {},
+  "reportIssue": "Raportoi ongelmasta",
+  "@reportIssue": {},
+  "householdEmpty": "Aloita lisäämällä ensimmäinen kotitalous!",
+  "@householdEmpty": {},
+  "householdLeave": "Poistu kotitaloudesta",
+  "@householdLeave": {},
+  "accountCreateTitle": "Luo KitchenOwl-tunnuksesi",
+  "@accountCreateTitle": {},
+  "accountCreate": "Luo käyttäjätunnus",
+  "@accountCreate": {},
+  "privacyPolicyAgree": "{privacyPolicy} katsotaan hyväksytyksi, kun luot tunnuksen",
+  "@privacyPolicyAgree": {
+    "placeholders": {
+      "privacyPolicy": {}
+    }
+  },
+  "email": "Sähköposti",
+  "@email": {},
+  "emailInvalid": "Virheellinen sähköposti",
+  "@emailInvalid": {},
+  "emailUpdate": "Päivitä sähköposti",
+  "@emailUpdate": {}
 }

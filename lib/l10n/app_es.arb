@@ -486,5 +486,22 @@
   "emailInvalid": "Correo electrónico no valido",
   "@emailInvalid": {},
   "emailUpdate": "Axtualizar el correo electrónico",
-  "@emailUpdate": {}
+  "@emailUpdate": {},
+  "ingredients": "Ingredientes",
+  "@ingredients": {},
+  "ingredientsOptional": "Ingredientes opcionales",
+  "@ingredientsOptional": {},
+  "addedBy": "Añadido por {name}",
+  "@addedBy": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "owesAB": "{nameA} debe {nameB}",
+  "@owesAB": {
+    "placeholders": {
+      "nameA": {},
+      "nameB": {}
+    }
+  }
 }

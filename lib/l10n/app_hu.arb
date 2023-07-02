@@ -11,7 +11,7 @@
   "@addItemTitle": {},
   "addLanguage": "Nyelv hozzáadása",
   "@addLanguage": {},
-  "addLanguageConfirm": "Biztosan hozzá szeretné adni a(z) '{lang}' nyelvet? Ez (jelenleg) nem vonható vissza.",
+  "addLanguageConfirm": "Biztosan '{lang}'-ra akarod állítani a nyelvet? Ez nem vonható vissza, új elemeket és kategóriákat fog hozzáadni a lakásodhoz.",
   "@addLanguageConfirm": {
     "placeholders": {
       "lang": {}
@@ -114,5 +114,111 @@
     "placeholders": {
       "month": {}
     }
-  }
+  },
+  "dangerZone": "Veszélyzóna",
+  "@dangerZone": {},
+  "imageSelect": "Válassz ki egy képet",
+  "@imageSelect": {},
+  "emailUsed": "Ez az email már hozzá van rendelve egy másik fiókhoz",
+  "@emailUsed": {},
+  "householdLeave": "Háztartás Elhagyása",
+  "@householdLeave": {},
+  "householdLeaveConfirmation": "Biztosan ki akarsz lépni a {household}-ból?",
+  "@householdLeaveConfirmation": {
+    "placeholders": {
+      "household": {}
+    }
+  },
+  "householdNew": "Új Háztartás",
+  "@householdNew": {},
+  "income": "Bevétel",
+  "@income": {},
+  "itemDelete": "Elem Törlése",
+  "@itemDelete": {},
+  "accountDelete": "Fiók Törlése",
+  "@accountDelete": {},
+  "expensePaidFor": "Fizetve neki",
+  "@expensePaidFor": {},
+  "expensePaidBy": "Fizette",
+  "@expensePaidBy": {},
+  "features": "Funkciók",
+  "@features": {},
+  "forceOfflineMode": "Erőltetett offline mód",
+  "@forceOfflineMode": {},
+  "list": "Lista",
+  "@list": {},
+  "language": "Nyelv",
+  "@language": {},
+  "languageSelect": "Válaszd ki a nyelvet",
+  "@languageSelect": {},
+  "ingredients": "Hozzávalók",
+  "@ingredients": {},
+  "ingredientsOptional": "Választható Hozzávalók",
+  "@ingredientsOptional": {},
+  "items": "Elemek",
+  "@items": {},
+  "itemsAdd": "Elemek Hozzáadása",
+  "@itemsAdd": {},
+  "accountCreate": "Fiók Létrehozása",
+  "@accountCreate": {},
+  "accountDeleteConfirmation": "Biztosan törölni akarod a fiókod?",
+  "@accountDeleteConfirmation": {},
+  "households": "Háztartások",
+  "@households": {},
+  "householdSwitch": "Háztartás Váltás",
+  "@householdSwitch": {},
+  "daily": "Napi",
+  "@daily": {},
+  "expenseReceivedBy": "Megkapta",
+  "@expenseReceivedBy": {},
+  "expenseReceivedFor": "Megkapva",
+  "@expenseReceivedFor": {},
+  "fieldCannotBeEmpty": "{field} maradhat üresen.",
+  "@fieldCannotBeEmpty": {
+    "placeholders": {
+      "field": {}
+    }
+  },
+  "gallery": "Galéria",
+  "@gallery": {},
+  "general": "Általános",
+  "@general": {},
+  "grid": "Rács",
+  "@grid": {},
+  "go": "Go",
+  "@go": {},
+  "helpTranslate": "Segíts a fordításban",
+  "@helpTranslate": {},
+  "household": "Háztartás",
+  "@household": {},
+  "householdDelete": "Háztartás Törlése",
+  "@householdDelete": {},
+  "householdDeleteConfirmation": "Biztosan ki akarod törölni a {household}-t? Minden hozzátartozó elemet, receptet és kiadást is törölni fog.",
+  "@householdDeleteConfirmation": {
+    "placeholders": {
+      "household": {}
+    }
+  },
+  "accountCreateTitle": "Hozz létre egy KitchenOwl fiókot",
+  "@accountCreateTitle": {},
+  "itemDeleteConfirmation": "Biztosan ki akarod törölni a(z) {item}-et? Törlődni fog minden receptből is, ami tartalmazza.",
+  "@itemDeleteConfirmation": {
+    "placeholders": {
+      "item": {}
+    }
+  },
+  "itemsOptional": "Választható Elemek",
+  "@itemsOptional": {},
+  "itemsRecent": "Friss Elemek",
+  "@itemsRecent": {},
+  "lastUsed": "Utoljára használt",
+  "@lastUsed": {},
+  "email": "Email",
+  "@email": {},
+  "emailInvalid": "Helytelen email",
+  "@emailInvalid": {},
+  "emailUpdate": "Email Frissítése",
+  "@emailUpdate": {},
+  "householdEmpty": "Még nincs háztartásod, hozz létre egyet!",
+  "@householdEmpty": {}
 }

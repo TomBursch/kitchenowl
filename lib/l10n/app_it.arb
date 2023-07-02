@@ -457,7 +457,7 @@
   "@monthly": {},
   "usernameUnavailable": "Lo username non è disponibile",
   "@usernameUnavailable": {},
-  "emailUsed": "La email è già associata ad un account",
+  "emailUsed": "L'e-mail è già associata ad un account",
   "@emailUsed": {},
   "privacyPolicyAgree": "Creando un account accetti le nostre {privacyPolicy}",
   "@privacyPolicyAgree": {
@@ -481,10 +481,14 @@
   "@accountCreate": {},
   "accountCreateTitle": "Crea il tuo KitchenOwl account",
   "@accountCreateTitle": {},
-  "emailUpdate": "Aggiorna la tua Email",
+  "emailUpdate": "Aggiorna l'e-mail",
   "@emailUpdate": {},
-  "email": "Email",
+  "email": "E-mail",
   "@email": {},
-  "emailInvalid": "Email invalida",
-  "@emailInvalid": {}
+  "emailInvalid": "E-mail invalida",
+  "@emailInvalid": {},
+  "ingredients": "Ingredienti",
+  "@ingredients": {},
+  "ingredientsOptional": "Ingredienti opzionali",
+  "@ingredientsOptional": {}
 }

@@ -13,6 +13,7 @@ import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/helpers/url_launcher.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/household.dart';
+import 'package:kitchenowl/pages/analytics_page.dart';
 import 'package:kitchenowl/pages/household_member_page.dart';
 import 'package:kitchenowl/pages/household_update_page.dart';
 import 'package:kitchenowl/pages/settings_server_user_page.dart';
@@ -273,6 +274,15 @@ class _SettingsPageState extends State<SettingsPage> {
                 onTap: () => Navigator.of(context, rootNavigator: true).push(
                   MaterialPageRoute(
                     builder: (context) => const SettingsServerUserPage(),
+                  ),
+                ),
+              ),
+              ListTile(
+                title: const Text("Analytics"),
+                leading: const Icon(Icons.analytics_rounded),
+                onTap: () => Navigator.of(context, rootNavigator: true).push(
+                  MaterialPageRoute(
+                    builder: (context) => const AnalyticsPage(),
                   ),
                 ),
               ),

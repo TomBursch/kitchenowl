@@ -5,13 +5,13 @@ Get it on your favorite app store or find the current release for your operating
 Please take a quick look at [Tips & Tricks](tips-and-tricks.md) to get the best experience in the app.
 
 <a href='https://play.google.com/store/apps/details?id=com.tombursch.kitchenowl'>
-    <img alt='Get it on Google Play'  src='/img/badges/playstore.png' style="height:50px"/>
+    <img alt='Get it on Google Play' src='/img/badges/playstore.png' style="height:50px" />
 </a>
 <a href='https://f-droid.org/packages/com.tombursch.kitchenowl/'>
-    <img alt='Get it on F-Droid' src='/img/badges/f-droid.png' style="height:50px"/>
+    <img alt='Get it on F-Droid' src='/img/badges/f-droid.png' style="height:50px" />
 </a>
-<a href='https://testflight.apple.com/join/x7LhltFw'>
-    <img alt='Get it on TestFlight' src='/img/badges/testflight.png' style="height:50px"/>
+<a href='https://apps.apple.com/app/kitchenowl/id1557453670'>
+    <img alt='Get it on the AppStore' src='/img/badges/appstore.png' style="height:50px" />
 </a>
 
 ## 🗄️ Server Install
@@ -61,7 +61,10 @@ There are three tags available: `latest`, `beta` and `dev`. `latest` is the most
     - Backend `tombursch/kitchenowl`:
         - `FRONT_URL`: Adds custom cors header for the set URL.
         - `HTTP_PORT` (defaut: `80`): Set a custom port for the http server. Usually this should be changed using docker port mapping.
-    - Setup using Postgres: [docker-compose.yml](https://github.com/TomBursch/kitchenowl-backend/blob/main/docker-compose-postgres.yml)
+        - `PRIVACY_POLICY_URL`: Allows to set a custom privacy policy for your server instance.
+        - `OPEN_REGISTRATION` (default: `false`): Allows anyone to create an account on your server.
+        - `EMAIL_MANDATORY` (default: `false`): If open registration is enabled this will force any new user to 
+        - Setup with a Postgres database: [docker-compose.yml](https://github.com/TomBursch/kitchenowl-backend/blob/main/docker-compose-postgres.yml)
 
 !!! danger "Important"
     We recommend running KitchenOwl behind a reverse proxy with HTTPS (e.g. [nginx](https://nginx.org/en/docs/http/configuring_https_servers.html]))

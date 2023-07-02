@@ -42,7 +42,7 @@
     <img alt='Get it on F-Droid' src='docs/img/badges/f-droid.png' height="50"/>
   </a>
   <a href='https://apps.apple.com/app/kitchenowl/id1557453670'>
-    <img alt='Get it on TestFlight' src='docs/img/badges/appstore.png' height="50" />
+    <img alt='Get it on the AppStore' src='docs/img/badges/appstore.png' height="50" />
   </a>
 </div>
 

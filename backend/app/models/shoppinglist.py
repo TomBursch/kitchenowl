@@ -32,15 +32,18 @@ class ShoppinglistItems(db.Model, DbModelMixin, TimestampMixin):
         'shoppinglist.id'), primary_key=True)
     item_id = db.Column(db.Integer, db.ForeignKey('item.id'), primary_key=True)
     description = db.Column('description', db.String())
+    created_by = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
 
     item = db.relationship("Item", back_populates='shoppinglists')
     shoppinglist = db.relationship("Shoppinglist", back_populates='items')
+    created_by_user = db.relationship("User", foreign_keys=[created_by], uselist=False)
 
     def obj_to_item_dict(self) -> dict:
         res = self.item.obj_to_dict()
         res['description'] = getattr(self, 'description')
         res['created_at'] = getattr(self, 'created_at')
         res['updated_at'] = getattr(self, 'updated_at')
+        res['created_by'] = getattr(self, 'created_by')
         return res
 
     @classmethod

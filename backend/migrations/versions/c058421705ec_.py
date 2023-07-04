@@ -64,7 +64,7 @@ def upgrade():
 
     try:
         filesInUploadFolder = [f for f in listdir(UPLOAD_FOLDER) if isfile(join(UPLOAD_FOLDER, f))]
-        files = [File(filename=f) for f in filesInUploadFolder]
+        files = [File(filename=f) for f in filesInUploadFolder if not File.query.filter(File.filename == f).first()]
 
         session.bulk_save_objects(files)
         session.commit()

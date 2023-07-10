@@ -27,7 +27,7 @@ class File(DeclarativeBase):
     filename = sa.Column(sa.String, primary_key=True)
     created_at = sa.Column(sa.DateTime, nullable=False, default=datetime.utcnow)
     updated_at = sa.Column(sa.DateTime, nullable=False, default=datetime.utcnow)
-    user_id = sa.Column(sa.Integer, sa.ForeignKey('user.id'), nullable=True)
+    created_by = sa.Column(sa.Integer, sa.ForeignKey('user.id'), nullable=True)
 
 class Recipe(DeclarativeBase):
     __tablename__ = 'recipe'
@@ -64,7 +64,7 @@ def upgrade():
 
     try:
         filesInUploadFolder = [f for f in listdir(UPLOAD_FOLDER) if isfile(join(UPLOAD_FOLDER, f))]
-        files = [File(filename=f) for f in filesInUploadFolder if not File.query.filter(File.filename == f).first()]
+        files = [File(filename=f) for f in filesInUploadFolder if not session.query(File.filename).filter(File.filename == f).first()]
 
         session.bulk_save_objects(files)
         session.commit()

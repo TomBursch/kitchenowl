@@ -54,6 +54,8 @@ SUPPORTED_LANGUAGES = {
     'pt': 'Português',
     'pt_BR': 'Português Brasileiro',
     'ru': 'русский язык',
+    'tr': 'Türkçe',
+    'zh_Hans': '简化字',
 }
 
 Flask.json_provider_class = KitchenOwlJSONProvider

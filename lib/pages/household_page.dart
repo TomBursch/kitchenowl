@@ -122,7 +122,7 @@ class _HouseholdPageState extends State<HouseholdPage> {
                     .toList();
 
             int _selectedIndex = pages.indexWhere(
-              (e) => GoRouterState.of(context).location.contains(e.toString()),
+              (e) => GoRouterState.of(context).uri.path.contains(e.toString()),
             );
 
             if (_selectedIndex < 0 && mounted) {
@@ -138,7 +138,7 @@ class _HouseholdPageState extends State<HouseholdPage> {
                     .toList();
 
             int _selectedIndex = pages.indexWhere(
-              (e) => GoRouterState.of(context).location.contains(e.toString()),
+              (e) => GoRouterState.of(context).uri.path.contains(e.toString()),
             );
 
             if (_selectedIndex < 0 || state is NotFoundHouseholdState) {

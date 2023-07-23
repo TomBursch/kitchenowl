@@ -40,10 +40,10 @@ final router = GoRouter(
   navigatorKey: _rootNavigatorKey,
   redirect: (BuildContext context, GoRouterState state) {
     final authState = BlocProvider.of<AuthCubit>(context).state;
-    initialLocation ??= state.location;
+    initialLocation ??= state.uri.toString();
     if (authState is Setup) return "/setup";
     if (authState is Onboarding) return "/onboarding";
-    if (authState is Unauthenticated && state.location != "/register") {
+    if (authState is Unauthenticated && state.uri.path != "/register") {
       return "/signin";
     }
     if (authState is Unreachable) return "/unreachable";
@@ -181,7 +181,7 @@ final router = GoRouter(
           path: ":id",
           builder: (context, state) => const SplashPage(),
           redirect: (context, state) {
-            if (state.matchedLocation == state.location) {
+            if (state.matchedLocation == state.uri.path) {
               return "${state.matchedLocation}/${(state.extra as Household?)?.viewOrdering?.firstOrNull.toString() ?? "items"}";
             }
 
@@ -236,9 +236,9 @@ final router = GoRouter(
                                     ) ??
                                     -1,
                               ),
-                          updateOnPlanningEdit:
-                              state.queryParameters['updateOnPlanningEdit'] ==
-                                  true.toString(),
+                          updateOnPlanningEdit: state.uri
+                                  .queryParameters['updateOnPlanningEdit'] ==
+                              true.toString(),
                         );
                       },
                     ),
@@ -246,7 +246,7 @@ final router = GoRouter(
                       parentNavigatorKey: _rootNavigatorKey,
                       path: 'scrape',
                       builder: (context, state) => RecipeScraperPage(
-                        url: state.queryParameters['url']!,
+                        url: state.uri.queryParameters['url']!,
                         household: Household(
                           id: int.tryParse(state.pathParameters['id'] ?? '') ??
                               -1,

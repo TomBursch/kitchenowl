@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:kitchenowl/app.dart';
 import 'package:kitchenowl/cubits/recipe_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
+import 'package:kitchenowl/helpers/recipe_item_markdown_extension.dart';
 import 'package:kitchenowl/helpers/url_launcher.dart';
 import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/models/item.dart';
@@ -13,6 +14,7 @@ import 'package:kitchenowl/pages/recipe_add_update_page.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/widgets/recipe_source_chip.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:markdown/markdown.dart' as md;
 
 class RecipePage extends StatefulWidget {
   final Household? household;
@@ -179,6 +181,20 @@ class _RecipePageState extends State<RecipePage> {
                                 openUrl(context, href);
                               }
                             },
+                            builders: <String, MarkdownElementBuilder>{
+                              'recipeItem': RecipeItemMarkdownBuilder(
+                                cubit: cubit,
+                              ),
+                            },
+                            extensionSet: md.ExtensionSet(
+                              md.ExtensionSet.gitHubWeb.blockSyntaxes,
+                              md.ExtensionSet.gitHubWeb.inlineSyntaxes +
+                                  [
+                                    RecipeItemMarkdownSyntax(
+                                      state.recipe,
+                                    ),
+                                  ],
+                            ),
                           ),
                         ],
                       ),

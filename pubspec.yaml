@@ -50,6 +50,7 @@ dependencies:
 
   azlistview: ^2.0.0
   flutter_markdown: ^0.6.14
+  markdown: ^7.1.1
   tuple: ^2.0.1
   community_charts_flutter: ^1.0.1
   fl_chart: ^0.63.0

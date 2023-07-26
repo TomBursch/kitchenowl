@@ -15,30 +15,41 @@ class RecipeItemMarkdownBuilder extends MarkdownElementBuilder {
 
   @override
   Widget? visitElementAfter(md.Element element, TextStyle? preferredStyle) {
-    return BlocBuilder<RecipeCubit, RecipeState>(
-      bloc: cubit,
-      buildWhen: (previous, current) =>
-          previous.dynamicRecipe.items
-              .firstWhere((e) => e.name.toLowerCase() == element.textContent) !=
-          current.dynamicRecipe.items
-              .firstWhere((e) => e.name.toLowerCase() == element.textContent),
-      builder: (context, state) {
-        RecipeItem item = state.dynamicRecipe.items
-            .firstWhere((e) => e.name.toLowerCase() == element.textContent);
-        IconData? icon = ItemIcons.get(item);
+    return RichText(
+      text: TextSpan(children: [
+        WidgetSpan(
+          alignment: PlaceholderAlignment.middle,
+          child: BlocBuilder<RecipeCubit, RecipeState>(
+            bloc: cubit,
+            buildWhen: (previous, current) =>
+                previous.dynamicRecipe.items.firstWhere(
+                  (e) => e.name.toLowerCase() == element.textContent,
+                ) !=
+                current.dynamicRecipe.items.firstWhere(
+                  (e) => e.name.toLowerCase() == element.textContent,
+                ),
+            builder: (context, state) {
+              RecipeItem item = state.dynamicRecipe.items.firstWhere(
+                (e) => e.name.toLowerCase() == element.textContent,
+              );
+              IconData? icon = ItemIcons.get(item);
 
-        return Chip(
-          avatar: icon != null ? Icon(icon) : null,
-          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-          padding: EdgeInsets.zero,
-          labelPadding:
-              icon != null ? const EdgeInsets.only(left: 1, right: 4) : null,
-          label: Text(item.name +
-              (item.description.isNotEmpty
-                  ? " (${_limitString(item.description)})"
-                  : "")),
-        );
-      },
+              return Chip(
+                avatar: icon != null ? Icon(icon) : null,
+                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                padding: EdgeInsets.zero,
+                labelPadding: icon != null
+                    ? const EdgeInsets.only(left: 1, right: 4)
+                    : null,
+                label: Text(item.name +
+                    (item.description.isNotEmpty
+                        ? " (${_limitString(item.description)})"
+                        : "")),
+              );
+            },
+          ),
+        ),
+      ]),
     );
   }
 

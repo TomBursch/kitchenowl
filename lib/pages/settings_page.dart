@@ -166,6 +166,38 @@ class _SettingsPageState extends State<SettingsPage> {
                   ),
                 ),
               ListTile(
+                title: Text(AppLocalizations.of(context)!.itemSize),
+                leading: const Icon(Icons.grid_view_rounded),
+                titleAlignment: ListTileTitleAlignment.top,
+                subtitle: Padding(
+                  padding: const EdgeInsets.only(top: 6),
+                  child: SegmentedButton(
+                    selected: {state.gridSize},
+                    segments: [
+                      ButtonSegment(
+                        value: GridSize.small,
+                        icon: const Icon(Icons.grid_4x4_rounded),
+                        label: Text(AppLocalizations.of(context)!.smaller),
+                      ),
+                      ButtonSegment(
+                        value: GridSize.normal,
+                        icon: const Icon(Icons.grid_3x3_rounded),
+                        label: Text(AppLocalizations.of(context)!.defaultWord),
+                      ),
+                      ButtonSegment(
+                        value: GridSize.large,
+                        icon: const Icon(Icons.crop_square_rounded),
+                        label: Text(AppLocalizations.of(context)!.larger),
+                      ),
+                    ],
+                    onSelectionChanged: (Set<GridSize> value) {
+                      BlocProvider.of<SettingsCubit>(context)
+                          .setGridSize(value.first);
+                    },
+                  ),
+                ),
+              ),
+              ListTile(
                 title: Text(
                   AppLocalizations.of(context)!.itemsRecent,
                 ),

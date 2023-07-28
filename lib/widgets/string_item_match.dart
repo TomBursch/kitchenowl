@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kitchenowl/cubits/settings_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/household.dart';
@@ -29,6 +31,7 @@ class StringItemMatch extends StatelessWidget {
       widthFactor: 1 /
           DynamicStyling.itemCrossAxisCount(
             MediaQuery.of(context).size.width - 32,
+            context.read<SettingsCubit>().state.gridSize,
           ),
       alignment: Alignment.topCenter,
       child: Column(

@@ -3,6 +3,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/config.dart';
+import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/services/storage/storage.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
@@ -16,6 +17,7 @@ class SettingsCubit extends Cubit<SettingsState> {
         PreferenceStorage.getInstance().readInt(key: 'themeMode');
     final dynamicAccentColor =
         PreferenceStorage.getInstance().readBool(key: 'dynamicAccentColor');
+    final gridSize = PreferenceStorage.getInstance().readInt(key: 'gridSize');
     final recentItemsCount =
         PreferenceStorage.getInstance().readInt(key: 'recentItemsCount');
     Config.deviceInfo = DeviceInfoPlugin().deviceInfo;
@@ -29,6 +31,9 @@ class SettingsCubit extends Cubit<SettingsState> {
     emit(SettingsState(
       themeMode: themeMode,
       dynamicAccentColor: await dynamicAccentColor ?? false,
+      gridSize: (await gridSize) != null
+          ? GridSize.values[(await gridSize)!]
+          : GridSize.normal,
       recentItemsCount: await recentItemsCount ?? 9,
     ));
   }
@@ -45,6 +50,12 @@ class SettingsCubit extends Cubit<SettingsState> {
     emit(state.copyWith(dynamicAccentColor: dynamicAccentColor));
   }
 
+  void setGridSize(GridSize gridSize) {
+    PreferenceStorage.getInstance()
+        .writeInt(key: 'gridSize', value: gridSize.index);
+    emit(state.copyWith(gridSize: gridSize));
+  }
+
   void setRecentItemsCount(int recentItemsCount) {
     if (recentItemsCount > 0) {
       PreferenceStorage.getInstance()
@@ -58,24 +69,29 @@ class SettingsState extends Equatable {
   final ThemeMode themeMode;
   final bool dynamicAccentColor;
   final int recentItemsCount;
+  final GridSize gridSize;
 
   const SettingsState({
     this.themeMode = ThemeMode.system,
     this.dynamicAccentColor = false,
+    this.gridSize = GridSize.normal,
     this.recentItemsCount = 9,
   });
 
   SettingsState copyWith({
     ThemeMode? themeMode,
     bool? dynamicAccentColor,
+    GridSize? gridSize,
     int? recentItemsCount,
   }) =>
       SettingsState(
         themeMode: themeMode ?? this.themeMode,
         dynamicAccentColor: dynamicAccentColor ?? this.dynamicAccentColor,
+        gridSize: gridSize ?? this.gridSize,
         recentItemsCount: recentItemsCount ?? this.recentItemsCount,
       );
 
   @override
-  List<Object?> get props => [themeMode, dynamicAccentColor, recentItemsCount];
+  List<Object?> get props =>
+      [themeMode, dynamicAccentColor, gridSize, recentItemsCount];
 }

@@ -357,6 +357,13 @@ class TransactionShoppingListUpdateItem extends Transaction<bool> {
       TempStorage.getInstance().writeItems(shoppinglist, list);
 
       return true;
+    } else if (description.isNotEmpty) {
+      final list =
+          await TempStorage.getInstance().readItems(shoppinglist) ?? [];
+      list.add(ShoppinglistItem(name: item.name, description: description));
+      TempStorage.getInstance().writeItems(shoppinglist, list);
+
+      return true;
     }
 
     return false;
@@ -367,6 +374,9 @@ class TransactionShoppingListUpdateItem extends Transaction<bool> {
     if (item is ShoppinglistItem) {
       return ApiService.getInstance()
           .updateShoppingListItemDescription(shoppinglist, item, description);
+    } else if (description.isNotEmpty) {
+      ApiService.getInstance()
+          .addItemByName(shoppinglist, item.name, description);
     }
 
     return false;

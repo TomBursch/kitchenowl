@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:kitchenowl/cubits/household_cubit.dart';
 import 'package:kitchenowl/cubits/planner_cubit.dart';
+import 'package:kitchenowl/cubits/settings_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/household.dart';
@@ -145,6 +146,10 @@ class _PlannerPageState extends State<PlannerPage> {
                                 widthFactor: (1 /
                                     DynamicStyling.itemCrossAxisCount(
                                       constraints.crossAxisExtent,
+                                      context
+                                          .read<SettingsCubit>()
+                                          .state
+                                          .gridSize,
                                     )),
                                 child: AspectRatio(
                                   aspectRatio: 1,
@@ -169,6 +174,10 @@ class _PlannerPageState extends State<PlannerPage> {
                                   widthFactor: (1 /
                                       DynamicStyling.itemCrossAxisCount(
                                         constraints.crossAxisExtent,
+                                        context
+                                            .read<SettingsCubit>()
+                                            .state
+                                            .gridSize,
                                       )),
                                   child: Column(
                                     mainAxisSize: MainAxisSize.min,

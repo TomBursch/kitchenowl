@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/cubits/household_cubit.dart';
+import 'package:kitchenowl/cubits/settings_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/category.dart';
@@ -101,6 +102,7 @@ class SliverItemGridList<T extends Item> extends StatelessWidget {
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: DynamicStyling.itemCrossAxisCount(
                     constraints.crossAxisExtent,
+                    context.read<SettingsCubit>().state.gridSize,
                   ),
                   childAspectRatio: 1,
                 ),

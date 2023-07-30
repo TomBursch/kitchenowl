@@ -416,6 +416,8 @@
   "@shoppingListEdit": {},
   "shoppingLists": "Shopping lists",
   "@shoppingLists": {},
+  "shoppingListStyle": "Shopping list style",
+  "@shoppingListStyle": {},
   "signup": "Sign up",
   "@signup": {},
   "start": "Start",

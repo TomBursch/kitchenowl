@@ -38,13 +38,20 @@ class ShoppingItemWidget<T extends Item> extends StatelessWidget {
             child: ListTile(
               title:
                   Text(item.name, maxLines: 1, overflow: TextOverflow.ellipsis),
-              selected: !selected,
+              selected: selected,
               subtitle: (item is ItemWithDescription &&
                       (item as ItemWithDescription).description.isNotEmpty)
                   ? Text(
                       (item as ItemWithDescription).description,
                       maxLines: 3,
                       overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                            color: Theme.of(context)
+                                .textTheme
+                                .bodySmall!
+                                .color!
+                                .withAlpha(170),
+                          ),
                     )
                   : null,
               onTap: onPressed != null ? () => onPressed!(item) : null,

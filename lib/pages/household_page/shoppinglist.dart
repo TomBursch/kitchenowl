@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/cubits/household_cubit.dart';
+import 'package:kitchenowl/cubits/settings_cubit.dart';
 import 'package:kitchenowl/cubits/shoppinglist_cubit.dart';
 import 'package:kitchenowl/enums/shoppinglist_sorting.dart';
 import 'package:kitchenowl/models/category.dart';
@@ -88,6 +89,10 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                             items: state.result,
                             categories: state.categories,
                             shoppingList: state.selectedShoppinglist,
+                            isList: context
+                                .read<SettingsCubit>()
+                                .state
+                                .shoppingListListView,
                             household: BlocProvider.of<HouseholdCubit>(context)
                                 .state
                                 .household,
@@ -122,8 +127,14 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                         household: BlocProvider.of<HouseholdCubit>(context)
                             .state
                             .household,
-                        isList: state.style == ShoppinglistStyle.list,
-                        selected: (_) => true,
+                        isList: context
+                            .read<SettingsCubit>()
+                            .state
+                            .shoppingListListView,
+                        selected: (_) => !context
+                            .read<SettingsCubit>()
+                            .state
+                            .shoppingListListView,
                         isLoading: state is LoadingShoppinglistCubitState,
                         onRefresh: cubit.refresh,
                         onPressed: (Item item) {
@@ -152,8 +163,14 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                           items: items,
                           categories: state.categories,
                           shoppingList: state.selectedShoppinglist,
-                          isList: state.style == ShoppinglistStyle.list,
-                          selected: (_) => true,
+                          isList: context
+                              .read<SettingsCubit>()
+                              .state
+                              .shoppingListListView,
+                          selected: (_) => !context
+                              .read<SettingsCubit>()
+                              .state
+                              .shoppingListListView,
                           isLoading: state is LoadingShoppinglistCubitState,
                           onRefresh: cubit.refresh,
                           onPressed: (Item item) {
@@ -253,7 +270,10 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                           onRefresh: cubit.refresh,
                           isDescriptionEditable: false,
                           isLoading: state is LoadingShoppinglistCubitState,
-                          isList: state.style == ShoppinglistStyle.list,
+                          isList: context
+                              .read<SettingsCubit>()
+                              .state
+                              .shoppingListListView,
                         ),
                       ],
                     );

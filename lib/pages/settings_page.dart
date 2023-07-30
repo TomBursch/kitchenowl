@@ -103,6 +103,11 @@ class _SettingsPageState extends State<SettingsPage> {
                     selected: {state.themeMode},
                     segments: [
                       ButtonSegment(
+                        value: ThemeMode.system,
+                        icon: const Icon(Icons.brightness_medium_outlined),
+                        label: Text(AppLocalizations.of(context)!.themeSystem),
+                      ),
+                      ButtonSegment(
                         value: ThemeMode.light,
                         icon: const Icon(Icons.light_mode_rounded),
                         label: Text(AppLocalizations.of(context)!.themeLight),
@@ -111,11 +116,6 @@ class _SettingsPageState extends State<SettingsPage> {
                         value: ThemeMode.dark,
                         icon: const Icon(Icons.dark_mode_rounded),
                         label: Text(AppLocalizations.of(context)!.themeDark),
-                      ),
-                      ButtonSegment(
-                        value: ThemeMode.system,
-                        icon: const Icon(Icons.brightness_medium_outlined),
-                        label: Text(AppLocalizations.of(context)!.themeSystem),
                       ),
                     ],
                     onSelectionChanged: (Set<ThemeMode> value) {
@@ -174,37 +174,66 @@ class _SettingsPageState extends State<SettingsPage> {
                   ),
                 ),
               ListTile(
-                title: Text(AppLocalizations.of(context)!.itemSize),
-                leading: const Icon(Icons.grid_view_rounded),
+                title: Text(AppLocalizations.of(context)!.shoppingListStyle),
+                leading: const Icon(Icons.shopping_bag_rounded),
                 titleAlignment: ListTileTitleAlignment.top,
                 subtitle: Padding(
                   padding: const EdgeInsets.only(top: 6),
                   child: SegmentedButton(
-                    selected: {state.gridSize},
+                    selected: {state.shoppingListListView},
                     segments: [
                       ButtonSegment(
-                        value: GridSize.small,
-                        icon: const Icon(Icons.grid_4x4_rounded),
-                        label: Text(AppLocalizations.of(context)!.smaller),
+                        value: false,
+                        icon: const Icon(Icons.grid_view_rounded),
+                        label: Text(AppLocalizations.of(context)!.grid),
                       ),
                       ButtonSegment(
-                        value: GridSize.normal,
-                        icon: const Icon(Icons.grid_3x3_rounded),
-                        label: Text(AppLocalizations.of(context)!.defaultWord),
-                      ),
-                      ButtonSegment(
-                        value: GridSize.large,
-                        icon: const Icon(Icons.crop_square_rounded),
-                        label: Text(AppLocalizations.of(context)!.larger),
+                        value: true,
+                        icon: const Icon(Icons.list_rounded),
+                        label: Text(AppLocalizations.of(context)!.list),
                       ),
                     ],
-                    onSelectionChanged: (Set<GridSize> value) {
+                    onSelectionChanged: (Set<bool> value) {
                       BlocProvider.of<SettingsCubit>(context)
-                          .setGridSize(value.first);
+                          .setShoppingListListView(value.first);
                     },
                   ),
                 ),
               ),
+              if (!state.shoppingListListView)
+                ListTile(
+                  title: Text(AppLocalizations.of(context)!.itemSize),
+                  leading: const Icon(Icons.grid_view_rounded),
+                  titleAlignment: ListTileTitleAlignment.top,
+                  subtitle: Padding(
+                    padding: const EdgeInsets.only(top: 6),
+                    child: SegmentedButton(
+                      selected: {state.gridSize},
+                      segments: [
+                        ButtonSegment(
+                          value: GridSize.small,
+                          icon: const Icon(Icons.grid_4x4_rounded),
+                          label: Text(AppLocalizations.of(context)!.smaller),
+                        ),
+                        ButtonSegment(
+                          value: GridSize.normal,
+                          icon: const Icon(Icons.grid_3x3_rounded),
+                          label:
+                              Text(AppLocalizations.of(context)!.defaultWord),
+                        ),
+                        ButtonSegment(
+                          value: GridSize.large,
+                          icon: const Icon(Icons.crop_square_rounded),
+                          label: Text(AppLocalizations.of(context)!.larger),
+                        ),
+                      ],
+                      onSelectionChanged: (Set<GridSize> value) {
+                        BlocProvider.of<SettingsCubit>(context)
+                            .setGridSize(value.first);
+                      },
+                    ),
+                  ),
+                ),
               ListTile(
                 title: Text(
                   AppLocalizations.of(context)!.itemsRecent,

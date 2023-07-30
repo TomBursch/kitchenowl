@@ -13,8 +13,6 @@ import 'package:kitchenowl/services/transactions/category.dart';
 import 'package:kitchenowl/services/transactions/shoppinglist.dart';
 import 'package:kitchenowl/services/transaction_handler.dart';
 
-enum ShoppinglistStyle { grid, list }
-
 class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
   final Household household;
   Future<void>? _refreshThread;
@@ -92,11 +90,6 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
         .values[(state.sorting.index + 1) % ShoppinglistSorting.values.length]);
   }
 
-  void incrementStyle() {
-    setStyle(ShoppinglistStyle
-        .values[(state.style.index + 1) % ShoppinglistStyle.values.length]);
-  }
-
   void setSorting(ShoppinglistSorting sorting, [bool savePreference = true]) {
     if (state is! SearchShoppinglistCubitState && state.listItems != const []) {
       ShoppinglistSorting.sortShoppinglistItems(state.listItems, sorting);
@@ -124,10 +117,6 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
       listItems: [],
     ));
     refresh();
-  }
-
-  void setStyle(ShoppinglistStyle style) {
-    emit(state.copyWith(style: style));
   }
 
   Future<void> refresh({String? query}) {
@@ -158,7 +147,6 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
         selectedShoppinglist: state.selectedShoppinglist,
         shoppinglists: state.shoppinglists,
         sorting: state.sorting,
-        style: state.style,
         categories: state.categories,
       ));
     }
@@ -224,7 +212,6 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
         query: query,
         listItems: loadedShoppinglistItems,
         categories: await categories,
-        style: state.style,
         sorting: state.sorting,
         recentItems: state.recentItems,
       );
@@ -241,7 +228,6 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
         recentItems: await recent,
         categories: await categories,
         sorting: state.sorting,
-        style: state.style,
       );
     }
     if (query == _refreshCurrentQuery) {
@@ -273,7 +259,6 @@ class ShoppinglistCubitState extends Equatable {
   final List<ItemWithDescription> recentItems;
   final List<Category> categories;
   final ShoppinglistSorting sorting;
-  final ShoppinglistStyle style;
 
   const ShoppinglistCubitState({
     this.shoppinglists = const [],
@@ -282,7 +267,6 @@ class ShoppinglistCubitState extends Equatable {
     this.recentItems = const [],
     this.categories = const [],
     this.sorting = ShoppinglistSorting.alphabetical,
-    this.style = ShoppinglistStyle.grid,
   });
 
   ShoppinglistCubitState copyWith({
@@ -292,7 +276,6 @@ class ShoppinglistCubitState extends Equatable {
     List<ItemWithDescription>? recentItems,
     List<Category>? categories,
     ShoppinglistSorting? sorting,
-    ShoppinglistStyle? style,
   }) =>
       ShoppinglistCubitState(
         shoppinglists: shoppinglists ?? this.shoppinglists,
@@ -301,7 +284,6 @@ class ShoppinglistCubitState extends Equatable {
         recentItems: recentItems ?? this.recentItems,
         categories: categories ?? this.categories,
         sorting: sorting ?? this.sorting,
-        style: style ?? this.style,
       );
 
   @override
@@ -312,13 +294,11 @@ class ShoppinglistCubitState extends Equatable {
         recentItems,
         categories,
         sorting,
-        style,
       ];
 }
 
 class LoadingShoppinglistCubitState extends ShoppinglistCubitState {
   const LoadingShoppinglistCubitState({
-    super.style,
     super.sorting,
     super.selectedShoppinglist,
     super.shoppinglists,
@@ -334,11 +314,9 @@ class LoadingShoppinglistCubitState extends ShoppinglistCubitState {
     List<ItemWithDescription>? recentItems,
     List<Category>? categories,
     ShoppinglistSorting? sorting,
-    ShoppinglistStyle? style,
   }) =>
       LoadingShoppinglistCubitState(
         sorting: sorting ?? this.sorting,
-        style: style ?? this.style,
         shoppinglists: shoppinglists ?? this.shoppinglists,
         selectedShoppinglist: selectedShoppinglist ?? this.selectedShoppinglist,
         categories: categories ?? this.categories,
@@ -356,7 +334,6 @@ class SearchShoppinglistCubitState extends ShoppinglistCubitState {
     super.recentItems = const [],
     super.categories = const [],
     super.sorting = ShoppinglistSorting.alphabetical,
-    super.style = ShoppinglistStyle.grid,
     this.query = "",
     this.result = const [],
   });
@@ -370,7 +347,6 @@ class SearchShoppinglistCubitState extends ShoppinglistCubitState {
     List<ItemWithDescription>? recentItems,
     List<Category>? categories,
     ShoppinglistSorting? sorting,
-    ShoppinglistStyle? style,
     List<Item>? result,
   }) =>
       SearchShoppinglistCubitState(
@@ -380,7 +356,6 @@ class SearchShoppinglistCubitState extends ShoppinglistCubitState {
         recentItems: recentItems ?? this.recentItems,
         sorting: sorting ?? this.sorting,
         categories: categories ?? this.categories,
-        style: style ?? this.style,
         query: query,
         result: result ?? this.result,
       );

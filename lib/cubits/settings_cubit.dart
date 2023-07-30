@@ -22,6 +22,8 @@ class SettingsCubit extends Cubit<SettingsState> {
         PreferenceStorage.getInstance().readInt(key: 'recentItemsCount');
     final accentColor =
         PreferenceStorage.getInstance().readInt(key: 'accentColor');
+    final shoppingListListView =
+        PreferenceStorage.getInstance().readBool(key: 'shoppingListListView');
     Config.deviceInfo = DeviceInfoPlugin().deviceInfo;
     Config.packageInfo = PackageInfo.fromPlatform();
 
@@ -39,6 +41,7 @@ class SettingsCubit extends Cubit<SettingsState> {
       recentItemsCount: await recentItemsCount ?? 9,
       accentColor:
           (await accentColor) != null ? Color((await accentColor)!) : null,
+      shoppingListListView: await shoppingListListView ?? false,
     ));
   }
 
@@ -78,6 +81,12 @@ class SettingsCubit extends Cubit<SettingsState> {
     }
     emit(state.copyWith(accentColor: Nullable(accentColor)));
   }
+
+  void setShoppingListListView(bool shoppingListListView) {
+    PreferenceStorage.getInstance()
+        .writeBool(key: 'shoppingListListView', value: shoppingListListView);
+    emit(state.copyWith(shoppingListListView: shoppingListListView));
+  }
 }
 
 class SettingsState extends Equatable {
@@ -86,6 +95,7 @@ class SettingsState extends Equatable {
   final int recentItemsCount;
   final GridSize gridSize;
   final Color? accentColor;
+  final bool shoppingListListView;
 
   const SettingsState({
     this.themeMode = ThemeMode.system,
@@ -93,6 +103,7 @@ class SettingsState extends Equatable {
     this.gridSize = GridSize.normal,
     this.recentItemsCount = 9,
     this.accentColor,
+    this.shoppingListListView = false,
   });
 
   SettingsState copyWith({
@@ -101,6 +112,7 @@ class SettingsState extends Equatable {
     GridSize? gridSize,
     int? recentItemsCount,
     Nullable<Color>? accentColor,
+    bool? shoppingListListView,
   }) =>
       SettingsState(
         themeMode: themeMode ?? this.themeMode,
@@ -108,9 +120,16 @@ class SettingsState extends Equatable {
         gridSize: gridSize ?? this.gridSize,
         recentItemsCount: recentItemsCount ?? this.recentItemsCount,
         accentColor: (accentColor ?? Nullable(this.accentColor)).value,
+        shoppingListListView: shoppingListListView ?? this.shoppingListListView,
       );
 
   @override
-  List<Object?> get props =>
-      [themeMode, dynamicAccentColor, gridSize, recentItemsCount, accentColor];
+  List<Object?> get props => [
+        themeMode,
+        dynamicAccentColor,
+        gridSize,
+        recentItemsCount,
+        accentColor,
+        shoppingListListView,
+      ];
 }

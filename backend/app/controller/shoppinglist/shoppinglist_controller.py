@@ -4,7 +4,7 @@ from app import db
 from app.models import Item, Shoppinglist, History, Status, Association, ShoppinglistItems
 from app.helpers import validate_args, authorize_household
 from .schemas import (RemoveItem, UpdateDescription,
-                      AddItemByName, CreateList, AddRecipeItems, GetItems, UpdateList, GetRecentItems)
+                      AddItemByName, CreateList, AddRecipeItems, GetItems, UpdateList, GetRecentItems, RemoveItems)
 from app.errors import NotFoundRequest, InvalidUsage
 from datetime import datetime, timedelta, timezone
 import app.util.description_merger as description_merger
@@ -205,23 +205,46 @@ def removeShoppinglistItem(args, id):
         raise NotFoundRequest()
     shoppinglist.checkAuthorized()
 
-    item = Item.find_by_id(args['item_id'])
-    if not item:
-        item = Item.find_by_name(args['name'])
-    if not item:
+    removeShoppinglistItem(
+        shoppinglist, args['item_id'], args['removed_at'] if 'removed_at' in args else None)
+
+    return jsonify({'msg': "DONE"})
+
+
+@shoppinglist.route('/<int:id>/items', methods=['DELETE'])
+@jwt_required()
+@validate_args(RemoveItems)
+def removeShoppinglistItems(args, id):
+    shoppinglist = Shoppinglist.find_by_id(id)
+    if not shoppinglist:
         raise NotFoundRequest()
-    con = ShoppinglistItems.find_by_ids(id, args['item_id'])
+    shoppinglist.checkAuthorized()
+
+    for arg in args['items']:
+        removeShoppinglistItem(
+            shoppinglist, arg['item_id'], arg['removed_at'] if 'removed_at' in arg else None)
+
+    return jsonify({'msg': "DONE"})
+
+
+def removeShoppinglistItem(shoppinglist: Shoppinglist, item_id: int, removed_at: int = None) -> bool:
+    item = Item.find_by_id(item_id)
+    if not item:
+        return False
+    con = ShoppinglistItems.find_by_ids(shoppinglist.id, item.id)
+    if not con:
+        return False
     description = con.description
     con.delete()
 
-    removed_at = None
-    if 'removed_at' in args:
-        removed_at = datetime.fromtimestamp(
-            args['removed_at']/1000, timezone.utc)
+    removed_at_datetime = None
+    if removed_at:
+        removed_at_datetime = datetime.fromtimestamp(
+            removed_at/1000, timezone.utc)
 
-    History.create_dropped(shoppinglist, item, description, removed_at)
-
-    return jsonify({'msg': "DONE"})
+    History.create_dropped(
+        shoppinglist, item, description, removed_at_datetime)
+    return True
 
 
 @shoppinglist.route('/<int:id>/recipeitems', methods=['POST'])

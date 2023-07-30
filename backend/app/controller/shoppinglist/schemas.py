@@ -56,10 +56,6 @@ class UpdateDescription(Schema):
         required=True
     )
 
-    # def validate_id(self, args):
-    #     if not ShoppinglistItem.find_by_ids(args['id'], args['item_id']):
-    #         raise ValidationError('Item does not exist')
-
 
 class RemoveItem(Schema):
     item_id = fields.Integer(
@@ -67,6 +63,14 @@ class RemoveItem(Schema):
     )
     removed_at = fields.Integer()
 
-    # def validate_id(self, args):
-    #     if not ShoppinglistItem.find_by_id(args['id'], args['item_id']):
-    #         raise ValidationError('Item does not exist')
+
+class RemoveItems(Schema):
+    class RecipeItem(Schema):
+        class Meta:
+            unknown = EXCLUDE
+        item_id = fields.Integer(
+            required=True,
+        )
+        removed_at = fields.Integer()
+
+    items = fields.List(fields.Nested(RecipeItem))

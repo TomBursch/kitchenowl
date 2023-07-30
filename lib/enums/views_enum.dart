@@ -4,6 +4,7 @@ import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/widgets/expense_create_fab.dart';
 import 'package:kitchenowl/widgets/recipe_create_fab.dart';
+import 'package:kitchenowl/widgets/shoppinglist_confirm_remove_fab.dart';
 
 enum ViewsEnum {
   items,
@@ -50,6 +51,10 @@ enum ViewsEnum {
         return !App.isOffline ? RecipeCreateFab() : null;
       case ViewsEnum.balances:
         return !App.isOffline ? const ExpenseCreateFab() : null;
+      case ViewsEnum.items:
+        return App.settings.shoppingListTapToRemove
+            ? null
+            : const ShoppingListConfirmRememoveFab();
       default:
         return null;
     }

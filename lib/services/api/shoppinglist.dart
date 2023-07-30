@@ -135,4 +135,27 @@ extension ShoppinglistApi on ApiService {
 
     return res.statusCode == 200;
   }
+
+  Future<bool> removeItems(
+    ShoppingList shoppinglist,
+    List<ShoppinglistItem> items, [
+    DateTime? time,
+  ]) async {
+    final res = await delete(
+      '${route(shoppinglist: shoppinglist)}/items',
+      body: jsonEncode({
+        "items": items
+            .map(
+              (item) => {
+                'item_id': item.id,
+                if (time != null)
+                  'removed_at': time.toUtc().millisecondsSinceEpoch,
+              },
+            )
+            .toList(),
+      }),
+    );
+
+    return res.statusCode == 200;
+  }
 }

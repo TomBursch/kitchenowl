@@ -85,6 +85,64 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
     }
   }
 
+  void selectItem(ShoppinglistItem item) {
+    final l = List.of(state.selectedListItems);
+    if (l.contains(item)) {
+      l.remove(item);
+    } else {
+      l.insert(0, item);
+    }
+    emit(state.copyWith(selectedListItems: l));
+  }
+
+  Future<void> confirmRemove() async {
+    final _state = state;
+    if (_state.selectedShoppinglist == null ||
+        _state.selectedListItems.isEmpty) {
+      return;
+    }
+    final l = List.of(_state.listItems);
+    l.removeWhere(_state.selectedListItems.contains);
+    final recent = List.of(_state.recentItems);
+    recent.insertAll(0, _state.selectedListItems);
+    if (recent.length > recentItemCountProvider()) {
+      recent.removeRange(recentItemCountProvider(), recent.length);
+    }
+
+    if (_state is SearchShoppinglistCubitState) {
+      final result = List.of(_state.result);
+      for (final item in _state.selectedListItems) {
+        final index = result.indexOf(item);
+        if (index >= 0) {
+          result.removeAt(index);
+          result.insert(
+            index,
+            ItemWithDescription.fromItem(
+              item: item,
+              description: item.description,
+            ),
+          );
+        }
+      }
+      emit(_state.copyWith(
+        listItems: l,
+        recentItems: recent,
+        result: result,
+        selectedListItems: [],
+      ));
+    } else {
+      emit(state
+          .copyWith(listItems: l, recentItems: recent, selectedListItems: []));
+    }
+    if (!await TransactionHandler.getInstance()
+        .runTransaction(TransactionShoppingListDeleteItems(
+      shoppinglist: _state.selectedShoppinglist!,
+      items: _state.selectedListItems,
+    ))) {
+      await refresh();
+    }
+  }
+
   void incrementSorting() {
     setSorting(ShoppinglistSorting
         .values[(state.sorting.index + 1) % ShoppinglistSorting.values.length]);
@@ -148,6 +206,7 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
         shoppinglists: state.shoppinglists,
         sorting: state.sorting,
         categories: state.categories,
+        selectedListItems: state.selectedListItems,
       ));
     }
 
@@ -214,6 +273,11 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
         categories: await categories,
         sorting: state.sorting,
         recentItems: state.recentItems,
+        selectedListItems: state.selectedListItems
+            .map((e) => loadedShoppinglistItems
+                .firstWhereOrNull((item) => item.id == e.id))
+            .whereNotNull()
+            .toList(),
       );
     } else {
       final recent = TransactionHandler.getInstance()
@@ -221,13 +285,19 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
         shoppinglist: shoppinglist,
         itemsCount: recentItemCountProvider(),
       ));
+      List<ShoppinglistItem> loadedShoppinglistItems = await items;
       resState = ShoppinglistCubitState(
         shoppinglists: shoppingLists,
         selectedShoppinglist: shoppinglist,
-        listItems: await items,
+        listItems: loadedShoppinglistItems,
         recentItems: await recent,
         categories: await categories,
         sorting: state.sorting,
+        selectedListItems: state.selectedListItems
+            .map((e) => (loadedShoppinglistItems)
+                .firstWhereOrNull((item) => item.id == e.id))
+            .whereNotNull()
+            .toList(),
       );
     }
     if (query == _refreshCurrentQuery) {
@@ -259,6 +329,7 @@ class ShoppinglistCubitState extends Equatable {
   final List<ItemWithDescription> recentItems;
   final List<Category> categories;
   final ShoppinglistSorting sorting;
+  final List<ShoppinglistItem> selectedListItems;
 
   const ShoppinglistCubitState({
     this.shoppinglists = const [],
@@ -267,6 +338,7 @@ class ShoppinglistCubitState extends Equatable {
     this.recentItems = const [],
     this.categories = const [],
     this.sorting = ShoppinglistSorting.alphabetical,
+    this.selectedListItems = const [],
   });
 
   ShoppinglistCubitState copyWith({
@@ -276,6 +348,7 @@ class ShoppinglistCubitState extends Equatable {
     List<ItemWithDescription>? recentItems,
     List<Category>? categories,
     ShoppinglistSorting? sorting,
+    List<ShoppinglistItem>? selectedListItems,
   }) =>
       ShoppinglistCubitState(
         shoppinglists: shoppinglists ?? this.shoppinglists,
@@ -284,6 +357,7 @@ class ShoppinglistCubitState extends Equatable {
         recentItems: recentItems ?? this.recentItems,
         categories: categories ?? this.categories,
         sorting: sorting ?? this.sorting,
+        selectedListItems: selectedListItems ?? this.selectedListItems,
       );
 
   @override
@@ -294,6 +368,7 @@ class ShoppinglistCubitState extends Equatable {
         recentItems,
         categories,
         sorting,
+        selectedListItems,
       ];
 }
 
@@ -303,6 +378,7 @@ class LoadingShoppinglistCubitState extends ShoppinglistCubitState {
     super.selectedShoppinglist,
     super.shoppinglists,
     super.categories,
+    super.selectedListItems,
   });
 
   @override
@@ -314,12 +390,14 @@ class LoadingShoppinglistCubitState extends ShoppinglistCubitState {
     List<ItemWithDescription>? recentItems,
     List<Category>? categories,
     ShoppinglistSorting? sorting,
+    List<ShoppinglistItem>? selectedListItems,
   }) =>
       LoadingShoppinglistCubitState(
         sorting: sorting ?? this.sorting,
         shoppinglists: shoppinglists ?? this.shoppinglists,
         selectedShoppinglist: selectedShoppinglist ?? this.selectedShoppinglist,
         categories: categories ?? this.categories,
+        selectedListItems: selectedListItems ?? this.selectedListItems,
       );
 }
 
@@ -336,6 +414,7 @@ class SearchShoppinglistCubitState extends ShoppinglistCubitState {
     super.sorting = ShoppinglistSorting.alphabetical,
     this.query = "",
     this.result = const [],
+    super.selectedListItems,
   });
 
   @override
@@ -348,6 +427,7 @@ class SearchShoppinglistCubitState extends ShoppinglistCubitState {
     List<Category>? categories,
     ShoppinglistSorting? sorting,
     List<Item>? result,
+    List<ShoppinglistItem>? selectedListItems,
   }) =>
       SearchShoppinglistCubitState(
         shoppinglists: shoppinglists ?? this.shoppinglists,
@@ -358,6 +438,7 @@ class SearchShoppinglistCubitState extends ShoppinglistCubitState {
         categories: categories ?? this.categories,
         query: query,
         result: result ?? this.result,
+        selectedListItems: selectedListItems ?? this.selectedListItems,
       );
 
   @override

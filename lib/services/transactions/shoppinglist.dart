@@ -254,6 +254,58 @@ class TransactionShoppingListDeleteItem extends Transaction<bool> {
   }
 }
 
+class TransactionShoppingListDeleteItems extends Transaction<bool> {
+  final ShoppingList shoppinglist;
+  final List<ShoppinglistItem> items;
+
+  TransactionShoppingListDeleteItems({
+    DateTime? timestamp,
+    required this.items,
+    required this.shoppinglist,
+  }) : super.internal(
+          timestamp ?? DateTime.now(),
+          "TransactionShoppingListDeleteItems",
+        );
+
+  factory TransactionShoppingListDeleteItems.fromJson(
+    Map<String, dynamic> map,
+    DateTime timestamp,
+  ) =>
+      TransactionShoppingListDeleteItems(
+        shoppinglist: ShoppingList.fromJson(map['shoppinglist']),
+        items: List.from(map['items'])
+            .map((e) => ShoppinglistItem.fromJson(e))
+            .toList(),
+        timestamp: timestamp,
+      );
+
+  @override
+  bool get saveTransaction => true;
+
+  @override
+  Map<String, dynamic> toJson() => super.toJson()
+    ..addAll({
+      "shoppinglist": shoppinglist.toJsonWithId(),
+      "items": items.map((e) => e.toJsonWithId()).toList(),
+    });
+
+  @override
+  Future<bool> runLocal() async {
+    final list = await TempStorage.getInstance().readItems(shoppinglist) ?? [];
+    list.removeWhere((e) => items.map((e) => e.name).contains(e.name));
+    TempStorage.getInstance().writeItems(shoppinglist, list);
+
+    return true;
+  }
+
+  @override
+  Future<bool?> runOnline() {
+    runLocal();
+
+    return ApiService.getInstance().removeItems(shoppinglist, items, timestamp);
+  }
+}
+
 class TransactionShoppingListUpdateItem extends Transaction<bool> {
   final ShoppingList shoppinglist;
   final Item item;

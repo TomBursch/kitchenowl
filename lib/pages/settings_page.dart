@@ -235,6 +235,34 @@ class _SettingsPageState extends State<SettingsPage> {
                   ),
                 ),
               ListTile(
+                title:
+                    Text(AppLocalizations.of(context)!.itemRemoveInteraction),
+                leading: const Icon(Icons.touch_app_rounded),
+                titleAlignment: ListTileTitleAlignment.top,
+                subtitle: Padding(
+                  padding: const EdgeInsets.only(top: 6),
+                  child: SegmentedButton(
+                    selected: {state.shoppingListTapToRemove},
+                    segments: [
+                      ButtonSegment(
+                        value: true,
+                        icon: const Icon(Icons.touch_app_rounded),
+                        label: Text(AppLocalizations.of(context)!.tap),
+                      ),
+                      ButtonSegment(
+                        value: false,
+                        icon: const Icon(Icons.done_all_rounded),
+                        label: Text(AppLocalizations.of(context)!.confirm),
+                      ),
+                    ],
+                    onSelectionChanged: (Set<bool> value) {
+                      BlocProvider.of<SettingsCubit>(context)
+                          .setShoppingListTapToRemove(value.first);
+                    },
+                  ),
+                ),
+              ),
+              ListTile(
                 title: Text(
                   AppLocalizations.of(context)!.itemsRecent,
                 ),

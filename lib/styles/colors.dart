@@ -15,4 +15,18 @@ abstract class AppColors {
     900: Color(0xFF13673C),
     // 900: Color(0xFF105632),
   });
+
+  static const List<Color> accentColorOptions = [
+    Colors.redAccent,
+    Colors.pinkAccent,
+    Colors.purpleAccent,
+    Colors.deepPurpleAccent,
+    Colors.blueAccent,
+    Colors.cyanAccent,
+    Colors.greenAccent,
+    Colors.lightGreenAccent,
+    Colors.yellowAccent,
+    Colors.orangeAccent,
+    Colors.deepOrangeAccent,
+  ];
 }

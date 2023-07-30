@@ -136,6 +136,13 @@ class _AppState extends State<App> {
                     // (Recommended) Harmonize the dynamic color scheme' built-in semantic colors.
                     lightColorScheme = lightDynamic.harmonized();
                     darkColorScheme = darkDynamic.harmonized();
+                  } else if (state.accentColor != null) {
+                    lightColorScheme =
+                        ColorScheme.fromSeed(seedColor: state.accentColor!);
+                    darkColorScheme = ColorScheme.fromSeed(
+                      seedColor: state.accentColor!,
+                      brightness: Brightness.dark,
+                    );
                   }
 
                   return MaterialApp.router(

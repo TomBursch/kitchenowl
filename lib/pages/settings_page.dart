@@ -18,6 +18,8 @@ import 'package:kitchenowl/pages/household_member_page.dart';
 import 'package:kitchenowl/pages/household_update_page.dart';
 import 'package:kitchenowl/pages/settings_server_user_page.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
+import 'package:kitchenowl/styles/colors.dart';
+import 'package:kitchenowl/widgets/settings/color_button.dart';
 import 'package:kitchenowl/widgets/user_list_tile.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -141,28 +143,34 @@ class _SettingsPageState extends State<SettingsPage> {
                   );
                 }
 
-                return const SizedBox();
-              }),
-              if (!kIsWeb)
-                ListTile(
+                return ListTile(
                   title: Text(
-                    AppLocalizations.of(context)!.forceOfflineMode,
+                    AppLocalizations.of(context)!.dynamicAccentColor,
                   ),
-                  leading: const Icon(Icons.mobiledata_off_outlined),
-                  onTap: () =>
-                      BlocProvider.of<AuthCubit>(context).setForcedOfflineMode(
-                    !BlocProvider.of<AuthCubit>(context)
-                        .state
-                        .forcedOfflineMode,
-                  ),
-                  trailing: BlocBuilder<AuthCubit, AuthState>(
-                    buildWhen: (previous, current) =>
-                        previous.forcedOfflineMode != current.forcedOfflineMode,
-                    builder: (context, state) => KitchenOwlSwitch(
-                      value: state.forcedOfflineMode,
-                      onChanged: (value) => BlocProvider.of<AuthCubit>(context)
-                          .setForcedOfflineMode(value),
-                    ),
+                  leading: const Icon(Icons.color_lens_rounded),
+                );
+              }),
+              if (!state.dynamicAccentColor)
+                SingleChildScrollView(
+                  primary: false,
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: [
+                      const SizedBox(width: 52),
+                      ColorButton(
+                        color: AppColors.green,
+                        selected: state.accentColor == null,
+                        onTap: () => BlocProvider.of<SettingsCubit>(context)
+                            .setAccentColor(null),
+                      ),
+                      for (final color in AppColors.accentColorOptions)
+                        ColorButton(
+                          color: color,
+                          selected: state.accentColor?.value == color.value,
+                          onTap: () => BlocProvider.of<SettingsCubit>(context)
+                              .setAccentColor(color),
+                        ),
+                    ],
                   ),
                 ),
               ListTile(
@@ -210,6 +218,28 @@ class _SettingsPageState extends State<SettingsPage> {
                   upperBound: 30,
                 ),
               ),
+              if (!kIsWeb)
+                ListTile(
+                  title: Text(
+                    AppLocalizations.of(context)!.forceOfflineMode,
+                  ),
+                  leading: const Icon(Icons.mobiledata_off_outlined),
+                  onTap: () =>
+                      BlocProvider.of<AuthCubit>(context).setForcedOfflineMode(
+                    !BlocProvider.of<AuthCubit>(context)
+                        .state
+                        .forcedOfflineMode,
+                  ),
+                  trailing: BlocBuilder<AuthCubit, AuthState>(
+                    buildWhen: (previous, current) =>
+                        previous.forcedOfflineMode != current.forcedOfflineMode,
+                    builder: (context, state) => KitchenOwlSwitch(
+                      value: state.forcedOfflineMode,
+                      onChanged: (value) => BlocProvider.of<AuthCubit>(context)
+                          .setForcedOfflineMode(value),
+                    ),
+                  ),
+                ),
             ]),
           ),
         ),

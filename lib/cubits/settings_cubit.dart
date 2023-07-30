@@ -20,6 +20,8 @@ class SettingsCubit extends Cubit<SettingsState> {
     final gridSize = PreferenceStorage.getInstance().readInt(key: 'gridSize');
     final recentItemsCount =
         PreferenceStorage.getInstance().readInt(key: 'recentItemsCount');
+    final accentColor =
+        PreferenceStorage.getInstance().readInt(key: 'accentColor');
     Config.deviceInfo = DeviceInfoPlugin().deviceInfo;
     Config.packageInfo = PackageInfo.fromPlatform();
 
@@ -35,6 +37,8 @@ class SettingsCubit extends Cubit<SettingsState> {
           ? GridSize.values[(await gridSize)!]
           : GridSize.normal,
       recentItemsCount: await recentItemsCount ?? 9,
+      accentColor:
+          (await accentColor) != null ? Color((await accentColor)!) : null,
     ));
   }
 
@@ -63,6 +67,17 @@ class SettingsCubit extends Cubit<SettingsState> {
       emit(state.copyWith(recentItemsCount: recentItemsCount));
     }
   }
+
+  void setAccentColor(Color? accentColor) {
+    accentColor = accentColor?.withAlpha(255);
+    if (accentColor != null) {
+      PreferenceStorage.getInstance()
+          .writeInt(key: 'accentColor', value: accentColor.value);
+    } else {
+      PreferenceStorage.getInstance().delete(key: 'accentColor');
+    }
+    emit(state.copyWith(accentColor: Nullable(accentColor)));
+  }
 }
 
 class SettingsState extends Equatable {
@@ -70,12 +85,14 @@ class SettingsState extends Equatable {
   final bool dynamicAccentColor;
   final int recentItemsCount;
   final GridSize gridSize;
+  final Color? accentColor;
 
   const SettingsState({
     this.themeMode = ThemeMode.system,
     this.dynamicAccentColor = false,
     this.gridSize = GridSize.normal,
     this.recentItemsCount = 9,
+    this.accentColor,
   });
 
   SettingsState copyWith({
@@ -83,15 +100,17 @@ class SettingsState extends Equatable {
     bool? dynamicAccentColor,
     GridSize? gridSize,
     int? recentItemsCount,
+    Nullable<Color>? accentColor,
   }) =>
       SettingsState(
         themeMode: themeMode ?? this.themeMode,
         dynamicAccentColor: dynamicAccentColor ?? this.dynamicAccentColor,
         gridSize: gridSize ?? this.gridSize,
         recentItemsCount: recentItemsCount ?? this.recentItemsCount,
+        accentColor: (accentColor ?? Nullable(this.accentColor)).value,
       );
 
   @override
   List<Object?> get props =>
-      [themeMode, dynamicAccentColor, gridSize, recentItemsCount];
+      [themeMode, dynamicAccentColor, gridSize, recentItemsCount, accentColor];
 }

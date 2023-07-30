@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kitchenowl/app.dart';
 import 'package:kitchenowl/cubits/household_cubit.dart';
 import 'package:kitchenowl/cubits/settings_cubit.dart';
 import 'package:kitchenowl/cubits/shoppinglist_cubit.dart';
@@ -97,11 +98,18 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                                 .state
                                 .household,
                             onRefresh: cubit.refresh,
-                            selected: (item) => item is ShoppinglistItem,
+                            selected: (item) =>
+                                item is ShoppinglistItem &&
+                                (App.settings.shoppingListTapToRemove ||
+                                    !state.selectedListItems.contains(item)),
                             isLoading: state is LoadingShoppinglistCubitState,
                             onPressed: (Item item) {
                               if (item is ShoppinglistItem) {
-                                cubit.remove(item);
+                                if (App.settings.shoppingListTapToRemove) {
+                                  cubit.remove(item);
+                                } else {
+                                  cubit.selectItem(item);
+                                }
                               } else {
                                 cubit.add(
                                   item.name,
@@ -131,15 +139,21 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                             .read<SettingsCubit>()
                             .state
                             .shoppingListListView,
-                        selected: (_) => !context
-                            .read<SettingsCubit>()
-                            .state
-                            .shoppingListListView,
+                        selected: (item) =>
+                            App.settings.shoppingListTapToRemove &&
+                                !App.settings.shoppingListListView ||
+                            !App.settings.shoppingListTapToRemove &&
+                                App.settings.shoppingListListView ^
+                                    !state.selectedListItems.contains(item),
                         isLoading: state is LoadingShoppinglistCubitState,
                         onRefresh: cubit.refresh,
                         onPressed: (Item item) {
                           if (item is ShoppinglistItem) {
-                            cubit.remove(item);
+                            if (App.settings.shoppingListTapToRemove) {
+                              cubit.remove(item);
+                            } else {
+                              cubit.selectItem(item);
+                            }
                           } else {
                             cubit.add(item.name);
                           }
@@ -167,15 +181,21 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                               .read<SettingsCubit>()
                               .state
                               .shoppingListListView,
-                          selected: (_) => !context
-                              .read<SettingsCubit>()
-                              .state
-                              .shoppingListListView,
+                          selected: (item) =>
+                              App.settings.shoppingListTapToRemove &&
+                                  !App.settings.shoppingListListView ||
+                              !App.settings.shoppingListTapToRemove &&
+                                  App.settings.shoppingListListView ^
+                                      !state.selectedListItems.contains(item),
                           isLoading: state is LoadingShoppinglistCubitState,
                           onRefresh: cubit.refresh,
                           onPressed: (Item item) {
                             if (item is ShoppinglistItem) {
-                              cubit.remove(item);
+                              if (App.settings.shoppingListTapToRemove) {
+                                cubit.remove(item);
+                              } else {
+                                cubit.selectItem(item);
+                              }
                             } else {
                               cubit.add(item.name);
                             }

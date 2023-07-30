@@ -36,6 +36,11 @@ class ShoppingItemWidget<T extends Item> extends StatelessWidget {
         : Card(
             margin: const EdgeInsets.symmetric(vertical: 4),
             child: ListTile(
+              leading: selected
+                  ? const Icon(Icons.check_rounded)
+                  : ItemIcons.get(item) != null
+                      ? Icon(ItemIcons.get(item))
+                      : null,
               title:
                   Text(item.name, maxLines: 1, overflow: TextOverflow.ellipsis),
               selected: selected,

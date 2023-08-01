@@ -8,12 +8,14 @@
       "category": "fruits_vegetables",
       "icon": "apple"
     },
+    "apple_cider_vinegar": {},
     "apple_pulp": {
       "icon": "apple"
     },
     "applesauce": {
       "icon": "apple"
     },
+    "apricots": {},
     "apérol": {
       "category": "drinks",
       "icon": "wine-bottle"
@@ -22,6 +24,7 @@
       "category": "fruits_vegetables"
     },
     "asian_egg_noodles": {},
+    "asian_noodles": {},
     "asparagus": {
       "category": "fruits_vegetables",
       "icon": "asparagus"
@@ -33,6 +36,7 @@
       "category": "fruits_vegetables",
       "icon": "avocado"
     },
+    "baby_potatoes": {},
     "baby_spinach": {
       "category": "fruits_vegetables",
       "icon": "spinach"
@@ -166,7 +170,9 @@
     "chickpeas": {
       "icon": "peas"
     },
+    "chicory": {},
     "chili_oil": {},
+    "chili_pepper": {},
     "chips": {
       "category": "snacks"
     },
@@ -177,9 +183,11 @@
       "category": "snacks",
       "icon": "chocolate-bar"
     },
+    "chocolate_chips": {},
     "chopped_tomatoes": {
       "icon": "tomato"
     },
+    "chunky_tomatoes": {},
     "ciabatta": {
       "category": "bread",
       "icon": "bread"
@@ -217,6 +225,7 @@
     "cornflakes": {},
     "cornstarch": {},
     "cornys": {},
+    "corriander": {},
     "cough_drops": {},
     "couscous": {},
     "covid_rapid_test": {},
@@ -243,6 +252,7 @@
       "icon": "cucumber"
     },
     "cumin": {},
+    "curd": {},
     "curry_paste": {},
     "curry_powder": {},
     "curry_sauce": {},
@@ -252,12 +262,15 @@
     "dental_floss": {
       "category": "hygiene"
     },
+    "deo": {},
     "deodorant": {
       "category": "hygiene"
     },
     "detergent": {
       "category": "hygiene"
     },
+    "detergent_sheets": {},
+    "diarrhea_remedy": {},
     "dill": {},
     "dishwasher_salt": {
       "category": "hygiene"
@@ -272,6 +285,8 @@
     "edamame": {
       "icon": "peas"
     },
+    "egg_salad": {},
+    "egg_yolk": {},
     "eggplant": {
       "category": "fruits_vegetables",
       "icon": "eggplant"
@@ -280,6 +295,8 @@
       "category": "dairy",
       "icon": "eggs"
     },
+    "enoki_mushrooms": {},
+    "eyebrow_gel": {},
     "falafel": {},
     "falafel_powder": {},
     "fanta": {
@@ -313,6 +330,7 @@
       "category": "freezer",
       "icon": "spinach"
     },
+    "funeral_card": {},
     "garam_masala": {},
     "garbage_bag": {
       "category": "hygiene"
@@ -348,6 +366,8 @@
       "category": "dairy",
       "icon": "cheese"
     },
+    "granola": {},
+    "granola_bar": {},
     "grapes": {
       "category": "fruits_vegetables",
       "icon": "grapes"
@@ -361,9 +381,12 @@
     "green_chili": {},
     "green_pesto": {},
     "hair_gel": {},
+    "hair_ties": {},
     "hair_wax": {},
+    "hand_soap": {},
     "handkerchief_box": {},
     "handkerchiefs": {},
+    "hard_cheese": {},
     "haribo": {
       "category": "snacks"
     },
@@ -395,6 +418,7 @@
     },
     "instant_soups": {},
     "jam": {},
+    "jasmine_rice": {},
     "katjes": {},
     "ketchup": {
       "icon": "ketchup"
@@ -424,6 +448,7 @@
       "category": "fruits_vegetables",
       "icon": "citrus"
     },
+    "lemon_curd": {},
     "lemon_juice": {
       "icon": "citrus"
     },
@@ -435,7 +460,9 @@
     },
     "lenses": {},
     "lenses_red": {},
+    "lentil_stew": {},
     "lentils": {},
+    "lentils_red": {},
     "lettuce": {
       "category": "fruits_vegetables",
       "icon": "lettuce"
@@ -448,13 +475,16 @@
       "icon": "citrus"
     },
     "linguine": {},
+    "lip_care": {},
     "low-fat_curd_cheese": {
       "category": "dairy"
     },
+    "maggi": {},
     "magnesium": {},
     "mango": {
       "category": "fruits_vegetables"
     },
+    "maple_syrup": {},
     "margarine": {
       "category": "dairy"
     },
@@ -462,6 +492,8 @@
     "marshmallows": {
       "category": "snacks"
     },
+    "mascara": {},
+    "mascarpone": {},
     "mask": {
       "category": "hygiene"
     },
@@ -476,8 +508,10 @@
       "icon": "basil"
     },
     "mint_candy": {},
+    "miso_paste": {},
     "mixed_vegetables": {},
     "mochis": {},
+    "mold_remover": {},
     "mountain_cheese": {
       "category": "dairy",
       "icon": "cheese"
@@ -496,6 +530,7 @@
       "icon": "mushroom"
     },
     "mustard": {},
+    "nail_file": {},
     "neutral_oil": {},
     "nori_leaves": {},
     "nori_sheets": {},
@@ -510,6 +545,7 @@
     "obatzda": {
       "category": "refrigerated"
     },
+    "oil": {},
     "olive_oil": {
       "icon": "olive"
     },
@@ -521,6 +557,7 @@
       "category": "fruits_vegetables",
       "icon": "onion"
     },
+    "onion_powder": {},
     "onions": {
       "category": "fruits_vegetables",
       "icon": "onion"
@@ -543,10 +580,12 @@
     "pak_choi": {
       "category": "fruits_vegetables"
     },
+    "pantyhose": {},
     "paprika": {
       "category": "fruits_vegetables",
       "icon": "paprika"
     },
+    "paprika_seasoning": {},
     "pardina_lentils_dried": {},
     "parmesan": {
       "category": "dairy"
@@ -605,6 +644,7 @@
       "icon": "pineapple"
     },
     "pita_bag": {},
+    "pita_bread": {},
     "pizza": {
       "icon": "salami-pizza"
     },
@@ -616,6 +656,7 @@
     },
     "plant_oil": {},
     "plaster": {},
+    "pointed_peppers": {},
     "porcini_mushrooms": {
       "category": "fruits_vegetables",
       "icon": "mushroom"
@@ -623,6 +664,7 @@
     "potato_dumpling_dough": {
       "icon": "potato"
     },
+    "potato_wedges": {},
     "potatoes": {
       "category": "fruits_vegetables",
       "icon": "potato"
@@ -665,10 +707,12 @@
       "category": "drinks",
       "icon": "raspberry"
     },
+    "razor_blades": {},
     "red_bull": {
       "category": "drinks"
     },
     "red_chili": {},
+    "red_curry_paste": {},
     "red_lentils": {},
     "red_onions": {
       "category": "fruits_vegetables",
@@ -688,6 +732,7 @@
       "icon": "grains-of-rice"
     },
     "rice_cakes": {},
+    "rice_paper": {},
     "rice_ribbon_noodles": {},
     "rice_vinegar": {},
     "ricotta": {},
@@ -727,7 +772,6 @@
     },
     "schlemmerfilet": {},
     "schupfnudeln": {},
-    "chocolate_chips": {},
     "semolina_porridge": {},
     "sesame": {},
     "sesame_oil": {},
@@ -770,18 +814,21 @@
       "category": "snacks"
     },
     "soap": {},
+    "soba_noodles": {},
     "soft_drinks": {
       "category": "drinks"
     },
     "softdrinks": {
       "category": "drinks"
     },
+    "soup_vegetables": {},
     "sour_cream": {
       "category": "dairy"
     },
     "sour_cucumbers": {
       "icon": "cucumber"
     },
+    "soy_cream": {},
     "soy_hack": {},
     "soy_sauce": {
       "icon": "soy-sauce"
@@ -803,6 +850,7 @@
     "sponge_cloth": {
       "category": "hygiene"
     },
+    "sponge_fingers": {},
     "sponge_wipes": {
       "category": "hygiene"
     },
@@ -826,13 +874,17 @@
     "strained_tomatoes": {
       "icon": "tomato"
     },
+    "strawberries": {},
     "sugar": {},
     "summer_roll_paper": {},
+    "sunflower_oil": {},
     "sunflower_seeds": {},
+    "sunscreen": {},
     "sushi_rice": {
       "icon": "grains-of-rice"
     },
     "swabian_ravioli": {},
+    "sweet_chili_sauce": {},
     "sweet_potato": {
       "category": "fruits_vegetables",
       "icon": "sweet-potato"
@@ -841,6 +893,7 @@
       "category": "fruits_vegetables",
       "icon": "sweet-potato"
     },
+    "sweets": {},
     "table_salt": {},
     "tagliatelle": {},
     "tahini": {},
@@ -848,6 +901,7 @@
       "category": "fruits_vegetables"
     },
     "tape": {},
+    "tapioca_flour": {},
     "tea": {
       "category": "drinks",
       "icon": "tea"
@@ -903,9 +957,11 @@
     },
     "vegetarian_cold_cuts": {},
     "vinegar": {},
+    "vitamin_tablets": {},
     "vodka": {
       "category": "drinks"
     },
+    "washing_gel": {},
     "washing_powder": {
       "category": "hygiene"
     },
@@ -919,6 +975,7 @@
     "wc_cleaner": {
       "category": "hygiene"
     },
+    "wheat_flour": {},
     "whipped_cream": {
       "category": "dairy"
     },
@@ -935,11 +992,15 @@
       "category": "fruits_vegetables",
       "icon": "raspberry"
     },
+    "wild_rice": {},
+    "wildberry_lillet": {},
+    "worcester_sauce": {},
     "wrapping_paper": {},
     "wraps": {
       "category": "bread"
     },
     "yeast": {},
+    "yeast_flakes": {},
     "yoghurt": {
       "category": "dairy"
     },

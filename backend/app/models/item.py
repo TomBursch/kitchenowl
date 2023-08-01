@@ -13,6 +13,7 @@ class Item(db.Model, DbModelMixin, TimestampMixin, DbModelAuthorizeMixin):
     icon = db.Column(db.String(128), nullable=True)
     category_id = db.Column(db.Integer, db.ForeignKey('category.id'))
     default = db.Column(db.Boolean, default=False)
+    default_key = db.Column(db.String(128))
     household_id = db.Column(db.Integer, db.ForeignKey(
         'household.id'), nullable=False)
 
@@ -70,6 +71,10 @@ class Item(db.Model, DbModelMixin, TimestampMixin, DbModelAuthorizeMixin):
     def find_by_name(cls, household_id: int, name: str) -> Self:
         name = name.strip()
         return cls.query.filter(cls.household_id == household_id, cls.name == name).first()
+    
+    @classmethod
+    def find_by_default_key(cls, household_id: int, default_key: str) -> Self:
+        return cls.query.filter(cls.household_id == household_id, cls.default_key == default_key).first()
 
     @classmethod
     def find_by_id(cls, id) -> Self:

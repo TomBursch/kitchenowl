@@ -20,12 +20,14 @@ class RecipePage extends StatefulWidget {
   final Household? household;
   final Recipe recipe;
   final bool updateOnPlanningEdit;
+  final int? selectedYields;
 
   const RecipePage({
     super.key,
     required this.recipe,
     this.household,
     this.updateOnPlanningEdit = false,
+    this.selectedYields,
   });
 
   @override
@@ -38,7 +40,11 @@ class _RecipePageState extends State<RecipePage> {
   @override
   void initState() {
     super.initState();
-    cubit = RecipeCubit(household: widget.household, recipe: widget.recipe);
+    cubit = RecipeCubit(
+      household: widget.household,
+      recipe: widget.recipe,
+      selectedYields: widget.selectedYields,
+    );
   }
 
   @override
@@ -212,6 +218,13 @@ class _RecipePageState extends State<RecipePage> {
                                 style: Theme.of(context).textTheme.titleLarge,
                               ),
                             ),
+                            if (state.selectedYields != state.recipe.yields)
+                              IconButton(
+                                onPressed: () => cubit
+                                    .setSelectedYields(state.recipe.yields),
+                                icon: const Icon(Icons.restart_alt_rounded),
+                                tooltip: AppLocalizations.of(context)!.reset,
+                              ),
                             NumberSelector(
                               value: state.selectedYields,
                               setValue: cubit.setSelectedYields,
@@ -293,8 +306,13 @@ class _RecipePageState extends State<RecipePage> {
                             Expanded(
                               child: LoadingElevatedButton(
                                 child: Text(
-                                  AppLocalizations.of(context)!
-                                      .addRecipeToPlanner,
+                                  state.selectedYields != state.recipe.yields
+                                      ? AppLocalizations.of(context)!
+                                          .addRecipeToPlanner(
+                                          state.selectedYields,
+                                        )
+                                      : AppLocalizations.of(context)!
+                                          .addRecipeToPlannerShort,
                                 ),
                                 onPressed: () async {
                                   await cubit.addRecipeToPlanner(
@@ -326,7 +344,7 @@ class _RecipePageState extends State<RecipePage> {
                                   context: context,
                                   builder: (context) => SelectDialog(
                                     title: AppLocalizations.of(context)!
-                                        .addRecipeToPlanner,
+                                        .addRecipeToPlannerShort,
                                     cancelText:
                                         AppLocalizations.of(context)!.cancel,
                                     options: weekdayMapping.entries

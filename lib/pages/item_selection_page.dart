@@ -3,10 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/cubits/item_selection_cubit.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/kitchenowl.dart';
-import 'package:kitchenowl/models/recipe.dart';
+import 'package:kitchenowl/models/planner.dart';
 
 class ItemSelectionPage extends StatefulWidget {
-  final List<Recipe> recipes;
+  final List<RecipePlan> plans;
   final String? title;
   final String Function(Object) selectText;
   final Future<List<RecipeItem>> Function(List<RecipeItem>)? handleResult;
@@ -14,7 +14,7 @@ class ItemSelectionPage extends StatefulWidget {
   const ItemSelectionPage({
     super.key,
     this.title,
-    this.recipes = const [],
+    this.plans = const [],
     required this.selectText,
     this.handleResult,
   });
@@ -30,7 +30,7 @@ class _ItemSelectionPageState extends State<ItemSelectionPage> {
   @override
   void initState() {
     super.initState();
-    cubit = ItemSelectionCubit(widget.recipes);
+    cubit = ItemSelectionCubit(widget.plans);
   }
 
   @override
@@ -49,25 +49,25 @@ class _ItemSelectionPageState extends State<ItemSelectionPage> {
         bloc: cubit,
         builder: (context, state) => CustomScrollView(
           slivers: [
-            for (final recipe in widget.recipes) ...[
-              if (recipe.items.isNotEmpty)
+            for (final plan in widget.plans) ...[
+              if (plan.recipe.items.isNotEmpty)
                 SliverPadding(
                   padding: const EdgeInsets.all(16),
                   sliver: SliverToBoxAdapter(
                     child: Text(
-                      '${recipe.name}:',
+                      '${plan.recipe.name}${plan.yields != null ? " (${plan.yields} ${AppLocalizations.of(context)!.yields})" : ""}:',
                       style: Theme.of(context).textTheme.headlineSmall,
                     ),
                   ),
                 ),
               SliverItemGridList(
-                items: recipe.mandatoryItems,
-                onPressed: (RecipeItem item) => cubit.toggleItem(recipe, item),
-                selected: (item) => state.selectedItems[recipe]!.contains(item),
+                items: plan.recipeWithYields.mandatoryItems,
+                onPressed: (RecipeItem item) => cubit.toggleItem(plan, item),
+                selected: (item) => state.selectedItems[plan]!.contains(item),
                 onLongPressed:
                     const Nullable<void Function(RecipeItem)>.empty(),
               ),
-              if (recipe.optionalItems.isNotEmpty)
+              if (plan.recipe.optionalItems.isNotEmpty)
                 SliverPadding(
                   padding: const EdgeInsets.all(16),
                   sliver: SliverToBoxAdapter(
@@ -78,9 +78,9 @@ class _ItemSelectionPageState extends State<ItemSelectionPage> {
                   ),
                 ),
               SliverItemGridList(
-                items: recipe.optionalItems,
-                onPressed: (RecipeItem item) => cubit.toggleItem(recipe, item),
-                selected: (item) => state.selectedItems[recipe]!.contains(item),
+                items: plan.recipeWithYields.optionalItems,
+                onPressed: (RecipeItem item) => cubit.toggleItem(plan, item),
+                selected: (item) => state.selectedItems[plan]!.contains(item),
                 onLongPressed:
                     const Nullable<void Function(RecipeItem)>.empty(),
               ),

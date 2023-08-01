@@ -239,6 +239,9 @@ final router = GoRouter(
                           updateOnPlanningEdit: state.uri
                                   .queryParameters['updateOnPlanningEdit'] ==
                               true.toString(),
+                          selectedYields: int.tryParse(
+                            state.uri.queryParameters['selectedYields'] ?? "",
+                          ),
                         );
                       },
                     ),

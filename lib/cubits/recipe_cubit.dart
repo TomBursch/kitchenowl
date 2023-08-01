@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/models/item.dart';
+import 'package:kitchenowl/models/planner.dart';
 import 'package:kitchenowl/models/recipe.dart';
 import 'package:kitchenowl/services/transaction_handler.dart';
 import 'package:kitchenowl/services/transactions/planner.dart';
@@ -12,8 +13,8 @@ import 'package:kitchenowl/services/transactions/shoppinglist.dart';
 class RecipeCubit extends Cubit<RecipeState> {
   final Household? household;
 
-  RecipeCubit({this.household, required Recipe recipe})
-      : super(RecipeState(recipe: recipe)) {
+  RecipeCubit({this.household, required Recipe recipe, int? selectedYields})
+      : super(RecipeState(recipe: recipe, selectedYields: selectedYields)) {
     refresh();
   }
 
@@ -41,7 +42,11 @@ class RecipeCubit extends Cubit<RecipeState> {
   Future<void> refresh() async {
     final recipe = await TransactionHandler.getInstance()
         .runTransaction(TransactionRecipeGetRecipe(recipe: state.recipe));
-    emit(RecipeState(recipe: recipe, updateState: state.updateState));
+    emit(RecipeState(
+      recipe: recipe,
+      updateState: state.updateState,
+      selectedYields: state.selectedYields,
+    ));
   }
 
   Future<void> addItemsToList() async {
@@ -61,8 +66,14 @@ class RecipeCubit extends Cubit<RecipeState> {
       await TransactionHandler.getInstance()
           .runTransaction(TransactionPlannerAddRecipe(
         household: household!,
-        recipe: state.recipe,
-        day: day,
+        recipePlan: RecipePlan(
+          recipe: state.recipe,
+          day: day,
+          yields: state.recipe.yields != state.selectedYields &&
+                  state.selectedYields > 0
+              ? state.selectedYields
+              : null,
+        ),
       ));
       if (updateOnAdd) setUpdateState(UpdateEnum.updated);
     }
@@ -87,8 +98,9 @@ class RecipeState extends Equatable {
   RecipeState({
     required this.recipe,
     this.updateState = UpdateEnum.unchanged,
+    int? selectedYields,
   })  : dynamicRecipe = recipe,
-        selectedYields = recipe.yields,
+        selectedYields = selectedYields ?? recipe.yields,
         selectedItems =
             recipe.items.where((e) => !e.optional).map((e) => e.name).toList();
 

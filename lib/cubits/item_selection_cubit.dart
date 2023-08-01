@@ -1,17 +1,19 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/models/item.dart';
-import 'package:kitchenowl/models/recipe.dart';
+import 'package:kitchenowl/models/planner.dart';
 
 class ItemSelectionCubit extends Cubit<ItemSelectionState> {
-  ItemSelectionCubit(List<Recipe> recipes)
+  ItemSelectionCubit(List<RecipePlan> plans)
       : super(
           ItemSelectionState(
-            Map.fromEntries(recipes.map((e) => MapEntry(e, e.items))),
+            Map.fromEntries(plans.map(
+              (e) => MapEntry(e, e.recipeWithYields.items),
+            )),
           ),
         );
 
-  void toggleItem(Recipe recipe, RecipeItem item) {
+  void toggleItem(RecipePlan recipe, RecipeItem item) {
     final s = Map.of(state.selectedItems);
     if (!s.containsKey(recipe)) return;
     final l = Set.of(s[recipe]!);
@@ -30,9 +32,9 @@ class ItemSelectionCubit extends Cubit<ItemSelectionState> {
 }
 
 class ItemSelectionState extends Equatable {
-  final Map<Recipe, Set<RecipeItem>> selectedItems;
+  final Map<RecipePlan, Set<RecipeItem>> selectedItems;
 
-  ItemSelectionState(Map<Recipe, List<RecipeItem>> items)
+  ItemSelectionState(Map<RecipePlan, List<RecipeItem>> items)
       : this.withSelection(
           items.map((key, value) =>
               MapEntry(key, value.where((e) => !e.optional).toSet())),
@@ -45,7 +47,7 @@ class ItemSelectionState extends Equatable {
   });
 
   ItemSelectionState copyWith({
-    Map<Recipe, Set<RecipeItem>>? selectedItems,
+    Map<RecipePlan, Set<RecipeItem>>? selectedItems,
   }) =>
       ItemSelectionState._all(
         selectedItems: selectedItems ?? this.selectedItems,

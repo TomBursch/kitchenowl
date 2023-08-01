@@ -1,10 +1,12 @@
 import 'package:kitchenowl/models/household.dart';
+import 'package:kitchenowl/models/planner.dart';
 import 'package:kitchenowl/models/recipe.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
 import 'package:kitchenowl/services/storage/temp_storage.dart';
 import 'package:kitchenowl/services/transaction.dart';
 
-class TransactionPlannerGetPlannedRecipes extends Transaction<List<Recipe>> {
+class TransactionPlannerGetPlannedRecipes
+    extends Transaction<List<RecipePlan>> {
   final Household household;
 
   TransactionPlannerGetPlannedRecipes({
@@ -16,18 +18,22 @@ class TransactionPlannerGetPlannedRecipes extends Transaction<List<Recipe>> {
         );
 
   @override
-  Future<List<Recipe>> runLocal() async {
+  Future<List<RecipePlan>> runLocal() async {
     final recipes = List<Recipe>.from(
       await TempStorage.getInstance().readRecipes(household) ?? const [],
     );
     recipes.retainWhere((e) => e.isPlanned);
 
-    return recipes;
+    return recipes
+        .expand((r) => r.plannedDays.isNotEmpty
+            ? r.plannedDays.map((day) => RecipePlan(recipe: r, day: day))
+            : [RecipePlan(recipe: r)])
+        .toList();
   }
 
   @override
-  Future<List<Recipe>?> runOnline() async {
-    return await ApiService.getInstance().getPlannedRecipes(household);
+  Future<List<RecipePlan>?> runOnline() async {
+    return await ApiService.getInstance().getPlanned(household);
   }
 }
 
@@ -78,13 +84,11 @@ class TransactionPlannerGetSuggestedRecipes extends Transaction<List<Recipe>> {
 
 class TransactionPlannerAddRecipe extends Transaction<bool> {
   final Household household;
-  final Recipe recipe;
-  final int? day;
+  final RecipePlan recipePlan;
 
   TransactionPlannerAddRecipe({
     required this.household,
-    required this.recipe,
-    this.day,
+    required this.recipePlan,
     DateTime? timestamp,
   }) : super.internal(
           timestamp ?? DateTime.now(),
@@ -97,8 +101,7 @@ class TransactionPlannerAddRecipe extends Transaction<bool> {
   ) =>
       TransactionPlannerAddRecipe(
         household: Household.fromJson(map['household']),
-        recipe: Recipe.fromJson(map['recipe']),
-        day: map['day'],
+        recipePlan: RecipePlan.fromJson(map['recipePlan']),
         timestamp: timestamp,
       );
 
@@ -109,8 +112,7 @@ class TransactionPlannerAddRecipe extends Transaction<bool> {
   Map<String, dynamic> toJson() => super.toJson()
     ..addAll({
       "household": household.toJsonWithId(),
-      "recipe": recipe.toJsonWithId(),
-      "day": day,
+      "recipePlan": recipePlan.toJsonWithId(),
     });
 
   @override
@@ -120,7 +122,7 @@ class TransactionPlannerAddRecipe extends Transaction<bool> {
 
   @override
   Future<bool?> runOnline() {
-    return ApiService.getInstance().addPlannedRecipe(household, recipe, day);
+    return ApiService.getInstance().addPlannedRecipe(household, recipePlan);
   }
 }
 

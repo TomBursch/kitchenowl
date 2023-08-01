@@ -10,6 +10,7 @@ class Category(db.Model, DbModelMixin, TimestampMixin, DbModelAuthorizeMixin):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(128))
     default = db.Column(db.Boolean, default=False)
+    default_key = db.Column(db.String(128))
     ordering = db.Column(db.Integer, default=0)
     household_id = db.Column(db.Integer, db.ForeignKey(
         'household.id'), nullable=False)
@@ -27,16 +28,21 @@ class Category(db.Model, DbModelMixin, TimestampMixin, DbModelAuthorizeMixin):
         return cls.query.filter(cls.household_id == household_id).order_by(cls.ordering, cls.name).all()
 
     @classmethod
-    def create_by_name(cls, household_id: int, name, default=False) -> Self:
+    def create_by_name(cls, household_id: int, name, default=False, default_key=None) -> Self:
         return cls(
             name=name,
             default=default,
+            default_key=default_key,
             household_id=household_id,
         ).save()
 
     @classmethod
     def find_by_name(cls, household_id: int, name: str) -> Self:
         return cls.query.filter(cls.name == name, cls.household_id == household_id).first()
+    
+    @classmethod
+    def find_by_default_key(cls, household_id: int, default_key: str) -> Self:
+        return cls.query.filter(cls.default_key == default_key, cls.household_id == household_id).first()
 
     @classmethod
     def find_by_id(cls, id: int) -> Self:

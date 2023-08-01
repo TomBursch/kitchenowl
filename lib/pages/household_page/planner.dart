@@ -204,6 +204,7 @@ class _PlannerPageState extends State<PlannerPage> {
                                             plan.recipe.id,
                                           ),
                                           title: plan.recipe.name,
+                                          description: plan.yields?.toString(),
                                           selected: true,
                                           onPressed: () {
                                             cubit.remove(

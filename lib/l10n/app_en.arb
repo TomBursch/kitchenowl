@@ -45,7 +45,7 @@
   },
   "addRecipeToPlannerShort": "Add to meal plan",
   "@addRecipeToPlannerShort": {
-    "description" : "A shorter title/button text used wherever the space is limited. Excludes the number of yields.",
+    "description" : "A shorter title/button text used wherever the space is limited. Excludes the number of yields."
   },
   "address": "Address",
   "@address": {},

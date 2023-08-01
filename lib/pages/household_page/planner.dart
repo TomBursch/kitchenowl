@@ -165,6 +165,7 @@ class _PlannerPageState extends State<PlannerPage> {
                                       context,
                                       cubit,
                                       plan.recipe,
+                                      plan.yields,
                                     ),
                                   ),
                                 ),
@@ -214,6 +215,7 @@ class _PlannerPageState extends State<PlannerPage> {
                                             context,
                                             cubit,
                                             plan.recipe,
+                                            plan.yields,
                                           ),
                                         ),
                                       ),
@@ -330,14 +332,16 @@ class _PlannerPageState extends State<PlannerPage> {
   Future<void> _openRecipePage(
     BuildContext context,
     PlannerCubit cubit,
-    Recipe recipe,
-  ) async {
+    Recipe recipe, [
+    int? yields,
+  ]) async {
     final household = BlocProvider.of<HouseholdCubit>(context).state.household;
     final res = await context.push<UpdateEnum>(
       Uri(
         path: "/household/${household.id}/recipes/details/${recipe.id}",
         queryParameters: {
           "updateOnPlanningEdit": true.toString(),
+          if (yields != null) "selectedYields": yields.toString(),
         },
       ).toString(),
       extra: Tuple2<Household, Recipe>(household, recipe),

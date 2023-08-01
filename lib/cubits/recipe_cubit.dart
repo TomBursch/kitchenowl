@@ -13,8 +13,8 @@ import 'package:kitchenowl/services/transactions/shoppinglist.dart';
 class RecipeCubit extends Cubit<RecipeState> {
   final Household? household;
 
-  RecipeCubit({this.household, required Recipe recipe})
-      : super(RecipeState(recipe: recipe)) {
+  RecipeCubit({this.household, required Recipe recipe, int? selectedYields})
+      : super(RecipeState(recipe: recipe, selectedYields: selectedYields)) {
     refresh();
   }
 
@@ -42,7 +42,11 @@ class RecipeCubit extends Cubit<RecipeState> {
   Future<void> refresh() async {
     final recipe = await TransactionHandler.getInstance()
         .runTransaction(TransactionRecipeGetRecipe(recipe: state.recipe));
-    emit(RecipeState(recipe: recipe, updateState: state.updateState));
+    emit(RecipeState(
+      recipe: recipe,
+      updateState: state.updateState,
+      selectedYields: state.selectedYields,
+    ));
   }
 
   Future<void> addItemsToList() async {
@@ -94,8 +98,9 @@ class RecipeState extends Equatable {
   RecipeState({
     required this.recipe,
     this.updateState = UpdateEnum.unchanged,
+    int? selectedYields,
   })  : dynamicRecipe = recipe,
-        selectedYields = recipe.yields,
+        selectedYields = selectedYields ?? recipe.yields,
         selectedItems =
             recipe.items.where((e) => !e.optional).map((e) => e.name).toList();
 

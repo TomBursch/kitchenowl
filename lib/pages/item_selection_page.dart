@@ -55,13 +55,13 @@ class _ItemSelectionPageState extends State<ItemSelectionPage> {
                   padding: const EdgeInsets.all(16),
                   sliver: SliverToBoxAdapter(
                     child: Text(
-                      '${plan.recipe.name}:',
+                      '${plan.recipe.name}${plan.yields != null ? " (${plan.yields} ${AppLocalizations.of(context)!.yields})" : ""}:',
                       style: Theme.of(context).textTheme.headlineSmall,
                     ),
                   ),
                 ),
               SliverItemGridList(
-                items: plan.recipe.mandatoryItems,
+                items: plan.recipeWithYields.mandatoryItems,
                 onPressed: (RecipeItem item) => cubit.toggleItem(plan, item),
                 selected: (item) => state.selectedItems[plan]!.contains(item),
                 onLongPressed:
@@ -78,7 +78,7 @@ class _ItemSelectionPageState extends State<ItemSelectionPage> {
                   ),
                 ),
               SliverItemGridList(
-                items: plan.recipe.optionalItems,
+                items: plan.recipeWithYields.optionalItems,
                 onPressed: (RecipeItem item) => cubit.toggleItem(plan, item),
                 selected: (item) => state.selectedItems[plan]!.contains(item),
                 onLongPressed:

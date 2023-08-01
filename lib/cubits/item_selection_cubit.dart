@@ -7,7 +7,9 @@ class ItemSelectionCubit extends Cubit<ItemSelectionState> {
   ItemSelectionCubit(List<RecipePlan> plans)
       : super(
           ItemSelectionState(
-            Map.fromEntries(plans.map((e) => MapEntry(e, e.recipe.items))),
+            Map.fromEntries(plans.map(
+              (e) => MapEntry(e, e.recipeWithYields.items),
+            )),
           ),
         );
 

@@ -20,6 +20,12 @@ class RecipePlan extends Model {
     );
   }
 
+  Recipe get recipeWithYields {
+    if (yields == null || yields! <= 0) return recipe;
+
+    return recipe.withYields(yields!);
+  }
+
   @override
   List<Object?> get props => [recipe, day, yields];
 

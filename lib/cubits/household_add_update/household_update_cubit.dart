@@ -62,7 +62,7 @@ class HouseholdUpdateCubit
   @override
   void setName(String name) {
     if (name.replaceAll(" ", "").isNotEmpty) {
-      emit(state.copyWith(name: name));
+      emit(state.copyWith(name: name.trim()));
       saveHousehold();
     }
   }

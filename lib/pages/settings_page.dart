@@ -478,7 +478,7 @@ class _SettingsPageState extends State<SettingsPage> {
             Padding(
               padding: const EdgeInsets.fromLTRB(8, 8, 8, 4),
               child: Text(
-                "v${Config.packageInfoSync?.version} (${Config.packageInfoSync?.buildNumber}) | Server v${(App.serverInfo as ConnectedServerInfoState).version}",
+                "v${Config.packageInfoSync?.version} (${Config.packageInfoSync?.buildNumber})${App.serverInfo is ConnectedServerInfoState ? " | Server v${(App.serverInfo as ConnectedServerInfoState).version}" : ""}",
                 style: Theme.of(context).textTheme.labelSmall?.copyWith(
                       color: Theme.of(context)
                           .textTheme

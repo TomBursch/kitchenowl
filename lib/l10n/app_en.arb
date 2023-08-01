@@ -37,10 +37,16 @@
       "number": {}
     }
   },
-  "addRecipeToPlanner": "Add to meal plan",
-  "@addRecipeToPlanner": {},
+  "addRecipeToPlanner": "Add to meal plan ({number} yields)",
+  "@addRecipeToPlanner": {
+    "placeholders": {
+      "number": {}
+    }
+  },
   "addRecipeToPlannerShort": "Add to meal plan",
-  "@addRecipeToPlannerShort": {},
+  "@addRecipeToPlannerShort": {
+    "description" : "A shorter title/button text used wherever the space is limited. Excludes the number of yields.",
+  },
   "address": "Address",
   "@address": {},
   "addShoppingList": "Add Shopping list",

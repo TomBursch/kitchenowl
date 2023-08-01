@@ -397,7 +397,7 @@ class _PlannerPageState extends State<PlannerPage> {
     int? day = await showDialog<int>(
       context: context,
       builder: (context) => SelectDialog(
-        title: AppLocalizations.of(context)!.addRecipeToPlanner,
+        title: AppLocalizations.of(context)!.addRecipeToPlannerShort,
         cancelText: AppLocalizations.of(context)!.cancel,
         options: weekdayMapping.entries
             .map(

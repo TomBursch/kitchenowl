@@ -293,8 +293,13 @@ class _RecipePageState extends State<RecipePage> {
                             Expanded(
                               child: LoadingElevatedButton(
                                 child: Text(
-                                  AppLocalizations.of(context)!
-                                      .addRecipeToPlanner,
+                                  state.selectedYields != state.recipe.yields
+                                      ? AppLocalizations.of(context)!
+                                          .addRecipeToPlanner(
+                                          state.selectedYields,
+                                        )
+                                      : AppLocalizations.of(context)!
+                                          .addRecipeToPlannerShort,
                                 ),
                                 onPressed: () async {
                                   await cubit.addRecipeToPlanner(
@@ -326,7 +331,7 @@ class _RecipePageState extends State<RecipePage> {
                                   context: context,
                                   builder: (context) => SelectDialog(
                                     title: AppLocalizations.of(context)!
-                                        .addRecipeToPlanner,
+                                        .addRecipeToPlannerShort,
                                     cancelText:
                                         AppLocalizations.of(context)!.cancel,
                                     options: weekdayMapping.entries

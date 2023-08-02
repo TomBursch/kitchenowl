@@ -71,6 +71,8 @@
   "@cancel": {},
   "categories": "Categories",
   "@categories": {},
+  "categoriesMerge": "Merge Categories",
+  "@categoriesMerge": {},
   "category": "Category",
   "@category": {},
   "categoryDelete": "Delete Category",
@@ -227,6 +229,15 @@
       "item": {}
     }
   },
+  "itemsMerge": "Merge Items",
+  "@itemsMerge": {},
+  "itemsMergeConfirmation": "Are you sure you want to merge {item} and {other}? This cannot be undone.",
+  "@itemsMergeConfirmation": {
+    "placeholders": {
+      "item": {},
+      "other": {}
+    }
+  },
   "itemsOptional": "Optional Items",
   "@itemsOptional": {},
   "itemsRecent": "Recent Items",
@@ -281,6 +292,8 @@
   "@memberRemove": {},
   "members": "Members",
   "@members": {},
+  "merge": "Merge",
+  "@merge": {},
   "minutesAbbrev": "min",
   "@minutesAbbrev": {},
   "monthly": "Monthly",

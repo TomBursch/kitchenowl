@@ -193,6 +193,13 @@ class HouseholdUpdateCubit
     return res;
   }
 
+  Future<bool> mergeCategory(Category category, Category other) async {
+    final res = await ApiService.getInstance().mergeCategories(category, other);
+    refresh();
+
+    return res;
+  }
+
   Future<bool> deleteExpenseCategory(ExpenseCategory category) async {
     final res = await ApiService.getInstance().deleteExpenseCategory(category);
     refresh();

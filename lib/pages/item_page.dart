@@ -13,6 +13,7 @@ import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/shoppinglist.dart';
 import 'package:kitchenowl/models/update_value.dart';
 import 'package:kitchenowl/pages/icon_selection_page.dart';
+import 'package:kitchenowl/pages/item_search_page.dart';
 import 'package:kitchenowl/widgets/recipe_item.dart';
 
 class ItemPage<T extends Item> extends StatefulWidget {
@@ -37,6 +38,8 @@ class ItemPage<T extends Item> extends StatefulWidget {
 
 enum _ItemAction {
   changeIcon,
+  rename,
+  merge,
   delete;
 }
 
@@ -82,7 +85,11 @@ class _ItemPageState<T extends Item> extends State<ItemPage<T>> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text(widget.item.name),
+          title: BlocBuilder<ItemEditCubit, ItemEditState>(
+            bloc: cubit,
+            buildWhen: (prev, curr) => prev.name != curr.name,
+            builder: (context, state) => Text(state.name),
+          ),
           actions: [
             if (widget.item is! RecipeItem && !App.isOffline)
               PopupMenuButton(
@@ -93,42 +100,21 @@ class _ItemPageState<T extends Item> extends State<ItemPage<T>> {
                     child: Text(AppLocalizations.of(context)!.changeIcon),
                   ),
                   PopupMenuItem<_ItemAction>(
+                    value: _ItemAction.rename,
+                    child: Text(AppLocalizations.of(context)!.rename),
+                  ),
+                  const PopupMenuDivider(),
+                  if (widget.household != null)
+                    PopupMenuItem<_ItemAction>(
+                      value: _ItemAction.merge,
+                      child: Text(AppLocalizations.of(context)!.merge),
+                    ),
+                  PopupMenuItem<_ItemAction>(
                     value: _ItemAction.delete,
                     child: Text(AppLocalizations.of(context)!.delete),
                   ),
                 ],
-                onSelected: (value) async {
-                  switch (value) {
-                    case _ItemAction.changeIcon:
-                      final icon = await Navigator.of(context)
-                          .push<Nullable<String?>>(MaterialPageRoute(
-                        builder: (context) => IconSelectionPage(
-                          oldIcon: cubit.state.icon,
-                          name: cubit.state.name,
-                        ),
-                      ));
-                      if (icon != null) cubit.setIcon(icon.value);
-                      break;
-                    case _ItemAction.delete:
-                      final confirmed = await askForConfirmation(
-                        context: context,
-                        title: Text(
-                          AppLocalizations.of(context)!.itemDelete,
-                        ),
-                        content: Text(
-                          AppLocalizations.of(context)!
-                              .itemDeleteConfirmation(widget.item.name),
-                        ),
-                      );
-                      if (confirmed) {
-                        await cubit.deleteItem();
-                        if (!mounted) return;
-                        Navigator.of(context)
-                            .pop(const UpdateValue<Item>(UpdateEnum.deleted));
-                      }
-                      break;
-                  }
-                },
+                onSelected: _handleItemAction,
               ),
           ],
         ),
@@ -311,5 +297,85 @@ class _ItemPageState<T extends Item> extends State<ItemPage<T>> {
         ),
       ),
     );
+  }
+
+  // ignore: long-method
+  Future<void> _handleItemAction(_ItemAction action) async {
+    switch (action) {
+      case _ItemAction.changeIcon:
+        final icon = await Navigator.of(context)
+            .push<Nullable<String?>>(MaterialPageRoute(
+          builder: (context) => IconSelectionPage(
+            oldIcon: cubit.state.icon,
+            name: cubit.state.name,
+          ),
+        ));
+        if (icon != null) cubit.setIcon(icon.value);
+        break;
+      case _ItemAction.rename:
+        final res = await showDialog<String>(
+          context: context,
+          builder: (BuildContext context) {
+            return TextDialog(
+              title: AppLocalizations.of(context)!.categoryEdit,
+              doneText: AppLocalizations.of(context)!.rename,
+              hintText: AppLocalizations.of(context)!.name,
+              initialText: cubit.state.name,
+              isInputValid: (s) => s.trim().isNotEmpty && s != cubit.state.name,
+            );
+          },
+        );
+        if (res != null) cubit.setName(res);
+        break;
+      case _ItemAction.merge:
+        final items = await Navigator.of(
+              context,
+              rootNavigator: true,
+            ).push<List<Item>>(MaterialPageRoute(
+              builder: (context) => ItemSearchPage(
+                household: widget.household!,
+                multiple: false,
+                title: AppLocalizations.of(context)!.itemsMerge,
+              ),
+            )) ??
+            [];
+        if (items.length == 1 && items.first.id != widget.item.id) {
+          final confirmed = await askForConfirmation(
+            context: context,
+            title: Text(
+              AppLocalizations.of(context)!.itemsMerge,
+            ),
+            confirmText: AppLocalizations.of(context)!.merge,
+            content: Text(
+              AppLocalizations.of(context)!.itemsMergeConfirmation(
+                widget.item.name,
+                items.first.name,
+              ),
+            ),
+          );
+          if (confirmed) {
+            await cubit.mergeItem(items.first);
+          }
+        }
+        break;
+      case _ItemAction.delete:
+        final confirmed = await askForConfirmation(
+          context: context,
+          title: Text(
+            AppLocalizations.of(context)!.itemDelete,
+          ),
+          content: Text(
+            AppLocalizations.of(context)!
+                .itemDeleteConfirmation(widget.item.name),
+          ),
+        );
+        if (confirmed) {
+          await cubit.deleteItem();
+          if (!mounted) return;
+          Navigator.of(context)
+              .pop(const UpdateValue<Item>(UpdateEnum.deleted));
+        }
+        break;
+    }
   }
 }

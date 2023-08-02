@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class SelectDialog extends StatelessWidget {
-  final List<SelectDialogOption> options;
+class SelectDialog<T> extends StatelessWidget {
+  final List<SelectDialogOption<T>> options;
   final String title;
   final String cancelText;
 
@@ -47,8 +47,8 @@ class SelectDialog extends StatelessWidget {
   }
 }
 
-class SelectDialogOption {
-  final int id;
+class SelectDialogOption<T> {
+  final T id;
   final String name;
   final IconData? icon;
 

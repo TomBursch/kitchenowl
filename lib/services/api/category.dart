@@ -34,6 +34,17 @@ extension CategoryApi on ApiService {
     return res.statusCode == 200;
   }
 
+  Future<bool> mergeCategories(Category category, Category other) async {
+    final res = await post(
+      '$baseRoute/${category.id}',
+      jsonEncode({
+        "merge_category_id": other.id,
+      }),
+    );
+
+    return res.statusCode == 200;
+  }
+
   Future<bool> deleteCategory(Category category) async {
     final res = await delete(
       baseRoute,

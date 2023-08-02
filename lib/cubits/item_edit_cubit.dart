@@ -22,12 +22,14 @@ class ItemEditCubit<T extends Item> extends Cubit<ItemEditState> {
         description: state.description,
         category: Nullable(state.category),
         icon: Nullable(state.icon),
+        name: state.name,
       )) as T);
     }
 
     return _item.copyWith(
       category: Nullable(state.category),
       icon: Nullable(state.icon),
+      name: state.name,
     ) as T;
   }
 
@@ -67,7 +69,9 @@ class ItemEditCubit<T extends Item> extends Cubit<ItemEditState> {
   }
 
   bool hasChangedItem() {
-    return _item.category != state.category || _item.icon != state.icon;
+    return _item.category != state.category ||
+        _item.icon != state.icon ||
+        _item.name != state.name;
   }
 
   bool hasChangedDescription() {
@@ -95,6 +99,14 @@ class ItemEditCubit<T extends Item> extends Cubit<ItemEditState> {
   Future<bool> deleteItem() async {
     if (_item.id != null) {
       return ApiService.getInstance().deleteItem(_item);
+    }
+
+    return false;
+  }
+
+  Future<bool> mergeItem(Item other) async {
+    if (_item.id != null && other.id != null) {
+      return ApiService.getInstance().mergeItems(_item, other);
     }
 
     return false;

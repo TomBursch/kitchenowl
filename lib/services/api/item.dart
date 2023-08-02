@@ -50,4 +50,15 @@ extension ItemApi on ApiService {
 
     return res.statusCode == 200;
   }
+
+  Future<bool> mergeItems(Item item, Item other) async {
+    final res = await post(
+      '$baseRoute/${item.id}',
+      jsonEncode({
+        "merge_item_id": other.id,
+      }),
+    );
+
+    return res.statusCode == 200;
+  }
 }

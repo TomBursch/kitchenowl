@@ -75,7 +75,7 @@
       "lang": {}
     }
   },
-  "addRecipeToPlanner": "Aggiungi al piano pasti",
+  "addRecipeToPlanner": "Aggiungi al piano pasti ({number} Rese)",
   "@addRecipeToPlanner": {},
   "addRecipeToPlannerShort": "Aggiungi al piano pasti",
   "@addRecipeToPlannerShort": {},

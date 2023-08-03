@@ -11,7 +11,7 @@
       "lang": {}
     }
   },
-  "addRecipeToPlanner": "Agregar al plan de comidas",
+  "addRecipeToPlanner": "Agregar al plan de comidas ({number} Rinde)",
   "@addRecipeToPlanner": {},
   "addTag": "Añadir etiqueta",
   "@addTag": {},
@@ -503,5 +503,19 @@
       "nameA": {},
       "nameB": {}
     }
-  }
+  },
+  "smaller": "Más pequeño",
+  "@smaller": {},
+  "confirm": "Confirmar",
+  "@confirm": {},
+  "itemRemoveInteraction": "Interacción de eliminación de elementos",
+  "@itemRemoveInteraction": {},
+  "itemSize": "Tamaño del artículo",
+  "@itemSize": {},
+  "larger": "Más grande",
+  "@larger": {},
+  "tap": "Pulsa",
+  "@tap": {},
+  "shoppingListStyle": "Estilo de lista de la compra",
+  "@shoppingListStyle": {}
 }

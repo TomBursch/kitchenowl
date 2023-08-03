@@ -46,5 +46,11 @@
   "copied": "کاپی کیتے",
   "@copied": {},
   "darkmode": "ہنیرا",
-  "@darkmode": {}
+  "@darkmode": {},
+  "addRecipeToPlanner": "ਖਾਣੇ ਦੀ ਯੋਜਨਾ ਵਿੱਚ ਸ਼ਾਮਲ ਕਰੋ ({number} ਉਪਜਾਂ)",
+  "@addRecipeToPlanner": {
+    "placeholders": {
+      "number": {}
+    }
+  }
 }

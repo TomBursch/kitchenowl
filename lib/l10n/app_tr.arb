@@ -11,7 +11,7 @@
   "@addDescriptionFromSource": {},
   "addLanguage": "Dil ekle",
   "@addLanguage": {},
-  "addRecipeToPlanner": "Yemek planına ekle",
+  "addRecipeToPlanner": "Yemek planına ekle ({number})",
   "@addRecipeToPlanner": {},
   "address": "Adres",
   "@address": {},
@@ -23,7 +23,7 @@
   "@appTitle": {
     "description": "The title of the app"
   },
-  "addLanguageConfirm": "'{lang}'dilini eklemek istediğinizden emin misiniz? Bu (şu anda) geri alınamaz.",
+  "addLanguageConfirm": "'{lang}'dilini eklemek istediğinizden emin misiniz? Bu geri alınamaz ve Evinize kategoriler ve öğeler ekleyecektir.",
   "@addLanguageConfirm": {
     "placeholders": {
       "lang": {}
@@ -39,7 +39,7 @@
   "@camera": {},
   "cancel": "İptal",
   "@cancel": {},
-  "categories": "Kategori",
+  "categories": "Kategoriler",
   "@categories": {},
   "category": "Kategori",
   "@category": {},
@@ -374,5 +374,134 @@
     }
   },
   "changeIcon": "Simgeyi Değiştir",
-  "@changeIcon": {}
+  "@changeIcon": {},
+  "addedBy": "{name} tarafından eklendi",
+  "@addedBy": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "householdEmpty": "Hane bulunamadı, yeni bir tane oluşturarak başlayın!",
+  "@householdEmpty": {},
+  "householdDeleteConfirmation": "{household} hanesini silmek istediğinizden emin misiniz? Bu tüm öğeleri, tarifleri ve bakiyeleri yok edecektir.",
+  "@householdDeleteConfirmation": {
+    "placeholders": {
+      "household": {}
+    }
+  },
+  "householdLeave": "Haneden Ayrıl",
+  "@householdLeave": {},
+  "general": "Genel",
+  "@general": {},
+  "accountDelete": "Hesabı Sil",
+  "@accountDelete": {},
+  "accountDeleteConfirmation": "Hesabınızı silmek istediğinize emin misiniz?",
+  "@accountDeleteConfirmation": {},
+  "accountCreate": "Yeni Hesap Oluştur",
+  "@accountCreate": {},
+  "accountCreateTitle": "KitchenOwl Hesabını Yarat",
+  "@accountCreateTitle": {},
+  "email": "E-posta",
+  "@email": {},
+  "emailUpdate": "E-postayı Güncelle",
+  "@emailUpdate": {},
+  "ingredientsOptional": "Tercihen ekleyin",
+  "@ingredientsOptional": {},
+  "ingredients": "Malzemeler",
+  "@ingredients": {},
+  "owesAB": "{nameA}, {nameB}'e borçlu",
+  "@owesAB": {
+    "placeholders": {
+      "nameA": {},
+      "nameB": {}
+    }
+  },
+  "passwordRepeat": "Şifre Tekrarı",
+  "@passwordRepeat": {},
+  "passwordRepeatNoMatch": "Şifreler uyuşmuyor",
+  "@passwordRepeatNoMatch": {},
+  "householdDelete": "Haneyi Sil",
+  "@householdDelete": {},
+  "memberRemove": "Üyeyi Çıkar",
+  "@memberRemove": {},
+  "members": "Üyeler",
+  "@members": {},
+  "memberAdd": "Üye Ekle",
+  "@memberAdd": {},
+  "reset": "Sıfırla",
+  "@reset": {},
+  "swipeToRemove": "Kaldırmak için kaydır",
+  "@swipeToRemove": {},
+  "emailUsed": "Bu e-posta hâlihazırda bir hesap ile ilişkilendirilmiş",
+  "@emailUsed": {},
+  "helpTranslate": "Çeviriye yardım edin",
+  "@helpTranslate": {},
+  "member": "Üye",
+  "@member": {},
+  "monthly": "Aylık",
+  "@monthly": {},
+  "signup": "Kayıt ol",
+  "@signup": {},
+  "logoutName": "Çıkış yap: {name}",
+  "@logoutName": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "reportIssue": "Hata bildir",
+  "@reportIssue": {},
+  "passwordFieldTooShort": "Şifre çok kısa",
+  "@passwordFieldTooShort": {},
+  "privacyPolicyAgree": "Hesap yaratarak {privacyPolicy} kabul etmiş olursunuz",
+  "@privacyPolicyAgree": {
+    "placeholders": {
+      "privacyPolicy": {}
+    }
+  },
+  "yearly": "Yıllık",
+  "@yearly": {},
+  "userSearchHint": "Bir ad yazın",
+  "@userSearchHint": {},
+  "privacyPolicy": "Gizlilik Politikası",
+  "@privacyPolicy": {},
+  "remove": "Kaldır",
+  "@remove": {},
+  "set": "Uygula",
+  "@set": {},
+  "settings": "Ayarlar",
+  "@settings": {},
+  "usernameInvalid": "Kullanıcı adı \"@\" içeremez",
+  "@usernameInvalid": {},
+  "usernameUnavailable": "Kullanıcı adı müsait değil",
+  "@usernameUnavailable": {},
+  "daily": "Günlük",
+  "@daily": {},
+  "dangerZone": "Tehlike Bölgesi",
+  "@dangerZone": {},
+  "expenseReceivedBy": "Ödemeyi Alan",
+  "@expenseReceivedBy": {},
+  "expenseReceivedFor": "Ödeme Nedeni",
+  "@expenseReceivedFor": {},
+  "householdLeaveConfirmation": "{household} hanesinden ayrılmak istediğinize emin misiniz?",
+  "@householdLeaveConfirmation": {
+    "placeholders": {
+      "household": {}
+    }
+  },
+  "householdNew": "Yeni Hane",
+  "@householdNew": {},
+  "households": "Haneler",
+  "@households": {},
+  "householdSwitch": "Diğer Haneler",
+  "@householdSwitch": {},
+  "imageSelect": "Bir resim seçin",
+  "@imageSelect": {},
+  "supportDevelopment": "Geliştirmeyi destekle",
+  "@supportDevelopment": {},
+  "tagEdit": "Etiketi Düzenle",
+  "@tagEdit": {},
+  "weekly": "Haftalık",
+  "@weekly": {},
+  "emailInvalid": "Geçersiz e-posta",
+  "@emailInvalid": {}
 }

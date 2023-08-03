@@ -7,7 +7,7 @@
   "@addItemTitle": {},
   "addLanguage": "Ajouter une langue",
   "@addLanguage": {},
-  "addRecipeToPlanner": "Ajouter au plan de repas",
+  "addRecipeToPlanner": "Ajouter au plan de repas ({number})",
   "@addRecipeToPlanner": {},
   "addRecipeToPlannerShort": "Ajouter au plan de repas",
   "@addRecipeToPlannerShort": {},
@@ -490,5 +490,18 @@
   "emailInvalid": "Courriel invalide",
   "@emailInvalid": {},
   "emailUpdate": "Mettre à jour le courriel",
-  "@emailUpdate": {}
+  "@emailUpdate": {},
+  "addedBy": "Ajouté par {name}",
+  "@addedBy": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "owesAB": "{nameA} est débiteur de {nameB}",
+  "@owesAB": {
+    "placeholders": {
+      "nameA": {},
+      "nameB": {}
+    }
+  }
 }

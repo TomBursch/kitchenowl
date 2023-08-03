@@ -13,7 +13,7 @@
       "number": {}
     }
   },
-  "addRecipeToPlanner": "Lägg till i måltidsplanen",
+  "addRecipeToPlanner": "Lägg till i måltidsplanen ({number})",
   "@addRecipeToPlanner": {},
   "appTitle": "KitchenOwl",
   "@appTitle": {
@@ -64,5 +64,109 @@
   "camera": "Kamera",
   "@camera": {},
   "categories": "Kategorier",
-  "@categories": {}
+  "@categories": {},
+  "addedBy": "Tillagd av {name}",
+  "@addedBy": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "emailUsed": "Den här e-postadressen är redan kopplad till ett konto",
+  "@emailUsed": {},
+  "expenseOverviewTotalTitle": "Totala utgifter för {month}:",
+  "@expenseOverviewTotalTitle": {
+    "placeholders": {
+      "month": {}
+    }
+  },
+  "expensePaidFor": "Betald för",
+  "@expensePaidFor": {},
+  "expenseReceivedBy": "Mottagen av",
+  "@expenseReceivedBy": {},
+  "expenseReceivedFor": "Mottaget för",
+  "@expenseReceivedFor": {},
+  "features": "Funktioner",
+  "@features": {},
+  "gallery": "Galleri",
+  "@gallery": {},
+  "general": "Allmän",
+  "@general": {},
+  "fieldCannotBeEmpty": "{field} kan inte vara tomt.",
+  "@fieldCannotBeEmpty": {
+    "placeholders": {
+      "field": {}
+    }
+  },
+  "forceOfflineMode": "Tvinga offline-läge",
+  "@forceOfflineMode": {},
+  "grid": "Rutnät",
+  "@grid": {},
+  "accountCreate": "Skapa Konto",
+  "@accountCreate": {},
+  "accountCreateTitle": "Skapa ditt KitchenOwl konto",
+  "@accountCreateTitle": {},
+  "categoryEdit": "Ändra Kategori",
+  "@categoryEdit": {},
+  "categoryExpenseDeleteConfirmation": "Är du säker på att du vill ta bort {category}? Detta kommer ta bort kategorin från alla utgifter.",
+  "@categoryExpenseDeleteConfirmation": {
+    "placeholders": {
+      "category": {}
+    }
+  },
+  "changeIcon": "Ändra Ikon",
+  "@changeIcon": {},
+  "colorSelect": "Välj en färg",
+  "@colorSelect": {},
+  "cookingTime": "Tillagningstid",
+  "@cookingTime": {},
+  "copied": "Kopierad",
+  "@copied": {},
+  "daily": "Daglig",
+  "@daily": {},
+  "dangerZone": "Farozon",
+  "@dangerZone": {},
+  "darkmode": "Mörkt läge",
+  "@darkmode": {},
+  "date": "Datum",
+  "@date": {},
+  "done": "Klar",
+  "@done": {},
+  "dynamicAccentColor": "Dynamisk accentfärg",
+  "@dynamicAccentColor": {},
+  "defaultWord": "Standard",
+  "@defaultWord": {},
+  "delete": "Ta bort",
+  "@delete": {},
+  "description": "Beskrivning",
+  "@description": {},
+  "error": "Ett fel inträffade",
+  "@error": {},
+  "expense": "Utgift",
+  "@expense": {},
+  "expenseAdd": "Lägg till utgift",
+  "@expenseAdd": {},
+  "expenseAmount": "Mängd",
+  "@expenseAmount": {},
+  "expenseCategories": "Utgiftskategorier",
+  "@expenseCategories": {},
+  "expenseEdit": "Redigera kostnad",
+  "@expenseEdit": {},
+  "expenseFactor": "Faktor",
+  "@expenseFactor": {},
+  "expenseEmpty": "Inga utgifter, börja med att skapa en!",
+  "@expenseEmpty": {},
+  "expenseOverviewComparedToPreviousMonth": "Jämfört med tidigare månader",
+  "@expenseOverviewComparedToPreviousMonth": {},
+  "expensePaidBy": "Betald av",
+  "@expensePaidBy": {},
+  "emailUpdate": "Uppdatera e-postadress",
+  "@emailUpdate": {},
+  "email": "Email",
+  "@email": {},
+  "emailInvalid": "Ogiltig e-postadress",
+  "@emailInvalid": {},
+  "confirm": "Bekräfta",
+  "@confirm": {},
+  "categoriesMerge": "Slå samman kategorier",
+  "@categoriesMerge": {}
 }

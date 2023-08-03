@@ -19,7 +19,7 @@
       "number": {}
     }
   },
-  "addRecipeToPlanner": "Pridat jídlo do plánu",
+  "addRecipeToPlanner": "Pridat jídlo do plánu ({number})",
   "@addRecipeToPlanner": {},
   "addRecipeToPlannerShort": "Pridat jídlo do plánu",
   "@addRecipeToPlannerShort": {},

@@ -52,6 +52,12 @@ def updateCategory(args, id):
     if 'ordering' in args and category.ordering != args['ordering']:
         category.reorder(args['ordering'])
     category.save()
+
+    if 'merge_category_id' in args and args['merge_category_id'] != id:
+        mergeCategory = Category.find_by_id(args['merge_category_id'])
+        if mergeCategory:
+            category.merge(mergeCategory)
+
     return jsonify(category.obj_to_dict())
 
 

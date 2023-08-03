@@ -79,5 +79,15 @@ def updateItem(args, id):
             raise InvalidUsage()
     if 'icon' in args:
         item.icon = args['icon']
+    if 'name' in args and args['name'] != item.name:
+        newName: str = args['name'].strip()
+        if not Item.search_name(newName, item.household_id):
+            item.name = newName
     item.save()
+
+    if 'merge_item_id' in args and args['merge_item_id'] != id:
+        mergeItem = Item.find_by_id(args['merge_item_id'])
+        if mergeItem:
+            item.merge(mergeItem)
+
     return jsonify(item.obj_to_dict())

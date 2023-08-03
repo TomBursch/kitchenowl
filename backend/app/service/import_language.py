@@ -19,7 +19,8 @@ def importLanguage(household_id, lang, bulkSave=False):
     t0 = time.time()
     models: list[Item] = []
     for key, name in data["items"].items():
-        item = Item.find_by_default_key(household_id, key) or Item.find_by_name(household_id, name)
+        item = Item.find_by_default_key(
+            household_id, key) or Item.find_by_name(household_id, name)
         if not item:
             # slow but needed to filter out duplicate names
             if bulkSave and any(i.name == name for i in models):
@@ -30,10 +31,12 @@ def importLanguage(household_id, lang, bulkSave=False):
             item.default = True
             item.default_key = key
 
-        if not item.default_key: # migrate to new system
+        if not item.default_key:  # migrate to new system
             item.default_key = key
 
         if item.default:
+            item.name = name.strip()
+
             if key in attributes["items"] and "icon" in attributes["items"][key]:
                 item.icon = attributes["items"][key]["icon"]
 
@@ -41,11 +44,12 @@ def importLanguage(household_id, lang, bulkSave=False):
             if key in attributes["items"] and "category" in attributes["items"][key] and attributes["items"][key]["category"] in data["categories"]:
                 category_key = attributes["items"][key]["category"]
                 category_name = data["categories"][category_key]
-                category = Category.find_by_default_key(household_id, category_key) or Category.find_by_name(household_id, category_name)
+                category = Category.find_by_default_key(
+                    household_id, category_key) or Category.find_by_name(household_id, category_name)
                 if not category:
                     category = Category.create_by_name(
                         household_id, category_name, True, category_key)
-                if not category.default_key: # migrate to new system
+                if not category.default_key:  # migrate to new system
                     category.default_key = category_key
                     category.save()
                 item.category = category

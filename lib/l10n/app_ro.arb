@@ -17,7 +17,7 @@
       "number": {}
     }
   },
-  "addRecipeToPlanner": "Adăugați la planul de masă",
+  "addRecipeToPlanner": "Adăugați la planul de masă ({number})",
   "@addRecipeToPlanner": {},
   "address": "Adresa",
   "@address": {},

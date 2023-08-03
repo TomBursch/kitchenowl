@@ -181,7 +181,7 @@
   "@addItemTitle": {},
   "addLanguage": "Legg til språk",
   "@addLanguage": {},
-  "addRecipeToPlanner": "Legg til i måltidsplan",
+  "addRecipeToPlanner": "Legg til i måltidsplan ({number})",
   "@addRecipeToPlanner": {},
   "description": "Beskrivelse",
   "@description": {},

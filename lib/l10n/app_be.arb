@@ -31,7 +31,7 @@
   "@addDescriptionFromSource": {},
   "addTag": "Дадаць тэг",
   "@addTag": {},
-  "addRecipeToPlanner": "Дадаць у план страў",
+  "addRecipeToPlanner": "Дадаць у план страў ({number})",
   "@addRecipeToPlanner": {},
   "addRecipeToPlannerShort": "Дадаць у план страў",
   "@addRecipeToPlannerShort": {},

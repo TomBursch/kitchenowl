@@ -255,7 +255,7 @@
   "@lltWarningTitle": {},
   "login": "Masuk",
   "@login": {},
-  "addRecipeToPlanner": "Tambah ke rencana makan",
+  "addRecipeToPlanner": "Tambah ke rencana makan ({number})",
   "@addRecipeToPlanner": {},
   "household": "Rumah tangga",
   "@household": {},

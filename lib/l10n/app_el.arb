@@ -17,7 +17,7 @@
       "lang": {}
     }
   },
-  "addRecipeToPlanner": "Προσθήκη στο πρόγραμμα γευμάτων",
+  "addRecipeToPlanner": "Προσθήκη στο πρόγραμμα γευμάτων ({number} Σερβιρίσματα)",
   "@addRecipeToPlanner": {},
   "back": "Πίσω",
   "@back": {},
@@ -490,5 +490,32 @@
   "you": "εσείς",
   "@you": {},
   "about": "Πληροφορίες",
-  "@about": {}
+  "@about": {},
+  "addedBy": "Προστέθηκε από {name}",
+  "@addedBy": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "owesAB": "Ο/η {nameA} χρωστάει στον/στην {nameB}",
+  "@owesAB": {
+    "placeholders": {
+      "nameA": {},
+      "nameB": {}
+    }
+  },
+  "itemSize": "Μέγεθος αντικειμένου",
+  "@itemSize": {},
+  "smaller": "Μικρότερο",
+  "@smaller": {},
+  "confirm": "Επιβεβαίωση",
+  "@confirm": {},
+  "itemRemoveInteraction": "Αλληλεπίδραση αφαίρεσης αντικειμένου",
+  "@itemRemoveInteraction": {},
+  "larger": "Μεγαλύτερο",
+  "@larger": {},
+  "shoppingListStyle": "Στυλ λίστας αγορών",
+  "@shoppingListStyle": {},
+  "tap": "Πατήστε",
+  "@tap": {}
 }

@@ -9,7 +9,7 @@
       "number": {}
     }
   },
-  "addRecipeToPlanner": "Lisää ateriasuunnitelmaan",
+  "addRecipeToPlanner": "Lisää ateriasuunnitelmaan ({number})",
   "@addRecipeToPlanner": {},
   "addRecipeToPlannerShort": "Lisää ateriasuunnitelmaan",
   "@addRecipeToPlannerShort": {},
@@ -460,5 +460,13 @@
   "emailInvalid": "Virheellinen sähköposti",
   "@emailInvalid": {},
   "emailUpdate": "Päivitä sähköposti",
-  "@emailUpdate": {}
+  "@emailUpdate": {},
+  "addedBy": "{name} lisäsi",
+  "@addedBy": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "expenseFactor": "Kerroin",
+  "@expenseFactor": {}
 }

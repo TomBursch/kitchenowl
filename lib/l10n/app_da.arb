@@ -17,7 +17,7 @@
       "number": {}
     }
   },
-  "addRecipeToPlanner": "Tilføj til måltidsplan",
+  "addRecipeToPlanner": "Tilføj til måltidsplan ({number})",
   "@addRecipeToPlanner": {},
   "addRecipeToPlannerShort": "Tilføj til madplan",
   "@addRecipeToPlannerShort": {},
@@ -372,5 +372,11 @@
   "unsavedChangesTitle": "Du har ændringer der ikke er gemt",
   "@unsavedChangesTitle": {},
   "unsavedChangesBody": "Er du sikker på, du vil gå tilbage?",
-  "@unsavedChangesBody": {}
+  "@unsavedChangesBody": {},
+  "accountDelete": "Slet Konto",
+  "@accountDelete": {},
+  "accountCreate": "Opret Konto",
+  "@accountCreate": {},
+  "accountCreateTitle": "Opret din KitchenOwl Konto",
+  "@accountCreateTitle": {}
 }

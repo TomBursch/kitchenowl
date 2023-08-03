@@ -23,7 +23,7 @@
       "number": {}
     }
   },
-  "addRecipeToPlanner": "Hozzáadás az étkezési tervhez",
+  "addRecipeToPlanner": "Hozzáadás az étkezési tervhez ({number})",
   "@addRecipeToPlanner": {},
   "addRecipeToPlannerShort": "Hozzáadás az étkezési tervhez",
   "@addRecipeToPlannerShort": {},
@@ -220,5 +220,15 @@
   "emailUpdate": "Email Frissítése",
   "@emailUpdate": {},
   "householdEmpty": "Még nincs háztartásod, hozz létre egyet!",
-  "@householdEmpty": {}
+  "@householdEmpty": {},
+  "addedBy": "Általa létrehozva: {name}",
+  "@addedBy": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "lltCreate": "Hosszú-élettartamú token létrehozása",
+  "@lltCreate": {},
+  "llts": "Hossz-élettartamú tokenek",
+  "@llts": {}
 }

@@ -189,7 +189,7 @@
       "lang": {}
     }
   },
-  "addRecipeToPlanner": "Dodaj do planu posiłków",
+  "addRecipeToPlanner": "Dodaj do planu posiłków ({number})",
   "@addRecipeToPlanner": {},
   "admin": "Administrator",
   "@admin": {},

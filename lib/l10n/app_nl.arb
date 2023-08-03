@@ -17,7 +17,7 @@
       "lang": {}
     }
   },
-  "addRecipeToPlanner": "Toevoegen aan maaltijdplan",
+  "addRecipeToPlanner": "Toevoegen aan maaltijdplan ({number} Opbrengsten)",
   "@addRecipeToPlanner": {},
   "addRecipeToPlannerShort": "Toevoegen aan maaltijdplan",
   "@addRecipeToPlannerShort": {},
@@ -490,5 +490,18 @@
   "ingredients": "Ingrediënten",
   "@ingredients": {},
   "ingredientsOptional": "Optionele Ingrediënten",
-  "@ingredientsOptional": {}
+  "@ingredientsOptional": {},
+  "addedBy": "Toegevoegd door {name}",
+  "@addedBy": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "owesAB": "{nameA} is verschuldigd aan {nameB}",
+  "@owesAB": {
+    "placeholders": {
+      "nameA": {},
+      "nameB": {}
+    }
+  }
 }

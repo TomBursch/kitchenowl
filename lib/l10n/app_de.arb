@@ -23,7 +23,7 @@
       "number": {}
     }
   },
-  "addRecipeToPlanner": "Zum Essensplan hinzufügen",
+  "addRecipeToPlanner": "Zum Essensplan hinzufügen ({number} Erträge)",
   "@addRecipeToPlanner": {},
   "addRecipeToPlannerShort": "Zum Speiseplan hinzufügen",
   "@addRecipeToPlannerShort": {},
@@ -498,6 +498,33 @@
     "placeholders": {
       "nameA": {},
       "nameB": {}
+    }
+  },
+  "itemSize": "Größe des Artikels",
+  "@itemSize": {},
+  "larger": "Größer",
+  "@larger": {},
+  "itemRemoveInteraction": "Artikel entfernen Interaktion",
+  "@itemRemoveInteraction": {},
+  "smaller": "Kleiner",
+  "@smaller": {},
+  "tap": "Tippen",
+  "@tap": {},
+  "confirm": "Bestätigen",
+  "@confirm": {},
+  "shoppingListStyle": "Einkaufslisten-Stil",
+  "@shoppingListStyle": {},
+  "categoriesMerge": "Kategorien zusammenführen",
+  "@categoriesMerge": {},
+  "itemsMerge": "Artikel zusammenführen",
+  "@itemsMerge": {},
+  "merge": "Zusammenführen",
+  "@merge": {},
+  "itemsMergeConfirmation": "Bist sicher, dass du {item} und {other} zusammenführen möchtest? Das kann nicht rückgängig gemacht werden.",
+  "@itemsMergeConfirmation": {
+    "placeholders": {
+      "item": {},
+      "other": {}
     }
   }
 }

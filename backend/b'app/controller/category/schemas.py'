@@ -18,6 +18,12 @@ class UpdateCategory(Schema):
         validate=lambda i: i >= 0
     )
 
+    # if set this merges the specified category into this category thus combining them to one
+    merge_category_id = fields.Integer(
+        validate=lambda a: a > 0,
+        allow_none=True,
+    )
+
 
 class DeleteCategory(Schema):
     name = fields.String(

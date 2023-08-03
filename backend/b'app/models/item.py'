@@ -3,6 +3,7 @@ from typing import Self
 from app import db
 from app.helpers import DbModelMixin, TimestampMixin, DbModelAuthorizeMixin
 from app.models.category import Category
+from app.util import description_merger
 
 
 class Item(db.Model, DbModelMixin, TimestampMixin, DbModelAuthorizeMixin):
@@ -59,6 +60,61 @@ class Item(db.Model, DbModelMixin, TimestampMixin, DbModelAuthorizeMixin):
             self.default = False
         return super().save()
 
+    def merge(self, other: Self) -> None:
+        if other.household_id != self.household_id:
+            return
+
+        from app.models import RecipeItems
+        from app.models import History
+        from app.models import ShoppinglistItems
+
+        if not self.default_key and other.default_key:
+            self.default_key = other.default_key
+
+        if not self.category_id and other.category_id:
+            self.category_id = other.category_id
+
+        if not self.icon and other.icon:
+            self.icon = other.icon
+
+        for ri in RecipeItems.query.filter(RecipeItems.item_id == other.id).all():
+            ri: RecipeItems
+            existingRi = RecipeItems.find_by_ids(ri.recipe_id, self.id)
+            if not existingRi:
+                ri.item_id = self.id
+                db.session.add(ri)
+            else:
+                existingRi.description = description_merger.merge(
+                    existingRi.description, ri.description)
+                db.session.delete(ri)
+                db.session.add(existingRi)
+
+        for si in ShoppinglistItems.query.filter(ShoppinglistItems.item_id == other.id).all():
+            si: ShoppinglistItems
+            existingSi = ShoppinglistItems.find_by_ids(
+                si.shoppinglist_id, self.id)
+            if not existingSi:
+                si.item_id = self.id
+                db.session.add(si)
+            else:
+                existingSi.description = description_merger.merge(
+                    existingSi.description, si.description)
+                db.session.delete(si)
+                db.session.add(existingSi)
+
+        for history in History.query.filter(History.item_id == other.id).all():
+            history.item_id = self.id
+            db.session.add(history)
+
+        
+        try:
+            db.session.add(self)
+            db.session.commit()
+            other.delete()
+        except Exception as e:
+            db.session.rollback()
+            raise e
+
     @classmethod
     def create_by_name(cls, household_id: int, name: str, default: bool = False) -> Self:
         return cls(
@@ -71,7 +127,7 @@ class Item(db.Model, DbModelMixin, TimestampMixin, DbModelAuthorizeMixin):
     def find_by_name(cls, household_id: int, name: str) -> Self:
         name = name.strip()
         return cls.query.filter(cls.household_id == household_id, cls.name == name).first()
-    
+
     @classmethod
     def find_by_default_key(cls, household_id: int, default_key: str) -> Self:
         return cls.query.filter(cls.household_id == household_id, cls.default_key == default_key).first()

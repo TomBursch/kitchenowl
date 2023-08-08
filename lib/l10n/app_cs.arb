@@ -268,5 +268,23 @@
   "optional": "Volitelný",
   "@optional": {},
   "or": "nebo",
-  "@or": {}
+  "@or": {},
+  "addedBy": "Přidáno {name}",
+  "@addedBy": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "confirm": "Potvrdit",
+  "@confirm": {},
+  "email": "Email",
+  "@email": {},
+  "accountCreate": "Vytvořit účet",
+  "@accountCreate": {},
+  "accountCreateTitle": "Vytvořit KitchenOwl účet",
+  "@accountCreateTitle": {},
+  "categoriesMerge": "Sloučit kategorie",
+  "@categoriesMerge": {},
+  "emailInvalid": "Neplatný email",
+  "@emailInvalid": {}
 }

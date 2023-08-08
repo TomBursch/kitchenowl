@@ -53,7 +53,7 @@
 		<string>ru</string>
 		<string>sv</string>
 		<string>tr</string>
-		<string>zh-Hans</string>
+		<string>zh</string>
 	</array>
 	<key>CFBundleName</key>
 	<string>kitchenowl</string>

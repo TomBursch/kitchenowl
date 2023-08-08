@@ -1,1 +1,58 @@
-{}
+{
+  "accountCreateTitle": "新建你的 KitchenOwl 账号",
+  "@accountCreateTitle": {},
+  "accountDelete": "删除账号",
+  "@accountDelete": {},
+  "accountDeleteConfirmation": "确定要删除你的账号吗？",
+  "@accountDeleteConfirmation": {},
+  "add": "新增",
+  "@add": {},
+  "addCategory": "新增分类",
+  "@addCategory": {},
+  "addDescriptionFromSource": "新增来自来源处的描述",
+  "@addDescriptionFromSource": {},
+  "addedBy": "由 {name} 添加",
+  "@addedBy": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "addItemTitle": "新增物品",
+  "@addItemTitle": {},
+  "addLanguage": "新增语言",
+  "@addLanguage": {},
+  "addNumberIngredients": "新增 {number} 个原料",
+  "@addNumberIngredients": {
+    "placeholders": {
+      "number": {}
+    }
+  },
+  "addRecipeToPlanner": "添加到膳食计划（{number}份）",
+  "@addRecipeToPlanner": {
+    "placeholders": {
+      "number": {}
+    }
+  },
+  "about": "关于",
+  "@about": {},
+  "accountCreate": "新建账号",
+  "@accountCreate": {},
+  "addLanguageConfirm": "确定要将语言设置为 '{lang}' 吗？这个操作不能被撤销，并且会在你的房屋中新增物品和分类。",
+  "@addLanguageConfirm": {
+    "placeholders": {
+      "lang": {}
+    }
+  },
+  "addRecipeToPlannerShort": "添加到膳食计划",
+  "@addRecipeToPlannerShort": {
+    "description": "A shorter title/button text used wherever the space is limited. Excludes the number of yields."
+  },
+  "address": "地址",
+  "@address": {},
+  "addShoppingList": "新增购物清单",
+  "@addShoppingList": {},
+  "addTag": "新增标签",
+  "@addTag": {},
+  "admin": "管理员",
+  "@admin": {}
+}

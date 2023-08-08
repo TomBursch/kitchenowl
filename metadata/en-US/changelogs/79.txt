@@ -1,0 +1,4 @@
+- Add simplified chinese
+- New customization options
+- New recipe ingredient pill. Link to a recipe ingredient using @ inside the description
+- Bug fixes and improvements 

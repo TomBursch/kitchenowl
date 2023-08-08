@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -440,14 +442,15 @@ class _SettingsPageState extends State<SettingsPage> {
                 "https://hosted.weblate.org/engage/kitchenowl",
               ),
             ),
-            ListTile(
-              title: Text(AppLocalizations.of(context)!.supportDevelopment),
-              leading: const Icon(Icons.volunteer_activism_rounded),
-              onTap: () => openUrl(
-                context,
-                "https://liberapay.com/tombursch",
+            if (kIsWeb || !Platform.isIOS)
+              ListTile(
+                title: Text(AppLocalizations.of(context)!.supportDevelopment),
+                leading: const Icon(Icons.volunteer_activism_rounded),
+                onTap: () => openUrl(
+                  context,
+                  "https://liberapay.com/tombursch",
+                ),
               ),
-            ),
             ListTile(
               title: Text(AppLocalizations.of(context)!.privacyPolicy),
               leading: const Icon(Icons.privacy_tip_rounded),

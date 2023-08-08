@@ -468,5 +468,17 @@
     }
   },
   "expenseFactor": "Kerroin",
-  "@expenseFactor": {}
+  "@expenseFactor": {},
+  "ingredientsOptional": "Valinnaiset ainesosat",
+  "@ingredientsOptional": {},
+  "ingredients": "Ainesosat",
+  "@ingredients": {},
+  "expensePaidBy": "Maksaja",
+  "@expensePaidBy": {},
+  "expenseReceivedBy": "Vastaanottanut",
+  "@expenseReceivedBy": {},
+  "categoriesMerge": "Yhdistä kategoriat",
+  "@categoriesMerge": {},
+  "confirm": "Vahvista",
+  "@confirm": {}
 }

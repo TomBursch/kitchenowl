@@ -517,5 +517,18 @@
   "tap": "Pulsa",
   "@tap": {},
   "shoppingListStyle": "Estilo de lista de la compra",
-  "@shoppingListStyle": {}
+  "@shoppingListStyle": {},
+  "categoriesMerge": "Fusionar categorías",
+  "@categoriesMerge": {},
+  "itemsMergeConfirmation": "¿Estás seguro de que quieres fusionar {item} y {other}? Esto no se puede deshacer.",
+  "@itemsMergeConfirmation": {
+    "placeholders": {
+      "item": {},
+      "other": {}
+    }
+  },
+  "itemsMerge": "Fusionar elementos",
+  "@itemsMerge": {},
+  "merge": "Fusionar",
+  "@merge": {}
 }

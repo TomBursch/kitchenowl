@@ -55,7 +55,7 @@
   "@emailUpdate": {},
   "error": "Ocorreu um Erro",
   "@error": {},
-  "addedBy": "Inserido por",
+  "addedBy": "Inserido por {name}",
   "@addedBy": {
     "placeholders": {
       "name": {}
@@ -98,5 +98,21 @@
     "placeholders": {
       "number": {}
     }
-  }
+  },
+  "categoriesMerge": "Unir Categorias",
+  "@categoriesMerge": {},
+  "addDescriptionFromSource": "Insira a origem",
+  "@addDescriptionFromSource": {},
+  "balances": "Balanço",
+  "@balances": {},
+  "admin": "Admin",
+  "@admin": {},
+  "appDescription": "KitchenOwl te ajuda a organizar suas compras.",
+  "@appDescription": {},
+  "addTag": "Adicionar Tag",
+  "@addTag": {},
+  "address": "Endereço",
+  "@address": {},
+  "addShoppingList": "Adicionar Lista de Compras",
+  "@addShoppingList": {}
 }

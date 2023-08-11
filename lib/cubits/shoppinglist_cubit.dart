@@ -33,6 +33,7 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
         );
       }
     });
+    _initialLoad();
     refresh();
   }
 
@@ -192,6 +193,59 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
     }
 
     return _refreshThread!;
+  }
+
+  Future<void> _initialLoad() async {
+    final shoppingLists = await TransactionHandler.getInstance().runTransaction(
+      TransactionShoppingListGet(household: household),
+      forceOffline: true,
+    );
+
+    final shoppinglist =
+        state.selectedShoppinglist ?? shoppingLists.firstOrNull;
+
+    if (shoppinglist == null) return;
+
+    Future<List<ShoppinglistItem>> items =
+        TransactionHandler.getInstance().runTransaction(
+      TransactionShoppingListGetItems(
+        shoppinglist: shoppinglist,
+        sorting: state.sorting,
+      ),
+      forceOffline: true,
+    );
+
+    Future<List<Category>> categories =
+        TransactionHandler.getInstance().runTransaction(
+      TransactionCategoriesGet(household: household),
+      forceOffline: true,
+    );
+
+    final recent = TransactionHandler.getInstance().runTransaction(
+      TransactionShoppingListGetRecentItems(
+        shoppinglist: shoppinglist,
+        itemsCount: recentItemCountProvider(),
+      ),
+      forceOffline: true,
+    );
+    List<ShoppinglistItem> loadedShoppinglistItems = await items;
+    final resState = ShoppinglistCubitState(
+      shoppinglists: shoppingLists,
+      selectedShoppinglist: shoppinglist,
+      listItems: loadedShoppinglistItems,
+      recentItems: await recent,
+      categories: await categories,
+      sorting: state.sorting,
+      selectedListItems: state.selectedListItems
+          .map((e) => (loadedShoppinglistItems)
+              .firstWhereOrNull((item) => item.id == e.id))
+          .whereNotNull()
+          .toList(),
+    );
+
+    if (state is LoadingShoppinglistCubitState) {
+      emit(resState);
+    }
   }
 
   // ignore: long-method

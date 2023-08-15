@@ -5,6 +5,7 @@ import 'package:kitchenowl/config.dart';
 import 'package:kitchenowl/helpers/named_bytearray.dart';
 import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/models/token.dart';
+import 'package:socket_io_client/socket_io_client.dart';
 import 'package:tuple/tuple.dart';
 
 // Export extensions
@@ -46,6 +47,7 @@ class ApiService {
 
   static ApiService? _instance;
   final _client = http.Client();
+  late final Socket socket;
   final String baseUrl;
   String? _refreshToken;
   Map<String, String> headers = {};
@@ -60,8 +62,16 @@ class ApiService {
   static final ValueNotifier<Map<String, dynamic>?> _serverInfoNotifier =
       ValueNotifier<Map<String, dynamic>?>(null);
 
-  ApiService._internal(this.baseUrl) {
+  ApiService._internal(String baseUrl) : baseUrl = baseUrl + _API_PATH {
     _connectionNotifier.value = Connection.undefined;
+    socket = io(
+      baseUrl,
+      OptionBuilder()
+          .setTransports(['websocket']) // for Flutter or Dart VM
+          .disableAutoConnect() // disable auto-connection
+          .setExtraHeaders(headers)
+          .build(),
+    );
   }
 
   static ApiService getInstance() {
@@ -86,6 +96,7 @@ class ApiService {
     _connectionNotifier.value = Connection.undefined;
     _serverInfoNotifier.value = null;
     _client.close();
+    socket.dispose();
   }
 
   void addListener(void Function() f) {
@@ -116,7 +127,6 @@ class ApiService {
 
   static Future<void> connectTo(String url, {String? refreshToken}) async {
     getInstance().dispose();
-    url += _API_PATH;
     _instance = ApiService._internal(url);
     _instance!.refreshToken = refreshToken ?? '';
     await _instance!.refresh();
@@ -253,6 +263,11 @@ class ApiService {
   }
 
   void _setConnectionState(Connection newState) {
+    if (newState == Connection.authenticated && !socket.connected) {
+      socket.connect();
+    } else if (newState != Connection.authenticated && socket.connected) {
+      socket.disconnect();
+    }
     _connectionNotifier.value = newState;
   }
 
@@ -332,6 +347,7 @@ class ApiService {
   Future<bool> logout() async {
     if (isAuthenticated()) {
       final res = await delete('/auth');
+      socket.disconnect();
       if (res.statusCode == 200) refreshToken = '';
 
       return res.statusCode == 200;

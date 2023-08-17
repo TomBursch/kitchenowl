@@ -79,6 +79,20 @@ extension ShoppinglistApi on ApiService {
     return body.map((e) => ItemWithDescription.fromJson(e)).toList();
   }
 
+  Future<bool> addItem(
+    ShoppingList shoppinglist,
+    ShoppinglistItem item,
+  ) async {
+    final data = {'name': item.name};
+    if (item.description.isNotEmpty) data['description'] = item.description;
+    final res = await post(
+      '${route(shoppinglist: shoppinglist)}/add-item-by-name',
+      jsonEncode(data),
+    );
+
+    return res.statusCode == 200;
+  }
+
   Future<bool> addItemByName(
     ShoppingList shoppinglist,
     String name, [
@@ -157,5 +171,21 @@ extension ShoppinglistApi on ApiService {
     );
 
     return res.statusCode == 200;
+  }
+
+  void onShoppinglistItemAdd(dynamic Function(dynamic) handler) {
+    socket.on("shoppinglist_item:add", handler);
+  }
+
+  void offShoppinglistItemAdd(dynamic Function(dynamic) handler) {
+    socket.off("shoppinglist_item:add", handler);
+  }
+
+  void onShoppinglistItemRemove(dynamic Function(dynamic) handler) {
+    socket.on("shoppinglist_item:remove", handler);
+  }
+
+  void offShoppinglistItemRemove(dynamic Function(dynamic) handler) {
+    socket.off("shoppinglist_item:remove", handler);
   }
 }

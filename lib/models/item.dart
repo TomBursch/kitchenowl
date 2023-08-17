@@ -153,15 +153,25 @@ class ShoppinglistItem extends ItemWithDescription {
     );
   }
 
+  /// Turn an Item into a Shopping list item.
+  ///
+  /// If description is null and item is an ItemWithDescription the existing description is used.
   factory ShoppinglistItem.fromItem({
     required Item item,
-    String description = '',
+    String? description,
+    DateTime? createdAt,
+    int? createdById,
   }) =>
       ShoppinglistItem(
         id: item.id,
         name: item.name,
         icon: item.icon,
-        description: description,
+        description: description ??
+            (item is ItemWithDescription ? item.description : ""),
+        category: item.category,
+        ordering: item.ordering,
+        createdAt: createdAt ?? DateTime.now(),
+        createdById: createdById,
       );
 
   @override

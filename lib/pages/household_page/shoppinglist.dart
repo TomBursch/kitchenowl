@@ -61,13 +61,7 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                     final state = cubit.state;
                     if (state is SearchShoppinglistCubitState) {
                       if (state.result.first is! ShoppinglistItem) {
-                        cubit.add(
-                          state.result.first.name,
-                          (state.result.first is ItemWithDescription)
-                              ? (state.result.first as ItemWithDescription)
-                                  .description
-                              : null,
-                        );
+                        cubit.add(state.result.first);
                       }
                     }
                   },
@@ -111,12 +105,7 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                                   cubit.selectItem(item);
                                 }
                               } else {
-                                cubit.add(
-                                  item.name,
-                                  (item is ItemWithDescription)
-                                      ? item.description
-                                      : null,
-                                );
+                                cubit.add(item);
                               }
                             },
                           ),
@@ -155,7 +144,7 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                               cubit.selectItem(item);
                             }
                           } else {
-                            cubit.add(item.name);
+                            cubit.add(item);
                           }
                         },
                       );
@@ -197,7 +186,7 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                                 cubit.selectItem(item);
                               }
                             } else {
-                              cubit.add(item.name);
+                              cubit.add(item);
                             }
                           },
                         ));
@@ -281,8 +270,7 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                           ),
                         SliverItemGridList(
                           items: state.recentItems,
-                          onPressed: (ItemWithDescription item) =>
-                              cubit.add(item.name, item.description),
+                          onPressed: cubit.add,
                           categories: state.categories,
                           household: BlocProvider.of<HouseholdCubit>(context)
                               .state

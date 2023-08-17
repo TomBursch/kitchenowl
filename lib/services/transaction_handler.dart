@@ -35,6 +35,7 @@ class TransactionHandler {
   Future<T> runTransaction<T>(
     Transaction<T> t, {
     bool forceOffline = false,
+    bool saveTransaction = true,
   }) async {
     forceOffline = forceOffline || App.isForcedOffline;
     if (!ApiService.getInstance().isConnected()) {
@@ -44,7 +45,7 @@ class TransactionHandler {
       T? res = await t.runOnline();
       if (res != null && (res is! bool || res)) return res;
     }
-    if (t.saveTransaction) {
+    if (t.saveTransaction && saveTransaction) {
       await TransactionStorage.getInstance().addTransaction(t);
     }
 

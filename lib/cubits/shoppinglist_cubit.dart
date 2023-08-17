@@ -8,6 +8,7 @@ import 'package:kitchenowl/models/category.dart';
 import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/models/shoppinglist.dart';
+import 'package:kitchenowl/services/api/api_service.dart';
 import 'package:kitchenowl/services/storage/storage.dart';
 import 'package:kitchenowl/services/transactions/category.dart';
 import 'package:kitchenowl/services/transactions/shoppinglist.dart';
@@ -35,22 +36,103 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
     });
     _initialLoad();
     refresh();
+    ApiService.getInstance().onShoppinglistItemAdd(onShoppinglistItemAdd);
+    ApiService.getInstance().onShoppinglistItemRemove(onShoppinglistItemRemove);
+  }
+
+  @override
+  Future<void> close() async {
+    ApiService.getInstance().offShoppinglistItemAdd(onShoppinglistItemAdd);
+    ApiService.getInstance()
+        .offShoppinglistItemRemove(onShoppinglistItemRemove);
+    super.close();
+  }
+
+  void onShoppinglistItemAdd(dynamic data) {
+    final item = ShoppinglistItem.fromJson(data["item"]);
+    TransactionHandler.getInstance().runTransaction(
+      TransactionShoppingListAddItem(
+        shoppinglist: ShoppingList.fromJson(data["shoppinglist"]),
+        item: item,
+      ),
+      forceOffline: true,
+      saveTransaction: false,
+    );
+    if (state.selectedShoppinglist == null ||
+        data["shoppinglist"]["id"] != state.selectedShoppinglist?.id) return;
+    addLocally(
+      ShoppinglistItem.fromJson(data["item"]),
+    );
+  }
+
+  void onShoppinglistItemRemove(dynamic data) {
+    final item = ShoppinglistItem.fromJson(data["item"]);
+    TransactionHandler.getInstance().runTransaction(
+      TransactionShoppingListDeleteItem(
+        shoppinglist: ShoppingList.fromJson(data["shoppinglist"]),
+        item: item,
+      ),
+      forceOffline: true,
+      saveTransaction: false,
+    );
+    if (state.selectedShoppinglist == null ||
+        data["shoppinglist"]["id"] != state.selectedShoppinglist?.id ||
+        !state.listItems.map((e) => e.id).contains(data["item"]["id"])) return;
+    removeLocally(item);
   }
 
   Future<void> search(String query) => refresh(query: query);
 
-  Future<void> add(String name, [String? description]) async {
-    if (state.selectedShoppinglist == null) return;
+  Future<void> add(Item item) async {
+    final _state = state;
+    addLocally(ShoppinglistItem.fromItem(item: item));
+    if (_state.selectedShoppinglist == null) return;
     await TransactionHandler.getInstance()
         .runTransaction(TransactionShoppingListAddItem(
-      shoppinglist: state.selectedShoppinglist!,
-      name: name,
-      description: description ?? '',
+      shoppinglist: _state.selectedShoppinglist!,
+      item: item,
     ));
     await refresh(query: '');
   }
 
+  void addLocally(ShoppinglistItem item) {
+    final _state = state;
+    if (_state.selectedShoppinglist == null) return;
+    final l = List.of(_state.listItems);
+    l.removeWhere((e) => e.id == item.id);
+    l.add(item);
+    ShoppinglistSorting.sortShoppinglistItems(l, state.sorting);
+    final recent = List.of(_state.recentItems);
+    recent.removeWhere((e) => e.id == item.id);
+    if (_state is SearchShoppinglistCubitState) {
+      final result = List.of(_state.result);
+      final index = result.indexWhere((e) => e.id == item.id);
+      if (index >= 0) {
+        result.removeAt(index);
+        result.insert(
+          index,
+          item,
+        );
+      }
+      emit(_state.copyWith(listItems: l, recentItems: recent, result: result));
+    } else {
+      emit(state.copyWith(listItems: l, recentItems: recent));
+    }
+  }
+
   Future<void> remove(ShoppinglistItem item) async {
+    final _state = state;
+    removeLocally(item);
+    if (!await TransactionHandler.getInstance()
+        .runTransaction(TransactionShoppingListDeleteItem(
+      shoppinglist: _state.selectedShoppinglist!,
+      item: item,
+    ))) {
+      await refresh();
+    }
+  }
+
+  void removeLocally(ShoppinglistItem item) {
     final _state = state;
     if (_state.selectedShoppinglist == null) return;
     final l = List.of(_state.listItems);
@@ -76,13 +158,6 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
       emit(_state.copyWith(listItems: l, recentItems: recent, result: result));
     } else {
       emit(state.copyWith(listItems: l, recentItems: recent));
-    }
-    if (!await TransactionHandler.getInstance()
-        .runTransaction(TransactionShoppingListDeleteItem(
-      shoppinglist: _state.selectedShoppinglist!,
-      item: item,
-    ))) {
-      await refresh();
     }
   }
 

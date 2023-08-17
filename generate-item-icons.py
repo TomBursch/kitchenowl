@@ -9,7 +9,7 @@ except :
     sys.stderr.write("fontforge package not found in the python path\n")
     sys.exit(1)
     
-FIRST_FONT_CHARACTER_INDEX = 0x100
+FIRST_FONT_CHARACTER_INDEX = 32
 
 class NoSourceSvgDirectoriesException(Exception):
     pass

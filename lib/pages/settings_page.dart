@@ -4,7 +4,6 @@ import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kitchenowl/app.dart';
 import 'package:kitchenowl/config.dart';
@@ -420,7 +419,7 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
             ListTile(
               title: const Text("GitHub"),
-              leading: const Icon(FontAwesomeIcons.github),
+              leading: const Icon(Icons.source_rounded),
               onTap: () => openUrl(
                 context,
                 "https://github.com/tombursch/kitchenowl",

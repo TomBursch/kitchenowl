@@ -3,14 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/cubits/household_add_update/household_update_cubit.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/widgets/dismissible_card.dart';
-import 'package:sliver_tools/sliver_tools.dart';
 
 class SliverHouseholdShoppinglistSettings extends StatelessWidget {
   const SliverHouseholdShoppinglistSettings({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MultiSliver(children: [
+    return SliverMainAxisGroup(slivers: [
       SliverToBoxAdapter(
         child: Row(
           children: [

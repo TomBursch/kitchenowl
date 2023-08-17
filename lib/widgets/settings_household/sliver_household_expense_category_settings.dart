@@ -6,7 +6,6 @@ import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/expense_category.dart';
 import 'package:kitchenowl/pages/expense_category_add_update_page.dart';
 import 'package:kitchenowl/widgets/dismissible_card.dart';
-import 'package:sliver_tools/sliver_tools.dart';
 
 class SliverHouseholdExpenseCategorySettings extends StatelessWidget {
   const SliverHouseholdExpenseCategorySettings({super.key});
@@ -39,7 +38,7 @@ class SliverHouseholdExpenseCategorySettings extends StatelessWidget {
           );
         }
 
-        return MultiSliver(children: [
+        return SliverMainAxisGroup(slivers: [
           SliverToBoxAdapter(
             child: Row(
               children: [

@@ -219,7 +219,8 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                                         padding: const EdgeInsets.symmetric(
                                           horizontal: 4,
                                         ),
-                                        child: KtichenOwlChoiceChip(
+                                        child: ChoiceChip(
+                                          showCheckmark: false,
                                           label: Text(
                                             shoppinglist.name,
                                             style: TextStyle(

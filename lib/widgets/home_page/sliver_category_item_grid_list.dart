@@ -50,8 +50,8 @@ class _SliverCategoryItemGridListState<T extends Item>
 
   @override
   Widget build(BuildContext context) {
-    return MultiSliver(
-      children: [
+    return SliverMainAxisGroup(
+      slivers: [
         SliverToBoxAdapter(
           child: AnimatedPadding(
             padding: EdgeInsets.fromLTRB(16, 0, 16, isExpanded ? 8 : 4),

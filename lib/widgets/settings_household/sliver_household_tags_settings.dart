@@ -4,14 +4,13 @@ import 'package:kitchenowl/cubits/household_add_update/household_update_cubit.da
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/tag.dart';
 import 'package:kitchenowl/widgets/dismissible_card.dart';
-import 'package:sliver_tools/sliver_tools.dart';
 
 class SliverHouseholdTagsSettings extends StatelessWidget {
   const SliverHouseholdTagsSettings({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MultiSliver(children: [
+    return SliverMainAxisGroup(slivers: [
       SliverToBoxAdapter(
         child: Row(
           children: [

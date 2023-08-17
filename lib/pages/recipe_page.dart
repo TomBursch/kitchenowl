@@ -16,7 +16,6 @@ import 'package:kitchenowl/widgets/recipe_source_chip.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:markdown/markdown.dart' as md;
 import 'package:responsive_builder/responsive_builder.dart';
-import 'package:sliver_tools/sliver_tools.dart';
 
 class RecipePage extends StatefulWidget {
   final Household? household;
@@ -373,16 +372,15 @@ class _RecipePageState extends State<RecipePage> {
                     ),
                     getValueForScreenType<Widget>(
                       context: context,
-                      mobile: MultiSliver(
-                        children: left + right,
+                      mobile: SliverMainAxisGroup(
+                        slivers: left + right,
                       ),
-                      // TODO wait for SliverCrossAxisGroup to release and update large screen layout
-                      // tablet: SliverCrossAxisGroup(
-                      //   slivers: [
-                      //     MultiSliver(children: left),
-                      //     MultiSliver(children: right),
-                      //   ],
-                      // ),
+                      tablet: SliverCrossAxisGroup(
+                        slivers: [
+                          SliverMainAxisGroup(slivers: left),
+                          SliverMainAxisGroup(slivers: right),
+                        ],
+                      ),
                     ),
                     SliverToBoxAdapter(
                       child: SizedBox(

@@ -6,7 +6,6 @@ import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/category.dart';
 import 'package:kitchenowl/widgets/dismissible_card.dart';
 import 'package:reorderables/reorderables.dart';
-import 'package:sliver_tools/sliver_tools.dart';
 
 enum _CategoryAction {
   rename,
@@ -19,7 +18,7 @@ class SliverHouseholdCategorySettings extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiSliver(children: [
+    return SliverMainAxisGroup(slivers: [
       SliverToBoxAdapter(
         child: Row(
           children: [

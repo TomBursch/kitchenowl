@@ -8,6 +8,7 @@ from .schemas import (RemoveItem, UpdateDescription,
 from app.errors import NotFoundRequest, InvalidUsage
 from datetime import datetime, timedelta, timezone
 import app.util.description_merger as description_merger
+from app import socketio
 
 
 shoppinglist = Blueprint('shoppinglist', __name__)
@@ -193,6 +194,11 @@ def addShoppinglistItemByName(args, id):
 
         History.create_added(shoppinglist, item, description)
 
+        socketio.emit("shoppinglist_item:add", {
+            "item": con.obj_to_item_dict(),
+            "shoppinglist": shoppinglist.obj_to_dict()
+        }, to=shoppinglist.household_id)
+
     return jsonify(item.obj_to_dict())
 
 
@@ -205,8 +211,12 @@ def removeShoppinglistItem(args, id):
         raise NotFoundRequest()
     shoppinglist.checkAuthorized()
 
-    removeShoppinglistItem(
+    con = removeShoppinglistItem(
         shoppinglist, args['item_id'], args['removed_at'] if 'removed_at' in args else None)
+    if con: socketio.emit("shoppinglist_item:remove", {
+        "item": con.obj_to_item_dict(),
+        "shoppinglist": shoppinglist.obj_to_dict()
+    }, to=shoppinglist.household_id)
 
     return jsonify({'msg': "DONE"})
 
@@ -221,19 +231,23 @@ def removeShoppinglistItems(args, id):
     shoppinglist.checkAuthorized()
 
     for arg in args['items']:
-        removeShoppinglistItem(
+        con = removeShoppinglistItem(
             shoppinglist, arg['item_id'], arg['removed_at'] if 'removed_at' in arg else None)
+        if con: socketio.emit("shoppinglist_item:remove", {
+            "item": con.obj_to_item_dict(),
+            "shoppinglist": shoppinglist.obj_to_dict()
+        }, to=shoppinglist.household_id)
 
     return jsonify({'msg': "DONE"})
 
 
-def removeShoppinglistItem(shoppinglist: Shoppinglist, item_id: int, removed_at: int = None) -> bool:
+def removeShoppinglistItem(shoppinglist: Shoppinglist, item_id: int, removed_at: int = None) -> ShoppinglistItems:
     item = Item.find_by_id(item_id)
     if not item:
-        return False
+        return None
     con = ShoppinglistItems.find_by_ids(shoppinglist.id, item.id)
     if not con:
-        return False
+        return None
     description = con.description
     con.delete()
 
@@ -244,7 +258,7 @@ def removeShoppinglistItem(shoppinglist: Shoppinglist, item_id: int, removed_at:
 
     History.create_dropped(
         shoppinglist, item, description, removed_at_datetime)
-    return True
+    return con
 
 
 @shoppinglist.route('/<int:id>/recipeitems', methods=['POST'])

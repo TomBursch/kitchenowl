@@ -7,7 +7,7 @@ RUN apt-get update \
     && apt-get install --yes --no-install-recommends \
         gcc g++ libffi-dev libpcre3-dev build-essential cargo \
         libxml2-dev libxslt-dev cmake gfortran libopenblas-dev liblapack-dev pkg-config ninja-build \
-         autoconf automake zlib1g-dev libjpeg62-turbo-dev
+         autoconf automake zlib1g-dev libjpeg62-turbo-dev libssl-dev
 
 # Create virtual enviroment
 RUN python -m venv /opt/venv && /opt/venv/bin/pip install --no-cache-dir -U pip setuptools wheel
@@ -45,9 +45,8 @@ HEALTHCHECK --interval=60s --timeout=3s CMD curl -f http://localhost/api/health/
 ENV STORAGE_PATH='/data'
 ENV JWT_SECRET_KEY='PLEASE_CHANGE_ME'
 ENV DEBUG='False'
-ENV HTTP_PORT=80
 
 RUN chmod u+x ./entrypoint.sh
 
-CMD ["wsgi.ini"]
+CMD ["wsgi.ini -gevent 100"]
 ENTRYPOINT ["./entrypoint.sh"]

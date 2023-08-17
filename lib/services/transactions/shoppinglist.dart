@@ -153,13 +153,11 @@ class TransactionShoppingListGetRecentItems
 
 class TransactionShoppingListAddItem extends Transaction<bool> {
   final ShoppingList shoppinglist;
-  final String name;
-  final String description;
+  final Item item;
 
   TransactionShoppingListAddItem({
     required this.shoppinglist,
-    required this.name,
-    required this.description,
+    required this.item,
     DateTime? timestamp,
   }) : super.internal(
           timestamp ?? DateTime.now(),
@@ -172,8 +170,7 @@ class TransactionShoppingListAddItem extends Transaction<bool> {
   ) =>
       TransactionShoppingListAddItem(
         shoppinglist: ShoppingList.fromJson(map['shoppinglist']),
-        name: map['name'],
-        description: map['description'],
+        item: ItemWithDescription.fromJson(map['item']),
         timestamp: timestamp,
       );
 
@@ -184,14 +181,13 @@ class TransactionShoppingListAddItem extends Transaction<bool> {
   Map<String, dynamic> toJson() => super.toJson()
     ..addAll({
       "shoppinglist": shoppinglist.toJsonWithId(),
-      "name": name,
-      "description": description,
+      "item": item.toJsonWithId(),
     });
 
   @override
   Future<bool> runLocal() async {
     final list = await TempStorage.getInstance().readItems(shoppinglist) ?? [];
-    list.add(ShoppinglistItem(name: name, description: description));
+    list.add(ShoppinglistItem.fromItem(item: item));
     TempStorage.getInstance().writeItems(shoppinglist, list);
 
     return true;
@@ -199,8 +195,13 @@ class TransactionShoppingListAddItem extends Transaction<bool> {
 
   @override
   Future<bool?> runOnline() {
-    return ApiService.getInstance()
-        .addItemByName(shoppinglist, name, description);
+    return ApiService.getInstance().addItemByName(
+      shoppinglist,
+      item.name,
+      (item is ItemWithDescription
+          ? (item as ItemWithDescription).description
+          : ""),
+    );
   }
 }
 

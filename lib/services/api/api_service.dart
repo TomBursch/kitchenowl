@@ -62,12 +62,15 @@ class ApiService {
   static final ValueNotifier<Map<String, dynamic>?> _serverInfoNotifier =
       ValueNotifier<Map<String, dynamic>?>(null);
 
-  ApiService._internal(String baseUrl) : baseUrl = baseUrl + _API_PATH {
+  ApiService._internal(String baseUrl)
+      : baseUrl = baseUrl.isNotEmpty ? baseUrl + _API_PATH : "" {
     _connectionNotifier.value = Connection.undefined;
     socket = io(
       baseUrl,
       OptionBuilder()
-          .setTransports(['websocket']) // for Flutter or Dart VM
+          .setTransports([
+            kIsWeb ? 'polling' : 'websocket',
+          ]) // for Flutter or Dart VM
           .disableAutoConnect() // disable auto-connection
           .setExtraHeaders(headers)
           .build(),
@@ -264,6 +267,7 @@ class ApiService {
 
   void _setConnectionState(Connection newState) {
     if (newState == Connection.authenticated && !socket.connected) {
+      socket.io.options?['extraHeaders'] = headers;
       socket.connect();
     } else if (newState != Connection.authenticated && socket.connected) {
       socket.disconnect();

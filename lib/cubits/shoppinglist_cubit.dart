@@ -49,31 +49,48 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
   }
 
   void onShoppinglistItemAdd(dynamic data) {
+    final item = ShoppinglistItem.fromJson(data["item"]);
+    TransactionHandler.getInstance().runTransaction(
+      TransactionShoppingListAddItem(
+        shoppinglist: ShoppingList.fromJson(data["shoppinglist"]),
+        item: item,
+      ),
+      forceOffline: true,
+      saveTransaction: false,
+    );
     if (state.selectedShoppinglist == null ||
-        data["shoppinglist_id"] != state.selectedShoppinglist?.id) return;
+        data["shoppinglist"]["id"] != state.selectedShoppinglist?.id) return;
     addLocally(
-      ShoppinglistItem.fromJson(data["item"] as Map<String, dynamic>),
+      ShoppinglistItem.fromJson(data["item"]),
     );
   }
 
   void onShoppinglistItemRemove(dynamic data) {
-    if (state.selectedShoppinglist == null ||
-        data["shoppinglist_id"] != state.selectedShoppinglist?.id ||
-        !state.listItems.map((e) => e.id).contains(data["item"]["id"])) return;
-    removeLocally(
-      ShoppinglistItem.fromJson(data["item"] as Map<String, dynamic>),
+    final item = ShoppinglistItem.fromJson(data["item"]);
+    TransactionHandler.getInstance().runTransaction(
+      TransactionShoppingListDeleteItem(
+        shoppinglist: ShoppingList.fromJson(data["shoppinglist"]),
+        item: item,
+      ),
+      forceOffline: true,
+      saveTransaction: false,
     );
+    if (state.selectedShoppinglist == null ||
+        data["shoppinglist"]["id"] != state.selectedShoppinglist?.id ||
+        !state.listItems.map((e) => e.id).contains(data["item"]["id"])) return;
+    removeLocally(item);
   }
 
   Future<void> search(String query) => refresh(query: query);
 
-  Future<void> add(String name, [String? description]) async {
-    if (state.selectedShoppinglist == null) return;
+  Future<void> add(Item item) async {
+    final _state = state;
+    addLocally(ShoppinglistItem.fromItem(item: item));
+    if (_state.selectedShoppinglist == null) return;
     await TransactionHandler.getInstance()
         .runTransaction(TransactionShoppingListAddItem(
-      shoppinglist: state.selectedShoppinglist!,
-      name: name,
-      description: description ?? '',
+      shoppinglist: _state.selectedShoppinglist!,
+      item: item,
     ));
     await refresh(query: '');
   }
@@ -82,6 +99,7 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
     final _state = state;
     if (_state.selectedShoppinglist == null) return;
     final l = List.of(_state.listItems);
+    l.removeWhere((e) => e.id == item.id);
     l.add(item);
     ShoppinglistSorting.sortShoppinglistItems(l, state.sorting);
     final recent = List.of(_state.recentItems);

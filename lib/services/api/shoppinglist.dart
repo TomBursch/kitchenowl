@@ -79,6 +79,20 @@ extension ShoppinglistApi on ApiService {
     return body.map((e) => ItemWithDescription.fromJson(e)).toList();
   }
 
+  Future<bool> addItem(
+    ShoppingList shoppinglist,
+    ShoppinglistItem item,
+  ) async {
+    final data = {'name': item.name};
+    if (item.description.isNotEmpty) data['description'] = item.description;
+    final res = await post(
+      '${route(shoppinglist: shoppinglist)}/add-item-by-name',
+      jsonEncode(data),
+    );
+
+    return res.statusCode == 200;
+  }
+
   Future<bool> addItemByName(
     ShoppingList shoppinglist,
     String name, [

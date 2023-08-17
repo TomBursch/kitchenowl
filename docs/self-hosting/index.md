@@ -43,7 +43,7 @@ volumes:
     - [https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security)
     - [https://www.netsparker.com/blog/web-security/http-security-headers/](https://www.netsparker.com/blog/web-security/http-security-headers/)
 
-## Community Installations
+## Community Installation Methods
 Here is a list of community maintained install methods:
 
 - Unraid ([Source](https://codeberg.org/HanSolo97/unraid-template-kitchenowl) AGPL-3.0)

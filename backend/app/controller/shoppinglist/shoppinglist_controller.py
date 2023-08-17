@@ -72,6 +72,10 @@ def updateItemDescription(args, id, item_id):
 
     con.description = args['description'] or ''
     con.save()
+    socketio.emit("shoppinglist_item:add", {
+        "item": con.obj_to_item_dict(),
+        "shoppinglist": shoppinglist.obj_to_dict()
+    }, to=shoppinglist.household_id)
     return jsonify(con.obj_to_item_dict())
 
 
@@ -213,10 +217,11 @@ def removeShoppinglistItem(args, id):
 
     con = removeShoppinglistItem(
         shoppinglist, args['item_id'], args['removed_at'] if 'removed_at' in args else None)
-    if con: socketio.emit("shoppinglist_item:remove", {
-        "item": con.obj_to_item_dict(),
-        "shoppinglist": shoppinglist.obj_to_dict()
-    }, to=shoppinglist.household_id)
+    if con:
+        socketio.emit("shoppinglist_item:remove", {
+            "item": con.obj_to_item_dict(),
+            "shoppinglist": shoppinglist.obj_to_dict()
+        }, to=shoppinglist.household_id)
 
     return jsonify({'msg': "DONE"})
 
@@ -233,10 +238,11 @@ def removeShoppinglistItems(args, id):
     for arg in args['items']:
         con = removeShoppinglistItem(
             shoppinglist, arg['item_id'], arg['removed_at'] if 'removed_at' in arg else None)
-        if con: socketio.emit("shoppinglist_item:remove", {
-            "item": con.obj_to_item_dict(),
-            "shoppinglist": shoppinglist.obj_to_dict()
-        }, to=shoppinglist.household_id)
+        if con:
+            socketio.emit("shoppinglist_item:remove", {
+                "item": con.obj_to_item_dict(),
+                "shoppinglist": shoppinglist.obj_to_dict()
+            }, to=shoppinglist.household_id)
 
     return jsonify({'msg': "DONE"})
 
@@ -289,7 +295,12 @@ def addRecipeItems(args, id):
                     db.session.add(con)
 
                 db.session.add(
-                    History.create_added_without_save(shoppinglist, item))
+                    History.create_added_without_save(shoppinglist, item, description))
+
+                socketio.emit("shoppinglist_item:add", {
+                    "item": con.obj_to_item_dict(),
+                    "shoppinglist": shoppinglist.obj_to_dict()
+                }, to=shoppinglist.household_id)
 
         db.session.commit()
     except Exception as e:

@@ -54,10 +54,12 @@ class DbModelMixin(object):
         return cls.query.filter(cls.id == target_id).first()
 
     @classmethod
-    def delete_by_id(cls, target_id: int):
+    def delete_by_id(cls, target_id: int) -> bool:
         mc = cls.find_by_id(target_id)
         if mc:
             mc.delete()
+            return True
+        return False
 
     @classmethod
     def all(cls) -> list[Self]:

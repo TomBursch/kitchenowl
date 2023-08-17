@@ -49,7 +49,7 @@ class History(db.Model, DbModelMixin, TimestampMixin):
             item_id=item.id,
             status=Status.DROPPED,
             description=description,
-            created_at=created_at or datetime.utcnow
+            created_at=created_at
         ).save()
 
     def obj_to_item_dict(self) -> dict:

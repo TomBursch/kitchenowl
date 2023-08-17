@@ -1,4 +1,5 @@
 from datetime import timedelta
+from flask_socketio import SocketIO
 from sqlalchemy import MetaData
 from sqlalchemy.engine import URL
 from werkzeug.exceptions import MethodNotAllowed
@@ -64,6 +65,7 @@ app = Flask(__name__)
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 32 * 1000 * 1000  # 32MB max upload
+app.config['SECRET_KEY'] = os.getenv('JWT_SECRET_KEY', 'super-secret')
 # SQLAlchemy
 app.config['SQLALCHEMY_DATABASE_URI'] = DB_URL
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -87,6 +89,7 @@ db = SQLAlchemy(app, metadata=metadata)
 migrate = Migrate(app, db, render_as_batch=True)
 bcrypt = Bcrypt(app)
 jwt = JWTManager(app)
+socketio = SocketIO(app, json=app.json, logger=True, cors_allowed_origins=os.getenv('FRONT_URL'))
 
 scheduler = APScheduler()
 # enable for debugging jobs: ../scheduler/jobs to see scheduled jobs
@@ -138,3 +141,7 @@ def unhandled_exception(e: Exception):
 @app.errorhandler(404)
 def not_found(error):
     return "Requested resource not found", 404
+
+@socketio.on_error_default
+def default_socket_error_handler(e):
+    app.logger.error(e)

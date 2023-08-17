@@ -8,13 +8,18 @@ services:
       POSTGRES_USER: kitchenowl
       POSTGRES_PASSWORD: example
     volumes:
-      - kitchenowl_data:/var/lib/postgresql/data
+      - kitchenowl_db:/var/lib/postgresql/data
     networks:
       - default
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}"]
+      interval: 30s
+      timeout: 60s
+      retries: 5
+      start_period: 80s
   front:
     image: tombursch/kitchenowl-web:latest
-    # environment:
-    #   - BACK_URL=back:5000 # Optional should not be changed unless you know what youre doing
+    restart: unless-stopped
     ports:
       - "80:80"
     depends_on:
@@ -24,8 +29,7 @@ services:
   back:
     image: tombursch/kitchenowl:latest
     restart: unless-stopped
-    # ports: # Optional
-    #   - "5000:5000" # uwsgi protocol
+    #command: wsgi.ini --gevent 2000 #default: 100
     networks:
       - default
     environment:
@@ -35,11 +39,10 @@ services:
       DB_NAME: kitchenowl
       DB_USER: kitchenowl
       DB_PASSWORD: example
-      # FRONT_URL: http://localhost # Optional should not be changed unless you know what youre doing
     depends_on:
       - db
     volumes:
-      - kitchenowl_data:/data
+      - kitchenowl_files:/data
 
 volumes:
   kitchenowl_files:

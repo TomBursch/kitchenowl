@@ -14,6 +14,8 @@ import 'package:kitchenowl/cubits/recipe_list_cubit.dart';
 import 'package:kitchenowl/cubits/shoppinglist_cubit.dart';
 import 'package:kitchenowl/enums/views_enum.dart';
 import 'package:kitchenowl/models/household.dart';
+import 'package:kitchenowl/pages/household_page/household_drawer.dart';
+import 'package:kitchenowl/pages/household_page/household_navigation_rail.dart';
 import 'package:kitchenowl/pages/page_not_found.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
@@ -31,6 +33,8 @@ class HouseholdPage extends StatefulWidget {
 }
 
 class _HouseholdPageState extends State<HouseholdPage> {
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+
   late final HouseholdCubit householdCubit;
   late final ShoppinglistCubit shoppingListCubit;
   late final RecipeListCubit recipeListCubit;
@@ -172,20 +176,12 @@ class _HouseholdPageState extends State<HouseholdPage> {
                 children: [
                   SafeArea(
                     child: BlocBuilder<AuthCubit, AuthState>(
-                      builder: (context, state) => NavigationRail(
-                        extended: extendedRail,
-                        destinations: pages
-                            .map((e) => NavigationRailDestination(
-                                  icon: Icon(e.toIcon(context)),
-                                  label: Text(e.toLocalizedString(context)),
-                                ))
-                            .toList(),
+                      builder: (context, state) => HouseholdNavigationRail(
+                        extendedRail: extendedRail,
+                        pages: pages,
+                        onPageSelected: _onItemTapped,
+                        openDrawer: scaffoldKey.currentState!.openDrawer,
                         selectedIndex: _selectedIndex,
-                        onDestinationSelected: (i) => _onItemTapped(
-                          context,
-                          pages[i],
-                          pages[_selectedIndex],
-                        ),
                       ),
                     ),
                   ),
@@ -195,9 +191,16 @@ class _HouseholdPageState extends State<HouseholdPage> {
             }
 
             return Scaffold(
+              key: scaffoldKey,
               body: body,
               floatingActionButton:
                   pages[_selectedIndex].floatingActionButton(context),
+              drawer: HouseholdDrawer(
+                onPageSelected: _onItemTapped,
+                pages: pages,
+                selectedIndex: _selectedIndex,
+              ),
+              drawerEnableOpenDragGesture: false,
               bottomNavigationBar: useBottomNavigationBar
                   ? BlocBuilder<AuthCubit, AuthState>(
                       builder: (context, state) => NavigationBar(

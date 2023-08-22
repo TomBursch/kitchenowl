@@ -11,11 +11,11 @@ server {
         client_max_body_size 32M;
         try_files $uri $uri/ =404;
     }
-    location /api {
+    location /api/ {
         include uwsgi_params;
         uwsgi_pass ${BACK_URL};
     }
-    location /socket.io {
+    location /socket.io/ {
         include uwsgi_params;
         proxy_set_header Host $http_host;
         proxy_set_header X-Real-IP $remote_addr;

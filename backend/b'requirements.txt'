@@ -17,7 +17,7 @@ cycler==0.11.0
 dbscan1d==0.2.2
 extruct==0.16.0
 flake8==6.1.0
-Flask==2.3.2
+Flask==2.3.3
 Flask-APScheduler==1.12.4
 Flask-Bcrypt==1.0.1
 Flask-JWT-Extended==4.5.2
@@ -71,7 +71,7 @@ pytest==7.4.0
 python-crfsuite==0.9.9
 python-dateutil==2.8.2
 python-editor==1.0.4
-python-engineio==4.5.1
+python-engineio==4.6.1
 python-socketio==5.8.0
 pytz==2023.3
 pytz-deprecation-shim==0.1.0.post0

@@ -26,6 +26,7 @@ Flask-SocketIO==5.3.5
 Flask-SQLAlchemy==3.0.5
 fonttools==4.42.1
 gevent==23.7.0
+gevent-websocket==0.10.1
 greenlet==2.0.2
 h11==0.14.0
 html-text==0.5.2
@@ -101,6 +102,7 @@ tzdata==2023.3
 tzlocal==5.0.1
 urllib3==2.0.4
 uWSGI==2.0.22
+uwsgi-tools==1.1.1
 w3lib==2.1.2
 webencodings==0.5.1
 Werkzeug==2.3.7

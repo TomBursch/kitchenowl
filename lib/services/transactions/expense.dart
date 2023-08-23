@@ -107,7 +107,7 @@ class TransactionExpenseRemove extends Transaction<bool> {
   TransactionExpenseRemove({required this.expense, DateTime? timestamp})
       : super.internal(
           timestamp ?? DateTime.now(),
-          "TransactionPlannerRemoveRecipe",
+          "TransactionExpenseRemove",
         );
 
   factory TransactionExpenseRemove.fromJson(
@@ -118,9 +118,6 @@ class TransactionExpenseRemove extends Transaction<bool> {
         expense: Expense.fromJson(map['expense']),
         timestamp: timestamp,
       );
-
-  @override
-  bool get saveTransaction => true;
 
   @override
   Map<String, dynamic> toJson() => super.toJson()
@@ -153,9 +150,6 @@ class TransactionExpenseUpdate extends Transaction<bool> {
         expense: Expense.fromJson(map['expense']),
         timestamp: timestamp,
       );
-
-  @override
-  bool get saveTransaction => true;
 
   @override
   Map<String, dynamic> toJson() => super.toJson()

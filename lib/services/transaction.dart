@@ -9,6 +9,8 @@ abstract class Transaction<T> extends Model {
         TransactionShoppingListAddItem.fromJson(m, t),
     "TransactionShoppingListDeleteItem": (m, t) =>
         TransactionShoppingListDeleteItem.fromJson(m, t),
+    "TransactionShoppingListDeleteItems": (m, t) =>
+        TransactionShoppingListDeleteItems.fromJson(m, t),
     "TransactionShoppingListUpdateItem": (m, t) =>
         TransactionShoppingListUpdateItem.fromJson(m, t),
     "TransactionShoppingListAddRecipeItems": (m, t) =>

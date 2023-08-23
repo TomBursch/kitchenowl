@@ -72,7 +72,7 @@ class RecipeListCubit extends Cubit<RecipeListState> {
     return _refreshThread!;
   }
 
-  Future<void> _refresh([String? query]) async {
+  Future<void> _refresh([String? query, bool runOffline = false]) async {
     final state = this.state;
 
     late ListRecipeListState _state;
@@ -86,7 +86,7 @@ class RecipeListCubit extends Cubit<RecipeListState> {
     if (query != null && query.isNotEmpty) {
       final tags = TransactionHandler.getInstance()
           .runTransaction(TransactionTagGetAll(household: household));
-      final items = TransactionHandler.getInstance()
+      final recipes = TransactionHandler.getInstance()
           .runTransaction(TransactionRecipeSearchRecipes(
         household: household,
         query: query,
@@ -94,14 +94,19 @@ class RecipeListCubit extends Cubit<RecipeListState> {
 
       _state = SearchRecipeListState(
         query: query,
-        recipes: await items,
+        recipes: await recipes,
         tags: await tags,
       );
     } else {
-      final tags = TransactionHandler.getInstance()
-          .runTransaction(TransactionTagGetAll(household: household));
-      recipeList = await TransactionHandler.getInstance()
-          .runTransaction(TransactionRecipeGetRecipes(household: household));
+      if (!runOffline && state is SearchRecipeListState) _refresh(query, true);
+      final tags = TransactionHandler.getInstance().runTransaction(
+        TransactionTagGetAll(household: household),
+        forceOffline: runOffline,
+      );
+      recipeList = await TransactionHandler.getInstance().runTransaction(
+        TransactionRecipeGetRecipes(household: household),
+        forceOffline: runOffline,
+      );
       Set<Tag> filter = const {};
       if (state is FilteredListRecipeListState && (query == null)) {
         filter = state.selectedTags;

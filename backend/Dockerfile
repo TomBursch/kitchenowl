@@ -40,7 +40,7 @@ COPY migrations /usr/src/kitchenowl/migrations
 WORKDIR /usr/src/kitchenowl
 VOLUME ["/data"]
 
-HEALTHCHECK --interval=60s --timeout=3s CMD uwsgi_curl localhost:5000 /api/health/8M4F88S8ooi4sMbLBfkkV7ctWwgiV || exit 1
+HEALTHCHECK --interval=60s --timeout=3s CMD uwsgi_curl localhost:5000 /api/health/8M4F88S8ooi4sMbLBfkkV7ctWwgibW6V || exit 1
 
 ENV STORAGE_PATH='/data'
 ENV JWT_SECRET_KEY='PLEASE_CHANGE_ME'
@@ -48,5 +48,5 @@ ENV DEBUG='False'
 
 RUN chmod u+x ./entrypoint.sh
 
-CMD ["wsgi.ini" "--gevent 200"]
+CMD ["wsgi.ini" "--gevent" "200"]
 ENTRYPOINT ["./entrypoint.sh"]

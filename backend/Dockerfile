@@ -48,5 +48,5 @@ ENV DEBUG='False'
 
 RUN chmod u+x ./entrypoint.sh
 
-CMD ["wsgi.ini" "--gevent" "200"]
+CMD ["wsgi.ini", "--gevent", "200"]
 ENTRYPOINT ["./entrypoint.sh"]

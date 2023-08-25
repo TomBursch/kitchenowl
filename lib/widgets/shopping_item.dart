@@ -35,6 +35,14 @@ class ShoppingItemWidget<T extends Item> extends StatelessWidget {
           )
         : Card(
             margin: const EdgeInsets.symmetric(vertical: 4),
+            elevation: item is! ShoppinglistItem ? 0 : null,
+            color: item is! ShoppinglistItem
+                ? ElevationOverlay.applySurfaceTint(
+                    Theme.of(context).colorScheme.background,
+                    Theme.of(context).colorScheme.surfaceTint,
+                    1.5,
+                  )
+                : null,
             child: ListTile(
               leading: selected
                   ? const Icon(Icons.check_rounded)

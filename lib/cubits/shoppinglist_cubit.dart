@@ -138,7 +138,7 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
     final l = List.of(_state.listItems);
     l.remove(item);
     final recent = List.of(_state.recentItems);
-    recent.insert(0, item);
+    recent.insert(0, ItemWithDescription.fromItem(item: item));
     if (recent.length > recentItemCountProvider()) {
       recent.removeLast();
     }

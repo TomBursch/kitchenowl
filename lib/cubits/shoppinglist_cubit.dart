@@ -318,7 +318,8 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
           .toList(),
     );
 
-    if (state is LoadingShoppinglistCubitState) {
+    if (state is LoadingShoppinglistCubitState &&
+        loadedShoppinglistItems.isNotEmpty) {
       emit(resState);
     }
   }

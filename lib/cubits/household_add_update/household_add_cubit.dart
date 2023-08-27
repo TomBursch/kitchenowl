@@ -69,9 +69,9 @@ class HouseholdAddCubit extends HouseholdAddUpdateCubit<HouseholdAddState> {
     ));
   }
 
-  Future<void> create() async {
+  Future<Household?> create() async {
     final _state = state;
-    if (!_state.isValid()) return;
+    if (!_state.isValid()) return null;
     String? image;
     if (_state.image != null) {
       image = _state.image!.isEmpty
@@ -79,7 +79,7 @@ class HouseholdAddCubit extends HouseholdAddUpdateCubit<HouseholdAddState> {
           : await ApiService.getInstance().uploadBytes(_state.image!);
     }
 
-    await ApiService.getInstance().addHousehold(Household(
+    return ApiService.getInstance().addHousehold(Household(
       id: 0,
       name: _state.name,
       image: image,

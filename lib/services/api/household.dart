@@ -32,7 +32,7 @@ extension HouseholdApi on ApiService {
     return res.statusCode == 200;
   }
 
-  Future<bool> addHousehold(Household household) async {
+  Future<Household?> addHousehold(Household household) async {
     final res = await post(
       baseRoute,
       jsonEncode(household.toJson()
@@ -42,7 +42,9 @@ extension HouseholdApi on ApiService {
         })),
     );
 
-    return res.statusCode == 200;
+    if (res.statusCode != 200) return null;
+
+    return Household.fromJson(jsonDecode(res.body));
   }
 
   Future<bool> deleteHousehold(Household household) async {

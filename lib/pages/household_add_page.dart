@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:kitchenowl/cubits/auth_cubit.dart';
 import 'package:kitchenowl/cubits/household_add_update/household_add_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/kitchenowl.dart';
+import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/models/member.dart';
 import 'package:kitchenowl/models/user.dart';
 import 'package:kitchenowl/pages/user_search_page.dart';
@@ -151,9 +153,13 @@ class _HouseholdAddPageState extends State<HouseholdAddPage> {
                   builder: (context, state) => LoadingElevatedButton(
                     onPressed: state.isValid()
                         ? () async {
-                            await cubit.create();
-                            if (!mounted) return;
+                            Household? household = await cubit.create();
+                            if (!mounted || household == null) return;
                             Navigator.of(context).pop(UpdateEnum.updated);
+                            context.go(
+                              '/household/${household.id}/${household.viewOrdering?.firstOrNull.toString()}',
+                              extra: household,
+                            );
                           }
                         : null,
                     child: Text(

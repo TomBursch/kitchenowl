@@ -89,7 +89,8 @@ db = SQLAlchemy(app, metadata=metadata)
 migrate = Migrate(app, db, render_as_batch=True)
 bcrypt = Bcrypt(app)
 jwt = JWTManager(app)
-socketio = SocketIO(app, json=app.json, logger=True, cors_allowed_origins=os.getenv('FRONT_URL'))
+socketio = SocketIO(app, json=app.json, logger=app.logger,
+                    cors_allowed_origins=os.getenv('FRONT_URL'))
 
 scheduler = APScheduler()
 # enable for debugging jobs: ../scheduler/jobs to see scheduled jobs
@@ -103,7 +104,7 @@ def add_cors_headers(response):
     if not request.referrer:
         return response
     r = request.referrer[:-1]
-    url = os.environ['FRONT_URL'] if 'FRONT_URL' in os.environ else None
+    url = os.getenv('FRONT_URL')
     if app.debug or url and r == url:
         response.headers.add('Access-Control-Allow-Origin', r)
         response.headers.add('Access-Control-Allow-Credentials', 'true')
@@ -141,6 +142,7 @@ def unhandled_exception(e: Exception):
 @app.errorhandler(404)
 def not_found(error):
     return "Requested resource not found", 404
+
 
 @socketio.on_error_default
 def default_socket_error_handler(e):

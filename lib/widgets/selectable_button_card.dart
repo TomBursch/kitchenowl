@@ -31,6 +31,7 @@ class SelectableButtonCard extends StatelessWidget {
             ),
       child: InkWell(
         onTap: onPressed,
+        onSecondaryTap: onLongPressed,
         onLongPress: onLongPressed,
         child: Column(
           mainAxisSize: MainAxisSize.min,

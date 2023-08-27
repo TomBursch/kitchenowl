@@ -99,7 +99,7 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
     final _state = state;
     if (_state.selectedShoppinglist == null) return;
     final l = List.of(_state.listItems);
-    l.removeWhere((e) => e.id == item.id);
+    l.removeWhere((e) => e.id == item.id || e.name == item.name);
     l.add(item);
     ShoppinglistSorting.sortShoppinglistItems(l, state.sorting);
     final recent = List.of(_state.recentItems);
@@ -250,6 +250,7 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
       recentItems: [],
       listItems: [],
     ));
+    _initialLoad();
     refresh();
   }
 
@@ -304,7 +305,7 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
       forceOffline: true,
     );
     List<ShoppinglistItem> loadedShoppinglistItems = await items;
-    final resState = ShoppinglistCubitState(
+    final resState = LoadingShoppinglistCubitState(
       shoppinglists: shoppingLists,
       selectedShoppinglist: shoppinglist,
       listItems: loadedShoppinglistItems,
@@ -318,8 +319,7 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
           .toList(),
     );
 
-    if (state is LoadingShoppinglistCubitState &&
-        loadedShoppinglistItems.isNotEmpty) {
+    if (state is LoadingShoppinglistCubitState) {
       emit(resState);
     }
   }
@@ -509,6 +509,8 @@ class LoadingShoppinglistCubitState extends ShoppinglistCubitState {
     super.shoppinglists,
     super.categories,
     super.selectedListItems,
+    super.listItems,
+    super.recentItems,
   });
 
   @override
@@ -528,6 +530,8 @@ class LoadingShoppinglistCubitState extends ShoppinglistCubitState {
         selectedShoppinglist: selectedShoppinglist ?? this.selectedShoppinglist,
         categories: categories ?? this.categories,
         selectedListItems: selectedListItems ?? this.selectedListItems,
+        listItems: listItems ?? this.listItems,
+        recentItems: recentItems ?? this.recentItems,
       );
 }
 

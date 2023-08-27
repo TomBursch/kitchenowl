@@ -47,17 +47,14 @@ class SliverItemGridList<T extends Item> extends StatelessWidget {
       return const SliverToBoxAdapter(child: SizedBox(height: 0));
     }
 
-    final delegate = isLoading
-        ? SliverChildBuilderDelegate(
-            childCount: 1,
-            (context, i) => ShimmerShoppingItemWidget(
+    final delegate = SliverChildBuilderDelegate(
+      childCount: items.length + (isLoading ? 1 : 0),
+      (context, i) => i >= items.length
+          ? ShimmerShoppingItemWidget(
               key: ValueKey(i),
               gridStyle: !isList,
-            ),
-          )
-        : SliverChildBuilderDelegate(
-            childCount: items.length,
-            (context, i) => SizedBox(
+            )
+          : SizedBox(
               child: ShoppingItemWidget<T>(
                 key: ObjectKey(items[i]),
                 item: items[i],
@@ -92,7 +89,7 @@ class SliverItemGridList<T extends Item> extends StatelessWidget {
                     .value,
               ),
             ),
-          );
+    );
 
     return SliverPadding(
       padding: const EdgeInsets.symmetric(horizontal: 16),

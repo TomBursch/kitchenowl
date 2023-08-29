@@ -9,7 +9,10 @@ server {
 
     location / {
         client_max_body_size 32M;
-        try_files $uri $uri/ =404;
+        try_files $uri $uri/ @redirect;
+    }
+    location @redirect {
+        return 301 "/#/404";
     }
     location /api/ {
         include uwsgi_params;
@@ -22,9 +25,17 @@ server {
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
         proxy_http_version 1.1;
+        proxy_buffering off;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection "Upgrade";
         uwsgi_buffering off;
+        uwsgi_pass ${BACK_URL};
+    }
+}
+server {
+    listen 9100;
+    location /metrics/ {
+        include uwsgi_params;
         uwsgi_pass ${BACK_URL};
     }
 }

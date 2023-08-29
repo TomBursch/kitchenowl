@@ -503,5 +503,32 @@
       "nameA": {},
       "nameB": {}
     }
-  }
+  },
+  "categoriesMerge": "categorieën samenvoegen",
+  "@categoriesMerge": {},
+  "itemRemoveInteraction": "Artikel verwijderactie",
+  "@itemRemoveInteraction": {},
+  "itemsMerge": "Artikelen samenvoegen",
+  "@itemsMerge": {},
+  "itemSize": "Artikel grootte",
+  "@itemSize": {},
+  "larger": "Groter",
+  "@larger": {},
+  "confirm": "Bevestigen",
+  "@confirm": {},
+  "tap": "Tap",
+  "@tap": {},
+  "itemsMergeConfirmation": "Weet je zeker dat je {item} en {other} wilt samenvoegen? Dit kan niet ongedaan gemaakt worden.",
+  "@itemsMergeConfirmation": {
+    "placeholders": {
+      "item": {},
+      "other": {}
+    }
+  },
+  "merge": "Samenvoegen",
+  "@merge": {},
+  "shoppingListStyle": "Boodschappenlijst stijl",
+  "@shoppingListStyle": {},
+  "smaller": "Kleiner",
+  "@smaller": {}
 }

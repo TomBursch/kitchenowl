@@ -490,5 +490,38 @@
   "ingredients": "Ingredienti",
   "@ingredients": {},
   "ingredientsOptional": "Ingredienti opzionali",
-  "@ingredientsOptional": {}
+  "@ingredientsOptional": {},
+  "addedBy": "Aggiunto da {name}",
+  "@addedBy": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "categoriesMerge": "Unisci le categorie",
+  "@categoriesMerge": {},
+  "itemsMergeConfirmation": "Sei sicuro/a di voler unire {item} e {other}? Questa operazione è irreversibile.",
+  "@itemsMergeConfirmation": {
+    "placeholders": {
+      "item": {},
+      "other": {}
+    }
+  },
+  "larger": "Più grande",
+  "@larger": {},
+  "smaller": "Più piccolo",
+  "@smaller": {},
+  "confirm": "Conferma",
+  "@confirm": {},
+  "itemRemoveInteraction": "Interazione di rimozione elemento",
+  "@itemRemoveInteraction": {},
+  "itemSize": "Dimensione Elementi",
+  "@itemSize": {},
+  "shoppingListStyle": "Stile lista della spesa",
+  "@shoppingListStyle": {},
+  "tap": "Tap",
+  "@tap": {},
+  "itemsMerge": "Unisci elementi",
+  "@itemsMerge": {},
+  "merge": "Unisci",
+  "@merge": {}
 }

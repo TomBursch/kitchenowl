@@ -26,8 +26,9 @@ class SelectableButtonCard extends StatelessWidget {
           ? Theme.of(context).colorScheme.primary
           : ElevationOverlay.applySurfaceTint(
               Theme.of(context).cardTheme.color ?? Theme.of(context).cardColor,
-              Theme.of(context).cardTheme.surfaceTintColor,
-              1,
+              Theme.of(context).cardTheme.surfaceTintColor ??
+                  Theme.of(context).colorScheme.surfaceTint,
+              0,
             ),
       child: InkWell(
         onTap: onPressed,

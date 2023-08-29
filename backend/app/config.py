@@ -2,10 +2,14 @@ from datetime import timedelta
 from flask_socketio import SocketIO
 from sqlalchemy import MetaData
 from sqlalchemy.engine import URL
+from prometheus_client import multiprocess
+from prometheus_client.core import CollectorRegistry
+from prometheus_flask_exporter import PrometheusMetrics
 from werkzeug.exceptions import MethodNotAllowed
 from app.errors import NotFoundRequest, UnauthorizedRequest, ForbiddenRequest, InvalidUsage
 from app.util import KitchenOwlJSONProvider
 from flask import Flask, request
+from flask_basicauth import BasicAuth
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
@@ -26,6 +30,8 @@ ALLOWED_FILE_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 PRIVACY_POLICY_URL = os.getenv('PRIVACY_POLICY_URL')
 OPEN_REGISTRATION = os.getenv('OPEN_REGISTRATION', "False").lower() == "true"
 EMAIL_MANDATORY = os.getenv('EMAIL_MANDATORY', "False").lower() == "true"
+
+COLLECT_METRICS = os.getenv('COLLECT_METRICS', "False").lower() == "true"
 
 DB_URL = URL.create(
     os.getenv('DB_DRIVER', "sqlite"),
@@ -73,7 +79,10 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY', 'super-secret')
 app.config["JWT_ACCESS_TOKEN_EXPIRES"] = JWT_ACCESS_TOKEN_EXPIRES
 app.config["JWT_REFRESH_TOKEN_EXPIRES"] = JWT_REFRESH_TOKEN_EXPIRES
-
+if COLLECT_METRICS:
+    # BASIC_AUTH
+    app.config['BASIC_AUTH_USERNAME'] = os.getenv('METRICS_USER', "kitchenowl")
+    app.config['BASIC_AUTH_PASSWORD'] = os.getenv('METRICS_PASSWORD', "ZqQtidgC5n3YXb")
 
 convention = {
     "ix": 'ix_%(column_0_label)s',
@@ -91,6 +100,12 @@ bcrypt = Bcrypt(app)
 jwt = JWTManager(app)
 socketio = SocketIO(app, json=app.json, logger=app.logger,
                     cors_allowed_origins=os.getenv('FRONT_URL'))
+if COLLECT_METRICS:
+    basic_auth = BasicAuth(app)
+    registry = CollectorRegistry()
+    multiprocess.MultiProcessCollector(registry, path='/tmp')
+    metrics = PrometheusMetrics(app, registry=registry, path="/metrics/", metrics_decorator=basic_auth.required)
+    metrics.info('app_info', 'Application info', version=BACKEND_VERSION)
 
 scheduler = APScheduler()
 # enable for debugging jobs: ../scheduler/jobs to see scheduled jobs

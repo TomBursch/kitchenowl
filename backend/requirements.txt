@@ -19,6 +19,7 @@ extruct==0.16.0
 flake8==6.1.0
 Flask==2.3.3
 Flask-APScheduler==1.12.4
+Flask-BasicAuth==0.2.0
 Flask-Bcrypt==1.0.1
 Flask-JWT-Extended==4.5.2
 Flask-Migrate==4.0.4

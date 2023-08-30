@@ -77,7 +77,7 @@ def addRecipe(args, household_id):
             con.tag = tag
             con.recipe = recipe
             con.save()
-    return jsonify(recipe.obj_to_dict())
+    return jsonify(recipe.obj_to_full_dict())
 
 
 @recipe.route('/<int:id>', methods=['POST'])
@@ -144,7 +144,7 @@ def updateRecipe(args, id):  # noqa: C901
                 con.tag = tag
                 con.recipe = recipe
                 con.save()
-    return jsonify(recipe.obj_to_dict())
+    return jsonify(recipe.obj_to_full_dict())
 
 
 @recipe.route('/<int:id>', methods=['DELETE'])
@@ -165,7 +165,7 @@ def deleteRecipeById(id):
 def searchRecipeByName(args, household_id):
     if 'only_ids' in args and args['only_ids']:
         return jsonify([e.id for e in Recipe.search_name(household_id, args['query'])])
-    return jsonify([e.obj_to_dict() for e in Recipe.search_name(household_id, args['query'])])
+    return jsonify([e.obj_to_full_dict() for e in Recipe.search_name(household_id, args['query'])])
 
 
 @recipeHousehold.route('/filter', methods=['POST'])

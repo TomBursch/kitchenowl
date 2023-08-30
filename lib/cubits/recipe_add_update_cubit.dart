@@ -39,7 +39,7 @@ class AddUpdateRecipeCubit extends Cubit<AddUpdateRecipeState> {
     emit(state.copyWith(tags: tags));
   }
 
-  Future<void> saveRecipe() async {
+  Future<Recipe?> saveRecipe() async {
     final AddUpdateRecipeState _state = state;
     if (state.isValid()) {
       hasChanges = false;
@@ -50,7 +50,7 @@ class AddUpdateRecipeCubit extends Cubit<AddUpdateRecipeState> {
             : await ApiService.getInstance().uploadBytes(_state.image!);
       }
       if (recipe.id == null) {
-        await ApiService.getInstance().addRecipe(
+        return ApiService.getInstance().addRecipe(
           household,
           Recipe(
             name: _state.name,
@@ -80,6 +80,8 @@ class AddUpdateRecipeCubit extends Cubit<AddUpdateRecipeState> {
         ));
       }
     }
+
+    return null;
   }
 
   Future<bool> removeRecipe() async {

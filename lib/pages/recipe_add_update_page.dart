@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:kitchenowl/cubits/recipe_add_update_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/models/household.dart';
@@ -13,6 +14,7 @@ import 'package:kitchenowl/pages/item_search_page.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/widgets/recipe_time_settings.dart';
 import 'package:responsive_builder/responsive_builder.dart';
+import 'package:tuple/tuple.dart';
 
 class AddUpdateRecipePage extends StatefulWidget {
   final Household household;
@@ -106,9 +108,18 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                     tooltip: AppLocalizations.of(context)!.save,
                     onPressed: state.isValid() && cubit.hasChanges
                         ? () async {
-                            await cubit.saveRecipe();
+                            final recipe = await cubit.saveRecipe();
                             if (!mounted) return;
                             Navigator.of(context).pop(UpdateEnum.updated);
+                            if (recipe != null) {
+                              context.go(
+                                "/household/${cubit.household.id}/recipes/details/${recipe.id}",
+                                extra: Tuple2<Household, Recipe>(
+                                  cubit.household,
+                                  recipe,
+                                ),
+                              );
+                            }
                           }
                         : null,
                   );
@@ -412,9 +423,18 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                         builder: (context, state) => LoadingElevatedButton(
                           onPressed: state.isValid() && cubit.hasChanges
                               ? () async {
-                                  await cubit.saveRecipe();
+                                  final recipe = await cubit.saveRecipe();
                                   if (!mounted) return;
                                   Navigator.of(context).pop(UpdateEnum.updated);
+                                  if (recipe != null) {
+                                    context.go(
+                                      "/household/${cubit.household.id}/recipes/details/${recipe.id}",
+                                      extra: Tuple2<Household, Recipe>(
+                                        cubit.household,
+                                        recipe,
+                                      ),
+                                    );
+                                  }
                                 }
                               : null,
                           child: Text(

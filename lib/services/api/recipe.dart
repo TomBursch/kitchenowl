@@ -50,13 +50,14 @@ extension RecipeApi on ApiService {
     return Recipe.fromJson(body);
   }
 
-  Future<bool> addRecipe(Household household, Recipe recipe) async {
+  Future<Recipe?> addRecipe(Household household, Recipe recipe) async {
     final res = await post(
       householdPath(household) + baseRoute,
       jsonEncode(recipe.toJson()),
     );
+    if (res.statusCode != 200) return null;
 
-    return res.statusCode == 200;
+    return Recipe.fromJson(jsonDecode(res.body));
   }
 
   Future<bool> updateRecipe(Recipe recipe) async {

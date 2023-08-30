@@ -7,6 +7,7 @@ import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/models/recipe.dart';
 import 'package:kitchenowl/models/shoppinglist.dart';
+import 'package:kitchenowl/models/tag.dart';
 import 'package:kitchenowl/models/user.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -64,6 +65,12 @@ class TempStorage {
     return File('$path/${household.id}-categories.json');
   }
 
+  Future<File> _localTagsFile(Household household) async {
+    final path = await _localPath;
+
+    return File('$path/${household.id}-tags.json');
+  }
+
   Future<void> clearAll() async {
     await readHouseholds().then(
       (value) => Future.wait(
@@ -75,6 +82,7 @@ class TempStorage {
                 clearShoppingLists(household),
                 clearRecipes(household),
                 clearCategories(household),
+                clearTags(household),
               ]);
             }).toList() ??
             [],
@@ -251,6 +259,42 @@ class TempStorage {
     if (!foundation.kIsWeb) {
       try {
         final file = await _localCategoryFile(household);
+        if (await file.exists()) await file.delete();
+      } catch (_) {}
+    }
+  }
+
+  Future<Set<Tag>?> readTags(Household household) async {
+    if (!foundation.kIsWeb) {
+      try {
+        final file = await _localTagsFile(household);
+        final String content = await file.readAsString();
+
+        return Set<Tag>.from(
+          json.decode(content).map((e) => Tag.fromJson(e)),
+        );
+      } catch (_) {}
+    }
+
+    return null;
+  }
+
+  Future<void> writeTags(
+    Household household,
+    Set<Tag> tags,
+  ) async {
+    if (!foundation.kIsWeb) {
+      final file = await _localTagsFile(household);
+      await file.writeAsString(
+        json.encode(tags.map((e) => e.toJsonWithId()).toList()),
+      );
+    }
+  }
+
+  Future<void> clearTags(Household household) async {
+    if (!foundation.kIsWeb) {
+      try {
+        final file = await _localTagsFile(household);
         if (await file.exists()) await file.delete();
       } catch (_) {}
     }

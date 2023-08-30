@@ -7,7 +7,7 @@
   "@addItemTitle": {},
   "addLanguage": "Ajouter une langue",
   "@addLanguage": {},
-  "addRecipeToPlanner": "Ajouter au plan de repas ({number})",
+  "addRecipeToPlanner": "Ajouter au plan de repas ({number} portions)",
   "@addRecipeToPlanner": {},
   "addRecipeToPlannerShort": "Ajouter au plan de repas",
   "@addRecipeToPlannerShort": {},
@@ -503,5 +503,32 @@
       "nameA": {},
       "nameB": {}
     }
-  }
+  },
+  "itemSize": "Taille de l'élément",
+  "@itemSize": {},
+  "larger": "Plus grand",
+  "@larger": {},
+  "itemRemoveInteraction": "Interaction pour supprimer l'élément",
+  "@itemRemoveInteraction": {},
+  "itemsMerge": "Fusionner les éléments",
+  "@itemsMerge": {},
+  "itemsMergeConfirmation": "Êtes-vous sûr·e de vouloir fusionner {item} et {other} ? Ceci ne peut pas être annulé.",
+  "@itemsMergeConfirmation": {
+    "placeholders": {
+      "item": {},
+      "other": {}
+    }
+  },
+  "tap": "Appuyer",
+  "@tap": {},
+  "categoriesMerge": "Fusionner les catégories",
+  "@categoriesMerge": {},
+  "confirm": "Confirmer",
+  "@confirm": {},
+  "merge": "Fusionner",
+  "@merge": {},
+  "shoppingListStyle": "Style de liste de courses",
+  "@shoppingListStyle": {},
+  "smaller": "Plus petite",
+  "@smaller": {}
 }

@@ -87,7 +87,7 @@
   "@optional": {},
   "or": "tai",
   "@or": {},
-  "other": "muu",
+  "other": "Muu",
   "@other": {},
   "pageNotFound": "Sivua ei löytynyt",
   "@pageNotFound": {},
@@ -480,5 +480,13 @@
   "categoriesMerge": "Yhdistä kategoriat",
   "@categoriesMerge": {},
   "confirm": "Vahvista",
-  "@confirm": {}
+  "@confirm": {},
+  "smaller": "Pienempi",
+  "@smaller": {},
+  "larger": "Suurempi",
+  "@larger": {},
+  "shoppingListStyle": "Ostoslistan tyyli",
+  "@shoppingListStyle": {},
+  "merge": "Yhdistä",
+  "@merge": {}
 }

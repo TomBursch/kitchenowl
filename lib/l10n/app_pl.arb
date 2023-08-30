@@ -460,5 +460,66 @@
   "weekly": "Tygodniowy",
   "@weekly": {},
   "yearly": "Roczny",
-  "@yearly": {}
+  "@yearly": {},
+  "addedBy": "Dodane przez {name}",
+  "@addedBy": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "ingredients": "Składniki",
+  "@ingredients": {},
+  "ingredientsOptional": "Opcjonalne składniki",
+  "@ingredientsOptional": {},
+  "privacyPolicyAgree": "Przez założenie konta zgadzasz się z naszą {privacyPolicy}",
+  "@privacyPolicyAgree": {
+    "placeholders": {
+      "privacyPolicy": {}
+    }
+  },
+  "confirm": "Potwierdź",
+  "@confirm": {},
+  "tap": "Kliknij",
+  "@tap": {},
+  "merge": "Połącz",
+  "@merge": {},
+  "supportDevelopment": "Wesprzyj rozwój",
+  "@supportDevelopment": {},
+  "emailInvalid": "Nieprawidłowy e-mail",
+  "@emailInvalid": {},
+  "itemsMergeConfirmation": "Czy na pewno chcesz połączyć {item} i {other}? To działanie jest nieodwracalne.",
+  "@itemsMergeConfirmation": {
+    "placeholders": {
+      "item": {},
+      "other": {}
+    }
+  },
+  "usernameUnavailable": "Nazwa użytkownika jest niedostępna",
+  "@usernameUnavailable": {},
+  "larger": "Większy",
+  "@larger": {},
+  "signup": "Zarejestruj się",
+  "@signup": {},
+  "usernameInvalid": "Nazwa użytkownika nie może zawierać '@'",
+  "@usernameInvalid": {},
+  "shoppingListStyle": "Styl listy zakupów",
+  "@shoppingListStyle": {},
+  "accountCreate": "Stwórz konto",
+  "@accountCreate": {},
+  "accountCreateTitle": "Stwórz swoje konto KitchenOwl",
+  "@accountCreateTitle": {},
+  "email": "E-mail",
+  "@email": {},
+  "smaller": "Mniejszy",
+  "@smaller": {},
+  "emailUpdate": "Zaktualizuj e-mail",
+  "@emailUpdate": {},
+  "categoriesMerge": "Połącz kategorie",
+  "@categoriesMerge": {},
+  "itemsMerge": "Połącz pozycje",
+  "@itemsMerge": {},
+  "itemRemoveInteraction": "Sposób usuwania pozycji",
+  "@itemRemoveInteraction": {},
+  "emailUsed": "Ten adres e-mail jest powiązany z innym kontem",
+  "@emailUsed": {}
 }

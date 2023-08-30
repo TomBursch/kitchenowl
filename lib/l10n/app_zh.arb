@@ -54,5 +54,59 @@
   "addTag": "新增标签",
   "@addTag": {},
   "admin": "管理员",
-  "@admin": {}
+  "@admin": {},
+  "appDescription": "KitchenOwl 助你管理杂货",
+  "@appDescription": {},
+  "appTitle": "KitchenOwl",
+  "@appTitle": {
+    "description": "The title of the app"
+  },
+  "back": "返回",
+  "@back": {},
+  "categories": "分类",
+  "@categories": {},
+  "changeIcon": "替换图标",
+  "@changeIcon": {},
+  "balances": "余额",
+  "@balances": {},
+  "camera": "相机",
+  "@camera": {},
+  "cancel": "取消",
+  "@cancel": {},
+  "categoriesMerge": "合并分类",
+  "@categoriesMerge": {},
+  "category": "分类",
+  "@category": {},
+  "categoryEdit": "编辑分类",
+  "@categoryEdit": {},
+  "categoryDelete": "删除分类",
+  "@categoryDelete": {},
+  "categoryDeleteConfirmation": "确定要删除 {category}？所有物品中的这个分类都会被移除。",
+  "@categoryDeleteConfirmation": {
+    "placeholders": {
+      "category": {}
+    }
+  },
+  "categoryExpenseDeleteConfirmation": "确定要删除{category}？所有支出中的这个分类都会被移除。",
+  "@categoryExpenseDeleteConfirmation": {
+    "placeholders": {
+      "category": {}
+    }
+  },
+  "colorSelect": "选择一个颜色",
+  "@colorSelect": {},
+  "dangerZone": "危险区域",
+  "@dangerZone": {},
+  "darkmode": "深色模式",
+  "@darkmode": {},
+  "confirm": "确定",
+  "@confirm": {},
+  "cookingTime": "烹饪时间",
+  "@cookingTime": {},
+  "copied": "已复制",
+  "@copied": {},
+  "daily": "每天",
+  "@daily": {},
+  "date": "日期",
+  "@date": {}
 }

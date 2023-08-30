@@ -517,5 +517,18 @@
   "shoppingListStyle": "Στυλ λίστας αγορών",
   "@shoppingListStyle": {},
   "tap": "Πατήστε",
-  "@tap": {}
+  "@tap": {},
+  "itemsMergeConfirmation": "Είστε σίγουροι πως θέλετε να συγχωνεύσετε το {item} και το {other}; Αυτή η πράξη δε μπορεί να αναιρεθεί.",
+  "@itemsMergeConfirmation": {
+    "placeholders": {
+      "item": {},
+      "other": {}
+    }
+  },
+  "categoriesMerge": "Συγχώνευση κατηγοριών",
+  "@categoriesMerge": {},
+  "itemsMerge": "Συγχώνευση ειδών",
+  "@itemsMerge": {},
+  "merge": "Συγχώνευση",
+  "@merge": {}
 }

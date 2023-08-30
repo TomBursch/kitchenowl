@@ -153,7 +153,7 @@
   "@optional": {},
   "or": "eller",
   "@or": {},
-  "other": "andre",
+  "other": "Andre",
   "@other": {},
   "overview": "Oversigt",
   "@overview": {},
@@ -378,5 +378,157 @@
   "accountCreate": "Opret Konto",
   "@accountCreate": {},
   "accountCreateTitle": "Opret din KitchenOwl Konto",
-  "@accountCreateTitle": {}
+  "@accountCreateTitle": {},
+  "accountDeleteConfirmation": "Er du sikker på, at du vil slette din konto?",
+  "@accountDeleteConfirmation": {},
+  "addedBy": "Tilføjet af {name}",
+  "@addedBy": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "dangerZone": "Farezone",
+  "@dangerZone": {},
+  "expenseReceivedFor": "Modtaget til",
+  "@expenseReceivedFor": {},
+  "ingredients": "Ingredienser",
+  "@ingredients": {},
+  "ingredientsOptional": "Valgfrie Ingredienser",
+  "@ingredientsOptional": {},
+  "logoutName": "Log {name} ud",
+  "@logoutName": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "monthly": "Månedlig",
+  "@monthly": {},
+  "yearly": "Årlig",
+  "@yearly": {},
+  "owesAB": "{nameA} skylder {nameB}",
+  "@owesAB": {
+    "placeholders": {
+      "nameA": {},
+      "nameB": {}
+    }
+  },
+  "remove": "Fjern",
+  "@remove": {},
+  "reset": "Nulstil",
+  "@reset": {},
+  "privacyPolicy": "Privatlivspolitik",
+  "@privacyPolicy": {},
+  "usernameUnavailable": "Brugernavnet er ikke tilgængeligt",
+  "@usernameUnavailable": {},
+  "shoppingListStyle": "Indkøbsliste stil",
+  "@shoppingListStyle": {},
+  "smaller": "Mindre",
+  "@smaller": {},
+  "tap": "Tap",
+  "@tap": {},
+  "weekly": "Ugentlig",
+  "@weekly": {},
+  "email": "Email",
+  "@email": {},
+  "emailInvalid": "Ugyldig email",
+  "@emailInvalid": {},
+  "expenseReceivedBy": "Modtaget af",
+  "@expenseReceivedBy": {},
+  "emailUpdate": "Opdater email",
+  "@emailUpdate": {},
+  "householdDelete": "Slet Husholdning",
+  "@householdDelete": {},
+  "householdEmpty": "Ingen husholdninger, start ved at lave en!",
+  "@householdEmpty": {},
+  "householdSwitch": "Skift Husholdning",
+  "@householdSwitch": {},
+  "imageSelect": "Vælg et billede",
+  "@imageSelect": {},
+  "itemRemoveInteraction": "Vare fjern interaktion",
+  "@itemRemoveInteraction": {},
+  "itemsMerge": "Sammenslå Varer",
+  "@itemsMerge": {},
+  "itemsMergeConfirmation": "Er du sikker på at du vil sammenslå {item} og {other}? Dette er en permanent handling.",
+  "@itemsMergeConfirmation": {
+    "placeholders": {
+      "item": {},
+      "other": {}
+    }
+  },
+  "emailUsed": "Denne email er allerede knyttet til en anden konto",
+  "@emailUsed": {},
+  "householdLeaveConfirmation": "Er du sikker på at du vil forlade {household}?",
+  "@householdLeaveConfirmation": {
+    "placeholders": {
+      "household": {}
+    }
+  },
+  "householdNew": "Ny Husholdning",
+  "@householdNew": {},
+  "households": "Husholdninger",
+  "@households": {},
+  "passwordRepeat": "Gentag Adgangskode",
+  "@passwordRepeat": {},
+  "passwordRepeatNoMatch": "Adgangkoderne er ikke ens",
+  "@passwordRepeatNoMatch": {},
+  "reportIssue": "Rapporter et problem",
+  "@reportIssue": {},
+  "signup": "Registrér",
+  "@signup": {},
+  "supportDevelopment": "Støt udviklingen",
+  "@supportDevelopment": {},
+  "usernameInvalid": "Brugernavn kan ikke indeholde '@'",
+  "@usernameInvalid": {},
+  "set": "Sæt",
+  "@set": {},
+  "swipeToRemove": "Swipe for at fjerne",
+  "@swipeToRemove": {},
+  "itemSize": "Vare størrelse",
+  "@itemSize": {},
+  "larger": "Større",
+  "@larger": {},
+  "privacyPolicyAgree": "Ved at oprette en konto, godkender du vores {privacyPolicy}",
+  "@privacyPolicyAgree": {
+    "placeholders": {
+      "privacyPolicy": {}
+    }
+  },
+  "tagEdit": "Rediger tag",
+  "@tagEdit": {},
+  "userSearchHint": "Skriv et navn",
+  "@userSearchHint": {},
+  "changeIcon": "Skift Ikon",
+  "@changeIcon": {},
+  "general": "Generelt",
+  "@general": {},
+  "members": "Medlemmer",
+  "@members": {},
+  "memberRemove": "Fjern Medlem",
+  "@memberRemove": {},
+  "settings": "Indstillinger",
+  "@settings": {},
+  "helpTranslate": "Hjælp med at oversætte",
+  "@helpTranslate": {},
+  "householdDeleteConfirmation": "Er du sikker på at du vil slette {household}? Dette vil fjerne alle varer, opskrifter og udgifter permanent.",
+  "@householdDeleteConfirmation": {
+    "placeholders": {
+      "household": {}
+    }
+  },
+  "householdLeave": "Forlad Husholdning",
+  "@householdLeave": {},
+  "memberAdd": "Tilføj Medlem",
+  "@memberAdd": {},
+  "member": "Medlem",
+  "@member": {},
+  "passwordFieldTooShort": "Adgangskoden er for kort",
+  "@passwordFieldTooShort": {},
+  "confirm": "Bekræft",
+  "@confirm": {},
+  "daily": "Dagligt",
+  "@daily": {},
+  "categoriesMerge": "Slå kategorier sammen",
+  "@categoriesMerge": {},
+  "merge": "Sammenslå",
+  "@merge": {}
 }

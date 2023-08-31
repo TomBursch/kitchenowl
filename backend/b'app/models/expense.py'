@@ -23,8 +23,14 @@ class Expense(db.Model, DbModelMixin, TimestampMixin, DbModelAuthorizeMixin):
         'ExpensePaidFor', back_populates='expense', cascade="all, delete-orphan")
     photo_file = db.relationship("File", back_populates='expense', uselist=False)
 
-    def obj_to_full_dict(self) -> dict:
+    def obj_to_dict(self) -> dict:
         res = super().obj_to_dict()
+        if self.photo_file:
+            res['photo_hash'] = self.photo_file.blur_hash
+        return res
+
+    def obj_to_full_dict(self) -> dict:
+        res = self.obj_to_dict()
         paidFor = ExpensePaidFor.query.filter(ExpensePaidFor.expense_id == self.id).join(
             ExpensePaidFor.user).order_by(
             ExpensePaidFor.expense_id).all()
@@ -32,7 +38,7 @@ class Expense(db.Model, DbModelMixin, TimestampMixin, DbModelAuthorizeMixin):
         if (self.category):
             res['category'] = self.category.obj_to_full_dict()
         return res
-    
+
     def obj_to_export_dict(self) -> dict:
         res = {
             'name': self.name,

@@ -1,15 +1,30 @@
 from os import listdir
 from os.path import isfile, join
+import blurhash
+from PIL import Image
 from app import app, db
 from app.config import UPLOAD_FOLDER
 from app.jobs import jobs
 from app.models import User, File, Household, HouseholdMember
 from app.service.delete_unused import deleteEmptyHouseholds, deleteUnusedFiles
 
+
 def importFiles():
     try:
         filesInUploadFolder = [f for f in listdir(UPLOAD_FOLDER) if isfile(join(UPLOAD_FOLDER, f))]
-        files = [File(filename=f) for f in filesInUploadFolder if not File.find(f)]
+        def createFile(filename: str) -> File:
+            blur = None
+            try:
+                with Image.open(join(UPLOAD_FOLDER, filename)) as image:
+                    image.thumbnail((100, 100))
+                    blur = blurhash.encode(
+                        image, x_components=4, y_components=3)
+            except FileNotFoundError:
+                pass
+            except Exception:
+                pass
+            return File(filename=filename, blur_hash=blur)
+        files = [createFile(f) for f in filesInUploadFolder if not File.find(f)]
 
         db.session.bulk_save_objects(files)
         db.session.commit()

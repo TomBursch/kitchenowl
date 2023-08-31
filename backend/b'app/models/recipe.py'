@@ -41,6 +41,8 @@ class Recipe(db.Model, DbModelMixin, TimestampMixin, DbModelAuthorizeMixin):
         res = super().obj_to_dict()
         res['planned'] = len(self.plans) > 0
         res['planned_days'] = [plan.day for plan in self.plans if plan.day >= 0]
+        if self.photo_file:
+            res['photo_hash'] = self.photo_file.blur_hash
         return res
 
     def obj_to_full_dict(self) -> dict:

@@ -8,6 +8,7 @@ beautifulsoup4==4.12.2
 bidict==0.22.1
 black==23.1a1
 blinker==1.6.2
+blurhash-python==1.2.1
 certifi==2023.7.22
 cffi==1.15.1
 charset-normalizer==3.2.0

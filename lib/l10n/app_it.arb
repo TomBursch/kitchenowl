@@ -518,10 +518,17 @@
   "@itemSize": {},
   "shoppingListStyle": "Stile lista della spesa",
   "@shoppingListStyle": {},
-  "tap": "Tap",
+  "tap": "Seleziona",
   "@tap": {},
   "itemsMerge": "Unisci elementi",
   "@itemsMerge": {},
   "merge": "Unisci",
-  "@merge": {}
+  "@merge": {},
+  "owesAB": "{nameA} deve a {nameB}",
+  "@owesAB": {
+    "placeholders": {
+      "nameA": {},
+      "nameB": {}
+    }
+  }
 }

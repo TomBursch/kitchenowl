@@ -41,8 +41,13 @@ class StringItemMatch extends StatelessWidget {
           SizedBox(
             height: 50,
             child: ListTile(
-              title: Text(string),
+              title: Text(
+                string,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 2,
+              ),
               contentPadding: const EdgeInsets.only(left: 0, right: 0),
+              horizontalTitleGap: 0,
               trailing: item != null
                   ? IconButton(
                       onPressed: () => itemSelected(null),
@@ -63,11 +68,17 @@ class StringItemMatch extends StatelessWidget {
                       onPressed: (_) => _onPressed(context),
                       onLongPressed: (_) => _onLongPressed(context),
                     )
-                  : Padding(
-                      padding: const EdgeInsets.all(32.0),
-                      child: OutlinedButton(
-                        onPressed: () => _onPressed(context),
-                        child: const Icon(Icons.add),
+                  : Center(
+                      child: SizedBox(
+                        width: 64,
+                        height: 64,
+                        child: OutlinedButton(
+                          style: const ButtonStyle(
+                            padding: MaterialStatePropertyAll(EdgeInsets.zero),
+                          ),
+                          onPressed: () => _onPressed(context),
+                          child: const Icon(Icons.add),
+                        ),
                       ),
                     ),
             ),

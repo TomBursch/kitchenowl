@@ -11,6 +11,7 @@ class File(db.Model, DbModelMixin, TimestampMixin, DbModelAuthorizeMixin):
     __tablename__ = 'file'
 
     filename = db.Column(db.String(), primary_key=True)
+    blur_hash = db.Column(db.String(length=40), nullable=True)
     created_by = db.Column(db.Integer, db.ForeignKey(
         'user.id'), nullable=True)
 

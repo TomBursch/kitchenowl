@@ -39,6 +39,8 @@ class Household(db.Model, DbModelMixin, TimestampMixin):
         res = super().obj_to_dict()
         res['member'] = [m.obj_to_user_dict() for m in getattr(self, 'member')]
         res['default_shopping_list'] = self.shoppinglists[0].obj_to_dict()
+        if self.photo_file:
+            res['photo_hash'] = self.photo_file.blur_hash
         return res
 
     def obj_to_export_dict(self) -> dict:

@@ -217,15 +217,15 @@ def scrapeRecipe(args, household_id):
     items = {}
     for ingredient in scraper.ingredients():
         parsed = parse_ingredient(ingredient)
-        item = Item.find_by_name(household_id, parsed['name'])
-        if not item:
-            item = Item(name=parsed['name'])
-
-        items[ingredient] = item.obj_to_dict() | {
-            "description": ' '.join(
-                filter(None, [parsed['quantity'] + parsed['unit'], parsed['comment']])),
-            "optional": False,
-        }
+        item = Item.find_by_name(household_id, parsed.name)
+        if item:
+            items[ingredient] = item.obj_to_dict() | {
+                "description": ' '.join(
+                    filter(None, [parsed.quantity + parsed.unit, parsed.comment])),
+                "optional": False,
+            }
+        else:
+             items[ingredient] = None
     return jsonify({
         'recipe': recipe.obj_to_dict(),
         'items': items,

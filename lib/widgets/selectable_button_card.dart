@@ -21,14 +21,14 @@ class SelectableButtonCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 0,
+      elevation: selected ? 1 : 0,
       color: selected
           ? Theme.of(context).colorScheme.primary
           : ElevationOverlay.applySurfaceTint(
               Theme.of(context).cardTheme.color ?? Theme.of(context).cardColor,
               Theme.of(context).cardTheme.surfaceTintColor ??
                   Theme.of(context).colorScheme.surfaceTint,
-              0,
+              1,
             ),
       child: InkWell(
         onTap: onPressed,

@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_blurhash/flutter_blurhash.dart';
 import 'package:kitchenowl/pages/photo_view_page.dart';
 import 'package:kitchenowl/widgets/image_provider.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 class FlexibleImageSpaceBar extends StatelessWidget {
   final String title;
   final String imageUrl;
+  final String? imageHash;
 
   const FlexibleImageSpaceBar({
     super.key,
     required this.title,
     String? imageUrl,
+    this.imageHash,
   }) : imageUrl = imageUrl ?? "";
 
   @override
@@ -63,18 +67,28 @@ class FlexibleImageSpaceBar extends StatelessWidget {
 
                   //   return hero.child;
                   // },
-                  Image(
-                image: getImageProvider(
-                  context,
-                  imageUrl,
-                  maxWidth: MediaQuery.of(context).size.width.toInt(),
+                  ShaderMask(
+                shaderCallback: (rect) {
+                  return const LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    stops: [.4, .85],
+                    colors: [Colors.black, Colors.transparent],
+                  ).createShader(Rect.fromLTRB(0, 0, rect.width, rect.height));
+                },
+                blendMode: BlendMode.dstIn,
+                child: FadeInImage(
+                  placeholder: imageHash != null
+                      ? BlurHashImage(imageHash!)
+                      : MemoryImage(kTransparentImage) as ImageProvider,
+                  image: getImageProvider(
+                    context,
+                    imageUrl,
+                    maxWidth: MediaQuery.of(context).size.width.toInt(),
+                  ),
+                  fit: BoxFit.cover,
                 ),
-                color:
-                    Theme.of(context).colorScheme.background.withOpacity(.25),
-                colorBlendMode: BlendMode.srcATop,
-                fit: BoxFit.cover,
               ),
-              // ),
             )
           : null,
     );

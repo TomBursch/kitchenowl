@@ -8,6 +8,7 @@ class Expense extends Model {
   final String name;
   final double amount;
   final String? image;
+  final String? imageHash;
   final DateTime? date;
   final ExpenseCategory? category;
   final int paidById;
@@ -20,6 +21,7 @@ class Expense extends Model {
     this.name = '',
     this.amount = 0,
     this.image,
+    this.imageHash,
     required this.paidById,
     this.paidFor = const [],
     this.date,
@@ -37,6 +39,7 @@ class Expense extends Model {
       name: map['name'],
       amount: map['amount'],
       image: map['photo'],
+      imageHash: map['photo_hash'],
       category: map['category'] != null
           ? ExpenseCategory.fromJson(map['category'])
           : null,
@@ -62,14 +65,24 @@ class Expense extends Model {
         amount: amount ?? this.amount,
         date: date ?? this.date,
         image: image ?? this.image,
+        imageHash: imageHash,
         category: (category ?? Nullable(this.category)).value,
         paidById: paidById ?? this.paidById,
         paidFor: paidFor ?? this.paidFor,
       );
 
   @override
-  List<Object?> get props =>
-      [id, name, amount, image, category, date, paidById, paidFor];
+  List<Object?> get props => [
+        id,
+        name,
+        amount,
+        image,
+        imageHash,
+        category,
+        date,
+        paidById,
+        paidFor,
+      ];
 
   @override
   Map<String, dynamic> toJson() {
@@ -90,6 +103,7 @@ class Expense extends Model {
   Map<String, dynamic> toJsonWithId() => toJson()
     ..addAll({
       "id": id,
+      if (imageHash != null) "photo_hash": imageHash,
     });
 }
 

@@ -9,6 +9,7 @@ class Household extends Model {
   final int id;
   final String name;
   final String? image;
+  final String? imageHash;
   final String? language;
   final bool? featurePlanner;
   final bool? featureExpenses;
@@ -20,6 +21,7 @@ class Household extends Model {
     required this.id,
     this.name = '',
     this.image,
+    this.imageHash,
     this.language,
     this.featurePlanner,
     this.featureExpenses,
@@ -45,6 +47,7 @@ class Household extends Model {
       id: map['id'],
       name: map['name'],
       image: map['photo'],
+      imageHash: map['photo_hash'],
       language: map['language'],
       featurePlanner: map['planner_feature'] ?? false,
       featureExpenses: map['expenses_feature'] ?? false,
@@ -68,6 +71,7 @@ class Household extends Model {
         id: id,
         name: name ?? this.name,
         image: image ?? this.image,
+        imageHash: imageHash,
         language: language ?? this.language,
         featurePlanner: featurePlanner ?? this.featurePlanner,
         featureExpenses: featureExpenses ?? this.featureExpenses,
@@ -79,6 +83,7 @@ class Household extends Model {
         id,
         name,
         image,
+        imageHash,
         language,
         featurePlanner,
         featureExpenses,
@@ -125,6 +130,7 @@ class Household extends Model {
         "member": member!.map((e) => e.toJsonWithId()).toList(),
       if (defaultShoppingList != null)
         "default_shopping_list": defaultShoppingList!.toJsonWithId(),
+      if (imageHash != null) "photo_hash": imageHash,
     });
 
   bool hasAdminRights(User user) => (member

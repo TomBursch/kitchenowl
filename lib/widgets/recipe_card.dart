@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_blurhash/flutter_blurhash.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/recipe.dart';
 import 'package:responsive_builder/responsive_builder.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 class RecipeCard extends StatelessWidget {
   final Recipe recipe;
@@ -40,8 +42,11 @@ class RecipeCard extends StatelessWidget {
                     borderRadius: const BorderRadius.vertical(
                       bottom: Radius.circular(14),
                     ),
-                    child: Image(
+                    child: FadeInImage(
                       fit: BoxFit.cover,
+                      placeholder: recipe.imageHash != null
+                          ? BlurHashImage(recipe.imageHash!)
+                          : MemoryImage(kTransparentImage) as ImageProvider,
                       image: getImageProvider(
                         context,
                         recipe.image!,

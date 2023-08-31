@@ -1,12 +1,14 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_blurhash/flutter_blurhash.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:kitchenowl/cubits/auth_cubit.dart';
 import 'package:kitchenowl/cubits/household_list_cubit.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/household.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 class HouseholdCard extends StatelessWidget {
   final Household household;
@@ -68,8 +70,11 @@ class HouseholdCard extends StatelessWidget {
                 ),
                 child: SizedBox(
                   height: 150,
-                  child: Image(
+                  child: FadeInImage(
                     fit: BoxFit.cover,
+                    placeholder: household.imageHash != null
+                        ? BlurHashImage(household.imageHash!)
+                        : MemoryImage(kTransparentImage) as ImageProvider,
                     image: getImageProvider(
                       context,
                       household.image!,

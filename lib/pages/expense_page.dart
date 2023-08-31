@@ -60,6 +60,7 @@ class _ExpensePageState extends State<ExpensePage> {
                     flexibleSpace: FlexibleImageSpaceBar(
                       title: state.expense.name,
                       imageUrl: state.expense.image,
+                      imageHash: state.expense.imageHash,
                     ),
                     expandedHeight: state.expense.image?.isNotEmpty ?? false
                         ? (MediaQuery.of(context).size.height / 3.5)

@@ -335,6 +335,7 @@ class _RecipePageState extends State<RecipePage> {
                       flexibleSpace: FlexibleImageSpaceBar(
                         title: state.recipe.name,
                         imageUrl: state.recipe.image,
+                        imageHash: state.recipe.imageHash,
                       ),
                       leading: BackButton(
                         onPressed: () =>

@@ -6,7 +6,6 @@ import 'package:kitchenowl/cubits/recipe_list_cubit.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/widgets/choice_scroll.dart';
 import 'package:kitchenowl/widgets/recipe_item.dart';
-import 'package:responsive_builder/responsive_builder.dart';
 
 class RecipeListPage extends StatefulWidget {
   const RecipeListPage({super.key});
@@ -33,13 +32,6 @@ class _RecipeListPageState extends State<RecipeListPage> {
   @override
   Widget build(BuildContext context) {
     final cubit = BlocProvider.of<RecipeListCubit>(context);
-
-    final int hintOffset = getValueForScreenType<int>(
-      context: context,
-      mobile: 0,
-      tablet: 80,
-      desktop: 256,
-    );
 
     return SafeArea(
       child: Column(
@@ -184,15 +176,6 @@ class _RecipeListPageState extends State<RecipeListPage> {
                           color: Theme.of(context).colorScheme.onPrimary,
                         ),
                         indexHintAlignment: Alignment.centerLeft,
-                        indexHintOffset: Offset(
-                          ((MediaQuery.of(context).size.width -
-                                          hintOffset -
-                                          1600) /
-                                      2)
-                                  .clamp(0, double.infinity) +
-                              hintOffset.toDouble(),
-                          0,
-                        ),
                       ),
                       hapticFeedback: true,
                       itemBuilder: (context, i) {

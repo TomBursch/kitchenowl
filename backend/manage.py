@@ -7,6 +7,7 @@ from app.config import UPLOAD_FOLDER
 from app.jobs import jobs
 from app.models import User, File, Household, HouseholdMember
 from app.service.delete_unused import deleteEmptyHouseholds, deleteUnusedFiles
+from app.service.recalculate_blurhash import recalculateBlurhashes
 
 
 def importFiles():
@@ -121,12 +122,15 @@ def manageFiles():
 What next?
     1. Import files
     2. Delete unused files
+    3. Generate missing blur-hashes
     (q) Go back""")
         selection = input("Your selection (q):")
         if selection == "1":
             importFiles()
         elif selection == "2":
             print(f"Deleted {deleteUnusedFiles()} unused files")
+        elif selection == "3":
+            print(f"Updated {recalculateBlurhashes()} files")
         else:
             return
 

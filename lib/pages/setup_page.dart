@@ -48,7 +48,7 @@ class _SetupPageState extends State<SetupPage> {
                       onFieldSubmitted: (text) => _setup(),
                       decoration: InputDecoration(
                         labelText: AppLocalizations.of(context)!.address,
-                        hintText: 'https://localhost:5000',
+                        hintText: 'https://localhost',
                       ),
                       validator: (s) => s == null || s.isEmpty
                           ? AppLocalizations.of(context)!.fieldCannotBeEmpty(

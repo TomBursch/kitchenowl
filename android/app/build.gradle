@@ -48,7 +48,7 @@ android {
 
     defaultConfig {
         applicationId "com.tombursch.kitchenowl"
-        minSdkVersion 19 //flutter.minSdkVersion == 18
+        minSdkVersion flutter.minSdkVersion
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName

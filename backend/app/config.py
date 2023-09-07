@@ -105,7 +105,7 @@ if COLLECT_METRICS:
     basic_auth = BasicAuth(app)
     registry = CollectorRegistry()
     multiprocess.MultiProcessCollector(registry, path='/tmp')
-    metrics = PrometheusMetrics(app, registry=registry, path="/metrics/", metrics_decorator=basic_auth.required)
+    metrics = PrometheusMetrics(app, registry=registry, path="/metrics/", metrics_decorator=basic_auth.required, group_by='endpoint')
     metrics.info('app_info', 'Application info', version=BACKEND_VERSION)
 
 scheduler = APScheduler()

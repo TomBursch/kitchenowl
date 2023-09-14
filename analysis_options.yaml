@@ -10,6 +10,8 @@
 include: package:flutter_lints/flutter.yaml
 
 analyzer:
+  exclude:
+    - flutter/**
   plugins:
     - dart_code_metrics
 

@@ -45,10 +45,10 @@ packages:
     dependency: transitive
     description:
       name: archive
-      sha256: "49b1fad315e57ab0bbc15bcbb874e83116a1d78f77ebd500a4af6c9407d6b28e"
+      sha256: e0902a06f0e00414e4e3438a084580161279f137aeb862274710f29ec10cf01e
       url: "https://pub.dev"
     source: hosted
-    version: "3.3.8"
+    version: "3.3.9"
   args:
     dependency: transitive
     description:
@@ -386,18 +386,18 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_custom_tabs
-      sha256: d39a788d2496aeda88398f805d2ce92f08f7ac2ebfe526c240ad42d13bf801e6
+      sha256: f74d1eba7f28a4d87bc8e9e123a398ca196af080428fd951268dbbf7a9ec4ae2
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.1"
+    version: "1.2.0"
   flutter_custom_tabs_platform_interface:
     dependency: transitive
     description:
       name: flutter_custom_tabs_platform_interface
-      sha256: "96c65223f36563cbc0c6ce1089c4d143ed419b07fd5c8fb4ae0f2cd69aed517d"
+      sha256: "1d6b9eb6c5671b21511fdb47babf18aa65982784373986c003aaf67ca78798ad"
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.0"
+    version: "1.2.0"
   flutter_custom_tabs_web:
     dependency: transitive
     description:
@@ -431,10 +431,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_markdown
-      sha256: d4a1cb250c4e059586af0235f32e02882860a508e189b61f2b31b8810c1e1330
+      sha256: a10979814c5f4ddbe2b6143fba25d927599e21e3ba65b3862995960606fae78f
       url: "https://pub.dev"
     source: hosted
-    version: "0.6.17+2"
+    version: "0.6.17+3"
   flutter_plugin_android_lifecycle:
     dependency: transitive
     description:
@@ -561,10 +561,10 @@ packages:
     dependency: transitive
     description:
       name: image_picker_android
-      sha256: d32a997bcc4ee135aebca8e272b7c517927aa65a74b9c60a81a2764ef1a0462d
+      sha256: "47da2161c2e9f8f8a9cbbd89d466d174333fbdd769aeed848912e0b16d9cb369"
       url: "https://pub.dev"
     source: hosted
-    version: "0.8.7+5"
+    version: "0.8.8"
   image_picker_for_web:
     dependency: transitive
     description:

@@ -20,12 +20,14 @@ class AddUpdateRecipePage extends StatefulWidget {
   final Household household;
   final Recipe recipe;
   final bool canSaveWithoutChanges;
+  final bool openRecipeAfterCreation;
 
   const AddUpdateRecipePage({
     super.key,
     required this.household,
     this.recipe = const Recipe(),
     this.canSaveWithoutChanges = false,
+    this.openRecipeAfterCreation = false,
   });
 
   @override
@@ -111,7 +113,8 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                             final recipe = await cubit.saveRecipe();
                             if (!mounted) return;
                             Navigator.of(context).pop(UpdateEnum.updated);
-                            if (recipe != null) {
+                            if (recipe != null &&
+                                widget.openRecipeAfterCreation) {
                               context.go(
                                 "/household/${cubit.household.id}/recipes/details/${recipe.id}",
                                 extra: Tuple2<Household, Recipe>(
@@ -426,7 +429,8 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                                   final recipe = await cubit.saveRecipe();
                                   if (!mounted) return;
                                   Navigator.of(context).pop(UpdateEnum.updated);
-                                  if (recipe != null) {
+                                  if (recipe != null &&
+                                      widget.openRecipeAfterCreation) {
                                     context.go(
                                       "/household/${cubit.household.id}/recipes/details/${recipe.id}",
                                       extra: Tuple2<Household, Recipe>(

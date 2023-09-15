@@ -521,5 +521,7 @@
   "itemRemoveInteraction": "Sposób usuwania pozycji",
   "@itemRemoveInteraction": {},
   "emailUsed": "Ten adres e-mail jest powiązany z innym kontem",
-  "@emailUsed": {}
+  "@emailUsed": {},
+  "itemSize": "Wielkość pozycji",
+  "@itemSize": {}
 }

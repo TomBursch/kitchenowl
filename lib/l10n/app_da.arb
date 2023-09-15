@@ -379,7 +379,7 @@
   "@accountCreate": {},
   "accountCreateTitle": "Opret din KitchenOwl Konto",
   "@accountCreateTitle": {},
-  "accountDeleteConfirmation": "Er du sikker på, at du vil slette din konto?",
+  "accountDeleteConfirmation": "Er du sikker på at du vil slette din konto?",
   "@accountDeleteConfirmation": {},
   "addedBy": "Tilføjet af {name}",
   "@addedBy": {
@@ -455,7 +455,7 @@
       "other": {}
     }
   },
-  "emailUsed": "Denne email er allerede knyttet til en anden konto",
+  "emailUsed": "Denne email er allerede forbundet til en anden konto",
   "@emailUsed": {},
   "householdLeaveConfirmation": "Er du sikker på at du vil forlade {household}?",
   "@householdLeaveConfirmation": {

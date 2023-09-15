@@ -11,12 +11,14 @@ class HouseholdDrawer extends StatelessWidget {
   final int selectedIndex;
   final List<ViewsEnum> pages;
   final void Function(BuildContext, ViewsEnum, ViewsEnum) onPageSelected;
+  final bool popOnSelection;
 
   const HouseholdDrawer({
     super.key,
     required this.selectedIndex,
     required this.pages,
     required this.onPageSelected,
+    this.popOnSelection = false,
   });
 
   @override
@@ -26,6 +28,7 @@ class HouseholdDrawer extends StatelessWidget {
       elevation: 0,
       selectedIndex: selectedIndex >= pages.length - 1 ? null : selectedIndex,
       onDestinationSelected: (i) {
+        if (popOnSelection) Navigator.of(context).pop();
         if (i < pages.length - 1) {
           onPageSelected(
             context,

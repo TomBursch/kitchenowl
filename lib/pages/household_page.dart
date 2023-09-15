@@ -199,6 +199,7 @@ class _HouseholdPageState extends State<HouseholdPage> {
                 onPageSelected: _onItemTapped,
                 pages: pages,
                 selectedIndex: _selectedIndex,
+                popOnSelection: true,
               ),
               drawerEnableOpenDragGesture: false,
               bottomNavigationBar: useBottomNavigationBar

@@ -72,7 +72,7 @@ class FlexibleImageSpaceBar extends StatelessWidget {
                   return const LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
-                    stops: [.4, .85],
+                    stops: [.6, .85],
                     colors: [Colors.black, Colors.transparent],
                   ).createShader(Rect.fromLTRB(0, 0, rect.width, rect.height));
                 },

@@ -67,7 +67,7 @@ class _RecipePageState extends State<RecipePage> {
         builder: (context, state) {
           final left = <Widget>[
             SliverPadding(
-              padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+              padding: const EdgeInsets.fromLTRB(16, 4, 16, 0),
               sliver: SliverList(
                 delegate: SliverChildListDelegate(
                   [
@@ -342,8 +342,8 @@ class _RecipePageState extends State<RecipePage> {
                             Navigator.of(context).pop(cubit.state.updateState),
                       ),
                       expandedHeight: state.recipe.image?.isNotEmpty ?? false
-                          ? (MediaQuery.of(context).size.height / 3.5)
-                              .clamp(160, 310)
+                          ? (MediaQuery.of(context).size.height / 3.3)
+                              .clamp(160, 350)
                           : null,
                       pinned: true,
                       actions: [

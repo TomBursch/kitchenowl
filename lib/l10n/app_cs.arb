@@ -19,7 +19,7 @@
       "number": {}
     }
   },
-  "addRecipeToPlanner": "Pridat jídlo do plánu ({number})",
+  "addRecipeToPlanner": "Přidat do plánu jídel ({number})",
   "@addRecipeToPlanner": {},
   "addRecipeToPlannerShort": "Pridat jídlo do plánu",
   "@addRecipeToPlannerShort": {},
@@ -55,7 +55,7 @@
   "@darkmode": {},
   "date": "Datum",
   "@date": {},
-  "error": "Oh, oběvil se error",
+  "error": "Oh, objevila se chyba",
   "@error": {},
   "expense": "Výdaje",
   "@expense": {},
@@ -65,9 +65,9 @@
   "@expenseCategories": {},
   "expenseEdit": "Upravit Výdaj",
   "@expenseEdit": {},
-  "expenseEmpty": "Zádné výdaje, začněte vytvořením prvního!",
+  "expenseEmpty": "Žádné výdaje, začněte vytvořením prvního!",
   "@expenseEmpty": {},
-  "expenseOverviewComparedToPreviousMonth": "V porovnáním s minulými mněsíci",
+  "expenseOverviewComparedToPreviousMonth": "V porovnáním s minulými měsíci",
   "@expenseOverviewComparedToPreviousMonth": {},
   "about": "O",
   "@about": {},
@@ -165,13 +165,13 @@
       "category": {}
     }
   },
-  "expenseOverviewTotalTitle": "Celkoé výdaje za {month}:",
+  "expenseOverviewTotalTitle": "Celkové výdaje za {month}:",
   "@expenseOverviewTotalTitle": {
     "placeholders": {
       "month": {}
     }
   },
-  "expensePaidBy": "Zaplaceo",
+  "expensePaidBy": "Zaplaceno",
   "@expensePaidBy": {},
   "expenseReceivedBy": "Zasláno",
   "@expenseReceivedBy": {},
@@ -181,7 +181,7 @@
       "field": {}
     }
   },
-  "forceOfflineMode": "Vynutit offlien mód",
+  "forceOfflineMode": "Vynutit offline mód",
   "@forceOfflineMode": {},
   "dynamicAccentColor": "Dynamická barva Akcentu",
   "@dynamicAccentColor": {},
@@ -286,5 +286,13 @@
   "categoriesMerge": "Sloučit kategorie",
   "@categoriesMerge": {},
   "emailInvalid": "Neplatný email",
-  "@emailInvalid": {}
+  "@emailInvalid": {},
+  "emailUsed": "Tento email je již používán jiným účtem",
+  "@emailUsed": {},
+  "ingredients": "Ingredience",
+  "@ingredients": {},
+  "ingredientsOptional": "Nepovinné ingredience",
+  "@ingredientsOptional": {},
+  "emailUpdate": "Aktualizovat email",
+  "@emailUpdate": {}
 }

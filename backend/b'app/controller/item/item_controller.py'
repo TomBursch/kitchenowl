@@ -81,7 +81,7 @@ def updateItem(args, id):
         item.icon = args['icon']
     if 'name' in args and args['name'] != item.name:
         newName: str = args['name'].strip()
-        if not Item.search_name(newName, item.household_id):
+        if not Item.find_by_name(item.household_id, newName):
             item.name = newName
     item.save()
 

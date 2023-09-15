@@ -74,8 +74,8 @@ def updateItemDescription(args, id, item_id):
     con.save()
     socketio.emit("shoppinglist_item:add", {
         "item": con.obj_to_item_dict(),
-        "shoppinglist": shoppinglist.obj_to_dict()
-    }, to=shoppinglist.household_id)
+        "shoppinglist": con.shoppinglist.obj_to_dict()
+    }, to=con.shoppinglist.household_id)
     return jsonify(con.obj_to_item_dict())
 
 

@@ -1,1 +1,24 @@
-{}
+{
+  "categories": {
+    "bread": "🍞 Chlebové zboží",
+    "canned": "🥫 Konzervované jídlo",
+    "dairy": "🥛 Mlékárna",
+    "drinks": "🍹 Nápoje",
+    "freezer": "❄️ Mrazák",
+    "fruits_vegetables": "🥬 Ovoce a zelenina",
+    "grain": "🥟 Obilné výrobky",
+    "hygiene": "🚽 Hygiena",
+    "refrigerated": "💧 Chlazené",
+    "snacks": "🥜 Občerstvení"
+  },
+  "items": {
+    "apple": "Jablko",
+    "aspirin": "Aspirin",
+    "avocado": "Avokádo",
+    "bacon": "Slanina",
+    "baguette": "Bageta",
+    "bananas": "Banány",
+    "beans": "Fazole",
+    "beer": "Pivo"
+  }
+}

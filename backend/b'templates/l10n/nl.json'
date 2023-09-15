@@ -1,15 +1,15 @@
 {
   "categories": {
-    "bread": "Brood artikelen",
-    "canned": "Ingeblikt eten",
-    "dairy": "Zuivel",
-    "drinks": "Drinken",
-    "freezer": "Vriezer",
-    "fruits_vegetables": "Fruit en Groenten",
-    "grain": "Graanproducten",
-    "hygiene": "Hygiëne",
-    "refrigerated": "Gekoeld",
-    "snacks": "Snacks"
+    "bread": "🍞 Brood artikelen",
+    "canned": "🥫 Ingeblikt eten",
+    "dairy": "🥛 Zuivel",
+    "drinks": "🍹 Drinken",
+    "freezer": "❄️ Vriezer",
+    "fruits_vegetables": "🥬 Fruit en Groenten",
+    "grain": "🥟 Graanproducten",
+    "hygiene": "🚽 Hygiëne",
+    "refrigerated": "💧 Gekoeld",
+    "snacks": "🥜 Snacks"
   },
   "items": {
     "aioli": "Aioli",

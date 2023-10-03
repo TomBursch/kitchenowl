@@ -55,8 +55,9 @@ def manageUsers():
         print("""
 What next?
     1. List all users
-    2. Update user
-    3. Delete user
+    2. Create user
+    3. Update user
+    4. Delete user
     (q) Go back""")
         selection = input("Your selection (q):")
         if selection == "1":
@@ -64,12 +65,16 @@ What next?
                 print(f"@{u.username} ({u.email}): {u.name} (server admin: {u.admin})")
         elif selection == "2":
             username = input("Enter the username:")
+            password = input("Enter the password:")
+            User.create(username, password, username)
+        elif selection == "3":
+            username = input("Enter the username:")
             user = User.find_by_username(username)
             if not user:
                 print("No user found with that username")
             else:
                 updateUser(user)
-        elif selection == "3":
+        elif selection == "4":
             username = input("Enter the username:")
             user = User.find_by_username(username)
             if not user:

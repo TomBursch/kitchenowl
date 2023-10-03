@@ -1,5 +1,7 @@
 from __future__ import annotations
 from typing import Self
+
+from sqlalchemy import func
 from app import db
 from app.helpers import DbModelMixin, TimestampMixin, DbModelAuthorizeMixin
 from app.models.category import Category
@@ -16,7 +18,7 @@ class Item(db.Model, DbModelMixin, TimestampMixin, DbModelAuthorizeMixin):
     default = db.Column(db.Boolean, default=False)
     default_key = db.Column(db.String(128))
     household_id = db.Column(db.Integer, db.ForeignKey(
-        'household.id'), nullable=False)
+        'household.id'), nullable=False, index=True)
 
     household = db.relationship("Household", uselist=False)
     category = db.relationship("Category")
@@ -106,7 +108,6 @@ class Item(db.Model, DbModelMixin, TimestampMixin, DbModelAuthorizeMixin):
             history.item_id = self.id
             db.session.add(history)
 
-        
         try:
             db.session.add(self)
             db.session.commit()
@@ -139,6 +140,10 @@ class Item(db.Model, DbModelMixin, TimestampMixin, DbModelAuthorizeMixin):
     @classmethod
     def search_name(cls, name: str, household_id: int) -> list[Self]:
         item_count = 11
+        print(db.engine.name)
+        if "postgresql" in db.engine.name:
+            return cls.query.filter(cls.household_id == household_id).order_by(func.levenshtein(func.lower(cls.name), name.lower()), cls.support.desc()).limit(item_count)
+
         found = []
 
         # name is a regex

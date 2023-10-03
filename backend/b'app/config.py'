@@ -54,6 +54,7 @@ SUPPORTED_LANGUAGES = {
     'es': 'Español',
     'fi': 'Suomi',
     'fr': 'Français',
+    'hu': 'Magyar nyelv',
     'id': 'Bahasa Indonesia',
     'it': 'Italiano',
     'nb_NO': 'Bokmål',
@@ -62,6 +63,7 @@ SUPPORTED_LANGUAGES = {
     'pt': 'Português',
     'pt_BR': 'Português Brasileiro',
     'ru': 'русский язык',
+    'sv': 'Svenska',
     'tr': 'Türkçe',
     'zh_Hans': '简化字',
 }

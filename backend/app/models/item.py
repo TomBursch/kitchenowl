@@ -142,7 +142,7 @@ class Item(db.Model, DbModelMixin, TimestampMixin, DbModelAuthorizeMixin):
         item_count = 11
         print(db.engine.name)
         if "postgresql" in db.engine.name:
-            return cls.query.filter(cls.household_id == household_id).order_by(func.levenshtein(func.lower(cls.name), name.lower()), cls.support.desc()).limit(item_count)
+            return cls.query.filter(cls.household_id == household_id).order_by(func.levenshtein(func.lower(func.substring(cls.name, 0, len(name))), name.lower()), cls.support.desc()).limit(item_count)
 
         found = []
 

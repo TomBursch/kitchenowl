@@ -12,7 +12,7 @@ class Planner(db.Model, DbModelMixin, TimestampMixin, DbModelAuthorizeMixin):
     day = db.Column(db.Integer, primary_key=True)
     yields = db.Column(db.Integer)
     household_id = db.Column(db.Integer, db.ForeignKey(
-        'household.id'), nullable=False)
+        'household.id'), nullable=False, index=True)
 
     household = db.relationship("Household", uselist=False)
     recipe = db.relationship("Recipe", back_populates="plans")

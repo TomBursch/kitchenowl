@@ -23,7 +23,7 @@ class Recipe(db.Model, DbModelMixin, TimestampMixin, DbModelAuthorizeMixin):
     suggestion_score = db.Column(db.Integer, server_default='0')
     suggestion_rank = db.Column(db.Integer, server_default='0')
     household_id = db.Column(db.Integer, db.ForeignKey(
-        'household.id'), nullable=False)
+        'household.id'), nullable=False, index=True)
 
     household = db.relationship("Household", uselist=False)
     recipe_history = db.relationship(

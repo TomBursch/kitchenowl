@@ -13,7 +13,7 @@ class Category(db.Model, DbModelMixin, TimestampMixin, DbModelAuthorizeMixin):
     default_key = db.Column(db.String(128))
     ordering = db.Column(db.Integer, default=0)
     household_id = db.Column(db.Integer, db.ForeignKey(
-        'household.id'), nullable=False)
+        'household.id'), nullable=False, index=True)
 
     household = db.relationship("Household", uselist=False)
     items = db.relationship(

@@ -3,10 +3,10 @@ from app.models import Recipe, RecipeTags, RecipeItems, Item, Tag
 from app.service.file_has_access_or_download import file_has_access_or_download
 
 
-def importRecipe(household_id: int, args: dict, override: bool = False):
+def importRecipe(household_id: int, args: dict, overwrite: bool = False):
     recipeNameCount = 0
     recipe = Recipe.find_by_name(household_id, args['name'])
-    if recipe and not override:
+    if recipe and not overwrite:
         recipeNameCount = 1 + \
             Recipe.query.filter(Recipe.household_id == household_id, Recipe.name.ilike(
                 args['name'] + " (_%)")).count()

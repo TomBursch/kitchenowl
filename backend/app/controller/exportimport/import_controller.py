@@ -29,7 +29,7 @@ def importData(args, household_id):
 
     if "recipes" in args:
         for recipe in args['recipes']:
-            importRecipe(household_id, recipe, args['recipe_overide'] if 'recipe_overide' in args else False)
+            importRecipe(household_id, recipe, args['recipe_overwrite'] if 'recipe_overwrite' in args else False)
 
     if "expenses" in args:
         for expense in args['expenses']:

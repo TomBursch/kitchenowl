@@ -80,6 +80,7 @@ class ImportSchema(Schema):
 
     items = fields.List(fields.Nested(Item))
     recipes = fields.List(fields.Nested(Recipe))
+    recipe_overide = fields.Boolean()
     expenses = fields.List(fields.Nested(Expense))
     member = fields.List(fields.String())
     shoppinglists = fields.List(fields.String())

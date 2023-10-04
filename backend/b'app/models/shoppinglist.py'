@@ -9,7 +9,7 @@ class Shoppinglist(db.Model, DbModelMixin, TimestampMixin, DbModelAuthorizeMixin
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(128))
 
-    household_id = db.Column(db.Integer, db.ForeignKey('household.id'), nullable=False)
+    household_id = db.Column(db.Integer, db.ForeignKey('household.id'), nullable=False, index=True)
 
     household = db.relationship("Household", uselist=False)
     items = db.relationship('ShoppinglistItems', cascade="all, delete-orphan")

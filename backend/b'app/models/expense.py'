@@ -14,7 +14,7 @@ class Expense(db.Model, DbModelMixin, TimestampMixin, DbModelAuthorizeMixin):
     category_id = db.Column(db.Integer, db.ForeignKey('expense_category.id'))
     photo = db.Column(db.String(), db.ForeignKey('file.filename'))
     paid_by_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    household_id = db.Column(db.Integer, db.ForeignKey('household.id'), nullable=False)
+    household_id = db.Column(db.Integer, db.ForeignKey('household.id'), nullable=False, index=True)
 
     household = db.relationship("Household", uselist=False)
     category = db.relationship("ExpenseCategory")

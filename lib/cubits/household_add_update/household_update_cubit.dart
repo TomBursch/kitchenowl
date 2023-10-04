@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:kitchenowl/enums/views_enum.dart';
 import 'package:kitchenowl/helpers/named_bytearray.dart';
 import 'package:kitchenowl/models/category.dart';
 import 'package:kitchenowl/models/expense_category.dart';
 import 'package:kitchenowl/models/household.dart';
+import 'package:kitchenowl/models/import_settings.dart';
 import 'package:kitchenowl/models/member.dart';
 import 'package:kitchenowl/models/shoppinglist.dart';
 import 'package:kitchenowl/models/tag.dart';
@@ -233,6 +236,32 @@ class HouseholdUpdateCubit
 
   Future<bool> deleteHousehold() {
     return ApiService.getInstance().deleteHousehold(household);
+  }
+
+  Future<void> exportHousehold(String path) async {
+    try {
+      final content = await ApiService.getInstance().exportHousehold(household);
+      if (content != null) File(path).writeAsString(content);
+    } catch (_) {}
+  }
+
+  Future<String?> getExportHousehold() {
+    return ApiService.getInstance().exportHousehold(household);
+  }
+
+  // ignore: long-parameter-list
+  Future<void> importHousehold(
+    Map<String, dynamic> content, [
+    ImportSettings settings = const ImportSettings(),
+  ]) async {
+    content = {
+      if (settings.items) "items": content["items"],
+      if (settings.recipes) "recipes": content["recipes"],
+      if (settings.expenses) "expenses": content["expenses"],
+      if (settings.shoppinglists) "shoppinglists": content["shoppinglists"],
+    };
+    await ApiService.getInstance()
+        .importHousehold(household, content, settings.recipesOverwrite);
   }
 }
 

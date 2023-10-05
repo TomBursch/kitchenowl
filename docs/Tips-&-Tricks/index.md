@@ -1,4 +1,4 @@
-# Tips & Tricks
+# Quick Tips
 
 There are a few hidden features in the app which might not be obvious at first.
 
@@ -7,7 +7,11 @@ There are a few hidden features in the app which might not be obvious at first.
 When searching for an item you can add the `,` delimiter to add descriptions directly.
 Did you also know that pressing enter when searching adds the first item to your shopping list?
 
-![video](/img/screenshots/description.gif)
+<!-- ![video](/img/screenshots/description.gif) -->
+
+### Recipe description
+
+Recipes support [markdown](./markdown.md), additionally you can reference ingredients using `@ingredient_name` and the required amount is automatically added to the text.
 
 ### More details
 

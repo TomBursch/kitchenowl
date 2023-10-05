@@ -48,3 +48,4 @@ Here is a list of community maintained install methods:
 
 - Unraid ([Source](https://codeberg.org/HanSolo97/unraid-template-kitchenowl) AGPL-3.0)
 - [Cosmos](https://cosmos-cloud.io/proxy#cosmos-ui/market-listing/cosmos-cloud/KitchenOwl) ([Source](https://github.com/azukaar/cosmos-servapps-official/tree/master/servapps/Kitchenowl) AGPL-3.0)
+- TrueNAS SCALE ([Source](https://github.com/truecharts/charts/tree/master/charts/stable/kitchenowl) BSD-3-Clause)

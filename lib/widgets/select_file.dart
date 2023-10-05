@@ -77,9 +77,8 @@ Future<NamedByteArray?> selectFile({
       if (i == -1) return NamedByteArray.empty;
     }
     FilePickerResult? result = await FilePicker.platform.pickFiles(
-      type: FileType.custom,
+      type: FileType.image,
       withData: true,
-      allowedExtensions: ['jpg', 'jpeg', 'png', 'gif'],
     );
     if (result != null && result.files.first.name.isNotEmpty) {
       return NamedByteArray(result.files.first.name, result.files.first.bytes!);

@@ -463,7 +463,7 @@
   "@yearly": {},
   "accountCreate": "Konto erstellen",
   "@accountCreate": {},
-  "accountCreateTitle": "Erstelle dein KitchenOwl Konto",
+  "accountCreateTitle": "Erstelle dein KitchenOwl-Konto",
   "@accountCreateTitle": {},
   "privacyPolicyAgree": "Durch das Erstellen eines Kontos stimmst du der {privacyPolicy} zu",
   "@privacyPolicyAgree": {},
@@ -526,5 +526,15 @@
       "item": {},
       "other": {}
     }
-  }
+  },
+  "recipesOverwrite": "Rezepte überschreiben",
+  "@recipesOverwrite": {},
+  "import": "Importieren",
+  "@import": {},
+  "export": "Exportieren",
+  "@export": {},
+  "recipesOverwriteDescription": "Wenn aktiviert, werden bestehende Rezepte mit dem gleichen Namen überschrieben",
+  "@recipesOverwriteDescription": {},
+  "importStartedHint": "Importierung gestartet, dies kann ein paar Minuten dauern.",
+  "@importStartedHint": {}
 }

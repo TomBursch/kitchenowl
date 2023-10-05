@@ -488,5 +488,47 @@
   "shoppingListStyle": "Ostoslistan tyyli",
   "@shoppingListStyle": {},
   "merge": "Yhdistä",
-  "@merge": {}
+  "@merge": {},
+  "yields": "Annosta",
+  "@yields": {},
+  "monthly": "Kuukausittain",
+  "@monthly": {},
+  "lltDelete": "Poista pitkäaikainen tunnus",
+  "@lltDelete": {},
+  "owesAB": "{nameA} on velkaa {nameB}",
+  "@owesAB": {
+    "placeholders": {
+      "nameA": {},
+      "nameB": {}
+    }
+  },
+  "llts": "Pitkäaikaiset tunnukset",
+  "@llts": {},
+  "itemSize": "Kohteen koko",
+  "@itemSize": {},
+  "itemsMergeConfirmation": "Oletko varma, että haluat yhdistää {item} ja {other}? Toimintoa ei voi perua.",
+  "@itemsMergeConfirmation": {
+    "placeholders": {
+      "item": {},
+      "other": {}
+    }
+  },
+  "itemsMerge": "Yhdistä kohteet",
+  "@itemsMerge": {},
+  "tap": "Napauta",
+  "@tap": {},
+  "weekly": "Viikottain",
+  "@weekly": {},
+  "expensePaidFor": "Maksettu",
+  "@expensePaidFor": {},
+  "yearly": "Vuosittain",
+  "@yearly": {},
+  "lltWarningContent": "Oletko varma, että haluat luoda pitkäaikaisen tunnuksen? Tämä voi olla mahdollinen tietoturvariski. Tunnus ei eräänny ja antaa tilille täyden käyttöoikeuden.",
+  "@lltWarningContent": {},
+  "expenseReceivedFor": "Saatu",
+  "@expenseReceivedFor": {},
+  "itemRemoveInteraction": "Kohteen poiston toiminto",
+  "@itemRemoveInteraction": {},
+  "usedIn": "Käytetty",
+  "@usedIn": {}
 }

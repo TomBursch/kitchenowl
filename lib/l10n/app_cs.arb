@@ -294,5 +294,38 @@
   "ingredientsOptional": "Nepovinné ingredience",
   "@ingredientsOptional": {},
   "emailUpdate": "Aktualizovat email",
-  "@emailUpdate": {}
+  "@emailUpdate": {},
+  "merge": "Sloučit",
+  "@merge": {},
+  "passwordRepeat": "Zopakuj heslo",
+  "@passwordRepeat": {},
+  "password": "Heslo",
+  "@password": {},
+  "passwordSave": "Aktualizovat heslo",
+  "@passwordSave": {},
+  "larger": "Větší",
+  "@larger": {},
+  "itemsMergeConfirmation": "Jsi si jistý, že chceš sloučit {item} a {other}? Tuto akci není možné vrátit.",
+  "@itemsMergeConfirmation": {
+    "placeholders": {
+      "item": {},
+      "other": {}
+    }
+  },
+  "pageNotFound": "Nemohl nalézt tuto stránku",
+  "@pageNotFound": {},
+  "other": "Ostatní",
+  "@other": {},
+  "personal": "Osobní",
+  "@personal": {},
+  "passwordRepeatNoMatch": "Hesla se neshodují",
+  "@passwordRepeatNoMatch": {},
+  "planner": "Plánovač",
+  "@planner": {},
+  "passwordFieldTooShort": "Heslo je příliš krátké",
+  "@passwordFieldTooShort": {},
+  "overview": "Přehled",
+  "@overview": {},
+  "onboardingLoading": "Import jazyka, tohle může chvíli zabrat. Prosím, buďte trpělivý :)",
+  "@onboardingLoading": {}
 }

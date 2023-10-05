@@ -158,5 +158,55 @@
   "name": "Имя",
   "@name": {},
   "logout": "Выйти",
-  "@logout": {}
+  "@logout": {},
+  "categoriesMerge": "Объединить категории",
+  "@categoriesMerge": {},
+  "user": "Пользователь",
+  "@user": {},
+  "usernameUnavailable": "Данный логин недоступен",
+  "@usernameUnavailable": {},
+  "yes": "Да",
+  "@yes": {},
+  "username": "Логин",
+  "@username": {},
+  "addNumberIngredients": "Добавьте ингредиенты: {number}",
+  "@addNumberIngredients": {
+    "placeholders": {
+      "number": {}
+    }
+  },
+  "userAdd": "Добавить пользователя",
+  "@userAdd": {},
+  "usernameInvalid": "Логин не может содержать '@'",
+  "@usernameInvalid": {},
+  "userDeleteConfirmation": "Вы уверены, что хотите удалить пользователя {user}?",
+  "@userDeleteConfirmation": {
+    "placeholders": {
+      "user": {}
+    }
+  },
+  "userDelete": "Удалить пользователя",
+  "@userDelete": {},
+  "users": "Пользователи",
+  "@users": {},
+  "wrongUsernameOrPassword": "Неправильный логин или пароль",
+  "@wrongUsernameOrPassword": {},
+  "weekly": "Еженедельно",
+  "@weekly": {},
+  "addedBy": "Добавил {name}",
+  "@addedBy": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "yearly": "Ежегодно",
+  "@yearly": {},
+  "addLanguageConfirm": "Вы уверены, что хотите установить язык '{lang}'? Это действие нельзя отменить, и в вашу кухню добавятся элементы и категории.",
+  "@addLanguageConfirm": {
+    "placeholders": {
+      "lang": {}
+    }
+  },
+  "addItemTitle": "Добавить элементы",
+  "@addItemTitle": {}
 }

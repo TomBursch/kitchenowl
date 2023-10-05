@@ -1,6 +1,8 @@
 <h1 align="center">
-  <img width="128" src="docs/img/icon.png#gh-light-mode-only" alt="KitchenOwl">
-  <img width="128" src="docs/img/icon.png#gh-dark-mode-only" alt="KitchenOwl">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="./docs/img/icon.png">
+    <img width="128" src="./docs/img/logo.png" alt="KitchenOwl">
+  </picture>
 </h1>
 <p align="center">
   <p align="center">A smart grocery list and recipe manager.</p>
@@ -102,6 +104,7 @@ You can help translate the App into your language by using [Weblate](https://hos
 KitchenOwl is moving fast, to stay updated consider starring and watching the releases of this repository.
 
 ### 💬 Status
+
 - [x] Public Alpha: Still working on stuff (sometimes things might break)
 - [ ] Public Beta: Stable and most planned features complete
 - [ ] Public: Production-ready

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:universal_html/html.dart' as html;
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
@@ -43,10 +44,33 @@ class SliverHouseholdDangerZone extends StatelessWidget {
                   child: Builder(
                     builder: (context) => LoadingElevatedButton(
                       onPressed: () async {
-                        if (!kIsWeb &&
-                            (Platform.isLinux ||
-                                Platform.isMacOS ||
-                                Platform.isWindows)) {
+                        if (kIsWeb) {
+                          String? export =
+                              await BlocProvider.of<HouseholdUpdateCubit>(
+                            context,
+                          ).getExportHousehold();
+                          if (export != null) {
+                            final url = Uri.dataFromString(
+                              export,
+                              mimeType: 'text/plain',
+                              encoding: utf8,
+                            );
+                            final anchor = html.document.createElement('a')
+                                as html.AnchorElement
+                              ..href = url.toString()
+                              ..style.display = 'none'
+                              ..download =
+                                  '${BlocProvider.of<HouseholdUpdateCubit>(context).household.name}_export.json';
+                            html.document.body?.children.add(anchor);
+
+                            anchor.click();
+
+                            html.document.body?.children.remove(anchor);
+                            html.Url.revokeObjectUrl(url.toString());
+                          }
+                        } else if (Platform.isLinux ||
+                            Platform.isMacOS ||
+                            Platform.isWindows) {
                           String? outputPath =
                               await FilePicker.platform.saveFile(
                             dialogTitle: 'Please select an output file:',
@@ -71,6 +95,9 @@ class SliverHouseholdDangerZone extends StatelessWidget {
                               [
                                 XFile.fromData(
                                   Uint8List.fromList(export.codeUnits),
+                                  name:
+                                      '${BlocProvider.of<HouseholdUpdateCubit>(context).household.name}_export.json',
+                                  mimeType: 'application/json',
                                 ),
                               ],
                               sharePositionOrigin:

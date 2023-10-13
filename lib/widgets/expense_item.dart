@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:animations/animations.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,6 +9,7 @@ import 'package:go_router/go_router.dart';
 import 'package:kitchenowl/cubits/auth_cubit.dart';
 import 'package:kitchenowl/cubits/household_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
+import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/expense.dart';
 import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/pages/expense_page.dart';
@@ -30,6 +32,7 @@ class ExpenseItemWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double amount = expense.amount;
+    final household = context.read<HouseholdCubit>().state.household;
     if (displayPersonalAmount &&
         BlocProvider.of<AuthCubit>(context).getUser() != null) {
       final i = expense.paidFor.indexWhere(
@@ -64,11 +67,26 @@ class ExpenseItemWidget extends StatelessWidget {
                   color: expense.category!.color,
                 )
               : null,
-          title: Text(expense.name),
-          trailing: Text(NumberFormat.simpleCurrency().format(amount)),
-          subtitle: (expense.date != null)
-              ? Text(DateFormat.yMMMd().format(expense.date!))
-              : null,
+          title: Row(
+            children: [
+              Expanded(child: Text(expense.name)),
+              Text(NumberFormat.simpleCurrency().format(amount)),
+            ],
+          ),
+          subtitle: Row(
+            children: [
+              (expense.date != null)
+                  ? Expanded(
+                      child: Text(DateFormat.yMMMd().format(expense.date!)),
+                    )
+                  : const Spacer(),
+              Text(
+                "${expense.isIncome ? AppLocalizations.of(context)!.expenseReceivedBy : AppLocalizations.of(context)!.expensePaidBy} ${household.member?.firstWhereOrNull(
+                      (e) => e.id == expense.paidById,
+                    )?.name ?? AppLocalizations.of(context)!.other}",
+              ),
+            ],
+          ),
           onTap: (kIsWeb || Platform.isIOS)
               ? () async {
                   final household =

@@ -57,10 +57,17 @@ class RenderLeftRightWrap extends RenderBox
     final bool wrapped =
         leftChild.size.width + rightChild.size.width > constraints.maxWidth;
 
-    leftParentData.offset = Offset.zero;
+    leftParentData.offset = Offset(
+      0,
+      wrapped
+          ? 0
+          : math.max((rightChild.size.height - leftChild.size.height) / 2, 0),
+    );
     rightParentData.offset = Offset(
       constraints.maxWidth - rightChild.size.width,
-      wrapped ? leftChild.size.height : 0,
+      wrapped
+          ? leftChild.size.height
+          : math.max((leftChild.size.height - rightChild.size.height) / 2, 0),
     );
 
     size = Size(

@@ -31,7 +31,6 @@ class RecipeCubit extends Cubit<RecipeState> {
   void setSelectedYields(int selectedYields) {
     emit(state.copyWith(
       selectedYields: selectedYields,
-      dynamicRecipe: state.recipe.withYields(selectedYields),
     ));
   }
 
@@ -87,33 +86,30 @@ class RecipeState extends Equatable {
   final int selectedYields;
   final UpdateEnum updateState;
 
-  const RecipeState.custom({
+  RecipeState.custom({
     required this.recipe,
     required this.selectedItems,
-    required this.dynamicRecipe,
     this.selectedYields = 0,
     this.updateState = UpdateEnum.unchanged,
-  });
+  }) : dynamicRecipe = recipe.withYields(selectedYields);
 
   RecipeState({
     required this.recipe,
     this.updateState = UpdateEnum.unchanged,
     int? selectedYields,
-  })  : dynamicRecipe = recipe,
-        selectedYields = selectedYields ?? recipe.yields,
+  })  : selectedYields = selectedYields ?? recipe.yields,
+        dynamicRecipe = recipe.withYields(selectedYields ?? recipe.yields),
         selectedItems =
             recipe.items.where((e) => !e.optional).map((e) => e.name).toList();
 
   RecipeState copyWith({
     Recipe? recipe,
-    Recipe? dynamicRecipe,
     List<String>? selectedItems,
     int? selectedYields,
     UpdateEnum? updateState,
   }) =>
       RecipeState.custom(
         recipe: recipe ?? this.recipe,
-        dynamicRecipe: dynamicRecipe ?? this.dynamicRecipe,
         selectedItems: selectedItems ?? this.selectedItems,
         selectedYields: selectedYields ?? this.selectedYields,
         updateState: updateState ?? this.updateState,

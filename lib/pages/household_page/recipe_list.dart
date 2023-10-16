@@ -116,9 +116,9 @@ class _RecipeListPageState extends State<RecipeListPage> {
                     padding: EdgeInsets.only(left: 28, right: 12),
                     child: Column(
                       children: [
-                        ShimmerCard(),
-                        ShimmerCard(),
-                        ShimmerCard(),
+                        ShimmerCard(trailing: Icon(Icons.arrow_right_rounded)),
+                        ShimmerCard(trailing: Icon(Icons.arrow_right_rounded)),
+                        ShimmerCard(trailing: Icon(Icons.arrow_right_rounded)),
                       ],
                     ),
                   );

@@ -3,16 +3,18 @@ import 'package:shimmer/shimmer.dart';
 
 class ShimmerCard extends StatelessWidget {
   final Widget? trailing;
-  const ShimmerCard({super.key, this.trailing});
+  final EdgeInsetsGeometry? margin;
+  const ShimmerCard({super.key, this.trailing, this.margin});
 
   @override
   Widget build(BuildContext context) {
     return Card(
+      margin: margin,
       child: Shimmer.fromColors(
         baseColor: Colors.grey.withOpacity(.4),
         highlightColor: Colors.grey[300]!.withOpacity(.9),
         child: ListTile(
-          trailing: trailing ?? const Icon(Icons.arrow_right_rounded),
+          trailing: trailing,
           title: const Row(
             children: [
               ShimmerText(),

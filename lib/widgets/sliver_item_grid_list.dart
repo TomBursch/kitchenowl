@@ -21,7 +21,6 @@ class SliverItemGridList<T extends Item> extends StatelessWidget {
   final ShoppingList? shoppingList; // forwarded to item page on long press
   final Household?
       household; // forwarded to item page on long press for offline functionality
-  final bool isList;
   final bool Function(T)? selected;
   final bool isLoading;
   final bool isDescriptionEditable;
@@ -35,7 +34,6 @@ class SliverItemGridList<T extends Item> extends StatelessWidget {
     this.categories,
     this.household,
     this.shoppingList,
-    this.isList = false,
     this.selected,
     this.isLoading = false,
     this.isDescriptionEditable = true,
@@ -43,6 +41,8 @@ class SliverItemGridList<T extends Item> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isList = context.read<SettingsCubit>().state.shoppingListListView;
+
     if (!isLoading && items.isEmpty) {
       return const SliverToBoxAdapter(child: SizedBox(height: 0));
     }
@@ -54,40 +54,38 @@ class SliverItemGridList<T extends Item> extends StatelessWidget {
               key: ValueKey(i),
               gridStyle: !isList,
             )
-          : SizedBox(
-              child: ShoppingItemWidget<T>(
-                key: ObjectKey(items[i]),
-                item: items[i],
-                selected: selected?.call(items[i]) ?? false,
-                gridStyle: !isList,
-                onPressed: onPressed,
-                onLongPressed: (onLongPressed ??
-                        Nullable((Item item) async {
-                          final res =
-                              await Navigator.of(context, rootNavigator: true)
-                                  .push<UpdateValue<Item>>(
-                            MaterialPageRoute(
-                              builder: (ctx) => BlocProvider.value(
-                                value: BlocProvider.of<HouseholdCubit>(context),
-                                child: ItemPage(
-                                  item: item,
-                                  household: household,
-                                  shoppingList: shoppingList,
-                                  categories: categories ?? const [],
-                                  isDescriptionEditable: isDescriptionEditable,
-                                ),
+          : ShoppingItemWidget<T>(
+              key: ObjectKey(items[i]),
+              item: items[i],
+              selected: selected?.call(items[i]) ?? false,
+              gridStyle: !isList,
+              onPressed: onPressed,
+              onLongPressed: (onLongPressed ??
+                      Nullable((Item item) async {
+                        final res =
+                            await Navigator.of(context, rootNavigator: true)
+                                .push<UpdateValue<Item>>(
+                          MaterialPageRoute(
+                            builder: (ctx) => BlocProvider.value(
+                              value: BlocProvider.of<HouseholdCubit>(context),
+                              child: ItemPage(
+                                item: item,
+                                household: household,
+                                shoppingList: shoppingList,
+                                categories: categories ?? const [],
+                                isDescriptionEditable: isDescriptionEditable,
                               ),
                             ),
-                          );
-                          if (onRefresh != null &&
-                              res != null &&
-                              (res.state == UpdateEnum.deleted ||
-                                  res.state == UpdateEnum.updated)) {
-                            onRefresh!();
-                          }
-                        }))
-                    .value,
-              ),
+                          ),
+                        );
+                        if (onRefresh != null &&
+                            res != null &&
+                            (res.state == UpdateEnum.deleted ||
+                                res.state == UpdateEnum.updated)) {
+                          onRefresh!();
+                        }
+                      }))
+                  .value,
             ),
     );
 

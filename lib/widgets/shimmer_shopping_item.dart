@@ -31,6 +31,8 @@ class ShimmerShoppingItemWidget extends StatelessWidget {
               ),
             ),
           )
-        : const ShimmerCard();
+        : const ShimmerCard(
+            margin: EdgeInsets.symmetric(vertical: 4),
+          );
   }
 }

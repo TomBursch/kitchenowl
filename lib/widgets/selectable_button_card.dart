@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class SelectableButtonCard extends StatelessWidget {
+class SelectableButtonCard extends StatefulWidget {
   final String title;
   final IconData? icon;
   final String? description;
@@ -9,20 +9,27 @@ class SelectableButtonCard extends StatelessWidget {
   final void Function()? onLongPressed;
 
   const SelectableButtonCard({
-    Key? key,
+    super.key,
     this.icon,
     required this.title,
     this.description,
     this.onPressed,
     this.onLongPressed,
     this.selected = false,
-  }) : super(key: key);
+  });
+
+  @override
+  State<SelectableButtonCard> createState() => _SelectableButtonCardState();
+}
+
+class _SelectableButtonCardState extends State<SelectableButtonCard> {
+  bool mouseHover = false;
 
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: selected ? 1 : 0,
-      color: selected
+      elevation: widget.selected ? 1 : 0,
+      color: widget.selected
           ? Theme.of(context).colorScheme.primary
           : ElevationOverlay.applySurfaceTint(
               Theme.of(context).cardTheme.color ?? Theme.of(context).cardColor,
@@ -30,55 +37,82 @@ class SelectableButtonCard extends StatelessWidget {
                   Theme.of(context).colorScheme.surfaceTint,
               1,
             ),
-      child: InkWell(
-        onTap: onPressed,
-        onSecondaryTap: onLongPressed,
-        onLongPress: onLongPressed,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            if (icon != null)
-              Padding(
-                padding: const EdgeInsets.fromLTRB(8, 4, 8, 12),
-                child: LayoutBuilder(
-                  builder: (context, constraint) => Icon(
-                    icon,
-                    size: constraint.maxWidth / 2.4,
-                    color: selected
-                        ? Theme.of(context).colorScheme.onPrimary
-                        : null,
-                  ),
+      child: MouseRegion(
+        onEnter: (event) {
+          setState(() {
+            mouseHover = true;
+          });
+        },
+        onExit: (event) {
+          setState(() {
+            mouseHover = false;
+          });
+        },
+        child: InkWell(
+          onTap: widget.onPressed,
+          onSecondaryTap: widget.onLongPressed,
+          onLongPress: widget.onLongPressed,
+          child: Stack(
+            alignment: AlignmentDirectional.topEnd,
+            children: [
+              if (widget.onLongPressed != null && mouseHover)
+                IconButton(
+                  onPressed: widget.onLongPressed,
+                  color: widget.selected
+                      ? Theme.of(context).colorScheme.onPrimary
+                      : null,
+                  icon: const Icon(Icons.more_horiz_rounded),
                 ),
-              ),
-            Text(
-              title,
-              style: TextStyle(
-                color:
-                    selected ? Theme.of(context).colorScheme.onPrimary : null,
-              ),
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              softWrap: true,
-              textAlign: TextAlign.center,
-            ),
-            if (description != null && description!.isNotEmpty)
-              Text(
-                description!,
-                style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                      color: selected
-                          ? Theme.of(context)
-                              .colorScheme
-                              .onPrimary
-                              .withOpacity(.7)
+              Column(
+                mainAxisSize: MainAxisSize.max,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  if (widget.icon != null)
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(8, 4, 8, 12),
+                      child: LayoutBuilder(
+                        builder: (context, constraint) => Icon(
+                          widget.icon,
+                          size: constraint.maxWidth / 2.4,
+                          color: widget.selected
+                              ? Theme.of(context).colorScheme.onPrimary
+                              : null,
+                        ),
+                      ),
+                    ),
+                  Text(
+                    widget.title,
+                    style: TextStyle(
+                      color: widget.selected
+                          ? Theme.of(context).colorScheme.onPrimary
                           : null,
                     ),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                softWrap: true,
-                textAlign: TextAlign.center,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    softWrap: true,
+                    textAlign: TextAlign.center,
+                  ),
+                  if (widget.description?.isNotEmpty ?? false)
+                    Text(
+                      widget.description!,
+                      style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                            color: widget.selected
+                                ? Theme.of(context)
+                                    .colorScheme
+                                    .onPrimary
+                                    .withOpacity(.7)
+                                : null,
+                          ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      softWrap: true,
+                      textAlign: TextAlign.center,
+                    ),
+                ],
               ),
-          ],
+            ],
+          ),
         ),
       ),
     );

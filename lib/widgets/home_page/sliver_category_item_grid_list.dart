@@ -18,7 +18,6 @@ class SliverCategoryItemGridList<T extends Item> extends StatefulWidget {
   final List<T> items;
   final List<Category>? categories; // forwarded to item page on long press
   final ShoppingList? shoppingList; // forwarded to item page on long press
-  final bool isList;
   final bool Function(T)? selected;
   final bool isLoading;
   final bool isDescriptionEditable;
@@ -33,7 +32,6 @@ class SliverCategoryItemGridList<T extends Item> extends StatefulWidget {
     this.items = const [],
     this.categories,
     this.shoppingList,
-    this.isList = false,
     this.selected,
     this.isLoading = false,
     this.isDescriptionEditable = true,
@@ -97,7 +95,6 @@ class _SliverCategoryItemGridListState<T extends Item>
                   household:
                       BlocProvider.of<HouseholdCubit>(context).state.household,
                   shoppingList: widget.shoppingList,
-                  isList: widget.isList,
                   selected: widget.selected,
                   isLoading: widget.isLoading,
                   isDescriptionEditable: widget.isDescriptionEditable,

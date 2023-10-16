@@ -53,10 +53,10 @@ dependencies:
   markdown: ^7.1.1
   tuple: ^2.0.1
   community_charts_flutter: ^1.0.1
-  fl_chart: ^0.63.0
+  fl_chart: ^0.64.0
   cached_network_image: ^3.2.3
   image_picker: ^1.0.0
-  file_picker: ^5.2.11
+  file_picker: ^6.0.0
   photo_view: ^0.14.0
   share_handler: ^0.0.16
   share_plus: ^7.1.0

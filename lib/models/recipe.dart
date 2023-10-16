@@ -1,4 +1,5 @@
 import 'package:azlistview/azlistview.dart';
+import 'package:fraction/fraction.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/models/model.dart';
 import 'package:kitchenowl/models/tag.dart';
@@ -101,10 +102,11 @@ class Recipe extends Model implements ISuspensionBean {
 
   Recipe withYields(int yields) {
     if (yields == this.yields) return this;
-    double factor = yields / this.yields;
 
     return copyWith(
-      items: items.map((item) => item.withFactor(factor)).toList(),
+      items: items
+          .map((item) => item.withFactor(Fraction(yields, this.yields)))
+          .toList(),
     );
   }
 

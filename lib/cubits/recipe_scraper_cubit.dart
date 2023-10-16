@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fraction/fraction.dart';
 import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/models/recipe.dart';
@@ -79,7 +80,15 @@ class RecipeScraperLoadedState extends RecipeScraperState {
 
   RecipeScraperLoadedState.fromScrape(RecipeScrape scrape)
       : recipe = scrape.recipe,
-        items = scrape.items;
+        items = scrape.items.map(
+          (key, value) => MapEntry(
+            key,
+            value?.withFactor(
+              1.toFraction(),
+              addDescriptionWhenEmpty: false,
+            ),
+          ),
+        );
 
   RecipeScraperLoadedState copyWith({
     Recipe? recipe,

@@ -509,6 +509,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  fraction:
+    dependency: "direct main"
+    description:
+      name: fraction
+      sha256: "09e9504c9177bbd77df56e5d147abfbb3b43360e64bf61510059c14d6a82d524"
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.0.2"
   glob:
     dependency: transitive
     description:

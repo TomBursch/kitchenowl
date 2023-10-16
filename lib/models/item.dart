@@ -1,3 +1,4 @@
+import 'package:fraction/fraction.dart';
 import 'package:kitchenowl/helpers/string_scaler.dart';
 import 'package:kitchenowl/models/category.dart';
 import 'package:kitchenowl/models/model.dart';
@@ -263,8 +264,11 @@ class RecipeItem extends ItemWithDescription {
         optional: optional ?? this.optional,
       );
 
-  RecipeItem withFactor(double factor) {
-    if (factor == 1) return this;
+  RecipeItem withFactor(
+    Fraction factor, {
+    bool addDescriptionWhenEmpty = true,
+  }) {
+    if (!addDescriptionWhenEmpty) return this;
 
     return copyWith(description: StringScaler.scale(description, factor));
   }

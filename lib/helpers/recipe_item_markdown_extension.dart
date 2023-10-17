@@ -67,7 +67,7 @@ class RecipeItemMarkdownSyntax extends md.InlineSyntax {
           caseSensitive: false,
         );
 
-  static const String _pattern = r'@([^ \n,-\.\(\)]+)';
+  static const String _pattern = r'@([^ \n,\.\(\)]+)';
 
   @override
   bool onMatch(md.InlineParser parser, Match match) {

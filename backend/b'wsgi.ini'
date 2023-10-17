@@ -12,5 +12,5 @@ chmod-socket = 664
 
 wsgi-file = wsgi.py
 callable = app
-socket = 0.0.0.0:5000
+socket = [::]:5000
 procname-prefix-spaced = kitchenowl

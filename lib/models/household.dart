@@ -93,11 +93,6 @@ class Household extends Model {
       ];
 
   @override
-  String toString() {
-    return name;
-  }
-
-  @override
   Map<String, dynamic> toJson() {
     Map<String, dynamic> data = {
       "name": name,

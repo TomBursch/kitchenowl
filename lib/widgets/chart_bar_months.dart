@@ -8,6 +8,8 @@ class ChartBarMonths extends StatefulWidget {
   final Map<int, ExpenseCategory> categoriesById;
   final void Function(int) onMonthSelect;
   final int selectedMonth;
+  final int numberOfMonthsToShow;
+  final int monthOffset;
 
   ChartBarMonths({
     super.key,
@@ -15,6 +17,8 @@ class ChartBarMonths extends StatefulWidget {
     required List<ExpenseCategory> categories,
     required this.onMonthSelect,
     required this.selectedMonth,
+    this.numberOfMonthsToShow = 5,
+    this.monthOffset = 0,
   }) : categoriesById =
             Map.fromEntries(categories.map((e) => MapEntry(e.id!, e)));
 
@@ -31,6 +35,8 @@ class _ChartBarMonthsState extends State<ChartBarMonths> {
               value.values.fold<double>(0, (p, e) => e < 0 ? p + e : p),
             ))
         .values
+        .skip(widget.monthOffset)
+        .take(widget.numberOfMonthsToShow)
         .fold<double>(0, (p, e) => p < e ? p : e);
     final maxY = widget.data
         .map((key, value) => MapEntry(
@@ -38,12 +44,15 @@ class _ChartBarMonthsState extends State<ChartBarMonths> {
               value.values.fold<double>(0, (p, e) => e > 0 ? p + e : p),
             ))
         .values
+        .skip(widget.monthOffset)
+        .take(widget.numberOfMonthsToShow)
         .fold<double>(0, (p, e) => p > e ? p : e);
 
     return LayoutBuilder(
       builder: (context, constraints) {
         double barWidth = constraints.maxWidth > 600 ? 50 : 35;
-        double barSpacing = constraints.maxWidth / 5 - barWidth - 10;
+        double barSpacing =
+            constraints.maxWidth / widget.numberOfMonthsToShow - barWidth - 10;
 
         return BarChart(
           swapAnimationDuration: const Duration(milliseconds: 150),
@@ -111,6 +120,8 @@ class _ChartBarMonthsState extends State<ChartBarMonths> {
               show: false,
             ),
             barGroups: widget.data.entries
+                .skip(widget.monthOffset)
+                .take(widget.numberOfMonthsToShow)
                 .toList()
                 .reversed
                 .map(
@@ -155,7 +166,6 @@ class _ChartBarMonthsState extends State<ChartBarMonths> {
         .STANDALONEMONTHS[(DateTime.now().month - 1 - offset) % 12];
   }
 
-  // ignore: long-method, long-parameter-list
   BarChartGroupData generateGroup(
     int month,
     Map<int, double> values,

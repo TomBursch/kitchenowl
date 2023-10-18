@@ -121,12 +121,16 @@ extension ExpenseApi on ApiService {
     ExpenselistSorting sorting = ExpenselistSorting.all,
     Timeframe timeframe = Timeframe.monthly,
     int? steps,
+    int? page,
   ]) async {
     String url =
         '${householdPath(household)}$baseRoute/overview?view=${sorting.index}&frame=${timeframe.index}';
 
     if (steps != null) {
       url += '&steps=$steps';
+    }
+    if (page != null) {
+      url += '&page=$page';
     }
 
     final res = await get(url);

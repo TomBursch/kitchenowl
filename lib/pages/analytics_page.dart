@@ -63,7 +63,7 @@ class AnalyticsPage extends StatelessWidget {
     final base = base1024 ? 1024 : 1000;
     if (value <= 0) return "0";
     final units = ["B", "kB", "MB", "GB", "TB"];
-    int digitGroups = (log(value) / log(base)).round();
+    int digitGroups = (log(value) / log(base)).floor();
 
     return "${NumberFormat("#,##0.#").format(value / pow(base, digitGroups))} ${units[digitGroups]}";
   }

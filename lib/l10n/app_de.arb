@@ -536,5 +536,7 @@
   "recipesOverwriteDescription": "Wenn aktiviert, werden bestehende Rezepte mit dem gleichen Namen überschrieben",
   "@recipesOverwriteDescription": {},
   "importStartedHint": "Importierung gestartet, dies kann ein paar Minuten dauern.",
-  "@importStartedHint": {}
+  "@importStartedHint": {},
+  "now": "Jetzt",
+  "@now": {}
 }

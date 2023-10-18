@@ -530,5 +530,15 @@
   "itemsMerge": "Συγχώνευση ειδών",
   "@itemsMerge": {},
   "merge": "Συγχώνευση",
-  "@merge": {}
+  "@merge": {},
+  "recipesOverwrite": "Αντικατάσταση συνταγών",
+  "@recipesOverwrite": {},
+  "import": "Εισαγωγή",
+  "@import": {},
+  "export": "Εξαγωγή",
+  "@export": {},
+  "recipesOverwriteDescription": "Αν ενεργοποιηθεί, οι υπάρχουσες συνταγές με το ίδιο όνομα θα αντικατασταθούν",
+  "@recipesOverwriteDescription": {},
+  "importStartedHint": "Η εισαγωγή ξεκίνησε, μπορεί να διαρκέσει μερικά λεπτά.",
+  "@importStartedHint": {}
 }

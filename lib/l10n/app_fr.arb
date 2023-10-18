@@ -530,5 +530,7 @@
   "shoppingListStyle": "Style de liste de courses",
   "@shoppingListStyle": {},
   "smaller": "Plus petite",
-  "@smaller": {}
+  "@smaller": {},
+  "importStartedHint": "Importation débutée, ceci peut prendre quelques minutes.",
+  "@importStartedHint": {}
 }

@@ -27,6 +27,23 @@ class ExpenseCategory(db.Model, DbModelMixin, TimestampMixin, DbModelAuthorizeMi
             'color': self.color,
         }
 
+    def merge(self, other: Self) -> None:
+        if self.household_id != other.household_id:
+            return
+
+        from app.models import Expense
+
+        for expense in Expense.query.filter(Expense.category_id == other.id).all():
+            expense.category_id = self.id
+            db.session.add(expense)
+
+        try:
+            db.session.commit()
+            other.delete()
+        except Exception as e:
+            db.session.rollback()
+            raise e
+
     @classmethod
     def find_by_name(cls, houshold_id: int, name: str) -> Self:
         return cls.query.filter(cls.name == name, cls.household_id == houshold_id).first()

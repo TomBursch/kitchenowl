@@ -93,12 +93,26 @@ class UpdateExpenseCategory(Schema):
         allow_none=True
     )
 
+    # if set this merges the specified category into this category thus combining them to one
+    merge_category_id = fields.Integer(
+        validate=lambda a: a > 0,
+        allow_none=True,
+    )
+
 
 class GetExpenseOverview(Schema):
+    # household = 0, personal = 1
     view = fields.Integer()
+    # daily = 0, weekly = 1, montly = 2, yearly = 3
     frame = fields.Integer(
         validate=lambda a: a >= 0 and a <= 3
     )
+    # how many frames are looked at
     steps = fields.Integer(
         validate=lambda a: a > 0
+    )
+    # used for pagination (i.e. start of steps, now=0)
+    page = fields.Integer(
+        validate=lambda a: a >= 0,
+        allow_none=True,
     )

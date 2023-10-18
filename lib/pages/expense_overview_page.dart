@@ -9,6 +9,8 @@ import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/widgets/chart_bar_member_distribution.dart';
 import 'package:kitchenowl/widgets/chart_bar_months.dart';
 import 'package:kitchenowl/widgets/expense_category_icon.dart';
+import 'package:responsive_builder/responsive_builder.dart';
+import 'package:sliver_tools/sliver_tools.dart';
 
 class ExpenseOverviewPage extends StatefulWidget {
   final Household household;
@@ -75,27 +77,56 @@ class _ExpenseOverviewPageState extends State<ExpenseOverviewPage> {
           const SizedBox(width: 8),
         ],
       ),
-      body: ConstrainedBox(
-        constraints: const BoxConstraints.expand(width: 1600),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: BlocBuilder<ExpenseOverviewCubit, ExpenseOverviewState>(
-            bloc: cubit,
-            buildWhen: (previous, current) =>
-                previous != current && previous.sorting == current.sorting,
-            builder: (context, state) {
-              if (state is! ExpenseOverviewLoaded) {
-                return const Center(child: CircularProgressIndicator());
-              }
+      body: BlocBuilder<ExpenseOverviewCubit, ExpenseOverviewState>(
+        bloc: cubit,
+        buildWhen: (previous, current) =>
+            previous != current && previous.sorting == current.sorting,
+        builder: (context, state) {
+          if (state is! ExpenseOverviewLoaded) {
+            return const Center(child: CircularProgressIndicator());
+          }
 
-              final totalForSelectedMonth =
-                  state.getTotalForMonth(state.selectedMonthIndex);
+          final totalForSelectedMonth =
+              state.getTotalForMonth(state.selectedMonthIndex);
 
-              return CustomScrollView(
-                slivers: [
-                  SliverList(
+          return CustomScrollView(
+            slivers: [
+              SliverCrossAxisPadded.symmetric(
+                padding: 16,
+                child: SliverCrossAxisConstrained(
+                  maxCrossAxisExtent: 1600,
+                  alignment: 0.5,
+                  child: SliverList(
                     delegate: SliverChildListDelegate([
-                      const SizedBox(height: 32),
+                      const SizedBox(height: 16),
+                      Row(
+                        children: [
+                          IconButton(
+                            onPressed: () =>
+                                cubit.pagePrev(getValueForScreenType<int>(
+                              context: context,
+                              mobile: 5,
+                              tablet: 7,
+                              desktop: 10,
+                            )),
+                            icon: const Icon(Icons.keyboard_arrow_left_rounded),
+                          ),
+                          Expanded(
+                            child: Text(
+                              "${_monthOffsetToString(state.currentMonthOffset + 4)} - ${state.currentMonthOffset == 0 ? AppLocalizations.of(context)!.now : _monthOffsetToString(state.currentMonthOffset)}",
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                          IconButton(
+                            onPressed: state.currentMonthOffset > 0
+                                ? cubit.pageNext
+                                : null,
+                            icon:
+                                const Icon(Icons.keyboard_arrow_right_rounded),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 16),
                       SizedBox(
                         height: 300,
                         child: ChartBarMonths(
@@ -103,6 +134,13 @@ class _ExpenseOverviewPageState extends State<ExpenseOverviewPage> {
                           categories: state.categories,
                           onMonthSelect: cubit.setSelectedMonth,
                           selectedMonth: state.selectedMonthIndex,
+                          monthOffset: state.currentMonthOffset,
+                          numberOfMonthsToShow: getValueForScreenType<int>(
+                            context: context,
+                            mobile: 5,
+                            tablet: 7,
+                            desktop: 10,
+                          ),
                         ),
                       ),
                       const SizedBox(height: 32),
@@ -128,7 +166,14 @@ class _ExpenseOverviewPageState extends State<ExpenseOverviewPage> {
                       const Divider(),
                     ]),
                   ),
-                  SliverList(
+                ),
+              ),
+              SliverCrossAxisPadded.symmetric(
+                padding: 16,
+                child: SliverCrossAxisConstrained(
+                  maxCrossAxisExtent: 1600,
+                  alignment: 0.5,
+                  child: SliverList(
                     delegate: SliverChildBuilderDelegate(
                       (context, i) {
                         final entry = state
@@ -145,17 +190,24 @@ class _ExpenseOverviewPageState extends State<ExpenseOverviewPage> {
 
                         return Card(
                           child: ListTile(
-                            leading: ExpenseCategoryIcon(
-                              name: category?.name ?? '🪙',
-                              color: category?.color,
+                            leading: Padding(
+                              padding: (amount / totalForSelectedMonth >= 0)
+                                  ? EdgeInsets.zero
+                                  : const EdgeInsets.all(4.0),
+                              child: ExpenseCategoryIcon(
+                                name: category?.name ?? '🪙',
+                                color: category?.color,
+                              ),
                             ),
                             title: Text(category?.name ??
                                 AppLocalizations.of(context)!.other),
                             trailing: Text(
                               NumberFormat.simpleCurrency().format(amount),
                             ),
-                            subtitle: Text(NumberFormat.percentPattern()
-                                .format(amount / totalForSelectedMonth)),
+                            subtitle: (amount / totalForSelectedMonth >= 0)
+                                ? Text(NumberFormat.percentPattern()
+                                    .format(amount / totalForSelectedMonth))
+                                : null,
                           ),
                         );
                       },
@@ -166,15 +218,27 @@ class _ExpenseOverviewPageState extends State<ExpenseOverviewPage> {
                           0,
                     ),
                   ),
-                  const SliverToBoxAdapter(
-                    child: Divider(),
-                  ),
-                  SliverToBoxAdapter(
-                    child: ChartBarMemberDistribution(
+                ),
+              ),
+              SliverCrossAxisPadded.symmetric(
+                padding: 16,
+                child: SliverCrossAxisConstrained(
+                  maxCrossAxisExtent: 1600,
+                  alignment: 0.5,
+                  child: SliverList.list(children: [
+                    const Divider(),
+                    ChartBarMemberDistribution(
                       household: state.household,
                     ),
-                  ),
-                  SliverList(
+                  ]),
+                ),
+              ),
+              SliverCrossAxisPadded.symmetric(
+                padding: 16,
+                child: SliverCrossAxisConstrained(
+                  maxCrossAxisExtent: 1600,
+                  alignment: 0.5,
+                  child: SliverList(
                     delegate: SliverChildBuilderDelegate(
                       (context, i) => Card(
                         child: ListTile(
@@ -189,16 +253,16 @@ class _ExpenseOverviewPageState extends State<ExpenseOverviewPage> {
                       childCount: state.owes.length,
                     ),
                   ),
-                  SliverToBoxAdapter(
-                    child: SizedBox(
-                      height: MediaQuery.of(context).padding.bottom + 16,
-                    ),
-                  ),
-                ],
-              );
-            },
-          ),
-        ),
+                ),
+              ),
+              SliverToBoxAdapter(
+                child: SizedBox(
+                  height: MediaQuery.of(context).padding.bottom + 16,
+                ),
+              ),
+            ],
+          );
+        },
       ),
     );
   }

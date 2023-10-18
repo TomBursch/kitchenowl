@@ -174,6 +174,7 @@ class TransactionExpenseGetOverview
   final ExpenselistSorting sorting;
   final Timeframe timeframe;
   final int steps;
+  final int page;
 
   TransactionExpenseGetOverview({
     DateTime? timestamp,
@@ -181,6 +182,7 @@ class TransactionExpenseGetOverview
     this.sorting = ExpenselistSorting.all,
     this.timeframe = Timeframe.monthly,
     this.steps = 1,
+    this.page = 0,
   }) : super.internal(
           timestamp ?? DateTime.now(),
           "TransactionExpenseGetOverview",
@@ -194,7 +196,7 @@ class TransactionExpenseGetOverview
   @override
   Future<Map<int, Map<int, double>>?> runOnline() async {
     return await ApiService.getInstance()
-        .getExpenseOverview(household, sorting, timeframe, steps);
+        .getExpenseOverview(household, sorting, timeframe, steps, page);
   }
 }
 

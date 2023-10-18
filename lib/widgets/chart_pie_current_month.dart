@@ -62,8 +62,10 @@ class _ChartPieCurrentMonthState extends State<ChartPieCurrentMonth> {
     );
   }
 
-  // ignore: long-method
   List<PieChartSectionData> _getData() {
+    final sum =
+        widget.data.values.where((e) => e > 0).fold(0.0, (p, e) => p + e);
+
     return widget.data.entries.map((e) {
       final isTouched = touchedIndex >= 0 &&
           e.key ==
@@ -77,31 +79,34 @@ class _ChartPieCurrentMonthState extends State<ChartPieCurrentMonth> {
         color: _colorFn(e.key),
         value: e.value < 0 ? 0 : e.value,
         radius: radius,
-        badgeWidget: Card(
-          child: AnimatedSize(
-            duration: const Duration(milliseconds: 200),
-            alignment: Alignment.centerRight,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 6),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  if (isTouched)
-                    Text(
-                      '${widget.categoriesById[e.key]?.name ?? AppLocalizations.of(context)!.other}: ',
+        badgeWidget: (isTouched || e.value / sum > .15)
+            ? Card(
+                child: AnimatedSize(
+                  duration: const Duration(milliseconds: 200),
+                  alignment: Alignment.centerRight,
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 4, horizontal: 6),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        if (isTouched)
+                          Text(
+                            '${widget.categoriesById[e.key]?.name ?? AppLocalizations.of(context)!.other}: ',
+                          ),
+                        if (!isTouched)
+                          Text(
+                            '${widget.categoriesById[e.key]?.name.characters.first ?? '🪙'}: ',
+                          ),
+                        Text(NumberFormat.simpleCurrency().format(e.value)),
+                      ],
                     ),
-                  if (!isTouched)
-                    Text(
-                      '${widget.categoriesById[e.key]?.name.characters.first ?? '🪙'}: ',
-                    ),
-                  Text(NumberFormat.simpleCurrency().format(e.value)),
-                ],
-              ),
-            ),
-          ),
-        ),
+                  ),
+                ),
+              )
+            : null,
         showTitle: false,
-        badgePositionPercentageOffset: isTouched ? 0 : 1,
+        badgePositionPercentageOffset: isTouched ? .85 : 1,
       );
     }).toList();
   }

@@ -14,11 +14,10 @@ import 'package:kitchenowl/services/transactions/household.dart';
 
 class ExpenseOverviewCubit extends Cubit<ExpenseOverviewState> {
   final Household household;
-  Future<void>? _refreshThread;
 
   ExpenseOverviewCubit(this.household, ExpenselistSorting initialSorting)
       : super(ExpenseOverviewLoading(sorting: initialSorting)) {
-    refresh();
+    _load();
   }
 
   void incrementSorting() {
@@ -28,20 +27,54 @@ class ExpenseOverviewCubit extends Cubit<ExpenseOverviewState> {
 
   void setSorting(ExpenselistSorting sorting) {
     emit(state.copyWith(sorting: sorting));
-    refresh();
+    _load();
   }
 
   void setSelectedMonth(int month) {
     emit(state.copyWith(selectedMonthIndex: month));
   }
 
-  Future<void> refresh() {
-    _refreshThread ??= _refresh();
-
-    return _refreshThread!;
+  void pagePrev([int viewSize = 5]) {
+    emit(state.copyWith(
+      currentMonthOffset: state.currentMonthOffset + 1,
+    ));
+    _loadMore(viewSize);
   }
 
-  Future<void> _refresh() async {
+  void pageNext() {
+    if (state.currentMonthOffset > 0) {
+      emit(state.copyWith(
+        currentMonthOffset: state.currentMonthOffset - 1,
+      ));
+    }
+  }
+
+  Future<void> _loadMore(int viewSize) async {
+    if (state is! ExpenseOverviewLoaded ||
+        state.currentMonthOffset <
+            (state as ExpenseOverviewLoaded)
+                    .categoryOverviewsByCategory
+                    .length -
+                viewSize) {
+      return;
+    }
+
+    final overview = await TransactionHandler.getInstance()
+        .runTransaction(TransactionExpenseGetOverview(
+      household: household,
+      sorting: state.sorting,
+      timeframe: Timeframe.monthly,
+      steps: viewSize,
+      page: (state.currentMonthOffset / viewSize).floor() + 1,
+    ));
+    emit((state as ExpenseOverviewLoaded).copyWith(
+      categoryOverviewsByCategory:
+          Map.from((state as ExpenseOverviewLoaded).categoryOverviewsByCategory)
+            ..addAll(overview),
+    ));
+  }
+
+  Future<void> _load() async {
     final sorting = state.sorting;
     final fHousehold = TransactionHandler.getInstance()
         .runTransaction(TransactionHouseholdGet(household: household));
@@ -52,13 +85,9 @@ class ExpenseOverviewCubit extends Cubit<ExpenseOverviewState> {
       household: household,
       sorting: sorting,
       timeframe: Timeframe.monthly,
-      steps: 5,
+      steps: 11,
+      page: 0,
     ));
-    if (overview.isEmpty) {
-      _refreshThread = null;
-
-      return;
-    }
 
     emit(ExpenseOverviewLoaded(
       sorting: sorting,
@@ -67,8 +96,6 @@ class ExpenseOverviewCubit extends Cubit<ExpenseOverviewState> {
       household: (await fHousehold) ?? household,
       owes: _calculateOwes((await fHousehold) ?? household),
     ));
-
-    _refreshThread = null;
   }
 
   List<(Member, Member, double)> _calculateOwes(Household household) {
@@ -95,15 +122,18 @@ class ExpenseOverviewCubit extends Cubit<ExpenseOverviewState> {
 abstract class ExpenseOverviewState extends Equatable {
   final ExpenselistSorting sorting;
   final int selectedMonthIndex;
+  final int currentMonthOffset;
 
   const ExpenseOverviewState({
     required this.sorting,
     this.selectedMonthIndex = 0,
+    this.currentMonthOffset = 0,
   });
 
   ExpenseOverviewState copyWith({
     ExpenselistSorting? sorting,
     int? selectedMonthIndex,
+    int? currentMonthOffset,
   });
 }
 
@@ -111,20 +141,23 @@ class ExpenseOverviewLoading extends ExpenseOverviewState {
   const ExpenseOverviewLoading({
     required super.sorting,
     super.selectedMonthIndex,
+    super.currentMonthOffset,
   });
 
   @override
   ExpenseOverviewState copyWith({
     ExpenselistSorting? sorting,
     int? selectedMonthIndex,
+    int? currentMonthOffset,
   }) =>
       ExpenseOverviewLoading(
         sorting: sorting ?? this.sorting,
         selectedMonthIndex: selectedMonthIndex ?? this.selectedMonthIndex,
+        currentMonthOffset: currentMonthOffset ?? this.currentMonthOffset,
       );
 
   @override
-  List<Object?> get props => [sorting, selectedMonthIndex];
+  List<Object?> get props => [sorting, selectedMonthIndex, currentMonthOffset];
 }
 
 class ExpenseOverviewLoaded extends ExpenseOverviewState {
@@ -140,6 +173,7 @@ class ExpenseOverviewLoaded extends ExpenseOverviewState {
     required this.household,
     required this.owes,
     super.selectedMonthIndex = 0,
+    super.currentMonthOffset,
   });
 
   double getTotalForMonth(int i) {
@@ -152,14 +186,18 @@ class ExpenseOverviewLoaded extends ExpenseOverviewState {
     int? selectedMonthIndex,
     Household? household,
     List<(Member, Member, double)>? owes,
+    Map<int, Map<int, double>>? categoryOverviewsByCategory,
+    int? currentMonthOffset,
   }) =>
       ExpenseOverviewLoaded(
         sorting: sorting ?? this.sorting,
-        categoryOverviewsByCategory: categoryOverviewsByCategory,
+        categoryOverviewsByCategory:
+            categoryOverviewsByCategory ?? this.categoryOverviewsByCategory,
         categories: categories,
         selectedMonthIndex: selectedMonthIndex ?? this.selectedMonthIndex,
         household: household ?? this.household,
         owes: owes ?? this.owes,
+        currentMonthOffset: currentMonthOffset ?? this.currentMonthOffset,
       );
 
   @override
@@ -170,5 +208,6 @@ class ExpenseOverviewLoaded extends ExpenseOverviewState {
         categoryOverviewsByCategory,
         household,
         owes,
+        currentMonthOffset,
       ];
 }

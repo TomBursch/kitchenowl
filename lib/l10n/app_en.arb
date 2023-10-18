@@ -314,6 +314,8 @@
   "@none": {},
   "noTags": "No Tags",
   "@noTags": {},
+  "now": "Now",
+  "@now": {},
   "offlineMessage": "You're offline",
   "@offlineMessage": {},
   "okay": "Okay",

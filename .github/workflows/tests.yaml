@@ -19,11 +19,15 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-
-      - name: Run Public Flutter Analyze Action
-        uses: NIOMIND-srl-sb/flutter-analyze-action@v1.0.20
+      - name: Clone Flutter repository with stable channel
+        uses: subosito/flutter-action@v2
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          channel: stable
+      - run: flutter packages get
+
+      # Run analyze
+      - run: flutter analyze
+      - uses: leancodepl/dart-problem-matcher@main
   test:
     name: Tests
     runs-on: ubuntu-latest
@@ -37,11 +41,11 @@ jobs:
       - run: flutter packages get
 
       # Run tests
-      - run: flutter test --machine > reports/test-results.json
+      - run: flutter test --machine > test-results.json
 
       # upload test results
       - uses: actions/upload-artifact@v3
         if: success() || failure() # run this step even if previous step failed
         with:
           name: test-results
-          path: reports/test-results.json
+          path: test-results.json

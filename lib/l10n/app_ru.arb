@@ -25,7 +25,7 @@
   "@addShoppingList": {},
   "cancel": "Отмена",
   "@cancel": {},
-  "addTag": "Добавить тэг",
+  "addTag": "Добавить метку",
   "@addTag": {},
   "admin": "Админ",
   "@admin": {},
@@ -147,7 +147,7 @@
   "@reportIssue": {},
   "general": "Основные",
   "@general": {},
-  "householdEmpty": "Кухня пуста, начните что нибудь сотворять на ней!",
+  "householdEmpty": "Кухня пуста, начните что нибудь готовить!",
   "@householdEmpty": {},
   "householdLeave": "Покинуть кухню",
   "@householdLeave": {},
@@ -155,7 +155,7 @@
   "@languageSelect": {},
   "you": "Вы",
   "@you": {},
-  "name": "Имя",
+  "name": "Метка",
   "@name": {},
   "logout": "Выйти",
   "@logout": {},
@@ -208,5 +208,33 @@
     }
   },
   "addItemTitle": "Добавить элементы",
-  "@addItemTitle": {}
+  "@addItemTitle": {},
+  "householdDeleteConfirmation": "Вы уверены, что хотите удалить {household}? Это приведет к удалению всех продуктов, рецептов и расходов.",
+  "@householdDeleteConfirmation": {
+    "placeholders": {
+      "household": {}
+    }
+  },
+  "tags": "Метки",
+  "@tags": {},
+  "searchHint": "Поиск",
+  "@searchHint": {},
+  "householdNew": "Новая Кухня",
+  "@householdNew": {},
+  "swipeToDelete": "Смахните что бы удалить",
+  "@swipeToDelete": {},
+  "swipeToDeleteAndLongPressToReorder": "Смахните строку в сторону, чтобы удалить, нажмите и удерживайте чтобы изменить порядок",
+  "@swipeToDeleteAndLongPressToReorder": {},
+  "minutesAbbrev": "мин",
+  "@minutesAbbrev": {},
+  "sortingAlphabetical": "По алфавиту",
+  "@sortingAlphabetical": {},
+  "household": "Кухня",
+  "@household": {},
+  "noTags": "Без меток",
+  "@noTags": {},
+  "householdDelete": "Удалить кухню",
+  "@householdDelete": {},
+  "recipeNew": "Новый рецепт",
+  "@recipeNew": {}
 }

@@ -189,7 +189,7 @@
       "lang": {}
     }
   },
-  "addRecipeToPlanner": "Dodaj do planu posiłków ({number})",
+  "addRecipeToPlanner": "Dodaj do planu posiłków ({number} porcji)",
   "@addRecipeToPlanner": {},
   "admin": "Administrator",
   "@admin": {},
@@ -523,5 +523,15 @@
   "emailUsed": "Ten adres e-mail jest powiązany z innym kontem",
   "@emailUsed": {},
   "itemSize": "Wielkość pozycji",
-  "@itemSize": {}
+  "@itemSize": {},
+  "recipesOverwrite": "Nadpisz przepisy",
+  "@recipesOverwrite": {},
+  "import": "Importuj",
+  "@import": {},
+  "export": "Eksportuj",
+  "@export": {},
+  "recipesOverwriteDescription": "Jeżeli zaznaczone, istniejące przepisy z tymi samymi nazwami zostaną nadpisane",
+  "@recipesOverwriteDescription": {},
+  "importStartedHint": "Rozpoczęto importowanie, może to potrwać kilka minut.",
+  "@importStartedHint": {}
 }

@@ -530,5 +530,15 @@
   "usedIn": "Används i",
   "@usedIn": {},
   "profile": "Profil",
-  "@profile": {}
+  "@profile": {},
+  "recipesOverwrite": "Skriv över Recept",
+  "@recipesOverwrite": {},
+  "import": "Importera",
+  "@import": {},
+  "export": "Exportera",
+  "@export": {},
+  "recipesOverwriteDescription": "Om aktiverad, skapade recept med samma namn kommer att skrivas över",
+  "@recipesOverwriteDescription": {},
+  "importStartedHint": "Importering påbörjad, detta kan ta någon minut.",
+  "@importStartedHint": {}
 }

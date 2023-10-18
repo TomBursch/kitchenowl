@@ -16,6 +16,7 @@ import 'package:kitchenowl/widgets/recipe_source_chip.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:markdown/markdown.dart' as md;
 import 'package:responsive_builder/responsive_builder.dart';
+import 'package:sliver_tools/sliver_tools.dart';
 
 class RecipePage extends StatefulWidget {
   final Household? household;
@@ -326,52 +327,53 @@ class _RecipePageState extends State<RecipePage> {
           return Scaffold(
             body: Align(
               alignment: Alignment.topCenter,
-              child: ConstrainedBox(
-                constraints: const BoxConstraints.expand(width: 1600),
-                child: CustomScrollView(
-                  primary: true,
-                  slivers: [
-                    SliverAppBar(
-                      flexibleSpace: FlexibleImageSpaceBar(
-                        title: state.recipe.name,
-                        imageUrl: state.recipe.image,
-                        imageHash: state.recipe.imageHash,
-                      ),
-                      leading: BackButton(
-                        onPressed: () =>
-                            Navigator.of(context).pop(cubit.state.updateState),
-                      ),
-                      expandedHeight: state.recipe.image?.isNotEmpty ?? false
-                          ? (MediaQuery.of(context).size.height / 3.3)
-                              .clamp(160, 350)
-                          : null,
-                      pinned: true,
-                      actions: [
-                        if (!App.isOffline && widget.household != null)
-                          LoadingIconButton(
-                            tooltip: AppLocalizations.of(context)!.recipeEdit,
-                            onPressed: () async {
-                              final res = await Navigator.of(context)
-                                  .push<UpdateEnum>(MaterialPageRoute(
-                                builder: (context) => AddUpdateRecipePage(
-                                  household: widget.household!,
-                                  recipe: state.recipe,
-                                ),
-                              ));
-                              if (res == UpdateEnum.updated) {
-                                cubit.setUpdateState(UpdateEnum.updated);
-                                await cubit.refresh();
-                              }
-                              if (res == UpdateEnum.deleted) {
-                                if (!mounted) return;
-                                Navigator.of(context).pop(UpdateEnum.deleted);
-                              }
-                            },
-                            icon: const Icon(Icons.edit),
-                          ),
-                      ],
+              child: CustomScrollView(
+                primary: true,
+                slivers: [
+                  SliverAppBar(
+                    flexibleSpace: FlexibleImageSpaceBar(
+                      title: state.recipe.name,
+                      imageUrl: state.recipe.image,
+                      imageHash: state.recipe.imageHash,
                     ),
-                    getValueForScreenType<Widget>(
+                    leading: BackButton(
+                      onPressed: () =>
+                          Navigator.of(context).pop(cubit.state.updateState),
+                    ),
+                    expandedHeight: state.recipe.image?.isNotEmpty ?? false
+                        ? (MediaQuery.of(context).size.height / 3.3)
+                            .clamp(160, 350)
+                        : null,
+                    pinned: true,
+                    actions: [
+                      if (!App.isOffline && widget.household != null)
+                        LoadingIconButton(
+                          tooltip: AppLocalizations.of(context)!.recipeEdit,
+                          onPressed: () async {
+                            final res = await Navigator.of(context)
+                                .push<UpdateEnum>(MaterialPageRoute(
+                              builder: (context) => AddUpdateRecipePage(
+                                household: widget.household!,
+                                recipe: state.recipe,
+                              ),
+                            ));
+                            if (res == UpdateEnum.updated) {
+                              cubit.setUpdateState(UpdateEnum.updated);
+                              await cubit.refresh();
+                            }
+                            if (res == UpdateEnum.deleted) {
+                              if (!mounted) return;
+                              Navigator.of(context).pop(UpdateEnum.deleted);
+                            }
+                          },
+                          icon: const Icon(Icons.edit),
+                        ),
+                    ],
+                  ),
+                  SliverCrossAxisConstrained(
+                    maxCrossAxisExtent: 1600,
+                    alignment: 0.5,
+                    child: getValueForScreenType<Widget>(
                       context: context,
                       mobile: SliverMainAxisGroup(
                         slivers: left + right,
@@ -383,13 +385,13 @@ class _RecipePageState extends State<RecipePage> {
                         ],
                       ),
                     ),
-                    SliverToBoxAdapter(
-                      child: SizedBox(
-                        height: MediaQuery.of(context).padding.bottom,
-                      ),
+                  ),
+                  SliverToBoxAdapter(
+                    child: SizedBox(
+                      height: MediaQuery.of(context).padding.bottom,
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           );

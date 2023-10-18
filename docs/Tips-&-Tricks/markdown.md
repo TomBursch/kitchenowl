@@ -1,8 +1,9 @@
 # Markdown
 
 #### Ingredient pill
+Ingredient pills allow you to reference ingredients from inside your recipes' description and automatically add amounts to it. It's case-insensitive and uses underscores for spaces.
 ```
-@Ingredient
+@ingredient_name
 ```
 
 #### Text formatting

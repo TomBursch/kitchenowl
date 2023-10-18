@@ -1,0 +1,3 @@
+- Improved balance overview
+- Export and import your household
+- Bug-fixes and improvements

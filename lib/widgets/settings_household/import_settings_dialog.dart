@@ -13,7 +13,7 @@ Future<ImportSettings?> askForImportSettings({
     );
 
 class _ImportSettingsDialog extends StatefulWidget {
-  const _ImportSettingsDialog({super.key});
+  const _ImportSettingsDialog();
 
   @override
   State<_ImportSettingsDialog> createState() => _ImportSettingsDialogState();

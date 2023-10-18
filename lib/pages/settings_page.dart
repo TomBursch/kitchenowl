@@ -61,7 +61,6 @@ class _SettingsPageState extends State<SettingsPage> {
         ),
         SliverCrossAxisConstrained(
           maxCrossAxisExtent: 1600,
-          alignment: 0.5,
           child: SliverList(
             delegate: SliverChildListDelegate([
               Theme(
@@ -93,7 +92,6 @@ class _SettingsPageState extends State<SettingsPage> {
         ),
         SliverCrossAxisConstrained(
           maxCrossAxisExtent: 1600,
-          alignment: 0.5,
           child: BlocBuilder<SettingsCubit, SettingsState>(
             builder: (context, state) => SliverList(
               delegate: SliverChildListDelegate([
@@ -318,7 +316,6 @@ class _SettingsPageState extends State<SettingsPage> {
         if (widget.household != null)
           SliverCrossAxisConstrained(
             maxCrossAxisExtent: 1600,
-            alignment: 0.5,
             child: SliverList(
               delegate: SliverChildListDelegate([
                 Padding(
@@ -346,7 +343,8 @@ class _SettingsPageState extends State<SettingsPage> {
                         content: Text(
                           AppLocalizations.of(context)!
                               .householdLeaveConfirmation(
-                                  widget.household!.name),
+                            widget.household!.name,
+                          ),
                         ),
                         confirmText: AppLocalizations.of(context)!.yes,
                       );
@@ -380,7 +378,6 @@ class _SettingsPageState extends State<SettingsPage> {
             widget.household!.hasAdminRights(user))
           SliverCrossAxisConstrained(
             maxCrossAxisExtent: 1600,
-            alignment: 0.5,
             child: SliverList(
               delegate: SliverChildListDelegate([
                 ListTile(
@@ -402,7 +399,6 @@ class _SettingsPageState extends State<SettingsPage> {
         if (!isOffline && user.hasServerAdminRights())
           SliverCrossAxisConstrained(
             maxCrossAxisExtent: 1600,
-            alignment: 0.5,
             child: SliverList(
               delegate: SliverChildListDelegate([
                 Padding(
@@ -437,7 +433,6 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
         SliverCrossAxisConstrained(
           maxCrossAxisExtent: 1600,
-          alignment: 0.5,
           child: SliverList(
             delegate: SliverChildListDelegate([
               Padding(

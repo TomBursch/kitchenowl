@@ -31,6 +31,17 @@ extension TagApi on ApiService {
     return res.statusCode == 200;
   }
 
+  Future<bool> mergeTag(Tag tag, Tag other) async {
+    final res = await post(
+      '$baseRoute/${tag.id}',
+      jsonEncode({
+        "merge_tag_id": other.id,
+      }),
+    );
+
+    return res.statusCode == 200;
+  }
+
   Future<Tag?> getTag(Tag tag) async {
     final res = await get('$baseRoute/${tag.id}');
     if (res.statusCode != 200) return null;

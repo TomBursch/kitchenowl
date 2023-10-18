@@ -372,7 +372,6 @@ class _RecipePageState extends State<RecipePage> {
                   ),
                   SliverCrossAxisConstrained(
                     maxCrossAxisExtent: 1600,
-                    alignment: 0.5,
                     child: getValueForScreenType<Widget>(
                       context: context,
                       mobile: SliverMainAxisGroup(

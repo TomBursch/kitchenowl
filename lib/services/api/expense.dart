@@ -102,6 +102,20 @@ extension ExpenseApi on ApiService {
     return res.statusCode == 200;
   }
 
+  Future<bool> mergeExpenseCategories(
+    ExpenseCategory category,
+    ExpenseCategory other,
+  ) async {
+    final res = await post(
+      '$baseRoute/categories/${category.id}',
+      jsonEncode({
+        "merge_category_id": other.id,
+      }),
+    );
+
+    return res.statusCode == 200;
+  }
+
   Future<Map<int, Map<int, double>>?> getExpenseOverview(
     Household household, [
     ExpenselistSorting sorting = ExpenselistSorting.all,

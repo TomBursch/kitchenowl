@@ -22,31 +22,14 @@ class AddUpdateExpenseCategoryCubit
   Future<void> saveCategory() async {
     final _state = state;
     if (_state.isValid()) {
-      if (category.id == null) {
-        await ApiService.getInstance().addExpenseCategory(
-          household,
-          ExpenseCategory(
-            name: _state.name,
-            color: _state.color,
-          ),
-        );
-      } else {
-        await ApiService.getInstance().updateExpenseCategory(
-          category.copyWith(
-            name: _state.name,
-            color: Nullable(_state.color),
-          ),
-        );
-      }
+      await ApiService.getInstance().addExpenseCategory(
+        household,
+        ExpenseCategory(
+          name: _state.name,
+          color: _state.color,
+        ),
+      );
     }
-  }
-
-  Future<bool> deleteCategory() async {
-    if (category.id != null) {
-      return ApiService.getInstance().deleteExpenseCategory(category);
-    }
-
-    return false;
   }
 
   void setName(String name) {

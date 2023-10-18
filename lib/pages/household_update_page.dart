@@ -10,6 +10,7 @@ import 'package:kitchenowl/widgets/settings_household/sliver_household_expense_c
 import 'package:kitchenowl/widgets/settings_household/sliver_household_feature_settings.dart';
 import 'package:kitchenowl/widgets/settings_household/sliver_household_shoppinglist_settings.dart';
 import 'package:kitchenowl/widgets/settings_household/sliver_household_tags_settings.dart';
+import 'package:sliver_tools/sliver_tools.dart';
 
 class HouseholdUpdatePage extends StatefulWidget {
   final Household household;
@@ -53,71 +54,98 @@ class _HouseholdUpdatePageState extends State<HouseholdUpdatePage> {
           },
           listenWhen: (previous, current) => previous.name != current.name,
           bloc: cubit,
-          child: Align(
-            alignment: Alignment.topCenter,
-            child: Scrollbar(
-              child: ConstrainedBox(
-                constraints: const BoxConstraints.expand(width: 600),
-                child: RefreshIndicator(
-                  onRefresh: cubit.refresh,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: CustomScrollView(
-                      primary: true,
-                      scrollBehavior: const MaterialScrollBehavior()
-                          .copyWith(scrollbars: false),
-                      slivers: [
-                        SliverList(
-                          delegate: SliverChildListDelegate([
-                            BlocBuilder<HouseholdUpdateCubit,
-                                HouseholdUpdateState>(
-                              bloc: cubit,
-                              buildWhen: (previous, current) =>
-                                  previous.image != current.image,
-                              builder: (context, state) => ImageSelector(
-                                padding: null,
-                                originalImage: state.image,
-                                setImage: cubit.setImage,
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 16),
-                              child: TextField(
-                                controller: nameController,
-                                onChanged: (value) => _debouncer.run(
-                                  () => cubit.setName(value),
-                                ),
-                                onSubmitted: (value) {
-                                  _debouncer.cancel();
-                                  cubit.setName(value);
-                                },
-                                textInputAction: TextInputAction.next,
-                                textCapitalization:
-                                    TextCapitalization.sentences,
-                                decoration: InputDecoration(
-                                  labelText: AppLocalizations.of(context)!.name,
-                                ),
-                              ),
-                            ),
-                          ]),
-                        ),
-                        const SliverHouseholdFeatureSettings<
-                            HouseholdUpdateCubit, HouseholdUpdateState>(),
-                        const SliverHouseholdShoppinglistSettings(),
-                        const SliverHouseholdCategorySettings(),
-                        const SliverHouseholdTagsSettings(),
-                        const SliverHouseholdExpenseCategorySettings(),
-                        const SliverHouseholdDangerZone(),
-                        SliverToBoxAdapter(
-                          child: SizedBox(
-                            height: MediaQuery.of(context).padding.bottom,
+          child: RefreshIndicator(
+            onRefresh: cubit.refresh,
+            child: CustomScrollView(
+              primary: true,
+              slivers: [
+                SliverCrossAxisPadded.symmetric(
+                  padding: 16,
+                  child: SliverCrossAxisConstrained(
+                    maxCrossAxisExtent: 600,
+                    child: SliverList(
+                      delegate: SliverChildListDelegate([
+                        BlocBuilder<HouseholdUpdateCubit, HouseholdUpdateState>(
+                          bloc: cubit,
+                          buildWhen: (previous, current) =>
+                              previous.image != current.image,
+                          builder: (context, state) => ImageSelector(
+                            padding: null,
+                            originalImage: state.image,
+                            setImage: cubit.setImage,
                           ),
                         ),
-                      ],
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          child: TextField(
+                            controller: nameController,
+                            onChanged: (value) => _debouncer.run(
+                              () => cubit.setName(value),
+                            ),
+                            onSubmitted: (value) {
+                              _debouncer.cancel();
+                              cubit.setName(value);
+                            },
+                            textInputAction: TextInputAction.next,
+                            textCapitalization: TextCapitalization.sentences,
+                            decoration: InputDecoration(
+                              labelText: AppLocalizations.of(context)!.name,
+                            ),
+                          ),
+                        ),
+                      ]),
                     ),
                   ),
                 ),
-              ),
+                SliverCrossAxisPadded.symmetric(
+                  padding: 16,
+                  child: const SliverCrossAxisConstrained(
+                    maxCrossAxisExtent: 600,
+                    child: SliverHouseholdFeatureSettings<HouseholdUpdateCubit,
+                        HouseholdUpdateState>(),
+                  ),
+                ),
+                SliverCrossAxisPadded.symmetric(
+                  padding: 16,
+                  child: const SliverCrossAxisConstrained(
+                    maxCrossAxisExtent: 600,
+                    child: SliverHouseholdShoppinglistSettings(),
+                  ),
+                ),
+                SliverCrossAxisPadded.symmetric(
+                  padding: 16,
+                  child: const SliverCrossAxisConstrained(
+                    maxCrossAxisExtent: 600,
+                    child: SliverHouseholdCategorySettings(),
+                  ),
+                ),
+                SliverCrossAxisPadded.symmetric(
+                  padding: 16,
+                  child: const SliverCrossAxisConstrained(
+                    maxCrossAxisExtent: 600,
+                    child: SliverHouseholdTagsSettings(),
+                  ),
+                ),
+                SliverCrossAxisPadded.symmetric(
+                  padding: 16,
+                  child: const SliverCrossAxisConstrained(
+                    maxCrossAxisExtent: 600,
+                    child: SliverHouseholdExpenseCategorySettings(),
+                  ),
+                ),
+                SliverCrossAxisPadded.symmetric(
+                  padding: 16,
+                  child: const SliverCrossAxisConstrained(
+                    maxCrossAxisExtent: 600,
+                    child: SliverHouseholdDangerZone(),
+                  ),
+                ),
+                SliverToBoxAdapter(
+                  child: SizedBox(
+                    height: MediaQuery.of(context).padding.bottom,
+                  ),
+                ),
+              ],
             ),
           ),
         ),

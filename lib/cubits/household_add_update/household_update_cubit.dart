@@ -137,6 +137,13 @@ class HouseholdUpdateCubit
     return res;
   }
 
+  Future<bool> mergeTag(Tag tag, Tag other) async {
+    final res = await ApiService.getInstance().mergeTag(tag, other);
+    refresh();
+
+    return res;
+  }
+
   Future<bool> deleteShoppingList(ShoppingList shoppingList) async {
     if (household.defaultShoppingList == shoppingList) return false;
     final res = await ApiService.getInstance().deleteShoppingList(shoppingList);
@@ -220,6 +227,17 @@ class HouseholdUpdateCubit
 
   Future<bool> updateExpenseCategory(ExpenseCategory category) async {
     final res = await ApiService.getInstance().updateExpenseCategory(category);
+    refresh();
+
+    return res;
+  }
+
+  Future<bool> mergeExpenseCategory(
+    ExpenseCategory category,
+    ExpenseCategory other,
+  ) async {
+    final res =
+        await ApiService.getInstance().mergeExpenseCategories(category, other);
     refresh();
 
     return res;

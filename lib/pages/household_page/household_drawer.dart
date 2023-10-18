@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:kitchenowl/app.dart';
 import 'package:kitchenowl/cubits/auth_cubit.dart';
 import 'package:kitchenowl/cubits/household_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
@@ -87,7 +88,9 @@ class HouseholdDrawer extends StatelessWidget {
           ),
         ),
         NavigationDrawerDestination(
-          icon: const Icon(Icons.person_rounded),
+          icon: Icon(
+            App.isOffline ? Icons.cloud_off_rounded : Icons.person_rounded,
+          ),
           label: Text(
             AppLocalizations.of(context)!.profile,
             maxLines: 1,

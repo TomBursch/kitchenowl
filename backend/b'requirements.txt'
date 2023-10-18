@@ -95,12 +95,12 @@ tqdm==4.66.1
 typed-ast==1.5.5
 types-beautifulsoup4==4.12.0.6
 types-html5lib==1.1.11.15
-types-requests==2.31.0.9
+types-requests==2.31.0.10
 types-urllib3==1.26.25.14
 typing_extensions==4.8.0
 tzdata==2023.3
 tzlocal==5.1
-urllib3==2.0.6
+urllib3==2.0.7
 uWSGI==2.0.22
 uwsgi-tools==1.1.1
 w3lib==2.1.2

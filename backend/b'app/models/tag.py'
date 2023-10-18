@@ -13,11 +13,28 @@ class Tag(db.Model, DbModelMixin, TimestampMixin, DbModelAuthorizeMixin):
         'household.id'), nullable=False)
 
     household = db.relationship("Household", uselist=False)
-    recipes = db.relationship('RecipeTags', back_populates='tag')
+    recipes = db.relationship('RecipeTags', back_populates='tag', cascade="all, delete-orphan")
 
     def obj_to_full_dict(self) -> dict:
         res = super().obj_to_dict()
         return res
+    
+    def merge(self, other: Self) -> None:
+        if self.household_id != other.household_id:
+            return
+
+        from app.models import RecipeTags
+
+        for rectag in RecipeTags.query.filter(RecipeTags.tag_id == other.id, RecipeTags.recipe_id.notin_(db.session.query(RecipeTags.recipe_id).filter(RecipeTags.tag_id == self.id).subquery().select())).all():
+            rectag.tag_id = self.id
+            db.session.add(rectag)
+
+        try:
+            db.session.commit()
+            other.delete()
+        except Exception as e:
+            db.session.rollback()
+            raise e
 
     @classmethod
     def create_by_name(cls, household_id: int, name: str) -> Self:

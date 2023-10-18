@@ -192,6 +192,7 @@ def getExpenseOverview(args, household_id):
 
     steps = args['steps'] if 'steps' in args else 5
     frame = args['frame'] if args['frame'] != None else 2
+    page = args['page'] if 'page' in args and args['page'] != None else 0
 
     factor = 1
     query = Expense.query\
@@ -242,9 +243,9 @@ def getExpenseOverview(args, household_id):
             .all()
         }
 
-    value = [getOverviewForStepAgo(i) for i in range(0, steps)]
+    value = [getOverviewForStepAgo(i) for i in range(page * steps, steps + page * steps)]
 
-    byStep = {i: {category: (value[i][category] if category in value[i] else 0.0)
+    byStep = {i + page * steps: {category: (value[i][category] if category in value[i] else 0.0)
                   for category in categories} for i in range(0, steps)}
 
     return jsonify(byStep)
@@ -289,4 +290,10 @@ def updateExpenseCategory(args, id):
         category.color = args['color']
 
     category.save()
+
+    if 'merge_category_id' in args and args['merge_category_id'] != id:
+        mergeCategory = ExpenseCategory.find_by_id(args['merge_category_id'])
+        if mergeCategory:
+            category.merge(mergeCategory)
+
     return jsonify(category.obj_to_dict())

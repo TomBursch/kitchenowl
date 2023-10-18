@@ -66,6 +66,12 @@ def updateTag(args, id):
         tag.name = args['name']
 
     tag.save()
+
+    if 'merge_tag_id' in args and args['merge_tag_id'] != id:
+        mergeTag = Tag.find_by_id(args['merge_tag_id'])
+        if mergeTag:
+            tag.merge(mergeTag)
+
     return jsonify(tag.obj_to_dict())
 
 

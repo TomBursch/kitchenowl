@@ -7,7 +7,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:kitchenowl/helpers/named_bytearray.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 
-// ignore: long-method
 Future<NamedByteArray?> selectFile({
   required BuildContext context,
   required String title,

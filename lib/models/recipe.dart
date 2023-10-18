@@ -160,7 +160,6 @@ class Recipe extends Model implements ISuspensionBean {
   String getSuspensionTag() => name[0].toUpperCase();
 
   @override
-  // ignore: no-empty-block
   set isShowSuspension(bool isShowSuspension) {}
 
   List<RecipeItem> get optionalItems => items.where((e) => e.optional).toList();

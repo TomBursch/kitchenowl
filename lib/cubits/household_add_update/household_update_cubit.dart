@@ -267,7 +267,6 @@ class HouseholdUpdateCubit
     return ApiService.getInstance().exportHousehold(household);
   }
 
-  // ignore: long-parameter-list
   Future<void> importHousehold(
     Map<String, dynamic> content, [
     ImportSettings settings = const ImportSettings(),
@@ -356,7 +355,6 @@ class LoadingHouseholdUpdateState extends HouseholdUpdateState {
   });
 
   @override
-  // ignore: long-parameter-list
   HouseholdUpdateState copyWith({
     String? name,
     String? image,

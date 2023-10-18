@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 
-// ignore: long-parameter-list
 Future<bool> askForConfirmation({
   required BuildContext context,
   Widget? content,

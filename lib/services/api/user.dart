@@ -60,7 +60,6 @@ extension UserApi on ApiService {
     return res.statusCode == 200;
   }
 
-  // ignore: long-parameter-list
   Future<bool> updateUserById(
     int userId, {
     String? name,

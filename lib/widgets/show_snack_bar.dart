@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-// ignore: long-parameter-list
 ScaffoldFeatureController<SnackBar, SnackBarClosedReason> showSnackbar({
   required BuildContext context,
   SnackBarAction? action,

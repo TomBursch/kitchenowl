@@ -69,7 +69,6 @@ abstract class AppThemes {
     );
   }
 
-  // ignore: long-method
   static ThemeData dark([ColorScheme? colorScheme]) {
     colorScheme ??= darkScheme;
 

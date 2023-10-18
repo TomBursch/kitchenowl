@@ -24,7 +24,6 @@ class SettingsUserCubit extends Cubit<SettingsUserState> {
     emit(state.copyWith(user: user, setAdmin: user?.serverAdmin));
   }
 
-  // ignore: long-parameter-list
   Future<void> updateUser({
     required BuildContext context,
     String? name,

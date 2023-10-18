@@ -96,7 +96,6 @@ class SettingsUserSessionsPage extends StatelessWidget {
     );
   }
 
-  // ignore: long-method
   void _createLLTflow(BuildContext context) async {
     final confirm = await askForConfirmation(
       context: context,

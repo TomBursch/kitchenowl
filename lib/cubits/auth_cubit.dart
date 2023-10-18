@@ -155,7 +155,6 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
-  // ignore: long-parameter-list
   Future<void> signup({
     required String username,
     required String name,

@@ -196,7 +196,6 @@ class LoadingExpenseListCubitState extends ExpenseListCubitState {
   });
 
   @override
-  // ignore: long-parameter-list
   ExpenseListCubitState copyWith({
     List<Expense>? expenses,
     ExpenselistSorting? sorting,

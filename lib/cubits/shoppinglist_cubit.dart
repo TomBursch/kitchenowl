@@ -324,7 +324,6 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
     }
   }
 
-  // ignore: long-method
   Future<void> _refresh([String? query]) async {
     // Get required information
     late ShoppinglistCubitState resState;
@@ -514,7 +513,6 @@ class LoadingShoppinglistCubitState extends ShoppinglistCubitState {
   });
 
   @override
-  // ignore: long-parameter-list
   ShoppinglistCubitState copyWith({
     List<ShoppingList>? shoppinglists,
     ShoppingList? selectedShoppinglist,
@@ -552,7 +550,6 @@ class SearchShoppinglistCubitState extends ShoppinglistCubitState {
   });
 
   @override
-  // ignore: long-parameter-list
   ShoppinglistCubitState copyWith({
     List<ShoppingList>? shoppinglists,
     ShoppingList? selectedShoppinglist,

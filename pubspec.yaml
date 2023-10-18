@@ -42,7 +42,7 @@ dependencies:
   flutter_custom_tabs: ^1.0.4
   package_info_plus: ^4.0.0
   device_info_plus: ^9.0.0
-  http: ^0.13.5
+  http: ^1.1.0
   diffutil_dart: ^4.0.0
 
   responsive_builder: ^0.7.0
@@ -75,7 +75,6 @@ dev_dependencies:
     sdk: flutter
   flutter_launcher_icons: ^0.13.1
   flutter_lints: ^2.0.1
-  dart_code_metrics: ^5.7.2
 
 # The following section is specific to Flutter.
 flutter:

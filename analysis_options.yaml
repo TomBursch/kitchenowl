@@ -12,8 +12,6 @@ include: package:flutter_lints/flutter.yaml
 analyzer:
   exclude:
     - flutter/**
-  plugins:
-    - dart_code_metrics
 
 linter:
   # The lint rules applied to this project can be customized in the
@@ -32,22 +30,3 @@ linter:
     use_build_context_synchronously: false
     no_leading_underscores_for_local_identifiers: false
     # prefer_single_quotes: true
-
-dart_code_metrics:
-  anti-patterns:
-    - long-method
-    - long-parameter-list
-  metrics:
-    cyclomatic-complexity: 20
-    maximum-nesting-level: 5
-    number-of-parameters: 4
-    source-lines-of-code: 50
-  metrics-exclude:
-    - test/**
-  rules:
-    - newline-before-return
-    - no-boolean-literal-compare
-    - no-empty-block
-    - prefer-trailing-comma
-    - prefer-conditional-expressions
-    - no-equal-then-else

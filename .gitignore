@@ -106,8 +106,9 @@ unlinked_spec.ds
 **/macos/Flutter/GeneratedPluginRegistrant.swift
 **/macos/Flutter/ephemeral
 
-# Coverage
+# Coverage & Reports
 coverage/
+reports/
 
 # Symbols
 app.*.symbols

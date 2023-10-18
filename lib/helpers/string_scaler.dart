@@ -3,7 +3,6 @@ import 'package:intl/intl.dart';
 import 'dart:math' as math;
 
 abstract class StringScaler {
-  // ignore: long-method
   static String scale(String str, Fraction factor, [int decimals = 2]) {
     if (str.isEmpty) str = "1x";
     // Replace custom unicode

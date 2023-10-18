@@ -299,7 +299,6 @@ class _ItemPageState<T extends Item> extends State<ItemPage<T>> {
     );
   }
 
-  // ignore: long-method
   Future<void> _handleItemAction(_ItemAction action) async {
     switch (action) {
       case _ItemAction.changeIcon:

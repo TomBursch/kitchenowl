@@ -40,7 +40,7 @@ class _IconSelectionPageState extends State<IconSelectionPage> {
                   controller: searchController,
                   clearOnSubmit: false,
                   onSearch: (s) async {
-                    setState(() => filter = s);
+                    setState(() => filter = s.toLowerCase());
                   },
                   textInputAction: TextInputAction.search,
                 ),

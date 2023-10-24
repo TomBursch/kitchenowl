@@ -4,12 +4,12 @@ import 'dart:math' as math;
 @immutable
 class ExpandableFab extends StatefulWidget {
   const ExpandableFab({
-    Key? key,
+    super.key,
     this.initialOpen,
     required this.distance,
     required this.children,
     required this.openIcon,
-  }) : super(key: key);
+  });
 
   final bool? initialOpen;
   final double distance;
@@ -156,12 +156,11 @@ class ExpandableFabState extends State<ExpandableFab>
 @immutable
 class _ExpandingActionButton extends StatelessWidget {
   const _ExpandingActionButton({
-    Key? key,
     required this.directionInDegrees,
     required this.maxDistance,
     required this.progress,
     required this.child,
-  }) : super(key: key);
+  });
 
   final double directionInDegrees;
   final double maxDistance;

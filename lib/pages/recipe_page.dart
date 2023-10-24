@@ -96,12 +96,10 @@ class _RecipePageState extends State<RecipePage> {
                                 Theme.of(context).colorScheme.primary,
                             elevation: 3,
                           ),
-                        ...state.recipe.tags
-                            .map((e) => Chip(
-                                  key: Key(e.name),
-                                  label: Text(e.name),
-                                ))
-                            .toList(),
+                        ...state.recipe.tags.map((e) => Chip(
+                              key: Key(e.name),
+                              label: Text(e.name),
+                            )),
                       ],
                     ),
                     const SizedBox(height: 8),

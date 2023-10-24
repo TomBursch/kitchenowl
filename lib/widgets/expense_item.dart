@@ -23,11 +23,11 @@ class ExpenseItemWidget extends StatelessWidget {
   final bool displayPersonalAmount;
 
   const ExpenseItemWidget({
-    Key? key,
+    super.key,
     required this.expense,
     this.onUpdated,
     this.displayPersonalAmount = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

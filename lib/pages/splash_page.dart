@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class SplashPage extends StatelessWidget {
   final String? message;
-  const SplashPage({Key? key, this.message}) : super(key: key);
+  const SplashPage({super.key, this.message});
 
   @override
   Widget build(BuildContext context) {

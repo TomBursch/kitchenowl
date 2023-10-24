@@ -8,12 +8,12 @@ class LanguageDialog extends StatefulWidget {
   final Map<String, String>? supportedLanguages;
 
   const LanguageDialog({
-    Key? key,
+    super.key,
     this.title = "",
     this.doneText = "",
     this.initialLanguage,
     required this.supportedLanguages,
-  }) : super(key: key);
+  });
 
   @override
   State<LanguageDialog> createState() => _LanguageDialogState();

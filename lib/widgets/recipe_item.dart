@@ -18,11 +18,11 @@ class RecipeItemWidget extends StatelessWidget {
   final Widget? description;
 
   const RecipeItemWidget({
-    Key? key,
+    super.key,
     required this.recipe,
     this.onUpdated,
     this.description,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

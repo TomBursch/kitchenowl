@@ -6,7 +6,7 @@ import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/widgets/create_user_form_fields.dart';
 
 class CreateUserPage extends StatefulWidget {
-  const CreateUserPage({Key? key}) : super(key: key);
+  const CreateUserPage({super.key});
 
   @override
   State<CreateUserPage> createState() => _CreateUserPageState();

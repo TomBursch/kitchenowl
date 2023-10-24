@@ -8,8 +8,7 @@ class KitchenOwlSwitch extends StatelessWidget {
   final bool value;
   final Function(bool)? onChanged;
 
-  const KitchenOwlSwitch({Key? key, required this.value, this.onChanged})
-      : super(key: key);
+  const KitchenOwlSwitch({super.key, required this.value, this.onChanged});
 
   @override
   Widget build(BuildContext context) {

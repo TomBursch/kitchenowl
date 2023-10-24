@@ -5,7 +5,7 @@ import 'package:kitchenowl/cubits/auth_cubit.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 
 class UnreachablePage extends StatelessWidget {
-  const UnreachablePage({Key? key}) : super(key: key);
+  const UnreachablePage({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -6,11 +6,11 @@ class SelectDialog<T> extends StatelessWidget {
   final String cancelText;
 
   const SelectDialog({
-    Key? key,
+    super.key,
     this.options = const [],
     this.title = "",
     this.cancelText = "",
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

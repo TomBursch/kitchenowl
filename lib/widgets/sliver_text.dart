@@ -7,10 +7,10 @@ class SliverText extends StatelessWidget {
 
   const SliverText(
     this.data, {
-    Key? key,
+    super.key,
     this.style,
     this.padding = EdgeInsets.zero,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

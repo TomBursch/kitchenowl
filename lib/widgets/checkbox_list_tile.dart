@@ -8,13 +8,13 @@ class CustomCheckboxListTile extends StatelessWidget {
   final bool value;
 
   const CustomCheckboxListTile({
-    Key? key,
+    super.key,
     this.trailing,
     this.title,
     this.subtitle,
     this.onChanged,
     required this.value,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

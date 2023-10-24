@@ -12,13 +12,13 @@ class ShoppingItemWidget<T extends Item> extends StatelessWidget {
   final bool gridStyle;
 
   const ShoppingItemWidget({
-    Key? key,
+    super.key,
     required this.item,
     this.onPressed,
     this.onLongPressed,
     this.selected = false,
     this.gridStyle = true,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

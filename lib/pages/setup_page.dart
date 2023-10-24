@@ -4,7 +4,7 @@ import 'package:kitchenowl/cubits/auth_cubit.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 
 class SetupPage extends StatefulWidget {
-  const SetupPage({Key? key}) : super(key: key);
+  const SetupPage({super.key});
 
   @override
   State<SetupPage> createState() => _SetupPageState();

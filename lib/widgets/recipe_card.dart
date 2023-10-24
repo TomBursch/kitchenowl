@@ -12,12 +12,12 @@ class RecipeCard extends StatelessWidget {
   final Future<void> Function()? onAddToDate;
 
   const RecipeCard({
-    Key? key,
+    super.key,
     required this.recipe,
     this.onPressed,
     this.onLongPressed,
     this.onAddToDate,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

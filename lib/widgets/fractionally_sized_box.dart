@@ -29,18 +29,17 @@ class KitchenOwlFractionallySizedBox extends SingleChildRenderObjectWidget {
   /// If non-null, the [widthFactor] and [heightFactor] arguments must be
   /// non-negative.
   const KitchenOwlFractionallySizedBox({
-    Key? key,
+    super.key,
     this.alignment = Alignment.center,
     this.widthFactor,
     this.widthSubstract,
     this.heightFactor,
     this.heightSubstract,
-    Widget? child,
+    super.child,
   })  : assert(widthFactor == null || widthFactor >= 0.0),
         assert(widthSubstract == null || widthSubstract >= 0.0),
         assert(heightFactor == null || heightFactor >= 0.0),
-        assert(heightSubstract == null || heightSubstract >= 0.0),
-        super(key: key, child: child);
+        assert(heightSubstract == null || heightSubstract >= 0.0);
 
   /// If non-null, the fraction of the incoming width given to the child.
   ///
@@ -153,22 +152,17 @@ class KitchenOwlRenderFractionallySizedOverflowBox
   /// The [textDirection] must be non-null if the [alignment] is
   /// direction-sensitive.
   KitchenOwlRenderFractionallySizedOverflowBox({
-    RenderBox? child,
+    super.child,
     double? widthFactor,
     double? widthSubstract,
     double? heightFactor,
     double? heightSubstract,
-    AlignmentGeometry alignment = Alignment.center,
-    TextDirection? textDirection,
+    super.alignment,
+    super.textDirection,
   })  : _widthFactor = widthFactor,
         _widthSubstract = widthSubstract,
         _heightFactor = heightFactor,
-        _heightSubstract = heightSubstract,
-        super(
-          child: child,
-          alignment: alignment,
-          textDirection: textDirection,
-        ) {
+        _heightSubstract = heightSubstract {
     assert(_widthFactor == null || _widthFactor! >= 0.0);
     assert(_widthSubstract == null || _widthSubstract! >= 0.0);
     assert(_heightFactor == null || _heightFactor! >= 0.0);

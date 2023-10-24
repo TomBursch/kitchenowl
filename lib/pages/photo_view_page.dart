@@ -7,11 +7,11 @@ class PhotoViewPage extends StatelessWidget {
   final String? title;
 
   const PhotoViewPage({
-    Key? key,
+    super.key,
     required this.imageProvider,
     this.title,
     this.heroTag,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

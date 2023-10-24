@@ -263,7 +263,7 @@ class Authenticated extends AuthState {
 class AuthenticatedOffline extends Authenticated {
   final bool _forcedOfflineMode;
 
-  const AuthenticatedOffline(User user, this._forcedOfflineMode) : super(user);
+  const AuthenticatedOffline(super.user, this._forcedOfflineMode);
 
   @override
   List<Object?> get props => [user, _forcedOfflineMode];

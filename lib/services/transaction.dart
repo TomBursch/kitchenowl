@@ -57,8 +57,7 @@ abstract class Transaction<T> extends Model {
 }
 
 class ErrorTransaction<T> extends Transaction<T> {
-  const ErrorTransaction(DateTime timestamp, String className)
-      : super.internal(timestamp, className);
+  const ErrorTransaction(super.timestamp, super.className) : super.internal();
 
   @override
   Future<T> runLocal() {

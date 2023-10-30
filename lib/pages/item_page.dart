@@ -269,13 +269,20 @@ class _ItemPageState<T extends Item> extends State<ItemPage<T>> {
                                           state.recipes[i].items.first
                                               .description.isNotEmpty
                                       ? Text(
-                                          state.recipes[i].items.first
-                                              .description,
+                                          "${state.recipes[i].items.first.description}${state.recipes[i].items.first.optional ? " (${AppLocalizations.of(context)!.optional})" : ""}",
                                           style: Theme.of(context)
                                               .textTheme
                                               .bodySmall,
                                         )
-                                      : null,
+                                      : state.recipes[i].items.first.optional
+                                          ? Text(
+                                              AppLocalizations.of(context)!
+                                                  .optional,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodySmall,
+                                            )
+                                          : null,
                                 );
                               },
                               childCount: state.recipes.isEmpty

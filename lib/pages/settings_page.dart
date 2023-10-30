@@ -281,7 +281,8 @@ class _SettingsPageState extends State<SettingsPage> {
                     value: state.recentItemsCount,
                     setValue: BlocProvider.of<SettingsCubit>(context)
                         .setRecentItemsCount,
-                    lowerBound: 3,
+                    defaultValue: 9,
+                    lowerBound: 0,
                     upperBound: 30,
                   ),
                 ),

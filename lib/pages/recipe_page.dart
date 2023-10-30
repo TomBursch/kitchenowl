@@ -171,16 +171,10 @@ class _RecipePageState extends State<RecipePage> {
                           style: Theme.of(context).textTheme.titleLarge,
                         ),
                       ),
-                      if (state.selectedYields != state.recipe.yields)
-                        IconButton(
-                          onPressed: () =>
-                              cubit.setSelectedYields(state.recipe.yields),
-                          icon: const Icon(Icons.restart_alt_rounded),
-                          tooltip: AppLocalizations.of(context)!.reset,
-                        ),
                       NumberSelector(
                         value: state.selectedYields,
                         setValue: cubit.setSelectedYields,
+                        defaultValue: state.recipe.yields,
                         lowerBound: 1,
                       ),
                     ],

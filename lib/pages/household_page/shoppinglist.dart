@@ -251,23 +251,17 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                         if (body is! List) body,
                         if ((state.recentItems.isNotEmpty ||
                             state is LoadingShoppinglistCubitState))
-                          SliverText(
-                            padding: const EdgeInsets.all(16),
-                            '${AppLocalizations.of(context)!.itemsRecent}:',
-                            style: Theme.of(context).textTheme.titleLarge,
+                          SliverCategoryItemGridList(
+                            name:
+                                '${AppLocalizations.of(context)!.itemsRecent}:',
+                            items: state.recentItems,
+                            onPressed: cubit.add,
+                            categories: state.categories,
+                            shoppingList: state.selectedShoppinglist,
+                            onRefresh: cubit.refresh,
+                            isDescriptionEditable: false,
+                            isLoading: state is LoadingShoppinglistCubitState,
                           ),
-                        SliverItemGridList(
-                          items: state.recentItems,
-                          onPressed: cubit.add,
-                          categories: state.categories,
-                          household: BlocProvider.of<HouseholdCubit>(context)
-                              .state
-                              .household,
-                          shoppingList: state.selectedShoppinglist,
-                          onRefresh: cubit.refresh,
-                          isDescriptionEditable: false,
-                          isLoading: state is LoadingShoppinglistCubitState,
-                        ),
                       ],
                     );
                   },

@@ -67,7 +67,7 @@ class SettingsCubit extends Cubit<SettingsState> {
   }
 
   void setRecentItemsCount(int recentItemsCount) {
-    if (recentItemsCount > 0) {
+    if (recentItemsCount >= 0) {
       PreferenceStorage.getInstance()
           .writeInt(key: 'recentItemsCount', value: recentItemsCount);
       emit(state.copyWith(recentItemsCount: recentItemsCount));

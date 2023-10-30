@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kitchenowl/kitchenowl.dart';
 
 class NumberSelector extends StatelessWidget {
   /// If non-null, the lower (inclusive) bound for this number.
@@ -7,6 +8,7 @@ class NumberSelector extends StatelessWidget {
   /// If non-null, the upper (inclusive) bound for this number.
   final int? upperBound;
   final int value;
+  final int? defaultValue;
   final void Function(int) setValue;
 
   const NumberSelector({
@@ -15,6 +17,7 @@ class NumberSelector extends StatelessWidget {
     this.upperBound,
     required this.value,
     required this.setValue,
+    this.defaultValue,
   });
 
   @override
@@ -23,6 +26,12 @@ class NumberSelector extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
+        if (defaultValue != null && defaultValue != value)
+          IconButton(
+            onPressed: () => setValue(defaultValue!),
+            icon: const Icon(Icons.restart_alt_rounded),
+            tooltip: AppLocalizations.of(context)!.reset,
+          ),
         IconButton(
           onPressed: _canDecrease() ? () => setValue(value - 1) : null,
           icon: const Icon(Icons.remove),

@@ -124,6 +124,7 @@ class TransactionShoppingListGetRecentItems
 
   @override
   Future<List<ItemWithDescription>> runLocal() async {
+    if (itemsCount <= 0) return [];
     final items =
         (await TempStorage.getInstance().readItems(shoppinglist) ?? const [])
             .map((e) => e.name)
@@ -146,6 +147,7 @@ class TransactionShoppingListGetRecentItems
 
   @override
   Future<List<ItemWithDescription>?> runOnline() async {
+    if (itemsCount <= 0) return [];
     return await ApiService.getInstance()
         .getRecentItems(shoppinglist, itemsCount);
   }

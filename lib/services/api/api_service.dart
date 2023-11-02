@@ -75,6 +75,10 @@ class ApiService {
           .setExtraHeaders(headers)
           .build(),
     );
+    socket.onReconnect(
+        (data) => {if (connectionStatus == Connection.disconnected) refresh()});
+    socket.onDisconnect(
+        (data) => {if (connectionStatus != Connection.disconnected) refresh()});
   }
 
   static ApiService getInstance() {

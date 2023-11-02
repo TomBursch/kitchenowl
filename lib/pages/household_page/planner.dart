@@ -269,7 +269,7 @@ class _PlannerPageState extends State<PlannerPage> {
                       ),
                     ),
                   ],
-                  if (state.suggestedRecipes.isNotEmpty) ...[
+                  if (state.suggestedRecipes.isNotEmpty)
                     SliverPadding(
                       padding: const EdgeInsets.fromLTRB(16, 12, 8, 12),
                       sliver: SliverToBoxAdapter(
@@ -281,15 +281,19 @@ class _PlannerPageState extends State<PlannerPage> {
                                 style: Theme.of(context).textTheme.titleLarge,
                               ),
                             ),
-                            LoadingIconButton(
-                              onPressed: cubit.refreshSuggestions,
-                              icon: const Icon(Icons.refresh),
-                              tooltip: AppLocalizations.of(context)!.refresh,
+                            ConstrainedBox(
+                              constraints: const BoxConstraints(maxHeight: 40),
+                              child: LoadingIconButton(
+                                onPressed: cubit.refreshSuggestions,
+                                icon: const Icon(Icons.refresh),
+                                tooltip: AppLocalizations.of(context)!.refresh,
+                              ),
                             ),
                           ],
                         ),
                       ),
                     ),
+                  if (state.suggestedRecipes.isNotEmpty)
                     SliverToBoxAdapter(
                       child: SizedBox(
                         height: getValueForScreenType(
@@ -320,7 +324,6 @@ class _PlannerPageState extends State<PlannerPage> {
                         ),
                       ),
                     ),
-                  ],
                 ],
               );
             },

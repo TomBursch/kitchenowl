@@ -24,7 +24,8 @@ BACKEND_VERSION = 81
 APP_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_DIR = os.path.dirname(APP_DIR)
 
-UPLOAD_FOLDER = os.getenv('STORAGE_PATH', PROJECT_DIR) + '/upload'
+STORAGE_PATH = os.getenv('STORAGE_PATH', PROJECT_DIR)
+UPLOAD_FOLDER = STORAGE_PATH + '/upload'
 ALLOWED_FILE_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 
 PRIVACY_POLICY_URL = os.getenv('PRIVACY_POLICY_URL')
@@ -38,8 +39,7 @@ DB_URL = URL.create(
     username=os.getenv('DB_USER'),
     password=os.getenv('DB_PASSWORD'),
     host=os.getenv('DB_HOST'),
-    database=os.getenv('DB_NAME', os.getenv(
-        'STORAGE_PATH', PROJECT_DIR) + "/database.db"),
+    database=os.getenv('DB_NAME', STORAGE_PATH + "/database.db"),
 )
 
 JWT_ACCESS_TOKEN_EXPIRES = timedelta(minutes=15)

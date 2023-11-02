@@ -140,7 +140,6 @@ class Item(db.Model, DbModelMixin, TimestampMixin, DbModelAuthorizeMixin):
     @classmethod
     def search_name(cls, name: str, household_id: int) -> list[Self]:
         item_count = 11
-        print(db.engine.name)
         if "postgresql" in db.engine.name:
             return cls.query.filter(cls.household_id == household_id, func.levenshtein(func.lower(func.substring(cls.name, 1, len(name))), name.lower()) < 4).order_by(func.levenshtein(func.lower(func.substring(cls.name, 1, len(name))), name.lower()), cls.support.desc()).limit(item_count)
 

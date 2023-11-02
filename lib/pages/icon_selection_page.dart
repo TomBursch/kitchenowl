@@ -53,6 +53,7 @@ class _IconSelectionPageState extends State<IconSelectionPage> {
                 .map((e) => Item(name: e, icon: e))
                 .toList(),
             selected: (item) => item.icon == widget.oldIcon,
+            onLongPressed: const Nullable<void Function(Item)>.empty(),
             onPressed: (Item item) {
               if (item.icon == widget.oldIcon) {
                 Navigator.of(context).pop(const Nullable<String?>.empty());

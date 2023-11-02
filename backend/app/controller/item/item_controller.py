@@ -35,7 +35,7 @@ def getItemRecipes(id):
         raise NotFoundRequest()
     item.checkAuthorized()
     recipe = RecipeItems.query.filter(
-        RecipeItems.item_id == id, RecipeItems.optional == False).join(  # noqa
+        RecipeItems.item_id == id).join(  # noqa
         RecipeItems.recipe).order_by(
         Recipe.name).all()
     return jsonify([e.obj_to_recipe_dict() for e in recipe])

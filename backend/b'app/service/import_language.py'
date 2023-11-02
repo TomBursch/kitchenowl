@@ -22,7 +22,7 @@ def importLanguage(household_id, lang, bulkSave=False):
         item = Item.find_by_default_key(
             household_id, key) or Item.find_by_name(household_id, name)
         if not item:
-            # slow but needed to filter out duplicate names
+            # needed to filter out duplicate names
             if bulkSave and any(i.name == name for i in models):
                 continue
             item = Item()
@@ -35,7 +35,8 @@ def importLanguage(household_id, lang, bulkSave=False):
             item.default_key = key
 
         if item.default:
-            item.name = name.strip()
+            if item.name != name.strip() and not Item.find_by_name(household_id, name) and not any(i.name == name for i in models):
+                item.name = name.strip()
 
             if key in attributes["items"] and "icon" in attributes["items"][key]:
                 item.icon = attributes["items"][key]["icon"]

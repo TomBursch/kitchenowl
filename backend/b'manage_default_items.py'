@@ -5,68 +5,51 @@ import requests
 
 from sqlalchemy import desc, func
 from app import app
+from app.config import STORAGE_PATH
 from app.models import Item, Category, Household
 
 
 BASE_PATH = os.path.dirname(os.path.abspath(__file__))
-DEEPL_AUTH_KEY = ""
+EXPORT_FOLDER = STORAGE_PATH + "/export"
+DEEPL_AUTH_KEY = os.getenv('DEEPL_AUTH_KEY', "")
 
 
-def update_names(saveToFile: bool = False):
+def update_names(saveToTemplate: bool = False, consensus_count: int = 2):
+    default_items = {}
     def nameToKey(name: str) -> str:
         return name.lower().strip().replace(" ", "_")
-    for household in Household.query.filter(Household.language != None).all():
-        lang_code = household.language
-        add_items = [item.obj_to_export_dict() for item in household.items]
-
-        # read en file
-        with open(BASE_PATH + "/templates/l10n/en.json", encoding="utf8") as f:
-            en = json.load(f)
-
-        # translate original file (used as the key) and write to file
-        if lang_code != "en" and not DEEPL_AUTH_KEY:
-            continue
-        if lang_code != "en":
-            deepl_supported_lang: list = [v['language'].lower() for v in json.loads(requests.get("https://api-free.deepl.com/v2/languages?type=source",
-                                                                                                 headers={'Authorization': 'DeepL-Auth-Key ' + DEEPL_AUTH_KEY}).content)]
-            if lang_code not in deepl_supported_lang:
-                print(f"Source language '{lang_code}' not supported by deepl")
-                continue
-
-            if os.path.exists(BASE_PATH + "/templates/l10n/" + lang_code + ".json"):
-                with open(BASE_PATH + "/templates/l10n/" + lang_code + ".json", "r", encoding="utf8") as f:
-                    content = f.read()
-                    if content:
-                        source = json.loads(content)
-                    else:
-                        source = {}
-            else:
-                source = {}
-
-            if "items" not in source:
-                source["items"] = {}
-
-            for item in add_items:
-                item["original"] = item["name"]
-                item["name"] = json.loads(requests.post("https://api-free.deepl.com/v2/translate", {"target_lang": "EN-US", "source_lang": lang_code.upper(), "text": item["name"]},
+    def loadLang(lang: str):
+        default_items[lang] = {"items": {} }
+        if os.path.exists(BASE_PATH + "/templates/l10n/" + lang + ".json"):
+            with open(BASE_PATH + "/templates/l10n/" + lang + ".json", 'r', encoding="utf8") as f:
+                default_items[lang] = json.loads(f.read())
+    supported_lang: list = [v['language'].lower() for v in json.loads(requests.get("https://api-free.deepl.com/v2/languages?type=source",
+                                                                                                 headers={'Authorization': 'DeepL-Auth-Key ' + DEEPL_AUTH_KEY}).content)] if DEEPL_AUTH_KEY else ['en']
+    loadLang('en')
+    
+    items = Item.query.with_entities(Item.name, func.count().label('count'), Household.language).filter(Item.default_key == None, Household.language.in_(supported_lang)).join(Household, isouter=True).group_by(Item.name, Household.language).having(func.count().label('count') >= consensus_count).order_by(desc("count")).all()
+    for item in items:
+        if item.language == "en":
+            if not nameToKey(item.name) in default_items["en"]['items']:
+                default_items["en"]['items'][nameToKey(item.name)] = item.name
+        else:
+            if not item.language in default_items:
+                loadLang(item.language)
+            engl_name = json.loads(requests.post("https://api-free.deepl.com/v2/translate", {"target_lang": "EN-US", "source_lang": item.language.upper(), "text": item.name},
                                                         headers={'Authorization': 'DeepL-Auth-Key ' + DEEPL_AUTH_KEY}).content)['translations'][0]["text"]
-
-                if (nameToKey(item["name"]) not in source["items"]):
-                    source["items"][nameToKey(item["name"])] = item["original"]
-
-            with open(BASE_PATH + "/templates/l10n/" + lang_code + ".json", "w", encoding="utf8") as f:
-                f.write(json.dumps(source, ensure_ascii=False,
-                        indent=2, sort_keys=True))
-
-        for item in add_items:
-            if (nameToKey(item["name"]) not in en["items"]):
-                en["items"][nameToKey(item["name"])] = item["name"]
-
-        with open(BASE_PATH + "/templates/l10n/en.json", "w", encoding="utf8") as f:
-            f.write(json.dumps(en, ensure_ascii=False, indent=2, sort_keys=True))
+            if not nameToKey(engl_name) in default_items[item.language]['items']:
+                default_items[item.language]['items'][nameToKey(engl_name)] = item.name
+            if not nameToKey(engl_name) in default_items["en"]['items']:
+                default_items["en"]['items'][nameToKey(engl_name)] = engl_name
 
 
-def update_attributes(saveToFile: bool = False):
+    folder = BASE_PATH + "/templates/l10n/" if saveToTemplate else (EXPORT_FOLDER + "/")
+    for key, content in default_items.items():
+        with open(folder + key + ".json", "w", encoding="utf8") as f:
+            f.write(json.dumps(content, ensure_ascii=False, indent=2, sort_keys=True))
+
+
+def update_attributes(saveToTemplate: bool = False):
     # read files
     with open(BASE_PATH + "/templates/l10n/en.json", encoding="utf8") as f:
         en: dict = json.load(f)
@@ -103,11 +86,12 @@ def update_attributes(saveToFile: bool = False):
 
     jsonContent = json.dumps(attr, ensure_ascii=False,
                              indent=2, sort_keys=True)
-    if (saveToFile):
+    if saveToTemplate:
         with open(BASE_PATH + "/templates/attributes.json", "w", encoding="utf8") as f:
             f.write(jsonContent)
     else:
-        print(jsonContent)
+        with open(EXPORT_FOLDER + "/attributes.json", "w", encoding="utf8") as f:
+            f.write(jsonContent)
 
 
 if __name__ == "__main__":
@@ -121,9 +105,15 @@ if __name__ == "__main__":
                         help="collects item names")
     parser.add_argument('-a', '--attributes', action='store_true',
                         help="collects attributes")
+    parser.add_argument('-c' '--consensus', type=int, default=2, help="Minimum number of households to have this item for it to be considered default")
     args = parser.parse_args()
-    with app.app_context():
-        if (args.names and args.save):
-            update_names(args.save)
-        if (args.attributes):
-            update_attributes(args.save)
+    if not args.names and not args.attributes:
+        parser.print_help()
+    else:
+        if args.save and not os.path.exists(EXPORT_FOLDER):
+            os.makedirs(EXPORT_FOLDER)
+        with app.app_context():
+            if (args.names):
+                update_names(args.save, args.c__consensus)
+            if (args.attributes):
+                update_attributes(args.save)

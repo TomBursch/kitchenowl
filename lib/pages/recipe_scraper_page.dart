@@ -54,7 +54,10 @@ class _RecipeScraperPageState extends State<RecipeScraperPage> {
               body: Center(
                 child: state is RecipeScraperErrorState
                     ? Text(AppLocalizations.of(context)!.error)
-                    : const CircularProgressIndicator(),
+                    : state is RecipeScraperUnsupportedState
+                        ? Text(AppLocalizations.of(context)!
+                            .unsupportedScrapeMessage)
+                        : const CircularProgressIndicator(),
               ),
             );
           }

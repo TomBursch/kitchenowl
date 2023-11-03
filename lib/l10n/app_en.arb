@@ -511,6 +511,8 @@
   "@unsupportedBackendMessage": {},
   "unsupportedFrontendMessage": "The app version is not supported, please update the app",
   "@unsupportedFrontendMessage": {},
+  "unsupportedScrapeMessage": "The URL couldn't be scraped",
+  "@unsupportedScrapeMessage": {},
   "usedIn": "Used in",
   "@usedIn": {},
   "user": "User",

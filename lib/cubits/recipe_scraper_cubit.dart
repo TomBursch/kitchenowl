@@ -19,8 +19,10 @@ class RecipeScraperCubit extends Cubit<RecipeScraperState> {
   Future<void> scrapeRecipe() async {
     final res = await ApiService.getInstance().scrapeRecipe(household, url);
 
-    if (res != null) {
-      emit(RecipeScraperLoadedState.fromScrape(res));
+    if (res.$1 != null) {
+      emit(RecipeScraperLoadedState.fromScrape(res.$1!));
+    } else if (res.$2 == 400) {
+      emit(RecipeScraperUnsupportedState());
     } else {
       emit(RecipeScraperErrorState());
     }
@@ -68,6 +70,8 @@ abstract class RecipeScraperState extends Equatable {
 class RecipeScraperLoadingState extends RecipeScraperState {}
 
 class RecipeScraperErrorState extends RecipeScraperState {}
+
+class RecipeScraperUnsupportedState extends RecipeScraperState {}
 
 class RecipeScraperLoadedState extends RecipeScraperState {
   final Recipe recipe;

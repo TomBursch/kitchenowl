@@ -8,7 +8,6 @@ from mlxtend.frequent_patterns import association_rules as arule
 
 
 def findItemSuggestions(shopping_instances):
-
     if not shopping_instances or len(shopping_instances) == 0:
         return
 
@@ -18,15 +17,14 @@ def findItemSuggestions(shopping_instances):
     store = pd.DataFrame(te_ary, columns=te.columns_)
 
     # compute the frequent itemsets with minimal support 0.1
-    frequent_itemsets = apriori(
-        store, min_support=0.001, use_colnames=True, max_len=2)
+    frequent_itemsets = apriori(store, min_support=0.001, use_colnames=True, max_len=2)
     app.logger.info("apriori finished")
 
     # extract support for single items
-    single_items = frequent_itemsets[frequent_itemsets['itemsets'].apply(
-        len) == 1]
-    single_items.insert(0, "single", [list(tup)[0]
-                                      for tup in single_items["itemsets"]], False)
+    single_items = frequent_itemsets[frequent_itemsets["itemsets"].apply(len) == 1]
+    single_items.insert(
+        0, "single", [list(tup)[0] for tup in single_items["itemsets"]], False
+    )
 
     # store support values
     for index, row in single_items.iterrows():
@@ -41,27 +39,32 @@ def findItemSuggestions(shopping_instances):
     app.logger.info("frequency of single items was stored")
 
     # compute all association rules with lift > 1.2 and confidence > 0.1
-    association_rules = arule(
-        frequent_itemsets, metric='lift', min_threshold=1.2)
-    association_rules = association_rules[association_rules['confidence'] > 0.1]
+    association_rules = arule(frequent_itemsets, metric="lift", min_threshold=1.2)
+    association_rules = association_rules[association_rules["confidence"] > 0.1]
 
     # extract rules with single antecedent and single consequent
-    single_rules = association_rules[(association_rules["antecedents"].apply(
-        len) == 1) & (association_rules["consequents"].apply(len) == 1)]
-    single_rules.insert(0, "antecedent", [list(
-        tup)[0] for tup in single_rules["antecedents"]], True)
-    single_rules.insert(1, "consequent", [list(
-        tup)[0] for tup in single_rules["consequents"]], True)
+    single_rules = association_rules[
+        (association_rules["antecedents"].apply(len) == 1)
+        & (association_rules["consequents"].apply(len) == 1)
+    ]
+    single_rules.insert(
+        0, "antecedent", [list(tup)[0] for tup in single_rules["antecedents"]], True
+    )
+    single_rules.insert(
+        1, "consequent", [list(tup)[0] for tup in single_rules["consequents"]], True
+    )
 
     # delete all previous associations
     Association.delete_all()
 
     # store all new associations
     for index, rule in single_rules.iterrows():
-        a = Association(antecedent_id=rule["antecedent"],
-                        consequent_id=rule["consequent"],
-                        support=rule["support"],
-                        confidence=rule["confidence"],
-                        lift=rule["lift"])
+        a = Association(
+            antecedent_id=rule["antecedent"],
+            consequent_id=rule["consequent"],
+            support=rule["support"],
+            confidence=rule["confidence"],
+            lift=rule["lift"],
+        )
         db.session.add(a)
     app.logger.info("associations rules of size 2 were updated")

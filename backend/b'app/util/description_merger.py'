@@ -3,7 +3,7 @@ from lark import Lark, Transformer, Tree, Token
 from lark.visitors import Interpreter
 import re
 
-grammar = r'''
+grammar = r"""
 start: ","* item (","+ item)*
 
 item: NUMBER? unit?
@@ -19,7 +19,7 @@ NUMBER.10: FLOAT | INT
 
 %ignore WS
 %import common (_EXP, INT, WS)
-'''
+"""
 
 
 class TreeItem(Tree):
@@ -39,9 +39,16 @@ class TreeItem(Tree):
         return not self.unit or self.unit.children[0].type == "COUNT"
 
     def sameUnit(self, other: Self) -> bool:
-        return (self.unitIsCount() and other.unitIsCount()) or (self.unit and other.unit and
-                                                (self.unit.children[0].type == other.unit.children[0].type and not other.unit.children[0].type == "DESCRIPTION"
-                                                 or self.unit.children[0].lower().strip() == other.unit.children[0].lower().strip()))
+        return (self.unitIsCount() and other.unitIsCount()) or (
+            self.unit
+            and other.unit
+            and (
+                self.unit.children[0].type == other.unit.children[0].type
+                and not other.unit.children[0].type == "DESCRIPTION"
+                or self.unit.children[0].lower().strip()
+                == other.unit.children[0].lower().strip()
+            )
+        )
 
 
 class T(Transformer):
@@ -60,7 +67,7 @@ class Printer(Interpreter):
                 if res and child.children[0].type == "DESCRIPTION":
                     res += " "
                 res += self.visit(child)
-            elif child.type == 'NUMBER':
+            elif child.type == "NUMBER":
                 value = round(child.value, 5)
                 res += str(int(value)) if value.is_integer() else f"{value}"
         return res
@@ -88,12 +95,16 @@ def merge(description: str, added: str) -> str:
     addTree = transformer.transform(parser.parse(added))
 
     for item in addTree.children:
-        targetItem: TreeItem =  next(desTree.find_pred(lambda t: t.data == "item" and item.sameUnit(t)), None)
+        targetItem: TreeItem = next(
+            desTree.find_pred(lambda t: t.data == "item" and item.sameUnit(t)), None
+        )
 
         if not targetItem:  # No item with same unit
             desTree.children.append(item)
         else:  # Found item with same unit
-            if not targetItem.number:  # Add number if not present and space behind it if description
+            if (
+                not targetItem.number
+            ):  # Add number if not present and space behind it if description
                 targetItem.number = Token("NUMBER", 1)
                 targetItem.children.insert(0, targetItem.number)
 
@@ -104,44 +115,44 @@ def merge(description: str, added: str) -> str:
             elif unit and unit.children[0].type == "SI_VOLUME":
                 merge_SI_Volume(targetItem, item)
             else:
-                targetItem.number.value = targetItem.number.value + \
-                    (item.number.value if item.number else 1.0)
+                targetItem.number.value = targetItem.number.value + (
+                    item.number.value if item.number else 1.0
+                )
 
     return Printer().visit(desTree)
 
 
 def clean(input: str) -> str:
     input = re.sub(
-        '¼|½|¾|⅐|⅑|⅒|⅓|⅔|⅕|⅖|⅗|⅘|⅙|⅚|⅛|⅜|⅝|⅞',
+        "¼|½|¾|⅐|⅑|⅒|⅓|⅔|⅕|⅖|⅗|⅘|⅙|⅚|⅛|⅜|⅝|⅞",
         lambda match: {
-            '¼': '0.25',
-            '½': '0.5',
-            '¾': '0.75',
-            '⅐': '0.142857142857',
-            '⅑': '0.111111111111',
-            '⅒': '0.1',
-            '⅓': '0.333333333333',
-            '⅔': '0.666666666667',
-            '⅕': '0.2',
-            '⅖': '0.4',
-            '⅗': '0.6',
-            '⅘': '0.8',
-            '⅙': '0.166666666667',
-            '⅚': '0.833333333333',
-            '⅛': '0.125',
-            '⅜': '0.375',
-            '⅝': '0.625',
-            '⅞': '0.875',
+            "¼": "0.25",
+            "½": "0.5",
+            "¾": "0.75",
+            "⅐": "0.142857142857",
+            "⅑": "0.111111111111",
+            "⅒": "0.1",
+            "⅓": "0.333333333333",
+            "⅔": "0.666666666667",
+            "⅕": "0.2",
+            "⅖": "0.4",
+            "⅗": "0.6",
+            "⅘": "0.8",
+            "⅙": "0.166666666667",
+            "⅚": "0.833333333333",
+            "⅛": "0.125",
+            "⅜": "0.375",
+            "⅝": "0.625",
+            "⅞": "0.875",
         }.get(match.group(), match.group),
-        input
+        input,
     )
 
     # replace 1/2 with .5
     input = re.sub(
-        r'(\d+((\.)\d+)?)\/(\d+((\.)\d+)?)',
-        lambda match: str(float(match.group(1)) /
-                          float(match.group(4))),
-        input
+        r"(\d+((\.)\d+)?)\/(\d+((\.)\d+)?)",
+        lambda match: str(float(match.group(1)) / float(match.group(4))),
+        input,
     )
 
     return input
@@ -149,30 +160,32 @@ def clean(input: str) -> str:
 
 def merge_SI_Volume(base: TreeItem, add: TreeItem) -> None:
     def toMl(x: float, unit: str):
-        return {'ml': x, 'l': 1000*x}.get(unit.lower())
+        return {"ml": x, "l": 1000 * x}.get(unit.lower())
 
-    base.number.value = toMl(base.number.value, base.unit.children[0]) + \
-        toMl(add.number.value if add.number else 1.0, add.unit.children[0])
-    base.unit.children[0] = base.unit.children[0].update(value='ml')
+    base.number.value = toMl(base.number.value, base.unit.children[0]) + toMl(
+        add.number.value if add.number else 1.0, add.unit.children[0]
+    )
+    base.unit.children[0] = base.unit.children[0].update(value="ml")
 
     # Simplify if possible
-    if (base.number.value/1000).is_integer():
-        base.number.value = base.number.value/1000
-        base.unit.children[0] = base.unit.children[0].update(value='L')
+    if (base.number.value / 1000).is_integer():
+        base.number.value = base.number.value / 1000
+        base.unit.children[0] = base.unit.children[0].update(value="L")
 
 
 def merge_SI_Weight(base: TreeItem, add: TreeItem) -> None:
     def toG(x: float, unit: str):
-        return {'mg': x/1000, 'g': x, 'kg': 1000*x}.get(unit.lower())
+        return {"mg": x / 1000, "g": x, "kg": 1000 * x}.get(unit.lower())
 
-    base.number.value = toG(base.number.value, base.unit.children[0]) + \
-        toG(add.number.value if add.number else 1.0, add.unit.children[0])
-    base.unit.children[0] = base.unit.children[0].update(value='g')
+    base.number.value = toG(base.number.value, base.unit.children[0]) + toG(
+        add.number.value if add.number else 1.0, add.unit.children[0]
+    )
+    base.unit.children[0] = base.unit.children[0].update(value="g")
 
     # Simplify when possible
     if base.number.value < 1:
-        base.number.value = base.number.value*1000
-        base.unit.children[0] = base.unit.children[0].update(value='mg')
-    elif (base.number.value/1000).is_integer():
-        base.number.value = base.number.value/1000
-        base.unit.children[0] = base.unit.children[0].update(value='kg')
+        base.number.value = base.number.value * 1000
+        base.unit.children[0] = base.unit.children[0].update(value="mg")
+    elif (base.number.value / 1000).is_integer():
+        base.number.value = base.number.value / 1000
+        base.unit.children[0] = base.unit.children[0].update(value="kg")

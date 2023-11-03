@@ -1,4 +1,3 @@
-
 from app.models import Household, Shoppinglist
 
 

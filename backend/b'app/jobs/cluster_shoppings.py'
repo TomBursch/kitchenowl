@@ -9,7 +9,7 @@ import numpy as np
 def clusterShoppings(shoppinglist_id: int) -> list:
     dropped = History.find_dropped_by_shoppinglist_id(shoppinglist_id)
 
-    if (len(dropped) == 0):
+    if len(dropped) == 0:
         app.logger.info("no history to investigate")
         return None
 
@@ -24,7 +24,7 @@ def clusterShoppings(shoppinglist_id: int) -> list:
     dbs = DBSCAN1D(eps=eps, min_samples=min_samples)
     labels = dbs.fit_predict(timestamps)
 
-    if (len(labels) == 0):
+    if len(labels) == 0:
         app.logger.info("no shopping instances identified")
         return None
 
@@ -37,11 +37,9 @@ def clusterShoppings(shoppinglist_id: int) -> list:
             clusters[label].append(i)
 
     # indices to list of itemlists for each found shopping instance
-    shopping_instances = [[dropped[i].item_id for i in cluster]
-                          for cluster in clusters]
+    shopping_instances = [[dropped[i].item_id for i in cluster] for cluster in clusters]
 
     # remove duplicates in the instances
-    shopping_instances = [list(set(instance))
-                          for instance in shopping_instances]
+    shopping_instances = [list(set(instance)) for instance in shopping_instances]
 
     return shopping_instances

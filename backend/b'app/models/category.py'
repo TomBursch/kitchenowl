@@ -5,19 +5,19 @@ from app.helpers import DbModelMixin, TimestampMixin, DbModelAuthorizeMixin
 
 
 class Category(db.Model, DbModelMixin, TimestampMixin, DbModelAuthorizeMixin):
-    __tablename__ = 'category'
+    __tablename__ = "category"
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(128))
     default = db.Column(db.Boolean, default=False)
     default_key = db.Column(db.String(128))
     ordering = db.Column(db.Integer, default=0)
-    household_id = db.Column(db.Integer, db.ForeignKey(
-        'household.id'), nullable=False, index=True)
+    household_id = db.Column(
+        db.Integer, db.ForeignKey("household.id"), nullable=False, index=True
+    )
 
     household = db.relationship("Household", uselist=False)
-    items = db.relationship(
-        'Item', back_populates='category')
+    items = db.relationship("Item", back_populates="category")
 
     def obj_to_full_dict(self) -> dict:
         res = super().obj_to_dict()
@@ -25,10 +25,16 @@ class Category(db.Model, DbModelMixin, TimestampMixin, DbModelAuthorizeMixin):
 
     @classmethod
     def all_by_ordering(cls, household_id: int):
-        return cls.query.filter(cls.household_id == household_id).order_by(cls.ordering, cls.name).all()
+        return (
+            cls.query.filter(cls.household_id == household_id)
+            .order_by(cls.ordering, cls.name)
+            .all()
+        )
 
     @classmethod
-    def create_by_name(cls, household_id: int, name, default=False, default_key=None) -> Self:
+    def create_by_name(
+        cls, household_id: int, name, default=False, default_key=None
+    ) -> Self:
         return cls(
             name=name,
             default=default,
@@ -38,11 +44,15 @@ class Category(db.Model, DbModelMixin, TimestampMixin, DbModelAuthorizeMixin):
 
     @classmethod
     def find_by_name(cls, household_id: int, name: str) -> Self:
-        return cls.query.filter(cls.name == name, cls.household_id == household_id).first()
+        return cls.query.filter(
+            cls.name == name, cls.household_id == household_id
+        ).first()
 
     @classmethod
     def find_by_default_key(cls, household_id: int, default_key: str) -> Self:
-        return cls.query.filter(cls.default_key == default_key, cls.household_id == household_id).first()
+        return cls.query.filter(
+            cls.default_key == default_key, cls.household_id == household_id
+        ).first()
 
     @classmethod
     def find_by_id(cls, id: int) -> Self:
@@ -51,8 +61,11 @@ class Category(db.Model, DbModelMixin, TimestampMixin, DbModelAuthorizeMixin):
     def reorder(self, newIndex: int):
         cls = self.__class__
 
-        l: list[cls] = cls.query.filter(cls.household_id == self.household_id).order_by(
-            cls.ordering, cls.name).all()
+        l: list[cls] = (
+            cls.query.filter(cls.household_id == self.household_id)
+            .order_by(cls.ordering, cls.name)
+            .all()
+        )
 
         self.ordering = min(newIndex, len(l) - 1)
 

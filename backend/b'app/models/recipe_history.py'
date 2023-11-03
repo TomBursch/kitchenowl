@@ -14,17 +14,15 @@ class Status(enum.Enum):
 
 
 class RecipeHistory(db.Model, DbModelMixin, TimestampMixin):
-    __tablename__ = 'recipe_history'
+    __tablename__ = "recipe_history"
 
     id = db.Column(db.Integer, primary_key=True)
 
-    recipe_id = db.Column(db.Integer, db.ForeignKey('recipe.id'))
-    household_id = db.Column(db.Integer, db.ForeignKey(
-        'household.id'), nullable=False)
+    recipe_id = db.Column(db.Integer, db.ForeignKey("recipe.id"))
+    household_id = db.Column(db.Integer, db.ForeignKey("household.id"), nullable=False)
 
     household = db.relationship("Household", uselist=False)
-    recipe = db.relationship("Recipe", uselist=False,
-                             back_populates="recipe_history")
+    recipe = db.relationship("Recipe", uselist=False, back_populates="recipe_history")
 
     status = db.Column(db.Enum(Status))
 
@@ -46,16 +44,20 @@ class RecipeHistory(db.Model, DbModelMixin, TimestampMixin):
 
     def obj_to_item_dict(self) -> dict:
         res = self.item.obj_to_dict()
-        res['timestamp'] = getattr(self, 'created_at')
+        res["timestamp"] = getattr(self, "created_at")
         return res
 
     @classmethod
     def find_added(cls, household_id: int) -> list[Self]:
-        return cls.query.filter(cls.household_id == household_id, cls.status == Status.ADDED).all()
+        return cls.query.filter(
+            cls.household_id == household_id, cls.status == Status.ADDED
+        ).all()
 
     @classmethod
     def find_dropped(cls, household_id: int) -> list[Self]:
-        return cls.query.filter(cls.household_id == household_id, cls.status == Status.DROPPED).all()
+        return cls.query.filter(
+            cls.household_id == household_id, cls.status == Status.DROPPED
+        ).all()
 
     @classmethod
     def find_all(cls, household_id: int) -> list[Self]:
@@ -63,8 +65,20 @@ class RecipeHistory(db.Model, DbModelMixin, TimestampMixin):
 
     @classmethod
     def get_recent(cls, household_id: int) -> list[Self]:
-        sq = db.session.query(Planner.recipe_id).group_by(Planner.recipe_id).filter(
-            Planner.household_id == household_id).subquery().select()
-        sq2 = db.session.query(func.max(cls.id)).filter(cls.status == Status.DROPPED, cls.household_id == household_id).filter(
-            cls.recipe_id.notin_(sq)).group_by(cls.recipe_id).join(cls.recipe).subquery().select()
+        sq = (
+            db.session.query(Planner.recipe_id)
+            .group_by(Planner.recipe_id)
+            .filter(Planner.household_id == household_id)
+            .subquery()
+            .select()
+        )
+        sq2 = (
+            db.session.query(func.max(cls.id))
+            .filter(cls.status == Status.DROPPED, cls.household_id == household_id)
+            .filter(cls.recipe_id.notin_(sq))
+            .group_by(cls.recipe_id)
+            .join(cls.recipe)
+            .subquery()
+            .select()
+        )
         return cls.query.filter(cls.id.in_(sq2)).order_by(cls.id.desc()).limit(9)

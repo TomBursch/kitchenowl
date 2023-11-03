@@ -8,14 +8,19 @@ from .cluster_shoppings import clusterShoppings
 
 # # for debugging run: FLASK_DEBUG=True python manage.py
 
-@scheduler.task('cron', id='everyDay', day_of_week='*', hour='3')
+
+@scheduler.task("cron", id="everyDay", day_of_week="*", hour="3")
 def daily():
     with app.app_context():
         app.logger.info("--- daily analysis is starting ---")
         # task for all households
         for household in Household.all():
             # shopping tasks
-            shopping_instances = clusterShoppings(Shoppinglist.query.filter(Shoppinglist.household_id == household.id).first().id)
+            shopping_instances = clusterShoppings(
+                Shoppinglist.query.filter(Shoppinglist.household_id == household.id)
+                .first()
+                .id
+            )
             if shopping_instances:
                 findItemOrdering(shopping_instances)
                 findItemSuggestions(shopping_instances)
@@ -26,7 +31,7 @@ def daily():
         app.logger.info("--- daily analysis is completed ---")
 
 
-@scheduler.task('interval', id='every30min', minutes=30)
+@scheduler.task("interval", id="every30min", minutes=30)
 def halfHourly():
     with app.app_context():
         # Remove expired Tokens

@@ -3,24 +3,12 @@ from marshmallow import fields, Schema
 
 class AddRecipe(Schema):
     class RecipeItem(Schema):
-        name = fields.String(
-            required=True,
-            validate=lambda a: a and not a.isspace()
-        )
-        description = fields.String(
-            load_default=''
-        )
-        optional = fields.Boolean(
-            load_default=True
-        )
+        name = fields.String(required=True, validate=lambda a: a and not a.isspace())
+        description = fields.String(load_default="")
+        optional = fields.Boolean(load_default=True)
 
-    name = fields.String(
-        required=True,
-        validate=lambda a: a and not a.isspace()
-    )
-    description = fields.String(
-        validate=lambda a: a is not None
-    )
+    name = fields.String(required=True, validate=lambda a: a and not a.isspace())
+    description = fields.String(validate=lambda a: a is not None)
     time = fields.Integer(validate=lambda a: a >= 0)
     cook_time = fields.Integer(validate=lambda a: a >= 0)
     prep_time = fields.Integer(validate=lambda a: a >= 0)
@@ -33,19 +21,12 @@ class AddRecipe(Schema):
 
 class UpdateRecipe(Schema):
     class RecipeItem(Schema):
-        name = fields.String(
-            required=True,
-            validate=lambda a: a and not a.isspace()
-        )
+        name = fields.String(required=True, validate=lambda a: a and not a.isspace())
         description = fields.String()
         optional = fields.Boolean(load_default=True)
 
-    name = fields.String(
-        validate=lambda a: a and not a.isspace()
-    )
-    description = fields.String(
-        validate=lambda a: a is not None
-    )
+    name = fields.String(validate=lambda a: a and not a.isspace())
+    description = fields.String(validate=lambda a: a is not None)
     time = fields.Integer(validate=lambda a: a >= 0)
     cook_time = fields.Integer(validate=lambda a: a >= 0)
     prep_time = fields.Integer(validate=lambda a: a >= 0)
@@ -57,10 +38,7 @@ class UpdateRecipe(Schema):
 
 
 class SearchByNameRequest(Schema):
-    query = fields.String(
-        required=True,
-        validate=lambda a: a and not a.isspace()
-    )
+    query = fields.String(required=True, validate=lambda a: a and not a.isspace())
     only_ids = fields.Boolean(
         default=False,
     )
@@ -71,9 +49,7 @@ class GetAllFilterRequest(Schema):
 
 
 class AddItemByName(Schema):
-    name = fields.String(
-        required=True
-    )
+    name = fields.String(required=True)
     description = fields.String()
 
 
@@ -84,7 +60,4 @@ class RemoveItem(Schema):
 
 
 class ScrapeRecipe(Schema):
-    url = fields.String(
-        required=True,
-        validate=lambda a: a and not a.isspace()
-    )
+    url = fields.String(required=True, validate=lambda a: a and not a.isspace())

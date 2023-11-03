@@ -10,7 +10,7 @@ class DbSetType(TypeDecorator):
         if type(value) is set:
             return json.dumps(list(value))
         else:
-            return '[]'
+            return "[]"
 
     def process_result_value(self, value, dialect) -> set:
         if type(value) is str:

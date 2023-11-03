@@ -15,11 +15,12 @@ def file_has_access_or_download(newPhoto: str, oldPhoto: str = None) -> str:
     Downloads the file if the url is an external URL or checks if the user has access to the file on this server
     If the user has no access oldPhoto is returned
     """
-    if newPhoto is not None and '/' in newPhoto:
+    if newPhoto is not None and "/" in newPhoto:
         from mimetypes import guess_extension
+
         resp = requests.get(newPhoto)
-        ext = guess_extension(resp.headers['content-type'])
-        if ext and allowed_file('file' + ext):
+        ext = guess_extension(resp.headers["content-type"])
+        if ext and allowed_file("file" + ext):
             filename = secure_filename(str(uuid.uuid4()) + ext)
             with open(os.path.join(UPLOAD_FOLDER, filename), "wb") as o:
                 o.write(resp.content)
@@ -27,14 +28,12 @@ def file_has_access_or_download(newPhoto: str, oldPhoto: str = None) -> str:
             try:
                 with Image.open(os.path.join(UPLOAD_FOLDER, filename)) as image:
                     image.thumbnail((100, 100))
-                    blur = blurhash.encode(
-                        image, x_components=4, y_components=3)
+                    blur = blurhash.encode(image, x_components=4, y_components=3)
             except FileNotFoundError:
                 return None
             except Exception:
                 pass
-            File(filename=filename, blur_hash=blur,
-                 created_by=current_user.id).save()
+            File(filename=filename, blur_hash=blur, created_by=current_user.id).save()
             return filename
     elif newPhoto is not None:
         if not newPhoto:

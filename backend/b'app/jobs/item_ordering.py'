@@ -15,7 +15,7 @@ def findItemOrdering(shopping_instances):
         item_id = order[ord]
         item = Item.find_by_id(item_id)
         if item:
-            item.ordering = ord+1
+            item.ordering = ord + 1
             db.session.add(item)
 
     # commit changes to db
@@ -47,15 +47,14 @@ class ItemSort:
                 self.matrix.append([0 for i in range(len(self.indices))])
 
         # cost of ranking in current list
-        cost = (1-self.decay) / len(lst)
+        cost = (1 - self.decay) / len(lst)
 
         # iterate the current list
         for i in range(len(lst)):
             index = self.item_dict[lst[i]]
 
             # decay old costs with factor decay
-            self.matrix[index] = list(
-                map(lambda x: x * self.decay, self.matrix[index]))
+            self.matrix[index] = list(map(lambda x: x * self.decay, self.matrix[index]))
 
             # increase incoming cost for all preceeding items in the current list
             predecessors = lst[:i]
@@ -68,7 +67,6 @@ class ItemSort:
         order = []
 
         for iter in range(len(mtx)):
-
             # cost of an item is the sum of its incoming costs
             costs = list(map(sum, mtx))
 

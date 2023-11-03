@@ -14,7 +14,7 @@ def validate_socket_args(schema_cls):
             try:
                 arguments = schema_cls().load(args[0])
             except ValidationError as exc:
-                raise InvalidUsage('{}'.format(exc))
+                raise InvalidUsage("{}".format(exc))
 
             return func(arguments, **kwargs)
 

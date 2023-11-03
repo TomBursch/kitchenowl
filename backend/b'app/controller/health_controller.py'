@@ -1,26 +1,33 @@
 from flask import jsonify, Blueprint
-from app.config import BACKEND_VERSION, MIN_FRONTEND_VERSION, PRIVACY_POLICY_URL, OPEN_REGISTRATION, EMAIL_MANDATORY
+from app.config import (
+    BACKEND_VERSION,
+    MIN_FRONTEND_VERSION,
+    PRIVACY_POLICY_URL,
+    OPEN_REGISTRATION,
+    EMAIL_MANDATORY,
+)
 from app.models import Settings
 from app.config import SUPPORTED_LANGUAGES
 
-health = Blueprint('health', __name__)
+health = Blueprint("health", __name__)
 
 
-@health.route('', methods=['GET'])
+@health.route("", methods=["GET"])
 def get_health():
     info = {
-        'msg': "OK",
-        'version': BACKEND_VERSION,
-        'min_frontend_version': MIN_FRONTEND_VERSION,
+        "msg": "OK",
+        "version": BACKEND_VERSION,
+        "min_frontend_version": MIN_FRONTEND_VERSION,
     }
     if PRIVACY_POLICY_URL:
-        info['privacy_policy'] = PRIVACY_POLICY_URL
+        info["privacy_policy"] = PRIVACY_POLICY_URL
     if OPEN_REGISTRATION:
-        info['open_registration'] = True
+        info["open_registration"] = True
     if EMAIL_MANDATORY:
-        info['email_mandatory'] = True
+        info["email_mandatory"] = True
     return jsonify(info)
 
-@health.route('/supported-languages', methods=['GET'])
+
+@health.route("/supported-languages", methods=["GET"])
 def getSupportedLanguages():
     return jsonify(SUPPORTED_LANGUAGES)

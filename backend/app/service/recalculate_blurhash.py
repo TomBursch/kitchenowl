@@ -11,8 +11,7 @@ def recalculateBlurhashes(updateAll: bool = False) -> int:
         try:
             with Image.open(os.path.join(UPLOAD_FOLDER, file.filename)) as image:
                 image.thumbnail((100, 100))
-                file.blur_hash = blurhash.encode(
-                    image, x_components=4, y_components=3)
+                file.blur_hash = blurhash.encode(image, x_components=4, y_components=3)
             db.session.add(file)
         except FileNotFoundError:
             db.session.delete(file)

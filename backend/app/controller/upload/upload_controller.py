@@ -12,24 +12,25 @@ from app.errors import ForbiddenRequest, NotFoundRequest
 from app.models import File
 from app.util.filename_validator import allowed_file
 
-upload = Blueprint('upload', __name__)
+upload = Blueprint("upload", __name__)
 
 
-@upload.route('', methods=['POST'])
+@upload.route("", methods=["POST"])
 @jwt_required()
 def upload_file():
-    if 'file' not in request.files:
-        return jsonify({'msg': 'missing file'})
+    if "file" not in request.files:
+        return jsonify({"msg": "missing file"})
 
-    file = request.files['file']
+    file = request.files["file"]
     # If the user does not select a file, the browser submits an
     # empty file without a filename.
-    if file.filename == '':
-        return jsonify({'msg': 'missing filename'})
+    if file.filename == "":
+        return jsonify({"msg": "missing filename"})
 
     if file and allowed_file(file.filename):
-        filename = secure_filename(str(uuid.uuid4()) + '.' +
-                                   file.filename.rsplit('.', 1)[1].lower())
+        filename = secure_filename(
+            str(uuid.uuid4()) + "." + file.filename.rsplit(".", 1)[1].lower()
+        )
         file.save(os.path.join(UPLOAD_FOLDER, filename))
         blur = None
         try:
@@ -46,7 +47,7 @@ def upload_file():
     raise Exception("Invalid usage.")
 
 
-@upload.route('<filename>', methods=['GET'])
+@upload.route("<filename>", methods=["GET"])
 @jwt_required()
 def download_file(filename):
     filename = secure_filename(filename)
@@ -65,9 +66,9 @@ def download_file(filename):
             household_id = f.expense.household_id
         f.checkAuthorized(household_id=household_id)
     elif f.created_by and current_user and f.created_by == current_user.id:
-        pass # created by user can access his pictures
+        pass  # created by user can access his pictures
     elif f.profile_picture:
-        pass # profile pictures are public
+        pass  # profile pictures are public
     else:
         raise ForbiddenRequest()
 

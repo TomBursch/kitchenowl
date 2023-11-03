@@ -8,21 +8,18 @@ import os
 
 
 class File(db.Model, DbModelMixin, TimestampMixin, DbModelAuthorizeMixin):
-    __tablename__ = 'file'
+    __tablename__ = "file"
 
     filename = db.Column(db.String(), primary_key=True)
     blur_hash = db.Column(db.String(length=40), nullable=True)
-    created_by = db.Column(db.Integer, db.ForeignKey(
-        'user.id'), nullable=True)
+    created_by = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=True)
 
-    created_by_user = db.relationship(
-        "User", foreign_keys=[created_by], uselist=False)
+    created_by_user = db.relationship("User", foreign_keys=[created_by], uselist=False)
 
     household = db.relationship("Household", uselist=False)
     recipe = db.relationship("Recipe", uselist=False)
     expense = db.relationship("Expense", uselist=False)
-    profile_picture = db.relationship(
-        "User", foreign_keys=[User.photo], uselist=False)
+    profile_picture = db.relationship("User", foreign_keys=[User.photo], uselist=False)
 
     def delete(self):
         """
@@ -33,7 +30,12 @@ class File(db.Model, DbModelMixin, TimestampMixin, DbModelAuthorizeMixin):
         db.session.commit()
 
     def isUnused(self) -> bool:
-        return not self.household and not self.recipe and not self.expense and not self.profile_picture
+        return (
+            not self.household
+            and not self.recipe
+            and not self.expense
+            and not self.profile_picture
+        )
 
     @classmethod
     def find(cls, filename: str) -> Self:

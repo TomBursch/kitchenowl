@@ -11,17 +11,17 @@ def validate_args(schema_cls):
             if not schema_cls:
                 raise Exception("Invalid usage. Schema class missing")
 
-            if request.method == 'GET':
+            if request.method == "GET":
                 request_data = request.args
                 load_fn = schema_cls().load
             else:
-                request_data = request.data.decode('utf-8')
+                request_data = request.data.decode("utf-8")
                 load_fn = schema_cls().loads
 
             try:
                 arguments = load_fn(request_data)
             except ValidationError as exc:
-                raise InvalidUsage('{}'.format(exc))
+                raise InvalidUsage("{}".format(exc))
 
             return func(arguments, *args, **kwargs)
 

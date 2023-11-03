@@ -3,10 +3,7 @@ from app.config import SUPPORTED_LANGUAGES
 
 
 class OnboardSchema(Schema):
-    name = fields.String(
-        required=True,
-        validate=lambda a: a and not a.isspace()
-    )
+    name = fields.String(required=True, validate=lambda a: a and not a.isspace())
     username = fields.String(
         required=True,
         validate=lambda a: a and not a.isspace() and not "@" in a,

@@ -4,7 +4,6 @@ from app import db
 
 
 class DbModelMixin(object):
-
     def save(self) -> Self:
         """
         Persist changes to current instance in db
@@ -25,7 +24,9 @@ class DbModelMixin(object):
         db.session.delete(self)
         db.session.commit()
 
-    def obj_to_dict(self, skip_columns: list[str] = None, include_columns: list[str] = None) -> dict:
+    def obj_to_dict(
+        self, skip_columns: list[str] | None = None, include_columns: list[str] | None = None
+    ) -> dict:
         d = {}
         for column in self.__table__.columns:
             d[column.name] = getattr(self, column.name)
@@ -90,7 +91,9 @@ class DbModelMixin(object):
         Return all instances of model
         IMPORTANT: requires household_id and name column
         """
-        return cls.query.filter(cls.household_id == household_id).order_by(cls.name).all()
+        return (
+            cls.query.filter(cls.household_id == household_id).order_by(cls.name).all()
+        )
 
     @classmethod
     def count(cls) -> int:

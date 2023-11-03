@@ -7,18 +7,23 @@ from flask import jsonify, Blueprint
 from flask_jwt_extended import jwt_required
 
 
-analytics = Blueprint('analytics', __name__)
+analytics = Blueprint("analytics", __name__)
 
 
-@analytics.route('', methods=['GET'])
+@analytics.route("", methods=["GET"])
 @jwt_required()
 @server_admin_required()
 def getBaseAnalytics():
     statvfs = os.statvfs(UPLOAD_FOLDER)
-    return jsonify({
-        "total_users": User.count(),
-        "active_users": db.session.query(Token.user_id).filter(Token.type == 'refresh').group_by(Token.user_id).count(),
-        "total_households": Household.count(),
-        "free_storage": statvfs.f_frsize * statvfs.f_bavail,
-        "available_storage": statvfs.f_frsize * statvfs.f_blocks,
-    })
+    return jsonify(
+        {
+            "total_users": User.count(),
+            "active_users": db.session.query(Token.user_id)
+            .filter(Token.type == "refresh")
+            .group_by(Token.user_id)
+            .count(),
+            "total_households": Household.count(),
+            "free_storage": statvfs.f_frsize * statvfs.f_bavail,
+            "available_storage": statvfs.f_frsize * statvfs.f_blocks,
+        }
+    )

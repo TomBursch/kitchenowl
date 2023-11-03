@@ -7,7 +7,7 @@ from app.errors import UnauthorizedRequest, InvalidUsage
 from .schemas import Login, Signup, CreateLongLivedToken
 from app.config import jwt, OPEN_REGISTRATION
 
-auth = Blueprint('auth', __name__)
+auth = Blueprint("auth", __name__)
 
 
 # Callback function to check if a JWT exists in the database blocklist
@@ -15,7 +15,7 @@ auth = Blueprint('auth', __name__)
 def check_if_token_revoked(jwt_header, jwt_payload: dict) -> bool:
     jti = jwt_payload["jti"]
     token = Token.find_by_jti(jti)
-    if (token is not None):
+    if token is not None:
         token.last_used_at = datetime.utcnow()
         token.save()
 
@@ -39,17 +39,20 @@ def user_lookup_callback(_jwt_header, jwt_data) -> User:
     return User.find_by_id(identity)
 
 
-@auth.route('', methods=['POST'])
+@auth.route("", methods=["POST"])
 @validate_args(Login)
 def login(args):
-    username = args['username'].lower()
+    username = args["username"].lower()
     user = User.find_by_username(username)
-    if not user or not user.check_password(args['password']):
+    if not user or not user.check_password(args["password"]):
         raise UnauthorizedRequest(
-            message='Unauthorized: IP {} login attemp with wrong username or password'.format(request.remote_addr))
+            message="Unauthorized: IP {} login attemp with wrong username or password".format(
+                request.remote_addr
+            )
+        )
     device = "Unkown"
     if "device" in args:
-        device = args['device']
+        device = args["device"]
 
     # Create refresh token
     refreshToken, refreshModel = Token.create_refresh_token(user, device)
@@ -57,35 +60,33 @@ def login(args):
     # Create first access token
     accesssToken, _ = Token.create_access_token(user, refreshModel)
 
-    return jsonify({
-        'access_token': accesssToken,
-        'refresh_token': refreshToken
-    })
+    return jsonify({"access_token": accesssToken, "refresh_token": refreshToken})
 
 
 if OPEN_REGISTRATION:
-    @auth.route('signup', methods=['POST'])
+
+    @auth.route("signup", methods=["POST"])
     @validate_args(Signup)
     def signup(args):
-        username = args['username'].strip().lower().replace(" ", "")
+        username = args["username"].strip().lower().replace(" ", "")
         user = User.find_by_username(username)
         if user:
             return "Request invalid: username", 400
         if "email" in args:
-            user = User.find_by_email(args['email'])
+            user = User.find_by_email(args["email"])
             if user:
                 return "Request invalid: email", 400
 
         user = User.create(
             username=username,
-            name=args['name'],
-            password=args['password'],
-            email=args['email'] if "email" in args else None,
+            name=args["name"],
+            password=args["password"],
+            email=args["email"] if "email" in args else None,
         )
 
         device = "Unkown"
         if "device" in args:
-            device = args['device']
+            device = args["device"]
 
         # Create refresh token
         refreshToken, refreshModel = Token.create_refresh_token(user, device)
@@ -93,80 +94,80 @@ if OPEN_REGISTRATION:
         # Create first access token
         accesssToken, _ = Token.create_access_token(user, refreshModel)
 
-        return jsonify({
-            'access_token': accesssToken,
-            'refresh_token': refreshToken
-        })
+        return jsonify({"access_token": accesssToken, "refresh_token": refreshToken})
 
 
-@auth.route('/refresh', methods=['GET'])
+@auth.route("/refresh", methods=["GET"])
 @jwt_required(refresh=True)
 def refresh():
     user = current_user
     if not user:
         raise UnauthorizedRequest(
-            message='Unauthorized: IP {} refresh attemp with wrong username or password'.format(request.remote_addr))
+            message="Unauthorized: IP {} refresh attemp with wrong username or password".format(
+                request.remote_addr
+            )
+        )
 
-    refreshModel = Token.find_by_jti(get_jwt()['jti'])
+    refreshModel = Token.find_by_jti(get_jwt()["jti"])
     # Refresh token rotation
     refreshToken, refreshModel = Token.create_refresh_token(
-        user, oldRefreshToken=refreshModel)
+        user, oldRefreshToken=refreshModel
+    )
 
     # Create access token
     accesssToken, _ = Token.create_access_token(user, refreshModel)
 
-    return jsonify({
-        'access_token': accesssToken,
-        'refresh_token': refreshToken
-    })
+    return jsonify({"access_token": accesssToken, "refresh_token": refreshToken})
 
 
-@auth.route('', methods=['DELETE'])
+@auth.route("", methods=["DELETE"])
 @jwt_required()
 def logout():
     jwt = get_jwt()
-    token = Token.find_by_jti(jwt['jti'])
+    token = Token.find_by_jti(jwt["jti"])
     if not token:
         raise UnauthorizedRequest(
-            message='Unauthorized: IP {}'.format(request.remote_addr))
+            message="Unauthorized: IP {}".format(request.remote_addr)
+        )
 
-    if token.type == 'access':
+    if token.type == "access":
         token.refresh_token.delete()
     else:
         token.delete()
 
-    return jsonify({'msg': 'DONE'})
+    return jsonify({"msg": "DONE"})
 
 
-@auth.route('llt', methods=['POST'])
+@auth.route("llt", methods=["POST"])
 @jwt_required()
 @validate_args(CreateLongLivedToken)
 def createLongLivedToken(args):
     user = current_user
     if not user:
         raise UnauthorizedRequest(
-            message='Unauthorized: IP {}'.format(request.remote_addr))
+            message="Unauthorized: IP {}".format(request.remote_addr)
+        )
 
-    llToken, _ = Token.create_longlived_token(user, args['device'])
+    llToken, _ = Token.create_longlived_token(user, args["device"])
 
-    return jsonify({
-        'longlived_token': llToken
-    })
+    return jsonify({"longlived_token": llToken})
 
 
-@auth.route('llt/<int:id>', methods=['DELETE'])
+@auth.route("llt/<int:id>", methods=["DELETE"])
 @jwt_required()
 def deleteLongLivedToken(id):
     user = current_user
     if not user:
         raise UnauthorizedRequest(
-            message='Unauthorized: IP {}'.format(request.remote_addr))
+            message="Unauthorized: IP {}".format(request.remote_addr)
+        )
 
     token = Token.find_by_id(id)
-    if (token.user_id != user.id or token.type != 'llt'):
+    if token.user_id != user.id or token.type != "llt":
         raise UnauthorizedRequest(
-            message='Unauthorized: IP {}'.format(request.remote_addr))
+            message="Unauthorized: IP {}".format(request.remote_addr)
+        )
 
     token.delete()
 
-    return jsonify({'msg': 'DONE'})
+    return jsonify({"msg": "DONE"})

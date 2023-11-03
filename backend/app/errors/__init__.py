@@ -9,8 +9,7 @@ class InvalidUsage(Exception):
 
 class UnauthorizedRequest(Exception):
     def __init__(self, message=""):
-        message = message or 'Authorization required. IP {}'.format(
-            request.remote_addr)
+        message = message or "Authorization required. IP {}".format(request.remote_addr)
         super(UnauthorizedRequest, self).__init__(message)
         self.message = message
 

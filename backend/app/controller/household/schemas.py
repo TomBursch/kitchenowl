@@ -4,10 +4,8 @@ from marshmallow import fields, Schema, EXCLUDE
 class AddHousehold(Schema):
     class Meta:
         unknown = EXCLUDE
-    name = fields.String(
-        required=True,
-        validate=lambda a: a and not a.isspace()
-    )
+
+    name = fields.String(required=True, validate=lambda a: a and not a.isspace())
     photo = fields.String()
     language = fields.String()
     planner_feature = fields.Boolean()
@@ -19,9 +17,8 @@ class AddHousehold(Schema):
 class UpdateHousehold(Schema):
     class Meta:
         unknown = EXCLUDE
-    name = fields.String(
-        validate=lambda a: a and not a.isspace()
-    )
+
+    name = fields.String(validate=lambda a: a and not a.isspace())
     photo = fields.String()
     language = fields.String()
     planner_feature = fields.Boolean()
@@ -32,4 +29,5 @@ class UpdateHousehold(Schema):
 class UpdateHouseholdMember(Schema):
     class Meta:
         unknown = EXCLUDE
+
     admin = fields.Boolean()

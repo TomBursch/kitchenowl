@@ -4,10 +4,10 @@ from flask import jsonify, Blueprint
 from flask_jwt_extended import jwt_required
 from app.models import Settings
 
-settings = Blueprint('settings', __name__)
+settings = Blueprint("settings", __name__)
 
 
-@settings.route('', methods=['POST'])
+@settings.route("", methods=["POST"])
 @jwt_required()
 @server_admin_required()
 def setSettings():
@@ -16,7 +16,7 @@ def setSettings():
     return jsonify(settings.obj_to_dict())
 
 
-@settings.route('', methods=['GET'])
+@settings.route("", methods=["GET"])
 @jwt_required()
 def getSettings():
     return jsonify(Settings.get().obj_to_dict())

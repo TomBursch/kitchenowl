@@ -236,10 +236,11 @@ def scrapeRecipe(args, household_id):
         name = parsed.name.text if parsed.name else ingredient
         item = Item.find_by_name(household_id, name)
         if item:
+            description = f"{parsed.amount[0].quantity if len(parsed.amount) > 0 else ''} {parsed.amount[0].unit if len(parsed.amount) > 0 else ''}"
+            # description = description + (" " if description else "") + (parsed.comment.text if parsed.comment else "") # Usually cooking instructions
+
             items[ingredient] = item.obj_to_dict() | {
-                "description": " ".join(
-                    filter(None, [parsed.quantity + parsed.unit, parsed.comment])
-                ),
+                "description": description,
                 "optional": False,
             }
         else:

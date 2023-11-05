@@ -145,7 +145,7 @@ class Item(db.Model, DbModelMixin, TimestampMixin, DbModelAuthorizeMixin):
     def find_by_name(cls, household_id: int, name: str) -> Self:
         name = name.strip()
         return cls.query.filter(
-            cls.household_id == household_id, cls.name == name
+            cls.household_id == household_id, func.lower(cls.name) == name.lower()
         ).first()
 
     @classmethod

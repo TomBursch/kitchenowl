@@ -97,6 +97,12 @@
     "beans": {
       "icon": "peas"
     },
+    "beef": {
+      "icon": "beef"
+    },
+    "beef_broth": {
+      "icon": "mayonnaise"
+    },
     "beer": {
       "category": "drinks",
       "icon": "beer-bottle"

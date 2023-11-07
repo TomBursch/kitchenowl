@@ -33,7 +33,7 @@ COPY --from=builder /opt/venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
 
 # Setup KitchenOwl
-COPY wsgi.ini wsgi.py entrypoint.sh manage.py upgrade_default_items.py /usr/src/kitchenowl/
+COPY wsgi.ini wsgi.py entrypoint.sh manage.py manage_default_items.py upgrade_default_items.py /usr/src/kitchenowl/
 COPY app /usr/src/kitchenowl/app
 COPY templates /usr/src/kitchenowl/templates
 COPY migrations /usr/src/kitchenowl/migrations

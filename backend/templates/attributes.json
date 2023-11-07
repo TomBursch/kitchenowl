@@ -161,7 +161,9 @@
     "butter_cookies": {
       "icon": "cookies"
     },
-    "butternut_squash": {},
+    "butternut_squash": {
+      "icon": "pumpkin"
+    },
     "button_cells": {},
     "börek_cheese": {
       "category": "dairy",
@@ -497,7 +499,9 @@
       "icon": "lettuce"
     },
     "herb_baguettes": {},
-    "herb_butter": {},
+    "herb_butter": {
+      "icon": "butter"
+    },
     "herb_cream_cheese": {
       "category": "dairy"
     },
@@ -538,6 +542,10 @@
     },
     "kitchen_towels": {
       "category": "hygiene"
+    },
+    "kiwi": {
+      "category": "fruits_vegetables",
+      "icon": "kiwi"
     },
     "kohlrabi": {
       "category": "fruits_vegetables",
@@ -599,7 +607,8 @@
     "maggi": {},
     "magnesium": {},
     "mango": {
-      "category": "fruits_vegetables"
+      "category": "fruits_vegetables",
+      "icon": "plum"
     },
     "maple_syrup": {},
     "margarine": {

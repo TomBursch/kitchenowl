@@ -1,6 +1,6 @@
 from app.jobs.recipe_suggestions import computeRecipeSuggestions
 from app import app, scheduler
-from app.models import Token, Household, Shoppinglist, Recipe
+from app.models import Token, Household, Shoppinglist, Recipe, ChallengePasswordReset
 from .item_ordering import findItemOrdering
 from .item_suggestions import findItemSuggestions
 from .cluster_shoppings import clusterShoppings
@@ -37,3 +37,4 @@ def halfHourly():
         # Remove expired Tokens
         Token.delete_expired_access()
         Token.delete_expired_refresh()
+        ChallengePasswordReset.delete_expired()

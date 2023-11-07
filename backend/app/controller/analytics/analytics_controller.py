@@ -18,6 +18,7 @@ def getBaseAnalytics():
     return jsonify(
         {
             "total_users": User.count(),
+            "verified_users": User.query.filter(User.email_verified == True).count(),
             "active_users": db.session.query(Token.user_id)
             .filter(Token.type == "refresh")
             .group_by(Token.user_id)

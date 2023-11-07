@@ -131,7 +131,7 @@ def logout():
         )
 
     if token.type == "access":
-        token.refresh_token.delete()
+        token.refresh_token.delete_token_familiy()
     else:
         token.delete()
 

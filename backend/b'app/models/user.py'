@@ -16,9 +16,17 @@ class User(db.Model, DbModelMixin, TimestampMixin):
     password = db.Column(db.String(256), nullable=False)
     photo = db.Column(db.String(), db.ForeignKey("file.filename", use_alter=True))
     admin = db.Column(db.Boolean(), default=False)
+    email_verified = db.Column(db.Boolean(), default=False)
 
     tokens = db.relationship(
         "Token", back_populates="user", cascade="all, delete-orphan"
+    )
+
+    password_reset_challenge = db.relationship(
+        "ChallengePasswordReset", back_populates="user", cascade="all, delete-orphan"
+    )
+    verify_mail_challenge = db.relationship(
+        "ChallengeMailVerify", back_populates="user", cascade="all, delete-orphan"
     )
 
     households = db.relationship(
@@ -52,7 +60,7 @@ class User(db.Model, DbModelMixin, TimestampMixin):
         else:
             skip_columns = ["password"]
         if not include_email:
-            skip_columns += ["email"]
+            skip_columns += ["email", "email_verified"]
 
         if not current_user or not current_user.admin:
             # Filter out admin status if current user is not an admin
@@ -65,9 +73,8 @@ class User(db.Model, DbModelMixin, TimestampMixin):
     def obj_to_full_dict(self) -> dict:
         from .token import Token
 
-        res = self.obj_to_dict()
+        res = self.obj_to_dict(include_email=True)
         res["admin"] = self.admin
-        res["email"] = self.email
         tokens = Token.query.filter(
             Token.user_id == self.id,
             Token.type != "access",

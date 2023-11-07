@@ -14,3 +14,5 @@ from .category import Category
 from .token import Token
 from .household import Household, HouseholdMember
 from .file import File
+from .challenge_mail_verify import ChallengeMailVerify
+from .challenge_password_reset import ChallengePasswordReset

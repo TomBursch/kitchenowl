@@ -33,6 +33,8 @@ STORAGE_PATH = os.getenv("STORAGE_PATH", PROJECT_DIR)
 UPLOAD_FOLDER = STORAGE_PATH + "/upload"
 ALLOWED_FILE_EXTENSIONS = {"txt", "pdf", "png", "jpg", "jpeg", "gif"}
 
+FRONT_URL = os.getenv("FRONT_URL")
+
 PRIVACY_POLICY_URL = os.getenv("PRIVACY_POLICY_URL")
 OPEN_REGISTRATION = os.getenv("OPEN_REGISTRATION", "False").lower() == "true"
 EMAIL_MANDATORY = os.getenv("EMAIL_MANDATORY", "False").lower() == "true"
@@ -107,7 +109,7 @@ migrate = Migrate(app, db, render_as_batch=True)
 bcrypt = Bcrypt(app)
 jwt = JWTManager(app)
 socketio = SocketIO(
-    app, json=app.json, logger=app.logger, cors_allowed_origins=os.getenv("FRONT_URL")
+    app, json=app.json, logger=app.logger, cors_allowed_origins=FRONT_URL
 )
 if COLLECT_METRICS:
     basic_auth = BasicAuth(app)
@@ -134,8 +136,7 @@ def add_cors_headers(response):
     if not request.referrer:
         return response
     r = request.referrer[:-1]
-    url = os.getenv("FRONT_URL")
-    if app.debug or url and r == url:
+    if app.debug or FRONT_URL and r == FRONT_URL:
         response.headers.add("Access-Control-Allow-Origin", r)
         response.headers.add("Access-Control-Allow-Credentials", "true")
         response.headers.add("Access-Control-Allow-Headers", "Content-Type")

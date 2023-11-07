@@ -18,8 +18,8 @@ cycler==0.12.1
 dbscan1d==0.2.2
 extruct==0.16.0
 flake8==6.1.0
-Flask==2.3.3
-Flask-APScheduler==1.13.0
+Flask==3.0.0
+Flask-APScheduler==1.13.1
 Flask-BasicAuth==0.2.0
 Flask-Bcrypt==1.0.1
 Flask-JWT-Extended==4.5.3

@@ -259,7 +259,8 @@ class _SettingsUserPageState extends State<SettingsUserPage> {
                               previous.user?.emailVerified !=
                               current.user?.emailVerified,
                           builder: (context, state) {
-                            if (state.user?.emailVerified ?? false) {
+                            if ((state.user?.email?.isEmpty ?? false) ||
+                                (state.user?.emailVerified ?? false)) {
                               return const SizedBox();
                             }
                             return LoadingListTile(

@@ -110,4 +110,31 @@ extension UserApi on ApiService {
 
     return body.map((e) => User.fromJson(e)).toList();
   }
+
+  Future<bool> resendVerificationMail() async {
+    final res = await post('$baseRoute/resend-verification-mail', null);
+    return res.statusCode == 200;
+  }
+
+  Future<bool> confirmMail(String token) async {
+    final res =
+        await post('$baseRoute/confirm-mail', jsonEncode({"token": token}));
+    return res.statusCode == 200;
+  }
+
+  Future<bool> resetPassword(String token, String password) async {
+    final res = await post(
+        '$baseRoute/reset-password',
+        jsonEncode({
+          "token": token,
+          "password": password,
+        }));
+    return res.statusCode == 200;
+  }
+
+  Future<bool> forgotPassword(String email) async {
+    final res =
+        await post('$baseRoute/forgot-password', jsonEncode({"email": email}));
+    return res.statusCode == 200;
+  }
 }

@@ -22,7 +22,29 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
+      appBar: !kIsWeb
+          ? AppBar(
+              actions: [
+                PopupMenuButton(
+                  itemBuilder: (BuildContext context) => <PopupMenuEntry<int>>[
+                    PopupMenuItem<int>(
+                      value: 0,
+                      child: ListTile(
+                        leading: const Icon(Icons.swap_horiz_rounded),
+                        title: Text(AppLocalizations.of(context)!.serverChange),
+                      ),
+                    ),
+                  ],
+                  onSelected: (_) {
+                    BlocProvider.of<AuthCubit>(context).removeServer();
+                  },
+                ),
+              ],
+            )
+          : null,
       body: SafeArea(
+        top: false,
         child: Align(
           alignment: Alignment.topCenter,
           child: ConstrainedBox(
@@ -113,12 +135,14 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ],
                     const Spacer(),
-                    if (!kIsWeb)
+                    if (App.serverInfo is ConnectedServerInfoState &&
+                        (App.serverInfo as ConnectedServerInfoState)
+                            .emailMandatory)
                       TextButton.icon(
-                        icon: const Icon(Icons.swap_horiz_rounded),
-                        label: Text(AppLocalizations.of(context)!.serverChange),
-                        onPressed: () =>
-                            BlocProvider.of<AuthCubit>(context).removeServer(),
+                        icon: const Icon(Icons.lock_reset_rounded),
+                        label:
+                            Text(AppLocalizations.of(context)!.passwordForgot),
+                        onPressed: () => context.push("/forgot-password"),
                       ),
                   ],
                 ),

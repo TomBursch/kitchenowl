@@ -106,22 +106,25 @@ class _AppState extends State<App> {
                   previous != current &&
                   !(previous is Authenticated && current is Authenticated),
               listener: (context, state) {
-                if (state is Setup) router.go("/setup");
-                if (state is Onboarding) router.go("/onboarding");
-                if (state is Unauthenticated) router.go("/signin");
-                if (state is Unreachable) router.go("/unreachable");
-                if (state is Unsupported) router.go("/unsupported");
-                if (state is Loading) router.go("/");
-                if (state is Authenticated) {
-                  if (initialLocation != null && initialLocation != "/") {
-                    router.go(initialLocation!);
-                  } else {
-                    PreferenceStorage.getInstance()
-                        .readInt(key: 'lastHouseholdId')
-                        .then((id) =>
-                            router.go("/household${id == null ? "" : "/$id"}"));
-                  }
+                if (state is Setup) return router.go("/setup");
+                if (state is Onboarding) return router.go("/onboarding");
+                if (state is Unauthenticated &&
+                    (initialLocation == null ||
+                        !publicRoutes.contains(initialLocation!.path))) {
+                  return router.go("/signin");
                 }
+                if (state is Unreachable) return router.go("/unreachable");
+                if (state is Unsupported) return router.go("/unsupported");
+                if (state is Loading) return router.go("/");
+                if (state is Authenticated &&
+                    (initialLocation == null || initialLocation?.path == "/")) {
+                  PreferenceStorage.getInstance()
+                      .readInt(key: 'lastHouseholdId')
+                      .then((id) =>
+                          router.go("/household${id == null ? "" : "/$id"}"));
+                  return;
+                }
+                router.go(initialLocation!.toString());
               },
               child: BlocBuilder<SettingsCubit, SettingsState>(
                 builder: (context, state) =>

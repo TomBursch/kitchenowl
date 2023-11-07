@@ -81,6 +81,10 @@ class SettingsUserCubit extends Cubit<SettingsUserState> {
 
     return false;
   }
+
+  Future<bool> resendVerificationMail() {
+    return ApiService.getInstance().resendVerificationMail();
+  }
 }
 
 class SettingsUserState extends Equatable {

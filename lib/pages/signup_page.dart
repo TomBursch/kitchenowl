@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:go_router/go_router.dart';
 import 'package:kitchenowl/app.dart';
 import 'package:kitchenowl/cubits/auth_cubit.dart';
 import 'package:kitchenowl/cubits/server_info_cubit.dart';
@@ -33,7 +34,13 @@ class _SignupPageState extends State<SignupPage> {
         : false;
 
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        leading: Navigator.canPop(context)
+            ? null
+            : BackButton(
+                onPressed: () => context.go("/"),
+              ),
+      ),
       extendBodyBehindAppBar: true,
       body: SafeArea(
         top: false,

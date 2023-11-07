@@ -37,10 +37,6 @@ class _AddUpdateExpensePageState extends State<AddUpdateExpensePage> {
   void initState() {
     super.initState();
     isUpdate = widget.expense?.id != null;
-    if (isUpdate) {
-      nameController.text = widget.expense!.name;
-      amountController.text = widget.expense!.amount.abs().toStringAsFixed(2);
-    }
     if (widget.expense == null) {
       amountController.text = 0.toStringAsFixed(2);
       cubit = AddUpdateExpenseCubit(
@@ -55,6 +51,8 @@ class _AddUpdateExpensePageState extends State<AddUpdateExpensePage> {
         ),
       );
     } else {
+      nameController.text = widget.expense!.name;
+      amountController.text = widget.expense!.amount.abs().toStringAsFixed(2);
       cubit = AddUpdateExpenseCubit(widget.household, widget.expense!);
     }
   }

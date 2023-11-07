@@ -4,8 +4,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:kitchenowl/cubits/expense_overview_cubit.dart';
 import 'package:kitchenowl/enums/expenselist_sorting.dart';
+import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/kitchenowl.dart';
+import 'package:kitchenowl/models/expense.dart';
 import 'package:kitchenowl/models/household.dart';
+import 'package:kitchenowl/pages/expense_add_update_page.dart';
 import 'package:kitchenowl/widgets/chart_bar_member_distribution.dart';
 import 'package:kitchenowl/widgets/chart_bar_months.dart';
 import 'package:kitchenowl/widgets/expense_category_icon.dart';
@@ -246,6 +249,30 @@ class _ExpenseOverviewPageState extends State<ExpenseOverviewPage> {
                             state.owes[i].$1.name,
                             state.owes[i].$2.name,
                           )),
+                          subtitle: LoadingTextButton(
+                            onPressed: () async {
+                              final data = await Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (ctx) => AddUpdateExpensePage(
+                                    household: state.household,
+                                    expense: Expense(
+                                        name: AppLocalizations.of(context)!
+                                            .moneyTransfer,
+                                        amount: state.owes[i].$3,
+                                        paidById: state.owes[i].$1.id,
+                                        paidFor: [
+                                          PaidForModel(
+                                              userId: state.owes[i].$2.id)
+                                        ]),
+                                  ),
+                                ),
+                              );
+                              if (data == UpdateEnum.updated) {
+                                return cubit.refresh();
+                              }
+                            },
+                            child: Text(AppLocalizations.of(context)!.settled),
+                          ),
                           trailing: Text(NumberFormat.simpleCurrency()
                               .format(state.owes[i].$3)),
                         ),

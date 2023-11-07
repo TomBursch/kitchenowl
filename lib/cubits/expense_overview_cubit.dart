@@ -74,6 +74,10 @@ class ExpenseOverviewCubit extends Cubit<ExpenseOverviewState> {
     ));
   }
 
+  Future<void> refresh() async {
+    return _load();
+  }
+
   Future<void> _load() async {
     final sorting = state.sorting;
     final fHousehold = TransactionHandler.getInstance()

@@ -31,6 +31,13 @@ class AnalyticsPage extends StatelessWidget {
                   trailing: Text(data['total_users'].toString()),
                 ),
                 ListTile(
+                  title: const Text("Verified users"),
+                  subtitle: const Text("Verified their email"),
+                  trailing: Text(
+                    "${data['verified_users'].toString()} (${NumberFormat.percentPattern().format(data['verified_users'] / data['total_users'])})",
+                  ),
+                ),
+                ListTile(
                   title: const Text("Active users"),
                   subtitle: const Text("Online in the last 30 days"),
                   trailing: Text(

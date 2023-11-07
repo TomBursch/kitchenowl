@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kitchenowl/app.dart';
 import 'package:kitchenowl/cubits/auth_cubit.dart';
 import 'package:kitchenowl/cubits/settings_user_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
@@ -143,20 +144,36 @@ class _SettingsUserPageState extends State<SettingsUserPage> {
                     ),
                     TextField(
                       controller: usernameController,
-                      autofocus: true,
                       enabled: false,
-                      textInputAction: TextInputAction.next,
                       decoration: InputDecoration(
                         labelText: AppLocalizations.of(context)!.username,
                       ),
                     ),
-                    TextField(
-                      controller: emailController,
-                      autofocus: true,
-                      enabled: false,
-                      textInputAction: TextInputAction.next,
-                      decoration: InputDecoration(
-                        labelText: AppLocalizations.of(context)!.email,
+                    BlocBuilder<SettingsUserCubit, SettingsUserState>(
+                      bloc: cubit,
+                      buildWhen: (previous, current) =>
+                          previous.user?.emailVerified !=
+                          current.user?.emailVerified,
+                      builder: (context, state) => TextField(
+                        controller: emailController,
+                        enabled: false,
+                        decoration: InputDecoration(
+                          labelText: AppLocalizations.of(context)!.email,
+                          suffix: (state.user?.email?.isEmpty ?? false) ||
+                                  (state.user?.emailVerified ?? false)
+                              ? null
+                              : Text(
+                                  AppLocalizations.of(context)!
+                                      .emailNotVerified,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .labelSmall
+                                      ?.copyWith(
+                                        color:
+                                            Theme.of(context).colorScheme.error,
+                                      ),
+                                ),
+                        ),
                       ),
                     ),
                     TextField(
@@ -235,6 +252,37 @@ class _SettingsUserPageState extends State<SettingsUserPage> {
                         }
                       },
                     ),
+                    if (!App.isOffline)
+                      BlocBuilder<SettingsUserCubit, SettingsUserState>(
+                          bloc: cubit,
+                          buildWhen: (previous, current) =>
+                              previous.user?.emailVerified !=
+                              current.user?.emailVerified,
+                          builder: (context, state) {
+                            if (state.user?.emailVerified ?? false) {
+                              return const SizedBox();
+                            }
+                            return LoadingListTile(
+                              title: Text(AppLocalizations.of(context)!
+                                  .emailResendVerification),
+                              leading:
+                                  const Icon(Icons.mark_email_read_rounded),
+                              trailing:
+                                  const Icon(Icons.arrow_forward_ios_rounded),
+                              contentPadding: EdgeInsets.zero,
+                              onTap: () async {
+                                String message =
+                                    await cubit.resendVerificationMail()
+                                        ? AppLocalizations.of(context)!.done
+                                        : AppLocalizations.of(context)!.error;
+
+                                showSnackbar(
+                                  context: context,
+                                  content: Text(message),
+                                );
+                              },
+                            );
+                          }),
                     if (cubit.userId == null)
                       ListTile(
                         title: Text(AppLocalizations.of(context)!.sessions),

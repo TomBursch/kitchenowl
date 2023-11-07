@@ -7,22 +7,34 @@ class SettingsUserPasswordPage extends StatelessWidget {
       TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
-  SettingsUserPasswordPage({super.key});
+  final AlignmentGeometry alignment;
+  final Future<void> Function(String)? onSubmitt;
+  final PreferredSizeWidget? appBar;
+
+  SettingsUserPasswordPage({
+    super.key,
+    this.onSubmitt,
+    this.appBar,
+    this.alignment = Alignment.topCenter,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.passwordSave),
-      ),
+      appBar: appBar ??
+          AppBar(
+            title: Text(AppLocalizations.of(context)!.passwordSave),
+          ),
+      extendBodyBehindAppBar: alignment != Alignment.topCenter,
       body: Align(
-        alignment: Alignment.topCenter,
+        alignment: alignment,
         child: ConstrainedBox(
-          constraints: const BoxConstraints.expand(width: 600),
+          constraints: const BoxConstraints.tightFor(width: 600),
           child: Form(
             key: _formKey,
             child: ListView(
               padding: const EdgeInsets.symmetric(horizontal: 16),
+              shrinkWrap: true,
               children: [
                 TextFormField(
                   controller: passwordController,
@@ -64,10 +76,11 @@ class SettingsUserPasswordPage extends StatelessWidget {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 16, bottom: 8),
-                  child: ElevatedButton(
-                    onPressed: () {
+                  child: LoadingElevatedButton(
+                    onPressed: () async {
                       if (_formKey.currentState?.validate() ?? false) {
-                        Navigator.of(context).pop(passwordController.text);
+                        return (onSubmitt ??
+                            Navigator.of(context).pop)(passwordController.text);
                       }
                     },
                     child: Text(AppLocalizations.of(context)!.save),

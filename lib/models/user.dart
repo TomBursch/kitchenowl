@@ -6,6 +6,7 @@ class User extends Model {
   final String username;
   final String name;
   final String? email;
+  final bool emailVerified;
   final String? image;
   final bool serverAdmin;
   final List<Token>? tokens;
@@ -16,6 +17,7 @@ class User extends Model {
     required this.username,
     this.email,
     this.image,
+    this.emailVerified = false,
     this.serverAdmin = false,
     this.tokens,
   });
@@ -31,6 +33,7 @@ class User extends Model {
       username: map['username'],
       name: map['name'],
       email: map['email'],
+      emailVerified: map['email_verified'] ?? false,
       image: map['photo'],
       serverAdmin: map['admin'] ?? false,
       tokens: tokens,
@@ -38,7 +41,8 @@ class User extends Model {
   }
 
   @override
-  List<Object?> get props => [id, name, email, username, serverAdmin, tokens];
+  List<Object?> get props =>
+      [id, name, email, emailVerified, username, serverAdmin, tokens];
 
   @override
   Map<String, dynamic> toJson() => {
@@ -50,6 +54,7 @@ class User extends Model {
   Map<String, dynamic> toJsonWithId() => {
         "id": id,
         "username": username,
+        "email_verified": emailVerified,
         "name": name,
         "admin": serverAdmin,
       };

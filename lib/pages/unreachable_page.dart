@@ -10,14 +10,35 @@ class UnreachablePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
+      appBar: !kIsWeb
+          ? AppBar(
+              actions: [
+                PopupMenuButton(
+                  itemBuilder: (BuildContext context) => <PopupMenuEntry<int>>[
+                    PopupMenuItem<int>(
+                      value: 0,
+                      child: ListTile(
+                        leading: const Icon(Icons.swap_horiz_rounded),
+                        title: Text(AppLocalizations.of(context)!.serverChange),
+                      ),
+                    ),
+                  ],
+                  onSelected: (_) {
+                    BlocProvider.of<AuthCubit>(context).removeServer();
+                  },
+                ),
+              ],
+            )
+          : null,
       body: SafeArea(
+        top: false,
         child: Align(
           alignment: Alignment.center,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const Spacer(),
               Text(
                 '\\:',
                 style: Theme.of(context).textTheme.displayMedium,
@@ -34,17 +55,6 @@ class UnreachablePage extends StatelessWidget {
                 onPressed: BlocProvider.of<AuthCubit>(context).refresh,
                 child: Text(AppLocalizations.of(context)!.refresh),
               ),
-              const Spacer(),
-              if (!kIsWeb)
-                Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: TextButton.icon(
-                    icon: const Icon(Icons.swap_horiz_rounded),
-                    label: Text(AppLocalizations.of(context)!.serverChange),
-                    onPressed: () =>
-                        BlocProvider.of<AuthCubit>(context).removeServer(),
-                  ),
-                ),
             ],
           ),
         ),

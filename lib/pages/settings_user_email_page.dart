@@ -6,21 +6,35 @@ class SettingsUserEmailPage extends StatelessWidget {
   final TextEditingController emailController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
-  SettingsUserEmailPage({super.key});
+  final AlignmentGeometry alignment;
+  final Future<void> Function(String)? onSubmitt;
+  final PreferredSizeWidget? appBar;
+  final String? buttonText;
+
+  SettingsUserEmailPage({
+    super.key,
+    this.alignment = Alignment.topCenter,
+    this.onSubmitt,
+    this.appBar,
+    this.buttonText,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.emailUpdate),
-      ),
+      appBar: appBar ??
+          AppBar(
+            title: Text(AppLocalizations.of(context)!.emailUpdate),
+          ),
+      extendBodyBehindAppBar: alignment != Alignment.topCenter,
       body: Align(
-        alignment: Alignment.topCenter,
+        alignment: alignment,
         child: ConstrainedBox(
-          constraints: const BoxConstraints.expand(width: 600),
+          constraints: const BoxConstraints.tightFor(width: 600),
           child: Form(
             key: _formKey,
             child: ListView(
+              shrinkWrap: true,
               padding: const EdgeInsets.symmetric(horizontal: 16),
               children: [
                 TextFormField(
@@ -57,13 +71,15 @@ class SettingsUserEmailPage extends StatelessWidget {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 16, bottom: 8),
-                  child: ElevatedButton(
-                    onPressed: () {
+                  child: LoadingElevatedButton(
+                    onPressed: () async {
                       if (_formKey.currentState?.validate() ?? false) {
-                        Navigator.of(context).pop(emailController.text);
+                        return (onSubmitt ??
+                            Navigator.of(context).pop)(emailController.text);
                       }
                     },
-                    child: Text(AppLocalizations.of(context)!.save),
+                    child:
+                        Text(buttonText ?? AppLocalizations.of(context)!.save),
                   ),
                 ),
               ],

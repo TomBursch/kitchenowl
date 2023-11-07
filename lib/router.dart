@@ -10,6 +10,7 @@ import 'package:kitchenowl/helpers/shared_axis_transition_page.dart';
 import 'package:kitchenowl/models/expense.dart';
 import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/models/recipe.dart';
+import 'package:kitchenowl/pages/email_confirm_page.dart';
 import 'package:kitchenowl/pages/expense_overview_page.dart';
 import 'package:kitchenowl/pages/expense_page.dart';
 import 'package:kitchenowl/pages/household_page/_export.dart';
@@ -17,6 +18,8 @@ import 'package:kitchenowl/pages/household_list_page.dart';
 import 'package:kitchenowl/pages/login_page.dart';
 import 'package:kitchenowl/pages/onboarding_page.dart';
 import 'package:kitchenowl/pages/page_not_found.dart';
+import 'package:kitchenowl/pages/password_forgot_page.dart';
+import 'package:kitchenowl/pages/password_reset_page.dart';
 import 'package:kitchenowl/pages/recipe_page.dart';
 import 'package:kitchenowl/pages/recipe_scraper_page.dart';
 import 'package:kitchenowl/pages/settings_page.dart';
@@ -33,17 +36,26 @@ import 'package:tuple/tuple.dart';
 final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>();
 final RouteObserver<ModalRoute> routeObserver = RouteObserver<ModalRoute>();
 
-String? initialLocation;
+Uri? initialLocation;
+
+const List<String> publicRoutes = [
+  "/register",
+  "/signin",
+  "/confirm-email",
+  "/reset-password",
+  "/forgot-password",
+];
 
 // GoRouter configuration
 final router = GoRouter(
   navigatorKey: _rootNavigatorKey,
   redirect: (BuildContext context, GoRouterState state) {
     final authState = BlocProvider.of<AuthCubit>(context).state;
-    initialLocation ??= state.uri.toString();
+    initialLocation ??= state.uri;
     if (authState is Setup) return "/setup";
     if (authState is Onboarding) return "/onboarding";
-    if (authState is Unauthenticated && state.uri.path != "/register") {
+    if (authState is Unauthenticated &&
+        !publicRoutes.contains(state.uri.path)) {
       return "/signin";
     }
     if (authState is Unreachable) return "/unreachable";
@@ -332,14 +344,30 @@ final router = GoRouter(
         ),
       ],
     ),
-    // GoRoute(
-    //   path: '/recipes/:id',
-    //   builder: (context, state) => RecipePage(
-    //     recipe: (state.extra as Recipe?) ??
-    //         Recipe(
-    //           id: int.tryParse(state.params['id'] ?? ''),
-    //         ),
-    //   ),
-    // ),
+    GoRoute(
+      path: '/confirm-email',
+      parentNavigatorKey: _rootNavigatorKey,
+      builder: (context, state) => EmailConfirmPage(
+        key: ValueKey(state.uri.queryParameters["t"]),
+        token: state.uri.queryParameters["t"],
+      ),
+    ),
+    GoRoute(
+      path: '/reset-password',
+      parentNavigatorKey: _rootNavigatorKey,
+      builder: (context, state) => PasswordResetPage(
+        key: ValueKey(state.uri.queryParameters["t"]),
+        token: state.uri.queryParameters["t"],
+      ),
+    ),
+    GoRoute(
+      path: '/forgot-password',
+      parentNavigatorKey: _rootNavigatorKey,
+      pageBuilder: (context, state) => SharedAxisTransitionPage(
+        key: state.pageKey,
+        name: state.name,
+        child: const PasswordForgotPage(),
+      ),
+    ),
   ],
 );

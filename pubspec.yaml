@@ -75,8 +75,9 @@ dev_dependencies:
     sdk: flutter
   integration_test:
     sdk: flutter
-  flutter_launcher_icons: ^0.13.1
   flutter_lints: ^3.0.0
+  icons_launcher: ^2.1.5
+  flutter_native_splash: ^2.3.5
 
 # The following section is specific to Flutter.
 flutter:
@@ -126,10 +127,35 @@ flutter:
       fonts:
         - asset: fonts/Items.ttf
 
-flutter_icons:
+icons_launcher:
   image_path: "assets/icon/icon.png"
-  android: "launcher_icon"
-  adaptive_icon_background: "#20AC64"
-  adaptive_icon_foreground: "assets/icon/icon-foreground.png"
-  ios: true
-  remove_alpha_ios: true
+  platforms:
+    android:
+      enable: true
+      image_path: "assets/icon/icon-small.png"
+      adaptive_background_color: '#20AC64'
+      adaptive_foreground_image: "assets/icon/icon-foreground.png"
+      adaptive_round_image: "assets/icon/icon-foreground.png"
+      adaptive_monochrome_image: "assets/icon/icon-foreground.png"
+    ios:
+      enable: true
+      image_path: "assets/icon/icon-small.png"
+    web:
+      enable: true
+      image_path: "assets/icon/icon.png"
+      favicon_path: "assets/icon/icon-rounded.png"
+    macos:
+      enable: true
+      image_path: "assets/icon/icon.png"
+    windows:
+      enable: true
+      image_path: "assets/icon/icon-rounded.png"
+
+flutter_native_splash:
+  color: "#fafafa"
+  # image: assets/splash.png
+  color_dark: "#303030"
+  # image_dark: assets/splash-invert.png
+  android_12:
+    color: "#fafafa"
+    color_dark: "#303030"

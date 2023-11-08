@@ -30,7 +30,8 @@
     <application
         android:name="${applicationName}"
         android:label="KitchenOwl"
-        android:icon="@mipmap/launcher_icon"
+        android:icon="@mipmap/ic_launcher"
+		android:roundIcon="@mipmap/ic_launcher_rounded"
         android:localeConfig="@xml/locales_config"
         android:usesCleartextTraffic="true">
         <activity

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/models/recipe.dart';
 import 'package:kitchenowl/models/tag.dart';
+import 'package:kitchenowl/services/storage/storage.dart';
 import 'package:kitchenowl/services/transaction_handler.dart';
 import 'package:kitchenowl/services/transactions/recipe.dart';
 import 'package:kitchenowl/services/transactions/tag.dart';
@@ -14,6 +15,11 @@ class RecipeListCubit extends Cubit<RecipeListState> {
   String? _refreshCurrentQuery;
 
   RecipeListCubit(this.household) : super(const LoadingRecipeListState()) {
+    PreferenceStorage.getInstance().readBool(key: 'recipeListView').then((i) {
+      if (i != null && state.listView != i) {
+        toggleView(false);
+      }
+    });
     refresh();
   }
 
@@ -140,7 +146,11 @@ class RecipeListCubit extends Cubit<RecipeListState> {
         allRecipes.where((e) => e.tags.containsAll(filter)),
       );
 
-  void toggleView() {
+  void toggleView([bool savePreference = true]) {
+    if (savePreference) {
+      PreferenceStorage.getInstance()
+          .writeBool(key: 'recipeListView', value: !state.listView);
+    }
     emit(state.copyWith(listView: !state.listView));
   }
 }

@@ -530,5 +530,19 @@
   "itemRemoveInteraction": "Kohteen poiston toiminto",
   "@itemRemoveInteraction": {},
   "usedIn": "Käytetty",
-  "@usedIn": {}
+  "@usedIn": {},
+  "recipesOverwrite": "Korvaa Reseptit",
+  "@recipesOverwrite": {},
+  "import": "Tuo",
+  "@import": {},
+  "export": "Vie",
+  "@export": {},
+  "recipesOverwriteDescription": "Toiminto korvaa samannimiset reseptit",
+  "@recipesOverwriteDescription": {},
+  "importStartedHint": "Tuonti aloitettu, tässä voi kestää hetken.",
+  "@importStartedHint": {},
+  "now": "Nyt",
+  "@now": {},
+  "unsupportedScrapeMessage": "URL:ää ei voitu parsia",
+  "@unsupportedScrapeMessage": {}
 }

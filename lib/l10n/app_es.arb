@@ -542,5 +542,15 @@
   "importStartedHint": "Importación iniciada, puede tardar unos minutos.",
   "@importStartedHint": {},
   "now": "Ahora",
-  "@now": {}
+  "@now": {},
+  "unsupportedScrapeMessage": "No se ha podido rastrear la dirección URL",
+  "@unsupportedScrapeMessage": {},
+  "passwordForgot": "¿Olvidó su contraseña?",
+  "@passwordForgot": {},
+  "emailResendVerification": "Reenviar correo de verificación",
+  "@emailResendVerification": {},
+  "passwordReset": "Restablecer contraseña",
+  "@passwordReset": {},
+  "emailNotVerified": "No verificado",
+  "@emailNotVerified": {}
 }

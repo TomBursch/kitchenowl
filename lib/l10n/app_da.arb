@@ -530,5 +530,17 @@
   "categoriesMerge": "Slå kategorier sammen",
   "@categoriesMerge": {},
   "merge": "Sammenslå",
-  "@merge": {}
+  "@merge": {},
+  "recipesOverwrite": "Overskriv opskrift",
+  "@recipesOverwrite": {},
+  "import": "Importer",
+  "@import": {},
+  "export": "Eksporter",
+  "@export": {},
+  "recipesOverwriteDescription": "Hvis aktiveret, vil eksisterende opskrifter med samme navn blive overskrevet",
+  "@recipesOverwriteDescription": {},
+  "importStartedHint": "Importering er i gang, dette kan tage et par minutter.",
+  "@importStartedHint": {},
+  "now": "Nu",
+  "@now": {}
 }

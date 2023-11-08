@@ -167,7 +167,7 @@
       "field": {}
     }
   },
-  "forceOfflineMode": "Forza la modalità fuori linea",
+  "forceOfflineMode": "Forza la modalità offline",
   "@forceOfflineMode": {},
   "gallery": "Galleria",
   "@gallery": {},
@@ -530,5 +530,19 @@
       "nameA": {},
       "nameB": {}
     }
-  }
+  },
+  "recipesOverwrite": "Sovrascrivi le Ricette",
+  "@recipesOverwrite": {},
+  "import": "Importa",
+  "@import": {},
+  "export": "Esporta",
+  "@export": {},
+  "unsupportedScrapeMessage": "Non è stato possibile eseguire lo scraping dell'URL",
+  "@unsupportedScrapeMessage": {},
+  "recipesOverwriteDescription": "Se attivo, le ricette esistenti con lo stesso nome saranno sovrascritte",
+  "@recipesOverwriteDescription": {},
+  "importStartedHint": "L'importazione è iniziata, l'operazione potrebbe richiedere alcuni minuti.",
+  "@importStartedHint": {},
+  "now": "Adesso",
+  "@now": {}
 }

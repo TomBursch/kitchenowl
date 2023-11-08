@@ -540,5 +540,7 @@
   "recipesOverwriteDescription": "Αν ενεργοποιηθεί, οι υπάρχουσες συνταγές με το ίδιο όνομα θα αντικατασταθούν",
   "@recipesOverwriteDescription": {},
   "importStartedHint": "Η εισαγωγή ξεκίνησε, μπορεί να διαρκέσει μερικά λεπτά.",
-  "@importStartedHint": {}
+  "@importStartedHint": {},
+  "now": "Τώρα",
+  "@now": {}
 }

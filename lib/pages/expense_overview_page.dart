@@ -249,32 +249,39 @@ class _ExpenseOverviewPageState extends State<ExpenseOverviewPage> {
                             state.owes[i].$1.name,
                             state.owes[i].$2.name,
                           )),
-                          subtitle: LoadingTextButton(
-                            onPressed: () async {
-                              final data = await Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (ctx) => AddUpdateExpensePage(
-                                    household: state.household,
-                                    expense: Expense(
-                                        name: AppLocalizations.of(context)!
-                                            .moneyTransfer,
-                                        amount: state.owes[i].$3,
-                                        paidById: state.owes[i].$1.id,
-                                        paidFor: [
-                                          PaidForModel(
-                                              userId: state.owes[i].$2.id)
-                                        ]),
-                                  ),
-                                ),
-                              );
-                              if (data == UpdateEnum.updated) {
-                                return cubit.refresh();
-                              }
-                            },
-                            child: Text(AppLocalizations.of(context)!.settled),
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              LoadingTextButton(
+                                onPressed: () async {
+                                  final data = await Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (ctx) => AddUpdateExpensePage(
+                                        household: state.household,
+                                        expense: Expense(
+                                            name: AppLocalizations.of(context)!
+                                                .moneyTransfer,
+                                            amount: state.owes[i].$3,
+                                            paidById: state.owes[i].$1.id,
+                                            paidFor: [
+                                              PaidForModel(
+                                                  userId: state.owes[i].$2.id)
+                                            ]),
+                                      ),
+                                    ),
+                                  );
+                                  if (data == UpdateEnum.updated) {
+                                    return cubit.refresh();
+                                  }
+                                },
+                                child: Text(
+                                    AppLocalizations.of(context)!.markAsPaid),
+                              ),
+                              const SizedBox(width: 4),
+                              Text(NumberFormat.simpleCurrency()
+                                  .format(state.owes[i].$3)),
+                            ],
                           ),
-                          trailing: Text(NumberFormat.simpleCurrency()
-                              .format(state.owes[i].$3)),
                         ),
                       ),
                       childCount: state.owes.length,

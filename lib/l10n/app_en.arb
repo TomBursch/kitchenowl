@@ -292,6 +292,8 @@
       "name": {}
     }
   },
+  "markAsPaid": "Mark as paid",
+  "@markAsPaid": {},
   "mealPlanner": "Meal Planner",
   "@mealPlanner": {},
   "member": "Member",
@@ -445,8 +447,6 @@
   "@set": {},
   "settings": "Settings",
   "@settings": {},
-  "settled": "Settled",
-  "@settled": {},
   "setupTitle": "Hey there! Ready to shop?",
   "@setupTitle": {},
   "shoppingList": "Shopping list",

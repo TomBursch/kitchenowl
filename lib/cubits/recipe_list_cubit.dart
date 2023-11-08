@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/models/recipe.dart';
 import 'package:kitchenowl/models/tag.dart';
+import 'package:kitchenowl/services/storage/storage.dart';
 import 'package:kitchenowl/services/transaction_handler.dart';
 import 'package:kitchenowl/services/transactions/recipe.dart';
 import 'package:kitchenowl/services/transactions/tag.dart';
@@ -14,6 +15,11 @@ class RecipeListCubit extends Cubit<RecipeListState> {
   String? _refreshCurrentQuery;
 
   RecipeListCubit(this.household) : super(const LoadingRecipeListState()) {
+    PreferenceStorage.getInstance().readBool(key: 'recipeListView').then((i) {
+      if (i != null && state.listView != i) {
+        toggleView(false);
+      }
+    });
     refresh();
   }
 
@@ -80,7 +86,7 @@ class RecipeListCubit extends Cubit<RecipeListState> {
         state is! SearchRecipeListState &&
         state is! FilteredListRecipeListState &&
         state.recipes.isEmpty) {
-      emit(const LoadingRecipeListState());
+      emit(LoadingRecipeListState(listView: state.listView));
     }
 
     if (query != null && query.isNotEmpty) {
@@ -96,6 +102,7 @@ class RecipeListCubit extends Cubit<RecipeListState> {
         query: query,
         recipes: await recipes,
         tags: await tags,
+        listView: state.listView,
       );
     } else {
       if (!runOffline && state is SearchRecipeListState) _refresh(query, true);
@@ -117,8 +124,13 @@ class RecipeListCubit extends Cubit<RecipeListState> {
               tags: await tags,
               selectedTags: filter,
               allRecipes: recipeList,
+              listView: state.listView,
             )
-          : ListRecipeListState(recipes: recipeList, tags: await tags);
+          : ListRecipeListState(
+              recipes: recipeList,
+              tags: await tags,
+              listView: state.listView,
+            );
     }
     if (query == _refreshCurrentQuery) {
       emit(_state);
@@ -133,26 +145,56 @@ class RecipeListCubit extends Cubit<RecipeListState> {
       List<Recipe>.from(
         allRecipes.where((e) => e.tags.containsAll(filter)),
       );
+
+  void toggleView([bool savePreference = true]) {
+    if (savePreference) {
+      PreferenceStorage.getInstance()
+          .writeBool(key: 'recipeListView', value: !state.listView);
+    }
+    emit(state.copyWith(listView: !state.listView));
+  }
 }
 
 abstract class RecipeListState extends Equatable {
-  const RecipeListState();
+  final bool listView;
+  const RecipeListState({this.listView = true});
+
+  @override
+  List<Object?> get props => [listView];
+
+  RecipeListState copyWith({bool? listView});
 }
 
 class LoadingRecipeListState extends RecipeListState {
-  const LoadingRecipeListState();
+  const LoadingRecipeListState({super.listView});
+
   @override
-  List<Object?> get props => const [];
+  RecipeListState copyWith({bool? listView}) {
+    return LoadingRecipeListState(listView: listView ?? this.listView);
+  }
 }
 
 class ListRecipeListState extends RecipeListState {
   final List<Recipe> recipes;
   final Set<Tag> tags;
 
-  const ListRecipeListState({this.recipes = const [], this.tags = const {}});
+  const ListRecipeListState({
+    this.recipes = const [],
+    this.tags = const {},
+    super.listView,
+  });
 
   @override
-  List<Object?> get props => <Object?>[tags] + recipes;
+  List<Object?> get props => super.props + <Object?>[tags] + recipes;
+
+  @override
+  RecipeListState copyWith({bool? listView}) {
+    return ListRecipeListState(
+      listView: listView ?? this.listView,
+      recipes: recipes,
+      tags: tags,
+    );
+  }
 }
 
 class FilteredListRecipeListState extends ListRecipeListState {
@@ -164,6 +206,7 @@ class FilteredListRecipeListState extends ListRecipeListState {
     this.allRecipes = const [],
     super.recipes = const [],
     super.tags = const {},
+    super.listView,
   });
 
   factory FilteredListRecipeListState.fromState(
@@ -179,12 +222,15 @@ class FilteredListRecipeListState extends ListRecipeListState {
         selectedTags: {selectedTag},
       );
 
+  @override
   FilteredListRecipeListState copyWith({
+    bool? listView,
     List<Recipe>? recipes,
     Set<Tag>? tags,
     Set<Tag>? selectedTags,
   }) =>
       FilteredListRecipeListState(
+        listView: listView ?? this.listView,
         recipes: recipes ?? this.recipes,
         tags: tags ?? this.tags,
         selectedTags: selectedTags ?? this.selectedTags,
@@ -202,8 +248,19 @@ class SearchRecipeListState extends ListRecipeListState {
     required this.query,
     super.recipes = const [],
     super.tags = const {},
+    super.listView,
   });
 
   @override
   List<Object?> get props => super.props + [query];
+
+  @override
+  RecipeListState copyWith({bool? listView}) {
+    return SearchRecipeListState(
+      listView: listView ?? this.listView,
+      query: query,
+      recipes: recipes,
+      tags: tags,
+    );
+  }
 }

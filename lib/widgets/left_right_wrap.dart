@@ -3,15 +3,18 @@ import 'package:flutter/rendering.dart';
 import 'dart:math' as math;
 
 class LeftRightWrap extends MultiChildRenderObjectWidget {
+  final double crossAxisSpacing;
+
   LeftRightWrap({
     super.key,
     required Widget left,
     required Widget right,
+    this.crossAxisSpacing = 0,
   }) : super(children: [left, right]);
 
   @override
   RenderLeftRightWrap createRenderObject(BuildContext context) =>
-      RenderLeftRightWrap();
+      RenderLeftRightWrap(crossAxisSpacing: crossAxisSpacing);
 }
 
 class LeftRightWrapParentData extends ContainerBoxParentData<RenderBox> {}
@@ -20,8 +23,10 @@ class RenderLeftRightWrap extends RenderBox
     with
         ContainerRenderObjectMixin<RenderBox, LeftRightWrapParentData>,
         RenderBoxContainerDefaultsMixin<RenderBox, LeftRightWrapParentData> {
+  final double crossAxisSpacing;
   RenderLeftRightWrap({
     List<RenderBox>? children,
+    required this.crossAxisSpacing,
   }) {
     addAll(children);
   }
@@ -66,14 +71,14 @@ class RenderLeftRightWrap extends RenderBox
     rightParentData.offset = Offset(
       constraints.maxWidth - rightChild.size.width,
       wrapped
-          ? leftChild.size.height
+          ? leftChild.size.height + crossAxisSpacing
           : math.max((leftChild.size.height - rightChild.size.height) / 2, 0),
     );
 
     size = Size(
       constraints.maxWidth,
       wrapped
-          ? leftChild.size.height + rightChild.size.height
+          ? leftChild.size.height + rightChild.size.height + crossAxisSpacing
           : math.max(leftChild.size.height, rightChild.size.height),
     );
   }

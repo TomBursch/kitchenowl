@@ -1,12 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_blurhash/flutter_blurhash.dart';
+import 'package:go_router/go_router.dart';
+import 'package:kitchenowl/cubits/household_cubit.dart';
+import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/kitchenowl.dart';
+import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/models/recipe.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:transparent_image/transparent_image.dart';
+import 'package:tuple/tuple.dart';
 
 class RecipeCard extends StatelessWidget {
   final Recipe recipe;
+  final void Function()? onUpdated;
   final void Function()? onPressed;
   final Future<void> Function()? onLongPressed;
   final Future<void> Function()? onAddToDate;
@@ -14,6 +21,7 @@ class RecipeCard extends StatelessWidget {
   const RecipeCard({
     super.key,
     required this.recipe,
+    this.onUpdated,
     this.onPressed,
     this.onLongPressed,
     this.onAddToDate,
@@ -30,7 +38,16 @@ class RecipeCard extends StatelessWidget {
       ),
       child: Card(
         child: InkWell(
-          onTap: onPressed,
+          onTap: onPressed ??
+              () async {
+                final household =
+                    BlocProvider.of<HouseholdCubit>(context).state.household;
+                final res = await context.push<UpdateEnum>(
+                  "/household/${household.id}/recipes/details/${recipe.id}",
+                  extra: Tuple2<Household, Recipe>(household, recipe),
+                );
+                _handleUpdate(res);
+              },
           onLongPress: onLongPressed,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -131,11 +148,30 @@ class RecipeCard extends StatelessWidget {
                           style: Theme.of(context).textTheme.bodySmall,
                         ),
                       const Spacer(),
-                      const Divider(),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          if (onAddToDate != null)
+                      if (onLongPressed != null) const Divider(),
+                      if (onLongPressed != null)
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            if (onAddToDate != null)
+                              LoadingElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  // Foreground color
+                                  // ignore: deprecated_member_use
+                                  onPrimary:
+                                      Theme.of(context).colorScheme.onPrimary,
+                                  // Background color
+                                  // ignore: deprecated_member_use
+                                  primary:
+                                      Theme.of(context).colorScheme.primary,
+                                  padding: EdgeInsets.zero,
+                                ).copyWith(
+                                  elevation: ButtonStyleButton.allOrNull(0.0),
+                                ),
+                                onPressed: onAddToDate,
+                                child: const Icon(Icons.calendar_month_rounded),
+                              ),
+                            const SizedBox(width: 8),
                             LoadingElevatedButton(
                               style: ElevatedButton.styleFrom(
                                 // Foreground color
@@ -145,36 +181,19 @@ class RecipeCard extends StatelessWidget {
                                 // Background color
                                 // ignore: deprecated_member_use
                                 primary: Theme.of(context).colorScheme.primary,
-                                padding: EdgeInsets.zero,
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 16),
                               ).copyWith(
                                 elevation: ButtonStyleButton.allOrNull(0.0),
                               ),
-                              onPressed: onAddToDate,
-                              child: const Icon(Icons.calendar_month_rounded),
+                              onPressed: onLongPressed,
+                              child: Text(
+                                AppLocalizations.of(context)!
+                                    .addRecipeToPlannerShort,
+                              ),
                             ),
-                          const SizedBox(width: 8),
-                          LoadingElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              // Foreground color
-                              // ignore: deprecated_member_use
-                              onPrimary:
-                                  Theme.of(context).colorScheme.onPrimary,
-                              // Background color
-                              // ignore: deprecated_member_use
-                              primary: Theme.of(context).colorScheme.primary,
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 16),
-                            ).copyWith(
-                              elevation: ButtonStyleButton.allOrNull(0.0),
-                            ),
-                            onPressed: onLongPressed,
-                            child: Text(
-                              AppLocalizations.of(context)!
-                                  .addRecipeToPlannerShort,
-                            ),
-                          ),
-                        ],
-                      ),
+                          ],
+                        ),
                     ],
                   ),
                 ),
@@ -184,5 +203,12 @@ class RecipeCard extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _handleUpdate(UpdateEnum? res) {
+    if (onUpdated != null &&
+        (res == UpdateEnum.updated || res == UpdateEnum.deleted)) {
+      onUpdated!();
+    }
   }
 }

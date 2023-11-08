@@ -2,6 +2,7 @@ name: Bug
 description: Report a bug
 title: "Bug: "
 labels: ["bug"]
+projects: ["TomBursch/1"]
 body:
   - type: markdown
     attributes:
@@ -16,6 +17,7 @@ body:
       options:
         - "No"
         - "Yes"
+      default: 0
   - type: dropdown
     id: affected-parts
     attributes:
@@ -29,11 +31,29 @@ body:
     validations:
       required: true
   - type: input
-    id: version
+    id: server-version
     attributes:
-      label: What are the Server/Client versions of KitchenOwl
+      label: What is the server version
     validations:
       required: true
+  - type: input
+    id: client-version
+    attributes:
+      label: What is the client version
+    validations:
+      required: true
+  - type: dropdown
+    id: client-platform
+    attributes:
+      label: What platform are you using
+      multiple: true
+      options:
+        - "Android"
+        - "iOS"
+        - "Web"
+        - "Mac"
+        - "Linux"
+        - "Windows"
   - type: textarea
     id: problem
     attributes:
@@ -46,11 +66,10 @@ body:
     attributes:
       label: Share your logs
       description: If you have any relevant logs you can share them here.
-      render: log
+      render: Shell
   - type: textarea
     id: config
     attributes:
       label: Share your configuration
-      description: Share your configuration such as `docker-compose.yml`. Ensure to remove URLs/IPs.
+      description: Share your configuration such as `docker-compose.yml`. Ensure to remove URLs/IPs and Secrects.
       render: yml
-

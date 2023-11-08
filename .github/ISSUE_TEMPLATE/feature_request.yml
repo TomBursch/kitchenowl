@@ -2,6 +2,7 @@ name: Feature request
 description: Suggest a feature to add to KitchenOwl
 title: "Feature request: "
 labels: ["enhancement"]
+projects: ["TomBursch/1"]
 body:
   - type: textarea
     id: description

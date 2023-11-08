@@ -455,6 +455,8 @@
   "@expenseReceivedFor": {},
   "daily": "Täglich",
   "@daily": {},
+  "moneyTransfer": "Geldtransfer",
+  "@moneyTransfer": {},
   "monthly": "Monatlich",
   "@monthly": {},
   "weekly": "Wöchentlich",

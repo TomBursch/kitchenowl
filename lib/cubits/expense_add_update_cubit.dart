@@ -22,6 +22,7 @@ class AddUpdateExpenseCubit extends Cubit<AddUpdateExpenseState> {
           name: expense.name,
           paidBy: expense.paidById,
           paidFor: expense.paidFor,
+          excludeFromStatistics: expense.excludeFromStatistics,
           category: expense.category,
           categories: expense.category == null ? const [] : [expense.category!],
         )) {
@@ -46,6 +47,7 @@ class AddUpdateExpenseCubit extends Cubit<AddUpdateExpenseState> {
             name: _state.name,
             date: _state.date,
             image: image ?? expense.image,
+            excludeFromStatistics: _state.excludeFromStatistics,
             paidById: _state.paidBy,
             paidFor: _state.paidFor,
             category: _state.category,
@@ -57,6 +59,7 @@ class AddUpdateExpenseCubit extends Cubit<AddUpdateExpenseState> {
           amount: amount,
           date: _state.date,
           image: image,
+          excludeFromStatistics: _state.excludeFromStatistics,
           paidById: _state.paidBy,
           paidFor: _state.paidFor,
           category: Nullable(_state.category),
@@ -110,6 +113,10 @@ class AddUpdateExpenseCubit extends Cubit<AddUpdateExpenseState> {
       category: category,
       categories: categories,
     ));
+  }
+
+  void setExcludeFromStatistics(bool? value) {
+    emit(state.copyWith(excludeFromStatistics: value));
   }
 
   void addUser(User user, [int factor = 1]) {
@@ -166,6 +173,7 @@ class AddUpdateExpenseState extends Equatable {
   final bool isIncome;
   final NamedByteArray? image;
   final int paidBy;
+  final bool excludeFromStatistics;
   final List<PaidForModel> paidFor;
   final ExpenseCategory? category;
   final List<ExpenseCategory> categories;
@@ -175,6 +183,7 @@ class AddUpdateExpenseState extends Equatable {
     required this.amount,
     this.isIncome = false,
     this.image,
+    this.excludeFromStatistics = false,
     required this.paidBy,
     required this.date,
     this.category,
@@ -189,6 +198,7 @@ class AddUpdateExpenseState extends Equatable {
     DateTime? date,
     bool? isIncome,
     NamedByteArray? image,
+    bool? excludeFromStatistics,
     List<PaidForModel>? paidFor,
     ExpenseCategory? category,
     List<ExpenseCategory>? categories,
@@ -199,6 +209,8 @@ class AddUpdateExpenseState extends Equatable {
         date: date ?? this.date,
         isIncome: isIncome ?? this.isIncome,
         image: image ?? this.image,
+        excludeFromStatistics:
+            excludeFromStatistics ?? this.excludeFromStatistics,
         category: category ?? this.category,
         paidBy: paidBy ?? this.paidBy,
         paidFor: paidFor ?? this.paidFor,
@@ -217,6 +229,7 @@ class AddUpdateExpenseState extends Equatable {
         category: category,
         paidBy: paidBy,
         paidFor: paidFor,
+        excludeFromStatistics: excludeFromStatistics,
         categories: categories ?? this.categories,
       );
 
@@ -229,6 +242,7 @@ class AddUpdateExpenseState extends Equatable {
         date,
         isIncome,
         image,
+        excludeFromStatistics,
         paidBy,
         category,
         categories,

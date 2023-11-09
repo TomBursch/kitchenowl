@@ -10,6 +10,7 @@ class Expense extends Model {
   final String? image;
   final String? imageHash;
   final DateTime? date;
+  final bool excludeFromStatistics;
   final ExpenseCategory? category;
   final int paidById;
   final List<PaidForModel> paidFor;
@@ -26,6 +27,7 @@ class Expense extends Model {
     this.paidFor = const [],
     this.date,
     this.category,
+    this.excludeFromStatistics = false,
   });
 
   factory Expense.fromJson(Map<String, dynamic> map) {
@@ -40,6 +42,7 @@ class Expense extends Model {
       amount: map['amount'],
       image: map['photo'],
       imageHash: map['photo_hash'],
+      excludeFromStatistics: map['exclude_from_statistics'],
       category: map['category'] != null
           ? ExpenseCategory.fromJson(map['category'])
           : null,
@@ -55,6 +58,7 @@ class Expense extends Model {
     double? amount,
     DateTime? date,
     String? image,
+    bool? excludeFromStatistics,
     Nullable<ExpenseCategory>? category,
     int? paidById,
     List<PaidForModel>? paidFor,
@@ -69,6 +73,8 @@ class Expense extends Model {
         category: (category ?? Nullable(this.category)).value,
         paidById: paidById ?? this.paidById,
         paidFor: paidFor ?? this.paidFor,
+        excludeFromStatistics:
+            excludeFromStatistics ?? this.excludeFromStatistics,
       );
 
   @override
@@ -82,6 +88,7 @@ class Expense extends Model {
         date,
         paidById,
         paidFor,
+        excludeFromStatistics,
       ];
 
   @override
@@ -93,6 +100,7 @@ class Expense extends Model {
       "amount": amount,
       if (image != null) "photo": image,
       'category': category?.id,
+      "exclude_from_statistics": excludeFromStatistics,
       "date": date!.toUtc().millisecondsSinceEpoch,
       "paid_by": {"id": paidById},
       "paid_for": paidFor.map((e) => e.toJson()).toList(),

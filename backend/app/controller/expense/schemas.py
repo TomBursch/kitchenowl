@@ -31,6 +31,7 @@ class AddExpense(Schema):
     paid_for = fields.List(
         fields.Nested(User()), required=True, validate=lambda a: len(a) > 0
     )
+    exclude_from_statistics = fields.Boolean()
 
 
 class UpdateExpense(Schema):
@@ -46,6 +47,7 @@ class UpdateExpense(Schema):
     category = fields.Integer(allow_none=True)
     paid_by = fields.Nested(User())
     paid_for = fields.List(fields.Nested(User()))
+    exclude_from_statistics = fields.Boolean()
 
 
 class AddExpenseCategory(Schema):

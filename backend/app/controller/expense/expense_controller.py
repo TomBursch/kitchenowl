@@ -94,6 +94,8 @@ def addExpense(args, household_id):
         if args["category"] is not None:
             category = ExpenseCategory.find_by_id(args["category"])
             expense.category = category
+    if "exclude_from_statistics" in args:
+        expense.exclude_from_statistics = args["exclude_from_statistics"]
     expense.paid_by_id = member.user_id
     expense.save()
     member.expense_balance = (member.expense_balance or 0) + expense.amount
@@ -141,6 +143,8 @@ def updateExpense(args, id):  # noqa: C901
             expense.category = category
         else:
             expense.category = None
+    if "exclude_from_statistics" in args:
+        expense.exclude_from_statistics = args["exclude_from_statistics"]
     if "paid_by" in args:
         member = HouseholdMember.find_by_ids(
             expense.household_id, args["paid_by"]["id"]
@@ -220,7 +224,10 @@ def getExpenseOverview(args, household_id):
 
     factor = 1
     query = (
-        Expense.query.filter(Expense.household_id == household_id)
+        Expense.query.filter(
+            Expense.household_id == household_id,
+            Expense.exclude_from_statistics == False,
+        )
         .group_by(Expense.category_id, ExpenseCategory.id)
         .join(Expense.category, isouter=True)
     )

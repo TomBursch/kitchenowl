@@ -279,10 +279,10 @@ class ApiService {
   }
 
   void _setConnectionState(Connection newState) {
-    if (newState == Connection.authenticated && !socket.connected) {
+    if (newState == Connection.authenticated && socket.disconnected) {
       socket.io.options?['extraHeaders'] = headers;
       socket.connect();
-    } else if (newState != Connection.authenticated && socket.connected) {
+    } else if (newState != Connection.authenticated && !socket.disconnected) {
       socket.disconnect();
     }
     _connectionNotifier.value = newState;

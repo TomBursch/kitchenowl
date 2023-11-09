@@ -73,12 +73,21 @@ class ApiService {
           ]) // for Flutter or Dart VM
           .disableAutoConnect() // disable auto-connection
           .setExtraHeaders(headers)
+          .setReconnectionDelay(2000)
+          .setReconnectionDelayMax(6000)
           .build(),
     );
-    socket.onReconnect(
-        (data) => {if (connectionStatus == Connection.disconnected) refresh()});
-    socket.onDisconnect(
-        (data) => {if (connectionStatus != Connection.disconnected) refresh()});
+    socket.onConnectError((data) {
+      if (connectionStatus != Connection.disconnected) {
+        socket.disconnect();
+      }
+    });
+    socket.onReconnect((data) {
+      if (connectionStatus == Connection.disconnected) refresh();
+    });
+    socket.onDisconnect((data) {
+      if (connectionStatus != Connection.disconnected) refresh();
+    });
   }
 
   static ApiService getInstance() {

@@ -201,7 +201,7 @@ def upgrade():
         household.created_at = datetime.utcnow()
         household.updated_at = datetime.utcnow()
         
-        users = session.query(User)
+        users = session.query(User).all()
         for user in users:
             hm = HouseholdMember()
             hm.created_at = datetime.utcnow()

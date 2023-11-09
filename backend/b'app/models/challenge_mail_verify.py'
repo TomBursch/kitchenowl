@@ -10,9 +10,7 @@ from app.models.user import User
 
 class ChallengeMailVerify(db.Model, DbModelMixin, TimestampMixin):
     challenge_hash = db.Column(db.String(256), primary_key=True)
-    user_id = db.Column(
-        db.Integer, db.ForeignKey("user.id"), nullable=False, index=True
-    )
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
 
     user = db.relationship("User")
 

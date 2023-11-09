@@ -133,6 +133,8 @@
   "@emailUsed": {},
   "error": "An error occured",
   "@error": {},
+  "excludeFromStatistics": "Exclude from statistics",
+  "@excludeFromStatistics": {},
   "expense": "Expense",
   "@expense": {},
   "expenseAdd": "Add Expense",

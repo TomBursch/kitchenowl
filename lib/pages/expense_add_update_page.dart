@@ -274,6 +274,21 @@ class _AddUpdateExpensePageState extends State<AddUpdateExpensePage> {
                           ],
                         ),
                       ),
+                      const SizedBox(height: 4),
+                      BlocBuilder<AddUpdateExpenseCubit, AddUpdateExpenseState>(
+                        bloc: cubit,
+                        buildWhen: (previous, current) =>
+                            previous.excludeFromStatistics !=
+                            current.excludeFromStatistics,
+                        builder: (context, state) => CheckboxListTile(
+                          value: state.excludeFromStatistics,
+                          onChanged: cubit.setExcludeFromStatistics,
+                          title: Text(AppLocalizations.of(context)!
+                              .excludeFromStatistics),
+                          secondary: const Icon(Icons.pie_chart_rounded),
+                          contentPadding: EdgeInsets.zero,
+                        ),
+                      ),
                       const SizedBox(height: 16),
                       Column(
                         mainAxisSize: MainAxisSize.min,

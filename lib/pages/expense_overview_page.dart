@@ -262,6 +262,7 @@ class _ExpenseOverviewPageState extends State<ExpenseOverviewPage> {
                                             name: AppLocalizations.of(context)!
                                                 .moneyTransfer,
                                             amount: state.owes[i].$3,
+                                            excludeFromStatistics: true,
                                             paidById: state.owes[i].$1.id,
                                             paidFor: [
                                               PaidForModel(

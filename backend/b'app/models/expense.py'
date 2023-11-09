@@ -17,6 +17,7 @@ class Expense(db.Model, DbModelMixin, TimestampMixin, DbModelAuthorizeMixin):
     household_id = db.Column(
         db.Integer, db.ForeignKey("household.id"), nullable=False, index=True
     )
+    exclude_from_statistics = db.Column(db.Boolean, default=False, nullable=False)
 
     household = db.relationship("Household", uselist=False)
     category = db.relationship("ExpenseCategory")

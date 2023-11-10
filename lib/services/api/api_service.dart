@@ -466,4 +466,42 @@ class ApiService {
 
     return Map<String, String>.from((jsonDecode(res.body)));
   }
+
+  Future<(String?, String?)> loginOIDC(String state, String code) async {
+    final res = await post(
+      '/auth/callback',
+      jsonEncode({
+        'state': state,
+        'code': code,
+        if (await Config.deviceName != null) 'device': await Config.deviceName,
+      }),
+    );
+    if (res.statusCode == 200) {
+      final body = jsonDecode(res.body);
+      headers['Authorization'] = 'Bearer ${body['access_token']}';
+      _refreshToken = body['refresh_token'];
+      _setConnectionState(Connection.authenticated);
+
+      return (_refreshToken, null);
+    }
+
+    return (null, res.body);
+  }
+
+  Future<(String?, String?, String?)> getLoginOIDCUrl(
+      [String? provider]) async {
+    final res =
+        await get('/auth/oidc${provider != null ? "?provider=$provider" : ""}');
+    if (res.statusCode == 200) {
+      final body = jsonDecode(res.body);
+
+      return (
+        body["login_url"] as String?,
+        body["state"] as String?,
+        body["nonce"] as String?
+      );
+    }
+
+    return (null, null, null);
+  }
 }

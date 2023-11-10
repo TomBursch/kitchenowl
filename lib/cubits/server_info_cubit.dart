@@ -38,6 +38,7 @@ class ConnectedServerInfoState extends ServerInfoState {
   final String? privacyPolicyUrl;
   final bool openRegistration;
   final bool emailMandatory;
+  final List<String> oidcProvider;
 
   const ConnectedServerInfoState({
     required this.version,
@@ -45,6 +46,7 @@ class ConnectedServerInfoState extends ServerInfoState {
     this.privacyPolicyUrl,
     this.openRegistration = false,
     this.emailMandatory = false,
+    this.oidcProvider = const [],
   });
 
   factory ConnectedServerInfoState.fromJson(Map<String, dynamic> data) =>
@@ -54,6 +56,7 @@ class ConnectedServerInfoState extends ServerInfoState {
         privacyPolicyUrl: data["privacy_policy"],
         openRegistration: data["open_registration"] ?? false,
         emailMandatory: data["email_mandatory"] ?? false,
+        oidcProvider: List<String>.from(data["oidc_provider"] ?? const []),
       );
 
   @override

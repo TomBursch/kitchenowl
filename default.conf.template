@@ -9,10 +9,7 @@ server {
 
     location / {
         client_max_body_size 32M;
-        try_files $uri $uri/ @redirect;
-    }
-    location @redirect {
-        return 301 "/#/404";
+        try_files $uri $uri/ /index.html;
     }
     location /api/ {
         include uwsgi_params;

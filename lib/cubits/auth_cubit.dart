@@ -198,6 +198,26 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
+  Future<void> loginOIDC(
+    String state,
+    String code, [
+    Function(String?)? wrongCredentialsCallback,
+  ]) async {
+    emit(const Loading());
+    (String?, String?) res =
+        await ApiService.getInstance().loginOIDC(state, code);
+    final token = res.$1;
+    if (token != null && ApiService.getInstance().isAuthenticated()) {
+      await SecureStorage.getInstance().write(key: 'TOKEN', value: token);
+    } else {
+      await updateState();
+      if (ApiService.getInstance().connectionStatus == Connection.connected &&
+          wrongCredentialsCallback != null) {
+        wrongCredentialsCallback(res.$2);
+      }
+    }
+  }
+
   Future<void> logout() async {
     emit(const Loading());
     await SecureStorage.getInstance().delete(key: 'TOKEN');

@@ -467,6 +467,12 @@
   "@shoppingLists": {},
   "shoppingListStyle": "Shopping list style",
   "@shoppingListStyle": {},
+  "signInWith": "Sign in with {provider}",
+  "@signInWith": {
+    "placeholders": {
+      "provider": {}
+    }
+  },
   "signup": "Sign up",
   "@signup": {},
   "start": "Start",

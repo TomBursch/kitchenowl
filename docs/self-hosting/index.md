@@ -34,7 +34,7 @@ volumes:
 
 
 !!! danger "Important"
-    We recommend running KitchenOwl behind a reverse proxy with HTTPS (e.g. [nginx](https://nginx.org/en/docs/http/configuring_https_servers.html]))
+    We recommend running KitchenOwl behind a reverse proxy with HTTPS (e.g. [nginx](https://nginx.org/en/docs/http/configuring_https_servers.html))
 
     It is also important that you have HTTP Strict Transport Security enabled and the proper headers applied to your responses or you could be subject to a javascript hijack.
 

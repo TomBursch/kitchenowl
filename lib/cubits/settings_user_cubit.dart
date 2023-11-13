@@ -11,8 +11,8 @@ import 'package:kitchenowl/services/api/api_service.dart';
 
 class SettingsUserCubit extends Cubit<SettingsUserState> {
   final int? userId;
-  SettingsUserCubit(this.userId)
-      : super(const SettingsUserState(null, false, UpdateEnum.unchanged)) {
+  SettingsUserCubit(this.userId, [User? initialUserData])
+      : super(SettingsUserState(initialUserData, false, UpdateEnum.unchanged)) {
     refresh();
   }
 

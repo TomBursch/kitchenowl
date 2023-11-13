@@ -478,6 +478,10 @@ class ApiService {
     );
     if (res.statusCode == 200) {
       final body = jsonDecode(res.body);
+      if (!body.containsKey('refresh_token')) {
+        // Successfully linked account
+        return (null, body['msg'] as String);
+      }
       headers['Authorization'] = 'Bearer ${body['access_token']}';
       _refreshToken = body['refresh_token'];
       _setConnectionState(Connection.authenticated);

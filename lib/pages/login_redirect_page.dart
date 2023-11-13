@@ -41,6 +41,10 @@ class _LoginRedirectPageState extends State<LoginRedirectPage> {
 
   String _extractErrorMessage(BuildContext context, String? msg) {
     if (msg == null) return AppLocalizations.of(context)!.error;
+    if (msg.contains("user not signed in"))
+      return AppLocalizations.of(context)!.userNotSignedIn;
+    if (msg.contains("already linked with other"))
+      return AppLocalizations.of(context)!.accountLinkedWithOtherUser;
     if (msg.contains("email")) return AppLocalizations.of(context)!.emailUsed;
     if (msg.contains("username")) {
       return AppLocalizations.of(context)!.usernameUnavailable;

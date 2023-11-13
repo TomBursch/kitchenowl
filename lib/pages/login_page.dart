@@ -7,10 +7,9 @@ import 'package:go_router/go_router.dart';
 import 'package:kitchenowl/app.dart';
 import 'package:kitchenowl/cubits/auth_cubit.dart';
 import 'package:kitchenowl/cubits/server_info_cubit.dart';
-import 'package:kitchenowl/helpers/url_launcher.dart';
+import 'package:kitchenowl/enums/oidc_provider.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
 import 'package:kitchenowl/kitchenowl.dart';
-import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -151,82 +150,39 @@ class _LoginPageState extends State<LoginPage> {
                         padding: EdgeInsets.only(top: 4),
                         child: Divider(),
                       ),
-                      if (_providerEnabled("custom"))
+                      if (_providerEnabled(OIDCProivder.custom))
                         Padding(
                           padding: const EdgeInsets.only(top: 10, bottom: 2),
                           child: ElevatedButton.icon(
-                            onPressed: () async {
-                              final url = (await ApiService.getInstance()
-                                      .getLoginOIDCUrl())
-                                  .$1;
-                              if (url != null) openUrl(context, url);
-                            },
-                            icon: const Icon(Icons.turn_slight_left_outlined),
+                            onPressed: () => OIDCProivder.custom.login(context),
+                            icon: OIDCProivder.custom.toIcon(context),
                             label: Text(AppLocalizations.of(context)!
-                                .signInWith("OIDC")),
+                                .signInWith(
+                                    OIDCProivder.custom.toLocalizedString())),
                           ),
                         ),
-                      if (_providerEnabled("google"))
+                      if (_providerEnabled(OIDCProivder.google))
                         Padding(
                           padding: const EdgeInsets.only(top: 10, bottom: 2),
                           child: ElevatedButton.icon(
-                            onPressed: () async {
-                              final url = (await ApiService.getInstance()
-                                      .getLoginOIDCUrl("google"))
-                                  .$1;
-                              if (url != null) openUrl(context, url);
-                            },
-                            icon: const Image(
-                              image:
-                                  AssetImage('assets/images/google_logo.png'),
-                              height: 32,
-                            ),
+                            onPressed: () => OIDCProivder.google.login(context),
+                            icon: OIDCProivder.google.toIcon(context),
                             label: Text(AppLocalizations.of(context)!
-                                .signInWith("Google")),
+                                .signInWith(
+                                    OIDCProivder.google.toLocalizedString())),
                           ),
                         ),
                       if (!kIsWeb &&
                           (Platform.isIOS || Platform.isMacOS) &&
-                          _providerEnabled("apple"))
+                          _providerEnabled(OIDCProivder.apple))
                         Padding(
                           padding: const EdgeInsets.only(top: 10, bottom: 2),
                           child: LoadingElevatedButtonIcon(
-                            onPressed: () async {
-                              final res = await ApiService.getInstance()
-                                  .getLoginOIDCUrl("apple");
-                              if (res.$2 == null || res.$3 == null) return;
-                              try {
-                                final credential =
-                                    await SignInWithApple.getAppleIDCredential(
-                                  scopes: [
-                                    AppleIDAuthorizationScopes.email,
-                                    AppleIDAuthorizationScopes.fullName,
-                                  ],
-                                  state: res.$2,
-                                  nonce: res.$3,
-                                );
-                                BlocProvider.of<AuthCubit>(context).loginOIDC(
-                                  credential.state!,
-                                  credential.authorizationCode,
-                                  (message) => showSnackbar(
-                                    context: context,
-                                    content: Text(
-                                        AppLocalizations.of(context)!.error),
-                                    width: null,
-                                  ),
-                                );
-                              } catch (_) {
-                                showSnackbar(
-                                  context: context,
-                                  content:
-                                      Text(AppLocalizations.of(context)!.error),
-                                  width: null,
-                                );
-                              }
-                            },
-                            icon: const Icon(Icons.apple_rounded),
+                            onPressed: () => OIDCProivder.apple.login(context),
+                            icon: OIDCProivder.apple.toIcon(context),
                             label: Text(AppLocalizations.of(context)!
-                                .signInWith("Apple")),
+                                .signInWith(
+                                    OIDCProivder.apple.toLocalizedString())),
                           ),
                         ),
                     ],
@@ -247,9 +203,9 @@ class _LoginPageState extends State<LoginPage> {
   bool _displayOIDC() =>
       App.serverInfo is ConnectedServerInfoState &&
       (App.serverInfo as ConnectedServerInfoState).oidcProvider.isNotEmpty &&
-      (kIsWeb || Platform.isAndroid || Platform.isLinux);
+      (kIsWeb || Platform.isAndroid);
 
-  bool _providerEnabled(String provider) =>
+  bool _providerEnabled(OIDCProivder provider) =>
       (App.serverInfo as ConnectedServerInfoState)
           .oidcProvider
           .contains(provider);

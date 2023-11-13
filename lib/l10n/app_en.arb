@@ -9,6 +9,10 @@
   "@accountDelete": {},
   "accountDeleteConfirmation": "Are you sure you want to delete your account?",
   "@accountDeleteConfirmation": {},
+  "accountsLinked": "Linked Accounts",
+  "@accountsLinked": {},
+  "accountLinkedWithOtherUser": "Account already linked to another user",
+  "@accountLinkedWithOtherUser": {},
   "add": "Add",
   "@add": {},
   "addCategory": "Add Category",
@@ -262,6 +266,10 @@
   "@larger": {},
   "lastUsed": "Last used",
   "@lastUsed": {},
+  "link": "Link",
+  "@link": {
+    "description": "As in link social account (e.g. Google)"
+  },
   "list": "List",
   "@list": {},
   "lltCreate": "Create long-lived token",
@@ -521,6 +529,10 @@
   "@uncategorized": {},
   "underConstruction": "Under Construction",
   "@underConstruction": {},
+  "unlink": "Unlink",
+  "@unlink": {
+    "description": "As in remove link to social account (e.g. Google)"
+  },
   "unreachableMessage": "Hmmmm… couldn't reach server",
   "@unreachableMessage": {},
   "unsavedChangesTitle": "You have unsaved changes",
@@ -553,6 +565,8 @@
   "@usernameInvalid": {},
   "usernameUnavailable": "The username is unavailable",
   "@usernameUnavailable": {},
+  "userNotSignedIn": "You need to be signed in to link an account",
+  "@userNotSignedIn": {},
   "users": "Users",
   "@users": {},
   "userSearchHint": "Type a name",

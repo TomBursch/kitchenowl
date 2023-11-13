@@ -203,7 +203,7 @@ class _LoginPageState extends State<LoginPage> {
   bool _displayOIDC() =>
       App.serverInfo is ConnectedServerInfoState &&
       (App.serverInfo as ConnectedServerInfoState).oidcProvider.isNotEmpty &&
-      (kIsWeb || Platform.isAndroid);
+      (kIsWeb || Platform.isAndroid || Platform.isIOS);
 
   bool _providerEnabled(OIDCProivder provider) =>
       (App.serverInfo as ConnectedServerInfoState)

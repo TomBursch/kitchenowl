@@ -38,18 +38,13 @@ class _EmailConfirmPageState extends State<EmailConfirmPage> {
               ),
       ),
       body: Center(
-        child: BlocConsumer(
-            listener: (context, state) {
-              if (state is EmailConfirmSuccessState) {
-                showSnackbar(
-                  context: context,
-                  content: Text(AppLocalizations.of(context)!.done),
-                );
-                if (mounted) context.go("/");
-              }
-            },
+        child: BlocBuilder(
             bloc: cubit,
             builder: (context, state) {
+              if (state is EmailConfirmSuccessState) {
+                return Text(
+                    AppLocalizations.of(context)!.emailSuccessfullyVerified);
+              }
               if (state is EmailConfirmErrorState) {
                 return Text(AppLocalizations.of(context)!.error);
               }

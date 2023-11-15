@@ -131,6 +131,8 @@
   "@emailNotVerified": {},
   "emailResendVerification": "Resend verification email",
   "@emailResendVerification": {},
+  "emailSuccessfullyVerified": "Email successfully verified!",
+  "@emailSuccessfullyVerified": {},
   "emailUpdate": "Update Email",
   "@emailUpdate": {},
   "emailUsed": "The email is already associated with an account",

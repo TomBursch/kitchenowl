@@ -494,8 +494,12 @@ class ApiService {
 
   Future<(String?, String?, String?)> getLoginOIDCUrl(
       [String? provider]) async {
-    final res =
-        await get('/auth/oidc${provider != null ? "?provider=$provider" : ""}');
+    bool customScheme =
+        !kIsWeb && baseUrl != "${Config.defaultServer}$_API_PATH";
+    final res = await get(Uri(path: '/auth/oidc', queryParameters: {
+      if (provider != null) "provider": provider,
+      if (customScheme) "kitchenowl_scheme": customScheme.toString(),
+    }).toString());
     if (res.statusCode == 200) {
       final body = jsonDecode(res.body);
 

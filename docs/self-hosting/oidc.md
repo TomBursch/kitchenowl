@@ -38,6 +38,8 @@ If everything is set up correctly you should see a *sign in with OIDC* button at
 
 ### Linking accounts
 
+When signing in using OIDC you're either logged into the linked account or, if none is present, a new account is created. The account creation will fail if an email already associated with a KitchenOwl account is provided by the identity management.
+
 If you've already started using KitchenOwl or created an account first you can link an OIDC account to your existing KitchenOwl account. Just go to *settings* :material-arrow-right: Click on your profile at the top :material-arrow-right: *Linked Accounts* :material-arrow-right: and link your account.
 
 Account links are permanent and can only be removed by deleting the KitchenOwl account. Users that signed in using OIDC are normal users that, after setting a password, can also sing in using their username + password. Deleting a user from your OIDC authority will not delete a user from KitchenOwl.

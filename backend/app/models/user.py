@@ -128,7 +128,7 @@ class User(db.Model, DbModelMixin, TimestampMixin):
         admin: bool = False,
     ) -> Self:
         return cls(
-            username=username.lower().strip().replace(" ", ""),
+            username=username.lower().replace(" ", ""),
             password=bcrypt.generate_password_hash(password).decode("utf-8")
             if password
             else None,

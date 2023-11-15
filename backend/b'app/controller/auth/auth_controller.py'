@@ -8,8 +8,9 @@ from oic.oauth2.message import ErrorResponse
 from app.helpers import validate_args
 from flask import jsonify, Blueprint, request
 from flask_jwt_extended import current_user, jwt_required, get_jwt
-from app.models import User, Token, OIDCLink, OIDCRequest
+from app.models import User, Token, OIDCLink, OIDCRequest, ChallengeMailVerify
 from app.errors import NotFoundRequest, UnauthorizedRequest, InvalidUsage
+from app.service import mail
 from .schemas import Login, Signup, CreateLongLivedToken, GetOIDCLoginUrl, LoginOIDC
 from app.config import EMAIL_MANDATORY, FRONT_URL, jwt, OPEN_REGISTRATION, oidc_clients
 
@@ -89,6 +90,8 @@ if OPEN_REGISTRATION:
             password=args["password"],
             email=args["email"] if "email" in args else None,
         )
+        if mail.mailConfigured():
+            mail.sendVerificationMail(user, ChallengeMailVerify.create_challenge(user))
 
         device = "Unkown"
         if "device" in args:

@@ -5,7 +5,8 @@ from PIL import Image
 from app import app, db
 from app.config import UPLOAD_FOLDER
 from app.jobs import jobs
-from app.models import User, File, Household, HouseholdMember
+from app.models import User, File, Household, HouseholdMember, ChallengeMailVerify
+from app.service import mail
 from app.service.delete_unused import deleteEmptyHouseholds, deleteUnusedFiles
 from app.service.recalculate_blurhash import recalculateBlurhashes
 
@@ -58,6 +59,7 @@ What next?
     2. Create user
     3. Update user
     4. Delete user
+    5. Send verification mail to unverified users
     (q) Go back""")
         selection = input("Your selection (q):")
         if selection == "1":
@@ -81,6 +83,15 @@ What next?
                 print("No user found with that username")
             else:
                 user.delete()
+        elif selection == "5":
+            if not mail.mailConfigured():
+                print("Mail service not configured")
+                continue
+            print("Sending mails...")
+            users = User.query.filter(User.email_verified == False).all()
+            for user in users:
+                if len(user.verify_mail_challenge) == 0:
+                    mail.sendVerificationMail(user, ChallengeMailVerify.create_challenge(user))
         else:
             return
 

@@ -39,7 +39,7 @@ class _SettingsUserPageState extends State<SettingsUserPage> {
     );
     final user = widget.user ?? BlocProvider.of<AuthCubit>(context).getUser();
     if (user != null) {
-      usernameController.text = user.username;
+      usernameController.text = "@${user.username}";
       emailController.text = user.email ?? "";
       nameController.text = user.name;
     }
@@ -64,7 +64,7 @@ class _SettingsUserPageState extends State<SettingsUserPage> {
         listenWhen: (previous, current) => previous.user != current.user,
         listener: (context, state) {
           if (state.user != null) {
-            usernameController.text = state.user?.username ?? '';
+            usernameController.text = "@${state.user?.username ?? ''}";
             emailController.text = state.user?.email ?? '';
             nameController.text = state.user?.name ?? '';
           }
@@ -109,7 +109,7 @@ class _SettingsUserPageState extends State<SettingsUserPage> {
                       );
                       if (confirm) {
                         if (await cubit.deleteUser() && mounted) {
-                          if (cubit.userId != null) {
+                          if (cubit.userId == null) {
                             BlocProvider.of<AuthCubit>(context).logout();
                           }
                           Navigator.of(context).pop(UpdateEnum.deleted);

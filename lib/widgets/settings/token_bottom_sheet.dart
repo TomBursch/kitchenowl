@@ -17,13 +17,21 @@ class TokenBottomSheet extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: TokenCard(token: token),
+            child: TokenCard(
+              token: token,
+              enableOnTap: false,
+            ),
           ),
           const Divider(),
-          ElevatedButton(
-            onPressed: onLogout,
-            child: Text(
-              AppLocalizations.of(context)!.logoutName(token.name),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: ElevatedButton(
+              onPressed: onLogout,
+              child: Text(
+                AppLocalizations.of(context)!.logoutName(token.name),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
             ),
           ),
           const SizedBox(height: 16),

@@ -7,8 +7,14 @@ import 'package:kitchenowl/widgets/settings/token_bottom_sheet.dart';
 class TokenCard extends StatelessWidget {
   final Token token;
   final void Function()? onLogout;
+  final bool enableOnTap;
 
-  const TokenCard({super.key, required this.token, this.onLogout});
+  const TokenCard({
+    super.key,
+    required this.token,
+    this.onLogout,
+    this.enableOnTap = true,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -24,14 +30,16 @@ class TokenCard extends StatelessWidget {
                     )}",
               )
             : null,
-        onTap: () => showModalBottomSheet(
-          context: context,
-          showDragHandle: true,
-          builder: (context) => TokenBottomSheet(
-            token: token,
-            onLogout: onLogout,
-          ),
-        ),
+        onTap: enableOnTap
+            ? () => showModalBottomSheet(
+                  context: context,
+                  showDragHandle: true,
+                  builder: (context) => TokenBottomSheet(
+                    token: token,
+                    onLogout: onLogout,
+                  ),
+                )
+            : null,
       ),
     );
 

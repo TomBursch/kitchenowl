@@ -1,0 +1,14 @@
+[
+    {
+      "relation": [
+        "delegate_permission/common.handle_all_urls"
+      ],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "com.tombursch.kitchenowl",
+        "sha256_cert_fingerprints": [
+          "FD:05:1C:5E:36:6B:D8:D5:A8:91:31:9A:3A:82:D4:31:37:0A:87:D4:26:1A:92:9B:B1:3C:C5:A4:5C:34:BD:72"
+        ]
+      }
+    }
+  ]

@@ -1,0 +1,11 @@
+{
+  "applinks": {
+      "apps": [],
+      "details": [
+      {
+        "appID": "4UNA4W8497.com.tombursch.kitchenowl",
+        "paths": ["*"]
+      }
+    ]
+  }
+}

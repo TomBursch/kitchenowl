@@ -52,7 +52,7 @@ def sendVerificationMail(user: User, token: str):
     if not user.email or not token:
         return
 
-    verifyLink = FRONT_URL + "/#/confirm-email?t=" + token
+    verifyLink = FRONT_URL + "/confirm-email?t=" + token
 
     message = MIMEMultipart("alternative")
     message["Subject"] = "Verify Email"
@@ -88,7 +88,7 @@ def sendPasswordResetMail(user: User, token: str):
     if not user.email or not token:
         return
 
-    resetLink = FRONT_URL + "/#/reset-password?t=" + token
+    resetLink = FRONT_URL + "/reset-password?t=" + token
 
     message = MIMEMultipart("alternative")
     message["Subject"] = "Reset password"

@@ -16,3 +16,4 @@ from .household import Household, HouseholdMember
 from .file import File
 from .challenge_mail_verify import ChallengeMailVerify
 from .challenge_password_reset import ChallengePasswordReset
+from .oidc import OIDCLink, OIDCRequest

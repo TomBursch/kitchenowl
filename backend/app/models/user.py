@@ -13,7 +13,7 @@ class User(db.Model, DbModelMixin, TimestampMixin):
     name = db.Column(db.String(128))
     username = db.Column(db.String(256), unique=True, nullable=False)
     email = db.Column(db.String(256), unique=True, nullable=True)
-    password = db.Column(db.String(256), nullable=False)
+    password = db.Column(db.String(256), nullable=True)
     photo = db.Column(db.String(), db.ForeignKey("file.filename", use_alter=True))
     admin = db.Column(db.Boolean(), default=False)
     email_verified = db.Column(db.Boolean(), default=False)
@@ -43,8 +43,16 @@ class User(db.Model, DbModelMixin, TimestampMixin):
         "File", back_populates="profile_picture", foreign_keys=[photo], uselist=False
     )
 
+    oidc_links = db.relationship(
+        "OIDCLink", back_populates="user", cascade="all, delete-orphan"
+    )
+    oidc_link_requests = db.relationship(
+        "OIDCRequest", back_populates="user", cascade="all, delete-orphan"
+    )
+
+
     def check_password(self, password: str) -> bool:
-        return bcrypt.check_password_hash(self.password, password)
+        return self.password and bcrypt.check_password_hash(self.password, password)
 
     def set_password(self, password: str):
         self.password = bcrypt.generate_password_hash(password).decode("utf-8")
@@ -81,6 +89,7 @@ class User(db.Model, DbModelMixin, TimestampMixin):
             ~Token.created_tokens.any(Token.type == "refresh"),
         ).all()
         res["tokens"] = [e.obj_to_dict(skip_columns=["user_id"]) for e in tokens]
+        res["oidc_links"] = [e.provider for e in self.oidc_links]
         return res
 
     def delete(self):
@@ -120,7 +129,9 @@ class User(db.Model, DbModelMixin, TimestampMixin):
     ) -> Self:
         return cls(
             username=username.lower().strip().replace(" ", ""),
-            password=bcrypt.generate_password_hash(password).decode("utf-8"),
+            password=bcrypt.generate_password_hash(password).decode("utf-8")
+            if password
+            else None,
             name=name.strip(),
             email=email.strip() if email else None,
             admin=admin,

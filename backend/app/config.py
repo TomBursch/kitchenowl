@@ -1,4 +1,5 @@
 from datetime import timedelta
+from http import client
 from flask_socketio import SocketIO
 from sqlalchemy import MetaData
 from sqlalchemy.engine import URL
@@ -13,6 +14,9 @@ from app.errors import (
     InvalidUsage,
 )
 from app.util import KitchenOwlJSONProvider
+from oic.oic import Client
+from oic.oic.message import RegistrationResponse
+from oic.utils.authn.client import CLIENT_AUTHN_METHOD
 from flask import Flask, request
 from flask_basicauth import BasicAuth
 from flask_migrate import Migrate
@@ -51,6 +55,16 @@ DB_URL = URL.create(
 
 JWT_ACCESS_TOKEN_EXPIRES = timedelta(minutes=15)
 JWT_REFRESH_TOKEN_EXPIRES = timedelta(days=30)
+
+OIDC_CLIENT_ID = os.getenv("OIDC_CLIENT_ID")
+OIDC_CLIENT_SECRET = os.getenv("OIDC_CLIENT_SECRET")
+OIDC_ISSUER = os.getenv("OIDC_ISSUER")
+
+GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID")
+GOOGLE_CLIENT_SECRET = os.getenv("GOOGLE_CLIENT_SECRET")
+
+APPLE_CLIENT_ID = os.getenv("APPLE_CLIENT_ID")
+APPLE_CLIENT_SECRET = os.getenv("APPLE_CLIENT_SECRET")
 
 SUPPORTED_LANGUAGES = {
     "en": "English",
@@ -111,6 +125,39 @@ jwt = JWTManager(app)
 socketio = SocketIO(
     app, json=app.json, logger=app.logger, cors_allowed_origins=FRONT_URL
 )
+oidc_clients = {}
+if FRONT_URL:
+    if OIDC_CLIENT_ID and OIDC_CLIENT_SECRET and OIDC_ISSUER:
+        client = Client(client_authn_method=CLIENT_AUTHN_METHOD)
+        client.provider_config(OIDC_ISSUER)
+        client.store_registration_info(
+            RegistrationResponse(
+                client_id=OIDC_CLIENT_ID, client_secret=OIDC_CLIENT_SECRET
+            )
+        )
+        oidc_clients["custom"] = client
+    if GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET:
+        client = Client(client_authn_method=CLIENT_AUTHN_METHOD)
+        client.provider_config("https://accounts.google.com/")
+        client.store_registration_info(
+            RegistrationResponse(
+                client_id=GOOGLE_CLIENT_ID,
+                client_secret=GOOGLE_CLIENT_SECRET,
+            )
+        )
+        oidc_clients["google"] = client
+    if APPLE_CLIENT_ID and APPLE_CLIENT_SECRET:
+        client = Client(client_authn_method=CLIENT_AUTHN_METHOD)
+        client.provider_config("https://appleid.apple.com/")
+        client.store_registration_info(
+            RegistrationResponse(
+                client_id=APPLE_CLIENT_ID,
+                client_secret=APPLE_CLIENT_SECRET,
+            )
+        )
+        oidc_clients["apple"] = client
+
+
 if COLLECT_METRICS:
     basic_auth = BasicAuth(app)
     registry = CollectorRegistry()

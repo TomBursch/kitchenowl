@@ -3,7 +3,6 @@ import hashlib
 from typing import Self
 import uuid
 from app import db
-from app.config import bcrypt
 from app.helpers import DbModelMixin, TimestampMixin
 from app.models.user import User
 

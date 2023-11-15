@@ -68,9 +68,11 @@ Have any questions? Check out https://kitchenowl.org/privacy/""".format(
     html = """\
 <html>
 <body>
-    <p>Hi {name} (@{username}),<br>
+    <p>Hi {name} (@{username}),<br><br>
+
     Verify your email so we know it's really you and you don't loose access to your account.<br>
-    <a href="{link}">Verify email address</a><br>
+    <a href="{link}">Verify email address</a><br><br>
+
     Have any questions? Check out our <a href="https://kitchenowl.org/privacy/">Privacy Policy</a>
     </p>
 </body>
@@ -106,10 +108,12 @@ Have any questions? Check out https://kitchenowl.org/privacy/""".format(
     html = """\
 <html>
 <body>
-    <p>Hi {name} (@{username}),<br>
-    We received a request to change your password. This link is valid for three hours.<br>
-    <a href="{link}">Reset password</a><br>
-    If you didn't request a password reset, you can ignore this message and continue to use your current password.<br>
+    <p>Hi {name} (@{username}),<br><br>
+
+    We received a request to change your password. This link is valid for three hours:<br>
+    <a href="{link}">Reset password</a><br><br>
+
+    If you didn't request a password reset, you can ignore this message and continue to use your current password.<br><br>
 
     Have any questions? Check out our <a href="https://kitchenowl.org/privacy/">Privacy Policy</a>
     </p>

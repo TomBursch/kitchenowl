@@ -15,7 +15,7 @@ jobs:
       upload_url: ${{ steps.create_release.outputs.upload_url }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Get latest published release tag
         id: get_latest_release
         uses: pozetroninc/github-action-get-latest-release@master
@@ -24,7 +24,7 @@ jobs:
           excludes: prerelease, draft
       - name: Build changelog
         id: github_release
-        uses: mikepenz/release-changelog-builder-action@v3
+        uses: mikepenz/release-changelog-builder-action@v4
         with:
           configuration: "changelog_configuration.json"
           fromTag: ${{ steps.get_latest_release.outputs.release }}

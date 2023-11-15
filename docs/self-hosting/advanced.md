@@ -11,13 +11,13 @@ Additionally, the releases are tagged, so you can always choose a specific versi
 
 Environment variables for `tombursch/kitchenowl-web`:
 
-- `BACK_URL` (default: `back:5000`): Allows to set a custom address for the backend. Needs to be an uWSGI protocol endpoint. Usually corresponds to the name and of the backend container and port `5000`.
+- `BACK_URL` (default: `back:5000`): Allows to set a custom address for the backend. Needs to be an uWSGI protocol endpoint. Should correspond to the name or IP of the backend container and port `5000`.
 
 ### Backend
 
 Environment variables for `tombursch/kitchenowl`:
 
-- `FRONT_URL`: Adds allow origin CORS header for the URL.
+- `FRONT_URL`: Adds allow origin CORS header for the URL. If set, should exactly match KitchenOwl's URL including the schema (e.g. `https://app.kitchenowl.org`)
 - `PRIVACY_POLICY_URL`: Allows to set a custom privacy policy for your server instance.
 - `OPEN_REGISTRATION` (default: `false`): If set allows anyone to create an account on your server.
 - `EMAIL_MANDATORY` (default: `false`): Make the email a mandatory field when registering (Only relevant if `OPEN_REGISTRATION` is set)

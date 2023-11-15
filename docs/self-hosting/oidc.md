@@ -7,8 +7,18 @@ For self-hosted instances the custom provider is the most interesting one.
 ### Setup
 Inside your OIDC you need to configure a new client, with the following to redirect URIs:
 
-- `FRONT_URL/signin/redirect`
+<div class="annotate" markdown>
+- `FRONT_URL(1)/signin/redirect` 
 - `kitchenowl:///signin/redirect`
+</div>
+
+1. FRONT_URL is the environment variable that exactly matches KitchenOwl's URL including the schema (e.g. `https://app.kitchenowl.org`)
+
+KitchenOwl will request the following scopes: 
+
+- `openid`
+- `profile`
+- `email`
 
 You can then configure the backend using environment variables, just provide your issuer URL, client ID, and client secret:
 

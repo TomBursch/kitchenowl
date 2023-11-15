@@ -69,6 +69,7 @@ dependencies:
   flutter_blurhash: ^0.7.0
   transparent_image: ^2.0.1
   universal_html: ^2.2.4
+  sign_in_with_apple: ^5.0.0
 
 dev_dependencies:
   flutter_test:
@@ -91,6 +92,7 @@ flutter:
 
   assets:
     - assets/icon/
+    - assets/images/
 
   fonts:
     - family: Roboto

@@ -466,4 +466,50 @@ class ApiService {
 
     return Map<String, String>.from((jsonDecode(res.body)));
   }
+
+  Future<(String?, String?)> loginOIDC(String state, String code) async {
+    final res = await post(
+      '/auth/callback',
+      jsonEncode({
+        'state': state,
+        'code': code,
+        if (await Config.deviceName != null) 'device': await Config.deviceName,
+      }),
+    );
+    if (res.statusCode == 200) {
+      final body = jsonDecode(res.body);
+      if (!body.containsKey('refresh_token')) {
+        // Successfully linked account
+        return (null, body['msg'] as String);
+      }
+      headers['Authorization'] = 'Bearer ${body['access_token']}';
+      _refreshToken = body['refresh_token'];
+      _setConnectionState(Connection.authenticated);
+
+      return (_refreshToken, null);
+    }
+
+    return (null, res.body);
+  }
+
+  Future<(String?, String?, String?)> getLoginOIDCUrl(
+      [String? provider]) async {
+    bool customScheme =
+        !kIsWeb && baseUrl != "${Config.defaultServer}$_API_PATH";
+    final res = await get(Uri(path: '/auth/oidc', queryParameters: {
+      if (provider != null) "provider": provider,
+      if (customScheme) "kitchenowl_scheme": customScheme.toString(),
+    }).toString());
+    if (res.statusCode == 200) {
+      final body = jsonDecode(res.body);
+
+      return (
+        body["login_url"] as String?,
+        body["state"] as String?,
+        body["nonce"] as String?
+      );
+    }
+
+    return (null, null, null);
+  }
 }

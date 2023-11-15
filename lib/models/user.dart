@@ -1,3 +1,4 @@
+import 'package:kitchenowl/enums/oidc_provider.dart';
 import 'package:kitchenowl/models/model.dart';
 import 'package:kitchenowl/models/token.dart';
 
@@ -10,6 +11,7 @@ class User extends Model {
   final String? image;
   final bool serverAdmin;
   final List<Token>? tokens;
+  final List<OIDCProivder> oidcLinks;
 
   const User({
     required this.id,
@@ -20,12 +22,19 @@ class User extends Model {
     this.emailVerified = false,
     this.serverAdmin = false,
     this.tokens,
+    this.oidcLinks = const [],
   });
 
   factory User.fromJson(Map<String, dynamic> map) {
     List<Token>? tokens;
     if (map.containsKey('tokens')) {
       tokens = List.from(map['tokens'].map((e) => Token.fromJson(e)));
+    }
+    List<OIDCProivder> oidcLinks = const [];
+    if (map.containsKey('oidc_links')) {
+      oidcLinks = List.from(map['oidc_links']
+          .map((e) => OIDCProivder.parse(e))
+          .where((e) => e != null));
     }
 
     return User(
@@ -37,12 +46,21 @@ class User extends Model {
       image: map['photo'],
       serverAdmin: map['admin'] ?? false,
       tokens: tokens,
+      oidcLinks: oidcLinks,
     );
   }
 
   @override
-  List<Object?> get props =>
-      [id, name, email, emailVerified, username, serverAdmin, tokens];
+  List<Object?> get props => [
+        id,
+        name,
+        email,
+        emailVerified,
+        username,
+        serverAdmin,
+        tokens,
+        oidcLinks,
+      ];
 
   @override
   Map<String, dynamic> toJson() => {
@@ -57,6 +75,7 @@ class User extends Model {
         "email_verified": emailVerified,
         "name": name,
         "admin": serverAdmin,
+        "oidc_links": oidcLinks.map((e) => e.toString()).toList(),
       };
 
   bool hasServerAdminRights() => serverAdmin;

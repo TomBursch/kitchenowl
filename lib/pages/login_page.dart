@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -5,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:kitchenowl/app.dart';
 import 'package:kitchenowl/cubits/auth_cubit.dart';
 import 'package:kitchenowl/cubits/server_info_cubit.dart';
+import 'package:kitchenowl/enums/oidc_provider.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 
@@ -106,9 +109,7 @@ class _LoginPageState extends State<LoginPage> {
                         child: Text(AppLocalizations.of(context)!.login),
                       ),
                     ),
-                    if (App.serverInfo is ConnectedServerInfoState &&
-                        (App.serverInfo as ConnectedServerInfoState)
-                            .openRegistration) ...[
+                    if (_displayRegister())
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -126,6 +127,7 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ],
                       ),
+                    if (_displayRegister())
                       Padding(
                         padding: const EdgeInsets.only(top: 10, bottom: 8),
                         child: ElevatedButton(
@@ -133,7 +135,6 @@ class _LoginPageState extends State<LoginPage> {
                           child: Text(AppLocalizations.of(context)!.signup),
                         ),
                       ),
-                    ],
                     const Spacer(),
                     if (App.serverInfo is ConnectedServerInfoState &&
                         (App.serverInfo as ConnectedServerInfoState)
@@ -144,6 +145,47 @@ class _LoginPageState extends State<LoginPage> {
                             Text(AppLocalizations.of(context)!.passwordForgot),
                         onPressed: () => context.push("/forgot-password"),
                       ),
+                    if (_displayOIDC()) ...[
+                      const Padding(
+                        padding: EdgeInsets.only(top: 4),
+                        child: Divider(),
+                      ),
+                      if (_providerEnabled(OIDCProivder.custom))
+                        Padding(
+                          padding: const EdgeInsets.only(top: 10, bottom: 2),
+                          child: ElevatedButton.icon(
+                            onPressed: () => OIDCProivder.custom.login(context),
+                            icon: OIDCProivder.custom.toIcon(context),
+                            label: Text(AppLocalizations.of(context)!
+                                .signInWith(
+                                    OIDCProivder.custom.toLocalizedString())),
+                          ),
+                        ),
+                      if (_providerEnabled(OIDCProivder.google))
+                        Padding(
+                          padding: const EdgeInsets.only(top: 10, bottom: 2),
+                          child: ElevatedButton.icon(
+                            onPressed: () => OIDCProivder.google.login(context),
+                            icon: OIDCProivder.google.toIcon(context),
+                            label: Text(AppLocalizations.of(context)!
+                                .signInWith(
+                                    OIDCProivder.google.toLocalizedString())),
+                          ),
+                        ),
+                      if (!kIsWeb &&
+                          (Platform.isIOS || Platform.isMacOS) &&
+                          _providerEnabled(OIDCProivder.apple))
+                        Padding(
+                          padding: const EdgeInsets.only(top: 10, bottom: 2),
+                          child: LoadingElevatedButtonIcon(
+                            onPressed: () => OIDCProivder.apple.login(context),
+                            icon: OIDCProivder.apple.toIcon(context),
+                            label: Text(AppLocalizations.of(context)!
+                                .signInWith(
+                                    OIDCProivder.apple.toLocalizedString())),
+                          ),
+                        ),
+                    ],
                   ],
                 ),
               ),
@@ -153,4 +195,17 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
+
+  bool _displayRegister() =>
+      App.serverInfo is ConnectedServerInfoState &&
+      (App.serverInfo as ConnectedServerInfoState).openRegistration;
+
+  bool _displayOIDC() =>
+      App.serverInfo is ConnectedServerInfoState &&
+      (App.serverInfo as ConnectedServerInfoState).oidcProvider.isNotEmpty;
+
+  bool _providerEnabled(OIDCProivder provider) =>
+      (App.serverInfo as ConnectedServerInfoState)
+          .oidcProvider
+          .contains(provider);
 }

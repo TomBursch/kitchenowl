@@ -16,6 +16,7 @@ import 'package:kitchenowl/pages/expense_page.dart';
 import 'package:kitchenowl/pages/household_page/_export.dart';
 import 'package:kitchenowl/pages/household_list_page.dart';
 import 'package:kitchenowl/pages/login_page.dart';
+import 'package:kitchenowl/pages/login_redirect_page.dart';
 import 'package:kitchenowl/pages/onboarding_page.dart';
 import 'package:kitchenowl/pages/page_not_found.dart';
 import 'package:kitchenowl/pages/password_forgot_page.dart';
@@ -41,6 +42,7 @@ Uri? initialLocation;
 const List<String> publicRoutes = [
   "/register",
   "/signin",
+  "/signin/redirect",
   "/confirm-email",
   "/reset-password",
   "/forgot-password",
@@ -122,6 +124,20 @@ final router = GoRouter(
 
         return (authState is! Unauthenticated) ? "/" : null;
       },
+      routes: [
+        GoRoute(
+          path: 'redirect',
+          pageBuilder: (context, state) => SharedAxisTransitionPage(
+            key: state.pageKey,
+            name: state.name,
+            child: LoginRedirectPage(
+              key: ValueKey(state.uri.queryParameters["state"]),
+              state: state.uri.queryParameters["state"],
+              code: state.uri.queryParameters["code"],
+            ),
+          ),
+        ),
+      ],
     ),
     GoRoute(
       path: '/register',

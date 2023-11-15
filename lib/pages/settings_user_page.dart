@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/app.dart';
 import 'package:kitchenowl/cubits/auth_cubit.dart';
+import 'package:kitchenowl/cubits/server_info_cubit.dart';
 import 'package:kitchenowl/cubits/settings_user_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/user.dart';
 import 'package:kitchenowl/pages/settings_user_email_page.dart';
+import 'package:kitchenowl/pages/settings_user_linked_accounts_page.dart';
 import 'package:kitchenowl/pages/settings_user_password_page.dart';
 import 'package:kitchenowl/pages/settings_user_sessions_page.dart';
 
@@ -31,7 +33,10 @@ class _SettingsUserPageState extends State<SettingsUserPage> {
   @override
   void initState() {
     super.initState();
-    cubit = SettingsUserCubit(widget.user?.id);
+    cubit = SettingsUserCubit(
+      widget.user?.id,
+      widget.user ?? context.read<AuthCubit>().getUser(),
+    );
     final user = widget.user ?? BlocProvider.of<AuthCubit>(context).getUser();
     if (user != null) {
       usernameController.text = user.username;
@@ -126,20 +131,22 @@ class _SettingsUserPageState extends State<SettingsUserPage> {
                   children: [
                     BlocBuilder<SettingsUserCubit, SettingsUserState>(
                       bloc: cubit,
-                      builder: (context, state) => CircleAvatar(
-                        foregroundImage: state.user?.image?.isEmpty ?? true
-                            ? null
-                            : getImageProvider(
-                                context,
-                                state.user!.image!,
-                              ),
-                        radius: 45,
-                        child: nameController.text.isNotEmpty
-                            ? Text(
-                                nameController.text.substring(0, 1),
-                                textScaleFactor: 2,
-                              )
-                            : null,
+                      builder: (context, state) => Center(
+                        child: CircleAvatar(
+                          foregroundImage: state.user?.image?.isEmpty ?? true
+                              ? null
+                              : getImageProvider(
+                                  context,
+                                  state.user!.image!,
+                                ),
+                          radius: 45,
+                          child: nameController.text.isNotEmpty
+                              ? Text(
+                                  nameController.text.substring(0, 1),
+                                  textScaleFactor: 2,
+                                )
+                              : null,
+                        ),
                       ),
                     ),
                     TextField(
@@ -284,6 +291,36 @@ class _SettingsUserPageState extends State<SettingsUserPage> {
                               },
                             );
                           }),
+                    if (cubit.userId == null &&
+                        App.serverInfo is ConnectedServerInfoState &&
+                        (App.serverInfo as ConnectedServerInfoState)
+                            .oidcProvider
+                            .isNotEmpty)
+                      ListTile(
+                        title:
+                            Text(AppLocalizations.of(context)!.accountsLinked),
+                        leading: const Icon(Icons.link_rounded),
+                        trailing: const Icon(Icons.arrow_forward_ios_rounded),
+                        contentPadding: EdgeInsets.zero,
+                        onTap: () async {
+                          final res = await Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => SettingsLinkedAccountsPage(
+                                cubit: cubit,
+                                oidcProvider:
+                                    (App.serverInfo as ConnectedServerInfoState)
+                                        .oidcProvider,
+                              ),
+                            ),
+                          );
+                          if (res != null) {
+                            cubit.updateUser(
+                              context: context,
+                              password: res,
+                            );
+                          }
+                        },
+                      ),
                     if (cubit.userId == null)
                       ListTile(
                         title: Text(AppLocalizations.of(context)!.sessions),

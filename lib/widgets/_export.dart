@@ -26,3 +26,4 @@ export 'trailing_icon_text_button.dart';
 export 'kitchenowl_fab.dart';
 export 'number_selector.dart';
 export 'loading_list_tile.dart';
+export 'loading_elevated_button_icon.dart';

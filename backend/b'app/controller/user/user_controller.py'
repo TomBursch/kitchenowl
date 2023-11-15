@@ -115,7 +115,7 @@ def updateUserById(args, id):
 @validate_args(CreateUser)
 def createUser(args):
     User.create(
-        args["username"],
+        args["username"].replace(" ", ""),
         args["password"],
         args["name"],
         email=args["email"] if "email" in args else None,

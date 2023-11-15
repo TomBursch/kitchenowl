@@ -48,7 +48,7 @@ def user_lookup_callback(_jwt_header, jwt_data) -> User:
 @auth.route("", methods=["POST"])
 @validate_args(Login)
 def login(args):
-    username = args["username"].lower()
+    username = args["username"].lower().replace(" ", ""),
     user = User.find_by_username(username)
     if not user or not user.check_password(args["password"]):
         raise UnauthorizedRequest(
@@ -74,7 +74,7 @@ if OPEN_REGISTRATION:
     @auth.route("signup", methods=["POST"])
     @validate_args(Signup)
     def signup(args):
-        username = args["username"].strip().lower().replace(" ", "")
+        username = args["username"].lower().replace(" ", "")
         user = User.find_by_username(username)
         if user:
             return "Request invalid: username", 400
@@ -309,13 +309,13 @@ if FRONT_URL and len(oidc_clients) > 0:
                 return "Request invalid: email", 400
 
             username = (
-                userinfo["name"].lower().strip().replace(" ", "")
+                userinfo["name"].lower().replace(" ", "").replace("@", "")
                 if "name" in userinfo
                 else None
             )
             if not username or User.find_by_username(username):
-                username = userinfo["sub"].lower().strip().replace(" ", "")
-                if User.find_by_username(username):
+                username = userinfo["sub"].lower().replace(" ", "").replace("@", "")
+                if not username or User.find_by_username(username):
                     username = uuid.uuid4().hex
             newUser = User(
                 username=username,

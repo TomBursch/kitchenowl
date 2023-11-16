@@ -49,7 +49,7 @@ def user_lookup_callback(_jwt_header, jwt_data) -> User:
 @auth.route("", methods=["POST"])
 @validate_args(Login)
 def login(args):
-    username = args["username"].lower().replace(" ", ""),
+    username = args["username"].lower().replace(" ", "")
     user = User.find_by_username(username)
     if not user or not user.check_password(args["password"]):
         raise UnauthorizedRequest(

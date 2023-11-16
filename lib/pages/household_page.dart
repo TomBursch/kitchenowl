@@ -1,8 +1,4 @@
-import 'dart:io';
-
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kitchenowl/app.dart';
@@ -99,132 +95,123 @@ class _HouseholdPageState extends State<HouseholdPage> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        if (!kIsWeb && Platform.isAndroid) {
-          SystemChannels.platform.invokeMethod('SystemNavigator.pop');
-        }
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider.value(value: householdCubit),
+        BlocProvider.value(value: shoppingListCubit),
+        BlocProvider.value(value: recipeListCubit),
+        BlocProvider.value(value: plannerCubit),
+        BlocProvider.value(value: expenseListCubit),
+      ],
+      child: BlocConsumer<HouseholdCubit, HouseholdState>(
+        listener: (context, state) {
+          if (state is NotFoundHouseholdState && mounted) {
+            return context.go("/household");
+          }
+          List<ViewsEnum> pages =
+              (state.household.viewOrdering ?? ViewsEnum.values)
+                  .where((e) => e.isViewActive(state.household))
+                  .toList();
 
-        return false;
-      },
-      child: MultiBlocProvider(
-        providers: [
-          BlocProvider.value(value: householdCubit),
-          BlocProvider.value(value: shoppingListCubit),
-          BlocProvider.value(value: recipeListCubit),
-          BlocProvider.value(value: plannerCubit),
-          BlocProvider.value(value: expenseListCubit),
-        ],
-        child: BlocConsumer<HouseholdCubit, HouseholdState>(
-          listener: (context, state) {
-            if (state is NotFoundHouseholdState && mounted) {
-              return context.go("/household");
-            }
-            List<ViewsEnum> pages =
-                (state.household.viewOrdering ?? ViewsEnum.values)
-                    .where((e) => e.isViewActive(state.household))
-                    .toList();
+          int _selectedIndex = pages.indexWhere(
+            (e) => GoRouterState.of(context).uri.path.contains(e.toString()),
+          );
 
-            int _selectedIndex = pages.indexWhere(
-              (e) => GoRouterState.of(context).uri.path.contains(e.toString()),
+          if (_selectedIndex < 0 && mounted) {
+            context.go(
+              "/household/${state.household.id}/${state.household.viewOrdering?.firstOrNull.toString() ?? "items"}",
             );
+          }
+        },
+        builder: (context, state) {
+          List<ViewsEnum> pages =
+              (state.household.viewOrdering ?? ViewsEnum.values)
+                  .where((e) => e.isViewActive(state.household))
+                  .toList();
 
-            if (_selectedIndex < 0 && mounted) {
-              context.go(
-                "/household/${state.household.id}/${state.household.viewOrdering?.firstOrNull.toString() ?? "items"}",
-              );
-            }
-          },
-          builder: (context, state) {
-            List<ViewsEnum> pages =
-                (state.household.viewOrdering ?? ViewsEnum.values)
-                    .where((e) => e.isViewActive(state.household))
-                    .toList();
+          int _selectedIndex = pages.indexWhere(
+            (e) => GoRouterState.of(context).uri.path.contains(e.toString()),
+          );
 
-            int _selectedIndex = pages.indexWhere(
-              (e) => GoRouterState.of(context).uri.path.contains(e.toString()),
-            );
+          if (_selectedIndex < 0 || state is NotFoundHouseholdState) {
+            return const PageNotFound();
+          }
 
-            if (_selectedIndex < 0 || state is NotFoundHouseholdState) {
-              return const PageNotFound();
-            }
+          final bool useBottomNavigationBar = getValueForScreenType<bool>(
+            context: context,
+            mobile: true,
+            tablet: false,
+            desktop: false,
+          );
 
-            final bool useBottomNavigationBar = getValueForScreenType<bool>(
+          Widget body = Align(
+            alignment: Alignment.topCenter,
+            child: ConstrainedBox(
+              constraints: const BoxConstraints.expand(width: 1600),
+              child: widget.child,
+            ),
+          );
+
+          if (!useBottomNavigationBar) {
+            final bool extendedRail = getValueForScreenType<bool>(
               context: context,
-              mobile: true,
+              mobile: false,
               tablet: false,
-              desktop: false,
+              desktop: true,
             );
-
-            Widget body = Align(
-              alignment: Alignment.topCenter,
-              child: ConstrainedBox(
-                constraints: const BoxConstraints.expand(width: 1600),
-                child: widget.child,
-              ),
-            );
-
-            if (!useBottomNavigationBar) {
-              final bool extendedRail = getValueForScreenType<bool>(
-                context: context,
-                mobile: false,
-                tablet: false,
-                desktop: true,
-              );
-              body = Row(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  SafeArea(
-                    child: BlocBuilder<AuthCubit, AuthState>(
-                      builder: (context, state) => HouseholdNavigationRail(
-                        extendedRail: extendedRail,
-                        pages: pages,
-                        onPageSelected: _onItemTapped,
-                        openDrawer: scaffoldKey.currentState!.openDrawer,
-                        selectedIndex: _selectedIndex,
-                      ),
+            body = Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                SafeArea(
+                  child: BlocBuilder<AuthCubit, AuthState>(
+                    builder: (context, state) => HouseholdNavigationRail(
+                      extendedRail: extendedRail,
+                      pages: pages,
+                      onPageSelected: _onItemTapped,
+                      openDrawer: scaffoldKey.currentState!.openDrawer,
+                      selectedIndex: _selectedIndex,
                     ),
                   ),
-                  Expanded(child: body),
-                ],
-              );
-            }
-
-            return Scaffold(
-              key: scaffoldKey,
-              body: body,
-              floatingActionButton:
-                  pages[_selectedIndex].floatingActionButton(context),
-              drawer: HouseholdDrawer(
-                onPageSelected: _onItemTapped,
-                pages: pages,
-                selectedIndex: _selectedIndex,
-                popOnSelection: true,
-              ),
-              drawerEnableOpenDragGesture: false,
-              bottomNavigationBar: useBottomNavigationBar
-                  ? BlocBuilder<AuthCubit, AuthState>(
-                      builder: (context, state) => NavigationBar(
-                        labelBehavior:
-                            NavigationDestinationLabelBehavior.onlyShowSelected,
-                        destinations: pages
-                            .map((e) => NavigationDestination(
-                                  icon: Icon(e.toIcon(context)),
-                                  label: e.toLocalizedString(context),
-                                ))
-                            .toList(),
-                        selectedIndex: _selectedIndex,
-                        onDestinationSelected: (i) => _onItemTapped(
-                          context,
-                          pages[i],
-                          pages[_selectedIndex],
-                        ),
-                      ),
-                    )
-                  : null,
+                ),
+                Expanded(child: body),
+              ],
             );
-          },
-        ),
+          }
+
+          return Scaffold(
+            key: scaffoldKey,
+            body: body,
+            floatingActionButton:
+                pages[_selectedIndex].floatingActionButton(context),
+            drawer: HouseholdDrawer(
+              onPageSelected: _onItemTapped,
+              pages: pages,
+              selectedIndex: _selectedIndex,
+              popOnSelection: true,
+            ),
+            drawerEnableOpenDragGesture: false,
+            bottomNavigationBar: useBottomNavigationBar
+                ? BlocBuilder<AuthCubit, AuthState>(
+                    builder: (context, state) => NavigationBar(
+                      labelBehavior:
+                          NavigationDestinationLabelBehavior.onlyShowSelected,
+                      destinations: pages
+                          .map((e) => NavigationDestination(
+                                icon: Icon(e.toIcon(context)),
+                                label: e.toLocalizedString(context),
+                              ))
+                          .toList(),
+                      selectedIndex: _selectedIndex,
+                      onDestinationSelected: (i) => _onItemTapped(
+                        context,
+                        pages[i],
+                        pages[_selectedIndex],
+                      ),
+                    ),
+                  )
+                : null,
+          );
+        },
       ),
     );
   }

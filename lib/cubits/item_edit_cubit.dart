@@ -64,23 +64,8 @@ class ItemEditCubit<T extends Item> extends Cubit<ItemEditState> {
     }
   }
 
-  bool hasChanged() {
-    return hasChangedDescription() || hasChangedItem();
-  }
-
-  bool hasChangedItem() {
-    return _item.category != state.category ||
-        _item.icon != state.icon ||
-        _item.name != state.name;
-  }
-
-  bool hasChangedDescription() {
-    return _item is ItemWithDescription &&
-        (_item as ItemWithDescription).description != state.description;
-  }
-
   Future<void> saveItem() async {
-    if (shoppingList != null && hasChangedDescription()) {
+    if (shoppingList != null && state.hasChangedDescription(_item)) {
       await TransactionHandler.getInstance()
           .runTransaction(TransactionShoppingListUpdateItem(
         shoppinglist: shoppingList!,
@@ -88,7 +73,7 @@ class ItemEditCubit<T extends Item> extends Cubit<ItemEditState> {
         description: state.description,
       ));
     }
-    if (hasChangedItem()) {
+    if (state.hasChangedItem(_item)) {
       await TransactionHandler.getInstance()
           .runTransaction(TransactionItemUpdate(
         item: item,
@@ -165,4 +150,17 @@ class ItemEditState extends Equatable {
 
   @override
   List<Object?> get props => [name, description, icon, recipes, category];
+
+  bool hasChanged(Item comparedTo) =>
+      hasChangedItem(comparedTo) || hasChangedDescription(comparedTo);
+
+  bool hasChangedItem(Item comparedTo) =>
+      comparedTo.category != category ||
+      comparedTo.icon != icon ||
+      comparedTo.name != name;
+
+  bool hasChangedDescription(Item comparedTo) {
+    return comparedTo is ItemWithDescription &&
+        (comparedTo).description != description;
+  }
 }

@@ -33,6 +33,7 @@
         android:icon="@mipmap/ic_launcher"
         android:roundIcon="@mipmap/ic_launcher_rounded"
         android:localeConfig="@xml/locales_config"
+        android:enableOnBackInvokedCallback="true"
         android:usesCleartextTraffic="true">
         <activity
             android:name=".MainActivity"

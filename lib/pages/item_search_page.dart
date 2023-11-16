@@ -84,11 +84,10 @@ class _ItemSearchPageState extends State<ItemSearchPage> {
       ),
     );
 
-    return WillPopScope(
-      onWillPop: () async {
-        Navigator.of(context).pop(cubit.state.selectedItems);
-
-        return false;
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (didPop) {
+        if (!didPop) Navigator.of(context).pop(cubit.state.selectedItems);
       },
       child: Scaffold(
         appBar: PreferredSize(

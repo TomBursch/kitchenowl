@@ -53,11 +53,10 @@ class _SettingsUserPageState extends State<SettingsUserPage> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        Navigator.of(context).pop(cubit.state.updateState);
-
-        return false;
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (didPop) {
+        if (!didPop) Navigator.of(context).pop(cubit.state.updateState);
       },
       child: BlocListener<SettingsUserCubit, SettingsUserState>(
         bloc: cubit,
@@ -143,7 +142,8 @@ class _SettingsUserPageState extends State<SettingsUserPage> {
                           child: nameController.text.isNotEmpty
                               ? Text(
                                   nameController.text.substring(0, 1),
-                                  textScaleFactor: 2,
+                                  textScaler: MediaQuery.textScalerOf(context)
+                                      .clamp(minScaleFactor: 2),
                                 )
                               : null,
                         ),

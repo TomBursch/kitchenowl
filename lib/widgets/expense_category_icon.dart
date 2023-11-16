@@ -31,8 +31,13 @@ class ExpenseCategoryIcon extends StatelessWidget {
         alignment: Alignment.center,
         child: Text(
           name.characters.isNotEmpty ? name.characters.first : "",
-          textScaleFactor: textScaleFactor,
           style: Theme.of(context).textTheme.headlineSmall!.copyWith(
+                fontSize: Theme.of(context).textTheme.headlineSmall?.fontSize !=
+                            null &&
+                        textScaleFactor != null
+                    ? Theme.of(context).textTheme.headlineSmall!.fontSize! *
+                        textScaleFactor!
+                    : null,
                 color: color != null
                     ? color!.computeLuminance() > 0.5
                         ? Colors.black

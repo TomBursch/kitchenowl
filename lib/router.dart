@@ -181,34 +181,41 @@ final router = GoRouter(
       },
     ),
     GoRoute(
-      path: "/household",
-      pageBuilder: (context, state) => SharedAxisTransitionPage(
-        key: state.pageKey,
-        name: state.name,
-        transitionType: SharedAxisTransitionType.scaled,
-        child: const HouseholdListPage(),
-      ),
-      redirect: (context, state) {
-        final id = int.tryParse(state.pathParameters['id'] ?? '');
-        if (id != null) {
-          PreferenceStorage.getInstance().writeInt(
-            key: 'lastHouseholdId',
-            value: id,
-          );
-        } else {
+        path: "/household",
+        pageBuilder: (context, state) => SharedAxisTransitionPage(
+              key: state.pageKey,
+              name: state.name,
+              transitionType: SharedAxisTransitionType.scaled,
+              child: const HouseholdListPage(),
+            ),
+        redirect: (context, state) {
           PreferenceStorage.getInstance().delete(
             key: 'lastHouseholdId',
           );
-        }
-
-        return null;
-      },
+          return null;
+        }),
+    ShellRoute(
+      builder: (context, state, child) => HouseholdPage(
+        household: ((state.extra is Household?)
+                ? (state.extra as Household?)
+                : null) ??
+            Household(
+              id: int.tryParse(state.pathParameters['id'] ?? '') ?? -1,
+            ),
+        child: child,
+      ),
       routes: [
         GoRoute(
           name: "household",
-          path: ":id",
-          builder: (context, state) => const SplashPage(),
+          path: "/household/:id",
           redirect: (context, state) {
+            final id = int.tryParse(state.pathParameters['id'] ?? '');
+            if (id != null) {
+              PreferenceStorage.getInstance().writeInt(
+                key: 'lastHouseholdId',
+                value: id,
+              );
+            }
             if (state.matchedLocation == state.uri.path) {
               return "${state.matchedLocation}/${(state.extra as Household?)?.viewOrdering?.firstOrNull.toString() ?? "items"}";
             }
@@ -216,130 +223,117 @@ final router = GoRouter(
             return null;
           },
           routes: [
-            ShellRoute(
-              builder: (context, state, child) => HouseholdPage(
-                household: ((state.extra is Household?)
-                        ? (state.extra as Household?)
-                        : null) ??
-                    Household(
-                      id: int.tryParse(state.pathParameters['id'] ?? '') ?? -1,
-                    ),
-                child: child,
+            GoRoute(
+              path: "items",
+              pageBuilder: (context, state) => FadeThroughTransitionPage(
+                key: state.pageKey,
+                name: state.name,
+                child: const ShoppinglistPage(),
+              ),
+            ),
+            GoRoute(
+              path: "recipes",
+              pageBuilder: (context, state) => FadeThroughTransitionPage(
+                key: state.pageKey,
+                name: state.name,
+                child: const RecipeListPage(),
               ),
               routes: [
                 GoRoute(
-                  path: "items",
-                  pageBuilder: (context, state) => FadeThroughTransitionPage(
-                    key: state.pageKey,
-                    name: state.name,
-                    child: const ShoppinglistPage(),
-                  ),
-                ),
-                GoRoute(
-                  path: "recipes",
-                  pageBuilder: (context, state) => FadeThroughTransitionPage(
-                    key: state.pageKey,
-                    name: state.name,
-                    child: const RecipeListPage(),
-                  ),
-                  routes: [
-                    GoRoute(
-                      parentNavigatorKey: _rootNavigatorKey,
-                      path: 'details/:recipeId',
-                      builder: (context, state) {
-                        final extra =
-                            (state.extra as Tuple2<Household, Recipe>?);
+                  parentNavigatorKey: _rootNavigatorKey,
+                  path: 'details/:recipeId',
+                  builder: (context, state) {
+                    final extra = (state.extra as Tuple2<Household, Recipe>?);
 
-                        return RecipePage(
-                          recipe: extra?.item2 ??
-                              Recipe(
-                                id: int.tryParse(
-                                  state.pathParameters['recipeId'] ?? '',
-                                ),
-                              ),
-                          household: extra?.item1 ??
-                              Household(
-                                id: int.tryParse(
-                                      state.pathParameters['id'] ?? '',
-                                    ) ??
-                                    -1,
-                              ),
-                          updateOnPlanningEdit: state.uri
-                                  .queryParameters['updateOnPlanningEdit'] ==
-                              true.toString(),
-                          selectedYields: int.tryParse(
-                            state.uri.queryParameters['selectedYields'] ?? "",
+                    return RecipePage(
+                      recipe: extra?.item2 ??
+                          Recipe(
+                            id: int.tryParse(
+                              state.pathParameters['recipeId'] ?? '',
+                            ),
                           ),
-                        );
-                      },
-                    ),
-                    GoRoute(
-                      parentNavigatorKey: _rootNavigatorKey,
-                      path: 'scrape',
-                      builder: (context, state) => RecipeScraperPage(
-                        url: state.uri.queryParameters['url']!,
-                        household: Household(
-                          id: int.tryParse(state.pathParameters['id'] ?? '') ??
-                              -1,
-                        ),
+                      household: extra?.item1 ??
+                          Household(
+                            id: int.tryParse(
+                                  state.pathParameters['id'] ?? '',
+                                ) ??
+                                -1,
+                          ),
+                      updateOnPlanningEdit:
+                          state.uri.queryParameters['updateOnPlanningEdit'] ==
+                              true.toString(),
+                      selectedYields: int.tryParse(
+                        state.uri.queryParameters['selectedYields'] ?? "",
                       ),
+                    );
+                  },
+                ),
+                GoRoute(
+                  parentNavigatorKey: _rootNavigatorKey,
+                  path: 'scrape',
+                  builder: (context, state) => RecipeScraperPage(
+                    url: state.uri.queryParameters['url']!,
+                    household: Household(
+                      id: int.tryParse(state.pathParameters['id'] ?? '') ?? -1,
                     ),
-                  ],
-                ),
-                GoRoute(
-                  path: "planner",
-                  pageBuilder: (context, state) => FadeThroughTransitionPage(
-                    key: state.pageKey,
-                    name: state.name,
-                    child: const PlannerPage(),
-                  ),
-                ),
-                GoRoute(
-                  path: "balances",
-                  pageBuilder: (context, state) => FadeThroughTransitionPage(
-                    key: state.pageKey,
-                    name: state.name,
-                    child: const ExpenseListPage(),
-                  ),
-                  routes: [
-                    GoRoute(
-                      parentNavigatorKey: _rootNavigatorKey,
-                      path: 'overview',
-                      builder: (context, state) => ExpenseOverviewPage(
-                        household: Household(
-                          id: int.tryParse(state.pathParameters['id'] ?? '') ??
-                              -1,
-                        ),
-                        initialSorting: state.extra as ExpenselistSorting? ??
-                            ExpenselistSorting.all,
-                      ),
-                    ),
-                  ],
-                ),
-                GoRoute(
-                  path: "profile",
-                  pageBuilder: (context, state) => FadeThroughTransitionPage(
-                    key: state.pageKey,
-                    name: state.name,
-                    child: const ProfilePage(),
                   ),
                 ),
               ],
             ),
             GoRoute(
-              parentNavigatorKey: _rootNavigatorKey,
-              path: 'expenses/:expenseId',
-              builder: (context, state) => ExpensePage(
-                household: (state.extra as Tuple2<Household, Expense>?)
-                        ?.item1 ??
-                    Household(
+              path: "planner",
+              pageBuilder: (context, state) => FadeThroughTransitionPage(
+                key: state.pageKey,
+                name: state.name,
+                child: const PlannerPage(),
+              ),
+            ),
+            GoRoute(
+              path: "balances",
+              pageBuilder: (context, state) => FadeThroughTransitionPage(
+                key: state.pageKey,
+                name: state.name,
+                child: const ExpenseListPage(),
+              ),
+              routes: [
+                GoRoute(
+                  parentNavigatorKey: _rootNavigatorKey,
+                  path: 'overview',
+                  builder: (context, state) => ExpenseOverviewPage(
+                    household: Household(
                       id: int.tryParse(state.pathParameters['id'] ?? '') ?? -1,
                     ),
-                expense: (state.extra as Tuple2<Household, Expense>?)?.item2 ??
-                    Expense(
-                      id: int.tryParse(state.pathParameters['expenseId'] ?? ''),
-                      paidById: 0,
-                    ),
+                    initialSorting: state.extra as ExpenselistSorting? ??
+                        ExpenselistSorting.all,
+                  ),
+                ),
+                GoRoute(
+                  parentNavigatorKey: _rootNavigatorKey,
+                  path: ':expenseId',
+                  builder: (context, state) => ExpensePage(
+                    household: (state.extra as Tuple2<Household, Expense>?)
+                            ?.item1 ??
+                        Household(
+                          id: int.tryParse(state.pathParameters['id'] ?? '') ??
+                              -1,
+                        ),
+                    expense:
+                        (state.extra as Tuple2<Household, Expense>?)?.item2 ??
+                            Expense(
+                              id: int.tryParse(
+                                  state.pathParameters['expenseId'] ?? ''),
+                              paidById: 0,
+                            ),
+                  ),
+                ),
+              ],
+            ),
+            GoRoute(
+              path: "profile",
+              pageBuilder: (context, state) => FadeThroughTransitionPage(
+                key: state.pageKey,
+                name: state.name,
+                child: const ProfilePage(),
               ),
             ),
           ],

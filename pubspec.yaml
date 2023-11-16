@@ -66,7 +66,10 @@ dependencies:
   go_router: ^12.1.1
   socket_io_client: ^2.0.3+1
   fraction: ^5.0.2
-  flutter_blurhash: ^0.7.0
+  flutter_blurhash:
+    git:
+      url: https://github.com/MominRaza/flutter_blurhash/
+      ref: master
   transparent_image: ^2.0.1
   universal_html: ^2.2.4
   sign_in_with_apple: ^5.0.0

@@ -33,7 +33,11 @@ class ProfilePage extends StatelessWidget {
                         user.image!,
                       ),
                 radius: 45,
-                child: Text(user.name.substring(0, 1), textScaleFactor: 2),
+                child: Text(
+                  user.name.substring(0, 1),
+                  textScaler:
+                      MediaQuery.textScalerOf(context).clamp(minScaleFactor: 2),
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8),

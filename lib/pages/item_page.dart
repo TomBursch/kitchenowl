@@ -70,235 +70,240 @@ class _ItemPageState<T extends Item> extends State<ItemPage<T>> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        if (cubit.hasChanged()) {
-          await cubit.saveItem();
-          if (!mounted) return false;
-          Navigator.of(context)
-              .pop(UpdateValue<T>(UpdateEnum.updated, cubit.item));
-
-          return false;
-        }
-
-        return true;
-      },
-      child: Scaffold(
-        appBar: AppBar(
-          title: BlocBuilder<ItemEditCubit, ItemEditState>(
-            bloc: cubit,
-            buildWhen: (prev, curr) => prev.name != curr.name,
-            builder: (context, state) => Text(state.name),
-          ),
-          actions: [
-            if (widget.item is! RecipeItem && !App.isOffline)
-              PopupMenuButton(
-                itemBuilder: (BuildContext context) =>
-                    <PopupMenuEntry<_ItemAction>>[
-                  PopupMenuItem<_ItemAction>(
-                    value: _ItemAction.changeIcon,
-                    child: Text(AppLocalizations.of(context)!.changeIcon),
-                  ),
-                  PopupMenuItem<_ItemAction>(
-                    value: _ItemAction.rename,
-                    child: Text(AppLocalizations.of(context)!.rename),
-                  ),
-                  const PopupMenuDivider(),
-                  if (widget.household != null)
+    return BlocBuilder<ItemEditCubit, ItemEditState>(
+      bloc: cubit,
+      buildWhen: (prev, curr) =>
+          prev.hasChanged(widget.item) != curr.hasChanged(widget.item),
+      builder: (context, state) => PopScope(
+        canPop: !state.hasChanged(widget.item),
+        onPopInvoked: (didPop) async {
+          if (!didPop && state.hasChanged(widget.item)) {
+            await cubit.saveItem();
+            if (mounted) {
+              Navigator.of(context)
+                  .pop(UpdateValue<T>(UpdateEnum.updated, cubit.item));
+            }
+          }
+        },
+        child: Scaffold(
+          appBar: AppBar(
+            title: BlocBuilder<ItemEditCubit, ItemEditState>(
+              bloc: cubit,
+              buildWhen: (prev, curr) => prev.name != curr.name,
+              builder: (context, state) => Text(state.name),
+            ),
+            actions: [
+              if (widget.item is! RecipeItem && !App.isOffline)
+                PopupMenuButton(
+                  itemBuilder: (BuildContext context) =>
+                      <PopupMenuEntry<_ItemAction>>[
                     PopupMenuItem<_ItemAction>(
-                      value: _ItemAction.merge,
-                      child: Text(AppLocalizations.of(context)!.merge),
+                      value: _ItemAction.changeIcon,
+                      child: Text(AppLocalizations.of(context)!.changeIcon),
                     ),
-                  PopupMenuItem<_ItemAction>(
-                    value: _ItemAction.delete,
-                    child: Text(AppLocalizations.of(context)!.delete),
-                  ),
-                ],
-                onSelected: _handleItemAction,
-              ),
-          ],
-        ),
-        body: Scrollbar(
-          child: RefreshIndicator(
-            onRefresh: cubit.refresh,
-            child: CustomScrollView(
-              slivers: [
-                if (widget.isDescriptionEditable &&
-                    widget.item is ItemWithDescription)
-                  SliverPadding(
-                    padding: const EdgeInsets.all(16),
-                    sliver: SliverToBoxAdapter(
-                      child: TextField(
-                        autofocus: true,
-                        controller: descController,
-                        onChanged: (s) => cubit.setDescription(s),
-                        textCapitalization: TextCapitalization.sentences,
-                        decoration: InputDecoration(
-                          border: const OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(14)),
+                    PopupMenuItem<_ItemAction>(
+                      value: _ItemAction.rename,
+                      child: Text(AppLocalizations.of(context)!.rename),
+                    ),
+                    const PopupMenuDivider(),
+                    if (widget.household != null)
+                      PopupMenuItem<_ItemAction>(
+                        value: _ItemAction.merge,
+                        child: Text(AppLocalizations.of(context)!.merge),
+                      ),
+                    PopupMenuItem<_ItemAction>(
+                      value: _ItemAction.delete,
+                      child: Text(AppLocalizations.of(context)!.delete),
+                    ),
+                  ],
+                  onSelected: _handleItemAction,
+                ),
+            ],
+          ),
+          body: Scrollbar(
+            child: RefreshIndicator(
+              onRefresh: cubit.refresh,
+              child: CustomScrollView(
+                slivers: [
+                  if (widget.isDescriptionEditable &&
+                      widget.item is ItemWithDescription)
+                    SliverPadding(
+                      padding: const EdgeInsets.all(16),
+                      sliver: SliverToBoxAdapter(
+                        child: TextField(
+                          autofocus: true,
+                          controller: descController,
+                          onChanged: (s) => cubit.setDescription(s),
+                          textCapitalization: TextCapitalization.sentences,
+                          decoration: InputDecoration(
+                            border: const OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(14)),
+                            ),
+                            labelText:
+                                AppLocalizations.of(context)!.description,
+                            // suffix: IconButton(
+                            //   onPressed: () {
+                            //     if (descController.text.isNotEmpty) {
+                            //       cubit.setDescription('');
+                            //       descController.clear();
+                            //     }
+                            //     FocusScope.of(context).unfocus();
+                            //   },
+                            //   icon: Icon(
+                            //     Icons.close,
+                            //     color: Colors.grey,
+                            //   ),
+                            // ),
                           ),
-                          labelText: AppLocalizations.of(context)!.description,
-                          // suffix: IconButton(
-                          //   onPressed: () {
-                          //     if (descController.text.isNotEmpty) {
-                          //       cubit.setDescription('');
-                          //       descController.clear();
-                          //     }
-                          //     FocusScope.of(context).unfocus();
-                          //   },
-                          //   icon: Icon(
-                          //     Icons.close,
-                          //     color: Colors.grey,
-                          //   ),
-                          // ),
                         ),
                       ),
                     ),
-                  ),
-                if (widget.item is! RecipeItem)
-                  SliverPadding(
-                    padding: EdgeInsets.only(
-                      top: (widget.isDescriptionEditable &&
-                              widget.item is ItemWithDescription)
-                          ? 0
-                          : 16,
-                      bottom: 16,
-                      left: 16,
-                      right: 16,
-                    ),
-                    sliver: SliverList(
-                      delegate: SliverChildListDelegate(
-                        [
-                          Text(
-                            AppLocalizations.of(context)!.category,
-                            style: Theme.of(context).textTheme.bodySmall,
-                          ),
-                          Row(
-                            children: [
-                              Expanded(
-                                child:
-                                    BlocBuilder<ItemEditCubit, ItemEditState>(
-                                  bloc: cubit,
-                                  buildWhen: (prev, curr) =>
-                                      prev.category != curr.category,
-                                  builder: (context, state) =>
-                                      DropdownButton<Category?>(
-                                    value: state.category,
-                                    isExpanded: true,
-                                    items: [
-                                      for (final e in widget.categories)
+                  if (widget.item is! RecipeItem)
+                    SliverPadding(
+                      padding: EdgeInsets.only(
+                        top: (widget.isDescriptionEditable &&
+                                widget.item is ItemWithDescription)
+                            ? 0
+                            : 16,
+                        bottom: 16,
+                        left: 16,
+                        right: 16,
+                      ),
+                      sliver: SliverList(
+                        delegate: SliverChildListDelegate(
+                          [
+                            Text(
+                              AppLocalizations.of(context)!.category,
+                              style: Theme.of(context).textTheme.bodySmall,
+                            ),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child:
+                                      BlocBuilder<ItemEditCubit, ItemEditState>(
+                                    bloc: cubit,
+                                    buildWhen: (prev, curr) =>
+                                        prev.category != curr.category,
+                                    builder: (context, state) =>
+                                        DropdownButton<Category?>(
+                                      value: state.category,
+                                      isExpanded: true,
+                                      items: [
+                                        for (final e in widget.categories)
+                                          DropdownMenuItem(
+                                            value: e,
+                                            child: Text(e.name),
+                                          ),
                                         DropdownMenuItem(
-                                          value: e,
-                                          child: Text(e.name),
+                                          value: null,
+                                          child: Text(
+                                            AppLocalizations.of(context)!.none,
+                                          ),
                                         ),
-                                      DropdownMenuItem(
-                                        value: null,
-                                        child: Text(
-                                          AppLocalizations.of(context)!.none,
-                                        ),
-                                      ),
-                                    ],
-                                    onChanged: !App.isOffline
-                                        ? cubit.setCategory
-                                        : null,
+                                      ],
+                                      onChanged: !App.isOffline
+                                          ? cubit.setCategory
+                                          : null,
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
-                          ),
-                          if (widget.item is ShoppinglistItem)
-                            ListTile(
-                              contentPadding: EdgeInsets.zero,
-                              title: Text(
-                                AppLocalizations.of(context)!
-                                    .addedBy(widget.household?.member
-                                            ?.firstWhereOrNull(
-                                              (e) =>
-                                                  e.id ==
-                                                  (widget.item
-                                                          as ShoppinglistItem)
-                                                      .createdById,
-                                            )
-                                            ?.name ??
-                                        AppLocalizations.of(context)!.other),
-                              ),
-                              trailing: (widget.item as ShoppinglistItem)
-                                          .createdAt !=
-                                      null
-                                  ? Text(
-                                      DateFormat.yMMMEd().add_jm().format(
-                                            (widget.item as ShoppinglistItem)
-                                                .createdAt!,
-                                          ),
-                                    )
-                                  : null,
+                              ],
                             ),
-                        ],
+                            if (widget.item is ShoppinglistItem)
+                              ListTile(
+                                contentPadding: EdgeInsets.zero,
+                                title: Text(
+                                  AppLocalizations.of(context)!
+                                      .addedBy(widget.household?.member
+                                              ?.firstWhereOrNull(
+                                                (e) =>
+                                                    e.id ==
+                                                    (widget.item
+                                                            as ShoppinglistItem)
+                                                        .createdById,
+                                              )
+                                              ?.name ??
+                                          AppLocalizations.of(context)!.other),
+                                ),
+                                trailing: (widget.item as ShoppinglistItem)
+                                            .createdAt !=
+                                        null
+                                    ? Text(
+                                        DateFormat.yMMMEd().add_jm().format(
+                                              (widget.item as ShoppinglistItem)
+                                                  .createdAt!,
+                                            ),
+                                      )
+                                    : null,
+                              ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                if (widget.item is! RecipeItem)
-                  BlocProvider.value(
-                    value: BlocProvider.of<HouseholdCubit>(context),
-                    child: BlocBuilder<ItemEditCubit, ItemEditState>(
-                      bloc: cubit,
-                      builder: (context, state) {
-                        return SliverPadding(
-                          padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-                          sliver: SliverList(
-                            delegate: SliverChildBuilderDelegate(
-                              (context, i) {
-                                if (i == 0) {
-                                  return Padding(
-                                    padding: const EdgeInsets.only(bottom: 8),
-                                    child: Text(
-                                      '${AppLocalizations.of(context)!.usedIn}:',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleLarge,
-                                    ),
-                                  );
-                                }
-                                i = i - 1;
+                  if (widget.item is! RecipeItem)
+                    BlocProvider.value(
+                      value: BlocProvider.of<HouseholdCubit>(context),
+                      child: BlocBuilder<ItemEditCubit, ItemEditState>(
+                        bloc: cubit,
+                        builder: (context, state) {
+                          return SliverPadding(
+                            padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                            sliver: SliverList(
+                              delegate: SliverChildBuilderDelegate(
+                                (context, i) {
+                                  if (i == 0) {
+                                    return Padding(
+                                      padding: const EdgeInsets.only(bottom: 8),
+                                      child: Text(
+                                        '${AppLocalizations.of(context)!.usedIn}:',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleLarge,
+                                      ),
+                                    );
+                                  }
+                                  i = i - 1;
 
-                                return RecipeItemWidget(
-                                  recipe: state.recipes[i],
-                                  onUpdated: cubit.refresh,
-                                  description: state.recipes[i].isPlanned &&
-                                          state.recipes[i].items.isNotEmpty &&
-                                          state.recipes[i].items.first
-                                              .description.isNotEmpty
-                                      ? Text(
-                                          "${state.recipes[i].items.first.description}${state.recipes[i].items.first.optional ? " (${AppLocalizations.of(context)!.optional})" : ""}",
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodySmall,
-                                        )
-                                      : state.recipes[i].items.first.optional
-                                          ? Text(
-                                              AppLocalizations.of(context)!
-                                                  .optional,
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .bodySmall,
-                                            )
-                                          : null,
-                                );
-                              },
-                              childCount: state.recipes.isEmpty
-                                  ? 0
-                                  : state.recipes.length + 1,
+                                  return RecipeItemWidget(
+                                    recipe: state.recipes[i],
+                                    onUpdated: cubit.refresh,
+                                    description: state.recipes[i].isPlanned &&
+                                            state.recipes[i].items.isNotEmpty &&
+                                            state.recipes[i].items.first
+                                                .description.isNotEmpty
+                                        ? Text(
+                                            "${state.recipes[i].items.first.description}${state.recipes[i].items.first.optional ? " (${AppLocalizations.of(context)!.optional})" : ""}",
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodySmall,
+                                          )
+                                        : state.recipes[i].items.first.optional
+                                            ? Text(
+                                                AppLocalizations.of(context)!
+                                                    .optional,
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodySmall,
+                                              )
+                                            : null,
+                                  );
+                                },
+                                childCount: state.recipes.isEmpty
+                                    ? 0
+                                    : state.recipes.length + 1,
+                              ),
                             ),
-                          ),
-                        );
-                      },
+                          );
+                        },
+                      ),
                     ),
+                  SliverToBoxAdapter(
+                    child:
+                        SizedBox(height: MediaQuery.of(context).padding.bottom),
                   ),
-                SliverToBoxAdapter(
-                  child:
-                      SizedBox(height: MediaQuery.of(context).padding.bottom),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

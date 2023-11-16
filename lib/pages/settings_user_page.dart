@@ -166,7 +166,7 @@ class _SettingsUserPageState extends State<SettingsUserPage> {
                         enabled: false,
                         decoration: InputDecoration(
                           labelText: AppLocalizations.of(context)!.email,
-                          suffix: (state.user?.email?.isEmpty ?? false) ||
+                          suffix: (state.user?.email?.isEmpty ?? true) ||
                                   (state.user?.emailVerified ?? false)
                               ? null
                               : Text(
@@ -266,7 +266,7 @@ class _SettingsUserPageState extends State<SettingsUserPage> {
                               previous.user?.emailVerified !=
                               current.user?.emailVerified,
                           builder: (context, state) {
-                            if ((state.user?.email?.isEmpty ?? false) ||
+                            if ((state.user?.email?.isEmpty ?? true) ||
                                 (state.user?.emailVerified ?? false)) {
                               return const SizedBox();
                             }

@@ -42,7 +42,11 @@ class RecipeListCubit extends Cubit<RecipeListState> {
       }
       if (selectedTags.isEmpty) {
         emit(
-          ListRecipeListState(recipes: _state.allRecipes, tags: _state.tags),
+          ListRecipeListState(
+            recipes: _state.allRecipes,
+            tags: _state.tags,
+            listView: _state.listView,
+          ),
         );
       } else {
         emit(_state.copyWith(
@@ -220,6 +224,7 @@ class FilteredListRecipeListState extends ListRecipeListState {
         allRecipes: state.recipes,
         tags: state.tags,
         selectedTags: {selectedTag},
+        listView: state.listView,
       );
 
   @override

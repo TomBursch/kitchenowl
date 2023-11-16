@@ -1,5 +1,4 @@
 import 'package:azlistview/azlistview.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/cubits/recipe_list_cubit.dart';
@@ -59,78 +58,85 @@ class _RecipeListPageState extends State<RecipeListPage> {
               ),
             ),
           ),
-          BlocBuilder<RecipeListCubit, RecipeListState>(
-            bloc: cubit,
-            builder: (context, state) {
-              if (state is! ListRecipeListState ||
-                  state.tags.isEmpty ||
-                  state is SearchRecipeListState) {
-                return const SizedBox();
-              }
-
-              return Align(
-                alignment: Alignment.centerLeft,
-                child: Padding(
-                  padding: const EdgeInsets.only(bottom: 6),
-                  child: LeftRightWrap(
-                    crossAxisSpacing: 6,
-                    left: ChoiceScroll(
-                        children: state.tags.map((tag) {
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 4),
-                        child: FilterChip(
-                          label: Text(
-                            tag.name,
-                            style: TextStyle(
-                              color: (state is FilteredListRecipeListState) &&
-                                      state.selectedTags.contains(tag)
-                                  ? Theme.of(context).colorScheme.onPrimary
-                                  : null,
-                            ),
-                          ),
-                          selected: (state is FilteredListRecipeListState) &&
-                              state.selectedTags.contains(tag),
-                          selectedColor:
-                              Theme.of(context).colorScheme.secondary,
-                          onSelected: (bool selected) =>
-                              cubit.tagSelected(tag, selected),
-                        ),
-                      );
-                    }).toList()),
-                    right: Padding(
-                      padding: const EdgeInsets.only(right: 16),
-                      child: TrailingIconTextButton(
-                        onPressed: cubit.toggleView,
-                        text: state.listView
-                            ? AppLocalizations.of(context)!.sortingAlphabetical
-                            : AppLocalizations.of(context)!.grid,
-                        icon: const Icon(Icons.view_agenda_rounded),
-                      ),
-                    ),
-                  ),
-                ),
-              );
-            },
-          ),
           Expanded(
             child: BlocBuilder<RecipeListCubit, RecipeListState>(
               bloc: cubit,
-              buildWhen: (previous, current) =>
-                  previous is! ListRecipeListState ||
-                  current is! ListRecipeListState ||
-                  !listEquals(previous.recipes, current.recipes) ||
-                  previous.listView != current.listView,
               builder: (context, state) {
-                if (state is! ListRecipeListState) {
-                  return const Padding(
-                    padding: EdgeInsets.only(left: 28, right: 12),
-                    child: Column(
-                      children: [
-                        ShimmerCard(trailing: Icon(Icons.arrow_right_rounded)),
-                        ShimmerCard(trailing: Icon(Icons.arrow_right_rounded)),
-                        ShimmerCard(trailing: Icon(Icons.arrow_right_rounded)),
-                      ],
+                Widget header;
+                if (state is! ListRecipeListState ||
+                    state.tags.isEmpty ||
+                    state is SearchRecipeListState) {
+                  header = const SizedBox();
+                } else {
+                  header = Align(
+                    alignment: Alignment.centerLeft,
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 6),
+                      child: LeftRightWrap(
+                        crossAxisSpacing: 6,
+                        left: ChoiceScroll(
+                            children: state.tags.map((tag) {
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 4),
+                            child: FilterChip(
+                              label: Text(
+                                tag.name,
+                                style: TextStyle(
+                                  color: (state
+                                              is FilteredListRecipeListState) &&
+                                          state.selectedTags.contains(tag)
+                                      ? Theme.of(context).colorScheme.onPrimary
+                                      : null,
+                                ),
+                              ),
+                              selected:
+                                  (state is FilteredListRecipeListState) &&
+                                      state.selectedTags.contains(tag),
+                              selectedColor:
+                                  Theme.of(context).colorScheme.secondary,
+                              onSelected: (bool selected) =>
+                                  cubit.tagSelected(tag, selected),
+                            ),
+                          );
+                        }).toList()),
+                        right: Padding(
+                          padding: const EdgeInsets.only(right: 16),
+                          child: TrailingIconTextButton(
+                            onPressed: cubit.toggleView,
+                            text: state.listView
+                                ? AppLocalizations.of(context)!
+                                    .sortingAlphabetical
+                                : AppLocalizations.of(context)!.grid,
+                            icon: Icon(state.listView
+                                ? Icons.view_agenda_rounded
+                                : Icons.grid_view_rounded),
+                          ),
+                        ),
+                      ),
                     ),
+                  );
+                }
+
+                if (state is! ListRecipeListState) {
+                  return Column(
+                    children: [
+                      header,
+                      const Padding(
+                        padding: EdgeInsets.only(left: 28, right: 12),
+                        child: ShimmerCard(
+                            trailing: Icon(Icons.arrow_right_rounded)),
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.only(left: 28, right: 12),
+                        child: ShimmerCard(
+                            trailing: Icon(Icons.arrow_right_rounded)),
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.only(left: 28, right: 12),
+                        child: ShimmerCard(
+                            trailing: Icon(Icons.arrow_right_rounded)),
+                      ),
+                    ],
                   );
                 }
                 final recipes = state.recipes;
@@ -140,6 +146,7 @@ class _RecipeListPageState extends State<RecipeListPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
+                      header,
                       const Icon(Icons.no_food_rounded),
                       const SizedBox(height: 16),
                       Text(state is SearchRecipeListState ||
@@ -153,8 +160,11 @@ class _RecipeListPageState extends State<RecipeListPage> {
                 Widget child;
                 if (state.listView) {
                   child = AzListView(
-                    itemCount: recipes.length,
-                    data: recipes,
+                    itemCount: recipes.length + 1,
+                    data: <ISuspensionBean>[
+                          _HeaderBean(recipes.first.getSuspensionTag())
+                        ] +
+                        recipes,
                     indexBarData: SuspensionUtil.getTagIndexList(recipes),
                     indexBarAlignment: Alignment.centerLeft,
                     indexBarOptions: IndexBarOptions(
@@ -188,6 +198,8 @@ class _RecipeListPageState extends State<RecipeListPage> {
                     ),
                     hapticFeedback: true,
                     itemBuilder: (context, i) {
+                      if (i == 0) return header;
+                      i--;
                       return Padding(
                         key: Key(recipes[i].name),
                         padding: const EdgeInsets.only(left: 32, right: 16),
@@ -199,20 +211,27 @@ class _RecipeListPageState extends State<RecipeListPage> {
                     },
                   );
                 } else {
-                  child = GridView.builder(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    itemCount: recipes.length,
+                  child = CustomScrollView(
                     primary: true,
-                    gridDelegate:
-                        const SliverGridDelegateWithMaxCrossAxisExtent(
-                      maxCrossAxisExtent: 350,
-                      childAspectRatio: 0.8,
-                    ),
-                    itemBuilder: (context, i) => RecipeCard(
-                      key: Key(recipes[i].name),
-                      recipe: recipes[i],
-                      onUpdated: cubit.refresh,
-                    ),
+                    slivers: [
+                      SliverToBoxAdapter(child: header),
+                      SliverPadding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        sliver: SliverGrid.builder(
+                          itemCount: recipes.length,
+                          gridDelegate:
+                              const SliverGridDelegateWithMaxCrossAxisExtent(
+                            maxCrossAxisExtent: 350,
+                            childAspectRatio: 0.8,
+                          ),
+                          itemBuilder: (context, i) => RecipeCard(
+                            key: Key(recipes[i].name),
+                            recipe: recipes[i],
+                            onUpdated: cubit.refresh,
+                          ),
+                        ),
+                      ),
+                    ],
                   );
                 }
 
@@ -227,4 +246,19 @@ class _RecipeListPageState extends State<RecipeListPage> {
       ),
     );
   }
+}
+
+class _HeaderBean implements ISuspensionBean {
+  String suspensionTag;
+
+  _HeaderBean(this.suspensionTag);
+
+  @override
+  bool get isShowSuspension => true;
+
+  @override
+  String getSuspensionTag() => suspensionTag;
+
+  @override
+  set isShowSuspension(bool _isShowSuspension) {}
 }

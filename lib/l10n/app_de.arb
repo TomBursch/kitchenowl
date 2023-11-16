@@ -4,6 +4,8 @@
   "@accountCreateTitle": {},
   "@accountDelete": {},
   "@accountDeleteConfirmation": {},
+  "@accountLinkedWithOtherUser": {},
+  "@accountsLinked": {},
   "@add": {},
   "@addCategory": {},
   "@addDescriptionFromSource": {},
@@ -71,9 +73,11 @@
   "@emailInvalid": {},
   "@emailNotVerified": {},
   "@emailResendVerification": {},
+  "@emailSuccessfullyVerified": {},
   "@emailUpdate": {},
   "@emailUsed": {},
   "@error": {},
+  "@excludeFromStatistics": {},
   "@expense": {},
   "@expenseAdd": {},
   "@expenseAmount": {},
@@ -150,6 +154,9 @@
   "@languageSelect": {},
   "@larger": {},
   "@lastUsed": {},
+  "@link": {
+    "description": "As in link social account (e.g. Google)"
+  },
   "@list": {},
   "@lltCreate": {},
   "@lltDelete": {},
@@ -263,6 +270,11 @@
   "@shoppingListEdit": {},
   "@shoppingListStyle": {},
   "@shoppingLists": {},
+  "@signInWith": {
+    "placeholders": {
+      "provider": {}
+    }
+  },
   "@signup": {},
   "@smaller": {},
   "@sortingAlgorithmic": {},
@@ -289,6 +301,9 @@
   "@totalTime": {},
   "@uncategorized": {},
   "@underConstruction": {},
+  "@unlink": {
+    "description": "As in remove link to social account (e.g. Google)"
+  },
   "@unreachableMessage": {},
   "@unsavedChangesBody": {},
   "@unsavedChangesTitle": {},
@@ -304,6 +319,7 @@
       "user": {}
     }
   },
+  "@userNotSignedIn": {},
   "@userSearchHint": {},
   "@username": {},
   "@usernameInvalid": {},
@@ -321,6 +337,8 @@
   "accountCreateTitle": "Erstelle dein KitchenOwl-Konto",
   "accountDelete": "Konto löschen",
   "accountDeleteConfirmation": "Bist du dir sicher, dass du dein Konto löschen möchtest?",
+  "accountLinkedWithOtherUser": "Konto schon mit anderem Nutzer verknüpft",
+  "accountsLinked": "Verknüpfte Konten",
   "add": "Hinzufügen",
   "addCategory": "Kategorie hinzufügen",
   "addDescriptionFromSource": "Füge die Beschreibung der Quelle ein",
@@ -366,9 +384,11 @@
   "emailInvalid": "Ungültige E-Mail",
   "emailNotVerified": "Nicht verifiziert",
   "emailResendVerification": "Verifizierungs-E-Mail erneut senden",
+  "emailSuccessfullyVerified": "E-Mail erfolgreich verifiziert!",
   "emailUpdate": "E-Mail aktualisieren",
   "emailUsed": "Die E-Mail ist bereits mit einem Konto verknüpft",
   "error": "Ein Fehler ist aufgetreten",
+  "excludeFromStatistics": "Von der Statistik ausschließen",
   "expense": "Ausgabe",
   "expenseAdd": "Ausgabe hinzufügen",
   "expenseAmount": "Betrag",
@@ -420,6 +440,7 @@
   "languageSelect": "Wähle eine Sprache",
   "larger": "Größer",
   "lastUsed": "Zuletzt benutzt",
+  "link": "Verknüpfen",
   "list": "Liste",
   "lltCreate": "Long-lived Token erstellen",
   "lltDelete": "Lösche Long-lived Token",
@@ -508,6 +529,7 @@
   "shoppingListEdit": "Einkaufsliste bearbeiten",
   "shoppingListStyle": "Einkaufslisten-Stil",
   "shoppingLists": "Einkaufslisten",
+  "signInWith": "Mit {provider} anmelden",
   "signup": "Registrieren",
   "smaller": "Kleiner",
   "sortingAlgorithmic": "Algorithmisch",
@@ -530,6 +552,7 @@
   "totalTime": "Gesamtzeit",
   "uncategorized": "Unkategorisiert",
   "underConstruction": "Baustelle",
+  "unlink": "Verknüpfung aufheben",
   "unreachableMessage": "Hmmmm… der Server wurde nicht erreicht",
   "unsavedChangesBody": "Bist du sicher, dass du zurückgehen möchstes?",
   "unsavedChangesTitle": "Du hast ungespeicherte Änderungen",
@@ -541,6 +564,7 @@
   "userAdd": "Benutzer hinzufügen",
   "userDelete": "Benutzer löschen",
   "userDeleteConfirmation": "Bist du dir sicher, dass du {user} löschen möchtest?",
+  "userNotSignedIn": "Du musst eingeloggt sein, um einen Account zu verknüpfen",
   "userSearchHint": "Schreibe einen Namen",
   "username": "Benutzername",
   "usernameInvalid": "Benutzername kann nicht '@' enthalten",

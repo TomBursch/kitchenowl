@@ -19,13 +19,15 @@ class _LoginRedirectPageState extends State<LoginRedirectPage> {
   void initState() {
     super.initState();
     if (widget.state == null || widget.code == null) {
+      context.go("/");
       showSnackbar(
         context: context,
         content: Text(AppLocalizations.of(context)!.error),
         width: null,
       );
-      context.go("/");
+      return;
     }
+    final isLinkAttempt = context.read<AuthCubit>().state is Authenticated;
     BlocProvider.of<AuthCubit>(context).loginOIDC(
       widget.state!,
       widget.code!,
@@ -37,6 +39,9 @@ class _LoginRedirectPageState extends State<LoginRedirectPage> {
         width: null,
       ),
     );
+    if (isLinkAttempt) {
+      context.go("/settings/account");
+    }
   }
 
   String _extractErrorMessage(BuildContext context, String? msg) {

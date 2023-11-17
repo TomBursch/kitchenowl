@@ -58,6 +58,11 @@ class _SettingsPageState extends State<SettingsPage> {
         SliverAppBar(
           title: Text(AppLocalizations.of(context)!.settings),
           pinned: true,
+          leading: Navigator.canPop(context)
+              ? null
+              : BackButton(
+                  onPressed: () => context.go("/"),
+                ),
         ),
         SliverCrossAxisConstrained(
           maxCrossAxisExtent: 1600,

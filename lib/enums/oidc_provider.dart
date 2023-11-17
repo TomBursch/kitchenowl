@@ -78,7 +78,7 @@ enum OIDCProivder {
     } else {
       final url =
           (await ApiService.getInstance().getLoginOIDCUrl(toString())).$1;
-      if (url != null) return openUrl(context, url);
+      if (url != null) return openUrl(context, url, webOpenNewTab: false);
     }
   }
 }

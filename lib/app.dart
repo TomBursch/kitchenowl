@@ -125,6 +125,7 @@ class _AppState extends State<App> {
                   return;
                 }
                 router.go(initialLocation!.toString());
+                initialLocation = Uri(path: "/");
               },
               child: BlocBuilder<SettingsCubit, SettingsState>(
                 builder: (context, state) =>

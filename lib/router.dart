@@ -122,7 +122,10 @@ final router = GoRouter(
       redirect: (BuildContext context, GoRouterState state) {
         final authState = BlocProvider.of<AuthCubit>(context).state;
 
-        return (authState is! Unauthenticated) ? "/" : null;
+        return (authState is! Unauthenticated &&
+                state.fullPath != "/signin/redirect")
+            ? "/"
+            : null;
       },
       routes: [
         GoRoute(

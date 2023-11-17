@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart' as ul;
 import 'package:flutter_custom_tabs/flutter_custom_tabs.dart';
 
-Future<void> openUrl(BuildContext context, String url) async {
+Future<void> openUrl(BuildContext context, String url,
+    {bool webOpenNewTab = true}) async {
   if (!isValidUrl(url)) return;
 
   return (!kIsWeb && (Platform.isAndroid || Platform.isIOS))
@@ -27,7 +28,10 @@ Future<void> openUrl(BuildContext context, String url) async {
             dismissButtonStyle: SafariViewControllerDismissButtonStyle.close,
           ),
         )
-      : await ul.launchUrl(Uri.parse(url));
+      : await ul.launchUrl(
+          Uri.parse(url),
+          webOnlyWindowName: webOpenNewTab ? '_blank' : '_self',
+        );
 }
 
 bool isValidUrl(String url) {

@@ -26,5 +26,9 @@ def getBaseAnalytics():
             "total_households": Household.count(),
             "free_storage": statvfs.f_frsize * statvfs.f_bavail,
             "available_storage": statvfs.f_frsize * statvfs.f_blocks,
+            "households": {
+                "expense_feature": Household.query.filter(Household.expenses_feature == True).count(),
+                "planner_feature": Household.query.filter(Household.planner_feature == True).count(),
+            },
         }
     )

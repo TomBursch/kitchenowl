@@ -201,7 +201,9 @@ if FRONT_URL and len(oidc_clients) > 0:
         state = rndstr()
         nonce = rndstr()
         redirect_uri = (
-            "kitchenowl://" if "kitchenowl_scheme" in args and args["kitchenowl_scheme"] else FRONT_URL
+            "kitchenowl://"
+            if "kitchenowl_scheme" in args and args["kitchenowl_scheme"]
+            else FRONT_URL
         ) + "/signin/redirect"
         args = {
             "client_id": client.client_id,
@@ -312,14 +314,20 @@ if FRONT_URL and len(oidc_clients) > 0:
                 return "Request invalid: email", 400
 
             username = (
-                userinfo["name"].lower().replace(" ", "").replace("@", "")
-                if "name" in userinfo
+                userinfo["preferred_username"].lower().replace(" ", "").replace("@", "")
+                if "preferred_username" in userinfo
                 else None
             )
             if not username or User.find_by_username(username):
-                username = userinfo["sub"].lower().replace(" ", "").replace("@", "")
+                username = (
+                    userinfo["name"].lower().replace(" ", "").replace("@", "")
+                    if "name" in userinfo
+                    else None
+                )
                 if not username or User.find_by_username(username):
-                    username = uuid.uuid4().hex
+                    username = userinfo["sub"].lower().replace(" ", "").replace("@", "")
+                    if not username or User.find_by_username(username):
+                        username = uuid.uuid4().hex
             newUser = User(
                 username=username,
                 name=userinfo["name"].strip()

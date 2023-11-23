@@ -49,6 +49,18 @@ class AnalyticsPage extends StatelessWidget {
                   trailing: Text(data['total_households'].toString()),
                 ),
                 ListTile(
+                  dense: true,
+                  title: const Text("with Balances"),
+                  trailing:
+                      Text(data['households']['expense_feature'].toString()),
+                ),
+                ListTile(
+                  dense: true,
+                  title: const Text("with Planner"),
+                  trailing:
+                      Text(data['households']['planner_feature'].toString()),
+                ),
+                ListTile(
                   title: const Text("Available storage"),
                   trailing: Text(
                     "${_readableByteSize(data['available_storage'] - data['free_storage'])}/${_readableByteSize(data['available_storage'])}",

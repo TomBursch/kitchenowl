@@ -33,6 +33,16 @@ def getAllExpenses(args, household_id):
     filter = [Expense.household_id == household_id]
     if "startAfterId" in args:
         filter.append(Expense.id < args["startAfterId"])
+    if "startAfterDate" in args:
+        filter.append(
+            Expense.date
+            < datetime.fromtimestamp(args["startAfterDate"] / 1000, timezone.utc)
+        )
+    if "endBeforeDate" in args:
+        filter.append(
+            Expense.date
+            > datetime.fromtimestamp(args["endBeforeDate"] / 1000, timezone.utc)
+        )
 
     if "view" in args and args["view"] == 1:
         subquery = (
@@ -212,10 +222,6 @@ def getExpenseCategories(household_id):
 @authorize_household()
 @validate_args(GetExpenseOverview)
 def getExpenseOverview(args, household_id):
-    categories = list(
-        map(lambda x: x.id, ExpenseCategory.all_from_household_by_name(household_id))
-    )
-    categories.append(-1)
     thisMonthStart = datetime.utcnow().date().replace(day=1)
 
     steps = args["steps"] if "steps" in args else 5
@@ -223,7 +229,7 @@ def getExpenseOverview(args, household_id):
     page = args["page"] if "page" in args and args["page"] != None else 0
 
     factor = 1
-    query = (
+    by_category_query = (
         Expense.query.filter(
             Expense.household_id == household_id,
             Expense.exclude_from_statistics == False,
@@ -231,6 +237,10 @@ def getExpenseOverview(args, household_id):
         .group_by(Expense.category_id, ExpenseCategory.id)
         .join(Expense.category, isouter=True)
     )
+    by_day_query = Expense.query.filter(
+        Expense.household_id == household_id,
+        Expense.exclude_from_statistics == False,
+    ).group_by(func.strftime("%Y-%m-%d", Expense.date))
 
     if "view" in args and args["view"] == 1:
         filterQuery = (
@@ -259,7 +269,10 @@ def getExpenseOverview(args, household_id):
 
         factor = s2.c.factor
 
-        query = query.filter(Expense.id.in_(filterQuery)).join(s2)
+        by_category_query = by_category_query.filter(Expense.id.in_(filterQuery)).join(
+            s2
+        )
+        by_day_query = by_day_query.filter(Expense.id.in_(filterQuery)).join(s2)
 
     def getFilterForStepAgo(stepAgo: int):
         start = None
@@ -285,27 +298,28 @@ def getExpenseOverview(args, household_id):
 
     def getOverviewForStepAgo(stepAgo: int):
         return {
-            (e.id or -1): (float(e.balance) or 0)
-            for e in query.with_entities(
-                ExpenseCategory.id.label("id"),
-                func.sum(Expense.amount * factor).label("balance"),
-            )
-            .filter(*getFilterForStepAgo(stepAgo))
-            .all()
+            "by_category": {
+                (e.id or -1): (float(e.balance) or 0)
+                for e in by_category_query.with_entities(
+                    ExpenseCategory.id.label("id"),
+                    func.sum(Expense.amount * factor).label("balance"),
+                )
+                .filter(*getFilterForStepAgo(stepAgo))
+                .all()
+            },
+            "by_day": {
+                e.day: (float(e.balance) or 0)
+                for e in by_day_query.with_entities(
+                    func.strftime("%Y-%m-%d", Expense.date).label("day"),
+                    func.sum(Expense.amount * factor).label("balance"),
+                )
+                .filter(*getFilterForStepAgo(stepAgo))
+                .all()
+            },
         }
-
-    value = [
-        getOverviewForStepAgo(i) for i in range(page * steps, steps + page * steps)
-    ]
 
     byStep = {
-        i
-        + page
-        * steps: {
-            category: (value[i][category] if category in value[i] else 0.0)
-            for category in categories
-        }
-        for i in range(0, steps)
+        i: getOverviewForStepAgo(i) for i in range(page * steps, steps + page * steps)
     }
 
     return jsonify(byStep)

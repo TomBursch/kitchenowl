@@ -1,5 +1,6 @@
 import calendar
 from datetime import datetime, timezone, timedelta
+from time import strftime
 from dateutil.relativedelta import relativedelta
 from sqlalchemy.sql.expression import desc
 from sqlalchemy import or_
@@ -237,10 +238,17 @@ def getExpenseOverview(args, household_id):
         .group_by(Expense.category_id, ExpenseCategory.id)
         .join(Expense.category, isouter=True)
     )
-    by_day_query = Expense.query.filter(
+
+    groupByStr = "%Y-%m"
+    if frame < 3:
+        groupByStr += "-%d"
+    if frame < 1:
+        groupByStr += " %H"
+
+    by_subframe_query = Expense.query.filter(
         Expense.household_id == household_id,
         Expense.exclude_from_statistics == False,
-    ).group_by(func.strftime("%Y-%m-%d", Expense.date))
+    ).group_by(func.strftime(groupByStr, Expense.date))
 
     if "view" in args and args["view"] == 1:
         filterQuery = (
@@ -272,23 +280,25 @@ def getExpenseOverview(args, household_id):
         by_category_query = by_category_query.filter(Expense.id.in_(filterQuery)).join(
             s2
         )
-        by_day_query = by_day_query.filter(Expense.id.in_(filterQuery)).join(s2)
+        by_subframe_query = by_subframe_query.filter(Expense.id.in_(filterQuery)).join(
+            s2
+        )
 
     def getFilterForStepAgo(stepAgo: int):
         start = None
         end = None
-        if frame == 0:
+        if frame == 0:  # daily
             start = datetime.utcnow().date() - timedelta(days=stepAgo)
             end = start + timedelta(hours=24)
-        elif frame == 1:
+        elif frame == 1:  # weekly
             start = datetime.utcnow().date() - relativedelta(
                 days=7, weekday=calendar.MONDAY, weeks=stepAgo
             )
             end = start + timedelta(days=7)
-        elif frame == 2:
+        elif frame == 2:  # monthly
             start = thisMonthStart - relativedelta(months=stepAgo)
             end = start + relativedelta(months=1)
-        elif frame == 3:
+        elif frame == 3:  # yearly
             start = datetime.utcnow().date().replace(day=1, month=1) - relativedelta(
                 years=stepAgo
             )
@@ -307,10 +317,10 @@ def getExpenseOverview(args, household_id):
                 .filter(*getFilterForStepAgo(stepAgo))
                 .all()
             },
-            "by_day": {
+            "by_subframe": {
                 e.day: (float(e.balance) or 0)
-                for e in by_day_query.with_entities(
-                    func.strftime("%Y-%m-%d", Expense.date).label("day"),
+                for e in by_subframe_query.with_entities(
+                    func.strftime(groupByStr, Expense.date).label("day"),
                     func.sum(Expense.amount * factor).label("balance"),
                 )
                 .filter(*getFilterForStepAgo(stepAgo))

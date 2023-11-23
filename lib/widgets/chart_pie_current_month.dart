@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/expense_category.dart';
+import 'package:kitchenowl/models/month_overview.dart';
 
 class ChartPieCurrentMonth extends StatefulWidget {
-  final Map<int, double> data;
+  final ExpenseOverview data;
   final double availableHeight;
   final Map<int, ExpenseCategory> categoriesById;
 
@@ -26,7 +27,7 @@ class _ChartPieCurrentMonthState extends State<ChartPieCurrentMonth> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.data.values.reduce((v, e) => v + e) == 0) {
+    if (widget.data.byCategory.values.reduce((v, e) => v + e) == 0) {
       return const SizedBox();
     }
 
@@ -63,13 +64,14 @@ class _ChartPieCurrentMonthState extends State<ChartPieCurrentMonth> {
   }
 
   List<PieChartSectionData> _getData() {
-    final sum =
-        widget.data.values.where((e) => e > 0).fold(0.0, (p, e) => p + e);
+    final sum = widget.data.byCategory.values
+        .where((e) => e > 0)
+        .fold(0.0, (p, e) => p + e);
 
-    return widget.data.entries.map((e) {
+    return widget.data.byCategory.entries.map((e) {
       final isTouched = touchedIndex >= 0 &&
           e.key ==
-              widget.data.entries
+              widget.data.byCategory.entries
                   .where((e) => e.value != 0)
                   .map((e) => e.key)
                   .elementAt(touchedIndex);
@@ -115,7 +117,7 @@ class _ChartPieCurrentMonthState extends State<ChartPieCurrentMonth> {
     if (widget.categoriesById[key]?.color != null) {
       return widget.categoriesById[key]!.color!;
     }
-    final i = widget.data.keys.toList().indexOf(key) % 5;
+    final i = widget.categoriesById.keys.toList().indexOf(key) % 5;
     final l = List.generate(5, (i) {
       Color c = lighten(Theme.of(context).colorScheme.primary, -0.2);
       for (int j = 0; j < i; j++) {

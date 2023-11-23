@@ -18,6 +18,7 @@ import 'package:kitchenowl/widgets/expense_category_icon.dart';
 import 'package:tuple/tuple.dart';
 
 class ExpenseItemWidget extends StatelessWidget {
+  final Household? household;
   final Expense expense;
   final void Function()? onUpdated;
   final bool displayPersonalAmount;
@@ -25,6 +26,7 @@ class ExpenseItemWidget extends StatelessWidget {
   const ExpenseItemWidget({
     super.key,
     required this.expense,
+    this.household,
     this.onUpdated,
     this.displayPersonalAmount = false,
   });
@@ -32,7 +34,6 @@ class ExpenseItemWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double amount = expense.amount;
-    final household = context.read<HouseholdCubit>().state.household;
     if (displayPersonalAmount &&
         BlocProvider.of<AuthCubit>(context).getUser() != null) {
       final i = expense.paidFor.indexWhere(
@@ -81,7 +82,7 @@ class ExpenseItemWidget extends StatelessWidget {
                     )
                   : const Spacer(),
               Text(
-                "${expense.isIncome ? AppLocalizations.of(context)!.expenseReceivedBy : AppLocalizations.of(context)!.expensePaidBy} ${household.member?.firstWhereOrNull(
+                "${expense.isIncome ? AppLocalizations.of(context)!.expenseReceivedBy : AppLocalizations.of(context)!.expensePaidBy} ${(household ?? context.read<HouseholdCubit>().state.household).member?.firstWhereOrNull(
                       (e) => e.id == expense.paidById,
                     )?.name ?? AppLocalizations.of(context)!.other}",
               ),
@@ -89,11 +90,11 @@ class ExpenseItemWidget extends StatelessWidget {
           ),
           onTap: (kIsWeb || Platform.isIOS)
               ? () async {
-                  final household =
+                  final _household = household ??
                       BlocProvider.of<HouseholdCubit>(context).state.household;
                   context.push(
-                    "/household/${household.id}/balances/${expense.id}",
-                    extra: Tuple2<Household, Expense>(household, expense),
+                    "/household/${_household.id}/balances/${expense.id}",
+                    extra: Tuple2<Household, Expense>(_household, expense),
                   );
                   // _handleUpdate(res);
                 }
@@ -102,7 +103,8 @@ class ExpenseItemWidget extends StatelessWidget {
       ),
       onClosed: _handleUpdate,
       openBuilder: (ctx, toggle) => ExpensePage(
-        household: BlocProvider.of<HouseholdCubit>(context).state.household,
+        household: household ??
+            BlocProvider.of<HouseholdCubit>(context).state.household,
         expense: expense,
       ),
     );

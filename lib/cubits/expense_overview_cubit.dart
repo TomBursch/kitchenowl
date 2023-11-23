@@ -8,6 +8,7 @@ import 'package:kitchenowl/enums/timeframe.dart';
 import 'package:kitchenowl/models/expense_category.dart';
 import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/models/member.dart';
+import 'package:kitchenowl/models/month_overview.dart';
 import 'package:kitchenowl/services/transaction_handler.dart';
 import 'package:kitchenowl/services/transactions/expense.dart';
 import 'package:kitchenowl/services/transactions/household.dart';
@@ -52,10 +53,7 @@ class ExpenseOverviewCubit extends Cubit<ExpenseOverviewState> {
   Future<void> _loadMore(int viewSize) async {
     if (state is! ExpenseOverviewLoaded ||
         state.currentMonthOffset <
-            (state as ExpenseOverviewLoaded)
-                    .categoryOverviewsByCategory
-                    .length -
-                viewSize) {
+            (state as ExpenseOverviewLoaded).monthOverview.length - viewSize) {
       return;
     }
 
@@ -68,9 +66,8 @@ class ExpenseOverviewCubit extends Cubit<ExpenseOverviewState> {
       page: (state.currentMonthOffset / viewSize).floor() + 1,
     ));
     emit((state as ExpenseOverviewLoaded).copyWith(
-      categoryOverviewsByCategory:
-          Map.from((state as ExpenseOverviewLoaded).categoryOverviewsByCategory)
-            ..addAll(overview),
+      monthOverview: Map.from((state as ExpenseOverviewLoaded).monthOverview)
+        ..addAll(overview),
     ));
   }
 
@@ -96,7 +93,7 @@ class ExpenseOverviewCubit extends Cubit<ExpenseOverviewState> {
     emit(ExpenseOverviewLoaded(
       sorting: sorting,
       categories: await categories,
-      categoryOverviewsByCategory: overview,
+      monthOverview: overview,
       household: (await fHousehold) ?? household,
       owes: _calculateOwes((await fHousehold) ?? household),
     ));
@@ -166,13 +163,13 @@ class ExpenseOverviewLoading extends ExpenseOverviewState {
 
 class ExpenseOverviewLoaded extends ExpenseOverviewState {
   final List<ExpenseCategory> categories;
-  final Map<int, Map<int, double>> categoryOverviewsByCategory;
+  final Map<int, ExpenseOverview> monthOverview;
   final Household household;
   final List<(Member, Member, double)> owes;
 
   const ExpenseOverviewLoaded({
     required this.categories,
-    required this.categoryOverviewsByCategory,
+    required this.monthOverview,
     required super.sorting,
     required this.household,
     required this.owes,
@@ -181,7 +178,26 @@ class ExpenseOverviewLoaded extends ExpenseOverviewState {
   });
 
   double getTotalForMonth(int i) {
-    return categoryOverviewsByCategory[i]?.values.reduce((v, e) => v + e) ?? 0;
+    return monthOverview[i]?.getTotalForPeriod() ?? 0;
+  }
+
+  double getAverageForLastMonths(int n) =>
+      monthOverview.values
+          .skip(1)
+          .take(n)
+          .fold(0.0, (value, e) => value + e.getTotalForPeriod()) /
+      monthOverview.values
+          .skip(1)
+          .take(n)
+          .where((e) => e.getTotalForPeriod() != 0)
+          .length;
+
+  bool trendUp(double total, double average) {
+    if (selectedMonthIndex == 0) {
+      return total > DateTime.now().day * average / 30;
+    } else {
+      return total > average;
+    }
   }
 
   @override
@@ -190,13 +206,12 @@ class ExpenseOverviewLoaded extends ExpenseOverviewState {
     int? selectedMonthIndex,
     Household? household,
     List<(Member, Member, double)>? owes,
-    Map<int, Map<int, double>>? categoryOverviewsByCategory,
+    Map<int, ExpenseOverview>? monthOverview,
     int? currentMonthOffset,
   }) =>
       ExpenseOverviewLoaded(
         sorting: sorting ?? this.sorting,
-        categoryOverviewsByCategory:
-            categoryOverviewsByCategory ?? this.categoryOverviewsByCategory,
+        monthOverview: monthOverview ?? this.monthOverview,
         categories: categories,
         selectedMonthIndex: selectedMonthIndex ?? this.selectedMonthIndex,
         household: household ?? this.household,
@@ -209,7 +224,7 @@ class ExpenseOverviewLoaded extends ExpenseOverviewState {
         sorting,
         selectedMonthIndex,
         categories,
-        categoryOverviewsByCategory,
+        monthOverview,
         household,
         owes,
         currentMonthOffset,

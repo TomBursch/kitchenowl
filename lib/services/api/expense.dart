@@ -5,6 +5,7 @@ import 'package:kitchenowl/enums/timeframe.dart';
 import 'package:kitchenowl/models/expense.dart';
 import 'package:kitchenowl/models/expense_category.dart';
 import 'package:kitchenowl/models/household.dart';
+import 'package:kitchenowl/models/month_overview.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
 
 extension ExpenseApi on ApiService {
@@ -13,12 +14,16 @@ extension ExpenseApi on ApiService {
   Future<List<Expense>?> getAllExpenses({
     required Household household,
     ExpenselistSorting sorting = ExpenselistSorting.all,
-    Expense? startAfter,
+    DateTime? startAfter,
     List<ExpenseCategory?>? filter,
+    DateTime? endBefore,
   }) async {
     String url = '${householdPath(household)}$baseRoute?view=${sorting.index}';
     if (startAfter != null) {
-      url += '&startAfterId=${startAfter.id}';
+      url += '&startAfterDate=${startAfter.toUtc().millisecondsSinceEpoch}';
+    }
+    if (endBefore != null) {
+      url += '&endBeforeDate=${endBefore.toUtc().millisecondsSinceEpoch}';
     }
     if (filter != null && filter.isNotEmpty) {
       for (final c in filter) {
@@ -116,7 +121,7 @@ extension ExpenseApi on ApiService {
     return res.statusCode == 200;
   }
 
-  Future<Map<int, Map<int, double>>?> getExpenseOverview(
+  Future<Map<int, ExpenseOverview>?> getExpenseOverview(
     Household household, [
     ExpenselistSorting sorting = ExpenselistSorting.all,
     Timeframe timeframe = Timeframe.monthly,
@@ -138,9 +143,8 @@ extension ExpenseApi on ApiService {
 
     final body = jsonDecode(res.body);
 
-    return Map.from(body).map((key, value) => MapEntry(
-          int.parse(key),
-          Map.from(value).map((key, value) => MapEntry(int.parse(key), value)),
-        ));
+    return Map.from(body).map(
+      (key, value) => MapEntry(int.parse(key), ExpenseOverview.fromJson(value)),
+    );
   }
 }

@@ -13,6 +13,8 @@ class CustomInteger(fields.Integer):
 class GetExpenses(Schema):
     view = fields.Integer()
     startAfterId = fields.Integer(validate=lambda a: a >= 0)
+    startAfterDate = fields.Integer(validate=lambda a: a >= 0)
+    endBeforeDate = fields.Integer(validate=lambda a: a >= 0)
     filter = MultiDictList(CustomInteger(allow_none=True))
 
 

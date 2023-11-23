@@ -9,8 +9,10 @@ import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/expense.dart';
 import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/pages/expense_add_update_page.dart';
+import 'package:kitchenowl/pages/expense_month_list_page.dart';
 import 'package:kitchenowl/widgets/chart_bar_member_distribution.dart';
 import 'package:kitchenowl/widgets/chart_bar_months.dart';
+import 'package:kitchenowl/widgets/chart_line_current_month.dart';
 import 'package:kitchenowl/widgets/expense_category_icon.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:sliver_tools/sliver_tools.dart';
@@ -98,7 +100,6 @@ class _ExpenseOverviewPageState extends State<ExpenseOverviewPage> {
                 padding: 16,
                 child: SliverCrossAxisConstrained(
                   maxCrossAxisExtent: 1600,
-                  alignment: 0.5,
                   child: SliverList(
                     delegate: SliverChildListDelegate([
                       const SizedBox(height: 16),
@@ -133,7 +134,7 @@ class _ExpenseOverviewPageState extends State<ExpenseOverviewPage> {
                       SizedBox(
                         height: 300,
                         child: ChartBarMonths(
-                          data: state.categoryOverviewsByCategory,
+                          data: state.monthOverview,
                           categories: state.categories,
                           onMonthSelect: cubit.setSelectedMonth,
                           selectedMonth: state.selectedMonthIndex,
@@ -158,14 +159,33 @@ class _ExpenseOverviewPageState extends State<ExpenseOverviewPage> {
                               style: Theme.of(context).textTheme.titleMedium,
                             ),
                           ),
+                          Icon(state.trendUp(totalForSelectedMonth,
+                                  state.getAverageForLastMonths(6))
+                              ? Icons.trending_up_rounded
+                              : Icons.trending_down_rounded),
                           Text(
-                            NumberFormat.simpleCurrency().format(
+                            " ${NumberFormat.simpleCurrency().format(
                               totalForSelectedMonth,
-                            ),
+                            )} ⌀ ${NumberFormat.simpleCurrency().format(
+                              state.getAverageForLastMonths(6),
+                            )}",
                             style: Theme.of(context).textTheme.titleMedium,
                           ),
                         ],
                       ),
+                      if (state.monthOverview[state.selectedMonthIndex] != null)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 16),
+                          child: SizedBox(
+                            height: 260,
+                            child: ChartLineCurrentMonth(
+                              data: state
+                                  .monthOverview[state.selectedMonthIndex]!,
+                              incomplete: state.selectedMonthIndex == 0,
+                              average: state.getAverageForLastMonths(6),
+                            ),
+                          ),
+                        ),
                       const Divider(),
                     ]),
                   ),
@@ -175,13 +195,12 @@ class _ExpenseOverviewPageState extends State<ExpenseOverviewPage> {
                 padding: 16,
                 child: SliverCrossAxisConstrained(
                   maxCrossAxisExtent: 1600,
-                  alignment: 0.5,
                   child: SliverList(
                     delegate: SliverChildBuilderDelegate(
                       (context, i) {
                         final entry = state
-                            .categoryOverviewsByCategory[
-                                state.selectedMonthIndex]!
+                            .monthOverview[state.selectedMonthIndex]!
+                            .byCategory
                             .entries
                             .sorted((a, b) => b.value.compareTo(a.value))
                             .elementAt(i);
@@ -211,13 +230,24 @@ class _ExpenseOverviewPageState extends State<ExpenseOverviewPage> {
                                 ? Text(NumberFormat.percentPattern()
                                     .format(amount / totalForSelectedMonth))
                                 : null,
+                            onTap: () => Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => ExpenseMonthListPage(
+                                  household: widget.household,
+                                  filter: [category],
+                                  sorting: state.sorting,
+                                  startAfter: _offsetToMonthStart(
+                                      state.selectedMonthIndex - 1),
+                                  endBefore: _offsetToMonthStart(
+                                      state.selectedMonthIndex),
+                                ),
+                              ),
+                            ),
                           ),
                         );
                       },
-                      childCount: state
-                              .categoryOverviewsByCategory[
-                                  state.selectedMonthIndex]
-                              ?.length ??
+                      childCount: state.monthOverview[state.selectedMonthIndex]
+                              ?.byCategory.length ??
                           0,
                     ),
                   ),
@@ -227,7 +257,6 @@ class _ExpenseOverviewPageState extends State<ExpenseOverviewPage> {
                 padding: 16,
                 child: SliverCrossAxisConstrained(
                   maxCrossAxisExtent: 1600,
-                  alignment: 0.5,
                   child: SliverList.list(children: [
                     const Divider(),
                     ChartBarMemberDistribution(
@@ -240,7 +269,6 @@ class _ExpenseOverviewPageState extends State<ExpenseOverviewPage> {
                 padding: 16,
                 child: SliverCrossAxisConstrained(
                   maxCrossAxisExtent: 1600,
-                  alignment: 0.5,
                   child: SliverList(
                     delegate: SliverChildBuilderDelegate(
                       (context, i) => Card(
@@ -306,5 +334,10 @@ class _ExpenseOverviewPageState extends State<ExpenseOverviewPage> {
     return DateFormat.MMMM()
         .dateSymbols
         .STANDALONEMONTHS[(DateTime.now().month - 1 - offset) % 12];
+  }
+
+  DateTime _offsetToMonthStart(int offset) {
+    return DateTime(DateTime.now().year - (offset / 12).floor(),
+        DateTime.now().month - offset);
   }
 }

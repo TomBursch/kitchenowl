@@ -102,7 +102,7 @@ class _ExpensePageState extends State<ExpenseListPage> {
                         child: AnimatedCrossFade(
                           crossFadeState:
                               state.sorting == ExpenselistSorting.all ||
-                                      state.categoryOverview.isEmpty
+                                      state.expenseOverview.byCategory.isEmpty
                                   ? CrossFadeState.showFirst
                                   : CrossFadeState.showSecond,
                           duration: const Duration(milliseconds: 100),
@@ -115,13 +115,13 @@ class _ExpensePageState extends State<ExpenseListPage> {
                               height: 270,
                               child: Row(
                                 children: [
-                                  if (state.categoryOverview.values
+                                  if (state.expenseOverview.byCategory.values
                                           .fold(0.0, (a, b) => a + b) !=
                                       0)
                                     Expanded(
                                       flex: 2,
                                       child: ChartPieCurrentMonth(
-                                        data: state.categoryOverview,
+                                        data: state.expenseOverview,
                                         categories: state.categories,
                                       ),
                                     ),
@@ -141,7 +141,8 @@ class _ExpensePageState extends State<ExpenseListPage> {
                                         const Divider(),
                                         Text(
                                           NumberFormat.simpleCurrency().format(
-                                            state.categoryOverview.values
+                                            state.expenseOverview.byCategory
+                                                .values
                                                 .fold(0.0, (a, b) => a + b),
                                           ),
                                           style: Theme.of(context)

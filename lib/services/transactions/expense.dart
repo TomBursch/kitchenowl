@@ -3,6 +3,7 @@ import 'package:kitchenowl/enums/timeframe.dart';
 import 'package:kitchenowl/models/expense.dart';
 import 'package:kitchenowl/models/expense_category.dart';
 import 'package:kitchenowl/models/household.dart';
+import 'package:kitchenowl/models/month_overview.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
 import 'package:kitchenowl/services/transaction.dart';
 
@@ -10,12 +11,16 @@ class TransactionExpenseGetAll extends Transaction<List<Expense>> {
   final ExpenselistSorting sorting;
   final Household household;
   final List<ExpenseCategory?>? filter;
+  final DateTime? startAfter;
+  final DateTime? endBefore;
 
   TransactionExpenseGetAll({
     DateTime? timestamp,
     required this.household,
     this.sorting = ExpenselistSorting.all,
     this.filter,
+    this.startAfter,
+    this.endBefore,
   }) : super.internal(timestamp ?? DateTime.now(), "TransactionExpenseGetAll");
 
   @override
@@ -29,36 +34,8 @@ class TransactionExpenseGetAll extends Transaction<List<Expense>> {
       household: household,
       sorting: sorting,
       filter: filter,
-    );
-  }
-}
-
-class TransactionExpenseGetMore extends Transaction<List<Expense>> {
-  final ExpenselistSorting sorting;
-  final Expense lastExpense;
-  final Household household;
-  final List<ExpenseCategory?>? filter;
-
-  TransactionExpenseGetMore({
-    DateTime? timestamp,
-    required this.household,
-    this.sorting = ExpenselistSorting.all,
-    required this.lastExpense,
-    this.filter,
-  }) : super.internal(timestamp ?? DateTime.now(), "TransactionExpenseGetMore");
-
-  @override
-  Future<List<Expense>> runLocal() async {
-    return [];
-  }
-
-  @override
-  Future<List<Expense>?> runOnline() async {
-    return await ApiService.getInstance().getAllExpenses(
-      household: household,
-      sorting: sorting,
-      startAfter: lastExpense,
-      filter: filter,
+      startAfter: startAfter,
+      endBefore: endBefore,
     );
   }
 }
@@ -169,7 +146,7 @@ class TransactionExpenseUpdate extends Transaction<bool> {
 }
 
 class TransactionExpenseGetOverview
-    extends Transaction<Map<int, Map<int, double>>> {
+    extends Transaction<Map<int, ExpenseOverview>> {
   final Household household;
   final ExpenselistSorting sorting;
   final Timeframe timeframe;
@@ -189,12 +166,12 @@ class TransactionExpenseGetOverview
         );
 
   @override
-  Future<Map<int, Map<int, double>>> runLocal() async {
+  Future<Map<int, ExpenseOverview>> runLocal() async {
     return {};
   }
 
   @override
-  Future<Map<int, Map<int, double>>?> runOnline() async {
+  Future<Map<int, ExpenseOverview>?> runOnline() async {
     return await ApiService.getInstance()
         .getExpenseOverview(household, sorting, timeframe, steps, page);
   }

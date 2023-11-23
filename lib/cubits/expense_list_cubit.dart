@@ -5,6 +5,7 @@ import 'package:kitchenowl/enums/timeframe.dart';
 import 'package:kitchenowl/models/expense.dart';
 import 'package:kitchenowl/models/expense_category.dart';
 import 'package:kitchenowl/models/household.dart';
+import 'package:kitchenowl/models/month_overview.dart';
 import 'package:kitchenowl/services/storage/storage.dart';
 import 'package:kitchenowl/services/transaction_handler.dart';
 import 'package:kitchenowl/services/transactions/expense.dart';
@@ -87,10 +88,10 @@ class ExpenseListCubit extends Cubit<ExpenseListCubitState> {
     if (state.allLoaded) return;
 
     final moreExpenses = TransactionHandler.getInstance()
-        .runTransaction(TransactionExpenseGetMore(
+        .runTransaction(TransactionExpenseGetAll(
       household: household,
       sorting: state.sorting,
-      lastExpense: state.expenses.last,
+      startAfter: state.expenses.last.date,
       filter: state.filter,
     ));
     emit(state.copyWith(
@@ -118,16 +119,16 @@ class ExpenseListCubit extends Cubit<ExpenseListCubitState> {
       filter: filter,
     ));
 
-    Future<Map<int, double>>? categoryOverview;
+    Future<ExpenseOverview>? monthOverview;
     if (state.sorting == ExpenselistSorting.personal) {
-      categoryOverview = TransactionHandler.getInstance()
+      monthOverview = TransactionHandler.getInstance()
           .runTransaction(TransactionExpenseGetOverview(
             household: household,
             sorting: state.sorting,
             timeframe: timeframe,
             steps: 1,
           ))
-          .then<Map<int, double>>((v) => v[0] ?? const {});
+          .then<ExpenseOverview>((v) => v[0] ?? const ExpenseOverview());
     }
 
     emit(ExpenseListCubitState(
@@ -135,7 +136,7 @@ class ExpenseListCubit extends Cubit<ExpenseListCubitState> {
       sorting: sorting,
       categories: await categories,
       allLoaded: (await expenses).length < 30,
-      categoryOverview: (await categoryOverview) ?? state.categoryOverview,
+      expenseOverview: (await monthOverview) ?? state.expenseOverview,
       timeframe: timeframe,
       filter: filter,
     ));
@@ -147,7 +148,7 @@ class ExpenseListCubitState extends Equatable {
   final List<Expense> expenses;
   final ExpenselistSorting sorting;
   final List<ExpenseCategory> categories;
-  final Map<int, double> categoryOverview;
+  final ExpenseOverview expenseOverview;
   final bool allLoaded;
   final Timeframe timeframe;
   final List<ExpenseCategory?> filter;
@@ -157,7 +158,7 @@ class ExpenseListCubitState extends Equatable {
     this.sorting = ExpenselistSorting.all,
     this.allLoaded = false,
     this.categories = const [],
-    this.categoryOverview = const {},
+    required this.expenseOverview,
     this.timeframe = Timeframe.monthly,
     this.filter = const [],
   });
@@ -167,7 +168,7 @@ class ExpenseListCubitState extends Equatable {
     ExpenselistSorting? sorting,
     bool? allLoaded,
     List<ExpenseCategory>? categories,
-    Map<int, double>? categoryOverview,
+    ExpenseOverview? expenseOverview,
     Timeframe? timeframe,
     List<ExpenseCategory?>? filter,
   }) =>
@@ -176,14 +177,14 @@ class ExpenseListCubitState extends Equatable {
         sorting: sorting ?? this.sorting,
         allLoaded: allLoaded ?? this.allLoaded,
         categories: categories ?? this.categories,
-        categoryOverview: categoryOverview ?? this.categoryOverview,
+        expenseOverview: expenseOverview ?? this.expenseOverview,
         timeframe: timeframe ?? this.timeframe,
         filter: filter ?? this.filter,
       );
 
   @override
   List<Object?> get props =>
-      <Object>[sorting, categoryOverview, timeframe, filter] +
+      <Object>[sorting, expenseOverview, timeframe, filter] +
       categories +
       expenses;
 }
@@ -193,7 +194,7 @@ class LoadingExpenseListCubitState extends ExpenseListCubitState {
     super.sorting,
     super.timeframe,
     super.filter,
-  });
+  }) : super(expenseOverview: const ExpenseOverview());
 
   @override
   ExpenseListCubitState copyWith({
@@ -201,7 +202,7 @@ class LoadingExpenseListCubitState extends ExpenseListCubitState {
     ExpenselistSorting? sorting,
     bool? allLoaded,
     List<ExpenseCategory>? categories,
-    Map<int, double>? categoryOverview,
+    ExpenseOverview? expenseOverview,
     Timeframe? timeframe,
     List<ExpenseCategory?>? filter,
   }) =>

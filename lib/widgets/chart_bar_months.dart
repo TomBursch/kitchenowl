@@ -1,10 +1,12 @@
+import 'dart:math' as math;
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kitchenowl/models/expense_category.dart';
+import 'package:kitchenowl/models/month_overview.dart';
 
 class ChartBarMonths extends StatefulWidget {
-  final Map<int, Map<int, double>> data;
+  final Map<int, ExpenseOverview> data;
   final Map<int, ExpenseCategory> categoriesById;
   final void Function(int) onMonthSelect;
   final int selectedMonth;
@@ -32,7 +34,8 @@ class _ChartBarMonthsState extends State<ChartBarMonths> {
     final minY = widget.data
         .map((key, value) => MapEntry(
               key,
-              value.values.fold<double>(0, (p, e) => e < 0 ? p + e : p),
+              value.byCategory.values
+                  .fold<double>(0, (p, e) => e < 0 ? p + e : p),
             ))
         .values
         .skip(widget.monthOffset)
@@ -41,7 +44,8 @@ class _ChartBarMonthsState extends State<ChartBarMonths> {
     final maxY = widget.data
         .map((key, value) => MapEntry(
               key,
-              value.values.fold<double>(0, (p, e) => e > 0 ? p + e : p),
+              value.byCategory.values
+                  .fold<double>(0, (p, e) => e > 0 ? p + e : p),
             ))
         .values
         .skip(widget.monthOffset)
@@ -60,7 +64,7 @@ class _ChartBarMonthsState extends State<ChartBarMonths> {
           BarChartData(
             alignment: BarChartAlignment.center,
             groupsSpace: barSpacing,
-            minY: minY.toDouble(),
+            minY: math.min(minY.toDouble(), -2),
             maxY: maxY.toDouble(),
             baselineY: 0,
             barTouchData: BarTouchData(
@@ -168,13 +172,15 @@ class _ChartBarMonthsState extends State<ChartBarMonths> {
 
   BarChartGroupData generateGroup(
     int month,
-    Map<int, double> values,
+    ExpenseOverview values,
     double width,
   ) {
-    final isTop = values.values.any((e) => e > 0);
-    final isBottom = values.values.any((e) => e < 0);
-    final sumPos = values.values.fold<double>(0, (v, e) => e > 0 ? v + e : v);
-    final sumNeg = values.values.fold<double>(0, (v, e) => e < 0 ? v + e : v);
+    final isTop = values.byCategory.values.any((e) => e > 0);
+    final isBottom = values.byCategory.values.any((e) => e < 0);
+    final sumPos =
+        values.byCategory.values.fold<double>(0, (v, e) => e > 0 ? v + e : v);
+    final sumNeg =
+        values.byCategory.values.fold<double>(0, (v, e) => e < 0 ? v + e : v);
 
     return BarChartGroupData(
       x: month,
@@ -195,8 +201,8 @@ class _ChartBarMonthsState extends State<ChartBarMonths> {
             color: Theme.of(context).colorScheme.onBackground,
             width: widget.selectedMonth == month ? 5 : 0,
           ),
-          rodStackItems:
-              generateStack(values, isTouched: widget.selectedMonth == month),
+          rodStackItems: generateStack(values.byCategory,
+              isTouched: widget.selectedMonth == month),
         ),
       ],
     );
@@ -230,7 +236,7 @@ class _ChartBarMonthsState extends State<ChartBarMonths> {
     if (widget.categoriesById[key]?.color != null) {
       return widget.categoriesById[key]!.color!;
     }
-    final i = widget.data[0]!.keys.toList().indexOf(key) % 5;
+    final i = widget.categoriesById.keys.toList().indexOf(key) % 5;
     final l = List.generate(5, (i) {
       Color c = lighten(Theme.of(context).colorScheme.primary, -0.2);
       for (int j = 0; j < i; j++) {

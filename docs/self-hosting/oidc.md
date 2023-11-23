@@ -60,4 +60,30 @@ back:
         - APPLE_CLIENT_SECRET=<SECRET>
         - GOOGLE_CLIENT_ID=<ID>
         - GOOGLE_CLIENT_SECRET=<SECRET>
+
+```
+
+### Authelia
+
+[Authelia](https://www.authelia.com/) is an open-source authentication and authorization server and portal fulfilling the identity and access management (IAM) role of information security in providing multi-factor authentication and single sign-on (SSO) for your applications via a web portal. It acts as a companion for common reverse proxies.
+
+Place this in your Authelia [configuration.yaml](https://www.authelia.com/configuration/prologue/introduction/) to allow KitchenOwl to use Authelia as an OIDC provider.
+
+```yml
+- id: kitchenowl
+    description: KitchenOwl
+    secret: # Same as OIDC_CLIENT_SECRET
+    public: false
+    authorization_policy: two_factor # Can also be one_factor if you need less security
+    pre_configured_consent_duration: 1M # One month - change this to something you desire
+    audience: []
+    scopes:
+        - openid
+        - email
+        - profile
+    redirect_uris:
+        - https://your.domain.here/signin/redirect # Put the same value as FRONT_URL, appended with /signin/redirect
+        - kitchenowl:///signin/redirect
+    response_modes:
+    userinfo_signing_algorithm: none
 ```

@@ -5,7 +5,7 @@ import 'package:kitchenowl/enums/timeframe.dart';
 import 'package:kitchenowl/models/expense.dart';
 import 'package:kitchenowl/models/expense_category.dart';
 import 'package:kitchenowl/models/household.dart';
-import 'package:kitchenowl/models/month_overview.dart';
+import 'package:kitchenowl/models/expense_overview.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
 
 extension ExpenseApi on ApiService {
@@ -144,7 +144,8 @@ extension ExpenseApi on ApiService {
     final body = jsonDecode(res.body);
 
     return Map.from(body).map(
-      (key, value) => MapEntry(int.parse(key), ExpenseOverview.fromJson(value)),
+      (key, value) =>
+          MapEntry(int.parse(key), ExpenseOverview.fromJson(timeframe, value)),
     );
   }
 }

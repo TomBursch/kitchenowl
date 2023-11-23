@@ -8,7 +8,7 @@ import 'package:kitchenowl/enums/timeframe.dart';
 import 'package:kitchenowl/models/expense_category.dart';
 import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/models/member.dart';
-import 'package:kitchenowl/models/month_overview.dart';
+import 'package:kitchenowl/models/expense_overview.dart';
 import 'package:kitchenowl/services/transaction_handler.dart';
 import 'package:kitchenowl/services/transactions/expense.dart';
 import 'package:kitchenowl/services/transactions/household.dart';

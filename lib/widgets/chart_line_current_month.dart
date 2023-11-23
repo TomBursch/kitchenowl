@@ -2,7 +2,7 @@ import 'dart:math' as math;
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:kitchenowl/models/month_overview.dart';
+import 'package:kitchenowl/models/expense_overview.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
 class ChartLineCurrentMonth extends StatefulWidget {
@@ -28,13 +28,13 @@ class _ChartLineCurrentMonthState extends State<ChartLineCurrentMonth> {
   @override
   Widget build(BuildContext context) {
     double min = 0, max = 0, sum = 0;
-    final data = widget.data.byDay.map((key, value) {
+    final data = widget.data.bySubTimeframe.map((key, value) {
       sum += value;
       if (sum < min) min = sum;
       if (sum > max) max = sum;
       return MapEntry(key.day, sum);
     });
-    firstDay = widget.data.byDay.keys.first.copyWith(day: 1);
+    firstDay = widget.data.bySubTimeframe.keys.first.copyWith(day: 1);
     data.putIfAbsent(0, () => 0);
 
     days = DateTimeRange(

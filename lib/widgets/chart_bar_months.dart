@@ -3,7 +3,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kitchenowl/models/expense_category.dart';
-import 'package:kitchenowl/models/month_overview.dart';
+import 'package:kitchenowl/models/expense_overview.dart';
 
 class ChartBarMonths extends StatefulWidget {
   final Map<int, ExpenseOverview> data;

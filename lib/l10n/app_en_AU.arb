@@ -1,0 +1,44 @@
+{
+  "@about": {},
+  "@accountCreate": {},
+  "@accountCreateTitle": {},
+  "@accountDelete": {},
+  "@accountDeleteConfirmation": {},
+  "@accountLinkedWithOtherUser": {},
+  "@accountsLinked": {},
+  "@add": {},
+  "@addCategory": {},
+  "@addDescriptionFromSource": {},
+  "@addItemTitle": {},
+  "@addLanguage": {},
+  "@addLanguageConfirm": {
+    "placeholders": {
+      "lang": {}
+    }
+  },
+  "@addNumberIngredients": {
+    "placeholders": {
+      "number": {}
+    }
+  },
+  "@addedBy": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "about": "About",
+  "accountCreate": "Create Account",
+  "accountCreateTitle": "Create your KitchenOwl account",
+  "accountDelete": "Delete Account",
+  "accountDeleteConfirmation": "Are you sure you want to delete your account?",
+  "accountLinkedWithOtherUser": "Account already linked to another user",
+  "accountsLinked": "Linked Accounts",
+  "add": "Add",
+  "addCategory": "Add Category",
+  "addDescriptionFromSource": "Add description from source",
+  "addItemTitle": "Add Items",
+  "addLanguage": "Add Language",
+  "addLanguageConfirm": "Are you sure you want to set the language to '{lang}'? This cannot be undone and will add items and categories to your household.",
+  "addNumberIngredients": "Add {number} ingredients",
+  "addedBy": "Added by {name}"
+}

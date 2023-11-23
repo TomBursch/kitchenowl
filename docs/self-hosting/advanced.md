@@ -11,20 +11,49 @@ Additionally, the releases are tagged, so you can always choose a specific versi
 
 Environment variables for `tombursch/kitchenowl-web`:
 
-- `BACK_URL` (default: `back:5000`): Allows to set a custom address for the backend. Needs to be an uWSGI protocol endpoint. Should correspond to the name or IP of the backend container and port `5000`.
+| Variable   | Default     | Description                                                                                                                                                          |
+| ---------- | ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `BACK_URL` | `back:5000` | Allows to set a custom address for the backend. Needs to be an uWSGI protocol endpoint. Should correspond to the name or IP of the backend container and port `5000` |
 
 ### Backend
 
 Environment variables for `tombursch/kitchenowl`:
 
-- `FRONT_URL`: Adds allow origin CORS header for the URL. If set, should exactly match KitchenOwl's URL including the schema (e.g. `https://app.kitchenowl.org`)
-- `PRIVACY_POLICY_URL`: Allows to set a custom privacy policy for your server instance.
-- `OPEN_REGISTRATION` (default: `false`): If set allows anyone to create an account on your server.
-- `EMAIL_MANDATORY` (default: `false`): Make the email a mandatory field when registering (Only relevant if `OPEN_REGISTRATION` is set)
+| Variable                     | Default                    | Description                                                                                                                                           |
+| ---------------------------- | -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `JWT_SECRET_KEY`             |                            |                                                                                                                                                       |
+| `FRONT_URL`                  |                            | Adds allow origin CORS header for the URL. If set, should exactly match KitchenOwl's URL including the schema (e.g. `https://app.kitchenowl.org`)     |
+| `PRIVACY_POLICY_URL`         |                            | Allows to set a custom privacy policy for your server instance                                                                                        |
+| `OPEN_REGISTRATION`          | `false`                    | If set allows anyone to create an account on your server                                                                                              |
+| `EMAIL_MANDATORY`            | `false`                    | Makes the email a mandatory field when registering (Only relevant if `OPEN_REGISTRATION` is set)                                                      |
+| `COLLECT_METRICS`            | `false`                    | Enables a Prometheus metrics endpoint at `/metrics/`. If enabled can be reached over the frontend container on port 9100 (e.g. `front:9100/metrics/`) |
+| `METRICS_USER`               | `kitchenowl`               | Metrics basic auth username                                                                                                                           |
+| `METRICS_PASSWORD`           | `ZqQtidgC5n3YXb`           | Metrics basic auth password                                                                                                                           |
+| `SKIP_UPGRADE_DEFAULT_ITEMS` | `false`                    | On every restart all default items are imported and updated in every household                                                                        |
+| `STORAGE_PATH`               | `/data`                    | Images are stored in `STORAGE_PATH/upload`                                                                                                            |
+| `DB_DRIVER`                  | `sqlite`                   | Supported: `sqlite` and `postgresql`                                                                                                                  |
+| `DB_HOST`                    |                            |                                                                                                                                                       |
+| `DB_NAME`                    | `STORAGE_PATH/database.db` | When the driver is `sqlite` this decides where to store the DB                                                                                        |
+| `DB_USER`                    |                            |                                                                                                                                                       |
+| `DB_PASSWORD`                |                            |                                                                                                                                                       |
+| `SMTP_HOST`                  |                            | You can connect to an SMTP server for sending password resets and verifying user emails. This not required.                                           |
+| `SMTP_PORT`                  | `465`                      |                                                                                                                                                       |
+| `SMTP_USER`                  |                            |                                                                                                                                                       |
+| `SMTP_PASS`                  |                            |                                                                                                                                                       |
+| `SMTP_FROM`                  |                            |                                                                                                                                                       |
+| `SMTP_REPLY_TO`              |                            |                                                                                                                                                       |
+| `OIDC_ISSUER`                |                            | More about [OIDC](./oidc.md)                                                                                                                          |
+| `OIDC_CLIENT_ID`             |                            |                                                                                                                                                       |
+| `OIDC_CLIENT_SECRET`         |                            |                                                                                                                                                       |
+| `APPLE_CLIENT_ID`            |                            |                                                                                                                                                       |
+| `APPLE_CLIENT_SECRET`        |                            |                                                                                                                                                       |
+| `GOOGLE_CLIENT_ID`           |                            |                                                                                                                                                       |
+| `GOOGLE_CLIENT_SECRET`       |                            |                                                                                                                                                       |
+
 - Set up with OpenID Connect: [OIDC](./oidc.md)
 - Set up with a PostgreSQL database: [docker-compose.yml](https://github.com/TomBursch/kitchenowl-backend/blob/main/docker-compose-postgres.yml)
 
-Additionally, to setting these environment variables you can also override the start command to scale the backend up. 
+Additionally, to setting these environment variables you can also override the start command to scale the backend up.
 Add the following line or take a look at this exemplary [docker-compose.yml](https://github.com/TomBursch/kitchenowl-backend/blob/main/docker-compose-postgres.yml) file:
 
 ```yml
@@ -33,4 +62,5 @@ back:
   command: wsgi.ini --gevent 2000 # default: 100
   [...]
 ```
+
 Overriding the command is not recommended as we might change the underlying process in the future.

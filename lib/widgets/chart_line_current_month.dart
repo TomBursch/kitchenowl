@@ -176,14 +176,13 @@ class _ChartLineCurrentMonthState extends State<ChartLineCurrentMonth> {
 
   Widget bottomTitles(double value, TitleMeta meta) {
     final showText = (value + 1) %
-                getValueForScreenType<int>(
-                  context: context,
-                  mobile: 2,
-                  tablet: 2,
-                  desktop: 1,
-                ) ==
-            0 ||
-        value == days;
+            getValueForScreenType<int>(
+              context: context,
+              mobile: 2,
+              tablet: 2,
+              desktop: 1,
+            ) ==
+        0;
 
     return SideTitleWidget(
       axisSide: meta.axisSide,

@@ -32,7 +32,10 @@ enum Connection {
 
 class ApiService {
   // ignore: constant_identifier_names
-  static const Duration _TIMEOUT = Duration(seconds: 4);
+  static const Duration _TIMEOUT = Duration(seconds: 5);
+
+  // ignore: constant_identifier_names
+  static const Duration _TIMEOUT_HEALTH = Duration(seconds: 4);
 
   // ignore: constant_identifier_names
   static const Duration _TIMEOUT_FILE_UPLOAD = Duration(seconds: 10);
@@ -181,10 +184,15 @@ class ApiService {
     _refreshThread = null;
   }
 
-  Future<http.Response> get(String url, {bool refreshOnException = true}) =>
+  Future<http.Response> get(
+    String url, {
+    bool refreshOnException = true,
+    Duration? timeout,
+  }) =>
       _handleRequest(
         () => _client.get(Uri.parse(baseUrl + url), headers: headers),
         refreshOnException: refreshOnException,
+        timeout: timeout,
       );
 
   Future<http.Response> post(
@@ -293,6 +301,7 @@ class ApiService {
       final res = await get(
         '/health/8M4F88S8ooi4sMbLBfkkV7ctWwgibW6V',
         refreshOnException: false,
+        timeout: _TIMEOUT_HEALTH,
       );
       if (res.statusCode == 200) {
         return Tuple2(

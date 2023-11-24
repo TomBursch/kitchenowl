@@ -8,6 +8,9 @@ import 'package:kitchenowl/services/api/api_service.dart';
 extension RecipeApi on ApiService {
   static const baseRoute = '/recipe';
 
+  // ignore: constant_identifier_names
+  static const Duration _TIMEOUT_SCRAPE = Duration(seconds: 7);
+
   Future<List<Recipe>?> getRecipes(Household household) async {
     final res = await get(householdPath(household) + baseRoute);
     if (res.statusCode != 200) return null;
@@ -78,6 +81,7 @@ extension RecipeApi on ApiService {
     final res = await post(
       '${householdPath(household)}$baseRoute/scrape',
       jsonEncode({'url': url}),
+      timeout: _TIMEOUT_SCRAPE,
     );
     if (res.statusCode != 200) return (null, res.statusCode);
 

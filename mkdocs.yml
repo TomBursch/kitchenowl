@@ -55,5 +55,8 @@ markdown_extensions:
       emoji_generator: !!python/name:materialx.emoji.to_svg
 extra_css:
   - stylesheets/extra.css
+  - stylesheets/mkdocsoad.css
 plugins:
   - search
+  - neoteroi.mkdocsoad:
+      use_pymdownx: true

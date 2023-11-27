@@ -1,6 +1,6 @@
-name: Wiki issue
-description: Report a Wiki issue
-title: "Wiki issue: "
+name: Documentation issue
+description: Report an issue with the documentation (including missing information)
+title: "Docs: "
 labels: ["documentation"]
 body:
   - type: input
@@ -9,7 +9,7 @@ body:
       label: "URL to the Wiki page"
       placeholder: "https://docs.kitchenowl.org/get-started/"
     validations:
-      required: true
+      required: false
   - type: textarea
     id: description
     attributes:

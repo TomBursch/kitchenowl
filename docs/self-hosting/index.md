@@ -30,8 +30,7 @@ volumes:
 ```
 2. Change the default value for `JWT_SECRET_KEY`
 3. If you change the container names, want to use PostgreSQL, or want to set other settings take a look at the [advanced](advanced.md) options
-3. Run `docker-compose up -d`
-
+4. Run `docker compose up -d`
 
 !!! danger "Important"
     We recommend running KitchenOwl behind a reverse proxy with HTTPS (e.g. [nginx](https://nginx.org/en/docs/http/configuring_https_servers.html) or [Traefik](https://doc.traefik.io/traefik/)). Some [example configurations have been contributed](reverse-proxy.md).
@@ -42,6 +41,14 @@ volumes:
 
     - [https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security)
     - [https://www.netsparker.com/blog/web-security/http-security-headers/](https://www.netsparker.com/blog/web-security/http-security-headers/)
+
+### Updating KitchenOwl
+To upgrade a docker compose stack, you can simply run:
+
+```
+docker compose pull
+docker compose up -d
+```
 
 ## Community Installation Methods
 Here is a list of community maintained install methods:

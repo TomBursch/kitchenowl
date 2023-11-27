@@ -27,39 +27,69 @@ class AnalyticsPage extends StatelessWidget {
             return SliverList(
               delegate: SliverChildListDelegate([
                 ListTile(
-                  title: const Text("Total users"),
-                  trailing: Text(data['total_users'].toString()),
+                  title: const Text("Users"),
+                  trailing: Text(data['users']['total'].toString()),
                 ),
                 ListTile(
-                  title: const Text("Verified users"),
+                  dense: true,
+                  title: const Text("Verified"),
                   subtitle: const Text("Verified their email"),
                   trailing: Text(
-                    "${data['verified_users'].toString()} (${NumberFormat.percentPattern().format(data['verified_users'] / data['total_users'])})",
+                    "${data['users']['verified'].toString()} (${NumberFormat.percentPattern().format(data['users']['verified'] / data['users']['total'])})",
                   ),
                 ),
                 ListTile(
-                  title: const Text("Active users"),
+                  dense: true,
+                  title: const Text("Linked social account"),
+                  trailing: Text(
+                      "${data['users']['linked_account']} (${NumberFormat.percentPattern().format(data['users']['linked_account'] / data['users']['total'])})"),
+                ),
+                ListTile(
+                  dense: true,
+                  title: const Text("Online"),
+                  subtitle: const Text("Online in the last 15 minutes"),
+                  trailing: Text(
+                    "${data['users']['online'].toString()} (${NumberFormat.percentPattern().format(data['users']['online'] / data['users']['total'])})",
+                  ),
+                ),
+                ListTile(
+                  dense: true,
+                  title: const Text("Active"),
                   subtitle: const Text("Online in the last 30 days"),
                   trailing: Text(
-                    "${data['active_users'].toString()} (${NumberFormat.percentPattern().format(data['active_users'] / data['total_users'])})",
+                    "${data['users']['active'].toString()} (${NumberFormat.percentPattern().format(data['users']['active'] / data['users']['total'])})",
                   ),
                 ),
                 ListTile(
+                  dense: true,
+                  title: const Text("Older than 30 days"),
+                  trailing: Text(
+                    "${data['users']['old'].toString()} (${NumberFormat.percentPattern().format(data['users']['old'] / data['users']['total'])})",
+                  ),
+                ),
+                ListTile(
+                  dense: true,
+                  title: const Text("Active and older than 30 days"),
+                  trailing: Text(
+                    "${data['users']['old_active'].toString()} (${NumberFormat.percentPattern().format(data['users']['old_active'] / data['users']['old'])})",
+                  ),
+                ),
+                const Divider(),
+                ListTile(
                   title: const Text("Households"),
-                  trailing: Text(data['total_households'].toString()),
+                  trailing: Text(data['households']['total'].toString()),
                 ),
                 ListTile(
                   dense: true,
                   title: const Text("with Balances"),
-                  trailing:
-                      Text(data['households']['expense_feature'].toString()),
+                  trailing: Text("${data['households']['expense_feature']}"),
                 ),
                 ListTile(
                   dense: true,
                   title: const Text("with Planner"),
-                  trailing:
-                      Text(data['households']['planner_feature'].toString()),
+                  trailing: Text("${data['households']['planner_feature']}"),
                 ),
+                const Divider(),
                 ListTile(
                   title: const Text("Available storage"),
                   trailing: Text(

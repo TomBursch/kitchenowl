@@ -1,5 +1,6 @@
 alembic==1.12.1
 annotated-types==0.6.0
+apispec==6.3.0
 appdirs==1.4.4
 APScheduler==3.10.4
 attrs==23.1.0

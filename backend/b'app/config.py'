@@ -3,6 +3,8 @@ from http import client
 from flask_socketio import SocketIO
 from sqlalchemy import MetaData
 from sqlalchemy.engine import URL
+from apispec import APISpec
+from apispec.ext.marshmallow import MarshmallowPlugin
 from prometheus_client import multiprocess
 from prometheus_client.core import CollectorRegistry
 from prometheus_flask_exporter import PrometheusMetrics
@@ -17,7 +19,7 @@ from app.util import KitchenOwlJSONProvider
 from oic.oic import Client
 from oic.oic.message import RegistrationResponse
 from oic.utils.authn.client import CLIENT_AUTHN_METHOD
-from flask import Flask, request
+from flask import Flask, jsonify, request
 from flask_basicauth import BasicAuth
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
@@ -125,6 +127,35 @@ jwt = JWTManager(app)
 socketio = SocketIO(
     app, json=app.json, logger=app.logger, cors_allowed_origins=FRONT_URL
 )
+api_spec = APISpec(
+    title="KitchenOwl",
+    version="v" + str(BACKEND_VERSION),
+    openapi_version="3.0.2",
+    info={
+        "description": "WIP KitchenOwl API documentation",
+        "termsOfService": "https://kitchenowl.org/privacy/",
+        "contact": {
+            "name": "API Support",
+            "url": "https://kitchenowl.org/imprint/",
+            "email": "support@kitchenowl.org",
+        },
+        "license": {
+            "name": "AGPL 3.0",
+            "url": "https://github.com/TomBursch/kitchenowl/blob/main/LICENSE",
+        },
+    },
+    servers=[
+        {
+            "url": "https://app.kitchenowl.org/api",
+            "description": "Official KitchenOwl server instance",
+        }
+    ],
+    externalDocs={
+        "description": "Find more info at the official documentation",
+        "url": "https://docs.kitchenowl.org",
+    },
+    plugins=[MarshmallowPlugin()],
+)
 oidc_clients = {}
 if FRONT_URL:
     if OIDC_CLIENT_ID and OIDC_CLIENT_SECRET and OIDC_ISSUER:
@@ -225,3 +256,8 @@ def not_found(error):
 @socketio.on_error_default
 def default_socket_error_handler(e):
     app.logger.error(e)
+
+
+@app.route("/api/openapi", methods=["GET"])
+def swagger():
+    return jsonify(api_spec.to_dict())

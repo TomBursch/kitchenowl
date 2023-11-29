@@ -1,3 +1,4 @@
+import gevent
 from app.errors import NotFoundRequest, UnauthorizedRequest
 from app.helpers.server_admin_required import server_admin_required
 from app.helpers import validate_args
@@ -74,11 +75,13 @@ def updateUser(args):
     if "password" in args:
         user.set_password(args["password"])
     if "email" in args and args["email"].strip() != user.email:
+        if user.find_by_email(args["email"].strip()):
+            return "Request invalid: email", 400
         user.email = args["email"].strip()
         user.email_verified = False
         ChallengeMailVerify.delete_by_user(user)
         if mail.mailConfigured():
-            mail.sendVerificationMail(user, ChallengeMailVerify.create_challenge(user))
+            gevent.spawn(mail.sendVerificationMail, user, ChallengeMailVerify.create_challenge(user))
     if "photo" in args and user.photo != args["photo"]:
         user.photo = file_has_access_or_download(args["photo"], user.photo)
     user.save()
@@ -98,6 +101,8 @@ def updateUserById(args, id):
     if "password" in args:
         user.set_password(args["password"])
     if "email" in args and args["email"].strip() != user.email:
+        if user.find_by_email(args["email"].strip()):
+            return "Request invalid: email", 400
         user.email = args["email"].strip()
         user.email_verified = True
         ChallengeMailVerify.delete_by_user(user)

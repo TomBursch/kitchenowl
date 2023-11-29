@@ -1,3 +1,4 @@
+import gevent
 from app.config import SUPPORTED_LANGUAGES
 from app.helpers import validate_args, authorize_household, RequiredRights
 from flask import jsonify, Blueprint
@@ -71,7 +72,7 @@ def addHousehold(args):
     Shoppinglist(name="Default", household_id=household.id).save()
 
     if household.language:
-        importLanguage(household.id, household.language, True)
+        gevent.spawn(importLanguage, household.id, household.language, True)
 
     return jsonify(household.obj_to_dict())
 
@@ -95,7 +96,7 @@ def updateHousehold(args, household_id):
         and args["language"] in SUPPORTED_LANGUAGES
     ):
         household.language = args["language"]
-        importLanguage(household.id, household.language)
+        gevent.spawn(importLanguage, household.id, household.language)
     if "planner_feature" in args:
         household.planner_feature = args["planner_feature"]
     if "expenses_feature" in args:

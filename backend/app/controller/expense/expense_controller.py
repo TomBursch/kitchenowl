@@ -1,6 +1,5 @@
 import calendar
 from datetime import datetime, timezone, timedelta
-from time import strftime
 from dateutil.relativedelta import relativedelta
 from sqlalchemy.sql.expression import desc
 from sqlalchemy import or_
@@ -239,16 +238,20 @@ def getExpenseOverview(args, household_id):
         .join(Expense.category, isouter=True)
     )
 
-    groupByStr = "%Y-%m"
+    groupByStr = "YYYY-MM" if "postgresql" in db.engine.name else "%Y-%m" 
     if frame < 3:
-        groupByStr += "-%d"
+        groupByStr += "-DD" if "postgresql" in db.engine.name else "-%d"
     if frame < 1:
-        groupByStr += " %H"
+        groupByStr += " HH24" if "postgresql" in db.engine.name else" %H"
 
     by_subframe_query = Expense.query.filter(
         Expense.household_id == household_id,
         Expense.exclude_from_statistics == False,
-    ).group_by(func.strftime(groupByStr, Expense.date))
+    ).group_by(
+        func.to_char(Expense.date, groupByStr).label("day")
+        if "postgresql" in db.engine.name
+        else func.strftime(groupByStr, Expense.date)
+    )
 
     if "view" in args and args["view"] == 1:
         filterQuery = (
@@ -320,7 +323,9 @@ def getExpenseOverview(args, household_id):
             "by_subframe": {
                 e.day: (float(e.balance) or 0)
                 for e in by_subframe_query.with_entities(
-                    func.strftime(groupByStr, Expense.date).label("day"),
+                    func.to_char(Expense.date, groupByStr).label("day")
+                    if "postgresql" in db.engine.name
+                    else func.strftime(groupByStr, Expense.date).label("day"),
                     func.sum(Expense.amount * factor).label("balance"),
                 )
                 .filter(*getFilterForStepAgo(stepAgo))

@@ -14,3 +14,7 @@ wsgi-file = wsgi.py
 callable = app
 socket = [::]:5000
 procname-prefix-spaced = kitchenowl
+
+[celery]
+ini = :uwsgi
+smart-attach-daemon = /tmp/celery.pid celery -A app.celery_app worker -B --pidfile=/tmp/celery.pid

@@ -1,4 +1,5 @@
 alembic==1.12.1
+amqp==5.2.0
 annotated-types==0.6.0
 apispec==6.3.0
 appdirs==1.4.4
@@ -8,13 +9,18 @@ autopep8==2.0.4
 bcrypt==4.0.1
 beautifulsoup4==4.12.2
 bidict==0.22.1
+billiard==4.2.0
 black==23.1a1
 blinker==1.7.0
 blurhash-python==1.2.1
+celery==5.3.6
 certifi==2023.11.17
 cffi==1.16.0
 charset-normalizer==3.3.2
 click==8.1.7
+click-didyoumean==0.3.0
+click-plugins==1.1.1
+click-repl==0.3.0
 contourpy==1.2.0
 cryptography==41.0.5
 cycler==0.12.1
@@ -46,6 +52,7 @@ Jinja2==3.1.2
 joblib==1.3.2
 jstyleson==0.0.2
 kiwisolver==1.4.5
+kombu==5.3.4
 lark==1.1.8
 lxml==4.9.3
 Mako==1.3.0
@@ -67,6 +74,7 @@ platformdirs==4.0.0
 pluggy==1.3.0
 prometheus-client==0.19.0
 prometheus-flask-exporter==0.23.0
+prompt-toolkit==3.0.41
 psycopg2-binary==2.9.9
 py==1.11.0
 pycodestyle==2.11.1
@@ -116,7 +124,9 @@ tzlocal==5.2
 urllib3==2.1.0
 uWSGI==2.0.23
 uwsgi-tools==1.1.1
+vine==5.1.0
 w3lib==2.1.2
+wcwidth==0.2.12
 webencodings==0.5.1
 Werkzeug==3.0.1
 wsproto==1.2.0

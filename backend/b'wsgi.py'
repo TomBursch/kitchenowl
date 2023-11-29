@@ -1,7 +1,7 @@
 import gevent.monkey
 gevent.monkey.patch_all()
 
-from app import app, socketio
+from app import app, socketio, celery_app
 import os
 
 from app.config import UPLOAD_FOLDER

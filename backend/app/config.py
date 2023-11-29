@@ -1,5 +1,6 @@
 from datetime import timedelta
 from http import client
+from celery import Celery, Task
 from flask_socketio import SocketIO
 from sqlalchemy import MetaData
 from sqlalchemy.engine import URL
@@ -54,6 +55,7 @@ DB_URL = URL.create(
     host=os.getenv("DB_HOST"),
     database=os.getenv("DB_NAME", STORAGE_PATH + "/database.db"),
 )
+MESSAGE_BROKER = os.getenv("MESSAGE_BROKER")
 
 JWT_ACCESS_TOKEN_EXPIRES = timedelta(minutes=15)
 JWT_REFRESH_TOKEN_EXPIRES = timedelta(days=30)
@@ -125,7 +127,11 @@ migrate = Migrate(app, db, render_as_batch=True)
 bcrypt = Bcrypt(app)
 jwt = JWTManager(app)
 socketio = SocketIO(
-    app, json=app.json, logger=app.logger, cors_allowed_origins=FRONT_URL
+    app,
+    json=app.json,
+    logger=app.logger,
+    cors_allowed_origins=FRONT_URL,
+    message_queue=MESSAGE_BROKER,
 )
 api_spec = APISpec(
     title="KitchenOwl",
@@ -202,11 +208,28 @@ if COLLECT_METRICS:
     )
     metrics.info("app_info", "Application info", version=BACKEND_VERSION)
 
-scheduler = APScheduler()
-# enable for debugging jobs: ../scheduler/jobs to see scheduled jobs
-scheduler.api_enabled = False
-scheduler.init_app(app)
-scheduler.start()
+scheduler = None
+celery_app = None
+if not MESSAGE_BROKER:
+    scheduler = APScheduler()
+    scheduler.api_enabled = False
+    scheduler.init_app(app)
+    scheduler.start()
+else:
+
+    class FlaskTask(Task):
+        def __call__(self, *args: object, **kwargs: object) -> object:
+            with app.app_context():
+                return self.run(*args, **kwargs)
+
+    celery_app = Celery(
+        app.name + "_tasks",
+        broker=MESSAGE_BROKER,
+        task_cls=FlaskTask,
+        task_ignore_result=True,
+    )
+    celery_app.set_default()
+    app.extensions["celery"] = celery_app
 
 
 @app.after_request

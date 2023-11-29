@@ -34,7 +34,9 @@ class _ChartLineCurrentMonthState extends State<ChartLineCurrentMonth> {
       if (sum > max) max = sum;
       return MapEntry(key.day, sum);
     });
-    firstDay = widget.data.bySubTimeframe.keys.first.copyWith(day: 1);
+    firstDay = (widget.data.bySubTimeframe.keys.firstOrNull ??
+            DateTime(DateTime.now().year, DateTime.now().month))
+        .copyWith(day: 1);
     data.putIfAbsent(0, () => 0);
 
     days = DateTimeRange(

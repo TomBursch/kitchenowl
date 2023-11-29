@@ -60,7 +60,7 @@ class ExpenseItemWidget extends StatelessWidget {
           Radius.circular(14),
         ),
       ),
-      closedBuilder: (context, toggle) => Card(
+      closedBuilder: (ctx, toggle) => Card(
         child: ListTile(
           leading: expense.category != null
               ? ExpenseCategoryIcon(

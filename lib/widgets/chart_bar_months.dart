@@ -2,6 +2,7 @@ import 'dart:math' as math;
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/expense_category.dart';
 import 'package:kitchenowl/models/expense_overview.dart';
 
@@ -51,6 +52,10 @@ class _ChartBarMonthsState extends State<ChartBarMonths> {
         .skip(widget.monthOffset)
         .take(widget.numberOfMonthsToShow)
         .fold<double>(0, (p, e) => p > e ? p : e);
+
+    if (minY == 0 && maxY == 0) {
+      return Center(child: Text(AppLocalizations.of(context)!.expenseEmpty));
+    }
 
     return LayoutBuilder(
       builder: (context, constraints) {

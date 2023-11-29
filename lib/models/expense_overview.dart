@@ -30,7 +30,7 @@ class ExpenseOverview extends Model {
   }
 
   double getTotalForPeriod() {
-    return byCategory.values.reduce((v, e) => v + e);
+    return byCategory.isEmpty ? 0 : byCategory.values.reduce((v, e) => v + e);
   }
 
   @override

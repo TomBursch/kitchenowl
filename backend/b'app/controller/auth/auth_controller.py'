@@ -1,6 +1,7 @@
 from datetime import datetime
 import re
 import uuid
+import gevent
 
 from oic import rndstr
 from oic.oic.message import AuthorizationResponse
@@ -90,8 +91,8 @@ if OPEN_REGISTRATION:
             password=args["password"],
             email=args["email"] if "email" in args else None,
         )
-        if mail.mailConfigured():
-            mail.sendVerificationMail(user, ChallengeMailVerify.create_challenge(user))
+        if "email" in args and mail.mailConfigured():
+            gevent.spawn(mail.sendVerificationMail, user, ChallengeMailVerify.create_challenge(user))
 
         device = "Unkown"
         if "device" in args:

@@ -45,7 +45,7 @@ def getBaseAnalytics():
                     )
                 )
                 .count(),
-                "linked_account": db.session.query(OIDCLink)
+                "linked_account": db.session.query(OIDCLink.user_id)
                 .group_by(OIDCLink.user_id)
                 .count(),
             },

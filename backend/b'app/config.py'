@@ -267,7 +267,7 @@ def unhandled_exception(e: Exception):
     if type(e) is MethodNotAllowed:
         app.logger.warning(e)
         return "The method is not allowed for the requested URL", 405
-    app.logger.error(e)
+    app.logger.error(e, exc_info=e)
     return "Something went wrong", 500
 
 

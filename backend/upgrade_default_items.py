@@ -1,5 +1,4 @@
 from tqdm import tqdm
-from app import app
 from app.errors import NotFoundRequest
 from app.models import Household
 from app.service.import_language import importLanguage

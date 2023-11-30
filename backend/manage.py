@@ -1,7 +1,9 @@
 from os import listdir
 from os.path import isfile, join
+import time
 import blurhash
 from PIL import Image
+from tqdm import tqdm
 from app import app, db
 from app.config import UPLOAD_FOLDER
 from app.jobs import jobs
@@ -87,11 +89,12 @@ What next?
             if not mail.mailConfigured():
                 print("Mail service not configured")
                 continue
-            print("Sending mails...")
-            users = User.query.filter(User.email_verified == False).all()
-            for user in users:
+            delay = float(input("Delay between mails in seconds (0):") or "0")
+            for user in tqdm(User.query.filter(User.email_verified == False).all(), desc="Sending mails..."):
                 if len(user.verify_mail_challenge) == 0:
-                    mail.sendVerificationMail(user, ChallengeMailVerify.create_challenge(user))
+                    mail.sendVerificationMail(user.id, ChallengeMailVerify.create_challenge(user))
+                    if delay > 0: 
+                        time.sleep(delay)
         else:
             return
 

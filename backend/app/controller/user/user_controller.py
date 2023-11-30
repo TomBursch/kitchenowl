@@ -81,7 +81,7 @@ def updateUser(args):
         user.email_verified = False
         ChallengeMailVerify.delete_by_user(user)
         if mail.mailConfigured():
-            gevent.spawn(mail.sendVerificationMail, user, ChallengeMailVerify.create_challenge(user))
+            gevent.spawn(mail.sendVerificationMail, user.id, ChallengeMailVerify.create_challenge(user))
     if "photo" in args and user.photo != args["photo"]:
         user.photo = file_has_access_or_download(args["photo"], user.photo)
     user.save()
@@ -146,7 +146,7 @@ def resendVerificationMail():
         raise Exception("Mail service not configured")
 
     if not user.email_verified:
-        mail.sendVerificationMail(user, ChallengeMailVerify.create_challenge(user))
+        mail.sendVerificationMail(user.id, ChallengeMailVerify.create_challenge(user))
     return jsonify({"msg": "DONE"})
 
 

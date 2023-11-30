@@ -48,7 +48,8 @@ def sendMail(to: str, message: MIMEMultipart):
         server.sendmail(SMTP_FROM, to, message.as_string())
 
 
-def sendVerificationMail(user: User, token: str):
+def sendVerificationMail(userId: int, token: str):
+    user = User.find_by_id(userId)
     if not user.email or not token:
         return
 

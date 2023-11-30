@@ -45,11 +45,12 @@ class RecipeListCubit extends Cubit<RecipeListState> {
           ListRecipeListState(
             recipes: _state.allRecipes,
             tags: _state.tags,
-            listView: _state.listView,
+            listView: state.listView,
           ),
         );
       } else {
         emit(_state.copyWith(
+          listView: state.listView,
           selectedTags: selectedTags,
           recipes: _getFilteredRecipesCopy(
             _state.allRecipes,
@@ -83,13 +84,11 @@ class RecipeListCubit extends Cubit<RecipeListState> {
   }
 
   Future<void> _refresh([String? query, bool runOffline = false]) async {
-    final state = this.state;
-
     late ListRecipeListState _state;
     if (state is ListRecipeListState &&
         state is! SearchRecipeListState &&
         state is! FilteredListRecipeListState &&
-        state.recipes.isEmpty) {
+        (state as ListRecipeListState).recipes.isEmpty) {
       emit(LoadingRecipeListState(listView: state.listView));
     }
 
@@ -120,7 +119,7 @@ class RecipeListCubit extends Cubit<RecipeListState> {
       );
       Set<Tag> filter = const {};
       if (state is FilteredListRecipeListState && (query == null)) {
-        filter = state.selectedTags;
+        filter = (state as FilteredListRecipeListState).selectedTags;
       }
       _state = filter.isNotEmpty
           ? FilteredListRecipeListState(

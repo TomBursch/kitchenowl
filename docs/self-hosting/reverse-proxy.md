@@ -150,3 +150,44 @@ SSLCertificateKeyFile /etc/letsencrypt/live/kitchenowl.example.org/privkey.pem
 Include /etc/letsencrypt/options-ssl-apache.conf
 </VirtualHost>
 ```
+
+### Nginx
+
+The following assumptions are made by this config:
+
+- You have a (sub)domain for your kitchenowl instance. eg: kitchenowl.example.org
+- You are running the docker images from the given docker-compose.yml with the "ports" changed from "80:80" to "8080:80"
+- You have certbot (or some other letsencrypt client) installed and running on your host system
+- You have nginx running on your host with the default ports for http/https (80/443)
+
+```
+server {
+    server_name kitchenowl.example.org;
+    listen [::]:443 ssl ipv6only=on; # managed by Certbot
+    listen 443 ssl; # managed by Certbot
+
+    # https://www.nginx.com/blog/http-strict-transport-security-hsts-and-nginx/
+    add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
+
+    location / {
+        proxy_pass http://localhost:8080;
+    }
+
+    ssl_certificate /etc/letsencrypt/live/kitchenowl.example.org/fullchain.pem; # managed by
+ Certbot
+    ssl_certificate_key /etc/letsencrypt/live/kitchenowl.example.org/privkey.pem; # managed 
+by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+}
+server {
+    if ($host = kitchenowl.example.org) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+    server_name kitchenowl.example.org;
+    listen 80;
+    listen [::]:80;
+    return 404; # managed by Certbot
+}
+```

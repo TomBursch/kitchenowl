@@ -6,7 +6,7 @@ appdirs==1.4.4
 APScheduler==3.10.4
 attrs==23.1.0
 autopep8==2.0.4
-bcrypt==4.0.1
+bcrypt==4.1.1
 beautifulsoup4==4.12.2
 bidict==0.22.1
 billiard==4.2.0
@@ -22,7 +22,7 @@ click-didyoumean==0.3.0
 click-plugins==1.1.1
 click-repl==0.3.0
 contourpy==1.2.0
-cryptography==41.0.5
+cryptography==41.0.7
 cycler==0.12.1
 dbscan1d==0.2.2
 defusedxml==0.7.1
@@ -43,8 +43,8 @@ greenlet==3.0.0rc3
 h11==0.14.0
 html-text==0.5.2
 html5lib==1.1
-idna==3.4
-ingredient-parser-nlp==0.1.0b6
+idna==3.6
+ingredient-parser-nlp==0.1.0b7
 iniconfig==2.0.0
 isodate==0.6.1
 itsdangerous==2.1.2

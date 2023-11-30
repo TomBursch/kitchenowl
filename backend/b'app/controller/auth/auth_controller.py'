@@ -92,7 +92,7 @@ if OPEN_REGISTRATION:
             email=args["email"] if "email" in args else None,
         )
         if "email" in args and mail.mailConfigured():
-            gevent.spawn(mail.sendVerificationMail, user, ChallengeMailVerify.create_challenge(user))
+            gevent.spawn(mail.sendVerificationMail, user.id, ChallengeMailVerify.create_challenge(user))
 
         device = "Unkown"
         if "device" in args:

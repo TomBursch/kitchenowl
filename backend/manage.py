@@ -90,7 +90,7 @@ What next?
                 print("Mail service not configured")
                 continue
             delay = float(input("Delay between mails in seconds (0):") or "0")
-            for user in tqdm(User.query.filter(User.email_verified != True).all(), desc="Sending mails"):
+            for user in tqdm(User.query.filter((User.email_verified == False) | (User.email_verified == None)).all(), desc="Sending mails"):
                 if len(user.verify_mail_challenge) == 0:
                     mail.sendVerificationMail(user.id, ChallengeMailVerify.create_challenge(user))
                     if delay > 0: 

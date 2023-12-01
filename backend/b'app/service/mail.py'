@@ -61,7 +61,7 @@ def sendVerificationMail(userId: int, token: str):
         text = """\
 Hi {name} (@{username}),
 
-Verify your email so we know it's really you and you don't loose access to your account.
+Verify your email so we know it's really you, and you don't lose access to your account.
 Verify email address: {link}
 
 Have any questions? Check out https://kitchenowl.org/privacy/""".format(
@@ -72,7 +72,7 @@ Have any questions? Check out https://kitchenowl.org/privacy/""".format(
 <body>
     <p>Hi {name} (@{username}),<br><br>
 
-    Verify your email so we know it's really you and you don't loose access to your account.<br>
+    Verify your email so we know it's really you, and you don't lose access to your account.<br>
     <a href="{link}">Verify email address</a><br><br>
 
     Have any questions? Check out our <a href="https://kitchenowl.org/privacy/">Privacy Policy</a>

@@ -24,7 +24,7 @@ user = Blueprint("user", __name__)
 @jwt_required()
 @server_admin_required()
 def getAllUsers():
-    return jsonify([e.obj_to_dict(include_email=True) for e in User.all_by_name()])
+    return jsonify([e.obj_to_dict(include_email=True) for e in User.query.order_by(User.admin, User.username).all()])
 
 
 @user.route("", methods=["GET"])

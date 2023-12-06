@@ -79,13 +79,22 @@ def deleteShoppinglist(id):
     return jsonify({"msg": "DONE"})
 
 
-@shoppinglist.route("/<int:id>/item/<int:item_id>", methods=["POST"])
+@shoppinglist.route("/<int:id>/item/<int:item_id>", methods=["POST", "PUT"])
 @jwt_required()
 @validate_args(UpdateDescription)
 def updateItemDescription(args, id, item_id):
     con = ShoppinglistItems.find_by_ids(id, item_id)
     if not con:
-        raise NotFoundRequest()
+        shoppinglist = Shoppinglist.find_by_id(id)
+        item = Item.find_by_id(item_id)
+        if not item or not shoppinglist:
+            raise NotFoundRequest()
+        if shoppinglist.household_id != item.household_id:
+            raise InvalidUsage()
+        con = ShoppinglistItems()
+        con.shoppinglist = shoppinglist
+        con.item = item
+        con.created_by = current_user.id
     con.shoppinglist.checkAuthorized()
 
     con.description = args["description"] or ""

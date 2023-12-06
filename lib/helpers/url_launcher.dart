@@ -17,6 +17,8 @@ Future<void> openUrl(BuildContext context, String url,
             enableDefaultShare: true,
             extraCustomTabs: const [
               'org.mozilla.firefox',
+              'org.mozilla.fenix',
+              'com.vivaldi.browser',
               'com.microsoft.emmx',
             ],
           ),

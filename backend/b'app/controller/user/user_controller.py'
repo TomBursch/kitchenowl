@@ -1,4 +1,5 @@
 import gevent
+from sqlalchemy import desc
 from app.errors import NotFoundRequest, UnauthorizedRequest
 from app.helpers.server_admin_required import server_admin_required
 from app.helpers import validate_args
@@ -24,7 +25,7 @@ user = Blueprint("user", __name__)
 @jwt_required()
 @server_admin_required()
 def getAllUsers():
-    return jsonify([e.obj_to_dict(include_email=True) for e in User.query.order_by(User.admin, User.username).all()])
+    return jsonify([e.obj_to_dict(include_email=True) for e in User.query.order_by(desc(User.admin), User.username).all()])
 
 
 @user.route("", methods=["GET"])

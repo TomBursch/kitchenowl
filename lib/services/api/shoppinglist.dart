@@ -79,14 +79,16 @@ extension ShoppinglistApi on ApiService {
     return body.map((e) => ItemWithDescription.fromJson(e)).toList();
   }
 
-  Future<bool> addItem(
+  Future<bool> putItem(
     ShoppingList shoppinglist,
-    ShoppinglistItem item,
+    Item item,
   ) async {
-    final data = {'name': item.name};
-    if (item.description.isNotEmpty) data['description'] = item.description;
-    final res = await post(
-      '${route(shoppinglist: shoppinglist)}/add-item-by-name',
+    final Map<String, dynamic> data = {};
+    if (item is ItemWithDescription) {
+      data['description'] = item.description;
+    }
+    final res = await put(
+      '${route(shoppinglist: shoppinglist)}/item/${item.id}',
       jsonEncode(data),
     );
 
@@ -115,20 +117,6 @@ extension ShoppinglistApi on ApiService {
     final res = await post(
       '${route(shoppinglist: shoppinglist)}/recipeitems',
       jsonEncode({'items': items.map((e) => e.toJsonWithId()).toList()}),
-    );
-
-    return res.statusCode == 200;
-  }
-
-  Future<bool> updateShoppingListItemDescription(
-    ShoppingList shoppinglist,
-    Item item,
-    String description,
-  ) async {
-    final data = {'description': description};
-    final res = await post(
-      '${route(shoppinglist: shoppinglist)}/item/${item.id}',
-      jsonEncode(data),
     );
 
     return res.statusCode == 200;

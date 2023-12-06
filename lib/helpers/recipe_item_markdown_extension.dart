@@ -67,7 +67,8 @@ class RecipeItemMarkdownSyntax extends md.InlineSyntax {
           caseSensitive: false,
         );
 
-  static const String _pattern = r'@([^ \n,\.\(\)]+)';
+  static const String _pattern =
+      r"""@([^ \n\.\(\)\\\/\?\*\+,!%$#@^;:'"=~`]+)"""; // TODO: replace with \p{L} and unicode=true
 
   @override
   bool onMatch(md.InlineParser parser, Match match) {

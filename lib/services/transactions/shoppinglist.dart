@@ -197,13 +197,20 @@ class TransactionShoppingListAddItem extends Transaction<bool> {
 
   @override
   Future<bool?> runOnline() {
-    return ApiService.getInstance().addItemByName(
-      shoppinglist,
-      item.name,
-      (item is ItemWithDescription
-          ? (item as ItemWithDescription).description
-          : ""),
-    );
+    if (item.id != null) {
+      return ApiService.getInstance().putItem(
+        shoppinglist,
+        item,
+      );
+    } else {
+      return ApiService.getInstance().addItemByName(
+        shoppinglist,
+        item.name,
+        (item is ItemWithDescription
+            ? (item as ItemWithDescription).description
+            : ""),
+      );
+    }
   }
 }
 
@@ -374,15 +381,10 @@ class TransactionShoppingListUpdateItem extends Transaction<bool> {
 
   @override
   Future<bool?> runOnline() async {
-    if (item is ShoppinglistItem) {
-      return ApiService.getInstance()
-          .updateShoppingListItemDescription(shoppinglist, item, description);
-    } else if (description.isNotEmpty) {
-      ApiService.getInstance()
-          .addItemByName(shoppinglist, item.name, description);
-    }
-
-    return false;
+    return ApiService.getInstance().putItem(
+      shoppinglist,
+      ItemWithDescription.fromItem(item: item, description: description),
+    );
   }
 }
 

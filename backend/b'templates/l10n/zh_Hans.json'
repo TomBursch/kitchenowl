@@ -12,6 +12,7 @@
     "snacks": "🥜 零食"
   },
   "items": {
+    "agave_syrup": "龙舌兰糖浆",
     "aioli": "大蒜蛋黄酱",
     "amaretto": "杏仁酒",
     "apple": "苹果",
@@ -44,6 +45,8 @@
     "batteries": "电池",
     "bay_leaf": "香叶",
     "beans": "豆",
+    "beef": "牛肉",
+    "beef_broth": "牛肉汤",
     "beer": "啤酒",
     "beet": "甜菜",
     "beetroot": "甜根菜",
@@ -101,6 +104,7 @@
     "coconut_flakes": "椰子片",
     "coconut_milk": "椰子汁",
     "coconut_oil": "椰子油",
+    "coffee_powder": "咖啡粉",
     "colorful_sprinkles": "五颜六色的喷洒物",
     "concealer": "遮瑕膏",
     "cookies": "饼干",

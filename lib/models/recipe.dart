@@ -1,4 +1,4 @@
-import 'package:azlistview/azlistview.dart';
+import 'package:azlistview_plus/azlistview_plus.dart';
 import 'package:fraction/fraction.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/models/model.dart';

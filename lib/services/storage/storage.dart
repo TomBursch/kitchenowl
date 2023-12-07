@@ -20,7 +20,9 @@ class SecureStorage extends Storage {
 
   @override
   Future<void> delete({required String key}) async {
-    await _storage.delete(key: key);
+    return _storage.containsKey(key: key).then((v) {
+      if (v) return _storage.delete(key: key);
+    });
   }
 
   @override

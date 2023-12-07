@@ -109,6 +109,7 @@ simple-websocket==1.0.0
 six==1.16.0
 soupsieve==2.5
 SQLAlchemy==2.0.23
+sqlite-icu==1.0
 threadpoolctl==3.2.0
 toml==0.10.2
 tomli==2.0.1

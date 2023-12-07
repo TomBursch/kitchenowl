@@ -4,6 +4,7 @@ from celery import Celery, Task
 from flask_socketio import SocketIO
 from sqlalchemy import MetaData
 from sqlalchemy.engine import URL
+from sqlalchemy.event import listen
 from apispec import APISpec
 from apispec.ext.marshmallow import MarshmallowPlugin
 from prometheus_client import multiprocess
@@ -27,6 +28,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import JWTManager
 from flask_apscheduler import APScheduler
+import sqlite_icu
 import os
 
 
@@ -230,6 +232,18 @@ else:
     )
     celery_app.set_default()
     app.extensions["celery"] = celery_app
+
+
+# Load ICU extension for sqlite
+if DB_URL.drivername == "sqlite":
+
+    def load_extension(conn, unused):
+        conn.enable_load_extension(True)
+        conn.load_extension(sqlite_icu.extension_path().replace(".so", ""))
+        conn.enable_load_extension(False)
+
+    with app.app_context():
+        listen(db.engine, "connect", load_extension)
 
 
 @app.after_request

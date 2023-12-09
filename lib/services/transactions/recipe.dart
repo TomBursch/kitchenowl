@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/models/recipe.dart';
 import 'package:kitchenowl/models/tag.dart';
@@ -102,7 +103,11 @@ class TransactionRecipeSearchRecipes extends Transaction<List<Recipe>> {
 
   @override
   Future<List<Recipe>?> runOnline() async {
-    final ids = await ApiService.getInstance().searchRecipe(household, query);
+    if (kIsWeb) {
+      return ApiService.getInstance().searchRecipe(household, query);
+    }
+    final ids =
+        await ApiService.getInstance().searchRecipeById(household, query);
     if (ids == null) return [];
     final recipes = (await TempStorage.getInstance().readRecipes(household) ??
         [])

@@ -35,13 +35,24 @@ extension RecipeApi on ApiService {
     return body.map((e) => Recipe.fromJson(e)).toList();
   }
 
-  Future<List<int>?> searchRecipe(Household household, String query) async {
+  Future<List<int>?> searchRecipeById(Household household, String query) async {
     final res = await get(
       '${householdPath(household)}$baseRoute/search?only_ids=true&query=$query',
     );
     if (res.statusCode != 200) return null;
 
     return List.from(jsonDecode(res.body));
+  }
+
+  Future<List<Recipe>?> searchRecipe(Household household, String query) async {
+    final res = await get(
+      '${householdPath(household)}$baseRoute/search?query=$query',
+    );
+    if (res.statusCode != 200) return null;
+
+    final body = List.from(jsonDecode(res.body));
+
+    return body.map((e) => Recipe.fromJson(e)).toList();
   }
 
   Future<Recipe?> getRecipe(Recipe recipe) async {

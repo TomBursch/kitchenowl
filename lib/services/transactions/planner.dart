@@ -2,7 +2,7 @@ import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/models/planner.dart';
 import 'package:kitchenowl/models/recipe.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
-import 'package:kitchenowl/services/storage/temp_storage.dart';
+import 'package:kitchenowl/services/storage/mem_storage.dart';
 import 'package:kitchenowl/services/transaction.dart';
 
 class TransactionPlannerGetPlannedRecipes
@@ -20,7 +20,7 @@ class TransactionPlannerGetPlannedRecipes
   @override
   Future<List<RecipePlan>> runLocal() async {
     final recipes = List<Recipe>.from(
-      await TempStorage.getInstance().readRecipes(household) ?? const [],
+      await MemStorage.getInstance().readRecipes(household) ?? const [],
     );
     recipes.retainWhere((e) => e.isPlanned);
 

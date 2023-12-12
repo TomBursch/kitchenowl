@@ -4,8 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/config.dart';
 import 'package:kitchenowl/models/user.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
+import 'package:kitchenowl/services/storage/mem_storage.dart';
 import 'package:kitchenowl/services/storage/storage.dart';
-import 'package:kitchenowl/services/storage/temp_storage.dart';
 import 'package:kitchenowl/services/transaction_handler.dart';
 
 class AuthCubit extends Cubit<AuthState> {
@@ -44,7 +44,7 @@ class AuthCubit extends Cubit<AuthState> {
       case Connection.authenticated:
         if (!_forcedOfflineMode) {
           final user = (await ApiService.getInstance().getUser())!;
-          TempStorage.getInstance().writeUser(user);
+          MemStorage.getInstance().writeUser(user);
           TransactionHandler.getInstance().runOpenTransactions();
           emit(Authenticated(user));
         } else {
@@ -76,7 +76,7 @@ class AuthCubit extends Cubit<AuthState> {
 
   Future<void> _caseDisconnected() async {
     if (kIsWeb || ApiService.getInstance().baseUrl.isNotEmpty) {
-      final user = await TempStorage.getInstance().readUser();
+      final user = await MemStorage.getInstance().readUser();
       if (user != null) {
         emit(AuthenticatedOffline(user, _forcedOfflineMode));
       } else {
@@ -88,7 +88,7 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   Future<void> _caseUnsupported(bool unsupportedBackend) async {
-    final user = await TempStorage.getInstance().readUser();
+    final user = await MemStorage.getInstance().readUser();
     if (_forcedOfflineMode &&
         (kIsWeb || ApiService.getInstance().baseUrl.isNotEmpty)) {
       if (user != null) {
@@ -126,7 +126,7 @@ class AuthCubit extends Cubit<AuthState> {
   Future<void> refreshUser() async {
     if (state is Authenticated) {
       if (state is AuthenticatedOffline) {
-        final user = await TempStorage.getInstance().readUser();
+        final user = await MemStorage.getInstance().readUser();
         if (user != null) {
           emit(AuthenticatedOffline(user, state.forcedOfflineMode));
         } else {
@@ -223,7 +223,7 @@ class AuthCubit extends Cubit<AuthState> {
   Future<void> logout() async {
     emit(const Loading());
     await SecureStorage.getInstance().delete(key: 'TOKEN');
-    await TempStorage.getInstance().clearAll();
+    await MemStorage.getInstance().clearAll();
     await PreferenceStorage.getInstance().delete(key: "lastHouseholdId");
     await ApiService.getInstance().logout();
     if (ApiService.getInstance().connectionStatus == Connection.disconnected) {
@@ -238,7 +238,7 @@ class AuthCubit extends Cubit<AuthState> {
     emit(const Loading());
     await PreferenceStorage.getInstance().delete(key: 'URL');
     await SecureStorage.getInstance().delete(key: 'TOKEN');
-    await TempStorage.getInstance().clearAll();
+    await MemStorage.getInstance().clearAll();
     ApiService.getInstance().dispose();
     refresh();
   }

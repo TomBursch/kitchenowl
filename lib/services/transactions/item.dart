@@ -2,7 +2,7 @@ import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/models/recipe.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
-import 'package:kitchenowl/services/storage/temp_storage.dart';
+import 'package:kitchenowl/services/storage/mem_storage.dart';
 import 'package:kitchenowl/services/transaction.dart';
 
 class TransactionItemGet extends Transaction<Item> {
@@ -56,7 +56,7 @@ class TransactionItemGetRecipes extends Transaction<List<Recipe>> {
   Future<List<Recipe>> runLocal() async {
     if (household == null) return [];
     final recipes =
-        (await TempStorage.getInstance().readRecipes(household!)) ?? [];
+        (await MemStorage.getInstance().readRecipes(household!)) ?? [];
     recipes.retainWhere((e) {
       e.items.retainWhere((e) => e.id == item.id);
 

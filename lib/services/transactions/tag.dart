@@ -1,7 +1,7 @@
 import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/models/tag.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
-import 'package:kitchenowl/services/storage/temp_storage.dart';
+import 'package:kitchenowl/services/storage/mem_storage.dart';
 import 'package:kitchenowl/services/transaction.dart';
 
 class TransactionTagGetAll extends Transaction<Set<Tag>> {
@@ -12,14 +12,14 @@ class TransactionTagGetAll extends Transaction<Set<Tag>> {
 
   @override
   Future<Set<Tag>> runLocal() async {
-    return await TempStorage.getInstance().readTags(household) ?? {};
+    return await MemStorage.getInstance().readTags(household) ?? {};
   }
 
   @override
   Future<Set<Tag>?> runOnline() async {
     final tags = await ApiService.getInstance().getAllTags(household);
     if (tags != null) {
-      TempStorage.getInstance().writeTags(household, tags);
+      MemStorage.getInstance().writeTags(household, tags);
     }
 
     return tags;

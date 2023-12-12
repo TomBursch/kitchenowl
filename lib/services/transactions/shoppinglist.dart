@@ -2,10 +2,10 @@ import 'package:kitchenowl/enums/shoppinglist_sorting.dart';
 import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/models/shoppinglist.dart';
+import 'package:kitchenowl/services/storage/mem_storage.dart';
 import 'package:kitchenowl/services/storage/transaction_storage.dart';
 import 'package:kitchenowl/services/transaction.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
-import 'package:kitchenowl/services/storage/temp_storage.dart';
 
 class TransactionShoppingListGet extends Transaction<List<ShoppingList>> {
   final Household household;
@@ -18,14 +18,14 @@ class TransactionShoppingListGet extends Transaction<List<ShoppingList>> {
 
   @override
   Future<List<ShoppingList>> runLocal() async {
-    return await TempStorage.getInstance().readShoppingLists(household) ?? [];
+    return await MemStorage.getInstance().readShoppingLists(household) ?? [];
   }
 
   @override
   Future<List<ShoppingList>?> runOnline() async {
     final lists = await ApiService.getInstance().getShoppingLists(household);
     if (lists != null) {
-      TempStorage.getInstance().writeShoppingLists(household, lists);
+      MemStorage.getInstance().writeShoppingLists(household, lists);
     }
 
     return lists;
@@ -48,7 +48,7 @@ class TransactionShoppingListGetItems
 
   @override
   Future<List<ShoppinglistItem>> runLocal() async {
-    final l = await TempStorage.getInstance().readItems(shoppinglist) ?? [];
+    final l = await MemStorage.getInstance().readItems(shoppinglist) ?? [];
     ShoppinglistSorting.sortShoppinglistItems(l, sorting);
 
     return l;
@@ -59,7 +59,7 @@ class TransactionShoppingListGetItems
     final items =
         await ApiService.getInstance().getItems(shoppinglist, sorting);
     if (items != null) {
-      TempStorage.getInstance().writeItems(shoppinglist, items);
+      MemStorage.getInstance().writeItems(shoppinglist, items);
     }
 
     return items;
@@ -81,13 +81,13 @@ class TransactionShoppingListSearchItem extends Transaction<List<Item>> {
 
   @override
   Future<List<Item>> runLocal() async {
-    final shoppinglist = await TempStorage.getInstance()
+    final shoppinglist = await MemStorage.getInstance()
         .readShoppingLists(household)
         .then(
           (shoppingLists) => Future.wait<List<ShoppinglistItem>?>(
             shoppingLists
                     ?.map((shoppingList) =>
-                        TempStorage.getInstance().readItems(shoppingList))
+                        MemStorage.getInstance().readItems(shoppingList))
                     .toList() ??
                 [],
           ),
@@ -126,7 +126,7 @@ class TransactionShoppingListGetRecentItems
   Future<List<ItemWithDescription>> runLocal() async {
     if (itemsCount <= 0) return [];
     final items =
-        (await TempStorage.getInstance().readItems(shoppinglist) ?? const [])
+        (await MemStorage.getInstance().readItems(shoppinglist) ?? const [])
             .map((e) => e.name)
             .toSet();
 
@@ -188,9 +188,9 @@ class TransactionShoppingListAddItem extends Transaction<bool> {
 
   @override
   Future<bool> runLocal() async {
-    final list = await TempStorage.getInstance().readItems(shoppinglist) ?? [];
+    final list = await MemStorage.getInstance().readItems(shoppinglist) ?? [];
     list.add(ShoppinglistItem.fromItem(item: item));
-    TempStorage.getInstance().writeItems(shoppinglist, list);
+    MemStorage.getInstance().writeItems(shoppinglist, list);
 
     return true;
   }
@@ -249,9 +249,9 @@ class TransactionShoppingListDeleteItem extends Transaction<bool> {
 
   @override
   Future<bool> runLocal() async {
-    final list = await TempStorage.getInstance().readItems(shoppinglist) ?? [];
+    final list = await MemStorage.getInstance().readItems(shoppinglist) ?? [];
     list.removeWhere((e) => e.name == item.name);
-    TempStorage.getInstance().writeItems(shoppinglist, list);
+    MemStorage.getInstance().writeItems(shoppinglist, list);
 
     return true;
   }
@@ -301,9 +301,9 @@ class TransactionShoppingListDeleteItems extends Transaction<bool> {
 
   @override
   Future<bool> runLocal() async {
-    final list = await TempStorage.getInstance().readItems(shoppinglist) ?? [];
+    final list = await MemStorage.getInstance().readItems(shoppinglist) ?? [];
     list.removeWhere((e) => items.map((e) => e.name).contains(e.name));
-    TempStorage.getInstance().writeItems(shoppinglist, list);
+    MemStorage.getInstance().writeItems(shoppinglist, list);
 
     return true;
   }
@@ -356,22 +356,20 @@ class TransactionShoppingListUpdateItem extends Transaction<bool> {
   @override
   Future<bool> runLocal() async {
     if (item is ShoppinglistItem) {
-      final list =
-          await TempStorage.getInstance().readItems(shoppinglist) ?? [];
+      final list = await MemStorage.getInstance().readItems(shoppinglist) ?? [];
       final int i = list.indexWhere((e) => e.id == item.id);
       list.removeAt(i);
       list.insert(
         i,
         (item as ShoppinglistItem).copyWith(description: description),
       );
-      TempStorage.getInstance().writeItems(shoppinglist, list);
+      MemStorage.getInstance().writeItems(shoppinglist, list);
 
       return true;
     } else if (description.isNotEmpty) {
-      final list =
-          await TempStorage.getInstance().readItems(shoppinglist) ?? [];
+      final list = await MemStorage.getInstance().readItems(shoppinglist) ?? [];
       list.add(ShoppinglistItem(name: item.name, description: description));
-      TempStorage.getInstance().writeItems(shoppinglist, list);
+      MemStorage.getInstance().writeItems(shoppinglist, list);
 
       return true;
     }
@@ -427,7 +425,7 @@ class TransactionShoppingListAddRecipeItems extends Transaction<bool> {
 
   @override
   Future<bool> runLocal() async {
-    final list = await TempStorage.getInstance().readItems(shoppinglist) ?? [];
+    final list = await MemStorage.getInstance().readItems(shoppinglist) ?? [];
     for (final item in items) {
       final int i = list.indexWhere((e) => e.id == item.id);
       if (i >= 0) {
@@ -437,7 +435,7 @@ class TransactionShoppingListAddRecipeItems extends Transaction<bool> {
         list.add(item.toShoppingListItem());
       }
     }
-    TempStorage.getInstance().writeItems(shoppinglist, list);
+    MemStorage.getInstance().writeItems(shoppinglist, list);
 
     return true;
   }

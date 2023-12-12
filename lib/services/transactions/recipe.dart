@@ -1,9 +1,8 @@
-import 'package:flutter/foundation.dart';
 import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/models/recipe.dart';
 import 'package:kitchenowl/models/tag.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
-import 'package:kitchenowl/services/storage/temp_storage.dart';
+import 'package:kitchenowl/services/storage/mem_storage.dart';
 import 'package:kitchenowl/services/transaction.dart';
 
 class TransactionRecipeGetRecipes extends Transaction<List<Recipe>> {
@@ -17,14 +16,14 @@ class TransactionRecipeGetRecipes extends Transaction<List<Recipe>> {
 
   @override
   Future<List<Recipe>> runLocal() async {
-    return await TempStorage.getInstance().readRecipes(household) ?? [];
+    return await MemStorage.getInstance().readRecipes(household) ?? [];
   }
 
   @override
   Future<List<Recipe>?> runOnline() async {
     final recipes = await ApiService.getInstance().getRecipes(household);
     if (recipes != null) {
-      TempStorage.getInstance().writeRecipes(household, recipes);
+      MemStorage.getInstance().writeRecipes(household, recipes);
     }
 
     return recipes;
@@ -46,7 +45,7 @@ class TransactionRecipeGetRecipesFiltered extends Transaction<List<Recipe>> {
 
   @override
   Future<List<Recipe>> runLocal() async {
-    return (await TempStorage.getInstance().readRecipes(household))
+    return (await MemStorage.getInstance().readRecipes(household))
             ?.where((recipe) => recipe.tags.any((tag) => filter.contains(tag)))
             .toList() ??
         [];
@@ -93,8 +92,7 @@ class TransactionRecipeSearchRecipes extends Transaction<List<Recipe>> {
 
   @override
   Future<List<Recipe>> runLocal() async {
-    final recipes =
-        await TempStorage.getInstance().readRecipes(household) ?? [];
+    final recipes = await MemStorage.getInstance().readRecipes(household) ?? [];
     recipes
         .retainWhere((e) => e.name.toLowerCase().contains(query.toLowerCase()));
 
@@ -103,13 +101,10 @@ class TransactionRecipeSearchRecipes extends Transaction<List<Recipe>> {
 
   @override
   Future<List<Recipe>?> runOnline() async {
-    if (kIsWeb) {
-      return ApiService.getInstance().searchRecipe(household, query);
-    }
     final ids =
         await ApiService.getInstance().searchRecipeById(household, query);
     if (ids == null) return [];
-    final recipes = (await TempStorage.getInstance().readRecipes(household) ??
+    final recipes = (await MemStorage.getInstance().readRecipes(household) ??
         [])
       ..retainWhere((e) => ids.contains(e.id));
 

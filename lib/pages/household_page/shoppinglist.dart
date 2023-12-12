@@ -86,7 +86,7 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                             household: BlocProvider.of<HouseholdCubit>(context)
                                 .state
                                 .household,
-                            onRefresh: cubit.refresh,
+                            onRefresh: () => cubit.refresh(query: ""),
                             selected: (item) =>
                                 item is ShoppinglistItem &&
                                 (App.settings.shoppingListTapToRemove ||

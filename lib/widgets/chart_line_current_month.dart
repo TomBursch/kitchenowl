@@ -27,17 +27,20 @@ class _ChartLineCurrentMonthState extends State<ChartLineCurrentMonth> {
 
   @override
   Widget build(BuildContext context) {
-    double min = 0, max = 0, sum = 0;
+    double min = 0, max = 0, sum = 0, sumToday = 0;
+    int lastDayKey = 0;
     final data = widget.data.bySubTimeframe.map((key, value) {
       sum += value;
       if (sum < min) min = sum;
       if (sum > max) max = sum;
+      if (key.isBefore(DateTime.now())) sumToday = sum;
+      lastDayKey = key.day;
       return MapEntry(key.day, sum);
     });
     firstDay = (widget.data.bySubTimeframe.keys.firstOrNull ??
             DateTime(DateTime.now().year, DateTime.now().month))
         .copyWith(day: 1);
-    data.putIfAbsent(0, () => 0);
+    data.putIfAbsent(1, () => 0);
 
     days = DateTimeRange(
       start: firstDay,
@@ -46,7 +49,8 @@ class _ChartLineCurrentMonthState extends State<ChartLineCurrentMonth> {
     if (!widget.incomplete) {
       data[days] = sum;
     } else {
-      data[DateTime.now().day] = sum;
+      if (lastDayKey < DateTime.now().day) lastDayKey = DateTime.now().day;
+      data[DateTime.now().day] = sumToday;
     }
 
     return LineChart(
@@ -138,7 +142,7 @@ class _ChartLineCurrentMonthState extends State<ChartLineCurrentMonth> {
                 dotData: const FlDotData(show: false),
                 spots: [
                   FlSpot(
-                    DateTime.now().day.toDouble(),
+                    lastDayKey.toDouble(),
                     sum,
                   ),
                   FlSpot(
@@ -148,7 +152,21 @@ class _ChartLineCurrentMonthState extends State<ChartLineCurrentMonth> {
                 ],
               ),
             LineChartBarData(
-              color: Theme.of(context).colorScheme.primary,
+              color: !widget.incomplete || DateTime.now().day == lastDayKey
+                  ? Theme.of(context).colorScheme.primary
+                  : null,
+              gradient: widget.incomplete && DateTime.now().day != lastDayKey
+                  ? LinearGradient(
+                      colors: [
+                        Theme.of(context).colorScheme.primary,
+                        Theme.of(context).colorScheme.primaryContainer,
+                      ],
+                      stops: [
+                        DateTime.now().day / lastDayKey,
+                        DateTime.now().day / lastDayKey + 0.05
+                      ],
+                    )
+                  : null,
               barWidth: 4,
               isStrokeCapRound: true,
               dotData: const FlDotData(show: false),

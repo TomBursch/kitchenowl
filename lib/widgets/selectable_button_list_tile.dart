@@ -35,19 +35,11 @@ class _SelectableButtonListTileState extends State<SelectableButtonListTile> {
       elevation: !widget.raised ? 0 : null,
       color: !widget.raised
           ? ElevationOverlay.applySurfaceTint(
-        Theme.of(context).colorScheme.background,
-        Theme.of(context).colorScheme.surfaceTint,
-        1.5,
-      )
+              Theme.of(context).colorScheme.background,
+              Theme.of(context).colorScheme.surfaceTint,
+              1.5,
+            )
           : null,
-      // shape: !widget.raised
-      // ? null
-      // : RoundedRectangleBorder(
-      //   side: BorderSide(
-      //     color: Theme.of(context).colorScheme.outline,
-      //   ),
-      //   borderRadius: const BorderRadius.all(Radius.circular(12)),
-      // ),
       child: MouseRegion(
         onEnter: (event) {
           setState(() {
@@ -63,48 +55,59 @@ class _SelectableButtonListTileState extends State<SelectableButtonListTile> {
           leading: widget.selected
               ? const Icon(Icons.check_rounded)
               : widget.icon != null
-              ? Icon(
-              widget.icon,
-              color: !widget.raised
-                  ? Theme.of(context).iconTheme.color!.withAlpha(75)
-                  : Theme.of(context).iconTheme.color!.withAlpha(170)
-          )
-              : null,
-          title:
-          Text(
+                  ? Icon(widget.icon,
+                      color: !widget.raised
+                          ? Theme.of(context).iconTheme.color!.withAlpha(85)
+                          : Theme.of(context).iconTheme.color!.withAlpha(170))
+                  : null,
+          title: Text(
             widget.title,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                 color: !widget.raised
-                    ? Theme.of(context).textTheme.bodyMedium!.color!.withAlpha(75)
-                    : Theme.of(context).textTheme.bodyMedium!.color!.withAlpha(170)
-            ),
+                    ? Theme.of(context)
+                        .textTheme
+                        .bodyMedium!
+                        .color!
+                        .withAlpha(85)
+                    : Theme.of(context)
+                        .textTheme
+                        .bodyMedium!
+                        .color!
+                        .withAlpha(170)),
           ),
           selected: widget.selected,
           subtitle: (widget.description?.isNotEmpty ?? false)
               ? Text(
-            widget.description!,
-            maxLines: 3,
-            overflow: TextOverflow.ellipsis,
-            style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                color: !widget.raised
-                    ? Theme.of(context).textTheme.bodySmall!.color!.withAlpha(75)
-                    : Theme.of(context).textTheme.bodySmall!.color!.withAlpha(170)
-            ),
-          )
+                  widget.description!,
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                      color: !widget.raised
+                          ? Theme.of(context)
+                              .textTheme
+                              .bodySmall!
+                              .color!
+                              .withAlpha(85)
+                          : Theme.of(context)
+                              .textTheme
+                              .bodySmall!
+                              .color!
+                              .withAlpha(170)),
+                )
               : null,
           onTap: widget.onPressed,
           onLongPress: widget.onLongPressed,
           contentPadding: const EdgeInsets.only(left: 16, right: 8),
           trailing: (widget.onLongPressed != null && mouseHover)
               ? IconButton(
-            onPressed: widget.onLongPressed,
-            color: widget.selected
-                ? Theme.of(context).colorScheme.onPrimary
-                : null,
-            icon: const Icon(Icons.more_horiz_rounded),
-          )
+                  onPressed: widget.onLongPressed,
+                  color: widget.selected
+                      ? Theme.of(context).colorScheme.onPrimary
+                      : null,
+                  icon: const Icon(Icons.more_horiz_rounded),
+                )
               : null,
         ),
       ),

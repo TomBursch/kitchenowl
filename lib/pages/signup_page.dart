@@ -8,6 +8,7 @@ import 'package:kitchenowl/cubits/server_info_cubit.dart';
 import 'package:kitchenowl/helpers/url_launcher.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/widgets/create_user_form_fields.dart';
+import 'package:sliver_tools/sliver_tools.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -41,74 +42,79 @@ class _SignupPageState extends State<SignupPage> {
                 onPressed: () => context.go("/"),
               ),
       ),
-      extendBodyBehindAppBar: true,
-      body: SafeArea(
-        top: false,
-        child: Align(
-          alignment: Alignment.topCenter,
-          child: ConstrainedBox(
-            constraints: const BoxConstraints.expand(width: 600),
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(AppLocalizations.of(context)!.accountCreateTitle),
-                    CreateUserFormFields(
-                      usernameController: usernameController,
-                      nameController: nameController,
-                      passwordController: passwordController,
-                      emailController: emailController,
-                      enableEmail: emailMandatory,
-                    ),
-                    if (privacyPolicyUrl != null &&
-                        isValidUrl(privacyPolicyUrl))
-                      Padding(
-                        padding: const EdgeInsets.only(top: 16),
-                        child: MarkdownBody(
-                          data:
-                              AppLocalizations.of(context)!.privacyPolicyAgree(
-                            "[${AppLocalizations.of(context)!.privacyPolicy}]($privacyPolicyUrl)",
-                          ),
-                          shrinkWrap: true,
-                          styleSheet: MarkdownStyleSheet.fromTheme(
-                            Theme.of(context),
-                          ).copyWith(
-                            p: Theme.of(context).textTheme.labelSmall?.copyWith(
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .labelSmall
-                                      ?.color
-                                      ?.withOpacity(.3),
-                                ),
-                            a: TextStyle(
-                              color: Theme.of(context).colorScheme.primary,
+      body: CustomScrollView(
+        primary: true,
+        slivers: [
+          SliverCrossAxisConstrained(
+            maxCrossAxisExtent: 600,
+            child: SliverFillRemaining(
+              hasScrollBody: false,
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(AppLocalizations.of(context)!.accountCreateTitle),
+                      CreateUserFormFields(
+                        usernameController: usernameController,
+                        nameController: nameController,
+                        passwordController: passwordController,
+                        emailController: emailController,
+                        enableEmail: emailMandatory,
+                      ),
+                      if (privacyPolicyUrl != null &&
+                          isValidUrl(privacyPolicyUrl))
+                        Padding(
+                          padding: const EdgeInsets.only(top: 16),
+                          child: MarkdownBody(
+                            data: AppLocalizations.of(context)!
+                                .privacyPolicyAgree(
+                              "[${AppLocalizations.of(context)!.privacyPolicy}]($privacyPolicyUrl)",
                             ),
+                            shrinkWrap: true,
+                            styleSheet: MarkdownStyleSheet.fromTheme(
+                              Theme.of(context),
+                            ).copyWith(
+                              p: Theme.of(context)
+                                  .textTheme
+                                  .labelSmall
+                                  ?.copyWith(
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .labelSmall
+                                        ?.color
+                                        ?.withOpacity(.3),
+                                  ),
+                              a: TextStyle(
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
+                            ),
+                            onTapLink: (text, href, title) {
+                              if (href != null && isValidUrl(href)) {
+                                openUrl(context, href);
+                              }
+                            },
                           ),
-                          onTapLink: (text, href, title) {
-                            if (href != null && isValidUrl(href)) {
-                              openUrl(context, href);
-                            }
-                          },
+                        ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 16, bottom: 8),
+                        child: LoadingElevatedButton(
+                          onPressed: () => _submit(context),
+                          child:
+                              Text(AppLocalizations.of(context)!.accountCreate),
                         ),
                       ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 16, bottom: 8),
-                      child: LoadingElevatedButton(
-                        onPressed: () => _submit(context),
-                        child:
-                            Text(AppLocalizations.of(context)!.accountCreate),
-                      ),
-                    ),
-                  ],
+                      SizedBox(height: MediaQuery.of(context).padding.bottom),
+                    ],
+                  ),
                 ),
               ),
             ),
           ),
-        ),
+        ],
       ),
     );
   }

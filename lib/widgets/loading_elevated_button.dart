@@ -4,12 +4,14 @@ class LoadingElevatedButton extends StatefulWidget {
   final Widget child;
   final Future Function()? onPressed;
   final ButtonStyle? style;
+  final double loadingIndicatorSize;
 
   const LoadingElevatedButton({
     super.key,
     required this.child,
     this.onPressed,
     this.style,
+    this.loadingIndicatorSize = 24,
   });
 
   @override
@@ -37,10 +39,13 @@ class _LoadingElevatedButtonState extends State<LoadingElevatedButton> {
             }
           : null,
       child: isLoading
-          ? const SizedBox(
-              height: 16,
-              width: 16,
-              child: CircularProgressIndicator(),
+          ? SizedBox(
+              height: widget.loadingIndicatorSize,
+              width: widget.loadingIndicatorSize,
+              child: const Padding(
+                padding: EdgeInsets.all(4),
+                child: CircularProgressIndicator(),
+              ),
             )
           : widget.child,
     );

@@ -4,12 +4,15 @@ import 'package:kitchenowl/cubits/item_selection_cubit.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/planner.dart';
+import 'package:kitchenowl/models/shoppinglist.dart';
 
 class ItemSelectionPage extends StatefulWidget {
   final List<RecipePlan> plans;
+  final List<ShoppingList> shoppingLists;
   final String? title;
   final String Function(Object) selectText;
-  final Future<List<RecipeItem>> Function(List<RecipeItem>)? handleResult;
+  final Future<(ShoppingList?, List<RecipeItem>)?> Function(
+      ShoppingList?, List<RecipeItem>)? handleResult;
 
   const ItemSelectionPage({
     super.key,
@@ -17,6 +20,7 @@ class ItemSelectionPage extends StatefulWidget {
     this.plans = const [],
     required this.selectText,
     this.handleResult,
+    this.shoppingLists = const [],
   });
 
   @override
@@ -94,23 +98,72 @@ class _ItemSelectionPageState extends State<ItemSelectionPage> {
             SliverPadding(
               padding: const EdgeInsets.all(16),
               sliver: SliverToBoxAdapter(
-                child: LoadingElevatedButton(
-                  onPressed: state.getResult().isEmpty
-                      ? null
-                      : () async {
-                          if (widget.handleResult != null) {
-                            Navigator.of(context).pop(
-                              await widget.handleResult!(cubit.getResult()),
-                            );
-                          } else {
-                            Navigator.of(context).pop(cubit.getResult());
-                          }
-                        },
-                  child: Text(
-                    AppLocalizations.of(context)!.addNumberIngredients(
-                      state.getResult().length,
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: LoadingElevatedButton(
+                        onPressed: state.getResult().isEmpty
+                            ? null
+                            : () async {
+                                if (widget.handleResult != null) {
+                                  Navigator.of(context).pop(
+                                    await widget.handleResult!(
+                                        null, cubit.getResult()),
+                                  );
+                                } else {
+                                  Navigator.of(context)
+                                      .pop((null, cubit.getResult()));
+                                }
+                              },
+                        child: Text(
+                          AppLocalizations.of(context)!.addNumberIngredients(
+                            state.getResult().length,
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
+                    if (widget.shoppingLists.length > 1)
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8),
+                        child: LoadingElevatedButton(
+                          onPressed: state.getResult().isEmpty
+                              ? null
+                              : () async {
+                                  ShoppingList? list =
+                                      await showDialog<ShoppingList>(
+                                    context: context,
+                                    builder: (context) => SelectDialog(
+                                      title: AppLocalizations.of(context)!
+                                          .addNumberIngredients(
+                                              state.selectedItems.length),
+                                      cancelText:
+                                          AppLocalizations.of(context)!.cancel,
+                                      options: widget.shoppingLists
+                                          .map(
+                                            (e) => SelectDialogOption(
+                                              e,
+                                              e.name,
+                                            ),
+                                          )
+                                          .toList(),
+                                    ),
+                                  );
+                                  if (list != null) {
+                                    if (widget.handleResult != null) {
+                                      Navigator.of(context).pop(
+                                        await widget.handleResult!(
+                                            list, cubit.getResult()),
+                                      );
+                                    } else {
+                                      Navigator.of(context)
+                                          .pop((list, cubit.getResult()));
+                                    }
+                                  }
+                                },
+                          child: const Icon(Icons.shopping_bag_rounded),
+                        ),
+                      ),
+                  ],
                 ),
               ),
             ),

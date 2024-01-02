@@ -5,6 +5,7 @@ import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/models/planner.dart';
 import 'package:kitchenowl/models/recipe.dart';
+import 'package:kitchenowl/models/shoppinglist.dart';
 import 'package:kitchenowl/services/transaction_handler.dart';
 import 'package:kitchenowl/services/transactions/planner.dart';
 import 'package:kitchenowl/services/transactions/recipe.dart';
@@ -39,20 +40,27 @@ class RecipeCubit extends Cubit<RecipeState> {
   }
 
   Future<void> refresh() async {
-    final recipe = await TransactionHandler.getInstance()
+    final recipe = TransactionHandler.getInstance()
         .runTransaction(TransactionRecipeGetRecipe(recipe: state.recipe));
+    Future<List<ShoppingList>>? shoppingLists;
+    if (household != null) {
+      shoppingLists = TransactionHandler.getInstance()
+          .runTransaction(TransactionShoppingListGet(household: household!));
+    }
     emit(RecipeState(
-      recipe: recipe,
+      recipe: await recipe,
       updateState: state.updateState,
       selectedYields: state.selectedYields,
+      shoppingLists: shoppingLists != null ? await shoppingLists : const [],
     ));
   }
 
-  Future<void> addItemsToList() async {
-    if (household != null && household!.defaultShoppingList != null) {
+  Future<void> addItemsToList([ShoppingList? shoppingList]) async {
+    shoppingList ??= household?.defaultShoppingList;
+    if (shoppingList != null) {
       await TransactionHandler.getInstance()
           .runTransaction(TransactionShoppingListAddRecipeItems(
-        shoppinglist: household!.defaultShoppingList!,
+        shoppinglist: shoppingList,
         items: state.dynamicRecipe.items
             .where((item) => state.selectedItems.contains(item.name))
             .toList(),
@@ -85,18 +93,21 @@ class RecipeState extends Equatable {
   final Recipe dynamicRecipe;
   final int selectedYields;
   final UpdateEnum updateState;
+  final List<ShoppingList> shoppingLists;
 
   RecipeState.custom({
     required this.recipe,
     required this.selectedItems,
     this.selectedYields = 0,
     this.updateState = UpdateEnum.unchanged,
+    this.shoppingLists = const [],
   }) : dynamicRecipe = recipe.withYields(selectedYields);
 
   RecipeState({
     required this.recipe,
     this.updateState = UpdateEnum.unchanged,
     int? selectedYields,
+    this.shoppingLists = const [],
   })  : selectedYields = selectedYields ?? recipe.yields,
         dynamicRecipe = recipe.withYields(selectedYields ?? recipe.yields),
         selectedItems =
@@ -107,15 +118,23 @@ class RecipeState extends Equatable {
     List<String>? selectedItems,
     int? selectedYields,
     UpdateEnum? updateState,
+    List<ShoppingList>? shoppingLists,
   }) =>
       RecipeState.custom(
         recipe: recipe ?? this.recipe,
         selectedItems: selectedItems ?? this.selectedItems,
         selectedYields: selectedYields ?? this.selectedYields,
+        shoppingLists: shoppingLists ?? this.shoppingLists,
         updateState: updateState ?? this.updateState,
       );
 
   @override
-  List<Object?> get props =>
-      [recipe, selectedItems, selectedYields, dynamicRecipe, updateState];
+  List<Object?> get props => [
+        recipe,
+        selectedItems,
+        selectedYields,
+        dynamicRecipe,
+        shoppingLists,
+        updateState,
+      ];
 }

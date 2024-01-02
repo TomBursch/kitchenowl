@@ -5,11 +5,13 @@ import 'package:intl/intl.dart';
 import 'package:kitchenowl/cubits/household_cubit.dart';
 import 'package:kitchenowl/cubits/planner_cubit.dart';
 import 'package:kitchenowl/cubits/settings_cubit.dart';
+import 'package:kitchenowl/cubits/shoppinglist_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/models/recipe.dart';
+import 'package:kitchenowl/models/shoppinglist.dart';
 import 'package:kitchenowl/pages/item_selection_page.dart';
 import 'package:kitchenowl/widgets/recipe_card.dart';
 import 'package:responsive_builder/responsive_builder.dart';
@@ -359,29 +361,28 @@ class _PlannerPageState extends State<PlannerPage> {
     BuildContext context,
     PlannerCubit cubit,
   ) async {
-    await Navigator.of(context, rootNavigator: true).push<List<RecipeItem>>(
+    await Navigator.of(context, rootNavigator: true)
+        .push<(ShoppingList?, List<RecipeItem>)>(
       MaterialPageRoute(
         builder: (ctx) => ItemSelectionPage(
           selectText: AppLocalizations.of(ctx)!.addNumberIngredients,
           plans: (cubit.state as LoadedPlannerCubitState).recipePlans,
           title: AppLocalizations.of(ctx)!.addItemTitle,
-          handleResult: (res) async {
-            if (res.isNotEmpty &&
-                BlocProvider.of<HouseholdCubit>(context)
-                        .state
-                        .household
-                        .defaultShoppingList !=
-                    null) {
+          shoppingLists:
+              BlocProvider.of<ShoppinglistCubit>(context).state.shoppinglists,
+          handleResult: (list, res) async {
+            list ??= BlocProvider.of<HouseholdCubit>(context)
+                .state
+                .household
+                .defaultShoppingList;
+            if (res.isNotEmpty && list != null) {
               await cubit.addItemsToList(
-                BlocProvider.of<HouseholdCubit>(context)
-                    .state
-                    .household
-                    .defaultShoppingList!,
+                list,
                 res,
               );
             }
 
-            return res;
+            return (list, res);
           },
         ),
       ),

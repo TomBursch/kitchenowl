@@ -46,10 +46,7 @@ extension CategoryApi on ApiService {
   }
 
   Future<bool> deleteCategory(Category category) async {
-    final res = await delete(
-      baseRoute,
-      body: jsonEncode({'name': category.name}),
-    );
+    final res = await delete('$baseRoute/${category.id}');
 
     return res.statusCode == 200;
   }

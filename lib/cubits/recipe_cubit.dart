@@ -44,8 +44,10 @@ class RecipeCubit extends Cubit<RecipeState> {
         .runTransaction(TransactionRecipeGetRecipe(recipe: state.recipe));
     Future<List<ShoppingList>>? shoppingLists;
     if (household != null) {
-      shoppingLists = TransactionHandler.getInstance()
-          .runTransaction(TransactionShoppingListGet(household: household!));
+      shoppingLists = TransactionHandler.getInstance().runTransaction(
+        TransactionShoppingListGet(household: household!),
+        forceOffline: true,
+      );
     }
     emit(RecipeState(
       recipe: await recipe,

@@ -15,7 +15,7 @@ itemHousehold = Blueprint("item", __name__)
 @authorize_household()
 def getAllItems(household_id):
     return jsonify(
-        [e.obj_to_dict() for e in Item.all_by_name_with_filter(household_id)]
+        [e.obj_to_dict() for e in Item.all_from_household_by_name(household_id)]
     )
 
 

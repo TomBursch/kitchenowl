@@ -259,7 +259,6 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                             categories: state.categories,
                             shoppingList: state.selectedShoppinglist,
                             onRefresh: cubit.refresh,
-                            isDescriptionEditable: false,
                             isLoading: state is LoadingShoppinglistCubitState,
                           ),
                       ],

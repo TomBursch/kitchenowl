@@ -21,7 +21,6 @@ class ItemPage<T extends Item> extends StatefulWidget {
   final Household? household;
   final ShoppingList? shoppingList;
   final List<Category> categories;
-  final bool isDescriptionEditable;
 
   const ItemPage({
     super.key,
@@ -29,7 +28,6 @@ class ItemPage<T extends Item> extends StatefulWidget {
     this.shoppingList,
     this.household,
     this.categories = const [],
-    this.isDescriptionEditable = true,
   });
 
   @override
@@ -125,8 +123,7 @@ class _ItemPageState<T extends Item> extends State<ItemPage<T>> {
               onRefresh: cubit.refresh,
               child: CustomScrollView(
                 slivers: [
-                  if (widget.isDescriptionEditable &&
-                      widget.item is ItemWithDescription)
+                  if (widget.item is ItemWithDescription)
                     SliverPadding(
                       padding: const EdgeInsets.all(16),
                       sliver: SliverToBoxAdapter(
@@ -162,10 +159,7 @@ class _ItemPageState<T extends Item> extends State<ItemPage<T>> {
                   if (widget.item is! RecipeItem)
                     SliverPadding(
                       padding: EdgeInsets.only(
-                        top: (widget.isDescriptionEditable &&
-                                widget.item is ItemWithDescription)
-                            ? 0
-                            : 16,
+                        top: (widget.item is ItemWithDescription) ? 0 : 16,
                         bottom: 16,
                         left: 16,
                         right: 16,

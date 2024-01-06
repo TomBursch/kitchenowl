@@ -15,11 +15,13 @@ import 'package:responsive_builder/responsive_builder.dart';
 class AddUpdateExpensePage extends StatefulWidget {
   final Household household;
   final Expense? expense;
+  final List<String>? suggestedNames;
 
   AddUpdateExpensePage({
     super.key,
     this.expense,
     required this.household,
+    this.suggestedNames,
   }) : assert(household.member != null);
 
   @override
@@ -27,7 +29,6 @@ class AddUpdateExpensePage extends StatefulWidget {
 }
 
 class _AddUpdateExpensePageState extends State<AddUpdateExpensePage> {
-  final TextEditingController nameController = TextEditingController();
   final TextEditingController amountController = TextEditingController();
 
   late AddUpdateExpenseCubit cubit;
@@ -51,7 +52,6 @@ class _AddUpdateExpensePageState extends State<AddUpdateExpensePage> {
         ),
       );
     } else {
-      nameController.text = widget.expense!.name;
       amountController.text = widget.expense!.amount.abs().toStringAsFixed(2);
       cubit = AddUpdateExpenseCubit(widget.household, widget.expense!);
     }
@@ -60,7 +60,6 @@ class _AddUpdateExpensePageState extends State<AddUpdateExpensePage> {
   @override
   void dispose() {
     cubit.close();
-    nameController.dispose();
     amountController.dispose();
     super.dispose();
   }
@@ -117,13 +116,34 @@ class _AddUpdateExpensePageState extends State<AddUpdateExpensePage> {
                           setImage: cubit.setImage,
                         ),
                       ),
-                      TextField(
-                        controller: nameController,
-                        onChanged: (s) => cubit.setName(s),
-                        textInputAction: TextInputAction.next,
-                        textCapitalization: TextCapitalization.sentences,
-                        decoration: InputDecoration(
-                          labelText: AppLocalizations.of(context)!.name,
+                      Autocomplete<String>(
+                        optionsBuilder: (textEditingValue) {
+                          if (widget.suggestedNames == null ||
+                              textEditingValue.text.isEmpty) {
+                            return const Iterable.empty();
+                          }
+
+                          return widget.suggestedNames!
+                              .where(
+                                (e) => e.toLowerCase().startsWith(
+                                    textEditingValue.text.toLowerCase()),
+                              )
+                              .toSet()
+                              .take(5);
+                        },
+                        initialValue:
+                            TextEditingValue(text: widget.expense?.name ?? ""),
+                        fieldViewBuilder: (context, textEditingController,
+                                focusNode, onFieldSubmitted) =>
+                            TextField(
+                          controller: textEditingController,
+                          focusNode: focusNode,
+                          onChanged: (s) => cubit.setName(s),
+                          textInputAction: TextInputAction.next,
+                          textCapitalization: TextCapitalization.sentences,
+                          decoration: InputDecoration(
+                            labelText: AppLocalizations.of(context)!.name,
+                          ),
                         ),
                       ),
                       const SizedBox(height: 16),

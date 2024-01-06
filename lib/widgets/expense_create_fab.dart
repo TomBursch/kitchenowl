@@ -15,6 +15,12 @@ class ExpenseCreateFab extends StatelessWidget {
       openBuilder: (BuildContext ctx, VoidCallback _) {
         return AddUpdateExpensePage(
           household: BlocProvider.of<HouseholdCubit>(context).state.household,
+          suggestedNames: BlocProvider.of<ExpenseListCubit>(context)
+              .state
+              .expenses
+              .map((e) => e.name.trim())
+              .take(25)
+              .toList(),
         );
       },
       onClosed: (data) {

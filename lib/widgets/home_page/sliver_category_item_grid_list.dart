@@ -20,7 +20,6 @@ class SliverCategoryItemGridList<T extends Item> extends StatefulWidget {
   final ShoppingList? shoppingList; // forwarded to item page on long press
   final bool Function(T)? selected;
   final bool isLoading;
-  final bool isDescriptionEditable;
 
   const SliverCategoryItemGridList({
     super.key,
@@ -34,7 +33,6 @@ class SliverCategoryItemGridList<T extends Item> extends StatefulWidget {
     this.shoppingList,
     this.selected,
     this.isLoading = false,
-    this.isDescriptionEditable = true,
   });
 
   @override
@@ -97,7 +95,6 @@ class _SliverCategoryItemGridListState<T extends Item>
                   shoppingList: widget.shoppingList,
                   selected: widget.selected,
                   isLoading: widget.isLoading,
-                  isDescriptionEditable: widget.isDescriptionEditable,
                 ),
         ),
       ],

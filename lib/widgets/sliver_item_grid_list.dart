@@ -23,7 +23,6 @@ class SliverItemGridList<T extends Item> extends StatelessWidget {
       household; // forwarded to item page on long press for offline functionality
   final bool Function(T)? selected;
   final bool isLoading;
-  final bool isDescriptionEditable;
 
   const SliverItemGridList({
     super.key,
@@ -36,7 +35,6 @@ class SliverItemGridList<T extends Item> extends StatelessWidget {
     this.shoppingList,
     this.selected,
     this.isLoading = false,
-    this.isDescriptionEditable = true,
   });
 
   @override
@@ -73,7 +71,6 @@ class SliverItemGridList<T extends Item> extends StatelessWidget {
                                 household: household,
                                 shoppingList: shoppingList,
                                 categories: categories ?? const [],
-                                isDescriptionEditable: isDescriptionEditable,
                               ),
                             ),
                           ),

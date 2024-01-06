@@ -279,7 +279,8 @@
       "icon": "cereal"
     },
     "cornstarch": {
-      "category": "dairy"
+      "category": "dairy",
+      "icon": "flour"
     },
     "cornys": {},
     "corriander": {
@@ -288,7 +289,9 @@
     },
     "cotton_rounds": {},
     "cough_drops": {},
-    "couscous": {},
+    "couscous": {
+      "icon": "lentil"
+    },
     "covid_rapid_test": {},
     "cow's_milk": {
       "category": "dairy",
@@ -727,7 +730,9 @@
       "icon": "paprika"
     },
     "paprika_seasoning": {},
-    "pardina_lentils_dried": {},
+    "pardina_lentils_dried": {
+      "icon": "lentil"
+    },
     "parmesan": {
       "category": "dairy",
       "icon": "cheese"
@@ -893,7 +898,8 @@
     "rice_vinegar": {},
     "ricotta": {},
     "rinse_tabs": {
-      "category": "hygiene"
+      "category": "hygiene",
+      "icon": "soap_bubble"
     },
     "rinsing_agent": {
       "category": "hygiene"
@@ -930,6 +936,7 @@
       "icon": "sausage"
     },
     "savoy_cabbage": {
+      "category": "fruits_vegetables",
       "icon": "cabbage"
     },
     "scallion": {},
@@ -1032,7 +1039,8 @@
       "category": "hygiene"
     },
     "sponges": {
-      "category": "hygiene"
+      "category": "hygiene",
+      "icon": "soap_bubble"
     },
     "spreading_cream": {
       "category": "dairy"
@@ -1211,7 +1219,9 @@
       "icon": "nachos"
     },
     "yeast": {},
-    "yeast_flakes": {},
+    "yeast_flakes": {
+      "icon": "lentil"
+    },
     "yoghurt": {
       "category": "dairy",
       "icon": "yogurt"

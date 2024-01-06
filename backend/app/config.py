@@ -74,6 +74,7 @@ APPLE_CLIENT_SECRET = os.getenv("APPLE_CLIENT_SECRET")
 
 SUPPORTED_LANGUAGES = {
     "en": "English",
+    "en_AU": "Australian English",
     "cs": "čeština",
     "da": "Dansk",
     "de": "Deutsch",

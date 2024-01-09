@@ -1,0 +1,24 @@
+version: "3"
+services:
+  front:
+    image: tombursch/kitchenowl-web:latest
+    restart: unless-stopped
+    # environment:
+    #   - BACK_URL=back:5000 # Change this if you rename the containers
+    ports:
+      - "80:80"
+    depends_on:
+      - back
+  back:
+    image: tombursch/kitchenowl:latest
+    restart: unless-stopped
+    # ports: # Should only be needed if you're not using docker-compose
+    #   - "5000:5000" # uwsgi protocol
+    environment:
+      - JWT_SECRET_KEY=PLEASE_CHANGE_ME
+      # - FRONT_URL=http://localhost # Optional should not be changed unless you know what youre doing
+    volumes:
+      - kitchenowl_data:/data
+
+volumes:
+  kitchenowl_data:

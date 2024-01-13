@@ -13,17 +13,24 @@ import 'package:kitchenowl/services/transactions/shoppinglist.dart';
 
 class RecipeCubit extends Cubit<RecipeState> {
   final Household? household;
+  final TransactionHandler _transactionHandler;
 
-  RecipeCubit({this.household, required Recipe recipe, int? selectedYields})
-      : super(RecipeState(recipe: recipe, selectedYields: selectedYields)) {
+  RecipeCubit(Household? household, Recipe recipe, int? selectedYields)
+    : this.forTesting(TransactionHandler.getInstance(), household, recipe, selectedYields);
+
+  RecipeCubit.forTesting(
+      TransactionHandler transactionHandler,
+      this.household,
+      Recipe recipe,
+      int? selectedYields)
+      : _transactionHandler = transactionHandler,
+        super(RecipeState(recipe: recipe, selectedYields: selectedYields)) {
     refresh();
   }
 
   void itemSelected(RecipeItem item) {
-    final List<String> selectedItems = List.from(state.selectedItems);
-    if (selectedItems.contains(item.name)) {
-      selectedItems.remove(item.name);
-    } else {
+    final Set<String> selectedItems = Set.from(state.selectedItems);
+    if (!selectedItems.remove(item.name)) {
       selectedItems.add(item.name);
     }
     emit(state.copyWith(selectedItems: selectedItems));
@@ -40,11 +47,11 @@ class RecipeCubit extends Cubit<RecipeState> {
   }
 
   Future<void> refresh() async {
-    final recipe = TransactionHandler.getInstance()
+    final recipe = _transactionHandler
         .runTransaction(TransactionRecipeGetRecipe(recipe: state.recipe));
     Future<List<ShoppingList>>? shoppingLists;
     if (household != null) {
-      shoppingLists = TransactionHandler.getInstance().runTransaction(
+      shoppingLists = _transactionHandler.runTransaction(
         TransactionShoppingListGet(household: household!),
         forceOffline: true,
       );
@@ -60,7 +67,7 @@ class RecipeCubit extends Cubit<RecipeState> {
   Future<void> addItemsToList([ShoppingList? shoppingList]) async {
     shoppingList ??= household?.defaultShoppingList;
     if (shoppingList != null) {
-      await TransactionHandler.getInstance()
+      await _transactionHandler
           .runTransaction(TransactionShoppingListAddRecipeItems(
         shoppinglist: shoppingList,
         items: state.dynamicRecipe.items
@@ -72,8 +79,7 @@ class RecipeCubit extends Cubit<RecipeState> {
 
   Future<void> addRecipeToPlanner({int? day, bool updateOnAdd = false}) async {
     if (household != null) {
-      await TransactionHandler.getInstance()
-          .runTransaction(TransactionPlannerAddRecipe(
+      await _transactionHandler.runTransaction(TransactionPlannerAddRecipe(
         household: household!,
         recipePlan: RecipePlan(
           recipe: state.recipe,
@@ -89,8 +95,8 @@ class RecipeCubit extends Cubit<RecipeState> {
   }
 }
 
-class RecipeState extends Equatable {
-  final List<String> selectedItems;
+final class RecipeState extends Equatable {
+  final Set<String> selectedItems;
   final Recipe recipe;
   final Recipe dynamicRecipe;
   final int selectedYields;
@@ -113,11 +119,11 @@ class RecipeState extends Equatable {
   })  : selectedYields = selectedYields ?? recipe.yields,
         dynamicRecipe = recipe.withYields(selectedYields ?? recipe.yields),
         selectedItems =
-            recipe.items.where((e) => !e.optional).map((e) => e.name).toList();
+            recipe.items.where((e) => !e.optional).map((e) => e.name).toSet();
 
   RecipeState copyWith({
     Recipe? recipe,
-    List<String>? selectedItems,
+    Set<String>? selectedItems,
     int? selectedYields,
     UpdateEnum? updateState,
     List<ShoppingList>? shoppingLists,

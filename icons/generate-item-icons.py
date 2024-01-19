@@ -76,8 +76,7 @@ class SvgToFontGenerator():
             if os.path.exists(directory):
                 ret_directories.append(directory)
             else:
-                sys.stderr("path \"%s\" for source svg files does not exist." % \
-                            directory)
+                print(f"path \"{directory}\" for source svg files does not exist.\n")
         if len(ret_directories) == 0:
             raise NoSourceSvgDirectoriesException("No valid paths for source \
                                                   svg files provided")
@@ -105,10 +104,11 @@ class SvgToFontGenerator():
         font.save_to_file(self.target_ttf_file)
 
 if __name__ == "__main__":
-    fontGenerator = SvgToFontGenerator(['./icons/icons8', './icons'], './fonts/Items.ttf')
+    folderPath = os.path.dirname(os.path.abspath(__file__))
+    fontGenerator = SvgToFontGenerator([folderPath + '/icons8', folderPath + '/'], folderPath + '/../kitchenowl/fonts/Items.ttf')
     fontGenerator.generate()
     names = [svg.name.lower().replace("-", "_").replace("icons8_","") for svg in fontGenerator.source_svg_files]
-    with open('./lib/item_icons.dart', 'w') as f:
+    with open(folderPath + '/../kitchenowl/lib/item_icons.dart', 'w') as f:
         f.write("""
 /* generated code, do not edit */
 // ignore_for_file: constant_identifier_names

@@ -1,12 +1,11 @@
-name: CI deploy to Docker Hub
+name: CI deploy backend to Docker Hub
 
 # Controls when the workflow will run
 on:
-  # Triggers the workflow on push events of tags
+  # Triggers the workflow on push events but only for tags
   push:
     branches: [ main ]
     paths:
-      - kitchenowl/**
       - backend/**
     tags:
       - "v*"
@@ -40,7 +39,7 @@ jobs:
           fi
         env:
           REF: ${{ github.ref }}
-          BASE_TAG: ${{ secrets.DOCKER_HUB_USERNAME }}/kitchenowl
+          BASE_TAG: ${{ secrets.DOCKER_HUB_USERNAME }}/kitchenowl-backend
 
       - name: Login to Docker Hub
         uses: docker/login-action@v3
@@ -60,7 +59,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: ./
-          file: ./Dockerfile
+          file: backend/Dockerfile
           platforms: linux/amd64,linux/arm64 #,linux/arm/v7 #,linux/386,linux/arm/v6
           push: true
           tags: ${{ env.tags }}

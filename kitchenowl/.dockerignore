@@ -2,18 +2,13 @@
 .git
 .github
 
-# KitchenOwl
-icons/
-docs/
-kitchenowl/fedora/
-kitchenowl/ios/
-kitchenowl/android/
-kitchenowl/linux/
-kitchenowl/macos/
-kitchenowl/windows/
-
-backend/upload/
-backend/database.db
+# Docker ignore (include only web files)
+fedora/
+ios/
+android/
+linux/
+macos/
+windows/
 
 # .gitignore here:
 # Miscellaneous
@@ -98,6 +93,9 @@ app.*.symbols
 
 # MkDocs
 site/
+
+# KitchenOwl
+icons/
 
 # Development
 .devcontainer

@@ -2,6 +2,7 @@
 .git
 .github
 database.db
+upload/
 docs
 
 # Development

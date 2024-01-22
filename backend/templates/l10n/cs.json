@@ -1,18 +1,22 @@
 {
   "categories": {
-    "bread": "🍞 Chlebové zboží",
-    "canned": "🥫 Konzervované jídlo",
-    "dairy": "🥛 Mlékárna",
+    "bread": "🍞 Pečivo",
+    "canned": "🥫 Konzervované zboží",
+    "dairy": "🥛 Mléčné výrobky",
     "drinks": "🍹 Nápoje",
     "freezer": "❄️ Mrazák",
     "fruits_vegetables": "🥬 Ovoce a zelenina",
-    "grain": "🥟 Obilné výrobky",
+    "grain": "🥟 Těstoviny",
     "hygiene": "🚽 Drogerie",
     "refrigerated": "💧 Chlazené",
     "snacks": "🥜 Občerstvení"
   },
   "items": {
+    "agave_syrup": "Agávový sirup",
+    "amaretto": "Amaretto",
     "apple": "Jablko",
+    "apple_pulp": "Jablečné pyré",
+    "applesauce": "Jablečná šťáva",
     "apricots": "Meruňky",
     "arugula": "Rukola",
     "asian_egg_noodles": "Asijské vaječné nudle",

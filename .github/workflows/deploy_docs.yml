@@ -6,6 +6,7 @@ on:
     paths:
       - docs/**
       - mkdocs.yml
+      - docs-requirements.txt
   workflow_dispatch:
 
 jobs:

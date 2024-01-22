@@ -3,10 +3,14 @@ name:  Quality
 on:
   push:
     branches: [main]
+    paths:
+      - kitchenowl/**
   pull_request:
     types:
       - opened
       - synchronize
+    paths:
+      - kitchenowl/**
 
 jobs:
   analyze:
@@ -19,10 +23,14 @@ jobs:
         with:
           channel: stable
       - run: flutter packages get
+        working-directory: kitchenowl
 
       # Run analyze
       - run: flutter analyze
+        working-directory: kitchenowl
       - uses: leancodepl/dart-problem-matcher@main
+        with:
+          working-directory: kitchenowl
   test:
     name: Tests
     runs-on: ubuntu-latest
@@ -34,13 +42,15 @@ jobs:
         with:
           channel: stable
       - run: flutter packages get
+        working-directory: kitchenowl
 
       # Run tests
       - run: flutter test --machine > test-results.json
+        working-directory: kitchenowl
 
       # upload test results
       - uses: actions/upload-artifact@v3
         if: success() || failure() # run this step even if previous step failed
         with:
           name: test-results
-          path: test-results.json
+          path: kitchenowl/test-results.json

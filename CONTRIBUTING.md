@@ -27,12 +27,6 @@ The `description` is a descriptive summary of the change the PR will make.
 - All PRs should be rebased (with main) and commits squashed prior to the final merge process
 - One PR per fix or feature
 
-### Setup & Install
-- [Install flutter](https://flutter.dev/docs/get-started/install)
-- Install dependencies: `flutter packages get`
-- Create empty environment file: `touch .env`
-- Run app: `flutter run`
-
 ### Git Commit Message Style
 
 This project uses the [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/#summary) format.

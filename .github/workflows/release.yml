@@ -52,31 +52,31 @@ jobs:
           - os: macos-latest
             target: macOS
             build_target: macos
-            build_path: build/macos/Build/Products/Release
+            build_path: kitchenowl/build/macos/Build/Products/Release
             asset_extension: .zip
             asset_content_type: application/zip
           - os: windows-latest
             target: Windows
             build_target: windows
-            build_path: build\windows\runner\Release
+            build_path: kitchenowl/build\windows\runner\Release
             asset_extension: .zip
             asset_content_type: application/zip
           - os: ubuntu-latest
             target: Linux
             build_target: linux
-            build_path: build/linux/x64/release/bundle
+            build_path: kitchenowl/build/linux/x64/release/bundle
             asset_extension: .tar.gz
             asset_content_type: application/gzip
           - os: ubuntu-latest
             target: Android
             build_target: apk
-            build_path: build/app/outputs/flutter-apk
+            build_path: kitchenowl/build/app/outputs/flutter-apk
             asset_extension: .apk
             asset_content_type: application/vnd.android.package-archive
           - os: ubuntu-latest
             target: Debian
             build_target: linux
-            build_path: build/debian/release
+            build_path: kitchenowl/build/debian/release
             asset_extension: .deb
             asset_content_type: application/vnd.debian.binary-package
           - os: ubuntu-latest
@@ -85,13 +85,13 @@ jobs:
               options: --group-add 135
             target: Fedora
             build_target: linux
-            build_path: build/fedora/release
+            build_path: kitchenowl/build/fedora/release
             asset_extension: .rpm
             asset_content_type: application/x-rpm
           - os: ubuntu-latest
             target: Web
             build_target: web --dart-define=FLUTTER_WEB_CANVASKIT_URL=/canvaskit/
-            build_path: build/web
+            build_path: kitchenowl/build/web
             asset_extension: .tar.gz
             asset_content_type: application/gzip
       # Disable fail-fast as we want results from all even if one fails.
@@ -133,7 +133,6 @@ jobs:
           git clone https://github.com/flutter/flutter.git -b stable
           echo "/usr/local/src/flutter/bin" >> $GITHUB_PATH
           export PATH="$PATH:/usr/local/src/flutter/bin"
-          flutter doctor
         working-directory: /usr/local/src
 
 
@@ -164,10 +163,11 @@ jobs:
           KEYSTORE_KEY_ALIAS: ${{ secrets.KEYSTORE_KEY_ALIAS }}
           KEYSTORE_KEY_PASSWORD: ${{ secrets.KEYSTORE_KEY_PASSWORD }}
           KEYSTORE_STORE_PASSWORD: ${{ secrets.KEYSTORE_STORE_PASSWORD }}
-        working-directory: android
+        working-directory: kitchenowl/android
 
       # Build the application.
       - run: flutter build -v ${{ matrix.build_target }} --release
+        working-directory: kitchenowl
 
       # Package the build.
       - name: Copy VC redistributables to release directory for Windows
@@ -176,6 +176,7 @@ jobs:
           Copy-Item (vswhere -latest -find 'VC\Redist\MSVC\*\x64\*\msvcp140.dll') .
           Copy-Item (vswhere -latest -find 'VC\Redist\MSVC\*\x64\*\vcruntime140.dll') .
           Copy-Item (vswhere -latest -find 'VC\Redist\MSVC\*\x64\*\vcruntime140_1.dll') .
+        working-directory: kitchenowl
       - name: Rename build for Android
         if: matrix.target == 'Android'
         run: mv app-release.apk $GITHUB_WORKSPACE/kitchenowl_${{ matrix.target }}.apk
@@ -195,7 +196,7 @@ jobs:
       - name: Package build for debian
         if: matrix.target == 'Debian'
         run: ./build.sh
-        working-directory: debian
+        working-directory: kitchenowl/debian
       - name: Rename build for debian
         if: matrix.target == 'Debian'
         run: mv kitchenowl.deb $GITHUB_WORKSPACE/kitchenowl_${{ matrix.target }}.deb
@@ -203,7 +204,7 @@ jobs:
       - name: Package build for Fedora
         if: matrix.target == 'Fedora'
         run: ./build.sh
-        working-directory: fedora
+        working-directory: kitchenowl/fedora
       - name: Rename build for fedora
         if: matrix.target == 'Fedora'
         run: mv KitchenOwl.x86_64.rpm $GITHUB_WORKSPACE/kitchenowl_${{ matrix.target }}.rpm

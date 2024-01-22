@@ -6,20 +6,15 @@ There are multiple ways you can install the KitchenOwl server.
 
 The official installation method is using [Docker](https://docs.docker.com/engine/install/) and [docker-compose](https://docs.docker.com/compose/):
 
-1. Download the [docker-compose.yml](https://github.com/TomBursch/kitchenowl-backend/blob/main/docker-compose.yml)
+1. Download the [docker-compose.yml](https://github.com/TomBursch/kitchenowl/blob/main/docker-compose.yml)
 ```yml
 version: "3"
 services:
-  front:
-    image: tombursch/kitchenowl-web:latest
-    restart: unless-stopped
-    ports:
-      - "80:80"
-    depends_on:
-      - back
   back:
     image: tombursch/kitchenowl:latest
     restart: unless-stopped
+    ports:
+      - "80:8080"
     environment:
       - JWT_SECRET_KEY=PLEASE_CHANGE_ME
     volumes:
@@ -29,7 +24,7 @@ volumes:
   kitchenowl_data:
 ```
 2. Change the default value for `JWT_SECRET_KEY`
-3. If you change the container names, want to use PostgreSQL, or want to set other settings take a look at the [advanced](advanced.md) options
+3. If you want to use PostgreSQL, use separate containers for front and backend, or want to set other settings take a look at the [advanced](advanced.md) options
 4. Run `docker compose up -d`
 
 !!! danger "Important"

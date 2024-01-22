@@ -1,0 +1,15 @@
+version: "3"
+services:
+  back:
+    image: tombursch/kitchenowl:latest
+    restart: unless-stopped
+    ports:
+      - "80:8080"
+    environment:
+      - JWT_SECRET_KEY=PLEASE_CHANGE_ME
+      # - FRONT_URL=http://localhost # Optional take a look at https://docs.kitchenowl.org/self-hosting/advanced/ for more info
+    volumes:
+      - kitchenowl_data:/data
+
+volumes:
+  kitchenowl_data:

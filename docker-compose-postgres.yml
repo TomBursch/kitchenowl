@@ -17,19 +17,11 @@ services:
       timeout: 60s
       retries: 5
       start_period: 80s
-  front:
-    image: tombursch/kitchenowl-web:latest
-    restart: unless-stopped
-    ports:
-      - "80:80"
-    depends_on:
-      - back
-    networks:
-      - default
   back:
     image: tombursch/kitchenowl:latest
     restart: unless-stopped
-    #command: wsgi.ini --gevent 2000 #default: 100
+    ports:
+      - "80:8080"
     networks:
       - default
     environment:

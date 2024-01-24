@@ -392,7 +392,7 @@
       "category": "dairy",
       "icon": "flour"
     },
-    "flushing": {},
+    "conditioner": {},
     "fresh_chili_pepper": {
       "category": "fruits_vegetables"
     },
@@ -1231,9 +1231,6 @@
     },
     "yum_yum": {
       "icon": "noodles"
-    },
-    "zewa": {
-      "category": "hygiene"
     },
     "zinc_cream": {
       "category": "hygiene"

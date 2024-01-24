@@ -149,7 +149,7 @@
     "ffp2": "N95 face masks",
     "fish_sticks": "Fish fingers",
     "flour": "Flour",
-    "flushing": "Conditioner",
+    "conditioner": "Conditioner",
     "fresh_chili_pepper": "Fresh chillies",
     "frozen_berries": "Frozen berries",
     "frozen_broccoli": "Frozen broccoli",
@@ -479,7 +479,6 @@
     "yoghurt": "Yoghurt",
     "yogurt": "Yoghurt",
     "yum_yum": "Yum Yum",
-    "zewa": "Toilet paper",
     "zinc_cream": "Zinc sunscreen",
     "zucchini": "Zucchini"
   }

@@ -160,7 +160,7 @@
     "ffp2": "FFP2",
     "fish_sticks": "Fischstäbchen",
     "flour": "Mehl",
-    "flushing": "Spülung",
+    "conditioner": "Spülung",
     "fresh_chili_pepper": "Frische Chilischote",
     "frozen_berries": "TK Beeren",
     "frozen_broccoli": "TK Brokkoli",
@@ -493,7 +493,6 @@
     "yoghurt": "Joghurt",
     "yogurt": "Joghurt",
     "yum_yum": "Yum Yum",
-    "zewa": "Zewa",
     "zinc_cream": "Zinkcreme",
     "zucchini": "Zucchini"
   }

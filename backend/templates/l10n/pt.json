@@ -160,7 +160,7 @@
     "ffp2": "FFP2",
     "fish_sticks": "Douradinhos",
     "flour": "Farinha",
-    "flushing": "Lavagem",
+    "conditioner": "Lavagem",
     "fresh_chili_pepper": "Pimenta fresca",
     "frozen_berries": "Bagas congeladas",
     "frozen_broccoli": "Brócolos congelados",
@@ -493,7 +493,6 @@
     "yoghurt": "Iogurte",
     "yogurt": "Iogurte",
     "yum_yum": "Yum Yum",
-    "zewa": "Zewa",
     "zinc_cream": "Creme de zinco",
     "zucchini": "Courgette"
   }

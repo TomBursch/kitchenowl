@@ -152,7 +152,7 @@
     "ffp2": "FFP2 maszk",
     "fish_sticks": "Halrudacskák",
     "flour": "Liszt",
-    "flushing": "Lefolyótisztitó",
+    "conditioner": "Lefolyótisztitó",
     "fresh_chili_pepper": "Friss chili paprika",
     "frozen_berries": "Fagyasztott bogyók",
     "frozen_fruit": "Fagyasztott gyümölcsök",
@@ -474,7 +474,6 @@
     "yoghurt": "Joghurt",
     "yogurt": "Joghurt",
     "yum_yum": "Yum Yum",
-    "zewa": "Zewa",
     "zinc_cream": "Cink krém",
     "zucchini": "Cukkini"
   }

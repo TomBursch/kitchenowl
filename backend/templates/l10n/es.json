@@ -160,7 +160,7 @@
     "ffp2": "FFP2",
     "fish_sticks": "Palitos de pescado",
     "flour": "Harina",
-    "flushing": "Acondicionador",
+    "conditioner": "Acondicionador",
     "fresh_chili_pepper": "Guindilla fresca",
     "frozen_berries": "Bayas congeladas",
     "frozen_broccoli": "Brócoli congelado",
@@ -493,7 +493,6 @@
     "yoghurt": "Yogur",
     "yogurt": "Yogur",
     "yum_yum": "Ñam Ñam",
-    "zewa": "Zewa",
     "zinc_cream": "Crema de zinc",
     "zucchini": "Calabacín"
   }

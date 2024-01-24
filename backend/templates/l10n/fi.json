@@ -160,7 +160,7 @@
     "ffp2": "FFP2-maskit",
     "fish_sticks": "Kalapuikot",
     "flour": "Jauhot",
-    "flushing": "Huuhtelu",
+    "conditioner": "Huuhtelu",
     "fresh_chili_pepper": "Tuore chilipippuri",
     "frozen_berries": "Pakastemarjat",
     "frozen_broccoli": "Pakasteparsakaali",
@@ -493,7 +493,6 @@
     "yoghurt": "Jogurtti",
     "yogurt": "Jogurtti",
     "yum_yum": "Nami nami",
-    "zewa": "Zewa",
     "zinc_cream": "Sinkkivoide",
     "zucchini": "Kesäkurpitsa"
   }

@@ -160,7 +160,7 @@
     "ffp2": "FFP2",
     "fish_sticks": "Bâtonnets de poisson",
     "flour": "Farine",
-    "flushing": "Chasse d'eau",
+    "conditioner": "Chasse d'eau",
     "fresh_chili_pepper": "Piment cili frais",
     "frozen_berries": "Baies congelées",
     "frozen_broccoli": "Brocoli surgelé",
@@ -493,7 +493,6 @@
     "yoghurt": "Yaourt",
     "yogurt": "Yogourt",
     "yum_yum": "Miam miam",
-    "zewa": "Zewa",
     "zinc_cream": "Crème de zinc",
     "zucchini": "Courgettes"
   }

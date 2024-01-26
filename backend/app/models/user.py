@@ -11,8 +11,8 @@ class User(db.Model, DbModelMixin, TimestampMixin):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(128))
-    username = db.Column(db.String(256), unique=True, nullable=False)
-    email = db.Column(db.String(256), unique=True, nullable=True)
+    username = db.Column(db.String(256), unique=True, nullable=False, index=True,)
+    email = db.Column(db.String(256), unique=True, nullable=True, index=True,)
     password = db.Column(db.String(256), nullable=True)
     photo = db.Column(db.String(), db.ForeignKey("file.filename", use_alter=True))
     admin = db.Column(db.Boolean(), default=False)

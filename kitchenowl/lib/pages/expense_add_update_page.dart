@@ -133,6 +133,7 @@ class _AddUpdateExpensePageState extends State<AddUpdateExpensePage> {
                         },
                         initialValue:
                             TextEditingValue(text: widget.expense?.name ?? ""),
+                        onSelected: (s) => cubit.setName(s),
                         fieldViewBuilder: (context, textEditingController,
                                 focusNode, onFieldSubmitted) =>
                             TextField(

@@ -417,7 +417,7 @@
   "helpTranslate": "Aiuta a tradurre",
   "household": "Domestico",
   "householdDelete": "Elimina la famiglia",
-  "householdDeleteConfirmation": "Sei sicuro/sicura di voler eliminare {household}? Questo rimuoverà tutti gli oggetti, le ricette e le spese.",
+  "householdDeleteConfirmation": "Sei sicuro di voler eliminare {household}? Ciò eliminerà tutti gli articoli, le ricette e le spese associate a quella famiglia.",
   "householdEmpty": "Nessuna famiglia, inizia creandone una!",
   "householdLeave": "Lascia la famiglia",
   "householdLeaveConfirmation": "Sei sicuro di voler abbandonare {household}?",

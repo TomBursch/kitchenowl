@@ -154,6 +154,9 @@
   "@languageSelect": {},
   "@larger": {},
   "@lastUsed": {},
+  "@link": {
+    "description": "As in link social account (e.g. Google)"
+  },
   "@list": {},
   "@lltCreate": {},
   "@lltDelete": {},
@@ -441,6 +444,7 @@
   "languageSelect": "Välj ett språk",
   "larger": "Större",
   "lastUsed": "Senast använd",
+  "link": "Länk",
   "list": "Lista",
   "lltCreate": "Skapa en lång livad token",
   "lltDelete": "Ta bort långlivad token",

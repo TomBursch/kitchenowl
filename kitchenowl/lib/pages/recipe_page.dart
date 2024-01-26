@@ -161,7 +161,7 @@ class _RecipePageState extends State<RecipePage> {
 
           final right = SliverWithPinnedFooter(
             sliver: SliverMainAxisGroup(slivers: [
-              if (state.recipe.yields > 0 && state.recipe.items.isNotEmpty)
+              if (state.recipe.yields > 0)
                 SliverPadding(
                   padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
                   sliver: SliverToBoxAdapter(
@@ -229,7 +229,8 @@ class _RecipePageState extends State<RecipePage> {
               child: Column(
                 children: [
                   if (widget.household != null &&
-                      widget.household!.defaultShoppingList != null)
+                      widget.household!.defaultShoppingList != null &&
+                      state.recipe.items.isNotEmpty)
                     Padding(
                       padding: const EdgeInsets.all(16),
                       child: BlocBuilder<RecipeCubit, RecipeState>(

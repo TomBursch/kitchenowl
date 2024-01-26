@@ -47,7 +47,6 @@ class RenderSliverWithPinnedFooter extends RenderSliver
       maxPaintExtent: sliver.geometry!.maxPaintExtent + footer.size.height,
       maxScrollObstructionExtent: sliver.geometry!.maxScrollObstructionExtent,
       hitTestExtent: paintExtent,
-      visible: sliver.geometry!.visible,
       hasVisualOverflow: sliver.geometry!.hasVisualOverflow,
       scrollOffsetCorrection: sliver.geometry!.scrollOffsetCorrection,
       cacheExtent: cacheExtent,

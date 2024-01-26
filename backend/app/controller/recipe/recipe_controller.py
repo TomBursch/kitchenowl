@@ -202,30 +202,30 @@ def scrapeRecipe(args, household_id):
     recipe.name = scraper.title()
     try:
         recipe.time = int(scraper.total_time())
-    except (NotImplementedError, ValueError, SchemaOrgException):
+    except (NotImplementedError, ValueError, AttributeError, SchemaOrgException):
         pass
     try:
         recipe.cook_time = int(scraper.cook_time())
-    except (NotImplementedError, ValueError, SchemaOrgException):
+    except (NotImplementedError, ValueError, AttributeError, SchemaOrgException):
         pass
     try:
         recipe.prep_time = int(scraper.prep_time())
-    except (NotImplementedError, ValueError, SchemaOrgException):
+    except (NotImplementedError, ValueError, AttributeError, SchemaOrgException):
         pass
     try:
         yields = re.search(r"\d*", scraper.yields())
         if yields:
             recipe.yields = int(yields.group())
-    except (NotImplementedError, ValueError, SchemaOrgException):
+    except (NotImplementedError, ValueError, AttributeError, SchemaOrgException):
         pass
     description = ""
     try:
         description = scraper.description() + "\n\n"
-    except (NotImplementedError, ValueError, SchemaOrgException):
+    except (NotImplementedError, ValueError, AttributeError, SchemaOrgException):
         pass
     try:
         description = description + scraper.instructions()
-    except (NotImplementedError, ValueError, SchemaOrgException):
+    except (NotImplementedError, ValueError, AttributeError, SchemaOrgException):
         pass
     recipe.description = description
     recipe.photo = scraper.image()

@@ -78,6 +78,7 @@ SUPPORTED_LANGUAGES = {
     "cs": "čeština",
     "da": "Dansk",
     "de": "Deutsch",
+    "de_CH": "Deutsch (Schweiz)",
     "el": "Ελληνικά",
     "es": "Español",
     "fi": "Suomi",

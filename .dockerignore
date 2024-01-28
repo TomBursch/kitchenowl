@@ -1,13 +1,19 @@
-# Docker ignore (include only web files)
-docs/
-fedora/
-ios/
-android/
-linux/
-macos/
-windows/
-.github/
+# General files
+.git
+.github
 
+# KitchenOwl
+icons/
+docs/
+kitchenowl/fedora/
+kitchenowl/ios/
+kitchenowl/android/
+kitchenowl/linux/
+kitchenowl/macos/
+kitchenowl/windows/
+
+backend/upload/
+backend/database.db
 
 # .gitignore here:
 # Miscellaneous
@@ -84,59 +90,14 @@ unlinked_spec.ds
 **/android/key.properties
 *.jks
 
-# iOS/XCode related
-**/ios/**/*.mode1v3
-**/ios/**/*.mode2v3
-**/ios/**/*.moved-aside
-**/ios/**/*.pbxuser
-**/ios/**/*.perspectivev3
-**/ios/**/*sync/
-**/ios/**/.sconsign.dblite
-**/ios/**/.tags*
-**/ios/**/.vagrant/
-**/ios/**/DerivedData/
-**/ios/**/Icon?
-**/ios/**/Pods/
-**/ios/**/.symlinks/
-**/ios/**/profile
-**/ios/**/xcuserdata
-**/ios/.generated/
-**/ios/Flutter/.last_build_id
-**/ios/Flutter/App.framework
-**/ios/Flutter/Flutter.framework
-**/ios/Flutter/Flutter.podspec
-**/ios/Flutter/Generated.xcconfig
-**/ios/Flutter/ephemeral
-**/ios/Flutter/app.flx
-**/ios/Flutter/app.zip
-**/ios/Flutter/flutter_assets/
-**/ios/Flutter/flutter_export_environment.sh
-**/ios/ServiceDefinitions.json
-**/ios/Runner/GeneratedPluginRegistrant.*
-
-# macOS
-**/macos/Flutter/GeneratedPluginRegistrant.swift
-**/macos/Flutter/ephemeral
-
 # Coverage
 coverage/
 
 # Symbols
 app.*.symbols
 
-# Exceptions to above rules.
-!**/ios/**/default.mode1v3
-!**/ios/**/default.mode2v3
-!**/ios/**/default.pbxuser
-!**/ios/**/default.perspectivev3
-!/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
-!/dev/ci/**/Gemfile.lock
-
 # MkDocs
 site/
-
-# KitchenOwl
-icons/
 
 # Development
 .devcontainer

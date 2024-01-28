@@ -26,7 +26,7 @@
     "order": "ASC",
     "on_property": "mergedAt"
   },
-  "template": "${{CHANGELOG}}## Uncategorized\n${{UNCATEGORIZED}}\n\n${{RELEASE_DIFF}}",
+  "template": "${{CHANGELOG}}\n## Uncategorized\n${{UNCATEGORIZED}}\n\n${{RELEASE_DIFF}}",
   "pr_template": "- ${{TITLE}} (#${{NUMBER}} by @${{AUTHOR}})",
   "empty_template": "- no changes",
   "base_branches": ["main"]

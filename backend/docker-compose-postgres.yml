@@ -1,0 +1,54 @@
+version: "3"
+services:
+  db:
+    image: postgres:15
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: kitchenowl
+      POSTGRES_USER: kitchenowl
+      POSTGRES_PASSWORD: example
+    volumes:
+      - kitchenowl_db:/var/lib/postgresql/data
+    networks:
+      - default
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}"]
+      interval: 30s
+      timeout: 60s
+      retries: 5
+      start_period: 80s
+  front:
+    image: tombursch/kitchenowl-web:latest
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - back
+    networks:
+      - default
+  back:
+    image: tombursch/kitchenowl:latest
+    restart: unless-stopped
+    #command: wsgi.ini --gevent 2000 #default: 100
+    networks:
+      - default
+    environment:
+      JWT_SECRET_KEY: PLEASE_CHANGE_ME
+      DB_DRIVER: postgresql
+      DB_HOST: db
+      DB_NAME: kitchenowl
+      DB_USER: kitchenowl
+      DB_PASSWORD: example
+    depends_on:
+      - db
+    volumes:
+      - kitchenowl_files:/data
+
+volumes:
+  kitchenowl_files:
+    driver: local
+  kitchenowl_db:
+    driver: local
+
+networks:
+  default:

@@ -39,7 +39,7 @@ dependencies:
   shimmer: ^3.0.0
   equatable: ^2.0.5
   url_launcher: ^6.1.10
-  flutter_custom_tabs: ^1.2.1
+  flutter_custom_tabs: ^2.0.0+1
   package_info_plus: ^5.0.1
   device_info_plus: ^9.1.1
   http: ^1.1.2

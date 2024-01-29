@@ -18,8 +18,6 @@ class SettingsCubit extends Cubit<SettingsState> {
     final dynamicAccentColor =
         PreferenceStorage.getInstance().readBool(key: 'dynamicAccentColor');
     final gridSize = PreferenceStorage.getInstance().readInt(key: 'gridSize');
-    final recentItemsCount =
-        PreferenceStorage.getInstance().readInt(key: 'recentItemsCount');
     final accentColor =
         PreferenceStorage.getInstance().readInt(key: 'accentColor');
     final shoppingListListView =
@@ -40,7 +38,6 @@ class SettingsCubit extends Cubit<SettingsState> {
       gridSize: (await gridSize) != null
           ? GridSize.values[(await gridSize)!]
           : GridSize.normal,
-      recentItemsCount: await recentItemsCount ?? 9,
       accentColor:
           (await accentColor) != null ? Color((await accentColor)!) : null,
       shoppingListListView: await shoppingListListView ?? false,
@@ -103,7 +100,6 @@ class SettingsCubit extends Cubit<SettingsState> {
 class SettingsState extends Equatable {
   final ThemeMode themeMode;
   final bool dynamicAccentColor;
-  final int recentItemsCount;
   final GridSize gridSize;
   final Color? accentColor;
   final bool shoppingListListView;
@@ -113,7 +109,6 @@ class SettingsState extends Equatable {
     this.themeMode = ThemeMode.system,
     this.dynamicAccentColor = false,
     this.gridSize = GridSize.normal,
-    this.recentItemsCount = 9,
     this.accentColor,
     this.shoppingListListView = false,
     this.shoppingListTapToRemove = true,
@@ -132,7 +127,6 @@ class SettingsState extends Equatable {
         themeMode: themeMode ?? this.themeMode,
         dynamicAccentColor: dynamicAccentColor ?? this.dynamicAccentColor,
         gridSize: gridSize ?? this.gridSize,
-        recentItemsCount: recentItemsCount ?? this.recentItemsCount,
         accentColor: (accentColor ?? Nullable(this.accentColor)).value,
         shoppingListListView: shoppingListListView ?? this.shoppingListListView,
         shoppingListTapToRemove:
@@ -144,7 +138,6 @@ class SettingsState extends Equatable {
         themeMode,
         dynamicAccentColor,
         gridSize,
-        recentItemsCount,
         accentColor,
         shoppingListListView,
         shoppingListTapToRemove,

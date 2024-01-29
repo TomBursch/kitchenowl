@@ -32,7 +32,8 @@ class GetItems(Schema):
 
 
 class GetRecentItems(Schema):
-    limit = fields.Integer(load_default=9, validate=lambda x: x > 0 and x <= 60)
+    startAfterDate = fields.Integer(validate=lambda a: a >= 0)
+    limit = fields.Integer(load_default=12, validate=lambda x: x > 0 and x <= 50)
 
 
 class UpdateDescription(Schema):

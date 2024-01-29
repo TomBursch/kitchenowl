@@ -277,20 +277,6 @@ class _SettingsPageState extends State<SettingsPage> {
                     ),
                   ),
                 ),
-                ListTile(
-                  title: Text(
-                    AppLocalizations.of(context)!.itemsRecent,
-                  ),
-                  leading: const Icon(Icons.numbers_rounded),
-                  trailing: NumberSelector(
-                    value: state.recentItemsCount,
-                    setValue: BlocProvider.of<SettingsCubit>(context)
-                        .setRecentItemsCount,
-                    defaultValue: 9,
-                    lowerBound: 0,
-                    upperBound: 30,
-                  ),
-                ),
                 if (!kIsWeb)
                   ListTile(
                     title: Text(

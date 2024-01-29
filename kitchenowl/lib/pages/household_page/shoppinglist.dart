@@ -19,6 +19,7 @@ class ShoppinglistPage extends StatefulWidget {
 
 class _ShoppinglistPageState extends State<ShoppinglistPage> {
   final TextEditingController searchController = TextEditingController();
+  ScrollController? scrollController;
 
   @override
   void initState() {
@@ -29,7 +30,18 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
   @override
   void dispose() {
     searchController.dispose();
+    scrollController?.removeListener(_scrollListen);
     super.dispose();
+  }
+
+  @override
+  void didChangeDependencies() {
+    if (scrollController != PrimaryScrollController.of(context)) {
+      scrollController?.removeListener(_scrollListen);
+      scrollController = PrimaryScrollController.of(context);
+      scrollController!.addListener(_scrollListen);
+    }
+    super.didChangeDependencies();
   }
 
   @override
@@ -271,5 +283,14 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
         ],
       ),
     );
+  }
+
+  void _scrollListen() {
+    print("here");
+    if (scrollController != null &&
+        (scrollController?.position.pixels ==
+            scrollController?.position.maxScrollExtent)) {
+      BlocProvider.of<ShoppinglistCubit>(context).loadMore();
+    }
   }
 }

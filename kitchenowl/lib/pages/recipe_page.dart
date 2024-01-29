@@ -45,9 +45,9 @@ class _RecipePageState extends State<RecipePage> {
   void initState() {
     super.initState();
     cubit = RecipeCubit(
-      household: widget.household,
-      recipe: widget.recipe,
-      selectedYields: widget.selectedYields,
+      widget.household,
+      widget.recipe,
+      widget.selectedYields,
     );
   }
 

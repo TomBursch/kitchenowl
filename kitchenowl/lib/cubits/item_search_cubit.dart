@@ -13,10 +13,7 @@ class ItemSearchCubit extends Cubit<ItemSearchState> {
 
   void itemSelected(Item item) {
     final List<Item> selectedItems = List.from(state.selectedItems);
-    final bool containsItem = state.selectedItems.contains(item);
-    if (containsItem) {
-      selectedItems.removeWhere((e) => e == item);
-    } else {
+    if(!selectedItems.remove(item)) {
       selectedItems.add(item);
     }
     emit(ItemSearchState(selectedItems, '', state.searchResults));
@@ -24,13 +21,7 @@ class ItemSearchCubit extends Cubit<ItemSearchState> {
 
   Future<void> search(String query) async {
     if (query.isNotEmpty) {
-      final splitIndex = query.indexOf(',');
-      String queryName = query;
-      String? queryDescription;
-      if (splitIndex >= 0) {
-        queryName = query.substring(0, splitIndex).trim();
-        queryDescription = query.substring(splitIndex + 1).trim();
-      }
+      final (queryName, queryDescription) = parseQuery(query);
 
       List<Item> items = [];
       for (Item item
@@ -57,6 +48,21 @@ class ItemSearchCubit extends Cubit<ItemSearchState> {
     } else {
       emit(ItemSearchState(state.selectedItems, query, state.searchResults));
     }
+  }
+
+  /// Scans the [query] for a comma and if found,
+  /// returns a tuple consisting of the part before
+  /// the comma and the remaining string.
+  /// Otherwise returns the [query].
+  (String, String?) parseQuery(String query) {
+    final splitIndex = query.indexOf(",");
+    if (splitIndex >= 0) {
+      return (
+        query.substring(0, splitIndex).trim(),
+        query.substring(splitIndex + 1).trim()
+      );
+    }
+    return (query, null);
   }
 }
 

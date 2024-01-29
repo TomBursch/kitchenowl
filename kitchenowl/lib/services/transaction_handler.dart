@@ -6,9 +6,10 @@ import 'package:kitchenowl/services/storage/transaction_storage.dart';
 class TransactionHandler {
   static TransactionHandler? _instance;
 
-  TransactionHandler._internal();
+  TransactionHandler.internal();
+
   static TransactionHandler getInstance() {
-    _instance ??= TransactionHandler._internal();
+    _instance ??= TransactionHandler.internal();
 
     return _instance!;
   }

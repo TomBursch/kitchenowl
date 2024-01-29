@@ -71,11 +71,7 @@ class RecipeListCubit extends Cubit<RecipeListState> {
     if (state is SearchRecipeListState) {
       query = query ?? state.query;
     }
-    if (_refreshThread != null && query != _refreshCurrentQuery) {
-      _refreshCurrentQuery = query;
-      _refreshThread = _refresh(query);
-    }
-    if (_refreshThread == null) {
+    if (_refreshThread == null || query != _refreshCurrentQuery) {
       _refreshCurrentQuery = query;
       _refreshThread = _refresh(query);
     }

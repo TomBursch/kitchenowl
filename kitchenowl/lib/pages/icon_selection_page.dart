@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kitchenowl/item_icons.dart';
+import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/item.dart';
-import 'package:kitchenowl/models/nullable.dart';
-import 'package:kitchenowl/widgets/search_text_field.dart';
-import 'package:kitchenowl/widgets/sliver_item_grid_list.dart';
 
 class IconSelectionPage extends StatefulWidget {
   final String? oldIcon;
@@ -28,6 +26,15 @@ class _IconSelectionPageState extends State<IconSelectionPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.name),
+        actions: [
+          if (widget.oldIcon != null)
+            IconButton(
+              icon: Icon(Icons.not_interested_rounded),
+              tooltip: AppLocalizations.of(context)!.remove,
+              onPressed: () =>
+                  Navigator.of(context).pop(const Nullable<String?>.empty()),
+            ),
+        ],
       ),
       body: CustomScrollView(
         slivers: [
@@ -54,6 +61,7 @@ class _IconSelectionPageState extends State<IconSelectionPage> {
                 .toList(),
             selected: (item) => item.icon == widget.oldIcon,
             onLongPressed: const Nullable<void Function(Item)>.empty(),
+            allRaised: true,
             onPressed: (Item item) {
               if (item.icon == widget.oldIcon) {
                 Navigator.of(context).pop(const Nullable<String?>.empty());

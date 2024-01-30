@@ -6,6 +6,7 @@ import 'package:kitchenowl/app.dart';
 import 'package:kitchenowl/cubits/household_cubit.dart';
 import 'package:kitchenowl/cubits/item_edit_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
+import 'package:kitchenowl/helpers/build_context_extension.dart';
 import 'package:kitchenowl/models/category.dart';
 import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/models/item.dart';
@@ -235,9 +236,10 @@ class _ItemPageState<T extends Item> extends State<ItemPage<T>> {
                         ),
                       ),
                     ),
-                  if (widget.item is! RecipeItem)
+                  if (widget.item is! RecipeItem &&
+                      context.readOrNull<HouseholdCubit>() != null)
                     BlocProvider.value(
-                      value: BlocProvider.of<HouseholdCubit>(context),
+                      value: context.read<HouseholdCubit>(),
                       child: BlocBuilder<ItemEditCubit, ItemEditState>(
                         bloc: cubit,
                         builder: (context, state) {

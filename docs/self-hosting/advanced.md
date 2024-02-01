@@ -5,15 +5,7 @@ There are a few options for advanced users. Customization is done using environm
 ### Tags
 
 There are three tags available: `latest`, `beta` and `dev`. `latest` is the most current stable release and is the default. `beta` corresponds to the most recent prerelease and might have some experimental features. The `dev` tag is directly build from the main branch and should not be used in production. Release notes can be found on the [releases page](https://github.com/TomBursch/kitchenowl/releases).
-Additionally, the releases are tagged, so you can always choose a specific version with `vXX` for the backend or `vX.X.X` for the frontend.
-
-### Frontend
-
-Environment variables for `tombursch/kitchenowl-web`:
-
-| Variable   | Default     | Description                                                                                                                                                          |
-| ---------- | ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `BACK_URL` | `back:5000` | Allows to set a custom address for the backend. Needs to be an uWSGI protocol endpoint. Should correspond to the name or IP of the backend container and port `5000` |
+Additionally, the releases are tagged, so you can always choose a specific version with `vX.X.X`.
 
 ### Backend
 - Set up with OpenID Connect: [OIDC](./oidc.md)
@@ -64,11 +56,19 @@ back:
 
 Overriding the command is not recommended as we might change the underlying process in the future.
 
+### Frontend
+
+Environment variables for `tombursch/kitchenowl-web`:
+
+| Variable   | Default     | Description                                                                                                                                                          |
+| ---------- | ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `BACK_URL` | `back:5000` | Allows to set a custom address for the backend. Needs to be an uWSGI protocol endpoint. Should correspond to the name or IP of the backend container and port `5000` |
+
 ## Multiservice Setup
-All provided examples can be turned into a multiservice setup with just a few changes. This means separating frontend and backend into multiple docker container.
+All provided examples can be turned into a multiservice setup with just a few changes. This means separating frontend and backend into multiple docker containers.
 
 
-1. Download the [docker-compose.yml](https://github.com/TomBursch/kitchenowl/blob/main/docker-compose-separate.yml)
+See [docker-compose.yml](https://github.com/TomBursch/kitchenowl/blob/main/docker-compose-separate.yml)
 ```yml
 version: "3"
 services:
@@ -90,4 +90,3 @@ services:
 volumes:
   kitchenowl_data:
 ```
-2. Change the default value for `JWT_SECRET_KEY`

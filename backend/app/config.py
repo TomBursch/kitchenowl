@@ -95,6 +95,8 @@ SUPPORTED_LANGUAGES = {
     "ru": "русский язык",
     "sv": "Svenska",
     "tr": "Türkçe",
+    "ua": "Українська",
+    "ua_INF": "Українська (неформальна)",
     "zh_Hans": "简化字",
 }
 

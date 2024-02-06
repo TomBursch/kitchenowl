@@ -115,7 +115,7 @@ KitchenOwl is moving fast, to stay updated consider starring and watching the re
 - [Docs](https://docs.kitchenowl.org)
 - [KitchenOwl Backend](https://github.com/TomBursch/kitchenowl-backend) Repository
 - [KitchenOwl Website](https://github.com/TomBursch/kitchenowl-website) Repository
-- [DockerHub](https://hub.docker.com/repository/docker/tombursch/kitchenowl)
+- [DockerHub](https://hub.docker.com/r/tombursch/kitchenowl)
 - Owl icon taken from [Freepik](https://www.flaticon.com/authors/freepik)
 - [Recipe scrapers](https://github.com/hhursev/recipe-scrapers) used for scraping recipes from the web
 - [Weblate](https://weblate.org/) is helping with continuous localization as part of their ongoing support for open-source software projects.

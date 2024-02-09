@@ -1,5 +1,4 @@
 from datetime import datetime
-import re
 import uuid
 import gevent
 
@@ -68,7 +67,13 @@ def login(args):
     # Create first access token
     accesssToken, _ = Token.create_access_token(user, refreshModel)
 
-    return jsonify({"access_token": accesssToken, "refresh_token": refreshToken})
+    return jsonify(
+        {
+            "access_token": accesssToken,
+            "refresh_token": refreshToken,
+            "user": user.obj_to_dict(),
+        }
+    )
 
 
 if OPEN_REGISTRATION:
@@ -92,7 +97,11 @@ if OPEN_REGISTRATION:
             email=args["email"] if "email" in args else None,
         )
         if "email" in args and mail.mailConfigured():
-            gevent.spawn(mail.sendVerificationMail, user.id, ChallengeMailVerify.create_challenge(user))
+            gevent.spawn(
+                mail.sendVerificationMail,
+                user.id,
+                ChallengeMailVerify.create_challenge(user),
+            )
 
         device = "Unkown"
         if "device" in args:
@@ -331,13 +340,15 @@ if FRONT_URL and len(oidc_clients) > 0:
                         username = uuid.uuid4().hex
             newUser = User(
                 username=username,
-                name=userinfo["name"].strip()
-                if "name" in userinfo
-                else userinfo["sub"],
+                name=(
+                    userinfo["name"].strip() if "name" in userinfo else userinfo["sub"]
+                ),
                 email=userinfo["email"].strip() if "email" in userinfo else None,
-                email_verified=userinfo["email_verified"]
-                if "email_verified" in userinfo
-                else False,
+                email_verified=(
+                    userinfo["email_verified"]
+                    if "email_verified" in userinfo
+                    else False
+                ),
                 photo=userinfo["picture"] if "picture" in userinfo else None,
             ).save()
             oidcLink = OIDCLink(

@@ -4,12 +4,13 @@ import 'package:kitchenowl/cubits/household_add_update/household_update_cubit.da
 import 'package:kitchenowl/helpers/debouncer.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/household.dart';
-import 'package:kitchenowl/widgets/settings_household/sliver_household_category_settings.dart';
+import 'package:kitchenowl/pages/settings_household/household_settings_category_page.dart';
+import 'package:kitchenowl/pages/settings_household/household_settings_items_page.dart';
 import 'package:kitchenowl/widgets/settings_household/sliver_household_danger_zone.dart';
-import 'package:kitchenowl/widgets/settings_household/sliver_household_expense_category_settings.dart';
+import 'package:kitchenowl/pages/settings_household/household_settings_expense_category_page.dart';
 import 'package:kitchenowl/widgets/settings_household/sliver_household_feature_settings.dart';
-import 'package:kitchenowl/widgets/settings_household/sliver_household_shoppinglist_settings.dart';
-import 'package:kitchenowl/widgets/settings_household/sliver_household_tags_settings.dart';
+import 'package:kitchenowl/pages/settings_household/household_settings_shoppinglist_page.dart';
+import 'package:kitchenowl/pages/settings_household/household_settings_tags_page.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
 class HouseholdUpdatePage extends StatefulWidget {
@@ -59,10 +60,10 @@ class _HouseholdUpdatePageState extends State<HouseholdUpdatePage> {
             child: CustomScrollView(
               primary: true,
               slivers: [
-                SliverCrossAxisPadded.symmetric(
-                  padding: 16,
-                  child: SliverCrossAxisConstrained(
-                    maxCrossAxisExtent: 600,
+                SliverCrossAxisConstrained(
+                  maxCrossAxisExtent: 600,
+                  child: SliverCrossAxisPadded.symmetric(
+                    padding: 16,
                     child: SliverList(
                       delegate: SliverChildListDelegate([
                         BlocBuilder<HouseholdUpdateCubit, HouseholdUpdateState>(
@@ -97,46 +98,100 @@ class _HouseholdUpdatePageState extends State<HouseholdUpdatePage> {
                     ),
                   ),
                 ),
-                SliverCrossAxisPadded.symmetric(
-                  padding: 16,
-                  child: const SliverCrossAxisConstrained(
-                    maxCrossAxisExtent: 600,
-                    child: SliverHouseholdFeatureSettings<HouseholdUpdateCubit,
-                        HouseholdUpdateState>(),
+                const SliverCrossAxisConstrained(
+                  maxCrossAxisExtent: 600,
+                  child: SliverHouseholdFeatureSettings<HouseholdUpdateCubit,
+                      HouseholdUpdateState>(),
+                ),
+                SliverCrossAxisConstrained(
+                  maxCrossAxisExtent: 600,
+                  child: SliverList(
+                    delegate: SliverChildListDelegate([
+                      const Divider(indent: 16, endIndent: 16),
+                      ListTile(
+                        title: Text(AppLocalizations.of(context)!.items),
+                        leading: const Icon(Icons.fastfood_rounded),
+                        trailing: const Icon(Icons.arrow_forward_ios_rounded),
+                        contentPadding:
+                            const EdgeInsets.only(left: 16, right: 16),
+                        onTap: () => Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => HouseholdSettingsItemsPage(
+                              household: widget.household,
+                            ),
+                          ),
+                        ),
+                      ),
+                      ListTile(
+                        title:
+                            Text(AppLocalizations.of(context)!.shoppingLists),
+                        leading: const Icon(Icons.list_rounded),
+                        trailing: const Icon(Icons.arrow_forward_ios_rounded),
+                        contentPadding:
+                            const EdgeInsets.only(left: 16, right: 16),
+                        onTap: () => Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => BlocProvider.value(
+                              value: cubit,
+                              child: HouseholdSettingsShoppinglistPage(),
+                            ),
+                          ),
+                        ),
+                      ),
+                      ListTile(
+                        title: Text(AppLocalizations.of(context)!.categories),
+                        leading: const Icon(Icons.category_rounded),
+                        trailing: const Icon(Icons.arrow_forward_ios_rounded),
+                        contentPadding:
+                            const EdgeInsets.only(left: 16, right: 16),
+                        onTap: () => Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => BlocProvider.value(
+                              value: cubit,
+                              child: HouseholdSettingsCategoryPage(),
+                            ),
+                          ),
+                        ),
+                      ),
+                      ListTile(
+                        title: Text(AppLocalizations.of(context)!.tags),
+                        leading: const Icon(Icons.tag_rounded),
+                        trailing: const Icon(Icons.arrow_forward_ios_rounded),
+                        contentPadding:
+                            const EdgeInsets.only(left: 16, right: 16),
+                        onTap: () => Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => BlocProvider.value(
+                              value: cubit,
+                              child: HouseholdSettingsTagsPage(),
+                            ),
+                          ),
+                        ),
+                      ),
+                      if (true)
+                        ListTile(
+                          title: Text(
+                              AppLocalizations.of(context)!.expenseCategories),
+                          leading: const Icon(Icons.attach_money_rounded),
+                          trailing: const Icon(Icons.arrow_forward_ios_rounded),
+                          contentPadding:
+                              const EdgeInsets.only(left: 16, right: 16),
+                          onTap: () => Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => BlocProvider.value(
+                                value: cubit,
+                                child: HouseholdSettingsExpenseCategoryPage(),
+                              ),
+                            ),
+                          ),
+                        )
+                    ]),
                   ),
                 ),
-                SliverCrossAxisPadded.symmetric(
-                  padding: 16,
-                  child: const SliverCrossAxisConstrained(
-                    maxCrossAxisExtent: 600,
-                    child: SliverHouseholdShoppinglistSettings(),
-                  ),
-                ),
-                SliverCrossAxisPadded.symmetric(
-                  padding: 16,
-                  child: const SliverCrossAxisConstrained(
-                    maxCrossAxisExtent: 600,
-                    child: SliverHouseholdCategorySettings(),
-                  ),
-                ),
-                SliverCrossAxisPadded.symmetric(
-                  padding: 16,
-                  child: const SliverCrossAxisConstrained(
-                    maxCrossAxisExtent: 600,
-                    child: SliverHouseholdTagsSettings(),
-                  ),
-                ),
-                SliverCrossAxisPadded.symmetric(
-                  padding: 16,
-                  child: const SliverCrossAxisConstrained(
-                    maxCrossAxisExtent: 600,
-                    child: SliverHouseholdExpenseCategorySettings(),
-                  ),
-                ),
-                SliverCrossAxisPadded.symmetric(
-                  padding: 16,
-                  child: const SliverCrossAxisConstrained(
-                    maxCrossAxisExtent: 600,
+                SliverCrossAxisConstrained(
+                  maxCrossAxisExtent: 600,
+                  child: SliverCrossAxisPadded.symmetric(
+                    padding: 16,
                     child: SliverHouseholdDangerZone(),
                   ),
                 ),

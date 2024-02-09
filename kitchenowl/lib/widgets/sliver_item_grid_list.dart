@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/cubits/household_cubit.dart';
 import 'package:kitchenowl/cubits/settings_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
+import 'package:kitchenowl/helpers/build_context_extension.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/category.dart';
 import 'package:kitchenowl/models/household.dart';
@@ -23,6 +24,8 @@ class SliverItemGridList<T extends Item> extends StatelessWidget {
       household; // forwarded to item page on long press for offline functionality
   final bool Function(T)? selected;
   final bool isLoading;
+  final bool? isList;
+  final bool? allRaised;
 
   const SliverItemGridList({
     super.key,
@@ -35,11 +38,14 @@ class SliverItemGridList<T extends Item> extends StatelessWidget {
     this.shoppingList,
     this.selected,
     this.isLoading = false,
+    this.isList,
+    this.allRaised,
   });
 
   @override
   Widget build(BuildContext context) {
-    final isList = context.read<SettingsCubit>().state.shoppingListListView;
+    final isList =
+        this.isList ?? context.read<SettingsCubit>().state.shoppingListListView;
 
     if (!isLoading && items.isEmpty) {
       return const SliverToBoxAdapter(child: SizedBox(height: 0));
@@ -58,22 +64,29 @@ class SliverItemGridList<T extends Item> extends StatelessWidget {
               selected: selected?.call(items[i]) ?? false,
               gridStyle: !isList,
               onPressed: onPressed,
+              raised: allRaised,
               onLongPressed: (onLongPressed ??
                       Nullable((Item item) async {
                         final res =
                             await Navigator.of(context, rootNavigator: true)
                                 .push<UpdateValue<Item>>(
-                          MaterialPageRoute(
-                            builder: (ctx) => BlocProvider.value(
-                              value: BlocProvider.of<HouseholdCubit>(context),
-                              child: ItemPage(
-                                item: item,
-                                household: household,
-                                shoppingList: shoppingList,
-                                categories: categories ?? const [],
-                              ),
-                            ),
-                          ),
+                          MaterialPageRoute(builder: (ctx) {
+                            Widget page = ItemPage(
+                              item: item,
+                              household: household,
+                              shoppingList: shoppingList,
+                              categories: categories ?? const [],
+                            );
+                            final householdCubit =
+                                context.readOrNull<HouseholdCubit>();
+                            if (householdCubit != null)
+                              page = BlocProvider.value(
+                                value: householdCubit,
+                                child: page,
+                              );
+
+                            return page;
+                          }),
                         );
                         if (onRefresh != null &&
                             res != null &&

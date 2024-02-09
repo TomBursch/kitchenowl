@@ -27,26 +27,29 @@ class SliverHouseholdFeatureSettings<
   Widget build(BuildContext context) {
     return SliverList(
       delegate: SliverChildListDelegate([
-        BlocBuilder<Cubit, State>(
-          builder: (context, state) => Row(
-            children: [
-              Expanded(
-                child: Text(
-                  '${AppLocalizations.of(context)!.features}:',
-                  style: Theme.of(context).textTheme.titleLarge,
+        Padding(
+          padding: const EdgeInsets.only(left: 16, right: 8),
+          child: BlocBuilder<Cubit, State>(
+            builder: (context, state) => Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    '${AppLocalizations.of(context)!.features}:',
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
                 ),
-              ),
-              if (!listEquals(state.viewOrdering, ViewsEnum.values))
-                IconButton(
-                  onPressed: BlocProvider.of<Cubit>(context).resetViewOrder,
-                  tooltip: AppLocalizations.of(context)!.reset,
-                  icon: const Icon(Icons.restart_alt_rounded),
-                  padding: EdgeInsets.zero,
-                ),
-            ],
+                const SizedBox(height: 40),
+                if (!listEquals(state.viewOrdering, ViewsEnum.values))
+                  IconButton(
+                    onPressed: BlocProvider.of<Cubit>(context).resetViewOrder,
+                    tooltip: AppLocalizations.of(context)!.reset,
+                    icon: const Icon(Icons.restart_alt_rounded),
+                    padding: EdgeInsets.zero,
+                  ),
+              ],
+            ),
           ),
         ),
-        const SizedBox(height: 8),
         BlocBuilder<Cubit, State>(
           builder: (context, state) => ReorderableColumn(
             onReorder: BlocProvider.of<Cubit>(context).reorderView,
@@ -67,11 +70,13 @@ class SliverHouseholdFeatureSettings<
             view: ViewsEnum.profile,
             showHandleIfNotOptional: false,
           ),
-        const Divider(),
+        Center(child: Text(AppLocalizations.of(context)!.longPressToReorder)),
+        const SizedBox(height: 8),
+        const Divider(indent: 16, endIndent: 16),
         ListTile(
           title: Text(AppLocalizations.of(context)!.language),
           leading: const Icon(Icons.language_rounded),
-          contentPadding: const EdgeInsets.only(left: 20, right: 5),
+          contentPadding: const EdgeInsets.only(left: 16, right: 21),
           trailing: BlocBuilder<Cubit, State>(
             buildWhen: (previous, current) =>
                 previous.language != current.language ||

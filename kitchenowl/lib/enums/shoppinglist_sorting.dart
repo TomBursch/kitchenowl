@@ -6,7 +6,7 @@ enum ShoppinglistSorting {
   category;
 
   static void sortShoppinglistItems(
-    List<ShoppinglistItem> shoppinglist,
+    List<Item> shoppinglist,
     ShoppinglistSorting sorting,
   ) {
     if (shoppinglist.isEmpty) return;

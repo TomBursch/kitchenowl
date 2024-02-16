@@ -177,6 +177,7 @@
       "name": {}
     }
   },
+  "@longPressToReorder": {},
   "@markAsPaid": {},
   "@mealPlanner": {},
   "@member": {},
@@ -457,6 +458,7 @@
   "loginTo": "Kirjaudu kohteeseen",
   "logout": "Kirjaudu ulos",
   "logoutName": "Kirjaa ulos {name}",
+  "longPressToReorder": "Paina pitkään muokataksesi järjestystä",
   "markAsPaid": "Merkitse maksetuksi",
   "mealPlanner": "Ateriasuunnittelu",
   "member": "Jäsen",

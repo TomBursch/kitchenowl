@@ -1,11 +1,11 @@
 {
   "categories": {
-    "dairy": "유제품",
-    "drinks": "음료",
-    "freezer": "냉동",
-    "fruits_vegetables": "과일 및 채소",
-    "grain": "파스타 및 국수",
-    "refrigerated": "냉장"
+    "dairy": "🥛 유제품",
+    "drinks": "🍹 음료",
+    "freezer": "❄️ 냉동",
+    "fruits_vegetables": "🥬 과일 및 채소",
+    "grain": "🥟 파스타 및 국수",
+    "refrigerated": "💧 냉장"
   },
   "items": {
     "agave_syrup": "아가베 시럽",

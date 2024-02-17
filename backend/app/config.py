@@ -87,6 +87,7 @@ SUPPORTED_LANGUAGES = {
     "hu": "Magyar nyelv",
     "id": "Bahasa Indonesia",
     "it": "Italiano",
+    "ko": "한국어",
     "nb_NO": "Bokmål",
     "nl": "Nederlands",
     "pl": "Polski",

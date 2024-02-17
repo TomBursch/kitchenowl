@@ -156,13 +156,9 @@ class RecipeCard extends StatelessWidget {
                             if (onAddToDate != null)
                               LoadingElevatedButton(
                                 style: ElevatedButton.styleFrom(
-                                  // Foreground color
-                                  // ignore: deprecated_member_use
-                                  onPrimary:
+                                  foregroundColor:
                                       Theme.of(context).colorScheme.onPrimary,
-                                  // Background color
-                                  // ignore: deprecated_member_use
-                                  primary:
+                                  backgroundColor:
                                       Theme.of(context).colorScheme.primary,
                                   padding: EdgeInsets.zero,
                                 ).copyWith(
@@ -174,13 +170,10 @@ class RecipeCard extends StatelessWidget {
                             const SizedBox(width: 8),
                             LoadingElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                // Foreground color
-                                // ignore: deprecated_member_use
-                                onPrimary:
+                                foregroundColor:
                                     Theme.of(context).colorScheme.onPrimary,
-                                // Background color
-                                // ignore: deprecated_member_use
-                                primary: Theme.of(context).colorScheme.primary,
+                                backgroundColor:
+                                    Theme.of(context).colorScheme.primary,
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 16),
                               ).copyWith(

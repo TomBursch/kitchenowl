@@ -177,6 +177,7 @@
       "name": {}
     }
   },
+  "@longPressToReorder": {},
   "@markAsPaid": {},
   "@mealPlanner": {},
   "@member": {},
@@ -457,6 +458,7 @@
   "loginTo": "Accesso a",
   "logout": "Esci",
   "logoutName": "Disconnetti {name}",
+  "longPressToReorder": "Premi a lungo per riordinare",
   "markAsPaid": "Contrassegna come pagato",
   "mealPlanner": "Pianificazione dei pasti",
   "member": "Membro",

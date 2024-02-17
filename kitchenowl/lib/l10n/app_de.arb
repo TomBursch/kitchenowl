@@ -177,6 +177,7 @@
       "name": {}
     }
   },
+  "@longPressToReorder": {},
   "@markAsPaid": {},
   "@mealPlanner": {},
   "@member": {},
@@ -453,6 +454,7 @@
   "loginTo": "Anmeldung bei",
   "logout": "Abmelden",
   "logoutName": "Melde {name} ab",
+  "longPressToReorder": "Halte lang zum Umsortieren",
   "markAsPaid": "Als gezahlt markieren",
   "mealPlanner": "Essensplaner",
   "member": "Mitglied",

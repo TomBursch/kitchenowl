@@ -177,6 +177,7 @@
       "name": {}
     }
   },
+  "@longPressToReorder": {},
   "@markAsPaid": {},
   "@mealPlanner": {},
   "@member": {},
@@ -457,6 +458,7 @@
   "loginTo": "Iniciar sesión en",
   "logout": "Cerrar sesión",
   "logoutName": "Cerrar sesión {name}",
+  "longPressToReorder": "Pulsación larga para reordenar",
   "markAsPaid": "Marcar como pagado",
   "mealPlanner": "Organizador de comidas",
   "member": "Miembro",

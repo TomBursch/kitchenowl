@@ -8,7 +8,7 @@ from app.models import Household, HouseholdMember, Shoppinglist, User
 from app.service.import_language import importLanguage
 from app.service.file_has_access_or_download import file_has_access_or_download
 from .schemas import AddHousehold, UpdateHousehold, UpdateHouseholdMember
-from flask_socketio import close_room
+from app import socketio
 
 household = Blueprint("household", __name__)
 
@@ -113,7 +113,7 @@ def updateHousehold(args, household_id):
 @authorize_household(required=RequiredRights.ADMIN)
 def deleteHouseholdById(household_id):
     if Household.delete_by_id(household_id):
-        close_room(household_id)
+        socketio.close_room(household_id)
     return jsonify({"msg": "DONE"})
 
 

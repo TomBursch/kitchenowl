@@ -31,7 +31,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
       - run: flutter packages get
-        working-directory: kitchenowl/android
+        working-directory: kitchenowl
 
       # Decide track internal|beta|production (not in use yet)
       - name: Decide track

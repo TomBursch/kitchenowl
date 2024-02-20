@@ -11,6 +11,7 @@ class Item extends Model {
   final String? icon;
   final int ordering;
   final Category? category;
+  final DateTime? createdAt;
 
   const Item({
     this.id,
@@ -18,6 +19,7 @@ class Item extends Model {
     this.icon,
     this.ordering = 0,
     this.category,
+    this.createdAt,
   });
 
   factory Item.fromJson(Map<String, dynamic> map) => Item(
@@ -27,6 +29,11 @@ class Item extends Model {
         icon: map['icon'],
         category:
             map['category'] != null ? Category.fromJson(map['category']) : null,
+        createdAt: map['created_at'] != null
+            ? DateTime.fromMillisecondsSinceEpoch(map['created_at'],
+                    isUtc: true)
+                .toLocal()
+            : null,
       );
 
   Item copyWith({
@@ -40,10 +47,11 @@ class Item extends Model {
         category: (category ?? Nullable(this.category)).value,
         icon: (icon ?? Nullable(this.icon)).value,
         ordering: ordering,
+        createdAt: createdAt,
       );
 
   @override
-  List<Object?> get props => [id, name, icon, ordering, category];
+  List<Object?> get props => [id, name, icon, ordering, category, createdAt];
 
   @override
   Map<String, dynamic> toJson() => {
@@ -57,6 +65,7 @@ class Item extends Model {
       "ordering": ordering,
       "icon": icon,
       "category": category?.toJsonWithId(),
+      "created_at": createdAt?.toUtc().millisecondsSinceEpoch,
     });
 }
 
@@ -70,6 +79,7 @@ class ItemWithDescription extends Item {
     super.icon,
     super.category,
     this.description = '',
+    super.createdAt,
   });
 
   factory ItemWithDescription.fromJson(Map<String, dynamic> map) =>
@@ -80,6 +90,11 @@ class ItemWithDescription extends Item {
         icon: map['icon'],
         category:
             map['category'] != null ? Category.fromJson(map['category']) : null,
+        createdAt: map['created_at'] != null
+            ? DateTime.fromMillisecondsSinceEpoch(map['created_at'],
+                    isUtc: true)
+                .toLocal()
+            : null,
       );
 
   factory ItemWithDescription.fromItem({
@@ -94,6 +109,7 @@ class ItemWithDescription extends Item {
         ordering: item.ordering,
         description: description ??
             ((item is ItemWithDescription) ? item.description : ''),
+        createdAt: item.createdAt,
       );
 
   @override
@@ -116,6 +132,7 @@ class ItemWithDescription extends Item {
         icon: (icon ?? Nullable(this.icon)).value,
         description: description ?? this.description,
         ordering: ordering,
+        createdAt: createdAt,
       );
 
   @override
@@ -124,7 +141,6 @@ class ItemWithDescription extends Item {
 
 class ShoppinglistItem extends ItemWithDescription {
   final int? createdById;
-  final DateTime? createdAt;
 
   const ShoppinglistItem({
     super.id,
@@ -134,7 +150,7 @@ class ShoppinglistItem extends ItemWithDescription {
     super.icon,
     super.ordering = 0,
     this.createdById,
-    this.createdAt,
+    super.createdAt,
   });
 
   factory ShoppinglistItem.fromJson(Map<String, dynamic> map) {
@@ -189,15 +205,16 @@ class ShoppinglistItem extends ItemWithDescription {
         icon: (icon ?? Nullable(this.icon)).value,
         description: description ?? this.description,
         ordering: ordering,
+        createdAt: createdAt,
+        createdById: createdById,
       );
 
   @override
-  List<Object?> get props => super.props + [createdAt, createdById];
+  List<Object?> get props => super.props + [createdById];
 
   @override
   Map<String, dynamic> toJsonWithId() => super.toJsonWithId()
     ..addAll({
-      "created_at": createdAt?.toUtc().millisecondsSinceEpoch,
       "created_by": createdById,
     });
 }

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:kitchenowl/app.dart';
 import 'package:kitchenowl/cubits/auth_cubit.dart';
 import 'package:kitchenowl/cubits/expense_list_cubit.dart';
 import 'package:kitchenowl/cubits/household_cubit.dart';
@@ -41,10 +40,7 @@ class _HouseholdPageState extends State<HouseholdPage> {
   void initState() {
     super.initState();
     householdCubit = HouseholdCubit(widget.household);
-    shoppingListCubit = ShoppinglistCubit(
-      widget.household,
-      () => App.settings.recentItemsCount,
-    );
+    shoppingListCubit = ShoppinglistCubit(widget.household);
     recipeListCubit = RecipeListCubit(widget.household);
     plannerCubit = PlannerCubit(widget.household);
     expenseListCubit = ExpenseListCubit(widget.household);

@@ -144,9 +144,22 @@ def getRecentItems(args, id):
         raise NotFoundRequest()
     shoppinglist.checkAuthorized()
 
-    items = History.get_recent(id, args["limit"])
+    items = History.get_recent(
+        id,
+        args["limit"],
+        datetime.fromtimestamp(args["startAfterDate"] / 1000, timezone.utc)
+        if "startAfterDate" in args
+        else None,
+    )
     return jsonify(
-        [e.item.obj_to_dict() | {"description": e.description} for e in items]
+        [
+            e.item.obj_to_dict()
+            | {
+                "description": e.description,
+                "created_at": e.created_at,
+            }
+            for e in items
+        ]
     )
 
 

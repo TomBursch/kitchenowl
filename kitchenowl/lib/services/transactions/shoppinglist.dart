@@ -111,12 +111,14 @@ class TransactionShoppingListSearchItem extends Transaction<List<Item>> {
 class TransactionShoppingListGetRecentItems
     extends Transaction<List<ItemWithDescription>> {
   final ShoppingList shoppinglist;
-  final int itemsCount;
+  final int pageSize;
+  final DateTime? startAfter;
 
   TransactionShoppingListGetRecentItems({
     DateTime? timestamp,
     required this.shoppinglist,
-    required this.itemsCount,
+    required this.pageSize,
+    this.startAfter,
   }) : super.internal(
           timestamp ?? DateTime.now(),
           "TransactionShoppingListGetRecentItems",
@@ -124,7 +126,7 @@ class TransactionShoppingListGetRecentItems
 
   @override
   Future<List<ItemWithDescription>> runLocal() async {
-    if (itemsCount <= 0) return [];
+    if (pageSize <= 0) return [];
     final items =
         (await MemStorage.getInstance().readItems(shoppinglist) ?? const [])
             .map((e) => e.name)
@@ -147,9 +149,12 @@ class TransactionShoppingListGetRecentItems
 
   @override
   Future<List<ItemWithDescription>?> runOnline() async {
-    if (itemsCount <= 0) return [];
-    return await ApiService.getInstance()
-        .getRecentItems(shoppinglist, itemsCount);
+    if (pageSize <= 0) return [];
+    return await ApiService.getInstance().getRecentItems(
+      shoppinglist,
+      limit: pageSize,
+      startAfter: startAfter,
+    );
   }
 }
 

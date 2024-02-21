@@ -177,26 +177,28 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
         _state.selectedListItems.isEmpty) {
       return;
     }
+    final selectedItems = _state.selectedListItems
+        .sorted((a, b) => a.id?.compareTo(b.id ?? 0) ?? -1);
     final l = List.of(_state.listItems);
-    l.removeWhere(_state.selectedListItems.contains);
+    l.removeWhere(selectedItems.contains);
     final recent = List.of(_state.recentItems);
-    recent.insertAll(0, _state.selectedListItems);
+    recent.insertAll(
+      0,
+      selectedItems.map((e) => ItemWithDescription.fromItem(item: e)),
+    );
     if (recent.length > recentItemCountProvider()) {
       recent.removeRange(recentItemCountProvider(), recent.length);
     }
 
     if (_state is SearchShoppinglistCubitState) {
       final result = List.of(_state.result);
-      for (final item in _state.selectedListItems) {
+      for (final item in selectedItems) {
         final index = result.indexOf(item);
         if (index >= 0) {
           result.removeAt(index);
           result.insert(
             index,
-            ItemWithDescription.fromItem(
-              item: item,
-              description: item.description,
-            ),
+            ItemWithDescription.fromItem(item: item),
           );
         }
       }
@@ -213,7 +215,7 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
     if (!await TransactionHandler.getInstance()
         .runTransaction(TransactionShoppingListDeleteItems(
       shoppinglist: _state.selectedShoppinglist!,
-      items: _state.selectedListItems,
+      items: selectedItems,
     ))) {
       await refresh();
     }

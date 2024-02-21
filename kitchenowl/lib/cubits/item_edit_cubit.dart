@@ -73,11 +73,19 @@ class ItemEditCubit<T extends Item> extends Cubit<ItemEditState> {
         description: state.description,
       ));
     }
-    if (_item.id != null && state.hasChangedItem(_item)) {
-      await TransactionHandler.getInstance()
-          .runTransaction(TransactionItemUpdate(
-        item: item,
-      ));
+    if (state.hasChangedItem(_item)) {
+      if (item.id != null) {
+        await TransactionHandler.getInstance()
+            .runTransaction(TransactionItemUpdate(
+          item: item,
+        ));
+      } else if (household != null) {
+        await TransactionHandler.getInstance()
+            .runTransaction(TransactionItemAdd(
+          household: household!,
+          item: item,
+        ));
+      }
     }
   }
 

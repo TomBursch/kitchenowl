@@ -31,3 +31,26 @@ class UpdateItem(Schema):
         validate=lambda a: a > 0,
         allow_none=True,
     )
+
+
+class AddItem(Schema):
+    class Meta:
+        unknown = EXCLUDE
+
+    class Category(Schema):
+        class Meta:
+            unknown = EXCLUDE
+
+        id = fields.Integer(required=True, validate=lambda a: a > 0)
+        name = fields.String(validate=lambda a: not a or a and not a.isspace())
+
+    category = fields.Nested(Category(), allow_none=True)
+    icon = fields.String(
+        validate=lambda a: not a or not a.isspace(),
+        allow_none=True,
+    )
+    name = fields.String(
+        validate=lambda a: not a or not a.isspace(),
+        allow_none=False,
+        required=True,
+    )

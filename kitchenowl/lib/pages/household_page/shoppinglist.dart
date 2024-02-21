@@ -82,7 +82,7 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                             items: state.result,
                             categories: state.categories,
                             shoppingList: state.selectedShoppinglist,
-                            onRefresh: () => cubit.refresh(query: ""),
+                            onRefresh: () => cubit.refresh(),
                             selected: (item) =>
                                 item is ShoppinglistItem &&
                                 (App.settings.shoppingListTapToRemove ||

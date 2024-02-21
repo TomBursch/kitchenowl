@@ -34,22 +34,23 @@ class ItemPopupMenuButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return PopupMenuButton(
       itemBuilder: (BuildContext context) => <PopupMenuEntry<_ItemAction>>[
-        PopupMenuItem<_ItemAction>(
-          value: _ItemAction.changeIcon,
-          child: Text(AppLocalizations.of(context)!.changeIcon),
-        ),
-        if (item is! RecipeItem)
+        if (household != null)
+          PopupMenuItem<_ItemAction>(
+            value: _ItemAction.changeIcon,
+            child: Text(AppLocalizations.of(context)!.changeIcon),
+          ),
+        if (item is! RecipeItem && item.id != null)
           PopupMenuItem<_ItemAction>(
             value: _ItemAction.rename,
             child: Text(AppLocalizations.of(context)!.rename),
           ),
-        if (item is! RecipeItem) const PopupMenuDivider(),
-        if (household != null && item is! RecipeItem)
+        if (item is! RecipeItem && item.id != null) const PopupMenuDivider(),
+        if (household != null && item.id != null && item is! RecipeItem)
           PopupMenuItem<_ItemAction>(
             value: _ItemAction.merge,
             child: Text(AppLocalizations.of(context)!.merge),
           ),
-        if (item is! RecipeItem)
+        if (item is! RecipeItem && item.id != null)
           PopupMenuItem<_ItemAction>(
             value: _ItemAction.delete,
             child: Text(AppLocalizations.of(context)!.delete),

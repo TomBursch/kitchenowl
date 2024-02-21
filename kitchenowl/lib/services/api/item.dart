@@ -62,6 +62,13 @@ extension ItemApi on ApiService {
     return res.statusCode == 200;
   }
 
+  Future<bool> addItem(Household household, Item item) async {
+    final res = await post('${householdPath(household)}$baseRoute',
+        jsonEncode(item.toJsonWithId()));
+
+    return res.statusCode == 200;
+  }
+
   Future<bool> mergeItems(Item item, Item other) async {
     final res = await post(
       '$baseRoute/${item.id}',

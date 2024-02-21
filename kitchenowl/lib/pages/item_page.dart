@@ -81,7 +81,7 @@ class _ItemPageState<T extends Item> extends State<ItemPage<T>> {
               builder: (context, state) => Text(state.name),
             ),
             actions: [
-              if (!App.isOffline && cubit.item.id != null)
+              if (!App.isOffline)
                 ItemPopupMenuButton(
                   item: cubit.item,
                   household: context.read<HouseholdCubit>().state.household,

@@ -39,6 +39,27 @@ class TransactionItemUpdate extends Transaction<bool> {
   }
 }
 
+class TransactionItemAdd extends Transaction<bool> {
+  final Household household;
+  final Item item;
+
+  TransactionItemAdd({
+    required this.household,
+    required this.item,
+    DateTime? timestamp,
+  }) : super.internal(timestamp ?? DateTime.now(), "TransactionItemAdd");
+
+  @override
+  Future<bool> runLocal() async {
+    return false;
+  }
+
+  @override
+  Future<bool?> runOnline() async {
+    return await ApiService.getInstance().addItem(household, item);
+  }
+}
+
 class TransactionItemGetRecipes extends Transaction<List<Recipe>> {
   final Household? household;
   final Item item;

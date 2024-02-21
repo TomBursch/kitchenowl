@@ -4,7 +4,7 @@ from app.errors import InvalidUsage, NotFoundRequest
 import app.util.description_splitter as description_splitter
 from flask_jwt_extended import jwt_required
 from app.models import Item, RecipeItems, Recipe, Category
-from .schemas import SearchByNameRequest, UpdateItem
+from .schemas import SearchByNameRequest, UpdateItem, AddItem
 
 item = Blueprint("item", __name__)
 itemHousehold = Blueprint("item", __name__)
@@ -69,6 +69,28 @@ def searchItemByName(args, household_id):
         ]
     )
 
+@itemHousehold.route("", methods=["POST"])
+@jwt_required()
+@authorize_household()
+@validate_args(AddItem)
+def addItem(args, household_id):
+    name: str = args["name"].strip()
+    if Item.find_by_name(household_id, name):
+        raise InvalidUsage()
+
+    item = Item(household_id=household_id, name=name)
+    if "category" in args:
+        if not args["category"]:
+            item.category = None
+        elif "id" in args["category"]:
+            item.category = Category.find_by_id(args["category"]["id"])
+        else:
+            raise InvalidUsage()
+    if "icon" in args:
+        item.icon = args["icon"]
+    item.save()
+
+    return jsonify(item.obj_to_dict())
 
 @item.route("/<int:id>", methods=["POST"])
 @jwt_required()

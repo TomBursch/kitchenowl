@@ -113,7 +113,13 @@ if OPEN_REGISTRATION:
         # Create first access token
         accesssToken, _ = Token.create_access_token(user, refreshModel)
 
-        return jsonify({"access_token": accesssToken, "refresh_token": refreshToken})
+        return jsonify(
+            {
+                "access_token": accesssToken,
+                "refresh_token": refreshToken,
+                "user": user.obj_to_dict(),
+            }
+        )
 
 
 @auth.route("/refresh", methods=["GET"])
@@ -122,7 +128,7 @@ def refresh():
     user = current_user
     if not user:
         raise UnauthorizedRequest(
-            message="Unauthorized: IP {} refresh attemp with wrong username or password".format(
+            message="Unauthorized: IP {} refresh could not get current user".format(
                 request.remote_addr
             )
         )
@@ -136,7 +142,13 @@ def refresh():
     # Create access token
     accesssToken, _ = Token.create_access_token(user, refreshModel)
 
-    return jsonify({"access_token": accesssToken, "refresh_token": refreshToken})
+    return jsonify(
+        {
+            "access_token": accesssToken,
+            "refresh_token": refreshToken,
+            "user": user.obj_to_dict(),
+        }
+    )
 
 
 @auth.route("", methods=["DELETE"])

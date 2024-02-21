@@ -66,7 +66,8 @@ class _ItemSelectionPageState extends State<ItemSelectionPage> {
                 ),
               SliverItemGridList(
                 items: plan.recipeWithYields.mandatoryItems,
-                onPressed: (RecipeItem item) => cubit.toggleItem(plan, item),
+                onPressed:
+                    Nullable((RecipeItem item) => cubit.toggleItem(plan, item)),
                 selected: (item) => state.selectedItems[plan]!.contains(item),
                 onLongPressed:
                     const Nullable<void Function(RecipeItem)>.empty(),
@@ -83,7 +84,8 @@ class _ItemSelectionPageState extends State<ItemSelectionPage> {
                 ),
               SliverItemGridList(
                 items: plan.recipeWithYields.optionalItems,
-                onPressed: (RecipeItem item) => cubit.toggleItem(plan, item),
+                onPressed:
+                    Nullable((RecipeItem item) => cubit.toggleItem(plan, item)),
                 selected: (item) => state.selectedItems[plan]!.contains(item),
                 onLongPressed:
                     const Nullable<void Function(RecipeItem)>.empty(),

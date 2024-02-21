@@ -73,7 +73,7 @@ class ItemEditCubit<T extends Item> extends Cubit<ItemEditState> {
         description: state.description,
       ));
     }
-    if (state.hasChangedItem(_item)) {
+    if (_item.id != null && state.hasChangedItem(_item)) {
       await TransactionHandler.getInstance()
           .runTransaction(TransactionItemUpdate(
         item: item,

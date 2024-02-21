@@ -6,7 +6,6 @@ import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/helpers/build_context_extension.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/category.dart';
-import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/models/shoppinglist.dart';
 import 'package:kitchenowl/models/update_value.dart';
@@ -15,17 +14,16 @@ import 'package:kitchenowl/widgets/shopping_item.dart';
 
 class SliverItemGridList<T extends Item> extends StatelessWidget {
   final void Function()? onRefresh;
-  final void Function(T)? onPressed;
+  final Nullable<void Function(T)>? onPressed;
   final Nullable<void Function(T)>? onLongPressed;
   final List<T> items;
   final List<Category>? categories; // forwarded to item page on long press
   final ShoppingList? shoppingList; // forwarded to item page on long press
-  final Household?
-      household; // forwarded to item page on long press for offline functionality
   final bool Function(T)? selected;
   final bool isLoading;
   final bool? isList;
   final bool? allRaised;
+  final Widget Function(T)? extraOption;
 
   const SliverItemGridList({
     super.key,
@@ -34,12 +32,12 @@ class SliverItemGridList<T extends Item> extends StatelessWidget {
     this.onLongPressed,
     this.items = const [],
     this.categories,
-    this.household,
     this.shoppingList,
     this.selected,
     this.isLoading = false,
     this.isList,
     this.allRaised,
+    this.extraOption,
   });
 
   @override
@@ -63,39 +61,14 @@ class SliverItemGridList<T extends Item> extends StatelessWidget {
               item: items[i],
               selected: selected?.call(items[i]) ?? false,
               gridStyle: !isList,
-              onPressed: onPressed,
+              onPressed:
+                  (onPressed ?? Nullable((item) => openMenu(context, item)))
+                      .value,
               raised: allRaised,
-              onLongPressed: (onLongPressed ??
-                      Nullable((Item item) async {
-                        final res =
-                            await Navigator.of(context, rootNavigator: true)
-                                .push<UpdateValue<Item>>(
-                          MaterialPageRoute(builder: (ctx) {
-                            Widget page = ItemPage(
-                              item: item,
-                              household: household,
-                              shoppingList: shoppingList,
-                              categories: categories ?? const [],
-                            );
-                            final householdCubit =
-                                context.readOrNull<HouseholdCubit>();
-                            if (householdCubit != null)
-                              page = BlocProvider.value(
-                                value: householdCubit,
-                                child: page,
-                              );
-
-                            return page;
-                          }),
-                        );
-                        if (onRefresh != null &&
-                            res != null &&
-                            (res.state == UpdateEnum.deleted ||
-                                res.state == UpdateEnum.updated)) {
-                          onRefresh!();
-                        }
-                      }))
-                  .value,
+              onLongPressed:
+                  (onLongPressed ?? Nullable((item) => openMenu(context, item)))
+                      .value,
+              extraOption: extraOption?.call(items[i]),
             ),
     );
 
@@ -116,5 +89,31 @@ class SliverItemGridList<T extends Item> extends StatelessWidget {
             )
           : SliverList(delegate: delegate),
     );
+  }
+
+  Future<void> openMenu(BuildContext context, Item item) async {
+    final res = await Navigator.of(context, rootNavigator: true)
+        .push<UpdateValue<Item>>(
+      MaterialPageRoute(builder: (ctx) {
+        Widget page = ItemPage(
+          item: item,
+          shoppingList: shoppingList,
+          categories: categories ?? const [],
+        );
+        final householdCubit = context.readOrNull<HouseholdCubit>();
+        if (householdCubit != null)
+          page = BlocProvider.value(
+            value: householdCubit,
+            child: page,
+          );
+
+        return page;
+      }),
+    );
+    if (onRefresh != null &&
+        res != null &&
+        (res.state == UpdateEnum.deleted || res.state == UpdateEnum.updated)) {
+      onRefresh!();
+    }
   }
 }

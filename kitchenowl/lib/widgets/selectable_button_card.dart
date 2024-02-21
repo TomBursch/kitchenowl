@@ -7,6 +7,7 @@ class SelectableButtonCard extends StatefulWidget {
   final bool selected;
   final void Function()? onPressed;
   final void Function()? onLongPressed;
+  final Widget? extraOption;
 
   const SelectableButtonCard({
     super.key,
@@ -16,6 +17,7 @@ class SelectableButtonCard extends StatefulWidget {
     this.onPressed,
     this.onLongPressed,
     this.selected = false,
+    this.extraOption,
   });
 
   @override
@@ -55,7 +57,10 @@ class _SelectableButtonCardState extends State<SelectableButtonCard> {
           child: Stack(
             alignment: AlignmentDirectional.topEnd,
             children: [
-              if (widget.onLongPressed != null && mouseHover)
+              if (widget.extraOption != null && mouseHover) widget.extraOption!,
+              if (widget.extraOption == null &&
+                  widget.onLongPressed != null &&
+                  mouseHover)
                 IconButton(
                   onPressed: widget.onLongPressed,
                   color: widget.selected

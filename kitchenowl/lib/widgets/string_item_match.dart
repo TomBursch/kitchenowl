@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kitchenowl/cubits/household_cubit.dart';
 import 'package:kitchenowl/cubits/settings_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/kitchenowl.dart';
@@ -126,8 +127,11 @@ class StringItemMatch extends StatelessWidget {
     final res = await Navigator.of(context, rootNavigator: true)
         .push<UpdateValue<RecipeItem>>(
       MaterialPageRoute(
-        builder: (BuildContext context) => ItemPage(
-          item: item!,
+        builder: (BuildContext ctx) => BlocProvider.value(
+          value: context.read<HouseholdCubit>(),
+          child: ItemPage(
+            item: item!,
+          ),
         ),
       ),
     );

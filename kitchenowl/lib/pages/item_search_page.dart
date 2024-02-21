@@ -102,13 +102,13 @@ class _ItemSearchPageState extends State<ItemSearchPage> {
                 items: state.searchResults,
                 selected: (item) => state.selectedItems.contains(item),
                 onLongPressed: const Nullable<void Function(Item)>.empty(),
-                onPressed: (Item item) {
+                onPressed: Nullable((Item item) {
                   if (!widget.multiple) {
                     Navigator.of(context).pop([item]);
                   } else {
                     cubit.itemSelected(item);
                   }
-                },
+                }),
               ),
             ],
           ),

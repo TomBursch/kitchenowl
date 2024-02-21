@@ -199,7 +199,7 @@ class _RecipePageState extends State<RecipePage> {
                       .where((e) => !e.optional)
                       .toList(),
                   selected: (item) => state.selectedItems.contains(item.name),
-                  onPressed: cubit.itemSelected,
+                  onPressed: Nullable(cubit.itemSelected),
                   onLongPressed:
                       const Nullable<void Function(RecipeItem)>.empty(),
                 ),
@@ -219,7 +219,7 @@ class _RecipePageState extends State<RecipePage> {
                       .where((e) => e.optional)
                       .toList(),
                   selected: (item) => state.selectedItems.contains(item.name),
-                  onPressed: cubit.itemSelected,
+                  onPressed: Nullable(cubit.itemSelected),
                   onLongPressed:
                       const Nullable<void Function(RecipeItem)>.empty(),
                 ),

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/category.dart';
-import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/models/shoppinglist.dart';
 import 'package:sliver_tools/sliver_tools.dart';
@@ -12,16 +11,15 @@ class SliverCategoryItemGridList<T extends Item> extends StatefulWidget {
 
   // SliverItemGridList
   final void Function()? onRefresh;
-  final void Function(T)? onPressed;
+  final Nullable<void Function(T)>? onPressed;
   final Nullable<void Function(T)>? onLongPressed;
   final List<T> items;
   final List<Category>? categories; // forwarded to item page on long press
   final ShoppingList? shoppingList; // forwarded to item page on long press
-  final Household?
-      household; // forwarded to item page on long press for offline functionality
   final bool Function(T)? selected;
   final bool isLoading;
   final bool? allRaised;
+  final Widget Function(T)? extraOption;
 
   const SliverCategoryItemGridList({
     super.key,
@@ -31,12 +29,12 @@ class SliverCategoryItemGridList<T extends Item> extends StatefulWidget {
     this.onPressed,
     this.onLongPressed,
     this.items = const [],
-    this.household,
     this.categories,
     this.shoppingList,
     this.selected,
     this.isLoading = false,
     this.allRaised,
+    this.extraOption,
   });
 
   @override
@@ -94,11 +92,11 @@ class _SliverCategoryItemGridListState<T extends Item>
                   onLongPressed: widget.onLongPressed,
                   items: widget.items,
                   categories: widget.categories,
-                  household: widget.household,
                   shoppingList: widget.shoppingList,
                   selected: widget.selected,
                   isLoading: widget.isLoading,
                   allRaised: widget.allRaised,
+                  extraOption: widget.extraOption,
                 ),
         ),
       ],

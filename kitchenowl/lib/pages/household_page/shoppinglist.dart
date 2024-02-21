@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/app.dart';
-import 'package:kitchenowl/cubits/household_cubit.dart';
 import 'package:kitchenowl/cubits/shoppinglist_cubit.dart';
 import 'package:kitchenowl/enums/shoppinglist_sorting.dart';
 import 'package:kitchenowl/models/category.dart';
@@ -83,16 +82,13 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                             items: state.result,
                             categories: state.categories,
                             shoppingList: state.selectedShoppinglist,
-                            household: BlocProvider.of<HouseholdCubit>(context)
-                                .state
-                                .household,
                             onRefresh: () => cubit.refresh(query: ""),
                             selected: (item) =>
                                 item is ShoppinglistItem &&
                                 (App.settings.shoppingListTapToRemove ||
                                     !state.selectedListItems.contains(item)),
                             isLoading: state is LoadingShoppinglistCubitState,
-                            onPressed: (Item item) {
+                            onPressed: Nullable((Item item) {
                               if (item is ShoppinglistItem) {
                                 if (App.settings.shoppingListTapToRemove) {
                                   cubit.remove(item);
@@ -102,7 +98,7 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                               } else {
                                 cubit.add(item);
                               }
-                            },
+                            }),
                           ),
                         ],
                       );
@@ -117,9 +113,6 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                         items: state.listItems,
                         categories: state.categories,
                         shoppingList: state.selectedShoppinglist,
-                        household: BlocProvider.of<HouseholdCubit>(context)
-                            .state
-                            .household,
                         selected: (item) =>
                             App.settings.shoppingListTapToRemove &&
                                 !App.settings.shoppingListListView ||
@@ -128,7 +121,7 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                                     !state.selectedListItems.contains(item),
                         isLoading: state is LoadingShoppinglistCubitState,
                         onRefresh: cubit.refresh,
-                        onPressed: (Item item) {
+                        onPressed: Nullable((Item item) {
                           if (item is ShoppinglistItem) {
                             if (App.settings.shoppingListTapToRemove) {
                               cubit.remove(item);
@@ -138,7 +131,7 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                           } else {
                             cubit.add(item);
                           }
-                        },
+                        }),
                       );
                     } else {
                       List<Widget> grids = [];
@@ -166,17 +159,19 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                                       !state.selectedListItems.contains(item),
                           isLoading: state is LoadingShoppinglistCubitState,
                           onRefresh: cubit.refresh,
-                          onPressed: (Item item) {
-                            if (item is ShoppinglistItem) {
-                              if (App.settings.shoppingListTapToRemove) {
-                                cubit.remove(item);
+                          onPressed: Nullable(
+                            (Item item) {
+                              if (item is ShoppinglistItem) {
+                                if (App.settings.shoppingListTapToRemove) {
+                                  cubit.remove(item);
+                                } else {
+                                  cubit.selectItem(item);
+                                }
                               } else {
-                                cubit.selectItem(item);
+                                cubit.add(item);
                               }
-                            } else {
-                              cubit.add(item);
-                            }
-                          },
+                            },
+                          ),
                         ));
                       }
                       body = grids;
@@ -255,7 +250,7 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                             name:
                                 '${AppLocalizations.of(context)!.itemsRecent}:',
                             items: state.recentItems,
-                            onPressed: cubit.add,
+                            onPressed: Nullable(cubit.add),
                             categories: state.categories,
                             shoppingList: state.selectedShoppinglist,
                             onRefresh: cubit.refresh,

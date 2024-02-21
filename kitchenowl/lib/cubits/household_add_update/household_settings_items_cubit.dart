@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/enums/shoppinglist_sorting.dart';
+import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/category.dart';
 import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/models/item.dart';
@@ -26,6 +27,7 @@ class HouseholdSettingsItemsCubit extends Cubit<HouseholdSettingsItemsState> {
       emit(HouseholdSettingsItemsState(
         items: (await items)!,
         categories: await categories,
+        sorting: state.sorting,
       ));
     }
   }
@@ -41,6 +43,32 @@ class HouseholdSettingsItemsCubit extends Cubit<HouseholdSettingsItemsState> {
       ShoppinglistSorting.sortShoppinglistItems(state.items, sorting);
     }
     emit(state.copyWith(sorting: sorting));
+  }
+
+  Future<void> deleteItem(Item item) async {
+    if (item.id != null) {
+      if (await ApiService.getInstance().deleteItem(item)) refresh();
+    }
+  }
+
+  Future<void> mergeItem(Item item, Item other) async {
+    if (item.id != null && other.id != null) {
+      if (await ApiService.getInstance().mergeItems(item, other)) refresh();
+    }
+  }
+
+  Future<void> setName(Item item, String name) async {
+    if (item.id != null) {
+      if (await ApiService.getInstance().updateItem(item.copyWith(name: name)))
+        refresh();
+    }
+  }
+
+  Future<void> setIcon(Item item, String? icon) async {
+    if (item.id != null) {
+      if (await ApiService.getInstance()
+          .updateItem(item.copyWith(icon: Nullable(icon)))) refresh();
+    }
   }
 }
 

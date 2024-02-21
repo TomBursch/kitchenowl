@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kitchenowl/cubits/household_cubit.dart';
 import 'package:kitchenowl/cubits/recipe_scraper_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/kitchenowl.dart';
@@ -38,100 +39,103 @@ class _RecipeScraperPageState extends State<RecipeScraperPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider.value(
-      value: cubit,
-      child: BlocBuilder<RecipeScraperCubit, RecipeScraperState>(
-        bloc: cubit,
-        builder: (context, state) {
-          if (state is! RecipeScraperLoadedState) {
+    return BlocProvider(
+      create: (context) => HouseholdCubit(widget.household),
+      child: BlocProvider.value(
+        value: cubit,
+        child: BlocBuilder<RecipeScraperCubit, RecipeScraperState>(
+          bloc: cubit,
+          builder: (context, state) {
+            if (state is! RecipeScraperLoadedState) {
+              return Scaffold(
+                appBar: AppBar(
+                  title: Text(
+                    Uri.tryParse(widget.url)?.host ?? widget.url,
+                    overflow: TextOverflow.fade,
+                  ),
+                ),
+                body: Center(
+                  child: state is RecipeScraperErrorState
+                      ? Text(AppLocalizations.of(context)!.error)
+                      : state is RecipeScraperUnsupportedState
+                          ? Text(AppLocalizations.of(context)!
+                              .unsupportedScrapeMessage)
+                          : const CircularProgressIndicator(),
+                ),
+              );
+            }
+
             return Scaffold(
               appBar: AppBar(
-                title: Text(
-                  Uri.tryParse(widget.url)?.host ?? widget.url,
-                  overflow: TextOverflow.fade,
-                ),
+                title: Text(state.recipe.name),
               ),
-              body: Center(
-                child: state is RecipeScraperErrorState
-                    ? Text(AppLocalizations.of(context)!.error)
-                    : state is RecipeScraperUnsupportedState
-                        ? Text(AppLocalizations.of(context)!
-                            .unsupportedScrapeMessage)
-                        : const CircularProgressIndicator(),
-              ),
-            );
-          }
-
-          return Scaffold(
-            appBar: AppBar(
-              title: Text(state.recipe.name),
-            ),
-            body: Align(
-              alignment: Alignment.topCenter,
-              child: ConstrainedBox(
-                constraints: const BoxConstraints.expand(width: 1600),
-                child: CustomScrollView(
-                  slivers: [
-                    SliverPadding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      sliver: SliverToBoxAdapter(
-                        child: Wrap(
-                          children: state.items.entries.map(
-                            (entry) {
-                              return StringItemMatch(
-                                household: widget.household,
-                                string: entry.key,
-                                item: entry.value,
-                                itemSelected: (item) {
-                                  cubit.updateItem(entry.key, item);
-                                },
-                              );
-                            },
-                          ).toList(),
-                        ),
-                      ),
-                    ),
-                    SliverPadding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 8,
-                      ),
-                      sliver: SliverToBoxAdapter(
-                        child: ElevatedButton(
-                          onPressed: state.isValid()
-                              ? () async {
-                                  if (!cubit.hasValidRecipe()) return;
-                                  final res = await Navigator.of(context)
-                                      .push<UpdateEnum>(MaterialPageRoute(
-                                    builder: (context) => AddUpdateRecipePage(
-                                      household: widget.household,
-                                      recipe: cubit.getRecipe()!,
-                                      canSaveWithoutChanges: true,
-                                    ),
-                                  ));
-                                  if (res == UpdateEnum.updated) {
-                                    Navigator.of(context)
-                                        .pop(UpdateEnum.updated);
-                                  }
-                                }
-                              : null,
-                          child: Text(
-                            AppLocalizations.of(context)!.next,
+              body: Align(
+                alignment: Alignment.topCenter,
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints.expand(width: 1600),
+                  child: CustomScrollView(
+                    slivers: [
+                      SliverPadding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        sliver: SliverToBoxAdapter(
+                          child: Wrap(
+                            children: state.items.entries.map(
+                              (entry) {
+                                return StringItemMatch(
+                                  household: widget.household,
+                                  string: entry.key,
+                                  item: entry.value,
+                                  itemSelected: (item) {
+                                    cubit.updateItem(entry.key, item);
+                                  },
+                                );
+                              },
+                            ).toList(),
                           ),
                         ),
                       ),
-                    ),
-                    SliverToBoxAdapter(
-                      child: SizedBox(
-                        height: MediaQuery.of(context).padding.bottom,
+                      SliverPadding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 8,
+                        ),
+                        sliver: SliverToBoxAdapter(
+                          child: ElevatedButton(
+                            onPressed: state.isValid()
+                                ? () async {
+                                    if (!cubit.hasValidRecipe()) return;
+                                    final res = await Navigator.of(context)
+                                        .push<UpdateEnum>(MaterialPageRoute(
+                                      builder: (context) => AddUpdateRecipePage(
+                                        household: widget.household,
+                                        recipe: cubit.getRecipe()!,
+                                        canSaveWithoutChanges: true,
+                                      ),
+                                    ));
+                                    if (res == UpdateEnum.updated) {
+                                      Navigator.of(context)
+                                          .pop(UpdateEnum.updated);
+                                    }
+                                  }
+                                : null,
+                            child: Text(
+                              AppLocalizations.of(context)!.next,
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
-                  ],
+                      SliverToBoxAdapter(
+                        child: SizedBox(
+                          height: MediaQuery.of(context).padding.bottom,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }

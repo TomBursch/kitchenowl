@@ -84,6 +84,7 @@ SUPPORTED_LANGUAGES = {
     "es": "Español",
     "fi": "Suomi",
     "fr": "Français",
+    "he": "עִבְרִית‎",
     "hu": "Magyar nyelv",
     "id": "Bahasa Indonesia",
     "it": "Italiano",

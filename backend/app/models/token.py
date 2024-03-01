@@ -120,7 +120,7 @@ class Token(db.Model, DbModelMixin, TimestampMixin):
         ):
             oldRefreshToken.delete_token_familiy()
             raise UnauthorizedRequest(
-                message="Unauthorized: IP {} reused the same refresh token, loging out user".format(
+                message="Unauthorized: IP {} reused the same refresh token, logging out user".format(
                     request.remote_addr
                 )
             )

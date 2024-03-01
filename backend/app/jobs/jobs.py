@@ -10,12 +10,18 @@ from app.models import (
     ChallengePasswordReset,
     OIDCRequest,
 )
+from app.service.delete_unused import deleteEmptyHouseholds
 from .item_ordering import findItemOrdering
 from .item_suggestions import findItemSuggestions
 from .cluster_shoppings import clusterShoppings
 
 
 if not MESSAGE_BROKER:
+
+    @scheduler.task("cron", id="everyMonth", day="1", hour="0", minute="0")
+    def setup_daily():
+        with app.app_context():
+            monthly()
 
     @scheduler.task("cron", id="everyDay", day_of_week="*", hour="3", minute="0")
     def setup_daily():
@@ -28,6 +34,11 @@ if not MESSAGE_BROKER:
             halfHourly()
 
 else:
+
+    @celery_app.task
+    def monthlyTask():
+        monthly()
+
     @celery_app.task
     def dailyTask():
         daily()
@@ -47,6 +58,16 @@ else:
             dailyTask,
             name="everyDay",
         )
+
+        sender.add_periodic_task(
+            crontab(day_of_month="1", hour=0, minute=0),
+            monthlyTask,
+            name="everyMonth",
+        )
+
+
+def monthly():
+    deleteEmptyHouseholds()
 
 
 def daily():

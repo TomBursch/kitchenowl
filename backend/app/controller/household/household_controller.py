@@ -8,7 +8,7 @@ from app.models import Household, HouseholdMember, Shoppinglist, User
 from app.service.import_language import importLanguage
 from app.service.file_has_access_or_download import file_has_access_or_download
 from .schemas import AddHousehold, UpdateHousehold, UpdateHouseholdMember
-from app import socketio
+from app import socketio, db
 
 household = Blueprint("household", __name__)
 
@@ -112,8 +112,11 @@ def updateHousehold(args, household_id):
 @jwt_required()
 @authorize_household(required=RequiredRights.ADMIN)
 def deleteHouseholdById(household_id):
-    if Household.delete_by_id(household_id):
-        socketio.close_room(household_id)
+    hms = HouseholdMember.find_by_household(household_id)
+    for hm in hms:
+        db.session.delete(hm)
+    db.session.commit()
+    socketio.close_room(household_id)
     return jsonify({"msg": "DONE"})
 
 

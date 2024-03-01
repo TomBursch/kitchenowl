@@ -89,16 +89,15 @@ class HouseholdMember(db.Model, DbModelMixin, TimestampMixin):
         return res
 
     def delete(self):
-        if len(self.household.member) <= 1:
-            self.household.delete()
-        elif self.owner:
+        if self.owner:
             newOwner = next(
                 (m for m in self.household.member if m.admin and m != self),
-                next((m for m in self.household.member if m != self)),
+                next((m for m in self.household.member if m != self), None),
             )
-            newOwner.admin = True
-            newOwner.owner = True
-            newOwner.save()
+            if newOwner:
+                newOwner.admin = True
+                newOwner.owner = True
+                newOwner.save()
             super().delete()
         else:
             super().delete()
@@ -116,3 +115,7 @@ class HouseholdMember(db.Model, DbModelMixin, TimestampMixin):
     @classmethod
     def find_by_user(cls, user_id: int) -> list[Self]:
         return cls.query.filter(cls.user_id == user_id).all()
+    
+    @classmethod
+    def find_by_household(cls, household_id: int) -> list[Self]:
+        return cls.query.filter(cls.household_id == household_id).all()

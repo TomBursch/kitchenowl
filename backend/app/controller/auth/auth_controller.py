@@ -292,7 +292,7 @@ if FRONT_URL and len(oidc_clients) > 0:
                 "code": args["code"],
                 "redirect_uri": oidc_request.redirect_uri,
             },
-            authn_method="client_secret_basic",
+            authn_method="client_secret_post",
         )
         if isinstance(tokenResponse, ErrorResponse):
             oidc_request.delete()

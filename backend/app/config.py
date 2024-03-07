@@ -89,6 +89,7 @@ SUPPORTED_LANGUAGES = {
     "id": "Bahasa Indonesia",
     "it": "Italiano",
     "ko": "한국어",
+    "lt": "Lietuvių kalba",
     "nb_NO": "Bokmål",
     "nl": "Nederlands",
     "pl": "Polski",

@@ -4,11 +4,18 @@
   "@accountCreateTitle": {},
   "@accountDelete": {},
   "@accountDeleteConfirmation": {},
+  "@accountLinkedWithOtherUser": {},
+  "@accountsLinked": {},
   "@add": {},
   "@addCategory": {},
   "@addDescriptionFromSource": {},
   "@addItemTitle": {},
   "@addLanguage": {},
+  "@addLanguageConfirm": {
+    "placeholders": {
+      "lang": {}
+    }
+  },
   "@addNumberIngredients": {
     "placeholders": {
       "number": {}
@@ -35,7 +42,17 @@
   "@categoriesMerge": {},
   "@category": {},
   "@categoryDelete": {},
+  "@categoryDeleteConfirmation": {
+    "placeholders": {
+      "category": {}
+    }
+  },
   "@categoryEdit": {},
+  "@categoryExpenseDeleteConfirmation": {
+    "placeholders": {
+      "category": {}
+    }
+  },
   "@changeIcon": {},
   "@colorSelect": {},
   "@confirm": {},
@@ -51,8 +68,19 @@
   "@done": {},
   "@email": {},
   "@emailInvalid": {},
+  "@emailNotVerified": {},
+  "@emailResendVerification": {},
+  "@emailSuccessfullyVerified": {},
   "@emailUpdate": {},
+  "@emailUsed": {},
   "@error": {},
+  "@excludeFromStatistics": {},
+  "@expense": {},
+  "@expenseAdd": {},
+  "@expenseAmount": {},
+  "@expenseCategories": {},
+  "@expenseEdit": {},
+  "@expenseEmpty": {},
   "@password": {},
   "@passwordFieldTooShort": {},
   "@passwordRepeat": {},
@@ -67,11 +95,14 @@
   "accountCreateTitle": "Crie sua conta KitchenOwl",
   "accountDelete": "Apagar Conta",
   "accountDeleteConfirmation": "Tem certeza que deseja apagar sua conta?",
+  "accountLinkedWithOtherUser": "Conta já vinculada a outro usuário",
+  "accountsLinked": "Contas vinculadas",
   "add": "Adicione",
   "addCategory": "Adicionar Categoria",
   "addDescriptionFromSource": "Insira a origem",
   "addItemTitle": "Inserir Itens",
   "addLanguage": "Inserir Idioma",
+  "addLanguageConfirm": "Tem certeza que quer mudar o idioma para '{lang}'? Essa ação não pode ser desfeita e irá adicionar itens e categorias no seu domicílio.",
   "addNumberIngredients": "Inserir [número] ingredientes",
   "addShoppingList": "Adicionar Lista de Compras",
   "addTag": "Adicionar Tag",
@@ -88,7 +119,9 @@
   "categoriesMerge": "Unir Categorias",
   "category": "Categoria",
   "categoryDelete": "Apagar Categoria",
+  "categoryDeleteConfirmation": "Tem certeza que quer apagar {category}? Isso irá remover a categoria de todos os itens.",
   "categoryEdit": "Editar Categoria",
+  "categoryExpenseDeleteConfirmation": "Tem certeza que quer apagar {category}? Isso irá remover a categoria de todas as despesas.",
   "changeIcon": "Alterar Ícone",
   "colorSelect": "Selecione uma cor",
   "confirm": "Confirme",
@@ -104,8 +137,19 @@
   "done": "Feito",
   "email": "Email",
   "emailInvalid": "Email Inválido",
+  "emailNotVerified": "Não verificado",
+  "emailResendVerification": "Mandar email de verificação novamente",
+  "emailSuccessfullyVerified": "Email verificado!",
   "emailUpdate": "Atualizar Email",
+  "emailUsed": "O email já está associado a uma conta",
   "error": "Ocorreu um Erro",
+  "excludeFromStatistics": "Excluir das estatísticas",
+  "expense": "Despesa",
+  "expenseAdd": "Adicionar despesa",
+  "expenseAmount": "Quantia",
+  "expenseCategories": "Categorias de despesa",
+  "expenseEdit": "Editar despesa",
+  "expenseEmpty": "Nenhuma despesa, comece criando uma!",
   "password": "Senha",
   "passwordFieldTooShort": "Senha muito curta",
   "passwordRepeat": "Repetir Senha",

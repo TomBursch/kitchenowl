@@ -1,5 +1,5 @@
 Section: base
 Priority: optional 
 Architecture: all 
-Depends: libsecret-1-0, libjsoncpp1
+Depends: libsecret-1-0
 Maintainer: Tom Bursch

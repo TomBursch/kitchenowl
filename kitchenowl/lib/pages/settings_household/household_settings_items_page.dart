@@ -59,6 +59,7 @@ class _HouseholdSettingsItemsPageState
                 categories: state.categories,
                 onRefresh: cubit.refresh,
                 allRaised: true,
+                advancedItemView: true,
                 extraOption: _itemPopmenuBuilder,
               );
             } else {
@@ -79,6 +80,7 @@ class _HouseholdSettingsItemsPageState
                   onRefresh: cubit.refresh,
                   allRaised: true,
                   items: items,
+                  advancedItemView: true,
                   extraOption: _itemPopmenuBuilder,
                 ));
               }

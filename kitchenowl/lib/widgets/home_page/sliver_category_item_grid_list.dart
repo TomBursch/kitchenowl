@@ -16,6 +16,7 @@ class SliverCategoryItemGridList<T extends Item> extends StatefulWidget {
   final List<T> items;
   final List<Category>? categories; // forwarded to item page on long press
   final ShoppingList? shoppingList; // forwarded to item page on long press
+  final bool advancedItemView; // forwarded to item page on long press
   final bool Function(T)? selected;
   final bool isLoading;
   final bool? allRaised;
@@ -39,6 +40,7 @@ class SliverCategoryItemGridList<T extends Item> extends StatefulWidget {
     this.extraOption,
     this.isSubTitle = false,
     this.splitByCategories = false,
+    this.advancedItemView = false,
   });
 
   @override
@@ -54,24 +56,21 @@ class _SliverCategoryItemGridListState<T extends Item>
   Widget build(BuildContext context) {
     TextStyle? titleTextStyle = Theme.of(context).textTheme.titleLarge;
     if (widget.isSubTitle)
-      titleTextStyle = titleTextStyle?.apply(fontStyle: FontStyle.italic, fontWeightDelta: -1);
+      titleTextStyle = titleTextStyle?.apply(
+          fontStyle: FontStyle.italic, fontWeightDelta: -1);
 
     List<Widget> list = [];
     final categoryLength = widget.categories?.length ?? 0;
 
     if (widget.splitByCategories) {
       for (int i = 0; i < categoryLength + 1; i++) {
-        Category? category = i < categoryLength
-            ? widget.categories![i]
-            : null;
-        final List<T> items = widget.items
-            .where((e) => e.category == category)
-            .toList();
+        Category? category = i < categoryLength ? widget.categories![i] : null;
+        final List<T> items =
+            widget.items.where((e) => e.category == category).toList();
         if (items.isEmpty) continue;
 
         list.add(SliverCategoryItemGridList(
-          name: category?.name ??
-              AppLocalizations.of(context)!.uncategorized,
+          name: category?.name ?? AppLocalizations.of(context)!.uncategorized,
           items: items,
           categories: widget.categories,
           shoppingList: widget.shoppingList,
@@ -82,10 +81,10 @@ class _SliverCategoryItemGridListState<T extends Item>
           isSubTitle: true,
           allRaised: widget.allRaised,
           extraOption: widget.extraOption,
+          advancedItemView: widget.advancedItemView,
         ));
       }
-    }
-    else
+    } else
       list.add(SliverItemGridList<T>(
         onRefresh: widget.onRefresh,
         onPressed: widget.onPressed,
@@ -97,6 +96,7 @@ class _SliverCategoryItemGridListState<T extends Item>
         isLoading: widget.isLoading,
         allRaised: widget.allRaised,
         extraOption: widget.extraOption,
+        advancedItemView: widget.advancedItemView,
       ));
 
     return SliverMainAxisGroup(

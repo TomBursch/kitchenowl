@@ -13,18 +13,21 @@ import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/shoppinglist.dart';
 import 'package:kitchenowl/models/update_value.dart';
 import 'package:kitchenowl/widgets/item_popup_menu_button.dart';
+import 'package:kitchenowl/widgets/item_wrap_menu.dart';
 import 'package:kitchenowl/widgets/recipe_item.dart';
 
 class ItemPage<T extends Item> extends StatefulWidget {
   final T item;
   final ShoppingList? shoppingList;
   final List<Category> categories;
+  final bool advancedView;
 
   const ItemPage({
     super.key,
     required this.item,
     this.shoppingList,
     this.categories = const [],
+    this.advancedView = false,
   });
 
   @override
@@ -139,7 +142,7 @@ class _ItemPageState<T extends Item> extends State<ItemPage<T>> {
                     SliverPadding(
                       padding: EdgeInsets.only(
                         top: (widget.item is ItemWithDescription) ? 0 : 16,
-                        bottom: 16,
+                        bottom: (widget.advancedView) ? 8 : 16,
                         left: 16,
                         right: 16,
                       ),
@@ -214,6 +217,64 @@ class _ItemPageState<T extends Item> extends State<ItemPage<T>> {
                                     : null,
                               ),
                           ],
+                        ),
+                      ),
+                    ),
+                  if (widget.advancedView)
+                    BlocBuilder<ItemEditCubit, ItemEditState>(
+                      bloc: cubit,
+                      builder: (context, state) => SliverPadding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        sliver: SliverList(
+                          delegate: SliverChildListDelegate([
+                            if (!App.isOffline)
+                              ItemWrapMenu(
+                                item: cubit.item,
+                                household: context
+                                    .read<HouseholdCubit>()
+                                    .state
+                                    .household,
+                                setIcon: cubit.setIcon,
+                                setName: cubit.setName,
+                                mergeItem: cubit.mergeItem,
+                                deleteItem: () async {
+                                  await cubit.deleteItem();
+                                  if (!mounted) return;
+                                  Navigator.of(context).pop(
+                                      const UpdateValue<Item>(
+                                          UpdateEnum.deleted));
+                                },
+                              ),
+                            const Divider(height: 32),
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 8),
+                              child: Text(
+                                AppLocalizations.of(context)!.about,
+                                style: Theme.of(context).textTheme.titleLarge,
+                              ),
+                            ),
+                            ListTile(
+                              contentPadding: EdgeInsets.zero,
+                              title: Text("Ordering"),
+                              trailing: Text(widget.item.ordering.toString()),
+                            ),
+                            ListTile(
+                              contentPadding: EdgeInsets.zero,
+                              title: Text("Icon"),
+                              trailing: Text(state.icon ?? ""),
+                            ),
+                            ListTile(
+                              contentPadding: EdgeInsets.zero,
+                              title: Text("Default"),
+                              trailing: Text(widget.item.isDefault.toString()),
+                            ),
+                            ListTile(
+                              contentPadding: EdgeInsets.zero,
+                              title: Text("Default name"),
+                              trailing: Text(widget.item.defaultKey ?? ""),
+                            ),
+                            const Divider(),
+                          ]),
                         ),
                       ),
                     ),

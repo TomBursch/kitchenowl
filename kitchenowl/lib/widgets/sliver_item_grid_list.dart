@@ -19,6 +19,7 @@ class SliverItemGridList<T extends Item> extends StatelessWidget {
   final List<T> items;
   final List<Category>? categories; // forwarded to item page on long press
   final ShoppingList? shoppingList; // forwarded to item page on long press
+  final bool advancedItemView; // forwarded to item page on long press
   final bool Function(T)? selected;
   final bool isLoading;
   final bool? isList;
@@ -38,6 +39,7 @@ class SliverItemGridList<T extends Item> extends StatelessWidget {
     this.isList,
     this.allRaised,
     this.extraOption,
+    this.advancedItemView = false,
   });
 
   @override
@@ -99,6 +101,7 @@ class SliverItemGridList<T extends Item> extends StatelessWidget {
           item: item,
           shoppingList: shoppingList,
           categories: categories ?? const [],
+          advancedView: advancedItemView,
         );
         final householdCubit = context.readOrNull<HouseholdCubit>();
         if (householdCubit != null)

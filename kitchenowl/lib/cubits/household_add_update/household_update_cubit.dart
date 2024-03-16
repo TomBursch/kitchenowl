@@ -53,12 +53,12 @@ class HouseholdUpdateCubit
       featurePlanner: household.featurePlanner ?? true,
       viewOrdering: household.viewOrdering ?? ViewsEnum.values,
       language: household.language,
-      supportedLanguages: state.supportedLanguages,
       image: household.image,
       shoppingLists: await shoppingLists ?? const [],
       tags: await tags ?? {},
       categories: await categories ?? const [],
       expenseCategories: await expenseCategories ?? const [],
+      supportedLanguages: state.supportedLanguages,
     ));
   }
 

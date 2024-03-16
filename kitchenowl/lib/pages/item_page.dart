@@ -255,22 +255,26 @@ class _ItemPageState<T extends Item> extends State<ItemPage<T>> {
                             ),
                             ListTile(
                               contentPadding: EdgeInsets.zero,
-                              title: Text("Ordering"),
+                              title:
+                                  Text(AppLocalizations.of(context)!.ordering),
                               trailing: Text(widget.item.ordering.toString()),
                             ),
+                            if (state.icon != null)
+                              ListTile(
+                                contentPadding: EdgeInsets.zero,
+                                title: Text(AppLocalizations.of(context)!.icon),
+                                trailing: Text(state.icon ?? ""),
+                              ),
                             ListTile(
                               contentPadding: EdgeInsets.zero,
-                              title: Text("Icon"),
-                              trailing: Text(state.icon ?? ""),
-                            ),
-                            ListTile(
-                              contentPadding: EdgeInsets.zero,
-                              title: Text("Default"),
+                              title: Text(
+                                  AppLocalizations.of(context)!.defaultWord),
                               trailing: Text(widget.item.isDefault.toString()),
                             ),
                             ListTile(
                               contentPadding: EdgeInsets.zero,
-                              title: Text("Default name"),
+                              title: Text(
+                                  AppLocalizations.of(context)!.defaultKey),
                               trailing: Text(widget.item.defaultKey ?? ""),
                             ),
                             const Divider(),

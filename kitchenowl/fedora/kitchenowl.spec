@@ -4,7 +4,6 @@ Summary: KitchenOwl helps you organize your grocery life
 License: Apache 2.0
 Source0: kitchenowl
 Source1: kitchenowl.desktop
-Requires: jsoncpp
 Requires: libsecret
 
 %description

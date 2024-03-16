@@ -36,7 +36,7 @@ RUN flutter upgrade
 RUN flutter doctor -v
 
 # Copy the app files to the container
-COPY .metadata l10n.yaml pubspec.yaml /usr/local/src/app/
+COPY .metadata l10n.yaml pubspec.yaml pubspec.lock /usr/local/src/app/
 COPY lib /usr/local/src/app/lib
 COPY web /usr/local/src/app/web
 COPY assets /usr/local/src/app/assets

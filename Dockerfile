@@ -36,7 +36,7 @@ RUN flutter upgrade
 RUN flutter doctor -v
 
 # Copy the app files to the container
-COPY kitchenowl/.metadata kitchenowl/l10n.yaml kitchenowl/pubspec.yaml /usr/local/src/app/
+COPY kitchenowl/.metadata kitchenowl/l10n.yaml kitchenowl/pubspec.yaml kitchenowl/pubspec.lock /usr/local/src/app/
 COPY kitchenowl/lib /usr/local/src/app/lib
 COPY kitchenowl/web /usr/local/src/app/web
 COPY kitchenowl/assets /usr/local/src/app/assets

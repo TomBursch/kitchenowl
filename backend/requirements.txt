@@ -10,7 +10,7 @@ bcrypt==4.1.2
 beautifulsoup4==4.12.3
 bidict==0.23.1
 billiard==4.2.0
-black==24.1a1
+black==24.3.0
 blinker==1.7.0
 blurhash-python==1.2.2
 celery==5.3.6

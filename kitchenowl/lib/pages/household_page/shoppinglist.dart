@@ -255,10 +255,12 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                             shoppingList: state.selectedShoppinglist,
                             onRefresh: cubit.refresh,
                             isLoading: state is LoadingShoppinglistCubitState,
-                            splitByCategories: !(state.sorting !=
-                                  ShoppinglistSorting.category ||
-                                  state is LoadingShoppinglistCubitState &&
-                                      state.listItems.isEmpty),
+                            splitByCategories: App
+                                    .settings.recentItemsCategorize &&
+                                !(state.sorting !=
+                                        ShoppinglistSorting.category ||
+                                    state is LoadingShoppinglistCubitState &&
+                                        state.listItems.isEmpty),
                           ),
                       ],
                     );

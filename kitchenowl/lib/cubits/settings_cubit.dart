@@ -26,6 +26,8 @@ class SettingsCubit extends Cubit<SettingsState> {
         PreferenceStorage.getInstance().readBool(key: 'shoppingListListView');
     final shoppingListTapToRemove = PreferenceStorage.getInstance()
         .readBool(key: 'shoppingListTapToRemove');
+    final recentItemsCategorize =
+        PreferenceStorage.getInstance().readBool(key: 'recentItemsCategorize');
     Config.deviceInfo = DeviceInfoPlugin().deviceInfo;
     Config.packageInfo = PackageInfo.fromPlatform();
 
@@ -45,6 +47,7 @@ class SettingsCubit extends Cubit<SettingsState> {
           (await accentColor) != null ? Color((await accentColor)!) : null,
       shoppingListListView: await shoppingListListView ?? false,
       shoppingListTapToRemove: await shoppingListTapToRemove ?? true,
+      recentItemsCategorize: await recentItemsCategorize ?? false,
     ));
   }
 
@@ -98,6 +101,14 @@ class SettingsCubit extends Cubit<SettingsState> {
     );
     emit(state.copyWith(shoppingListTapToRemove: shoppingListTapToRemove));
   }
+
+  void setRecentItemsCategorize(bool recentItemsCategorize) {
+    PreferenceStorage.getInstance().writeBool(
+      key: 'recentItemsCategorize',
+      value: recentItemsCategorize,
+    );
+    emit(state.copyWith(recentItemsCategorize: recentItemsCategorize));
+  }
 }
 
 class SettingsState extends Equatable {
@@ -108,6 +119,7 @@ class SettingsState extends Equatable {
   final Color? accentColor;
   final bool shoppingListListView;
   final bool shoppingListTapToRemove;
+  final bool recentItemsCategorize;
 
   const SettingsState({
     this.themeMode = ThemeMode.system,
@@ -117,6 +129,7 @@ class SettingsState extends Equatable {
     this.accentColor,
     this.shoppingListListView = false,
     this.shoppingListTapToRemove = true,
+    this.recentItemsCategorize = false,
   });
 
   SettingsState copyWith({
@@ -127,6 +140,7 @@ class SettingsState extends Equatable {
     Nullable<Color>? accentColor,
     bool? shoppingListListView,
     bool? shoppingListTapToRemove,
+    bool? recentItemsCategorize,
   }) =>
       SettingsState(
         themeMode: themeMode ?? this.themeMode,
@@ -137,6 +151,8 @@ class SettingsState extends Equatable {
         shoppingListListView: shoppingListListView ?? this.shoppingListListView,
         shoppingListTapToRemove:
             shoppingListTapToRemove ?? this.shoppingListTapToRemove,
+        recentItemsCategorize:
+            recentItemsCategorize ?? this.recentItemsCategorize,
       );
 
   @override
@@ -148,5 +164,6 @@ class SettingsState extends Equatable {
         accentColor,
         shoppingListListView,
         shoppingListTapToRemove,
+        recentItemsCategorize,
       ];
 }

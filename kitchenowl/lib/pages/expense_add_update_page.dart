@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -15,7 +16,7 @@ import 'package:responsive_builder/responsive_builder.dart';
 class AddUpdateExpensePage extends StatefulWidget {
   final Household household;
   final Expense? expense;
-  final List<String>? suggestedNames;
+  final Map<String, ExpenseCategory?>? suggestedNames;
 
   AddUpdateExpensePage({
     super.key,
@@ -123,7 +124,7 @@ class _AddUpdateExpensePageState extends State<AddUpdateExpensePage> {
                             return const Iterable.empty();
                           }
 
-                          return widget.suggestedNames!
+                          return widget.suggestedNames!.keys
                               .where(
                                 (e) => e.toLowerCase().startsWith(
                                     textEditingValue.text.toLowerCase()),
@@ -133,7 +134,16 @@ class _AddUpdateExpensePageState extends State<AddUpdateExpensePage> {
                         },
                         initialValue:
                             TextEditingValue(text: widget.expense?.name ?? ""),
-                        onSelected: (s) => cubit.setName(s),
+                        onSelected: (s) {
+                          cubit.setName(s);
+                          ExpenseCategory? category = (widget.suggestedNames
+                                      ?.containsKey(s) ??
+                                  false)
+                              ? cubit.state.categories.firstWhereOrNull(
+                                  (e) => widget.suggestedNames![s]?.id == e.id)
+                              : null;
+                          if (category != null) cubit.setCategory(category);
+                        },
                         fieldViewBuilder: (context, textEditingController,
                                 focusNode, onFieldSubmitted) =>
                             TextField(

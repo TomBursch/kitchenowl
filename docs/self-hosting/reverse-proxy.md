@@ -4,7 +4,7 @@ These are community provided and might need to be adapted to your specific setup
 
 ### HAProxy
 
-Assumes HAProxy is part of your KitchenOwl docker compose stack.
+Assumes HAProxy is part of your KitchenOwl docker compose stack, and you use the multiservice setup method.
 
 ```
 global

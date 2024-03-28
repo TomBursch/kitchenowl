@@ -1,5 +1,9 @@
 # Migrating from Older Versions
 
+### v0.5.0
+The fronted is not required any more `tombursch/kitchenowl:latest` is now an all-in-one container that hosts the web application and backend. Take a look at the [install instructions](index.md) if you want to switch your setup.
+Existing setups don't need to be adapted, they will still work like they used to. Although, there now exists a docker image `tombursch/kitchenowl-backend:latest` specifically designed for the split setup.
+
 ### v0.4.9
 The frontend is now required and using the option to use the backend as an HTTP server has been removed. 
 

@@ -3,9 +3,23 @@
   "@accountDelete": {},
   "@add": {},
   "@addLanguage": {},
+  "@addRecipeToPlannerShort": {
+    "description": "A shorter title/button text used wherever the space is limited. Excludes the number of yields."
+  },
+  "@addShoppingList": {},
+  "@addTag": {},
+  "@addedBy": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "@address": {},
+  "@admin": {},
+  "@back": {},
   "@camera": {},
   "@cancel": {},
   "@categories": {},
+  "@categoriesMerge": {},
   "@category": {},
   "@categoryDelete": {},
   "@categoryEdit": {},
@@ -91,9 +105,17 @@
   "accountDelete": "계정 삭제",
   "add": "추가",
   "addLanguage": "언어 추가",
+  "addRecipeToPlannerShort": "식단 추가",
+  "addShoppingList": "쇼핑리스트 추가",
+  "addTag": "태그 추가",
+  "addedBy": "{name}에서 추가됨",
+  "address": "주소",
+  "admin": "어드민",
+  "back": "뒤로",
   "camera": "카메라",
   "cancel": "취소",
   "categories": "카테고리",
+  "categoriesMerge": "카테고리 합치기",
   "category": "카테고리",
   "categoryDelete": "카테고리 지우기",
   "categoryEdit": "카테고리 편집",

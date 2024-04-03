@@ -1,1 +1,19 @@
-{}
+{
+  "categories": {
+    "bread": "🍞 מוצרי מאפה",
+    "canned": "🥫 שימורים",
+    "dairy": "🥛 חלב",
+    "drinks": "🍹 משקאות",
+    "freezer": "❄️ קפואים",
+    "fruits_vegetables": "🥬 פירות וירקות",
+    "grain": "🥟 פסטה ונודלס",
+    "hygiene": "🚽 הגיינה",
+    "refrigerated": "💧 מקורר",
+    "snacks": "🥜 חטיפים"
+  },
+  "items": {
+    "agave_syrup": "סירופ אגבה",
+    "aioli": "איולי",
+    "amaretto": "אמרטו"
+  }
+}

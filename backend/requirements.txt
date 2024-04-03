@@ -21,7 +21,7 @@ click==8.1.7
 click-didyoumean==0.3.1
 click-plugins==1.1.1
 click-repl==0.3.0
-contourpy==1.2.0
+contourpy==1.2.1
 cryptography==42.0.5
 cycler==0.12.1
 dbscan1d==0.2.2
@@ -69,7 +69,7 @@ oic==1.6.1
 packaging==24.0
 pandas==2.2.1
 pathspec==0.12.1
-Pillow==10.2.0
+Pillow==10.3.0
 platformdirs==4.2.0
 pluggy==1.4.0
 prometheus-client==0.20.0
@@ -78,7 +78,7 @@ prompt-toolkit==3.0.43
 psycopg2-binary==2.9.9
 py==1.11.0
 pycodestyle==2.11.1
-pycparser==2.21
+pycparser==2.22
 pycryptodomex==3.20.0
 pydantic==2.6.4
 pydantic-settings==2.2.1
@@ -102,7 +102,7 @@ recipe-scrapers==14.55.0
 regex==2023.12.25
 requests==2.31.0
 scikit-learn==1.4.0
-scipy==1.12.0
+scipy==1.13.0
 setuptools-scm==8.0.4
 simple-websocket==1.0.0
 six==1.16.0
@@ -116,7 +116,7 @@ tqdm==4.66.2
 typed-ast==1.5.5
 types-beautifulsoup4==4.12.0.20240229
 types-html5lib==1.1.11.20240228
-types-requests==2.31.0.20240311
+types-requests==2.31.0.20240403
 types-urllib3==1.26.25.14
 typing_extensions==4.10.0
 tzdata==2024.1
@@ -128,7 +128,7 @@ vine==5.1.0
 w3lib==2.1.2
 wcwidth==0.2.13
 webencodings==0.5.1
-Werkzeug==3.0.1
+Werkzeug==3.0.2
 wsproto==1.2.0
 zope.event==5.0
 zope.interface==6.2

@@ -85,7 +85,8 @@ class _ChartLineCurrentMonthState extends State<ChartLineCurrentMonth> {
           ),
           lineTouchData: LineTouchData(
               touchTooltipData: LineTouchTooltipData(
-            tooltipBgColor: Theme.of(context).cardTheme.color ??
+            getTooltipColor: (group) =>
+                Theme.of(context).cardTheme.color ??
                 Theme.of(context).colorScheme.surface,
             tooltipRoundedRadius: 14,
             getTooltipItems: (touchedSpots) =>

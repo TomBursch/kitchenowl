@@ -10,18 +10,13 @@ services:
     depends_on:
       - back
   back:
-    image: tombursch/kitchenowl:latest
+    image: tombursch/kitchenowl-backend:latest
     restart: unless-stopped
-    command: --ini wsgi.ini:celery --gevent 100
     environment:
       - JWT_SECRET_KEY=PLEASE_CHANGE_ME
-      - MESSAGE_BROKER="amqp://rabbitmq"
+      # - FRONT_URL=http://localhost # Optional take a look at https://docs.kitchenowl.org/self-hosting/advanced/ for more info
     volumes:
       - kitchenowl_data:/data
-  rabbitmq:
-    image: rabbitmq:3
-    volumes:
-        - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
 
 volumes:
   kitchenowl_data:

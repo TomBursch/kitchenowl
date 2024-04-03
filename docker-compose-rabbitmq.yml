@@ -1,5 +1,6 @@
 version: "3"
 services:
+# rabbitmq is only supported with a separate front & backend container
   front:
     image: tombursch/kitchenowl-web:latest
     restart: unless-stopped
@@ -10,15 +11,18 @@ services:
     depends_on:
       - back
   back:
-    image: tombursch/kitchenowl:latest
+    image: tombursch/kitchenowl-backend:latest
     restart: unless-stopped
-    # ports: # Should only be needed if you're not using docker-compose
-    #   - "5000:5000" # uwsgi protocol
+    command: --ini wsgi.ini:celery --gevent 100
     environment:
       - JWT_SECRET_KEY=PLEASE_CHANGE_ME
-      # - FRONT_URL=http://localhost # Optional should not be changed unless you know what youre doing
+      - MESSAGE_BROKER="amqp://rabbitmq"
     volumes:
       - kitchenowl_data:/data
+  rabbitmq:
+    image: rabbitmq:3
+    volumes:
+        - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
 
 volumes:
   kitchenowl_data:

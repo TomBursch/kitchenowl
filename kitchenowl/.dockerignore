@@ -13,7 +13,6 @@ windows/
 # .gitignore here:
 # Miscellaneous
 *.class
-*.lock
 *.log
 *.pyc
 *.swp

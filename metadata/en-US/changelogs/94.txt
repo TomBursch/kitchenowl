@@ -1,0 +1,6 @@
+- More than 250 new item icons
+- Updated household settings
+- You can now categorize recent items
+- Auto completion of recipe names and categories
+- New and updated translations
+- Many Bug-fixes and improvements

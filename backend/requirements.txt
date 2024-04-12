@@ -43,7 +43,7 @@ greenlet==3.0.0rc3
 h11==0.14.0
 html-text==0.5.2
 html5lib==1.1
-idna==3.6
+idna==3.7
 ingredient-parser-nlp==0.1.0b8
 iniconfig==2.0.0
 isodate==0.6.1

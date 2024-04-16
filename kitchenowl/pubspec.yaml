@@ -40,7 +40,7 @@ dependencies:
   equatable: ^2.0.5
   url_launcher: ^6.1.10
   flutter_custom_tabs: ^2.0.0+1
-  package_info_plus: ^6.0.0
+  package_info_plus: ^7.0.0
   device_info_plus: ^10.0.1
   http: ^1.1.2
   diffutil_dart: ^4.0.0

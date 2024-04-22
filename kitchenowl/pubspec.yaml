@@ -49,7 +49,7 @@ dependencies:
   dynamic_color: ^1.6.3
 
   azlistview_plus: ^3.0.0
-  flutter_markdown: ^0.6.18
+  flutter_markdown: ^0.7.1
   markdown: ^7.1.1
   tuple: ^2.0.1
   community_charts_flutter: ^1.0.2
@@ -57,7 +57,7 @@ dependencies:
   cached_network_image: ^3.3.0
   image_picker: ^1.0.4
   file_picker: ^8.0.0+1
-  photo_view: ^0.14.0
+  photo_view: ^0.15.0
   share_handler: ^0.0.19
   share_plus: ^8.0.2
   reorderables: ^0.6.0

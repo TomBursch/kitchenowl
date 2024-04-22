@@ -166,17 +166,17 @@ class _ItemPageState<T extends Item> extends State<ItemPage<T>> {
                                       value: state.category,
                                       isExpanded: true,
                                       items: [
-                                        for (final e in widget.categories)
-                                          DropdownMenuItem(
-                                            value: e,
-                                            child: Text(e.name),
-                                          ),
                                         DropdownMenuItem(
                                           value: null,
                                           child: Text(
                                             AppLocalizations.of(context)!.none,
                                           ),
                                         ),
+                                        for (final e in widget.categories)
+                                          DropdownMenuItem(
+                                            value: e,
+                                            child: Text(e.name),
+                                          ),
                                       ],
                                       onChanged: !App.isOffline
                                           ? cubit.setCategory

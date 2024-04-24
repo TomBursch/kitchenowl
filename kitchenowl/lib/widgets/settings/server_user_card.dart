@@ -72,7 +72,7 @@ class ServerUserListTile extends StatelessWidget {
               user: user,
             ),
           ));
-          if (res == UpdateEnum.updated) {
+          if (res == UpdateEnum.updated || res == UpdateEnum.deleted) {
             BlocProvider.of<SettingsServerCubit>(context).refresh();
           }
         },

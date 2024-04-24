@@ -67,7 +67,11 @@ class _LoginPageState extends State<LoginPage> {
                       TextField(
                         controller: usernameController,
                         autofocus: true,
-                        autofillHints: const [AutofillHints.username],
+                        autofillHints: const [
+                          AutofillHints.username,
+                          AutofillHints.email,
+                        ],
+                        keyboardType: TextInputType.name,
                         textInputAction: TextInputAction.next,
                         decoration: InputDecoration(
                           labelText: AppLocalizations.of(context)!.username,
@@ -78,6 +82,7 @@ class _LoginPageState extends State<LoginPage> {
                         obscureText: true,
                         textInputAction: TextInputAction.go,
                         autofillHints: const [AutofillHints.password],
+                        keyboardType: TextInputType.visiblePassword,
                         onSubmitted: (value) =>
                             BlocProvider.of<AuthCubit>(context).login(
                           usernameController.text,

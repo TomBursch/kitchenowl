@@ -44,6 +44,7 @@ class SettingsUserPasswordPage extends StatelessWidget {
                   ],
                   obscureText: true,
                   textInputAction: TextInputAction.next,
+                  keyboardType: TextInputType.visiblePassword,
                   decoration: InputDecoration(
                     labelText: AppLocalizations.of(context)!.password,
                   ),
@@ -67,6 +68,7 @@ class SettingsUserPasswordPage extends StatelessWidget {
                   controller: passwordRepeatController,
                   obscureText: true,
                   textInputAction: TextInputAction.done,
+                  keyboardType: TextInputType.visiblePassword,
                   decoration: InputDecoration(
                     labelText: AppLocalizations.of(context)!.passwordRepeat,
                   ),

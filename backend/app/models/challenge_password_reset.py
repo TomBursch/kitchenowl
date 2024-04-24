@@ -1,5 +1,5 @@
 from __future__ import annotations
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 import hashlib
 from typing import Self
 import uuid
@@ -16,7 +16,7 @@ class ChallengePasswordReset(db.Model, DbModelMixin, TimestampMixin):
 
     @classmethod
     def find_by_challenge(cls, challenge: str) -> Self:
-        filter_before = datetime.utcnow() - timedelta(hours=3)
+        filter_before = datetime.now(timezone.utc) - timedelta(hours=3)
         return cls.query.filter(
             cls.challenge_hash == hashlib.sha256(bytes(challenge, "utf-8")).hexdigest(),
             cls.created_at >= filter_before,
@@ -38,6 +38,6 @@ class ChallengePasswordReset(db.Model, DbModelMixin, TimestampMixin):
 
     @classmethod
     def delete_expired(cls):
-        filter_before = datetime.utcnow() - timedelta(hours=3)
+        filter_before = datetime.now(timezone.utc) - timedelta(hours=3)
         db.session.query(cls).filter(cls.created_at <= filter_before).delete()
         db.session.commit()

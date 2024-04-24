@@ -1,7 +1,7 @@
 alembic==1.13.1
 amqp==5.2.0
 annotated-types==0.6.0
-apispec==6.6.0
+apispec==6.6.1
 appdirs==1.4.4
 APScheduler==3.10.4
 attrs==23.2.0
@@ -41,10 +41,10 @@ future==1.0.0
 gevent==24.2.1
 greenlet==3.0.0rc3
 h11==0.14.0
-html-text==0.6.0
+html-text==0.6.1
 html5lib==1.1
 idna==3.7
-ingredient-parser-nlp==0.1.0b8
+ingredient-parser-nlp==0.1.0b10
 iniconfig==2.0.0
 isodate==0.6.1
 itsdangerous==2.2.0
@@ -70,7 +70,7 @@ packaging==24.0
 pandas==2.2.2
 pathspec==0.12.1
 Pillow==10.3.0
-platformdirs==4.2.0
+platformdirs==4.2.1
 pluggy==1.5.0
 prometheus-client==0.20.0
 prometheus-flask-exporter==0.23.0
@@ -80,7 +80,7 @@ py==1.11.0
 pycodestyle==2.11.1
 pycparser==2.22
 pycryptodomex==3.20.0
-pydantic==2.7.0
+pydantic==2.7.1
 pydantic-settings==2.2.1
 pyflakes==3.2.0
 pyjwkest==1.4.2

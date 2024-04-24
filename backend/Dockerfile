@@ -1,7 +1,7 @@
 # ------------
 # BUILDER
 # ------------
-FROM python:3.11-slim as builder
+FROM python:3.12-slim as builder
 
 RUN apt-get update \
     && apt-get install --yes --no-install-recommends \
@@ -21,7 +21,7 @@ RUN python -c "import nltk; nltk.download('averaged_perceptron_tagger', download
 # ------------
 # RUNNER
 # ------------
-FROM python:3.11-slim as runner
+FROM python:3.12-slim as runner
 
 RUN apt-get update \
     && apt-get install --yes --no-install-recommends \

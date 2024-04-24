@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Self
 
 from app import db
@@ -34,7 +34,7 @@ class OIDCRequest(db.Model, DbModelMixin, TimestampMixin):
 
     @classmethod
     def find_by_state(cls, state: str) -> Self:
-        filter_before = datetime.utcnow() - timedelta(minutes=7)
+        filter_before = datetime.now(timezone.utc) - timedelta(minutes=7)
         return cls.query.filter(
             cls.state == state,
             cls.created_at >= filter_before,
@@ -42,6 +42,6 @@ class OIDCRequest(db.Model, DbModelMixin, TimestampMixin):
 
     @classmethod
     def delete_expired(cls):
-        filter_before = datetime.utcnow() - timedelta(minutes=7)
+        filter_before = datetime.now(timezone.utc) - timedelta(minutes=7)
         db.session.query(cls).filter(cls.created_at <= filter_before).delete()
         db.session.commit()

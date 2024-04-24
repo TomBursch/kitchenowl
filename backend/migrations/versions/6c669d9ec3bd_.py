@@ -5,7 +5,7 @@ Revises: 4b4823a384e7
 Create Date: 2023-01-15 23:58:29.531456
 
 """
-from datetime import datetime
+from datetime import datetime, timezone
 from alembic import op
 import sqlalchemy as sa
 from sqlalchemy import orm
@@ -180,7 +180,7 @@ def upgrade():
     # Data Migration
     settings = session.query(Settings).first()
     if settings:
-        models: list[db.Model] = session.query(Category).all()\
+        models: list = session.query(Category).all()\
             + session.query(Expense).all()\
             + session.query(ExpenseCategory).all()\
             + session.query(Item).all()\
@@ -198,14 +198,14 @@ def upgrade():
         household.planner_feature = settings.planner_feature
         household.expenses_feature = settings.expenses_feature
         household.view_ordering = settings.view_ordering
-        household.created_at = datetime.utcnow()
-        household.updated_at = datetime.utcnow()
+        household.created_at = datetime.now(timezone.utc)
+        household.updated_at = datetime.now(timezone.utc)
         
         users = session.query(User).all()
         for user in users:
             hm = HouseholdMember()
-            hm.created_at = datetime.utcnow()
-            hm.updated_at = datetime.utcnow()
+            hm.created_at = datetime.now(timezone.utc)
+            hm.updated_at = datetime.now(timezone.utc)
             hm.user_id = user.id
             hm.household_id = 1
             hm.admin = user.admin

@@ -1,5 +1,5 @@
 from __future__ import annotations
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Self, Tuple
 
 from flask import request
@@ -43,7 +43,7 @@ class Token(db.Model, DbModelMixin, TimestampMixin):
 
     @classmethod
     def delete_expired_refresh(cls):
-        filter_before = datetime.utcnow() - JWT_REFRESH_TOKEN_EXPIRES
+        filter_before = datetime.now(timezone.utc) - JWT_REFRESH_TOKEN_EXPIRES
         for token in (
             db.session.query(cls)
             .filter(
@@ -58,7 +58,7 @@ class Token(db.Model, DbModelMixin, TimestampMixin):
 
     @classmethod
     def delete_expired_access(cls):
-        filter_before = datetime.utcnow() - JWT_ACCESS_TOKEN_EXPIRES
+        filter_before = datetime.now(timezone.utc) - JWT_ACCESS_TOKEN_EXPIRES
         db.session.query(cls).filter(
             cls.created_at <= filter_before, cls.type == "access"
         ).delete()

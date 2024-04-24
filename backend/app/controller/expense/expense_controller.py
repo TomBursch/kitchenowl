@@ -222,7 +222,7 @@ def getExpenseCategories(household_id):
 @authorize_household()
 @validate_args(GetExpenseOverview)
 def getExpenseOverview(args, household_id):
-    thisMonthStart = datetime.utcnow().date().replace(day=1)
+    thisMonthStart = datetime.now(timezone.utc).date().replace(day=1)
 
     steps = args["steps"] if "steps" in args else 5
     frame = args["frame"] if args["frame"] != None else 2
@@ -291,10 +291,10 @@ def getExpenseOverview(args, household_id):
         start = None
         end = None
         if frame == 0:  # daily
-            start = datetime.utcnow().date() - timedelta(days=stepAgo)
+            start = datetime.now(timezone.utc).date() - timedelta(days=stepAgo)
             end = start + timedelta(hours=24)
         elif frame == 1:  # weekly
-            start = datetime.utcnow().date() - relativedelta(
+            start = datetime.now(timezone.utc).date() - relativedelta(
                 days=7, weekday=calendar.MONDAY, weeks=stepAgo
             )
             end = start + timedelta(days=7)
@@ -302,7 +302,7 @@ def getExpenseOverview(args, household_id):
             start = thisMonthStart - relativedelta(months=stepAgo)
             end = start + relativedelta(months=1)
         elif frame == 3:  # yearly
-            start = datetime.utcnow().date().replace(day=1, month=1) - relativedelta(
+            start = datetime.now(timezone.utc).date().replace(day=1, month=1) - relativedelta(
                 years=stepAgo
             )
             end = start + relativedelta(years=1)

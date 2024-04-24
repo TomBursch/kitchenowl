@@ -40,7 +40,7 @@ dependencies:
   equatable: ^2.0.5
   url_launcher: ^6.1.10
   flutter_custom_tabs: ^2.0.0+1
-  package_info_plus: ^7.0.0
+  package_info_plus: ^8.0.0
   device_info_plus: ^10.0.1
   http: ^1.1.2
   diffutil_dart: ^4.0.0
@@ -59,7 +59,7 @@ dependencies:
   file_picker: ^8.0.0+1
   photo_view: ^0.15.0
   share_handler: ^0.0.19
-  share_plus: ^8.0.2
+  share_plus: ^9.0.0
   reorderables: ^0.6.0
   flutter_colorpicker: ^1.0.3
   sliver_tools: ^0.2.12

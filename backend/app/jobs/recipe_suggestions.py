@@ -15,9 +15,9 @@ def computeRecipeSuggestions(household_id: int):
             RecipeHistory.status == Status.ADDED,
             RecipeHistory.household_id == household_id,
             RecipeHistory.created_at
-            >= datetime.datetime.utcnow() - datetime.timedelta(days=182),
+            >= datetime.datetime.now(datetime.timezone.utc) - datetime.timedelta(days=182),
             RecipeHistory.created_at
-            <= datetime.datetime.utcnow() - datetime.timedelta(days=7),
+            <= datetime.datetime.now(datetime.timezone.utc) - datetime.timedelta(days=7),
         )
         .group_by(RecipeHistory.recipe_id)
         .all()

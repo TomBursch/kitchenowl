@@ -85,6 +85,7 @@
     "cheddar": "Cheddar",
     "cheese": "Ost",
     "cherry_tomatoes": "Körsbärstomater",
+    "chia_seeds": "Chiafrön",
     "chickpeas": "Kikärtor",
     "chicory": "Cikoria",
     "chili_oil": "Chiliolja",
@@ -187,6 +188,7 @@
     "hair_gel": "Hårgelé",
     "hair_ties": "Hårsnodd",
     "hair_wax": "Hårvax",
+    "hairband": "Hårband",
     "ham": "Skinka",
     "ham_cubes": "Skinkkuber",
     "hand_soap": "Handtvål",
@@ -408,6 +410,14 @@
     "sunflower_oil": "Solrosolja",
     "sunflower_seeds": "Solroskärnor",
     "sunscreen": "Solkräm",
-    "sushi_rice": "Sushiris"
+    "sushi_rice": "Sushiris",
+    "toilet_paper": "Toalettpapper",
+    "tomato_juice": "Tomatjuice",
+    "toothpaste": "Tandkräm",
+    "tuna": "Tonfisk",
+    "walnuts": "Valnötter",
+    "watermelon": "Vattenmelon",
+    "whipped_cream": "Vispgrädde",
+    "white_wine_vinegar": "Vitvinsvinäger"
   }
 }

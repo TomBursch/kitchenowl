@@ -236,6 +236,7 @@
     }
   },
   "@profile": {},
+  "@recentItemsCategorize": {},
   "@recipeAdd": {},
   "@recipeAddUrl": {},
   "@recipeDelete": {},
@@ -507,6 +508,7 @@
   "privacyPolicy": "Политика конфиденциальности",
   "privacyPolicyAgree": "Создавая аккаунт вы соглашаетесь с нашим {privacyPolicy}",
   "profile": "Профиль",
+  "recentItemsCategorize": "Категоризация недавних событий",
   "recipeAdd": "Добавить рецепт",
   "recipeAddUrl": "Добавить рецепт из ссылки",
   "recipeDelete": "Удалить рецепт",

@@ -267,7 +267,7 @@
   "list": "Listă",
   "lltCreate": "Creați un token cu viață lungă",
   "lltDelete": "Stergeți un token cu viață lungă",
-  "lltDeleteConfirmation": "Sigur doriți să ștergeți token-ul cu durată lungă de viață ‘{token}’? Acest lucru nu poate fi anulat.",
+  "lltDeleteConfirmation": "Sigur doriți să ștergeți indicativul cu durată lungă de viață '{token}'? Acest lucru nu poate fi anulat.",
   "lltNotShownAgain": "Salvați token-ul; nu o vei putea vedea din nou",
   "lltWarningContent": "Sigur doriți să creați un token cu viață lungă? Acesta ar putea fi un risc de securitate. Tokenul nu expiră și oferă acces deplin la contul tău.",
   "lltWarningTitle": "Știi ce faci?",

@@ -384,6 +384,7 @@ class ItemIcons {
     "tin_can": tin_can,
     "toaster": toaster,
     "toaster_oven": toaster_oven,
+    "tofu": tofu,
     "toilet_paper": toilet_paper,
     "tomato": tomato,
     "tooth": tooth,
@@ -788,37 +789,38 @@ class ItemIcons {
   static const IconData tin_can = IconData(622, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData toaster = IconData(623, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData toaster_oven = IconData(624, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData toilet_paper = IconData(625, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData tomato = IconData(626, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData tooth = IconData(627, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData tooth_cleaning_kit = IconData(628, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData toothpaste = IconData(629, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData topping = IconData(630, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData towel = IconData(631, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData transistor = IconData(632, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData trash_bag = IconData(633, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData trousers = IconData(634, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData tube = IconData(635, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData tupperware = IconData(636, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData turkey = IconData(637, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData usb_connector = IconData(638, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData vodka = IconData(639, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData washing_dishes = IconData(640, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData water = IconData(641, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData watering_can = IconData(642, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData watermelon = IconData(643, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData wet = IconData(644, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData wheat = IconData(645, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData whipped_cream = IconData(646, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData white_beans = IconData(647, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData wine_bottle = IconData(648, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData wipes = IconData(649, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData wood = IconData(650, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData wood_chips = IconData(651, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData worcestershire_sauce = IconData(652, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData wrap = IconData(653, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData yarn = IconData(654, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData yoga_mat = IconData(655, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData yogurt = IconData(656, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData zipper = IconData(657, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData tofu = IconData(625, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData toilet_paper = IconData(626, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData tomato = IconData(627, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData tooth = IconData(628, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData tooth_cleaning_kit = IconData(629, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData toothpaste = IconData(630, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData topping = IconData(631, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData towel = IconData(632, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData transistor = IconData(633, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData trash_bag = IconData(634, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData trousers = IconData(635, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData tube = IconData(636, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData tupperware = IconData(637, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData turkey = IconData(638, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData usb_connector = IconData(639, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData vodka = IconData(640, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData washing_dishes = IconData(641, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData water = IconData(642, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData watering_can = IconData(643, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData watermelon = IconData(644, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData wet = IconData(645, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData wheat = IconData(646, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData whipped_cream = IconData(647, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData white_beans = IconData(648, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData wine_bottle = IconData(649, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData wipes = IconData(650, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData wood = IconData(651, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData wood_chips = IconData(652, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData worcestershire_sauce = IconData(653, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData wrap = IconData(654, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData yarn = IconData(655, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData yoga_mat = IconData(656, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData yogurt = IconData(657, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData zipper = IconData(658, fontFamily: _kFontFam, fontPackage: _kFontPkg);
 }

@@ -31,15 +31,15 @@ class Recipe(db.Model, DbModelMixin, TimestampMixin, DbModelAuthorizeMixin):
         "RecipeHistory", back_populates="recipe", cascade="all, delete-orphan"
     )
     items = db.relationship(
-        "RecipeItems", back_populates="recipe", cascade="all, delete-orphan"
+        "RecipeItems", back_populates="recipe", cascade="all, delete-orphan", lazy='selectin', order_by="RecipeItems._name",
     )
     tags = db.relationship(
-        "RecipeTags", back_populates="recipe", cascade="all, delete-orphan"
+        "RecipeTags", back_populates="recipe", cascade="all, delete-orphan", lazy='selectin', order_by="RecipeTags._name",
     )
     plans = db.relationship(
-        "Planner", back_populates="recipe", cascade="all, delete-orphan"
+        "Planner", back_populates="recipe", cascade="all, delete-orphan", lazy='selectin'
     )
-    photo_file = db.relationship("File", back_populates="recipe", uselist=False)
+    photo_file = db.relationship("File", back_populates="recipe", uselist=False, lazy='selectin')
 
     def obj_to_dict(self) -> dict:
         res = super().obj_to_dict()
@@ -51,20 +51,8 @@ class Recipe(db.Model, DbModelMixin, TimestampMixin, DbModelAuthorizeMixin):
 
     def obj_to_full_dict(self) -> dict:
         res = self.obj_to_dict()
-        items = (
-            RecipeItems.query.filter(RecipeItems.recipe_id == self.id)
-            .join(RecipeItems.item)
-            .order_by(Item.name)
-            .all()
-        )
-        res["items"] = [e.obj_to_item_dict() for e in items]
-        tags = (
-            RecipeTags.query.filter(RecipeTags.recipe_id == self.id)
-            .join(RecipeTags.tag)
-            .order_by(Tag.name)
-            .all()
-        )
-        res["tags"] = [e.obj_to_item_dict() for e in tags]
+        res["items"] = [e.obj_to_item_dict() for e in self.items]
+        res["tags"] = [e.obj_to_item_dict() for e in self.tags]
         return res
 
     def obj_to_export_dict(self) -> dict:
@@ -199,8 +187,10 @@ class RecipeItems(db.Model, DbModelMixin, TimestampMixin):
     description = db.Column("description", db.String())
     optional = db.Column("optional", db.Boolean)
 
-    item = db.relationship("Item", back_populates="recipes")
+    item = db.relationship("Item", back_populates="recipes", lazy="joined")
     recipe = db.relationship("Recipe", back_populates="items")
+
+    _name = db.column_property(db.select(Item.name).where(Item.id == item_id).scalar_subquery())
 
     def obj_to_item_dict(self) -> dict:
         res = self.item.obj_to_dict()
@@ -235,7 +225,9 @@ class RecipeTags(db.Model, DbModelMixin, TimestampMixin):
     tag_id = db.Column(db.Integer, db.ForeignKey("tag.id"), primary_key=True)
 
     tag = db.relationship("Tag", back_populates="recipes")
-    recipe = db.relationship("Recipe", back_populates="tags")
+    recipe = db.relationship("Recipe", back_populates="tags", lazy="joined")
+
+    _name = db.column_property(db.select(Tag.name).where(Tag.id == tag_id).scalar_subquery())
 
     def obj_to_item_dict(self) -> dict:
         res = self.tag.obj_to_dict()

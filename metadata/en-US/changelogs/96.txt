@@ -1,0 +1,4 @@
+- Improve initial household load
+- New tofu icon
+- New and updated translations
+- Bug-fixes and improvements

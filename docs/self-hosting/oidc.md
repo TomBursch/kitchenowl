@@ -14,7 +14,7 @@ Inside your OIDC you need to configure a new client, with the following to redir
 
 1. FRONT_URL is the environment variable that exactly matches KitchenOwl's URL including the schema (e.g. `https://app.kitchenowl.org`)
 
-KitchenOwl will request the following scopes: 
+KitchenOwl uses the token auth method `client_secret_post` and will request the following scopes: 
 
 - `openid`
 - `profile`
@@ -86,4 +86,5 @@ Place this in your Authelia [configuration.yaml](https://www.authelia.com/config
         - kitchenowl:///signin/redirect
     response_modes:
     userinfo_signing_algorithm: none
+    token_endpoint_auth_method: client_secret_post
 ```

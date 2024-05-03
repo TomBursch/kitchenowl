@@ -112,7 +112,7 @@ sqlite-icu==1.0
 threadpoolctl==3.4.0
 toml==0.10.2
 tomli==2.0.1
-tqdm==4.66.2
+tqdm==4.66.3
 typed-ast==1.5.5
 types-beautifulsoup4==4.12.0.20240229
 types-html5lib==1.1.11.20240228

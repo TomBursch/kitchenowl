@@ -128,7 +128,7 @@ vine==5.1.0
 w3lib==2.1.2
 wcwidth==0.2.13
 webencodings==0.5.1
-Werkzeug==3.0.2
+Werkzeug==3.0.3
 wsproto==1.2.0
 zope.event==5.0
 zope.interface==6.3

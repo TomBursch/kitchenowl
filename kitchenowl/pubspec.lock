@@ -306,7 +306,7 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: master
+      ref: "92bdb69a313a56c391ef148c12ef6539bd31253d"
       resolved-ref: "92bdb69a313a56c391ef148c12ef6539bd31253d"
       url: "https://github.com/mchome/flutter_colorpicker"
     source: git

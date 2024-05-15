@@ -23,7 +23,7 @@ class ColorButton extends StatelessWidget {
         shape: CircleBorder(
           side: selected
               ? BorderSide(
-                  color: Theme.of(context).colorScheme.onBackground,
+                  color: Theme.of(context).colorScheme.onSurface,
                   width: 4,
                 )
               : BorderSide.none,

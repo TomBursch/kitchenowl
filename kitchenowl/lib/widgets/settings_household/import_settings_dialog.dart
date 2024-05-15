@@ -87,7 +87,7 @@ class _ImportSettingsDialogState extends State<_ImportSettingsDialog> {
       actions: <Widget>[
         TextButton(
           style: ButtonStyle(
-            foregroundColor: MaterialStateProperty.all<Color>(
+            foregroundColor: WidgetStateProperty.all<Color>(
               Theme.of(context).disabledColor,
             ),
           ),

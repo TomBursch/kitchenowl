@@ -122,7 +122,7 @@ class _SearchTextFieldState extends State<SearchTextField> {
           textAlignVertical: TextAlignVertical.center,
           decoration: InputDecoration(
             isDense: true,
-            fillColor: Theme.of(context).colorScheme.background,
+            fillColor: Theme.of(context).colorScheme.surface,
             border: const OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(14)),
             ),

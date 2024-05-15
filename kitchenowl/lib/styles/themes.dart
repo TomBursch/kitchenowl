@@ -8,6 +8,7 @@ abstract class AppThemes {
     primary: AppColors.green,
     secondary: AppColors.green,
     tertiary: AppColors.green,
+    surface: Colors.grey[50],
     background: Colors.grey[50],
     brightness: Brightness.light,
   );
@@ -20,6 +21,7 @@ abstract class AppThemes {
     onPrimary: Colors.white,
     onSecondary: Colors.white,
     onTertiary: Colors.white,
+    surface: Colors.grey[850],
     background: Colors.grey[850],
     brightness: Brightness.dark,
   );
@@ -46,14 +48,14 @@ abstract class AppThemes {
       ),
       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
       appBarTheme: AppBarTheme(
-        backgroundColor: colorScheme.background,
-        surfaceTintColor: colorScheme.background,
+        backgroundColor: colorScheme.surface,
+        surfaceTintColor: colorScheme.surface,
       ),
       navigationRailTheme: NavigationRailThemeData(
-        backgroundColor: colorScheme.background,
+        backgroundColor: colorScheme.surface,
       ),
       navigationBarTheme: NavigationBarThemeData(
-        backgroundColor: colorScheme.background,
+        backgroundColor: colorScheme.surface,
         height: 70,
       ),
       cardTheme: CardTheme(
@@ -65,6 +67,12 @@ abstract class AppThemes {
         backgroundColor: colorScheme.primary,
         foregroundColor: colorScheme.onPrimary,
         elevation: 0,
+      ),
+      pageTransitionsTheme: const PageTransitionsTheme(
+        builders: {
+          // Use PredictiveBackPageTransitionsBuilder to get the predictive back route transition!
+          TargetPlatform.android: PredictiveBackPageTransitionsBuilder(),
+        },
       ),
     );
   }
@@ -79,24 +87,24 @@ abstract class AppThemes {
       cardTheme: CardTheme(
         clipBehavior: Clip.antiAlias,
         elevation: 0,
-        color: colorScheme.surfaceVariant,
+        color: colorScheme.surfaceBright,
       ),
       navigationRailTheme: NavigationRailThemeData(
-        backgroundColor: colorScheme.background,
+        backgroundColor: colorScheme.surface,
       ),
       navigationBarTheme: NavigationBarThemeData(
-        backgroundColor: colorScheme.background,
+        backgroundColor: colorScheme.surface,
         height: 70,
       ),
       appBarTheme: AppBarTheme(
-        color: colorScheme.background,
-        surfaceTintColor: colorScheme.background,
+        color: colorScheme.surface,
+        surfaceTintColor: colorScheme.surface,
       ),
       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           foregroundColor: colorScheme.onSurfaceVariant,
-          backgroundColor: colorScheme.surfaceVariant,
+          backgroundColor: colorScheme.surfaceBright,
           elevation: 0,
         ),
       ),
@@ -106,7 +114,7 @@ abstract class AppThemes {
         elevation: 0,
       ),
       listTileTheme: ListTileThemeData(
-        iconColor: colorScheme.onBackground,
+        iconColor: colorScheme.onSurface,
       ),
       chipTheme: ChipThemeData.fromDefaults(
         primaryColor: colorScheme.primary,
@@ -117,6 +125,12 @@ abstract class AppThemes {
         side: BorderSide.none,
       ),
       visualDensity: VisualDensity.adaptivePlatformDensity,
+      pageTransitionsTheme: const PageTransitionsTheme(
+        builders: {
+          // Use PredictiveBackPageTransitionsBuilder to get the predictive back route transition!
+          TargetPlatform.android: PredictiveBackPageTransitionsBuilder(),
+        },
+      ),
     );
   }
 }

@@ -92,10 +92,10 @@ BEGIN
             VALUE "CompanyName", "com.tombursch" "\0"
             VALUE "FileDescription", "kitchenowl" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "kitchenowl" "\0"
-            VALUE "LegalCopyright", "Copyright (C) 2022 com.tombursch. All rights reserved." "\0"
+            VALUE "InternalName", "KitchenOwl" "\0"
+            VALUE "LegalCopyright", "Copyright (C) 2024 Tom Bursch. All rights reserved." "\0"
             VALUE "OriginalFilename", "kitchenowl.exe" "\0"
-            VALUE "ProductName", "kitchenowl" "\0"
+            VALUE "ProductName", "KitchenOwl" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

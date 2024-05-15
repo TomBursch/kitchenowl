@@ -25,7 +25,7 @@ Future<bool> askForConfirmation({
             if (showCancel)
               TextButton(
                 style: ButtonStyle(
-                  foregroundColor: MaterialStateProperty.all<Color>(
+                  foregroundColor: WidgetStateProperty.all<Color>(
                     cancelColor ?? Theme.of(context).disabledColor,
                   ),
                 ),
@@ -39,12 +39,12 @@ Future<bool> askForConfirmation({
                       confirmForegroundColor != null
                   ? ButtonStyle(
                       backgroundColor: confirmBackgroundColor != null
-                          ? MaterialStateProperty.all<Color>(
+                          ? WidgetStateProperty.all<Color>(
                               confirmBackgroundColor,
                             )
                           : null,
                       foregroundColor: confirmForegroundColor != null
-                          ? MaterialStateProperty.all<Color>(
+                          ? WidgetStateProperty.all<Color>(
                               confirmForegroundColor,
                             )
                           : null,

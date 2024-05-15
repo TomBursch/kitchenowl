@@ -248,18 +248,18 @@ class _AddUpdateExpensePageState extends State<AddUpdateExpensePage> {
                               child: ElevatedButton(
                                 style: ButtonStyle(
                                   backgroundColor: !state.isIncome
-                                      ? MaterialStateProperty.all(
+                                      ? WidgetStateProperty.all(
                                           Theme.of(context).colorScheme.primary,
                                         )
                                       : null,
                                   foregroundColor: !state.isIncome
-                                      ? MaterialStateProperty.all(
+                                      ? WidgetStateProperty.all(
                                           Theme.of(context)
                                               .colorScheme
                                               .onPrimary,
                                         )
                                       : null,
-                                  shape: MaterialStateProperty.all(
+                                  shape: WidgetStateProperty.all(
                                     const RoundedRectangleBorder(
                                       borderRadius: BorderRadius.horizontal(
                                         left: Radius.circular(14),
@@ -277,18 +277,18 @@ class _AddUpdateExpensePageState extends State<AddUpdateExpensePage> {
                               child: ElevatedButton(
                                 style: ButtonStyle(
                                   backgroundColor: state.isIncome
-                                      ? MaterialStateProperty.all(
+                                      ? WidgetStateProperty.all(
                                           Theme.of(context).colorScheme.primary,
                                         )
                                       : null,
                                   foregroundColor: state.isIncome
-                                      ? MaterialStateProperty.all(
+                                      ? WidgetStateProperty.all(
                                           Theme.of(context)
                                               .colorScheme
                                               .onPrimary,
                                         )
                                       : null,
-                                  shape: MaterialStateProperty.all(
+                                  shape: WidgetStateProperty.all(
                                     const RoundedRectangleBorder(
                                       borderRadius: BorderRadius.horizontal(
                                         right: Radius.circular(14),
@@ -421,10 +421,10 @@ class _AddUpdateExpensePageState extends State<AddUpdateExpensePage> {
                   sliver: SliverToBoxAdapter(
                     child: LoadingElevatedButton(
                       style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all<Color>(
+                        backgroundColor: WidgetStateProperty.all<Color>(
                           Colors.redAccent,
                         ),
-                        foregroundColor: MaterialStateProperty.all<Color>(
+                        foregroundColor: WidgetStateProperty.all<Color>(
                           Colors.white,
                         ),
                       ),

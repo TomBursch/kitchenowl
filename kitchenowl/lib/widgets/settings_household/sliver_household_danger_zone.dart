@@ -158,10 +158,10 @@ class SliverHouseholdDangerZone extends StatelessWidget {
             const Divider(),
             LoadingElevatedButton(
               style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all<Color>(
+                backgroundColor: WidgetStateProperty.all<Color>(
                   Colors.redAccent,
                 ),
-                foregroundColor: MaterialStateProperty.all<Color>(
+                foregroundColor: WidgetStateProperty.all<Color>(
                   Colors.white,
                 ),
               ),

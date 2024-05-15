@@ -225,7 +225,7 @@ class _RecipePageState extends State<RecipePage> {
                 ),
             ]),
             footer: Container(
-              color: Theme.of(context).colorScheme.background,
+              color: Theme.of(context).colorScheme.surface,
               child: Column(
                 children: [
                   if (widget.household != null &&

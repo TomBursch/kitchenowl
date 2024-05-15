@@ -33,7 +33,7 @@ class FlexibleImageSpaceBar extends StatelessWidget {
           maxLines: isCollapsed ? 1 : 2,
           overflow: TextOverflow.ellipsis,
           style: TextStyle(
-            color: Theme.of(context).colorScheme.onBackground,
+            color: Theme.of(context).colorScheme.onSurface,
           ),
         );
       }),

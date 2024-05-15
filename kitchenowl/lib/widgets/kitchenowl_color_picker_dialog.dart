@@ -39,7 +39,7 @@ class _KitchenOwlColorPickerDialogState
       actions: [
         TextButton(
           style: ButtonStyle(
-            foregroundColor: MaterialStateProperty.all<Color>(
+            foregroundColor: WidgetStateProperty.all<Color>(
               Theme.of(context).disabledColor,
             ),
           ),
@@ -50,10 +50,10 @@ class _KitchenOwlColorPickerDialogState
         ),
         FilledButton(
           style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all<Color>(
+            backgroundColor: WidgetStateProperty.all<Color>(
               Colors.redAccent,
             ),
-            foregroundColor: MaterialStateProperty.all<Color>(
+            foregroundColor: WidgetStateProperty.all<Color>(
               Colors.white,
             ),
           ),

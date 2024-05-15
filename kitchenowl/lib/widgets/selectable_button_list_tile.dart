@@ -37,7 +37,7 @@ class _SelectableButtonListTileState extends State<SelectableButtonListTile> {
       elevation: !widget.raised ? 0 : null,
       color: !widget.raised
           ? ElevationOverlay.applySurfaceTint(
-              Theme.of(context).colorScheme.background,
+              Theme.of(context).colorScheme.surface,
               Theme.of(context).colorScheme.surfaceTint,
               1.5,
             )

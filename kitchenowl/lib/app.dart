@@ -192,7 +192,7 @@ class _AppState extends State<App> {
         }
       light:
       case ThemeMode.light:
-        final Color backgroundColor = Theme.of(context).colorScheme.background;
+        final Color backgroundColor = Theme.of(context).colorScheme.surface;
         return SystemUiOverlayStyle.dark.copyWith(
           statusBarColor: Colors.transparent,
           statusBarIconBrightness: Brightness.dark,
@@ -203,7 +203,7 @@ class _AppState extends State<App> {
         );
       dark:
       case ThemeMode.dark:
-        final Color backgroundColor = Theme.of(context).colorScheme.background;
+        final Color backgroundColor = Theme.of(context).colorScheme.surface;
         return SystemUiOverlayStyle.light.copyWith(
           statusBarColor: Colors.transparent,
           statusBarIconBrightness: Brightness.light,

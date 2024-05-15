@@ -435,11 +435,11 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                               child: LoadingElevatedButton(
                                 style: ButtonStyle(
                                   backgroundColor:
-                                      MaterialStateProperty.all<Color>(
+                                      WidgetStateProperty.all<Color>(
                                     Colors.redAccent,
                                   ),
                                   foregroundColor:
-                                      MaterialStateProperty.all<Color>(
+                                      WidgetStateProperty.all<Color>(
                                     Colors.white,
                                   ),
                                 ),

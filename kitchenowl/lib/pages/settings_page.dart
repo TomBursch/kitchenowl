@@ -521,8 +521,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     onPressed: BlocProvider.of<AuthCubit>(context).logout,
                     icon: const Icon(Icons.logout),
                     style: const ButtonStyle(
-                      foregroundColor:
-                          MaterialStatePropertyAll(Colors.redAccent),
+                      foregroundColor: WidgetStatePropertyAll(Colors.redAccent),
                     ),
                     child: Text(AppLocalizations.of(context)!.logout),
                   ),

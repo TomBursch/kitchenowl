@@ -203,7 +203,7 @@ class _ChartBarMonthsState extends State<ChartBarMonths> {
             bottomRight: Radius.circular(isBottom ? 14 : 0),
           ),
           borderSide: BorderSide(
-            color: Theme.of(context).colorScheme.onBackground,
+            color: Theme.of(context).colorScheme.onSurface,
             width: widget.selectedMonth == month ? 5 : 0,
           ),
           rodStackItems: generateStack(values.byCategory,

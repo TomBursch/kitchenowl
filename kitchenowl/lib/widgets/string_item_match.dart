@@ -75,7 +75,7 @@ class StringItemMatch extends StatelessWidget {
                         height: 64,
                         child: OutlinedButton(
                           style: const ButtonStyle(
-                            padding: MaterialStatePropertyAll(EdgeInsets.zero),
+                            padding: WidgetStatePropertyAll(EdgeInsets.zero),
                           ),
                           onPressed: () => _onPressed(context),
                           child: const Icon(Icons.add),

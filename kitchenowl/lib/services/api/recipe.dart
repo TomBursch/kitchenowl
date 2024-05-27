@@ -9,7 +9,7 @@ extension RecipeApi on ApiService {
   static const baseRoute = '/recipe';
 
   // ignore: constant_identifier_names
-  static const Duration _TIMEOUT_SCRAPE = Duration(seconds: 7);
+  static const Duration _TIMEOUT_SCRAPE = Duration(seconds: 15);
 
   Future<List<Recipe>?> getRecipes(Household household) async {
     final res = await get(householdPath(household) + baseRoute);

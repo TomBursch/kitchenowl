@@ -124,7 +124,7 @@ types-urllib3==1.26.25.14
 typing_extensions==4.11.0
 tzdata==2024.1
 tzlocal==5.2
-urllib3==2.2.1
+urllib3==2.2.2
 uWSGI==2.0.25.1
 uwsgi-tools==1.1.1
 vine==5.1.0

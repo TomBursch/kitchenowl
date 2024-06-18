@@ -103,7 +103,7 @@ rdflib-jsonld==0.6.2
 recipe_scrapers==14.56.0
 regex==2024.5.10
 requests==2.31.0
-scikit-learn==1.4.2
+scikit-learn==1.5.0
 scipy==1.13.0
 setuptools==69.5.1
 setuptools-scm==8.1.0

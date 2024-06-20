@@ -56,18 +56,6 @@ class Recipe(db.Model, DbModelMixin, TimestampMixin, DbModelAuthorizeMixin):
         return res
 
     def obj_to_export_dict(self) -> dict:
-        items = (
-            RecipeItems.query.filter(RecipeItems.recipe_id == self.id)
-            .join(RecipeItems.item)
-            .order_by(Item.name)
-            .all()
-        )
-        tags = (
-            RecipeTags.query.filter(RecipeTags.recipe_id == self.id)
-            .join(RecipeTags.tag)
-            .order_by(Tag.name)
-            .all()
-        )
         res = {
             "name": self.name,
             "description": self.description,
@@ -83,9 +71,9 @@ class Recipe(db.Model, DbModelMixin, TimestampMixin, DbModelAuthorizeMixin):
                     "description": e.description,
                     "optional": e.optional,
                 }
-                for e in items
+                for e in self.items
             ],
-            "tags": [e.tag.name for e in tags],
+            "tags": [e.tag.name for e in self.tags],
         }
         return res
 

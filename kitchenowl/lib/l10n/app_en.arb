@@ -188,9 +188,6 @@
   },
   "@markAsPaid": {},
   "@mealPlanner": {},
-  "@mealPlannerShort": {
-    "description": "A shorter version of @mealPlanner used in the bottom AppBar and when space is limited"
-  },
   "@member": {},
   "@memberAdd": {},
   "@memberRemove": {},
@@ -285,9 +282,6 @@
     }
   },
   "@shoppingListEdit": {},
-  "@shoppingListShort": {
-    "description": "A shorter version of @shoppingList used in the bottom AppBar and when space is limited"
-  },
   "@shoppingListStyle": {},
   "@shoppingLists": {},
   "@signInWith": {
@@ -479,7 +473,6 @@
   "longPressToReorder": "Long press to reorder",
   "markAsPaid": "Mark as paid",
   "mealPlanner": "Meal planner",
-  "mealPlannerShort": "Planner",
   "member": "Member",
   "memberAdd": "Add member",
   "memberRemove": "Remove member",
@@ -553,7 +546,6 @@
   "shoppingListDelete": "Delete shopping list",
   "shoppingListDeleteConfirmation": "Are you sure you want to delete {shoppingList}?",
   "shoppingListEdit": "Edit shopping list",
-  "shoppingListShort": "List",
   "shoppingListStyle": "Shopping list style",
   "shoppingLists": "Shopping lists",
   "signInWith": "Sign in with {provider}",

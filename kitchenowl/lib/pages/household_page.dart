@@ -198,7 +198,8 @@ class _HouseholdPageState extends State<HouseholdPage> {
                       destinations: pages
                           .map((e) => NavigationDestination(
                                 icon: Icon(e.toIcon(context)),
-                                label: e.toLocalizedString(context),
+                                label: e.toLocalizedShortString(context),
+                                tooltip: e.toLocalizedString(context),
                               ))
                           .toList(),
                       selectedIndex: _selectedIndex,

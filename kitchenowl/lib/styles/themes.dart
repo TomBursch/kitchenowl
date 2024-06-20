@@ -9,6 +9,7 @@ abstract class AppThemes {
     secondary: AppColors.green,
     tertiary: AppColors.green,
     surface: Colors.grey[50],
+    // ignore: deprecated_member_use
     background: Colors.grey[50],
     brightness: Brightness.light,
   );
@@ -22,6 +23,7 @@ abstract class AppThemes {
     onSecondary: Colors.white,
     onTertiary: Colors.white,
     surface: Colors.grey[850],
+    // ignore: deprecated_member_use
     background: Colors.grey[850],
     brightness: Brightness.dark,
   );

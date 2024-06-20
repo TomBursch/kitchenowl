@@ -29,9 +29,9 @@ enum ViewsEnum {
     final loc = AppLocalizations.of(context)!;
 
     return [
-      loc.shoppingListShort,
+      loc.list,
       loc.recipes,
-      loc.mealPlannerShort,
+      loc.planner,
       loc.balances,
       loc.profile,
     ][index];

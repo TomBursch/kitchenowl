@@ -25,6 +25,18 @@ enum ViewsEnum {
     ][index];
   }
 
+  String toLocalizedShortString(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+
+    return [
+      loc.shoppingListShort,
+      loc.recipes,
+      loc.mealPlannerShort,
+      loc.balances,
+      loc.profile,
+    ][index];
+  }
+
   IconData toIcon(BuildContext context) {
     return [
       Icons.shopping_bag_outlined,

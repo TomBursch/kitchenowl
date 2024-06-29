@@ -313,6 +313,9 @@
   "@totalTime": {},
   "@uncategorized": {},
   "@underConstruction": {},
+  "@unlink": {
+    "description": "As in remove link to social account (e.g. Google)"
+  },
   "@unreachableMessage": {},
   "@unsavedChangesBody": {},
   "@unsavedChangesTitle": {},
@@ -353,7 +356,7 @@
   "addItemTitle": "Inserir Itens",
   "addLanguage": "Inserir Idioma",
   "addLanguageConfirm": "Tem certeza de que deseja definir o idioma como '{lang}'? Isso não pode ser desfeito e adicionará itens e categorias à sua residência.",
-  "addNumberIngredients": "Inserir [número] ingredientes",
+  "addNumberIngredients": "Inserir {number} ingredientes",
   "addRecipeToPlanner": "Adicionar ao plano de refeições ({number} de receitas)",
   "addRecipeToPlannerShort": "Adicionar ao plano de refeição",
   "addShoppingList": "Adicionar Lista de Compras",
@@ -562,6 +565,7 @@
   "totalTime": "Tempo total",
   "uncategorized": "Sem categoria",
   "underConstruction": "Em construção",
+  "unlink": "Desvincular",
   "unreachableMessage": "Hmmmm... não foi possível aceder o servidor",
   "unsavedChangesBody": "Tem certeza de que deseja voltar?",
   "unsavedChangesTitle": "Tem alterações não gravadas",

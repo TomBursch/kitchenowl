@@ -1,11 +1,11 @@
-alembic==1.13.1
+alembic==1.13.2
 amqp==5.2.0
 annotated-types==0.7.0
 apispec==6.6.1
 appdirs==1.4.4
 APScheduler==3.10.4
 attrs==23.2.0
-autopep8==2.3.0
+autopep8==2.3.1
 bcrypt==4.1.3
 beautifulsoup4==4.12.3
 bidict==0.23.1
@@ -73,7 +73,8 @@ packaging==24.1
 pandas==2.2.2
 pathspec==0.12.1
 pillow==10.3.0
-Pint==0.24
+Pint==0.24.1
+pip-upgrade-tool==0.7.4
 platformdirs==4.2.2
 pluggy==1.5.0
 prometheus-flask-exporter==0.23.0
@@ -85,7 +86,7 @@ pycodestyle==2.12.0
 pycparser==2.22
 pycryptodomex==3.20.0
 pydantic==2.7.4
-pydantic-settings==2.3.3
+pydantic-settings==2.3.4
 pyflakes==3.2.0
 pyjwkest==1.4.2
 PyJWT==2.8.0
@@ -102,12 +103,12 @@ pytz==2024.1
 pytz-deprecation-shim==0.1.0.post0
 rdflib==7.0.0
 rdflib-jsonld==0.6.2
-recipe_scrapers==14.56.0
+recipe_scrapers==14.57.0
 regex==2024.5.15
 requests==2.32.3
 scikit-learn==1.5.0
-scipy==1.13.1
-setuptools==70.1.0
+scipy==1.14.0
+setuptools==70.1.1
 setuptools-scm==8.1.0
 simple-websocket==1.0.0
 six==1.16.0
@@ -121,7 +122,7 @@ tqdm==4.66.4
 typed_ast==1.5.5
 types-beautifulsoup4==4.12.0.20240511
 types-html5lib==1.1.11.20240228
-types-requests==2.32.0.20240602
+types-requests==2.32.0.20240622
 types-urllib3==1.26.25.14
 typing_extensions==4.11.0
 tzdata==2024.1
@@ -136,4 +137,4 @@ webencodings==0.5.1
 Werkzeug==3.0.3
 wsproto==1.2.0
 zope.event==5.0
-zope.interface==6.4
+zope.interface==6.4.post2

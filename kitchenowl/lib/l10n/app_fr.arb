@@ -236,6 +236,7 @@
     }
   },
   "@profile": {},
+  "@recentItemsCategorize": {},
   "@recipeAdd": {},
   "@recipeAddUrl": {},
   "@recipeDelete": {},
@@ -507,6 +508,7 @@
   "privacyPolicy": "Politique de confidentialité",
   "privacyPolicyAgree": "En créant un compte, vous acceptez notre {privacyPolicy}",
   "profile": "Profil",
+  "recentItemsCategorize": "Catégoriser les articles récents",
   "recipeAdd": "Ajouter une recette",
   "recipeAddUrl": "Ajouter une recette depuis une URL",
   "recipeDelete": "Supprimer la recette",

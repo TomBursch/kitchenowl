@@ -1,12 +1,12 @@
 {
   "categories": {
-    "bread": "🍞 Brotwaren",
+    "bread": "Backwaren",
     "canned": "🥫 Konserven",
     "dairy": "🥛 Milchprodukte",
     "drinks": "🍹 Getränke",
     "freezer": "❄️ Tiefgekühlt",
     "fruits_vegetables": "🥬 Obst & Gemüse",
-    "grain": "🥟 Teigwaren",
+    "grain": "🥟 Nudeln",
     "hygiene": "🚽 Hygiene",
     "refrigerated": "💧 Kühltheke",
     "snacks": "🥜 Snacks"

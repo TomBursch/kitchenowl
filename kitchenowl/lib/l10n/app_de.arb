@@ -352,7 +352,7 @@
   "addLanguageConfirm": "Bist du dir sicher, dass du die Sprache auf '{lang}' setzen möchtest? Dies kann nicht rückgängig gemacht werden und fügt Produkte und Kategorien hinzu.",
   "addNumberIngredients": "Füge {number} Zutaten hinzu",
   "addRecipeToPlanner": "Zum Essensplan hinzufügen ({number} Portionen)",
-  "addRecipeToPlannerShort": "Zum Speiseplan hinzufügen",
+  "addRecipeToPlannerShort": "Zum Essensplan hinzufügen",
   "addShoppingList": "Einkaufsliste hinzufügen",
   "addTag": "Markierung hinzufügen",
   "addedBy": "Hinzugefügt von {name}",

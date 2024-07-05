@@ -107,3 +107,5 @@ RUN chmod u+x ./entrypoint.sh
 
 CMD ["--ini", "wsgi.ini:web", "--gevent", "200"]
 ENTRYPOINT ["./entrypoint.sh"]
+
+EXPOSE 8080

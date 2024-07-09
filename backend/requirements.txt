@@ -14,7 +14,7 @@ black==24.4.2
 blinker==1.8.2
 blurhash-python==1.2.2
 celery==5.4.0
-certifi==2024.6.2
+certifi==2024.7.4
 cffi==1.16.0
 charset-normalizer==3.3.2
 click==8.1.7
@@ -38,7 +38,7 @@ Flask-SocketIO==5.3.6
 Flask-SQLAlchemy==3.1.1
 flexcache==0.3
 flexparser==0.3.1
-fonttools==4.53.0
+fonttools==4.53.1
 future==1.0.0
 gevent==24.2.1
 greenlet==3.0.0rc3
@@ -61,7 +61,7 @@ lxml_html_clean==0.1.1
 Mako==1.3.5
 MarkupSafe==2.1.5
 marshmallow==3.21.3
-matplotlib==3.9.0
+matplotlib==3.9.1
 mccabe==0.7.0
 mf2py==2.0.1
 mlxtend==0.23.1
@@ -72,7 +72,7 @@ oic==1.7.0
 packaging==24.1
 pandas==2.2.2
 pathspec==0.12.1
-pillow==10.3.0
+pillow==10.4.0
 Pint==0.24.1
 pip-upgrade-tool==0.7.4
 platformdirs==4.2.2
@@ -85,7 +85,7 @@ py==1.11.0
 pycodestyle==2.12.0
 pycparser==2.22
 pycryptodomex==3.20.0
-pydantic==2.7.4
+pydantic==2.8.2
 pydantic-settings==2.3.4
 pyflakes==3.2.0
 pyjwkest==1.4.2
@@ -106,9 +106,9 @@ rdflib-jsonld==0.6.2
 recipe_scrapers==14.57.0
 regex==2024.5.15
 requests==2.32.3
-scikit-learn==1.5.0
+scikit-learn==1.5.1
 scipy==1.14.0
-setuptools==70.1.1
+setuptools==70.2.0
 setuptools-scm==8.1.0
 simple-websocket==1.0.0
 six==1.16.0

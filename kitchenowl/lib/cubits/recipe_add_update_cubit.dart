@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/helpers/named_bytearray.dart';
 import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/models/item.dart';
@@ -8,8 +7,9 @@ import 'package:kitchenowl/models/tag.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
 import 'package:kitchenowl/services/transaction_handler.dart';
 import 'package:kitchenowl/services/transactions/tag.dart';
+import 'package:replay_bloc/replay_bloc.dart';
 
-class AddUpdateRecipeCubit extends Cubit<AddUpdateRecipeState> {
+class AddUpdateRecipeCubit extends ReplayCubit<AddUpdateRecipeState> {
   final Household household;
   final Recipe recipe;
 
@@ -37,6 +37,7 @@ class AddUpdateRecipeCubit extends Cubit<AddUpdateRecipeState> {
     final tags = await TransactionHandler.getInstance()
         .runTransaction(TransactionTagGetAll(household: household));
     emit(state.copyWith(tags: tags));
+    this.clearHistory();
   }
 
   Future<Recipe?> saveRecipe() async {
@@ -79,6 +80,7 @@ class AddUpdateRecipeCubit extends Cubit<AddUpdateRecipeState> {
         ));
       }
       emit(_state.copyWith(hasChanges: false));
+      this.clearHistory();
     }
 
     return null;

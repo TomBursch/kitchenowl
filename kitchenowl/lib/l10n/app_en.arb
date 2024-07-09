@@ -261,6 +261,7 @@
   "@recipesOverwriteDescription": {},
   "@recipesRecent": {},
   "@recipesSuggested": {},
+  "@redo": {},
   "@refresh": {},
   "@remove": {},
   "@rename": {},
@@ -315,6 +316,7 @@
   "@totalTime": {},
   "@uncategorized": {},
   "@underConstruction": {},
+  "@undo": {},
   "@unlink": {
     "description": "As in remove link to social account (e.g. Google)"
   },
@@ -529,6 +531,7 @@
   "recipesOverwriteDescription": "If activated, existing recipes with the same name will be overwritten",
   "recipesRecent": "Recent",
   "recipesSuggested": "Suggested",
+  "redo": "Redo",
   "refresh": "Refresh",
   "remove": "Remove",
   "rename": "Rename",
@@ -571,6 +574,7 @@
   "totalTime": "Total time",
   "uncategorized": "Uncategorized",
   "underConstruction": "Under construction",
+  "undo": "Undo",
   "unlink": "Unlink",
   "unreachableMessage": "Hmmmm… couldn't reach server",
   "unsavedChangesBody": "Are you sure you want to go back?",

@@ -83,8 +83,18 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
 
     return BlocProvider(
       create: (context) => HouseholdCubit(widget.household),
-      child: BlocBuilder<AddUpdateRecipeCubit, AddUpdateRecipeState>(
+      child: BlocConsumer<AddUpdateRecipeCubit, AddUpdateRecipeState>(
           bloc: cubit,
+          listener: (context, state) {
+            if (nameController.text != state.name)
+              nameController.text = state.name;
+            if (descController.text != state.description)
+              descController.text = state.description;
+            if (yieldsController.text != state.yields.toString())
+              yieldsController.text = state.yields.toString();
+            if (sourceController.text != state.source)
+              sourceController.text = state.source;
+          },
           buildWhen: (previous, current) =>
               previous.hasChanges != current.hasChanges,
           builder: (context, state) {
@@ -114,33 +124,46 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                       ? AppLocalizations.of(context)!.recipeEdit
                       : AppLocalizations.of(context)!.recipeNew),
                   actions: [
+                    BlocBuilder<AddUpdateRecipeCubit, AddUpdateRecipeState>(
+                      bloc: cubit,
+                      builder: (context, state) => IconButton(
+                        onPressed: cubit.canUndo ? cubit.undo : null,
+                        icon: Icon(Icons.undo_rounded),
+                        tooltip: AppLocalizations.of(context)!.undo,
+                      ),
+                    ),
+                    BlocBuilder<AddUpdateRecipeCubit, AddUpdateRecipeState>(
+                      bloc: cubit,
+                      builder: (context, state) => IconButton(
+                        onPressed: cubit.canRedo ? cubit.redo : null,
+                        icon: Icon(Icons.redo_rounded),
+                        tooltip: AppLocalizations.of(context)!.redo,
+                      ),
+                    ),
                     if (mobileLayout)
                       BlocBuilder<AddUpdateRecipeCubit, AddUpdateRecipeState>(
                         bloc: cubit,
-                        builder: (context, state) {
-                          return LoadingIconButton(
-                            icon: const Icon(Icons.save_rounded),
-                            tooltip: AppLocalizations.of(context)!.save,
-                            onPressed: state.isValid() && state.hasChanges
-                                ? () async {
-                                    final recipe = await cubit.saveRecipe();
-                                    if (!mounted) return;
-                                    Navigator.of(context)
-                                        .pop(UpdateEnum.updated);
-                                    if (recipe != null &&
-                                        widget.openRecipeAfterCreation) {
-                                      context.go(
-                                        "/household/${cubit.household.id}/recipes/details/${recipe.id}",
-                                        extra: Tuple2<Household, Recipe>(
-                                          cubit.household,
-                                          recipe,
-                                        ),
-                                      );
-                                    }
+                        builder: (context, state) => LoadingIconButton(
+                          icon: const Icon(Icons.save_rounded),
+                          tooltip: AppLocalizations.of(context)!.save,
+                          onPressed: state.isValid() && state.hasChanges
+                              ? () async {
+                                  final recipe = await cubit.saveRecipe();
+                                  if (!mounted) return;
+                                  Navigator.of(context).pop(UpdateEnum.updated);
+                                  if (recipe != null &&
+                                      widget.openRecipeAfterCreation) {
+                                    context.go(
+                                      "/household/${cubit.household.id}/recipes/details/${recipe.id}",
+                                      extra: Tuple2<Household, Recipe>(
+                                        cubit.household,
+                                        recipe,
+                                      ),
+                                    );
                                   }
-                                : null,
-                          );
-                        },
+                                }
+                              : null,
+                        ),
                       ),
                   ],
                 ),

@@ -30,10 +30,11 @@
 	<string>6.0</string>
 	<key>CFBundleLocalizations</key>
 	<array>
+		<string>be</string>
+		<string>bg</string>
 		<string>ca</string>
 		<string>ca-valencia</string>
 		<string>cs</string>
-		<string>be</string>
 		<string>da</string>
 		<string>de</string>
 		<string>de_CH</string>

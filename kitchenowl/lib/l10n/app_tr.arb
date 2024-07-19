@@ -256,6 +256,7 @@
   "@recipesOverwriteDescription": {},
   "@recipesRecent": {},
   "@recipesSuggested": {},
+  "@redo": {},
   "@refresh": {},
   "@remove": {},
   "@rename": {},
@@ -310,6 +311,7 @@
   "@totalTime": {},
   "@uncategorized": {},
   "@underConstruction": {},
+  "@undo": {},
   "@unlink": {
     "description": "As in remove link to social account (e.g. Google)"
   },
@@ -524,6 +526,7 @@
   "recipesOverwriteDescription": "Etkinleştirilirse, aynı ada sahip var olan tariflerin üzerine yazılır",
   "recipesRecent": "Son",
   "recipesSuggested": "Önerildi",
+  "redo": "Yeniden yap",
   "refresh": "Yenile",
   "remove": "Kaldır",
   "rename": "Yeniden adlandır",
@@ -566,6 +569,7 @@
   "totalTime": "Toplam zaman",
   "uncategorized": "Sınıflandırılmamış",
   "underConstruction": "Yapım halinde",
+  "undo": "Geri al",
   "unlink": "Bağlantıyı kaldır",
   "unreachableMessage": "Hmmmm… sunucuya ulaşılamadı",
   "unsavedChangesBody": "Geri gitmek istediğinizden emin misiniz?",

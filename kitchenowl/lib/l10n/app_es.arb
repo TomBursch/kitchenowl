@@ -256,6 +256,7 @@
   "@recipesOverwriteDescription": {},
   "@recipesRecent": {},
   "@recipesSuggested": {},
+  "@redo": {},
   "@refresh": {},
   "@remove": {},
   "@rename": {},
@@ -310,6 +311,7 @@
   "@totalTime": {},
   "@uncategorized": {},
   "@underConstruction": {},
+  "@undo": {},
   "@unlink": {
     "description": "As in remove link to social account (e.g. Google)"
   },
@@ -524,6 +526,7 @@
   "recipesOverwriteDescription": "Si se activa, las recetas existentes con el mismo nombre se sobrescribirán",
   "recipesRecent": "Reciente",
   "recipesSuggested": "Sugerido",
+  "redo": "Rehacer",
   "refresh": "Refrescar",
   "remove": "Eliminar",
   "rename": "Renombrar",
@@ -566,6 +569,7 @@
   "totalTime": "Tiempo total",
   "uncategorized": "Sin categoria",
   "underConstruction": "En construcción",
+  "undo": "Deshacer",
   "unlink": "Desvincular",
   "unreachableMessage": "Hmmmm… no encuentro el servidor",
   "unsavedChangesBody": "¿Estás seguro de que quieres volver?",

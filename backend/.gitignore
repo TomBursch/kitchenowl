@@ -9,6 +9,9 @@ upload/
 .vscode/
 *.code-workspace
 
+# Zed related
+pyrightconfig.json
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

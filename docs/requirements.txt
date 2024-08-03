@@ -1,0 +1,4 @@
+mkdocs-material==9.5.31
+mkdocs==1.6.0
+neoteroi-mkdocs==1.0.5
+mike==2.1.2

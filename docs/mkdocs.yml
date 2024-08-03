@@ -2,13 +2,14 @@ site_name: KitchenOwl Docs
 site_url: https://docs.kitchenowl.org/
 repo_url: https://github.com/tombursch/kitchenowl
 repo_name: tombursch/kitchenowl
-edit_uri: edit/main/docs/
+edit_uri: edit/main/docs/docs/
 copyright: >
   &copy; 2023 KitchenOwl - <a href="https://kitchenowl.org/imprint">Imprint</a>
 theme:
   name: material
   logo: img/icon.png
   favicon: img/icon.png
+  custom_dir: overrides
   features:
     - content.tabs.link
     - toc.follow
@@ -30,6 +31,8 @@ theme:
         icon: material/toggle-switch
         name: Switch to light mode
 extra:
+  version:
+    provider: mike
   social:
     - icon: fontawesome/brands/github
       link: https://github.com/tombursch/kitchenowl
@@ -51,8 +54,8 @@ markdown_extensions:
   - pymdownx.tasklist:
       custom_checkbox: true
   - pymdownx.emoji:
-      emoji_index: !!python/name:materialx.emoji.twemoji
-      emoji_generator: !!python/name:materialx.emoji.to_svg
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
 extra_css:
   - stylesheets/extra.css
   - stylesheets/mkdocsoad.css

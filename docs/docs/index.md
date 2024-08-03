@@ -14,16 +14,16 @@ Welcome to the developer documentation of [KitchenOwl](https://kitchenowl.org). 
 ## :robot: App Install
 
 Get it on your favorite app store or find the current release for your operating system on the [releases page](https://github.com/TomBursch/kitchenowl/releases).
-Please take a quick look at [Tips & Tricks](reference/tips-and-tricks.md) to get the best experience in the app.
+Please take a quick look at [Tips & Tricks](Tips-&-Tricks) to get the best experience in the app.
 
 <a href='https://play.google.com/store/apps/details?id=com.tombursch.kitchenowl'>
-    <img alt='Get it on Google Play' src='/img/badges/playstore.png' style="height:50px" />
+    <img alt='Get it on Google Play' src='./img/badges/playstore.png' style="height:50px" />
 </a>
 <a href='https://f-droid.org/packages/com.tombursch.kitchenowl/'>
-    <img alt='Get it on F-Droid' src='/img/badges/f-droid.png' style="height:50px" />
+    <img alt='Get it on F-Droid' src='./img/badges/f-droid.png' style="height:50px" />
 </a>
 <a href='https://apps.apple.com/app/kitchenowl/id1557453670'>
-    <img alt='Get it on the AppStore' src='/img/badges/appstore.png' style="height:50px" />
+    <img alt='Get it on the AppStore' src='./img/badges/appstore.png' style="height:50px" />
 </a>
 
 ## Features

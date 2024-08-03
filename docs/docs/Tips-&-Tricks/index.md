@@ -17,7 +17,7 @@ Recipes support [markdown](./markdown.md), additionally you can reference ingred
 
 Every card supports long presses to show details. So next time you look at your planned meals just long press and see how to cook it!
 
-![video](./img/screenshots/more-info.gif)
+![video](../img/screenshots/more-info.gif)
 
 ### Share to the App
 

@@ -9,12 +9,12 @@ hide:
 Welcome to the developer documentation of [KitchenOwl](https://kitchenowl.org). If you want to contribute or set up a self-hosted instance of KitchenOwl you're at the right place. Otherwise, you can find general information on the main website.
 
 [Main Website](https://kitchenowl.org){ .md-button }
-[Get Started with Self Hosting](self-hosting){ .md-button }
+[Get Started with Self Hosting](./self-hosting/index.md){ .md-button }
 
 ## :robot: App Install
 
 Get it on your favorite app store or find the current release for your operating system on the [releases page](https://github.com/TomBursch/kitchenowl/releases).
-Please take a quick look at [Tips & Tricks](Tips-&-Tricks) to get the best experience in the app.
+Please take a quick look at [Tips & Tricks](./Tips-&-Tricks/index.md) to get the best experience in the app.
 
 <a href='https://play.google.com/store/apps/details?id=com.tombursch.kitchenowl'>
     <img alt='Get it on Google Play' src='./img/badges/playstore.png' style="height:50px" />

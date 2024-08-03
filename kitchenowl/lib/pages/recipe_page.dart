@@ -383,7 +383,13 @@ class _RecipePageState extends State<RecipePage> {
                       imageUrl: state.recipe.image,
                       imageHash: state.recipe.imageHash,
                     ),
-                    leading: BackButton(
+                    leading: (state.recipe.image == null ||
+                            state.recipe.image!.isEmpty
+                        ? IconButton.new
+                        : IconButton.filledTonal)(
+                      icon: const BackButtonIcon(),
+                      tooltip:
+                          MaterialLocalizations.of(context).backButtonTooltip,
                       onPressed: () =>
                           Navigator.of(context).pop(cubit.state.updateState),
                     ),
@@ -394,26 +400,33 @@ class _RecipePageState extends State<RecipePage> {
                     pinned: true,
                     actions: [
                       if (!App.isOffline && widget.household != null)
-                        LoadingIconButton(
-                          tooltip: AppLocalizations.of(context)!.recipeEdit,
-                          onPressed: () async {
-                            final res = await Navigator.of(context)
-                                .push<UpdateEnum>(MaterialPageRoute(
-                              builder: (context) => AddUpdateRecipePage(
-                                household: widget.household!,
-                                recipe: state.recipe,
-                              ),
-                            ));
-                            if (res == UpdateEnum.updated) {
-                              cubit.setUpdateState(UpdateEnum.updated);
-                              await cubit.refresh();
-                            }
-                            if (res == UpdateEnum.deleted) {
-                              if (!mounted) return;
-                              Navigator.of(context).pop(UpdateEnum.deleted);
-                            }
-                          },
-                          icon: const Icon(Icons.edit),
+                        Padding(
+                          padding: const EdgeInsets.only(right: 8),
+                          child: LoadingIconButton(
+                            tooltip: AppLocalizations.of(context)!.recipeEdit,
+                            variant: state.recipe.image == null ||
+                                    state.recipe.image!.isEmpty
+                                ? LoadingIconButtonVariant.standard
+                                : LoadingIconButtonVariant.filledTonal,
+                            onPressed: () async {
+                              final res = await Navigator.of(context)
+                                  .push<UpdateEnum>(MaterialPageRoute(
+                                builder: (context) => AddUpdateRecipePage(
+                                  household: widget.household!,
+                                  recipe: state.recipe,
+                                ),
+                              ));
+                              if (res == UpdateEnum.updated) {
+                                cubit.setUpdateState(UpdateEnum.updated);
+                                await cubit.refresh();
+                              }
+                              if (res == UpdateEnum.deleted) {
+                                if (!mounted) return;
+                                Navigator.of(context).pop(UpdateEnum.deleted);
+                              }
+                            },
+                            icon: const Icon(Icons.edit),
+                          ),
                         ),
                     ],
                   ),

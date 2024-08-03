@@ -1,3 +1,0 @@
-mkdocs-material==9.5.6
-mkdocs==1.5.3
-neoteroi-mkdocs==1.0.4

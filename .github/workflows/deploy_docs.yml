@@ -1,13 +1,8 @@
 name: Deploy Docs
 on:
   push:
-    branches:
-      - main
-    paths:
-      - docs/**
-      - mkdocs.yml
-      - docs-requirements.txt
-  workflow_dispatch:
+    tags:
+      - "v*"
 
 jobs:
   build:
@@ -16,10 +11,18 @@ jobs:
     steps:
       - name: Checkout main
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      - name: Deploy docs
-        uses: mhausenblas/mkdocs-deploy-gh-pages@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          EXTRA_PACKAGES: build-base
-          REQUIREMENTS: docs-requirements.txt
+      - uses: actions/setup-python@v4
+        with:
+          python-version: 3.12
+      - name: Install Dependencies
+        run: pip install -r docs/requirements.txt
+      - name: Setup Docs Deploy
+        run: |
+          git config --global user.name "Docs Deploy"
+          git config --global user.email "support@kitchenowl.org"
+      - name: Build Docs Website
+        run: mike deploy --push --update-aliases ${{ github.ref_name }} latest
+        working-directory: docs

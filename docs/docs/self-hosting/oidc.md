@@ -34,7 +34,7 @@ back:
 
 If everything is set up correctly you should see a *sign in with OIDC* button at the bottom of the login page.
 
-![screenshot](/img/screenshots/oidc_button.png)
+![screenshot](../img/screenshots/oidc_button.png)
 
 ### Linking accounts
 

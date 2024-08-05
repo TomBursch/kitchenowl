@@ -46,6 +46,7 @@ FRONT_URL = os.getenv("FRONT_URL")
 
 PRIVACY_POLICY_URL = os.getenv("PRIVACY_POLICY_URL")
 OPEN_REGISTRATION = os.getenv("OPEN_REGISTRATION", "False").lower() == "true"
+DISABLE_USERNAME_PASSWORD_LOGIN = os.getenv("DISABLE_USERNAME_PASSWORD_LOGIN", "False").lower() == "true"
 EMAIL_MANDATORY = os.getenv("EMAIL_MANDATORY", "False").lower() == "true"
 
 COLLECT_METRICS = os.getenv("COLLECT_METRICS", "False").lower() == "true"

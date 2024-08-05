@@ -12,7 +12,7 @@ from app.models import User, Token, OIDCLink, OIDCRequest, ChallengeMailVerify
 from app.errors import NotFoundRequest, UnauthorizedRequest, InvalidUsage
 from app.service import mail
 from .schemas import Login, Signup, CreateLongLivedToken, GetOIDCLoginUrl, LoginOIDC
-from app.config import EMAIL_MANDATORY, FRONT_URL, jwt, OPEN_REGISTRATION, oidc_clients
+from app.config import EMAIL_MANDATORY, FRONT_URL, jwt, OPEN_REGISTRATION, DISABLE_USERNAME_PASSWORD_LOGIN, oidc_clients
 
 auth = Blueprint("auth", __name__)
 
@@ -46,37 +46,39 @@ def user_lookup_callback(_jwt_header, jwt_data) -> User:
     return User.find_by_id(identity)
 
 
-@auth.route("", methods=["POST"])
-@validate_args(Login)
-def login(args):
-    username = args["username"].lower().replace(" ", "")
-    user = User.find_by_username(username)
-    if not user or not user.check_password(args["password"]):
-        raise UnauthorizedRequest(
-            message="Unauthorized: IP {} login attemp with wrong username or password".format(
-                request.remote_addr
+if not DISABLE_USERNAME_PASSWORD_LOGIN:
+
+    @auth.route("", methods=["POST"])
+    @validate_args(Login)
+    def login(args):
+        username = args["username"].lower().replace(" ", "")
+        user = User.find_by_username(username)
+        if not user or not user.check_password(args["password"]):
+            raise UnauthorizedRequest(
+                message="Unauthorized: IP {} login attemp with wrong username or password".format(
+                    request.remote_addr
+                )
             )
+        device = "Unkown"
+        if "device" in args:
+            device = args["device"]
+
+        # Create refresh token
+        refreshToken, refreshModel = Token.create_refresh_token(user, device)
+
+        # Create first access token
+        accesssToken, _ = Token.create_access_token(user, refreshModel)
+
+        return jsonify(
+            {
+                "access_token": accesssToken,
+                "refresh_token": refreshToken,
+                "user": user.obj_to_dict(),
+            }
         )
-    device = "Unkown"
-    if "device" in args:
-        device = args["device"]
-
-    # Create refresh token
-    refreshToken, refreshModel = Token.create_refresh_token(user, device)
-
-    # Create first access token
-    accesssToken, _ = Token.create_access_token(user, refreshModel)
-
-    return jsonify(
-        {
-            "access_token": accesssToken,
-            "refresh_token": refreshToken,
-            "user": user.obj_to_dict(),
-        }
-    )
 
 
-if OPEN_REGISTRATION:
+if OPEN_REGISTRATION and not DISABLE_USERNAME_PASSWORD_LOGIN:
 
     @auth.route("signup", methods=["POST"])
     @validate_args(Signup)

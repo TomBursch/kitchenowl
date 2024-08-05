@@ -16,6 +16,7 @@ Environment variables for `tombursch/kitchenowl` and `tombursch/kitchenowl-backe
 
 | Variable                          | Default                    | Description                                                                                                                                           |
 | --------------------------------- | -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `JWT_REFRESH_TOKEN_EXPIRES`       | `30`                       | Sets how long (in days) refresh tokens are valid for. Essentially, how long it takes until users are automatically logged out. Must be a number.      |
 | `JWT_SECRET_KEY`                  |                            |                                                                                                                                                       |
 | `FRONT_URL`                       |                            | Adds allow origin CORS header for the URL. If set, should exactly match KitchenOwl's URL including the schema (e.g. `https://app.kitchenowl.org`)     |
 | `PRIVACY_POLICY_URL`              |                            | Allows to set a custom privacy policy for your server instance                                                                                        |

@@ -62,7 +62,7 @@ DB_URL = URL.create(
 MESSAGE_BROKER = os.getenv("MESSAGE_BROKER")
 
 JWT_ACCESS_TOKEN_EXPIRES = timedelta(minutes=15)
-JWT_REFRESH_TOKEN_EXPIRES = timedelta(days=30)
+JWT_REFRESH_TOKEN_EXPIRES = timedelta(days=int(os.getenv("JWT_REFRESH_TOKEN_EXPIRES", "30")))
 
 OIDC_CLIENT_ID = os.getenv("OIDC_CLIENT_ID")
 OIDC_CLIENT_SECRET = os.getenv("OIDC_CLIENT_SECRET")

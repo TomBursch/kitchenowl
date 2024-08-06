@@ -8,10 +8,12 @@ class FlexibleImageSpaceBar extends StatelessWidget {
   final String title;
   final String imageUrl;
   final String? imageHash;
+  final bool isCollapsed;
 
   const FlexibleImageSpaceBar({
     super.key,
     required this.title,
+    this.isCollapsed = false,
     String? imageUrl,
     this.imageHash,
   }) : imageUrl = imageUrl ?? "";
@@ -24,19 +26,14 @@ class FlexibleImageSpaceBar extends StatelessWidget {
         bottom: 16,
         end: 36,
       ),
-      title: LayoutBuilder(builder: (context, constraints) {
-        final isCollapsed = constraints.biggest.height <=
-            MediaQuery.of(context).padding.top + kToolbarHeight - 16 + 32;
-
-        return Text(
-          title,
-          maxLines: isCollapsed ? 1 : 2,
-          overflow: TextOverflow.ellipsis,
-          style: TextStyle(
-            color: Theme.of(context).colorScheme.onSurface,
-          ),
-        );
-      }),
+      title: Text(
+        title,
+        maxLines: isCollapsed ? 1 : 2,
+        overflow: TextOverflow.ellipsis,
+        style: TextStyle(
+          color: Theme.of(context).colorScheme.onSurface,
+        ),
+      ),
       background: imageUrl.isNotEmpty
           ? GestureDetector(
               onTap: () => Navigator.of(context, rootNavigator: true)

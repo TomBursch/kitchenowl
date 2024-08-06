@@ -20,6 +20,7 @@ export 'shimmer_shopping_item.dart';
 export 'kitchenowl_switch.dart';
 export 'image_selector.dart';
 export 'flexible_image_space_bar.dart';
+export 'sliver_image_app_bar.dart';
 export 'sliver_implicit_animated_list.dart';
 export 'left_right_wrap.dart';
 export 'trailing_icon_text_button.dart';

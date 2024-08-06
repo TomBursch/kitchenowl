@@ -45,83 +45,89 @@ class _LoadingIconButtonState extends State<LoadingIconButton> {
         ),
       );
 
-    return switch (widget.variant) {
-      LoadingIconButtonVariant.standard => IconButton(
-          tooltip: widget.tooltip,
-          style: widget.style,
-          onPressed: widget.onPressed != null
-              ? () async {
-                  setState(() {
-                    isLoading = true;
-                  });
-                  await widget.onPressed!();
-                  if (mounted) {
+    return AnimatedSwitcher(
+      duration: const Duration(milliseconds: 200),
+      child: switch (widget.variant) {
+        LoadingIconButtonVariant.standard => IconButton(
+            key: ValueKey(widget.variant),
+            tooltip: widget.tooltip,
+            style: widget.style,
+            onPressed: widget.onPressed != null
+                ? () async {
                     setState(() {
-                      isLoading = false;
+                      isLoading = true;
                     });
+                    await widget.onPressed!();
+                    if (mounted) {
+                      setState(() {
+                        isLoading = false;
+                      });
+                    }
                   }
-                }
-              : null,
-          icon: widget.icon,
-          padding: widget.padding,
-        ),
-      LoadingIconButtonVariant.filled => IconButton.filled(
-          tooltip: widget.tooltip,
-          style: widget.style,
-          onPressed: widget.onPressed != null
-              ? () async {
-                  setState(() {
-                    isLoading = true;
-                  });
-                  await widget.onPressed!();
-                  if (mounted) {
+                : null,
+            icon: widget.icon,
+            padding: widget.padding,
+          ),
+        LoadingIconButtonVariant.filled => IconButton.filled(
+            key: ValueKey(widget.variant),
+            tooltip: widget.tooltip,
+            style: widget.style,
+            onPressed: widget.onPressed != null
+                ? () async {
                     setState(() {
-                      isLoading = false;
+                      isLoading = true;
                     });
+                    await widget.onPressed!();
+                    if (mounted) {
+                      setState(() {
+                        isLoading = false;
+                      });
+                    }
                   }
-                }
-              : null,
-          icon: widget.icon,
-          padding: widget.padding,
-        ),
-      LoadingIconButtonVariant.filledTonal => IconButton.filledTonal(
-          tooltip: widget.tooltip,
-          style: widget.style,
-          onPressed: widget.onPressed != null
-              ? () async {
-                  setState(() {
-                    isLoading = true;
-                  });
-                  await widget.onPressed!();
-                  if (mounted) {
+                : null,
+            icon: widget.icon,
+            padding: widget.padding,
+          ),
+        LoadingIconButtonVariant.filledTonal => IconButton.filledTonal(
+            key: ValueKey(widget.variant),
+            tooltip: widget.tooltip,
+            style: widget.style,
+            onPressed: widget.onPressed != null
+                ? () async {
                     setState(() {
-                      isLoading = false;
+                      isLoading = true;
                     });
+                    await widget.onPressed!();
+                    if (mounted) {
+                      setState(() {
+                        isLoading = false;
+                      });
+                    }
                   }
-                }
-              : null,
-          icon: widget.icon,
-          padding: widget.padding,
-        ),
-      LoadingIconButtonVariant.outlined => IconButton.outlined(
-          tooltip: widget.tooltip,
-          style: widget.style,
-          onPressed: widget.onPressed != null
-              ? () async {
-                  setState(() {
-                    isLoading = true;
-                  });
-                  await widget.onPressed!();
-                  if (mounted) {
+                : null,
+            icon: widget.icon,
+            padding: widget.padding,
+          ),
+        LoadingIconButtonVariant.outlined => IconButton.outlined(
+            tooltip: widget.tooltip,
+            style: widget.style,
+            onPressed: widget.onPressed != null
+                ? () async {
                     setState(() {
-                      isLoading = false;
+                      isLoading = true;
                     });
+                    await widget.onPressed!();
+                    if (mounted) {
+                      setState(() {
+                        isLoading = false;
+                      });
+                    }
                   }
-                }
-              : null,
-          icon: widget.icon,
-          padding: widget.padding,
-        ),
-    };
+                : null,
+            icon: widget.icon,
+            padding: widget.padding,
+          ),
+      },
+    );
   }
 }

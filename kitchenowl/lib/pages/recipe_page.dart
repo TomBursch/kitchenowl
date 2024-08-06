@@ -377,35 +377,20 @@ class _RecipePageState extends State<RecipePage> {
               child: CustomScrollView(
                 primary: true,
                 slivers: [
-                  SliverAppBar(
-                    flexibleSpace: FlexibleImageSpaceBar(
-                      title: state.recipe.name,
-                      imageUrl: state.recipe.image,
-                      imageHash: state.recipe.imageHash,
-                    ),
-                    leading: (state.recipe.image == null ||
-                            state.recipe.image!.isEmpty
-                        ? IconButton.new
-                        : IconButton.filledTonal)(
-                      icon: const BackButtonIcon(),
-                      tooltip:
-                          MaterialLocalizations.of(context).backButtonTooltip,
-                      onPressed: () =>
-                          Navigator.of(context).pop(cubit.state.updateState),
-                    ),
-                    expandedHeight: state.recipe.image?.isNotEmpty ?? false
-                        ? (MediaQuery.of(context).size.height / 3.3)
-                            .clamp(160, 350)
-                        : null,
-                    pinned: true,
-                    actions: [
+                  SliverImageAppBar(
+                    title: state.recipe.name,
+                    imageUrl: state.recipe.image,
+                    imageHash: state.recipe.imageHash,
+                    popValue: () => cubit.state.updateState,
+                    actions: (isCollapsed) => [
                       if (!App.isOffline && widget.household != null)
                         Padding(
                           padding: const EdgeInsets.only(right: 8),
                           child: LoadingIconButton(
                             tooltip: AppLocalizations.of(context)!.recipeEdit,
                             variant: state.recipe.image == null ||
-                                    state.recipe.image!.isEmpty
+                                    state.recipe.image!.isEmpty ||
+                                    isCollapsed
                                 ? LoadingIconButtonVariant.standard
                                 : LoadingIconButtonVariant.filledTonal,
                             onPressed: () async {

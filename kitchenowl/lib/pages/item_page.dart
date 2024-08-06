@@ -67,7 +67,7 @@ class _ItemPageState<T extends Item> extends State<ItemPage<T>> {
           prev.hasChanged(widget.item) != curr.hasChanged(widget.item),
       builder: (context, state) => PopScope(
         canPop: !state.hasChanged(widget.item),
-        onPopInvoked: (didPop) async {
+        onPopInvokedWithResult: (didPop, result) async {
           if (!didPop && state.hasChanged(widget.item)) {
             await cubit.saveItem();
             if (mounted) {

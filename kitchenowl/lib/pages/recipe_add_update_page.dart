@@ -100,7 +100,7 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
           builder: (context, state) {
             return PopScope(
               canPop: !state.hasChanges,
-              onPopInvoked: (didPop) async {
+              onPopInvokedWithResult: (didPop, result) async {
                 if (!didPop && state.hasChanges) {
                   if (await askForConfirmation(
                     context: context,

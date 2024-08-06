@@ -86,7 +86,7 @@ class _ItemSearchPageState extends State<ItemSearchPage> {
 
     return PopScope(
       canPop: false,
-      onPopInvoked: (didPop) {
+      onPopInvokedWithResult: (didPop, result) {
         if (!didPop) Navigator.of(context).pop(cubit.state.selectedItems);
       },
       child: Scaffold(

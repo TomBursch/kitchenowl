@@ -59,7 +59,7 @@ dependencies:
   file_picker: ^8.0.0+1
   photo_view: ^0.15.0
   share_handler: ^0.0.19
-  share_plus: ^9.0.0
+  share_plus: ^10.0.0
   reorderables: ^0.6.0
   flutter_colorpicker: ^1.1.0
   sliver_tools: ^0.2.12

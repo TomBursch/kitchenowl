@@ -43,7 +43,7 @@ class _ExpensePageState extends State<ExpensePage> {
   Widget build(BuildContext context) {
     return PopScope(
       canPop: false,
-      onPopInvoked: (didPop) {
+      onPopInvokedWithResult: (didPop, result) {
         if (!didPop) Navigator.of(context).pop(cubit.state.updateState);
       },
       child: BlocBuilder<ExpenseCubit, ExpenseCubitState>(

@@ -1,7 +1,7 @@
 <h1 align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="./docs/img/icon.png">
-    <img width="128" src="./docs/img/logo.png" alt="KitchenOwl">
+    <source media="(prefers-color-scheme: dark)" srcset="./docs/docs/img/icon.png">
+    <img width="128" src="./docs/docs/img/logo.png" alt="KitchenOwl">
   </picture>
 </h1>
 <p align="center">
@@ -38,13 +38,13 @@
 
 <div align="center">
   <a href='https://play.google.com/store/apps/details?id=com.tombursch.kitchenowl'>
-    <img alt='Get it on Google Play' src='docs/img/badges/playstore.png' height="50" />
+    <img alt='Get it on Google Play' src='docs/docs/img/badges/playstore.png' height="50" />
   </a>
   <a href='https://f-droid.org/packages/com.tombursch.kitchenowl/'>
-    <img alt='Get it on F-Droid' src='docs/img/badges/f-droid.png' height="50"/>
+    <img alt='Get it on F-Droid' src='docs/docs/img/badges/f-droid.png' height="50"/>
   </a>
   <a href='https://apps.apple.com/app/kitchenowl/id1557453670'>
-    <img alt='Get it on the AppStore' src='docs/img/badges/appstore.png' height="50" />
+    <img alt='Get it on the AppStore' src='docs/docs/img/badges/appstore.png' height="50" />
   </a>
 </div>
 

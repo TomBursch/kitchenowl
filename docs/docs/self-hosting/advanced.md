@@ -47,6 +47,7 @@ Environment variables for `tombursch/kitchenowl` and `tombursch/kitchenowl-backe
 | `APPLE_CLIENT_SECRET`             |                            |                                                                                                                                                       |
 | `GOOGLE_CLIENT_ID`                |                            |                                                                                                                                                       |
 | `GOOGLE_CLIENT_SECRET`            |                            |                                                                                                                                                       |
+| `LLM_MODEL`                       |                            | Set a custom ingredient detection strategy for scraped recipes from the web. More at [Ingredient Parsing](./ingredient_parsing.md)                    |
 
 Additionally, to setting these environment variables you can also override the start command to scale the backend up.
 Add the following line or take a look at this exemplary [docker-compose.yml](https://github.com/TomBursch/kitchenowl/blob/main/docker-compose-postgres.yml) file:

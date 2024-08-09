@@ -17,7 +17,8 @@ To use OpenAi you need to set the following environment variables:
 
 ### Ollama
 
-To use OpenAi you need to set the following environment variables:
+Ollama is a locally hosted LLM. You can also run this on a remote host (e.g. your desktop), and when the host is not reachable it will fall back to the NLP method. 
+To use Ollama you need to set the following environment variables:
 
 - `LLM_MODEL`: The model name prefixed with `ollama` (e.g. `ollama/llama3.1`)
 - `OPENAI_API_KEY`: Your OpenAI API key

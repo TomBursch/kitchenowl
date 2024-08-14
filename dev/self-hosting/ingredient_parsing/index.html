@@ -8,13 +8,13 @@
       
       
       
-        <link rel="canonical" href="https://docs.kitchenowl.org/dev/reference/API/">
+        <link rel="canonical" href="https://docs.kitchenowl.org/dev/self-hosting/ingredient_parsing/">
       
       
-        <link rel="prev" href="../../Tips-%26-Tricks/markdown/">
+        <link rel="prev" href="../advanced/">
       
       
-        <link rel="next" href="../contributing/">
+        <link rel="next" href="../migration/">
       
       
       <link rel="icon" href="../../img/icon.png">
@@ -22,7 +22,7 @@
     
     
       
-        <title>API - KitchenOwl Docs</title>
+        <title>Ingredient Detection - KitchenOwl Docs</title>
       
     
     
@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#kitchenowl-v97" class="md-skip">
+        <a href="#ingredient-detection" class="md-skip">
           Skip to content
         </a>
       
@@ -129,7 +129,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              API
+              Ingredient Detection
             
           </span>
         </div>
@@ -269,13 +269,11 @@
         
   
   
-    
-  
   
     
     
-      <li class="md-tabs__item md-tabs__item--active">
-        <a href="./" class="md-tabs__link">
+      <li class="md-tabs__item">
+        <a href="../../reference/API/" class="md-tabs__link">
           
   
   Reference
@@ -289,11 +287,13 @@
         
   
   
+    
+  
   
     
     
-      <li class="md-tabs__item">
-        <a href="../../self-hosting/" class="md-tabs__link">
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
           
   
   Self hosting
@@ -459,28 +459,23 @@
       
   
   
-    
   
   
-  
     
     
     
       
-        
-        
-      
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
         
           
-          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
             
   
   <span class="md-ellipsis">
@@ -491,7 +486,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
             Reference
@@ -502,30 +497,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  <span class="md-ellipsis">
-    API
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../reference/API/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -534,44 +509,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#servers" class="md-nav__link">
-    <span class="md-ellipsis">
-      Servers
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#more-documentation" class="md-nav__link">
-    <span class="md-ellipsis">
-      More documentation
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -584,7 +521,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../contributing/" class="md-nav__link">
+      <a href="../../reference/contributing/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -605,7 +542,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../management/" class="md-nav__link">
+      <a href="../../reference/management/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -630,23 +567,28 @@
       
   
   
+    
   
   
+  
     
     
     
-      
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
         
           
-          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
             
   
   <span class="md-ellipsis">
@@ -657,7 +599,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_4">
             <span class="md-nav__icon md-icon"></span>
             Self hosting
@@ -671,7 +613,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../self-hosting/" class="md-nav__link">
+      <a href="../" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -692,7 +634,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../self-hosting/advanced/" class="md-nav__link">
+      <a href="../advanced/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -710,10 +652,30 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../../self-hosting/ingredient_parsing/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Ingredient Detection
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   <span class="md-ellipsis">
@@ -722,6 +684,44 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#openai" class="md-nav__link">
+    <span class="md-ellipsis">
+      OpenAI
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ollama" class="md-nav__link">
+    <span class="md-ellipsis">
+      Ollama
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -734,7 +734,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../self-hosting/migration/" class="md-nav__link">
+      <a href="../migration/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -755,7 +755,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../self-hosting/oidc/" class="md-nav__link">
+      <a href="../oidc/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -776,7 +776,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../self-hosting/reverse-proxy/" class="md-nav__link">
+      <a href="../reverse-proxy/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -824,18 +824,18 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#servers" class="md-nav__link">
+  <a href="#openai" class="md-nav__link">
     <span class="md-ellipsis">
-      Servers
+      OpenAI
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#more-documentation" class="md-nav__link">
+  <a href="#ollama" class="md-nav__link">
     <span class="md-ellipsis">
-      More documentation
+      Ollama
     </span>
   </a>
   
@@ -859,53 +859,26 @@
   
 
 
-<!--
-This Markdown has been generated by essentials-openapi
-https://github.com/Neoteroi/essentials-openapi
-
-Most likely, it is not desirable to edit this file by hand!
--->
-
-<h1 id="kitchenowl-v97">KitchenOwl <span class="api-version">v97</span></h1>
-<p>WIP KitchenOwl API documentation</p>
-<hr />
-<div class="terms-of-service info-data">
-    <strong>Terms of service:</strong> <a href="https://kitchenowl.org/privacy/" target="_blank" rel="noopener noreferrer">https://kitchenowl.org/privacy/</a>
-</div>
-
-<div class="contact info-data">
-    <strong>Contact:</strong> <a href="mailto:support@kitchenowl.org">API Support support@kitchenowl.org</a>
-</div>
-
-<div class="license info-data">
-    <strong>License:</strong> <a href="https://github.com/TomBursch/kitchenowl/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">AGPL 3.0</a>
-</div>
-
-<h2 id="servers">Servers</h2>
-<table>
-    <thead>
-        <tr>
-            <th>Description</th>
-            <th>URL</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>Official KitchenOwl server instance</td>
-            <td>
-                <a href="https://app.kitchenowl.org/api" target="_blank" rel="noopener noreferrer">https://app.kitchenowl.org/api</a>
-            </td>
-        </tr>
-    </tbody>
-</table>
-
-<hr />
-<h2 id="more-documentation">More documentation</h2>
-<p>Find more info at the official documentation</p>
-<hr />
-<div class="external-docs info-data">
-    <strong>For more information:</strong> <a href="https://docs.kitchenowl.org" target="_blank" rel="noopener noreferrer">https://docs.kitchenowl.org</a>
-</div>
+<h1 id="ingredient-detection">Ingredient Detection</h1>
+<p>When scraping recipes from the web multiple strategies to map ingredients to household items are available.
+The scraping only returns a list of ingredients (like <code>3 cloves garlic</code>, <code>1/2 teaspoon salt</code>, <code>2 carrots chopped</code>) from which we need to extract the ingredient name and description. The names are then mapped to existing household items.</p>
+<p>The default method is to use a local <a href="https://github.com/strangetom/ingredient-parser/">natural language processing (NLP) model</a> trained on English ingredients. To use this leave the <code>LLM_MODEL</code> environment variable empty.</p>
+<p>Alternatively, you can use a <a href="https://github.com/BerriAI/litellm">Large Language Model (LLM)</a>, multiple models are supported. Using a LLM uses more resources but can provide better results, especially for languages other than English.
+It can automatically translate the ingredient names to the household language for better item detection.</p>
+<h3 id="openai">OpenAI</h3>
+<p>To use OpenAi you need to set the following environment variables:</p>
+<ul>
+<li><code>LLM_MODEL</code>: The model name (e.g. <code>gpt-3.5-turbo</code>)</li>
+<li><code>OPENAI_API_KEY</code>: Your OpenAI API key</li>
+</ul>
+<h3 id="ollama">Ollama</h3>
+<p>Ollama is a locally hosted LLM. You can also run this on a remote host (e.g. your desktop), and when the host is not reachable it will fall back to the NLP method. 
+To use Ollama you need to set the following environment variables:</p>
+<ul>
+<li><code>LLM_MODEL</code>: The model name prefixed with <code>ollama</code> (e.g. <code>ollama/llama3.1</code>)</li>
+<li><code>OPENAI_API_KEY</code>: Your OpenAI API key</li>
+<li><code>LLM_API_URL</code>: The URL of the Ollama server (e.g. <code>http://localhost:11434</code>)</li>
+</ul>
 
 
 

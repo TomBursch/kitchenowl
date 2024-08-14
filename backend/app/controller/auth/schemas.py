@@ -54,7 +54,7 @@ class GetOIDCLoginUrl(Schema):
     )
     kitchenowl_scheme = fields.Boolean(
         required=False,
-        default=False,
+        load_default=False,
         load_only=True,
     )
 

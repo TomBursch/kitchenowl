@@ -40,7 +40,7 @@ class UpdateRecipe(Schema):
 class SearchByNameRequest(Schema):
     query = fields.String(required=True, validate=lambda a: a and not a.isspace())
     only_ids = fields.Boolean(
-        default=False,
+        load_default=False,
     )
 
 

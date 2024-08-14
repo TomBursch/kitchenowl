@@ -68,6 +68,7 @@ class ItemEditCubit<T extends Item> extends Cubit<ItemEditState> {
     if (shoppingList != null && state.hasChangedDescription(_item)) {
       await TransactionHandler.getInstance()
           .runTransaction(TransactionShoppingListUpdateItem(
+        household: household!,
         shoppinglist: shoppingList!,
         item: _item,
         description: state.description,

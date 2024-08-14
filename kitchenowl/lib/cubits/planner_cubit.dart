@@ -77,6 +77,7 @@ class PlannerCubit extends Cubit<PlannerCubitState> {
   ) {
     return TransactionHandler.getInstance()
         .runTransaction(TransactionShoppingListAddRecipeItems(
+      household: household,
       shoppinglist: shoppingList,
       items: items,
     ));

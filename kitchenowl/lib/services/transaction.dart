@@ -8,9 +8,9 @@ abstract class Transaction<T> extends Model {
     "TransactionShoppingListAddItem": (m, t) =>
         TransactionShoppingListAddItem.fromJson(m, t),
     "TransactionShoppingListDeleteItem": (m, t) =>
-        TransactionShoppingListDeleteItem.fromJson(m, t),
+        TransactionShoppingListRemoveItem.fromJson(m, t),
     "TransactionShoppingListDeleteItems": (m, t) =>
-        TransactionShoppingListDeleteItems.fromJson(m, t),
+        TransactionShoppingListRemoveItems.fromJson(m, t),
     "TransactionShoppingListUpdateItem": (m, t) =>
         TransactionShoppingListUpdateItem.fromJson(m, t),
     "TransactionShoppingListAddRecipeItems": (m, t) =>
@@ -36,14 +36,21 @@ abstract class Transaction<T> extends Model {
         DateTime.tryParse(map['timestamp']) ?? DateTime.now();
     if (map.containsKey('className') &&
         _transactionTypes.containsKey(map['className'])) {
-      return _transactionTypes[map['className']]!(map, timestamp)
-          as Transaction<T>;
+      try {
+        return _transactionTypes[map['className']]!(map, timestamp)
+            as Transaction<T>;
+      } catch (e) {
+        return ErrorTransaction<T>(
+            timestamp,
+            map.containsKey('className') ? map['className'] : "ERROR",
+            e.toString());
+      }
     }
 
     return ErrorTransaction<T>(
-      timestamp,
-      map.containsKey('className') ? map['className'] : "ERROR",
-    );
+        timestamp,
+        map.containsKey('className') ? map['className'] : "ERROR",
+        "Could not find transaction class");
   }
 
   @override
@@ -57,7 +64,10 @@ abstract class Transaction<T> extends Model {
 }
 
 class ErrorTransaction<T> extends Transaction<T> {
-  const ErrorTransaction(super.timestamp, super.className) : super.internal();
+  final String message;
+
+  const ErrorTransaction(super.timestamp, super.className, [this.message = ""])
+      : super.internal();
 
   @override
   Future<T> runLocal() {

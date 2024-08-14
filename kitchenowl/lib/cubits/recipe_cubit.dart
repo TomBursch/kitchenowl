@@ -16,13 +16,11 @@ class RecipeCubit extends Cubit<RecipeState> {
   final TransactionHandler _transactionHandler;
 
   RecipeCubit(Household? household, Recipe recipe, int? selectedYields)
-    : this.forTesting(TransactionHandler.getInstance(), household, recipe, selectedYields);
+      : this.forTesting(TransactionHandler.getInstance(), household, recipe,
+            selectedYields);
 
-  RecipeCubit.forTesting(
-      TransactionHandler transactionHandler,
-      this.household,
-      Recipe recipe,
-      int? selectedYields)
+  RecipeCubit.forTesting(TransactionHandler transactionHandler, this.household,
+      Recipe recipe, int? selectedYields)
       : _transactionHandler = transactionHandler,
         super(RecipeState(recipe: recipe, selectedYields: selectedYields)) {
     refresh();
@@ -69,6 +67,7 @@ class RecipeCubit extends Cubit<RecipeState> {
     if (shoppingList != null) {
       await _transactionHandler
           .runTransaction(TransactionShoppingListAddRecipeItems(
+        household: household!,
         shoppinglist: shoppingList,
         items: state.dynamicRecipe.items
             .where((item) => state.selectedItems.contains(item.name))

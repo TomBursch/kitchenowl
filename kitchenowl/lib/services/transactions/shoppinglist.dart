@@ -3,15 +3,20 @@ import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/models/shoppinglist.dart';
 import 'package:kitchenowl/services/storage/mem_storage.dart';
-import 'package:kitchenowl/services/storage/transaction_storage.dart';
 import 'package:kitchenowl/services/transaction.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
 
 class TransactionShoppingListGet extends Transaction<List<ShoppingList>> {
   final Household household;
+  final ShoppinglistSorting sorting;
+  final int recentItemlimit;
 
-  TransactionShoppingListGet({DateTime? timestamp, required this.household})
-      : super.internal(
+  TransactionShoppingListGet({
+    DateTime? timestamp,
+    required this.household,
+    this.sorting = ShoppinglistSorting.alphabetical,
+    this.recentItemlimit = 9,
+  }) : super.internal(
           timestamp ?? DateTime.now(),
           "TransactionShoppingListGet",
         );
@@ -23,46 +28,16 @@ class TransactionShoppingListGet extends Transaction<List<ShoppingList>> {
 
   @override
   Future<List<ShoppingList>?> runOnline() async {
-    final lists = await ApiService.getInstance().getShoppingLists(household);
+    final lists = await ApiService.getInstance().getShoppingLists(
+      household,
+      sorting: sorting,
+      recentItemlimit: recentItemlimit + 3,
+    );
     if (lists != null) {
       MemStorage.getInstance().writeShoppingLists(household, lists);
     }
 
     return lists;
-  }
-}
-
-class TransactionShoppingListGetItems
-    extends Transaction<List<ShoppinglistItem>> {
-  final ShoppingList shoppinglist;
-  final ShoppinglistSorting sorting;
-
-  TransactionShoppingListGetItems({
-    DateTime? timestamp,
-    required this.shoppinglist,
-    required this.sorting,
-  }) : super.internal(
-          timestamp ?? DateTime.now(),
-          "TransactionShoppingListGetItems",
-        );
-
-  @override
-  Future<List<ShoppinglistItem>> runLocal() async {
-    final l = await MemStorage.getInstance().readItems(shoppinglist) ?? [];
-    ShoppinglistSorting.sortShoppinglistItems(l, sorting);
-
-    return l;
-  }
-
-  @override
-  Future<List<ShoppinglistItem>?> runOnline() async {
-    final items =
-        await ApiService.getInstance().getItems(shoppinglist, sorting);
-    if (items != null) {
-      MemStorage.getInstance().writeItems(shoppinglist, items);
-    }
-
-    return items;
   }
 }
 
@@ -81,25 +56,20 @@ class TransactionShoppingListSearchItem extends Transaction<List<Item>> {
 
   @override
   Future<List<Item>> runLocal() async {
-    final shoppinglist = await MemStorage.getInstance()
-        .readShoppingLists(household)
-        .then(
-          (shoppingLists) => Future.wait<List<ShoppinglistItem>?>(
-            shoppingLists
-                    ?.map((shoppingList) =>
-                        MemStorage.getInstance().readItems(shoppingList))
-                    .toList() ??
-                [],
-          ),
-        )
-        .then<List<ShoppinglistItem>>((e) => e.fold<List<ShoppinglistItem>>(
-              [],
-              (p, e) => p + (e ?? []),
-            ));
-    shoppinglist
-        .retainWhere((e) => e.name.toLowerCase().contains(query.toLowerCase()));
-
-    return shoppinglist;
+    final shoppingLists =
+        await MemStorage.getInstance().readShoppingLists(household);
+    return (shoppingLists
+            ?.map((shoppingList) =>
+                shoppingList.recentItems
+                    .map((e) => Item.fromItem(item: e))
+                    .toList() +
+                shoppingList.items)
+            .fold<List<Item>>(
+          [],
+          (p, e) => p + e,
+        ) ??
+        [])
+      ..retainWhere((e) => e.name.toLowerCase().contains(query.toLowerCase()));
   }
 
   @override
@@ -108,56 +78,13 @@ class TransactionShoppingListSearchItem extends Transaction<List<Item>> {
   }
 }
 
-class TransactionShoppingListGetRecentItems
-    extends Transaction<List<ItemWithDescription>> {
-  final ShoppingList shoppinglist;
-  final int itemsCount;
-
-  TransactionShoppingListGetRecentItems({
-    DateTime? timestamp,
-    required this.shoppinglist,
-    required this.itemsCount,
-  }) : super.internal(
-          timestamp ?? DateTime.now(),
-          "TransactionShoppingListGetRecentItems",
-        );
-
-  @override
-  Future<List<ItemWithDescription>> runLocal() async {
-    if (itemsCount <= 0) return [];
-    final items =
-        (await MemStorage.getInstance().readItems(shoppinglist) ?? const [])
-            .map((e) => e.name)
-            .toSet();
-
-    return (await TransactionStorage.getInstance().readTransactions())
-        .whereType<TransactionShoppingListDeleteItem>()
-        .where((e) => e.shoppinglist.id == shoppinglist.id)
-        .map((e) => e.item)
-        .where((e) {
-      if (items.contains(e.name)) {
-        return false;
-      } else {
-        items.add(e.name);
-
-        return true;
-      }
-    }).toList();
-  }
-
-  @override
-  Future<List<ItemWithDescription>?> runOnline() async {
-    if (itemsCount <= 0) return [];
-    return await ApiService.getInstance()
-        .getRecentItems(shoppinglist, itemsCount);
-  }
-}
-
 class TransactionShoppingListAddItem extends Transaction<bool> {
+  final Household household;
   final ShoppingList shoppinglist;
   final Item item;
 
   TransactionShoppingListAddItem({
+    required this.household,
     required this.shoppinglist,
     required this.item,
     DateTime? timestamp,
@@ -171,6 +98,7 @@ class TransactionShoppingListAddItem extends Transaction<bool> {
     DateTime timestamp,
   ) =>
       TransactionShoppingListAddItem(
+        household: Household.fromJson(map['household']),
         shoppinglist: ShoppingList.fromJson(map['shoppinglist']),
         item: ItemWithDescription.fromJson(map['item']),
         timestamp: timestamp,
@@ -182,15 +110,22 @@ class TransactionShoppingListAddItem extends Transaction<bool> {
   @override
   Map<String, dynamic> toJson() => super.toJson()
     ..addAll({
+      "household": household.toJsonWithId(),
       "shoppinglist": shoppinglist.toJsonWithId(),
       "item": item.toJsonWithId(),
     });
 
   @override
   Future<bool> runLocal() async {
-    final list = await MemStorage.getInstance().readItems(shoppinglist) ?? [];
-    list.add(ShoppinglistItem.fromItem(item: item));
-    MemStorage.getInstance().writeItems(shoppinglist, list);
+    final shoppingLists =
+        await MemStorage.getInstance().readShoppingLists(household) ?? [];
+    final latestShoppingList =
+        shoppingLists.where((e) => e.id == shoppinglist.id).firstOrNull;
+    if (latestShoppingList == null) return false;
+    latestShoppingList.items.add(ShoppinglistItem.fromItem(item: item));
+    latestShoppingList.recentItems
+        .removeWhere((item) => item.name == this.item.name);
+    MemStorage.getInstance().writeShoppingLists(household, shoppingLists);
 
     return true;
   }
@@ -214,12 +149,14 @@ class TransactionShoppingListAddItem extends Transaction<bool> {
   }
 }
 
-class TransactionShoppingListDeleteItem extends Transaction<bool> {
+class TransactionShoppingListRemoveItem extends Transaction<bool> {
+  final Household household;
   final ShoppingList shoppinglist;
   final ShoppinglistItem item;
 
-  TransactionShoppingListDeleteItem({
+  TransactionShoppingListRemoveItem({
     DateTime? timestamp,
+    required this.household,
     required this.item,
     required this.shoppinglist,
   }) : super.internal(
@@ -227,11 +164,12 @@ class TransactionShoppingListDeleteItem extends Transaction<bool> {
           "TransactionShoppingListDeleteItem",
         );
 
-  factory TransactionShoppingListDeleteItem.fromJson(
+  factory TransactionShoppingListRemoveItem.fromJson(
     Map<String, dynamic> map,
     DateTime timestamp,
   ) =>
-      TransactionShoppingListDeleteItem(
+      TransactionShoppingListRemoveItem(
+        household: Household.fromJson(map['household']),
         shoppinglist: ShoppingList.fromJson(map['shoppinglist']),
         item: ShoppinglistItem.fromJson(map['item']),
         timestamp: timestamp,
@@ -243,15 +181,22 @@ class TransactionShoppingListDeleteItem extends Transaction<bool> {
   @override
   Map<String, dynamic> toJson() => super.toJson()
     ..addAll({
+      'household': household.toJsonWithId(),
       "shoppinglist": shoppinglist.toJsonWithId(),
       "item": item.toJsonWithId(),
     });
 
   @override
   Future<bool> runLocal() async {
-    final list = await MemStorage.getInstance().readItems(shoppinglist) ?? [];
-    list.removeWhere((e) => e.name == item.name);
-    MemStorage.getInstance().writeItems(shoppinglist, list);
+    final shoppingLists =
+        await MemStorage.getInstance().readShoppingLists(household) ?? [];
+    final latestShoppingList =
+        shoppingLists.where((e) => e.id == shoppinglist.id).firstOrNull;
+    if (latestShoppingList == null) return false;
+    latestShoppingList.items.removeWhere((e) => e.name == item.name);
+    latestShoppingList.recentItems.removeWhere((e) => e.name == item.name);
+    latestShoppingList.recentItems.insert(0, item);
+    MemStorage.getInstance().writeShoppingLists(household, shoppingLists);
 
     return true;
   }
@@ -264,12 +209,14 @@ class TransactionShoppingListDeleteItem extends Transaction<bool> {
   }
 }
 
-class TransactionShoppingListDeleteItems extends Transaction<bool> {
+class TransactionShoppingListRemoveItems extends Transaction<bool> {
+  final Household household;
   final ShoppingList shoppinglist;
   final List<ShoppinglistItem> items;
 
-  TransactionShoppingListDeleteItems({
+  TransactionShoppingListRemoveItems({
     DateTime? timestamp,
+    required this.household,
     required this.items,
     required this.shoppinglist,
   }) : super.internal(
@@ -277,11 +224,12 @@ class TransactionShoppingListDeleteItems extends Transaction<bool> {
           "TransactionShoppingListDeleteItems",
         );
 
-  factory TransactionShoppingListDeleteItems.fromJson(
+  factory TransactionShoppingListRemoveItems.fromJson(
     Map<String, dynamic> map,
     DateTime timestamp,
   ) =>
-      TransactionShoppingListDeleteItems(
+      TransactionShoppingListRemoveItems(
+        household: Household.fromJson(map['household']),
         shoppinglist: ShoppingList.fromJson(map['shoppinglist']),
         items: List.from(map['items'])
             .map((e) => ShoppinglistItem.fromJson(e))
@@ -295,15 +243,22 @@ class TransactionShoppingListDeleteItems extends Transaction<bool> {
   @override
   Map<String, dynamic> toJson() => super.toJson()
     ..addAll({
+      'household': household.toJsonWithId(),
       "shoppinglist": shoppinglist.toJsonWithId(),
       "items": items.map((e) => e.toJsonWithId()).toList(),
     });
 
   @override
   Future<bool> runLocal() async {
-    final list = await MemStorage.getInstance().readItems(shoppinglist) ?? [];
-    list.removeWhere((e) => items.map((e) => e.name).contains(e.name));
-    MemStorage.getInstance().writeItems(shoppinglist, list);
+    final shoppingLists =
+        await MemStorage.getInstance().readShoppingLists(household) ?? [];
+    final latestShoppingList =
+        shoppingLists.where((e) => e.id == shoppinglist.id).firstOrNull;
+    if (latestShoppingList == null) return false;
+    latestShoppingList.items
+        .removeWhere((e) => items.map((e) => e.name).contains(e.name));
+    latestShoppingList.recentItems.insertAll(0, items);
+    MemStorage.getInstance().writeShoppingLists(household, shoppingLists);
 
     return true;
   }
@@ -317,11 +272,13 @@ class TransactionShoppingListDeleteItems extends Transaction<bool> {
 }
 
 class TransactionShoppingListUpdateItem extends Transaction<bool> {
+  final Household household;
   final ShoppingList shoppinglist;
   final Item item;
   final String description;
 
   TransactionShoppingListUpdateItem({
+    required this.household,
     required this.shoppinglist,
     required this.item,
     required this.description,
@@ -336,6 +293,7 @@ class TransactionShoppingListUpdateItem extends Transaction<bool> {
     DateTime timestamp,
   ) =>
       TransactionShoppingListUpdateItem(
+        household: Household.fromJson(map['household']),
         shoppinglist: ShoppingList.fromJson(map['shoppinglist']),
         item: Item.fromJson(map['item']),
         description: map['description'],
@@ -348,6 +306,7 @@ class TransactionShoppingListUpdateItem extends Transaction<bool> {
   @override
   Map<String, dynamic> toJson() => super.toJson()
     ..addAll({
+      'household': household.toJsonWithId(),
       "shoppinglist": shoppinglist.toJsonWithId(),
       "item": item.toJsonWithId(),
       "description": description,
@@ -355,21 +314,25 @@ class TransactionShoppingListUpdateItem extends Transaction<bool> {
 
   @override
   Future<bool> runLocal() async {
+    final shoppingLists =
+        await MemStorage.getInstance().readShoppingLists(household) ?? [];
+    final latestShoppingList =
+        shoppingLists.where((e) => e.id == shoppinglist.id).firstOrNull;
+    if (latestShoppingList == null) return false;
+
     if (item is ShoppinglistItem) {
-      final list = await MemStorage.getInstance().readItems(shoppinglist) ?? [];
-      final int i = list.indexWhere((e) => e.id == item.id);
-      list.removeAt(i);
-      list.insert(
-        i,
-        (item as ShoppinglistItem).copyWith(description: description),
-      );
-      MemStorage.getInstance().writeItems(shoppinglist, list);
+      final int i = latestShoppingList.items.indexWhere((e) => e.id == item.id);
+      latestShoppingList.items[i] =
+          (item as ShoppinglistItem).copyWith(description: description);
+      MemStorage.getInstance().writeShoppingLists(household, shoppingLists);
 
       return true;
     } else if (description.isNotEmpty) {
-      final list = await MemStorage.getInstance().readItems(shoppinglist) ?? [];
-      list.add(ShoppinglistItem(name: item.name, description: description));
-      MemStorage.getInstance().writeItems(shoppinglist, list);
+      latestShoppingList.items
+          .add(ShoppinglistItem(name: item.name, description: description));
+      latestShoppingList.recentItems
+          .removeWhere((item) => item.name == this.item.name);
+      MemStorage.getInstance().writeShoppingLists(household, shoppingLists);
 
       return true;
     }
@@ -387,10 +350,12 @@ class TransactionShoppingListUpdateItem extends Transaction<bool> {
 }
 
 class TransactionShoppingListAddRecipeItems extends Transaction<bool> {
+  final Household household;
   final ShoppingList shoppinglist;
   final List<RecipeItem> items;
 
   TransactionShoppingListAddRecipeItems({
+    required this.household,
     required this.shoppinglist,
     required this.items,
     DateTime? timestamp,
@@ -407,6 +372,7 @@ class TransactionShoppingListAddRecipeItems extends Transaction<bool> {
         List.from(map['items'].map((e) => RecipeItem.fromJson(e)));
 
     return TransactionShoppingListAddRecipeItems(
+      household: Household.fromJson(map['household']),
       shoppinglist: ShoppingList.fromJson(map['shoppinglist']),
       items: items,
       timestamp: timestamp,
@@ -419,23 +385,29 @@ class TransactionShoppingListAddRecipeItems extends Transaction<bool> {
   @override
   Map<String, dynamic> toJson() => super.toJson()
     ..addAll({
+      "household": household.toJsonWithId(),
       "shoppinglist": shoppinglist.toJsonWithId(),
       "items": items.map((e) => e.toJsonWithId()).toList(),
     });
 
   @override
   Future<bool> runLocal() async {
-    final list = await MemStorage.getInstance().readItems(shoppinglist) ?? [];
+    final shoppingLists =
+        await MemStorage.getInstance().readShoppingLists(household) ?? [];
+    final latestShoppingList =
+        shoppingLists.where((e) => e.id == shoppinglist.id).firstOrNull;
+    if (latestShoppingList == null) return false;
+
     for (final item in items) {
-      final int i = list.indexWhere((e) => e.id == item.id);
+      final int i = latestShoppingList.items.indexWhere((e) => e.id == item.id);
       if (i >= 0) {
-        list.removeAt(i);
-        list.insert(i, item.toShoppingListItem());
+        latestShoppingList.items[i] = item.toShoppingListItem();
       } else {
-        list.add(item.toShoppingListItem());
+        latestShoppingList.items.add(item.toShoppingListItem());
+        latestShoppingList.recentItems.removeWhere((e) => e.name == item.name);
       }
     }
-    MemStorage.getInstance().writeItems(shoppinglist, list);
+    MemStorage.getInstance().writeShoppingLists(household, shoppingLists);
 
     return true;
   }

@@ -24,6 +24,19 @@ class Item extends Model {
     this.defaultKey,
   });
 
+  factory Item.fromItem({
+    required Item item,
+  }) =>
+      Item(
+        id: item.id,
+        name: item.name,
+        icon: item.icon,
+        category: item.category,
+        ordering: item.ordering,
+        isDefault: item.isDefault,
+        defaultKey: item.defaultKey,
+      );
+
   factory Item.fromJson(Map<String, dynamic> map) => Item(
         id: map['id'],
         name: map['name'],

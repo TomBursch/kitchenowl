@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/app.dart';
@@ -8,6 +9,7 @@ import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/widgets/choice_scroll.dart';
 import 'package:kitchenowl/widgets/home_page/sliver_category_item_grid_list.dart';
+import 'package:kitchenowl/widgets/shopping_list/shopping_list_choice_chip.dart';
 
 class ShoppinglistPage extends StatefulWidget {
   const ShoppinglistPage({super.key});
@@ -108,9 +110,10 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
 
                     if (state.sorting != ShoppinglistSorting.category ||
                         state is LoadingShoppinglistCubitState &&
-                            state.listItems.isEmpty) {
-                      body = SliverItemGridList(
-                        items: state.listItems,
+                            (state.selectedShoppinglist?.items.isEmpty ??
+                                false)) {
+                      body = SliverItemGridList<ShoppinglistItem>(
+                        items: state.selectedShoppinglist?.items ?? [],
                         categories: state.categories,
                         shoppingList: state.selectedShoppinglist,
                         selected: (item) =>
@@ -140,9 +143,11 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                         Category? category = i < state.categories.length
                             ? state.categories[i]
                             : null;
-                        final List<ShoppinglistItem> items = state.listItems
-                            .where((e) => e.category == category)
-                            .toList();
+                        final List<ShoppinglistItem> items = state
+                                .selectedShoppinglist?.items
+                                .where((e) => e.category == category)
+                                .toList() ??
+                            [];
                         if (items.isEmpty) continue;
 
                         grids.add(SliverCategoryItemGridList(
@@ -185,42 +190,25 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                             left: (state.shoppinglists.length < 2)
                                 ? const SizedBox()
                                 : ChoiceScroll(
-                                    children:
-                                        state.shoppinglists.map((shoppinglist) {
-                                      return Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 4,
-                                        ),
-                                        child: ChoiceChip(
-                                          showCheckmark: false,
-                                          label: Text(
-                                            shoppinglist.name,
-                                            style: TextStyle(
-                                              color: shoppinglist.id ==
-                                                      state
-                                                          .selectedShoppinglist!
-                                                          .id
-                                                  ? Theme.of(context)
-                                                      .colorScheme
-                                                      .onPrimary
-                                                  : null,
-                                            ),
+                                    children: state.shoppinglists.values
+                                        .sorted((a, b) => b.items.length
+                                            .compareTo(a.items.length))
+                                        .map(
+                                          (shoppinglist) =>
+                                              ShoppingListChoiceChip(
+                                            shoppingList: shoppinglist,
+                                            selected: shoppinglist.id ==
+                                                state.selectedShoppinglistId,
+                                            onSelected: (bool selected) {
+                                              if (selected) {
+                                                cubit.setShoppingList(
+                                                  shoppinglist,
+                                                );
+                                              }
+                                            },
                                           ),
-                                          selected: shoppinglist.id ==
-                                              state.selectedShoppinglist!.id,
-                                          selectedColor: Theme.of(context)
-                                              .colorScheme
-                                              .secondary,
-                                          onSelected: (bool selected) {
-                                            if (selected) {
-                                              cubit.setShoppingList(
-                                                shoppinglist,
-                                              );
-                                            }
-                                          },
-                                        ),
-                                      );
-                                    }).toList(),
+                                        )
+                                        .toList(),
                                   ),
                             right: Padding(
                               padding:
@@ -244,12 +232,17 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                         ),
                         if (body is List) ...body,
                         if (body is! List) body,
-                        if ((state.recentItems.isNotEmpty ||
-                            state is LoadingShoppinglistCubitState))
-                          SliverCategoryItemGridList(
+                        if ((state.selectedShoppinglist?.recentItems
+                                    .isNotEmpty ??
+                                false) ||
+                            state is LoadingShoppinglistCubitState)
+                          SliverCategoryItemGridList<ItemWithDescription>(
                             name:
                                 '${AppLocalizations.of(context)!.itemsRecent}:',
-                            items: state.recentItems,
+                            items: state.selectedShoppinglist?.recentItems
+                                    .take(App.settings.recentItemsCount)
+                                    .toList() ??
+                                [],
                             onPressed: Nullable(cubit.add),
                             categories: state.categories,
                             shoppingList: state.selectedShoppinglist,
@@ -260,7 +253,9 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                                 !(state.sorting !=
                                         ShoppinglistSorting.category ||
                                     state is LoadingShoppinglistCubitState &&
-                                        state.listItems.isEmpty),
+                                        (state.selectedShoppinglist?.items
+                                                .isEmpty ??
+                                            false)),
                           ),
                       ],
                     );

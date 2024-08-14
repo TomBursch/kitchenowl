@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:flutter/foundation.dart' as foundation;
 import 'package:kitchenowl/models/category.dart';
 import 'package:kitchenowl/models/household.dart';
-import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/models/recipe.dart';
 import 'package:kitchenowl/models/shoppinglist.dart';
 import 'package:kitchenowl/models/tag.dart';
@@ -43,12 +42,6 @@ class TempStorage {
     return File('$path/${household.id}-shoppinglists.json');
   }
 
-  Future<File> _localItemFile(ShoppingList shoppinglist) async {
-    final path = await _localPath;
-
-    return File('$path/${shoppinglist.id}-items.json');
-  }
-
   Future<File> _localRecipesFile(Household household) async {
     final path = await _localPath;
 
@@ -71,9 +64,6 @@ class TempStorage {
     await readHouseholds().then(
       (value) => Future.wait(
         value?.map((household) async {
-              await readShoppingLists(household).then((value) =>
-                  value?.map((shoppingList) => clearItems(shoppingList)));
-
               await Future.wait([
                 clearShoppingLists(household),
                 clearRecipes(household),
@@ -152,42 +142,6 @@ class TempStorage {
       await file.writeAsString(
         json.encode(shoppingLists.map((e) => e.toJsonWithId()).toList()),
       );
-    }
-  }
-
-  Future<List<ShoppinglistItem>?> readItems(ShoppingList shoppingList) async {
-    if (!foundation.kIsWeb) {
-      try {
-        final file = await _localItemFile(shoppingList);
-        final String content = await file.readAsString();
-
-        return List<ShoppinglistItem>.from(
-          json.decode(content).map((e) => ShoppinglistItem.fromJson(e)),
-        );
-      } catch (_) {}
-    }
-
-    return null;
-  }
-
-  Future<void> writeItems(
-    ShoppingList shoppinglist,
-    List<ShoppinglistItem> items,
-  ) async {
-    if (!foundation.kIsWeb) {
-      final file = await _localItemFile(shoppinglist);
-      await file.writeAsString(
-        json.encode(items.map((e) => e.toJsonWithId()).toList()),
-      );
-    }
-  }
-
-  Future<void> clearItems(ShoppingList shoppinglist) async {
-    if (!foundation.kIsWeb) {
-      try {
-        final file = await _localItemFile(shoppinglist);
-        if (await file.exists()) await file.delete();
-      } catch (_) {}
     }
   }
 

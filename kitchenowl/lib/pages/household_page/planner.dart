@@ -368,8 +368,11 @@ class _PlannerPageState extends State<PlannerPage> {
           selectText: AppLocalizations.of(ctx)!.addNumberIngredients,
           plans: (cubit.state as LoadedPlannerCubitState).recipePlans,
           title: AppLocalizations.of(ctx)!.addItemTitle,
-          shoppingLists:
-              BlocProvider.of<ShoppinglistCubit>(context).state.shoppinglists,
+          shoppingLists: BlocProvider.of<ShoppinglistCubit>(context)
+              .state
+              .shoppinglists
+              .values
+              .toList(),
           handleResult: (list, res) async {
             list ??= BlocProvider.of<HouseholdCubit>(context)
                 .state

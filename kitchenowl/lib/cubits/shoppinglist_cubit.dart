@@ -52,33 +52,31 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
     final item = ShoppinglistItem.fromJson(data["item"]);
     TransactionHandler.getInstance().runTransaction(
       TransactionShoppingListAddItem(
+        household: household,
         shoppinglist: ShoppingList.fromJson(data["shoppinglist"]),
         item: item,
       ),
       forceOffline: true,
       saveTransaction: false,
     );
-    if (state.selectedShoppinglist == null ||
-        data["shoppinglist"]["id"] != state.selectedShoppinglist?.id) return;
     addLocally(
       ShoppinglistItem.fromJson(data["item"]),
+      data["shoppinglist"]["id"],
     );
   }
 
   void onShoppinglistItemRemove(dynamic data) {
     final item = ShoppinglistItem.fromJson(data["item"]);
     TransactionHandler.getInstance().runTransaction(
-      TransactionShoppingListDeleteItem(
+      TransactionShoppingListRemoveItem(
+        household: household,
         shoppinglist: ShoppingList.fromJson(data["shoppinglist"]),
         item: item,
       ),
       forceOffline: true,
       saveTransaction: false,
     );
-    if (state.selectedShoppinglist == null ||
-        data["shoppinglist"]["id"] != state.selectedShoppinglist?.id ||
-        !state.listItems.map((e) => e.id).contains(data["item"]["id"])) return;
-    removeLocally(item);
+    removeLocally(item, data["shoppinglist"]["id"]);
   }
 
   Future<void> search(String query) => refresh(query: query);
@@ -89,21 +87,26 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
     if (_state.selectedShoppinglist == null) return;
     await TransactionHandler.getInstance()
         .runTransaction(TransactionShoppingListAddItem(
+      household: household,
       shoppinglist: _state.selectedShoppinglist!,
       item: item,
     ));
     await refresh(query: '');
   }
 
-  void addLocally(ShoppinglistItem item) {
+  void addLocally(ShoppinglistItem item, [int? shoppinglistId]) {
     final _state = state;
-    if (_state.selectedShoppinglist == null) return;
-    final l = List.of(_state.listItems);
+    shoppinglistId ??= _state.selectedShoppinglist?.id;
+    if (shoppinglistId == null) return;
+    final shoppinglist = _state.shoppinglists[shoppinglistId];
+    if (shoppinglist == null) return;
+
+    final l = List.of(shoppinglist.items);
     l.removeWhere((e) => e.id == item.id || e.name == item.name);
     l.add(item);
     ShoppinglistSorting.sortShoppinglistItems(l, state.sorting);
-    final recent = List.of(_state.recentItems);
-    recent.removeWhere((e) => e.id == item.id);
+    final recent = List.of(shoppinglist.recentItems);
+    recent.removeWhere((e) => e.name == item.name);
     if (_state is SearchShoppinglistCubitState) {
       final result = List.of(_state.result);
       final index = result.indexWhere((e) => e.id == item.id);
@@ -114,9 +117,16 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
           item,
         );
       }
-      emit(_state.copyWith(listItems: l, recentItems: recent, result: result));
+      emit(_state.copyWith(
+        shoppinglists: _replaceAndUpdateShoppingLists(_state.shoppinglists,
+            shoppinglist.copyWith(items: l, recentItems: recent)),
+        result: result,
+      ));
     } else {
-      emit(state.copyWith(listItems: l, recentItems: recent));
+      emit(state.copyWith(
+        shoppinglists: _replaceAndUpdateShoppingLists(_state.shoppinglists,
+            shoppinglist.copyWith(items: l, recentItems: recent)),
+      ));
     }
   }
 
@@ -124,7 +134,8 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
     final _state = state;
     removeLocally(item);
     if (!await TransactionHandler.getInstance()
-        .runTransaction(TransactionShoppingListDeleteItem(
+        .runTransaction(TransactionShoppingListRemoveItem(
+      household: household,
       shoppinglist: _state.selectedShoppinglist!,
       item: item,
     ))) {
@@ -132,12 +143,17 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
     }
   }
 
-  void removeLocally(ShoppinglistItem item) {
+  void removeLocally(ShoppinglistItem item, [int? shoppinglistId]) {
     final _state = state;
-    if (_state.selectedShoppinglist == null) return;
-    final l = List.of(_state.listItems);
-    l.remove(item);
-    final recent = List.of(_state.recentItems);
+    shoppinglistId ??= _state.selectedShoppinglist?.id;
+    if (shoppinglistId == null) return;
+    final shoppinglist = _state.shoppinglists[shoppinglistId];
+    if (shoppinglist == null) return;
+
+    final l = List.of(shoppinglist.items);
+    l.removeWhere((e) => e.name == item.name);
+    final recent = List.of(shoppinglist.recentItems);
+    recent.removeWhere((e) => e.name == item.name);
     recent.insert(0, ItemWithDescription.fromItem(item: item));
     if (recent.length > recentItemCountProvider()) {
       recent.removeLast();
@@ -155,9 +171,15 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
           ),
         );
       }
-      emit(_state.copyWith(listItems: l, recentItems: recent, result: result));
+      emit(_state.copyWith(
+          shoppinglists: _replaceAndUpdateShoppingLists(_state.shoppinglists,
+              shoppinglist.copyWith(items: l, recentItems: recent)),
+          result: result));
     } else {
-      emit(state.copyWith(listItems: l, recentItems: recent));
+      emit(state.copyWith(
+        shoppinglists: _replaceAndUpdateShoppingLists(_state.shoppinglists,
+            shoppinglist.copyWith(items: l, recentItems: recent)),
+      ));
     }
   }
 
@@ -179,9 +201,9 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
     }
     final selectedItems = _state.selectedListItems
         .sorted((a, b) => a.id?.compareTo(b.id ?? 0) ?? -1);
-    final l = List.of(_state.listItems);
+    final l = List.of(_state.selectedShoppinglist!.items);
     l.removeWhere(selectedItems.contains);
-    final recent = List.of(_state.recentItems);
+    final recent = List.of(_state.selectedShoppinglist!.recentItems);
     recent.insertAll(
       0,
       selectedItems.map((e) => ItemWithDescription.fromItem(item: e)),
@@ -203,17 +225,24 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
         }
       }
       emit(_state.copyWith(
-        listItems: l,
-        recentItems: recent,
+        shoppinglists: _replaceAndUpdateShoppingLists(
+            _state.shoppinglists,
+            _state.selectedShoppinglist!
+                .copyWith(items: l, recentItems: recent)),
         result: result,
         selectedListItems: [],
       ));
     } else {
-      emit(state
-          .copyWith(listItems: l, recentItems: recent, selectedListItems: []));
+      emit(_state.copyWith(
+          shoppinglists: _replaceAndUpdateShoppingLists(
+              _state.shoppinglists,
+              _state.selectedShoppinglist!
+                  .copyWith(items: l, recentItems: recent)),
+          selectedListItems: []));
     }
     if (!await TransactionHandler.getInstance()
-        .runTransaction(TransactionShoppingListDeleteItems(
+        .runTransaction(TransactionShoppingListRemoveItems(
+      household: household,
       shoppinglist: _state.selectedShoppinglist!,
       items: selectedItems,
     ))) {
@@ -227,8 +256,11 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
   }
 
   void setSorting(ShoppinglistSorting sorting, [bool savePreference = true]) {
-    if (state is! SearchShoppinglistCubitState && state.listItems != const []) {
-      ShoppinglistSorting.sortShoppinglistItems(state.listItems, sorting);
+    if (state is! SearchShoppinglistCubitState &&
+        state.selectedShoppinglist != null &&
+        state.selectedShoppinglist?.items != const []) {
+      ShoppinglistSorting.sortShoppinglistItems(
+          state.selectedShoppinglist!.items, sorting);
     }
     if (savePreference) {
       PreferenceStorage.getInstance()
@@ -248,12 +280,8 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
       );
     }
     emit(state.copyWith(
-      selectedShoppinglist: shoppingList,
-      recentItems: [],
-      listItems: [],
+      selectedShoppinglistId: shoppingList.id,
     ));
-    _initialLoad();
-    refresh();
   }
 
   Future<void> refresh({String? query}) {
@@ -274,24 +302,19 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
   }
 
   Future<void> _initialLoad() async {
-    final shoppingLists = await TransactionHandler.getInstance().runTransaction(
-      TransactionShoppingListGet(household: household),
-      forceOffline: true,
-    );
+    final shoppingLists = await TransactionHandler.getInstance()
+        .runTransaction(
+          TransactionShoppingListGet(household: household),
+          forceOffline: true,
+        )
+        .then((lists) => Map.fromEntries(lists
+            .map((e) => e.id != null ? MapEntry(e.id!, e) : null)
+            .whereNotNull()));
 
     final shoppinglist =
-        state.selectedShoppinglist ?? shoppingLists.firstOrNull;
+        state.selectedShoppinglist ?? shoppingLists.values.firstOrNull;
 
     if (shoppinglist == null) return;
-
-    Future<List<ShoppinglistItem>> items =
-        TransactionHandler.getInstance().runTransaction(
-      TransactionShoppingListGetItems(
-        shoppinglist: shoppinglist,
-        sorting: state.sorting,
-      ),
-      forceOffline: true,
-    );
 
     Future<List<Category>> categories =
         TransactionHandler.getInstance().runTransaction(
@@ -299,24 +322,14 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
       forceOffline: true,
     );
 
-    final recent = TransactionHandler.getInstance().runTransaction(
-      TransactionShoppingListGetRecentItems(
-        shoppinglist: shoppinglist,
-        itemsCount: recentItemCountProvider(),
-      ),
-      forceOffline: true,
-    );
-    List<ShoppinglistItem> loadedShoppinglistItems = await items;
     final resState = LoadingShoppinglistCubitState(
       shoppinglists: shoppingLists,
-      selectedShoppinglist: shoppinglist,
-      listItems: loadedShoppinglistItems,
-      recentItems: await recent,
+      selectedShoppinglistId: shoppinglist.id,
       categories: await categories,
       sorting: state.sorting,
       selectedListItems: state.selectedListItems
-          .map((e) => (loadedShoppinglistItems)
-              .firstWhereOrNull((item) => item.id == e.id))
+          .map((e) =>
+              shoppinglist.items.firstWhereOrNull((item) => item.id == e.id))
           .whereNotNull()
           .toList(),
     );
@@ -329,11 +342,12 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
   Future<void> _refresh([String? query]) async {
     // Get required information
     late ShoppinglistCubitState resState;
-    if (state.recentItems.isEmpty &&
-        state.listItems.isEmpty &&
-        (query == null || query.isEmpty)) {
+    if (state.selectedShoppinglistId == null ||
+        (state.selectedShoppinglist?.items.isEmpty ?? true) &&
+            (state.selectedShoppinglist?.recentItems.isEmpty ?? true) &&
+            (query == null || query.isEmpty)) {
       emit(LoadingShoppinglistCubitState(
-        selectedShoppinglist: state.selectedShoppinglist,
+        selectedShoppinglistId: state.selectedShoppinglistId,
         shoppinglists: state.shoppinglists,
         sorting: state.sorting,
         categories: state.categories,
@@ -342,20 +356,17 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
     }
 
     final shoppingLists = await TransactionHandler.getInstance()
-        .runTransaction(TransactionShoppingListGet(household: household));
+        .runTransaction(TransactionShoppingListGet(household: household))
+        .then((lists) => Map.fromEntries(lists
+            .map((e) => e.id != null ? MapEntry(e.id!, e) : null)
+            .whereNotNull()));
 
-    final shoppinglist =
-        state.selectedShoppinglist ?? shoppingLists.firstOrNull;
+    final selectedShoppinglistId =
+        state.selectedShoppinglistId ?? shoppingLists.values.firstOrNull?.id;
 
-    if (shoppinglist == null) return;
+    if (selectedShoppinglistId == null) return;
 
-    Future<List<ShoppinglistItem>> items =
-        TransactionHandler.getInstance().runTransaction(
-      TransactionShoppingListGetItems(
-        shoppinglist: shoppinglist,
-        sorting: state.sorting,
-      ),
-    );
+    final shoppinglist = shoppingLists[selectedShoppinglistId];
 
     Future<List<Category>> categories = TransactionHandler.getInstance()
         .runTransaction(TransactionCategoriesGet(household: household));
@@ -385,9 +396,8 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
               .toList());
 
       List<Item> loadedItems = await searchItems;
-      List<ShoppinglistItem> loadedShoppinglistItems = await items;
 
-      _mergeShoppinglistItems(loadedItems, loadedShoppinglistItems);
+      _mergeShoppinglistItems(loadedItems, shoppinglist?.items);
       if (loadedItems.isEmpty ||
           !loadedItems
               .any((e) => e.name.toLowerCase() == queryName.toLowerCase())) {
@@ -398,36 +408,26 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
       }
       resState = SearchShoppinglistCubitState(
         shoppinglists: shoppingLists,
-        selectedShoppinglist: shoppinglist,
+        selectedShoppinglistId: selectedShoppinglistId,
         result: loadedItems,
         query: query,
-        listItems: loadedShoppinglistItems,
         categories: await categories,
         sorting: state.sorting,
-        recentItems: state.recentItems,
         selectedListItems: state.selectedListItems
-            .map((e) => loadedShoppinglistItems
-                .firstWhereOrNull((item) => item.id == e.id))
+            .map((e) =>
+                shoppinglist?.items.firstWhereOrNull((item) => item.id == e.id))
             .whereNotNull()
             .toList(),
       );
     } else {
-      final recent = TransactionHandler.getInstance()
-          .runTransaction(TransactionShoppingListGetRecentItems(
-        shoppinglist: shoppinglist,
-        itemsCount: recentItemCountProvider(),
-      ));
-      List<ShoppinglistItem> loadedShoppinglistItems = await items;
       resState = ShoppinglistCubitState(
         shoppinglists: shoppingLists,
-        selectedShoppinglist: shoppinglist,
-        listItems: loadedShoppinglistItems,
-        recentItems: await recent,
+        selectedShoppinglistId: selectedShoppinglistId,
         categories: await categories,
         sorting: state.sorting,
         selectedListItems: state.selectedListItems
-            .map((e) => (loadedShoppinglistItems)
-                .firstWhereOrNull((item) => item.id == e.id))
+            .map((e) =>
+                shoppinglist?.items.firstWhereOrNull((item) => item.id == e.id))
             .whereNotNull()
             .toList(),
       );
@@ -440,9 +440,9 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
 
   void _mergeShoppinglistItems(
     List<Item> items,
-    List<ShoppinglistItem> shoppinglist,
+    List<ShoppinglistItem>? shoppinglist,
   ) {
-    if (shoppinglist.isEmpty) return;
+    if (shoppinglist == null || shoppinglist.isEmpty) return;
     for (int i = 0; i < items.length; i++) {
       final shoppinglistItem =
           shoppinglist.firstWhereOrNull((e) => e.id == items[i].id);
@@ -452,41 +452,54 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
       }
     }
   }
+
+  Map<int, ShoppingList> _replaceAndUpdateShoppingLists(
+      Map<int, ShoppingList> shoppinglists, ShoppingList shoppingList) {
+    if (shoppingList.id == null) return shoppinglists;
+
+    final res = Map.of(shoppinglists);
+    res[shoppingList.id!] = shoppingList;
+    return res;
+  }
 }
 
 class ShoppinglistCubitState extends Equatable {
-  final List<ShoppingList> shoppinglists;
-  final ShoppingList? selectedShoppinglist;
-  final List<ShoppinglistItem> listItems;
-  final List<ItemWithDescription> recentItems;
+  final Map<int, ShoppingList> shoppinglists;
+  final int? selectedShoppinglistId;
   final List<Category> categories;
   final ShoppinglistSorting sorting;
   final List<ShoppinglistItem> selectedListItems;
+  final ShoppingList? _selectedShoppinglist;
 
-  const ShoppinglistCubitState({
-    this.shoppinglists = const [],
-    required this.selectedShoppinglist,
-    this.listItems = const [],
-    this.recentItems = const [],
+  const ShoppinglistCubitState._({
+    this.shoppinglists = const {},
     this.categories = const [],
     this.sorting = ShoppinglistSorting.alphabetical,
     this.selectedListItems = const [],
-  });
+    this.selectedShoppinglistId = null,
+  }) : this._selectedShoppinglist = null;
+
+  ShoppinglistCubitState({
+    this.shoppinglists = const {},
+    required this.selectedShoppinglistId,
+    this.categories = const [],
+    this.sorting = ShoppinglistSorting.alphabetical,
+    this.selectedListItems = const [],
+  }) : _selectedShoppinglist = shoppinglists[selectedShoppinglistId];
+
+  ShoppingList? get selectedShoppinglist => _selectedShoppinglist;
 
   ShoppinglistCubitState copyWith({
-    List<ShoppingList>? shoppinglists,
-    ShoppingList? selectedShoppinglist,
-    List<ShoppinglistItem>? listItems,
-    List<ItemWithDescription>? recentItems,
+    Map<int, ShoppingList>? shoppinglists,
+    int? selectedShoppinglistId,
     List<Category>? categories,
     ShoppinglistSorting? sorting,
     List<ShoppinglistItem>? selectedListItems,
   }) =>
       ShoppinglistCubitState(
         shoppinglists: shoppinglists ?? this.shoppinglists,
-        selectedShoppinglist: selectedShoppinglist ?? this.selectedShoppinglist,
-        listItems: listItems ?? this.listItems,
-        recentItems: recentItems ?? this.recentItems,
+        selectedShoppinglistId:
+            selectedShoppinglistId ?? this.selectedShoppinglistId,
         categories: categories ?? this.categories,
         sorting: sorting ?? this.sorting,
         selectedListItems: selectedListItems ?? this.selectedListItems,
@@ -495,9 +508,7 @@ class ShoppinglistCubitState extends Equatable {
   @override
   List<Object?> get props => [
         shoppinglists,
-        selectedShoppinglist,
-        listItems,
-        recentItems,
+        selectedShoppinglistId,
         categories,
         sorting,
         selectedListItems,
@@ -507,18 +518,16 @@ class ShoppinglistCubitState extends Equatable {
 class LoadingShoppinglistCubitState extends ShoppinglistCubitState {
   const LoadingShoppinglistCubitState({
     super.sorting,
-    super.selectedShoppinglist,
+    super.selectedShoppinglistId,
     super.shoppinglists,
     super.categories,
     super.selectedListItems,
-    super.listItems,
-    super.recentItems,
-  });
+  }) : super._();
 
   @override
   ShoppinglistCubitState copyWith({
-    List<ShoppingList>? shoppinglists,
-    ShoppingList? selectedShoppinglist,
+    Map<int, ShoppingList>? shoppinglists,
+    int? selectedShoppinglistId,
     List<ShoppinglistItem>? listItems,
     List<ItemWithDescription>? recentItems,
     List<Category>? categories,
@@ -528,11 +537,10 @@ class LoadingShoppinglistCubitState extends ShoppinglistCubitState {
       LoadingShoppinglistCubitState(
         sorting: sorting ?? this.sorting,
         shoppinglists: shoppinglists ?? this.shoppinglists,
-        selectedShoppinglist: selectedShoppinglist ?? this.selectedShoppinglist,
+        selectedShoppinglistId:
+            selectedShoppinglistId ?? this.selectedShoppinglistId,
         categories: categories ?? this.categories,
         selectedListItems: selectedListItems ?? this.selectedListItems,
-        listItems: listItems ?? this.listItems,
-        recentItems: recentItems ?? this.recentItems,
       );
 }
 
@@ -540,11 +548,9 @@ class SearchShoppinglistCubitState extends ShoppinglistCubitState {
   final String query;
   final List<Item> result;
 
-  const SearchShoppinglistCubitState({
-    super.shoppinglists = const [],
-    required super.selectedShoppinglist,
-    super.listItems = const [],
-    super.recentItems = const [],
+  SearchShoppinglistCubitState({
+    super.shoppinglists = const {},
+    required super.selectedShoppinglistId,
     super.categories = const [],
     super.sorting = ShoppinglistSorting.alphabetical,
     this.query = "",
@@ -554,10 +560,8 @@ class SearchShoppinglistCubitState extends ShoppinglistCubitState {
 
   @override
   ShoppinglistCubitState copyWith({
-    List<ShoppingList>? shoppinglists,
-    ShoppingList? selectedShoppinglist,
-    List<ShoppinglistItem>? listItems,
-    List<ItemWithDescription>? recentItems,
+    Map<int, ShoppingList>? shoppinglists,
+    int? selectedShoppinglistId,
     List<Category>? categories,
     ShoppinglistSorting? sorting,
     List<Item>? result,
@@ -565,9 +569,8 @@ class SearchShoppinglistCubitState extends ShoppinglistCubitState {
   }) =>
       SearchShoppinglistCubitState(
         shoppinglists: shoppinglists ?? this.shoppinglists,
-        selectedShoppinglist: selectedShoppinglist ?? this.selectedShoppinglist,
-        listItems: listItems ?? this.listItems,
-        recentItems: recentItems ?? this.recentItems,
+        selectedShoppinglistId:
+            selectedShoppinglistId ?? this.selectedShoppinglistId,
         sorting: sorting ?? this.sorting,
         categories: categories ?? this.categories,
         query: query,

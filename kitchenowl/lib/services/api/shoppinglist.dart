@@ -11,8 +11,13 @@ extension ShoppinglistApi on ApiService {
   String route({Household? household, ShoppingList? shoppinglist}) =>
       "${household != null ? householdPath(household) : ""}$baseRoute${shoppinglist?.id != null ? "/${shoppinglist!.id}" : ""}";
 
-  Future<List<ShoppingList>?> getShoppingLists(Household household) async {
-    final res = await get(route(household: household));
+  Future<List<ShoppingList>?> getShoppingLists(
+    Household household, {
+    ShoppinglistSorting sorting = ShoppinglistSorting.alphabetical,
+    int recentItemlimit = 9,
+  }) async {
+    final res = await get(route(household: household) +
+        "?orderby=${sorting.index}&recent_limit=${recentItemlimit}");
     if (res.statusCode != 200) return null;
 
     final body = List.from(jsonDecode(res.body));
@@ -49,34 +54,6 @@ extension ShoppinglistApi on ApiService {
     final res = await delete(route(shoppinglist: shoppingList));
 
     return res.statusCode == 200;
-  }
-
-  Future<List<ShoppinglistItem>?> getItems(
-    ShoppingList shoppinglist, [
-    ShoppinglistSorting sorting = ShoppinglistSorting.alphabetical,
-  ]) async {
-    final res = await get(
-      '${route(shoppinglist: shoppinglist)}/items?orderby=${sorting.index}',
-    );
-    if (res.statusCode != 200) return null;
-
-    final body = List.from(jsonDecode(res.body));
-
-    return body.map((e) => ShoppinglistItem.fromJson(e)).toList();
-  }
-
-  Future<List<ItemWithDescription>?> getRecentItems(
-    ShoppingList shoppinglist, [
-    int limit = 9,
-  ]) async {
-    final res = await get(
-      '${route(shoppinglist: shoppinglist)}/recent-items?limit=$limit',
-    );
-    if (res.statusCode != 200) return null;
-
-    final body = List.from(jsonDecode(res.body));
-
-    return body.map((e) => ItemWithDescription.fromJson(e)).toList();
   }
 
   Future<bool> putItem(

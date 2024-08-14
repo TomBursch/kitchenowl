@@ -16,17 +16,14 @@ class TransactionHandler {
 
   Future<void> runOpenTransactions() async {
     if (ApiService.getInstance().isConnected()) {
-      List<Transaction> transactions = [];
-      try {
-        transactions =
-            await TransactionStorage.getInstance().readTransactions();
-      } catch (Exception) {}
+      List<Transaction> transactions =
+          await TransactionStorage.getInstance().readTransactions();
 
       final now = DateTime.now();
       List<Transaction> openTransactions = [];
       for (final t in transactions) {
         if (t is! ErrorTransaction && t.timestamp.difference(now).inDays < 3) {
-          dynamic res = t.runOnline();
+          dynamic res = await t.runOnline();
           if (res == null || (res is bool && !res)) {
             openTransactions.add(t);
           }

@@ -31,7 +31,7 @@ class TransactionShoppingListGet extends Transaction<List<ShoppingList>> {
     final lists = await ApiService.getInstance().getShoppingLists(
       household,
       sorting: sorting,
-      recentItemlimit: recentItemlimit,
+      recentItemlimit: recentItemlimit + 3,
     );
     if (lists != null) {
       MemStorage.getInstance().writeShoppingLists(household, lists);
@@ -59,8 +59,11 @@ class TransactionShoppingListSearchItem extends Transaction<List<Item>> {
     final shoppingLists =
         await MemStorage.getInstance().readShoppingLists(household);
     return (shoppingLists
-            ?.map(
-                (shoppingList) => shoppingList.recentItems + shoppingList.items)
+            ?.map((shoppingList) =>
+                shoppingList.recentItems
+                    .map((e) => Item.fromItem(item: e))
+                    .toList() +
+                shoppingList.items)
             .fold<List<Item>>(
           [],
           (p, e) => p + e,
@@ -191,6 +194,7 @@ class TransactionShoppingListRemoveItem extends Transaction<bool> {
         shoppingLists.where((e) => e.id == shoppinglist.id).firstOrNull;
     if (latestShoppingList == null) return false;
     latestShoppingList.items.removeWhere((e) => e.name == item.name);
+    latestShoppingList.recentItems.removeWhere((e) => e.name == item.name);
     latestShoppingList.recentItems.insert(0, item);
     MemStorage.getInstance().writeShoppingLists(household, shoppingLists);
 

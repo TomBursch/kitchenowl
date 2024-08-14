@@ -106,7 +106,7 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
     l.add(item);
     ShoppinglistSorting.sortShoppinglistItems(l, state.sorting);
     final recent = List.of(shoppinglist.recentItems);
-    recent.removeWhere((e) => e.id == item.id);
+    recent.removeWhere((e) => e.name == item.name);
     if (_state is SearchShoppinglistCubitState) {
       final result = List.of(_state.result);
       final index = result.indexWhere((e) => e.id == item.id);
@@ -151,8 +151,9 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
     if (shoppinglist == null) return;
 
     final l = List.of(shoppinglist.items);
-    l.remove(item);
+    l.removeWhere((e) => e.name == item.name);
     final recent = List.of(shoppinglist.recentItems);
+    recent.removeWhere((e) => e.name == item.name);
     recent.insert(0, ItemWithDescription.fromItem(item: item));
     if (recent.length > recentItemCountProvider()) {
       recent.removeLast();

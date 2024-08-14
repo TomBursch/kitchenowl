@@ -9,7 +9,7 @@ import 'package:kitchenowl/models/recipe.dart';
 import 'package:kitchenowl/models/shoppinglist.dart';
 import 'package:kitchenowl/models/tag.dart';
 import 'package:kitchenowl/models/user.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:path_provider/path_provider.dart' as pathProvider;
 
 class TempStorage {
   static TempStorage? _instance;
@@ -22,11 +22,7 @@ class TempStorage {
   }
 
   Future<String> get _localPath async {
-    final temp = await getTemporaryDirectory();
-    final directory = Directory('${temp.path}/kitchenowl');
-    if (!await directory.exists()) directory.create();
-
-    return directory.path;
+    return pathProvider.getApplicationCacheDirectory().then((dir) => dir.path);
   }
 
   Future<File> get _localUserFile async {

@@ -159,6 +159,14 @@ class Item(db.Model, DbModelMixin, TimestampMixin, DbModelAuthorizeMixin):
         return cls.query.filter(cls.id == id).first()
 
     @classmethod
+    def find_name_starts_with(cls, household_id: int, starts_with: str) -> Self:
+        starts_with = starts_with.strip()
+        return cls.query.filter(
+            cls.household_id == household_id,
+            func.lower(cls.name).like(func.lower(starts_with) + "%"),
+        ).first()
+
+    @classmethod
     def search_name(cls, name: str, household_id: int) -> list[Self]:
         item_count = 11
         if "postgresql" in db.engine.name:

@@ -6,7 +6,7 @@ from flask import jsonify, Blueprint
 from flask_jwt_extended import jwt_required
 from app.helpers import validate_args, authorize_household
 from app.models import Recipe, Item, Tag
-from recipe_scrapers import scrape_me
+from recipe_scrapers import scrape_html
 from recipe_scrapers._exceptions import SchemaOrgException, NoSchemaFoundInWildMode
 from app.service.file_has_access_or_download import file_has_access_or_download
 from app.service.ingredient_parsing import parseIngredients
@@ -198,7 +198,7 @@ def scrapeRecipe(args, household_id):
         raise NotFoundRequest()
 
     try:
-        scraper = scrape_me(args["url"], wild_mode=True)
+        scraper = scrape_html(args["url"], wild_mode=True)
     except NoSchemaFoundInWildMode:
         return "Unsupported website", 400
     recipe = Recipe()

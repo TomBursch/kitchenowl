@@ -59,10 +59,9 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
       forceOffline: true,
       saveTransaction: false,
     );
-    if (state.selectedShoppinglist == null ||
-        data["shoppinglist"]["id"] != state.selectedShoppinglist?.id) return;
     addLocally(
       ShoppinglistItem.fromJson(data["item"]),
+      data["shoppinglist"]["id"],
     );
   }
 
@@ -77,12 +76,7 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
       forceOffline: true,
       saveTransaction: false,
     );
-    if (state.selectedShoppinglist == null ||
-        data["shoppinglist"]["id"] != state.selectedShoppinglist?.id ||
-        !state.selectedShoppinglist!.items
-            .map((e) => e.id)
-            .contains(data["item"]["id"])) return;
-    removeLocally(item);
+    removeLocally(item, data["shoppinglist"]["id"]);
   }
 
   Future<void> search(String query) => refresh(query: query);

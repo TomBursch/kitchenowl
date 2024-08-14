@@ -1,16 +1,15 @@
 import re
 
 from app.errors import NotFoundRequest, InvalidUsage
-from app.models.recipe import RecipeItems, RecipeTags
+from app.models import Household, RecipeItems, RecipeTags
 from flask import jsonify, Blueprint
 from flask_jwt_extended import jwt_required
 from app.helpers import validate_args, authorize_household
 from app.models import Recipe, Item, Tag
 from recipe_scrapers import scrape_me
 from recipe_scrapers._exceptions import SchemaOrgException, NoSchemaFoundInWildMode
-from ingredient_parser import parse_ingredient
-
 from app.service.file_has_access_or_download import file_has_access_or_download
+from app.service.ingredient_parsing import parseIngredients
 from .schemas import (
     SearchByNameRequest,
     AddRecipe,
@@ -194,6 +193,10 @@ def getAllFiltered(args, household_id):
 @authorize_household()
 @validate_args(ScrapeRecipe)
 def scrapeRecipe(args, household_id):
+    household = Household.find_by_id(household_id)
+    if not household:
+        raise NotFoundRequest()
+
     try:
         scraper = scrape_me(args["url"], wild_mode=True)
     except NoSchemaFoundInWildMode:
@@ -231,20 +234,16 @@ def scrapeRecipe(args, household_id):
     recipe.photo = scraper.image()
     recipe.source = args["url"]
     items = {}
-    for ingredient in scraper.ingredients():
-        parsed = parse_ingredient(ingredient)
-        name = parsed.name.text if parsed.name else ingredient
-        item = Item.find_by_name(household_id, name)
+    for ingredient in parseIngredients(scraper.ingredients(), household.language):
+        name = ingredient.name if ingredient.name else ingredient.originalText
+        item = Item.find_name_starts_with(household_id, name)
         if item:
-            description = f"{parsed.amount[0].quantity if len(parsed.amount) > 0 else ''} {parsed.amount[0].unit if len(parsed.amount) > 0 else ''}"
-            # description = description + (" " if description else "") + (parsed.comment.text if parsed.comment else "") # Usually cooking instructions
-
-            items[ingredient] = item.obj_to_dict() | {
-                "description": description,
+            items[ingredient.originalText] = item.obj_to_dict() | {
+                "description": ingredient.description,
                 "optional": False,
             }
         else:
-            items[ingredient] = None
+            items[ingredient.originalText] = None
     return jsonify(
         {
             "recipe": recipe.obj_to_dict(),

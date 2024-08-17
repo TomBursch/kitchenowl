@@ -1,10 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_localized_locales/flutter_localized_locales.dart';
 import 'package:kitchenowl/cubits/household_add_update/household_add_update_cubit.dart';
 import 'package:kitchenowl/enums/views_enum.dart';
 import 'package:kitchenowl/kitchenowl.dart';
-import 'package:kitchenowl/widgets/language_dialog.dart';
+import 'package:kitchenowl/widgets/language_bottom_sheet.dart';
 import 'package:reorderables/reorderables.dart';
 
 import 'view_settings_list_tile.dart';
@@ -83,46 +84,46 @@ class SliverHouseholdFeatureSettings<
                 previous.supportedLanguages != current.supportedLanguages,
             builder: (context, state) {
               if (state.language != null && !languageCanBeChanged) {
-                return Text(state.supportedLanguages?[state.language!] ??
+                return Text(LocaleNames.of(context)!.nameOf(state.language!) ??
+                    state.supportedLanguages?[state.language!] ??
                     state.language!);
               }
 
               return LoadingElevatedButton(
-                child: Text(state.supportedLanguages?[state.language] ??
-                    state.language ??
-                    AppLocalizations.of(context)!.set),
+                child: Text(
+                    LocaleNames.of(context)!.nameOf(state.language ?? "") ??
+                        state.supportedLanguages?[state.language] ??
+                        state.language ??
+                        AppLocalizations.of(context)!.set),
                 onPressed: () async {
-                  final language = await showDialog<String>(
+                  final language = await showModalBottomSheet<Nullable<String>>(
                     context: context,
+                    showDragHandle: true,
                     builder: (BuildContext context) {
-                      return LanguageDialog(
+                      return LanguageBottomSheet(
                         title: AppLocalizations.of(context)!.language,
                         doneText: AppLocalizations.of(context)!.set,
-                        initialLanguage: state.language ??
-                            AppLocalizations.of(context)!.localeName,
+                        initialLanguage: state.language,
                         supportedLanguages: state.supportedLanguages,
                       );
                     },
                   );
-                  if (language == null) {
-                    BlocProvider.of<Cubit>(context).setLanguage(language);
-                  } else {
-                    if (askConfirmation) {
-                      final confirm = await askForConfirmation(
-                        context: context,
-                        confirmText: AppLocalizations.of(context)!.set,
-                        title: Text(
-                          AppLocalizations.of(context)!.addLanguage,
-                        ),
-                        content: Text(
-                          AppLocalizations.of(context)!
-                              .addLanguageConfirm(language),
-                        ),
-                      );
-                      if (!confirm) return;
-                    }
-                    BlocProvider.of<Cubit>(context).setLanguage(language);
+                  if (language == null) return;
+                  if (askConfirmation) {
+                    final confirm = await askForConfirmation(
+                      context: context,
+                      confirmText: AppLocalizations.of(context)!.set,
+                      title: Text(
+                        AppLocalizations.of(context)!.addLanguage,
+                      ),
+                      content: Text(
+                        AppLocalizations.of(context)!
+                            .addLanguageConfirm(language),
+                      ),
+                    );
+                    if (!confirm) return;
                   }
+                  BlocProvider.of<Cubit>(context).setLanguage(language.value);
                 },
               );
             },

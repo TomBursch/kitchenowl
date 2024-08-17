@@ -13,6 +13,7 @@ class TransactionExpenseGetAll extends Transaction<List<Expense>> {
   final List<ExpenseCategory?>? filter;
   final DateTime? startAfter;
   final DateTime? endBefore;
+  final String search;
 
   TransactionExpenseGetAll({
     DateTime? timestamp,
@@ -21,6 +22,7 @@ class TransactionExpenseGetAll extends Transaction<List<Expense>> {
     this.filter,
     this.startAfter,
     this.endBefore,
+    this.search = "",
   }) : super.internal(timestamp ?? DateTime.now(), "TransactionExpenseGetAll");
 
   @override
@@ -36,6 +38,7 @@ class TransactionExpenseGetAll extends Transaction<List<Expense>> {
       filter: filter,
       startAfter: startAfter,
       endBefore: endBefore,
+      search: search,
     );
   }
 }

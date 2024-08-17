@@ -28,3 +28,4 @@ export 'kitchenowl_fab.dart';
 export 'number_selector.dart';
 export 'loading_list_tile.dart';
 export 'loading_elevated_button_icon.dart';
+export 'kitchenowl_search_anchor.dart';

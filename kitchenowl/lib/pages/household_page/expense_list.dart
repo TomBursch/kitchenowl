@@ -49,6 +49,27 @@ class _ExpensePageState extends State<ExpenseListPage> {
           ]),
           child: BlocBuilder<HouseholdCubit, HouseholdState>(
             builder: (context, householdState) {
+              final searchAnchor = KitchenowlSearchAnchor(
+                onSearch: (search) => cubit.setSearch(search),
+                suggestionsBuilder: (context, controller) => (cubit
+                        .state.expenses
+                        .map((e) => e.name.trim())
+                        .where((e) => e
+                            .toLowerCase()
+                            .startsWith(controller.text.toLowerCase()))
+                        .take(25)
+                        .fold<Map<String, int>>(
+                            <String, int>{},
+                            (map, letter) => map
+                              ..update(letter, (value) => value + 1,
+                                  ifAbsent: () => 1))
+                        .entries
+                        .where((e) => e.value > 1 || controller.text.isNotEmpty)
+                        .toList()
+                      ..sort((a, b) => b.value.compareTo(a.value)))
+                    .map((e) => e.key),
+              );
+
               return BlocBuilder<ExpenseListCubit, ExpenseListCubitState>(
                 bloc: cubit,
                 builder: (context, state) => CustomScrollView(
@@ -74,23 +95,20 @@ class _ExpensePageState extends State<ExpenseListPage> {
                                   value: state.timeframe,
                                   onChanged: cubit.setTimeframe,
                                 ),
-                              const SizedBox(width: 16),
-                              Tooltip(
-                                message: AppLocalizations.of(context)!.overview,
-                                child: InkWell(
-                                  borderRadius: BorderRadius.circular(50),
-                                  child: const Icon(Icons.bar_chart_rounded),
-                                  onTap: () {
-                                    final household =
-                                        BlocProvider.of<HouseholdCubit>(context)
-                                            .state
-                                            .household;
-                                    context.go(
-                                      "/household/${household.id}/balances/overview",
-                                      extra: state.sorting,
-                                    );
-                                  },
-                                ),
+                              const SizedBox(width: 2),
+                              IconButton(
+                                onPressed: () {
+                                  final household =
+                                      BlocProvider.of<HouseholdCubit>(context)
+                                          .state
+                                          .household;
+                                  context.go(
+                                    "/household/${household.id}/balances/overview",
+                                    extra: state.sorting,
+                                  );
+                                },
+                                icon: const Icon(Icons.bar_chart_rounded),
+                                tooltip: AppLocalizations.of(context)!.overview,
                               ),
                             ],
                           ),
@@ -161,11 +179,14 @@ class _ExpensePageState extends State<ExpenseListPage> {
                     SliverToBoxAdapter(
                       child: LeftRightWrap(
                         left: (state.categories.isEmpty)
-                            ? const SizedBox()
+                            ? searchAnchor
                             : ChoiceScroll(
                                 collapsable: true,
                                 icon: Icons.filter_list_rounded,
                                 onCollapse: cubit.clearFilter,
+                                actions: [
+                                  searchAnchor,
+                                ],
                                 children: state.categories.map((category) {
                                   return Padding(
                                     padding: const EdgeInsets.symmetric(

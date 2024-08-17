@@ -84,6 +84,14 @@ class ExpenseListCubit extends Cubit<ExpenseListCubitState> {
     }
   }
 
+  void setSearch(String search) {
+    search = search.trim();
+    if (search != state.search) {
+      emit(state.copyWith(search: search));
+      refresh();
+    }
+  }
+
   Future<void> loadMore() async {
     if (state.allLoaded) return;
 
@@ -93,6 +101,7 @@ class ExpenseListCubit extends Cubit<ExpenseListCubitState> {
       sorting: state.sorting,
       startAfter: state.expenses.last.date,
       filter: state.filter,
+      search: state.search,
     ));
     emit(state.copyWith(
       expenses: List.from(state.expenses + await moreExpenses),
@@ -110,6 +119,7 @@ class ExpenseListCubit extends Cubit<ExpenseListCubitState> {
     final sorting = state.sorting;
     final timeframe = state.timeframe;
     final filter = state.filter;
+    final search = state.search;
     final categories = TransactionHandler.getInstance()
         .runTransaction(TransactionExpenseCategoriesGet(household: household));
     final expenses = TransactionHandler.getInstance()
@@ -117,6 +127,7 @@ class ExpenseListCubit extends Cubit<ExpenseListCubitState> {
       household: household,
       sorting: sorting,
       filter: filter,
+      search: search,
     ));
 
     Future<ExpenseOverview>? monthOverview;
@@ -139,6 +150,7 @@ class ExpenseListCubit extends Cubit<ExpenseListCubitState> {
       expenseOverview: (await monthOverview) ?? state.expenseOverview,
       timeframe: timeframe,
       filter: filter,
+      search: search,
     ));
     _refreshThread = null;
   }
@@ -152,6 +164,7 @@ class ExpenseListCubitState extends Equatable {
   final bool allLoaded;
   final Timeframe timeframe;
   final List<ExpenseCategory?> filter;
+  final String search;
 
   const ExpenseListCubitState({
     this.expenses = const [],
@@ -161,6 +174,7 @@ class ExpenseListCubitState extends Equatable {
     required this.expenseOverview,
     this.timeframe = Timeframe.monthly,
     this.filter = const [],
+    this.search = "",
   });
 
   ExpenseListCubitState copyWith({
@@ -171,6 +185,7 @@ class ExpenseListCubitState extends Equatable {
     ExpenseOverview? expenseOverview,
     Timeframe? timeframe,
     List<ExpenseCategory?>? filter,
+    String? search,
   }) =>
       ExpenseListCubitState(
         expenses: expenses ?? this.expenses,
@@ -180,11 +195,12 @@ class ExpenseListCubitState extends Equatable {
         expenseOverview: expenseOverview ?? this.expenseOverview,
         timeframe: timeframe ?? this.timeframe,
         filter: filter ?? this.filter,
+        search: search ?? this.search,
       );
 
   @override
   List<Object?> get props =>
-      <Object>[sorting, expenseOverview, timeframe, filter] +
+      <Object>[sorting, expenseOverview, timeframe, filter, search] +
       categories +
       expenses;
 }
@@ -205,6 +221,7 @@ class LoadingExpenseListCubitState extends ExpenseListCubitState {
     ExpenseOverview? expenseOverview,
     Timeframe? timeframe,
     List<ExpenseCategory?>? filter,
+    String? search,
   }) =>
       LoadingExpenseListCubitState(
         sorting: sorting ?? this.sorting,

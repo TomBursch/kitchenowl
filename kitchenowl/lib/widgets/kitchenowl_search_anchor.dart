@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:kitchenowl/helpers/debouncer.dart';
+import 'package:kitchenowl/kitchenowl.dart';
+import 'package:responsive_builder/responsive_builder.dart';
 
 class KitchenowlSearchAnchor extends StatefulWidget {
   final FutureOr<Iterable<String>> Function(BuildContext, SearchController)
@@ -65,6 +67,26 @@ class _KitchenowlSearchAnchorState extends State<KitchenowlSearchAnchor> {
   Widget build(BuildContext context) {
     return SearchAnchor(
       searchController: controller,
+      isFullScreen: getValueForScreenType<bool>(
+        context: context,
+        mobile: true,
+        tablet: true,
+        desktop: false,
+      ),
+      viewBackgroundColor: getValueForScreenType<Color?>(
+        context: context,
+        mobile: Theme.of(context).scaffoldBackgroundColor,
+        tablet: Theme.of(context).scaffoldBackgroundColor,
+        desktop: Theme.of(context).colorScheme.surfaceContainerHigh,
+      ),
+      textInputAction: TextInputAction.search,
+      viewHintText: AppLocalizations.of(context)!.searchHint,
+      textCapitalization: TextCapitalization.sentences,
+      viewOnSubmitted: (value) {
+        controller.closeView(null);
+      },
+      viewConstraints:
+          BoxConstraints(minWidth: 360.0, minHeight: 240.0, maxHeight: 350),
       builder: (BuildContext context, SearchController controller) {
         if (search.isEmpty)
           return IconButton(

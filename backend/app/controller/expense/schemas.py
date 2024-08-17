@@ -16,6 +16,7 @@ class GetExpenses(Schema):
     startAfterDate = fields.Integer(validate=lambda a: a >= 0)
     endBeforeDate = fields.Integer(validate=lambda a: a >= 0)
     filter = MultiDictList(CustomInteger(allow_none=True))
+    search = fields.String(allow_none=True)
 
 
 class AddExpense(Schema):

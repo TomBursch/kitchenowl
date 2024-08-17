@@ -62,6 +62,13 @@ def getAllExpenses(args, household_id):
         else:
             filter.append(Expense.category_id.in_(args["filter"]))
 
+    if "search" in args and args["search"]:
+        if "*" in args["search"] or "_" in args["search"]:
+            query = args["search"].replace("_", "__").replace("*", "%").replace("?", "_")
+        else:
+            query = "%{0}%".format(args["search"])
+        filter.append(Expense.name.ilike(query))
+
     return jsonify(
         [
             e.obj_to_full_dict()

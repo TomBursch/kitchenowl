@@ -17,6 +17,7 @@ extension ExpenseApi on ApiService {
     DateTime? startAfter,
     List<ExpenseCategory?>? filter,
     DateTime? endBefore,
+    String search = "",
   }) async {
     String url = '${householdPath(household)}$baseRoute?view=${sorting.index}';
     if (startAfter != null) {
@@ -24,6 +25,9 @@ extension ExpenseApi on ApiService {
     }
     if (endBefore != null) {
       url += '&endBeforeDate=${endBefore.toUtc().millisecondsSinceEpoch}';
+    }
+    if (search.isNotEmpty) {
+      url += '&search=${search}';
     }
     if (filter != null && filter.isNotEmpty) {
       for (final c in filter) {

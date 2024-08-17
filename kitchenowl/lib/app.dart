@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_localized_locales/flutter_localized_locales.dart';
 import 'package:kitchenowl/cubits/auth_cubit.dart';
 import 'package:kitchenowl/cubits/server_info_cubit.dart';
 import 'package:kitchenowl/cubits/settings_cubit.dart';
@@ -158,7 +159,10 @@ class _AppState extends State<App> {
                     onGenerateTitle: (BuildContext context) =>
                         AppLocalizations.of(context)!.appTitle,
                     localizationsDelegates:
-                        AppLocalizations.localizationsDelegates,
+                        AppLocalizations.localizationsDelegates +
+                            [
+                              LocaleNamesLocalizationsDelegate(),
+                            ],
                     supportedLocales: const [Locale('en')] +
                         AppLocalizations.supportedLocales,
                     theme: AppThemes.light(lightColorScheme),

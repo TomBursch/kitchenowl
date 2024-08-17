@@ -48,6 +48,7 @@ dependencies:
 
   responsive_builder: ^0.7.0
   dynamic_color: ^1.7.0
+  flutter_localized_locales: ^2.0.5
 
   azlistview_plus: ^3.0.0
   flutter_markdown: ^0.7.1

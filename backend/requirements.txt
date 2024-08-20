@@ -83,7 +83,7 @@ mf2py==2.0.1
 mlxtend==0.23.1
 multidict==6.0.5
 mypy-extensions==1.0.0
-nltk==3.8.1
+nltk==3.9
 numpy==2.0.1
 oic==1.7.0
 openai==1.41.0

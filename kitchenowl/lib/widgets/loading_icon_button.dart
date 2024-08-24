@@ -29,11 +29,23 @@ class LoadingIconButton extends StatefulWidget {
 class _LoadingIconButtonState extends State<LoadingIconButton> {
   bool isLoading = false;
 
+  void _onPressed() async {
+    setState(() {
+      isLoading = true;
+    });
+    await widget.onPressed!();
+    if (mounted) {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     if (isLoading)
-      return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8),
+      return ConstrainedBox(
+        constraints: const BoxConstraints(maxHeight: 40),
         child: AspectRatio(
           aspectRatio: 1,
           child: Padding(
@@ -52,19 +64,7 @@ class _LoadingIconButtonState extends State<LoadingIconButton> {
             key: ValueKey(widget.variant),
             tooltip: widget.tooltip,
             style: widget.style,
-            onPressed: widget.onPressed != null
-                ? () async {
-                    setState(() {
-                      isLoading = true;
-                    });
-                    await widget.onPressed!();
-                    if (mounted) {
-                      setState(() {
-                        isLoading = false;
-                      });
-                    }
-                  }
-                : null,
+            onPressed: widget.onPressed != null ? _onPressed : null,
             icon: widget.icon,
             padding: widget.padding,
           ),
@@ -72,19 +72,7 @@ class _LoadingIconButtonState extends State<LoadingIconButton> {
             key: ValueKey(widget.variant),
             tooltip: widget.tooltip,
             style: widget.style,
-            onPressed: widget.onPressed != null
-                ? () async {
-                    setState(() {
-                      isLoading = true;
-                    });
-                    await widget.onPressed!();
-                    if (mounted) {
-                      setState(() {
-                        isLoading = false;
-                      });
-                    }
-                  }
-                : null,
+            onPressed: widget.onPressed != null ? _onPressed : null,
             icon: widget.icon,
             padding: widget.padding,
           ),
@@ -92,38 +80,14 @@ class _LoadingIconButtonState extends State<LoadingIconButton> {
             key: ValueKey(widget.variant),
             tooltip: widget.tooltip,
             style: widget.style,
-            onPressed: widget.onPressed != null
-                ? () async {
-                    setState(() {
-                      isLoading = true;
-                    });
-                    await widget.onPressed!();
-                    if (mounted) {
-                      setState(() {
-                        isLoading = false;
-                      });
-                    }
-                  }
-                : null,
+            onPressed: widget.onPressed != null ? _onPressed : null,
             icon: widget.icon,
             padding: widget.padding,
           ),
         LoadingIconButtonVariant.outlined => IconButton.outlined(
             tooltip: widget.tooltip,
             style: widget.style,
-            onPressed: widget.onPressed != null
-                ? () async {
-                    setState(() {
-                      isLoading = true;
-                    });
-                    await widget.onPressed!();
-                    if (mounted) {
-                      setState(() {
-                        isLoading = false;
-                      });
-                    }
-                  }
-                : null,
+            onPressed: widget.onPressed != null ? _onPressed : null,
             icon: widget.icon,
             padding: widget.padding,
           ),

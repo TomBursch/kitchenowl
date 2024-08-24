@@ -280,13 +280,10 @@ class _PlannerPageState extends State<PlannerPage> {
                                 style: Theme.of(context).textTheme.titleLarge,
                               ),
                             ),
-                            ConstrainedBox(
-                              constraints: const BoxConstraints(maxHeight: 40),
-                              child: LoadingIconButton(
-                                onPressed: cubit.refreshSuggestions,
-                                icon: const Icon(Icons.refresh),
-                                tooltip: AppLocalizations.of(context)!.refresh,
-                              ),
+                            LoadingIconButton(
+                              onPressed: cubit.refreshSuggestions,
+                              icon: const Icon(Icons.refresh),
+                              tooltip: AppLocalizations.of(context)!.refresh,
                             ),
                           ],
                         ),

@@ -6,6 +6,7 @@ import 'package:kitchenowl/models/expense_category.dart';
 import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/services/transaction_handler.dart';
 import 'package:kitchenowl/services/transactions/expense.dart';
+import 'package:kitchenowl/services/transactions/household.dart';
 
 class ExpenseMonthListCubit extends Cubit<ExpenseListCubitState> {
   final Household household;
@@ -16,7 +17,7 @@ class ExpenseMonthListCubit extends Cubit<ExpenseListCubitState> {
 
   ExpenseMonthListCubit(this.household, this.filter, this.sorting,
       this.startAfter, this.endBefore)
-      : super(const LoadingExpenseListCubitState()) {
+      : super(LoadingExpenseListCubitState(household)) {
     refresh();
   }
 
@@ -38,14 +39,20 @@ class ExpenseMonthListCubit extends Cubit<ExpenseListCubitState> {
   Future<void> refresh() async {
     final expenses = TransactionHandler.getInstance()
         .runTransaction(TransactionExpenseGetAll(
-      household: household,
+      household: this.household,
       sorting: sorting,
       filter: filter,
       startAfter: startAfter,
       endBefore: endBefore,
     ));
 
+    final household = TransactionHandler.getInstance().runTransaction(
+      TransactionHouseholdGet(household: this.household),
+      forceOffline: true,
+    );
+
     emit(ExpenseListCubitState(
+      household: (await household) ?? this.household,
       expenses: await expenses,
       allLoaded: (await expenses).length < 30,
     ));
@@ -53,19 +60,23 @@ class ExpenseMonthListCubit extends Cubit<ExpenseListCubitState> {
 }
 
 class ExpenseListCubitState extends Equatable {
+  final Household household;
   final List<Expense> expenses;
   final bool allLoaded;
 
   const ExpenseListCubitState({
+    required this.household,
     this.expenses = const [],
     this.allLoaded = false,
   });
 
   ExpenseListCubitState copyWith({
+    Household? household,
     List<Expense>? expenses,
     bool? allLoaded,
   }) =>
       ExpenseListCubitState(
+        household: household ?? this.household,
         expenses: expenses ?? this.expenses,
         allLoaded: allLoaded ?? this.allLoaded,
       );
@@ -75,12 +86,14 @@ class ExpenseListCubitState extends Equatable {
 }
 
 class LoadingExpenseListCubitState extends ExpenseListCubitState {
-  const LoadingExpenseListCubitState() : super(allLoaded: true);
+  const LoadingExpenseListCubitState(Household household)
+      : super(household: household, allLoaded: true);
 
   @override
   ExpenseListCubitState copyWith({
+    Household? household,
     List<Expense>? expenses,
     bool? allLoaded,
   }) =>
-      const LoadingExpenseListCubitState();
+      LoadingExpenseListCubitState((household ?? this.household));
 }

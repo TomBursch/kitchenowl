@@ -56,11 +56,13 @@ class _ExpenseMonthListPageState extends State<ExpenseMonthListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
       body: BlocBuilder<ExpenseMonthListCubit, ExpenseListCubitState>(
         bloc: cubit,
         builder: (context, state) => CustomScrollView(
           slivers: [
+            SliverAppBar(
+              pinned: true,
+            ),
             if (state.expenses.isNotEmpty)
               SliverCrossAxisConstrained(
                 maxCrossAxisExtent: 1600,
@@ -71,7 +73,7 @@ class _ExpenseMonthListPageState extends State<ExpenseMonthListPage> {
                       key: ValueKey(state.expenses[i].id),
                       sizeFactor: animation,
                       child: ExpenseItemWidget(
-                        household: widget.household,
+                        household: state.household,
                         expense: state.expenses[i],
                         onUpdated: cubit.refresh,
                         displayPersonalAmount:
@@ -83,7 +85,7 @@ class _ExpenseMonthListPageState extends State<ExpenseMonthListPage> {
                       key: ValueKey(expense.id),
                       sizeFactor: animation,
                       child: ExpenseItemWidget(
-                        household: widget.household,
+                        household: state.household,
                         expense: expense,
                         onUpdated: cubit.refresh,
                         displayPersonalAmount:

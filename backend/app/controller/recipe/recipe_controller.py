@@ -199,7 +199,7 @@ def scrapeRecipe(args, household_id):
 
     try:
         scraper = scrape_html(args["url"], wild_mode=True)
-    except NoSchemaFoundInWildMode:
+    except:
         return "Unsupported website", 400
     recipe = Recipe()
     recipe.name = scraper.title()

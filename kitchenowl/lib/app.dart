@@ -9,19 +9,19 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localized_locales/flutter_localized_locales.dart';
+import 'package:kitchenowl/config.dart';
 import 'package:kitchenowl/cubits/auth_cubit.dart';
 import 'package:kitchenowl/cubits/server_info_cubit.dart';
 import 'package:kitchenowl/cubits/settings_cubit.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/router.dart';
+import 'package:kitchenowl/services/api/api_service.dart';
 import 'package:kitchenowl/services/storage/storage.dart';
 import 'package:kitchenowl/services/transaction_handler.dart';
 import 'package:kitchenowl/styles/colors.dart';
 import 'package:kitchenowl/styles/themes.dart';
 import 'package:share_handler/share_handler.dart';
-// ignore: depend_on_referenced_packages
 import 'package:image_picker_android/image_picker_android.dart';
-// ignore: depend_on_referenced_packages
 import 'package:image_picker_platform_interface/image_picker_platform_interface.dart';
 
 class App extends StatefulWidget {
@@ -37,6 +37,9 @@ class App extends StatefulWidget {
 
   static bool get isForcedOffline =>
       _instance!._authCubit.state.forcedOfflineMode;
+
+  static bool get isDefaultServer =>
+      ApiService.getInstance().baseUrl == Config.defaultServer + "/api";
 
   static SettingsState get settings => _instance!._settingsCubit.state;
 

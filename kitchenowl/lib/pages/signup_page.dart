@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kitchenowl/app.dart';
 import 'package:kitchenowl/cubits/auth_cubit.dart';
 import 'package:kitchenowl/cubits/server_info_cubit.dart';
 import 'package:kitchenowl/helpers/url_launcher.dart';
 import 'package:kitchenowl/kitchenowl.dart';
+import 'package:kitchenowl/styles/color_mapper.dart';
 import 'package:kitchenowl/widgets/create_user_form_fields.dart';
+import 'package:responsive_builder/responsive_builder.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
 class SignupPage extends StatefulWidget {
@@ -35,83 +38,140 @@ class _SignupPageState extends State<SignupPage> {
         : false;
 
     return Scaffold(
-      appBar: AppBar(
-        leading: Navigator.canPop(context)
-            ? null
-            : BackButton(
-                onPressed: () => context.go("/"),
+      body: Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          if (getValueForScreenType(
+            context: context,
+            mobile: false,
+            tablet: false,
+            desktop: true,
+          ))
+            Expanded(
+              child: Container(
+                child: SvgPicture(
+                  SvgAssetLoader(
+                    "assets/illustrations/welcoming.svg",
+                    colorMapper: KitchenOwlColorMapper(
+                      accentColor: Theme.of(context).colorScheme.primary,
+                    ),
+                  ),
+                  fit: BoxFit.scaleDown,
+                ),
+                margin: const EdgeInsets.all(20),
+                padding: const EdgeInsets.all(50),
+                decoration: BoxDecoration(
+                  color: App.settings.accentColor == null &&
+                          Theme.of(context).brightness == Brightness.dark
+                      ? Theme.of(context).colorScheme.surfaceBright
+                      : Theme.of(context).colorScheme.surfaceContainer,
+                  borderRadius: BorderRadius.circular(25),
+                ),
               ),
-      ),
-      body: CustomScrollView(
-        primary: true,
-        slivers: [
-          SliverCrossAxisConstrained(
-            maxCrossAxisExtent: 600,
-            child: SliverFillRemaining(
-              hasScrollBody: false,
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(AppLocalizations.of(context)!.accountCreateTitle),
-                      CreateUserFormFields(
-                        usernameController: usernameController,
-                        nameController: nameController,
-                        passwordController: passwordController,
-                        emailController: emailController,
-                        enableEmail: emailMandatory,
-                      ),
-                      if (privacyPolicyUrl != null &&
-                          isValidUrl(privacyPolicyUrl))
-                        Padding(
-                          padding: const EdgeInsets.only(top: 16),
-                          child: MarkdownBody(
-                            data: AppLocalizations.of(context)!
-                                .privacyPolicyAgree(
-                              "[${AppLocalizations.of(context)!.privacyPolicy}]($privacyPolicyUrl)",
+            ),
+          Expanded(
+            child: CustomScrollView(
+              primary: true,
+              slivers: [
+                SliverAppBar(
+                  leading: Navigator.canPop(context)
+                      ? null
+                      : BackButton(
+                          onPressed: () => context.go("/"),
+                        ),
+                ),
+                SliverCrossAxisConstrained(
+                  maxCrossAxisExtent: 600,
+                  child: SliverFillRemaining(
+                    hasScrollBody: false,
+                    fillOverscroll: true,
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Form(
+                        key: _formKey,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              AppLocalizations.of(context)!.accountCreateTitle,
+                              style: Theme.of(context).textTheme.titleLarge,
                             ),
-                            shrinkWrap: true,
-                            styleSheet: MarkdownStyleSheet.fromTheme(
-                              Theme.of(context),
-                            ).copyWith(
-                              p: Theme.of(context)
+                            const SizedBox(height: 32),
+                            Text(
+                              AppLocalizations.of(context)!.accountCreateHint,
+                              style: Theme.of(context)
                                   .textTheme
-                                  .labelSmall
+                                  .labelMedium
                                   ?.copyWith(
                                     color: Theme.of(context)
                                         .textTheme
-                                        .labelSmall
+                                        .labelMedium
                                         ?.color
-                                        ?.withOpacity(.3),
+                                        ?.withOpacity(0.8),
                                   ),
-                              a: TextStyle(
-                                color: Theme.of(context).colorScheme.primary,
+                            ),
+                            const SizedBox(height: 8),
+                            CreateUserFormFields(
+                              usernameController: usernameController,
+                              nameController: nameController,
+                              passwordController: passwordController,
+                              emailController: emailController,
+                              enableEmail: emailMandatory,
+                            ),
+                            if (privacyPolicyUrl != null &&
+                                isValidUrl(privacyPolicyUrl))
+                              Padding(
+                                padding: const EdgeInsets.only(top: 16),
+                                child: MarkdownBody(
+                                  data: AppLocalizations.of(context)!
+                                      .privacyPolicyAgree(
+                                    "[${AppLocalizations.of(context)!.privacyPolicy}]($privacyPolicyUrl)",
+                                  ),
+                                  shrinkWrap: true,
+                                  styleSheet: MarkdownStyleSheet.fromTheme(
+                                    Theme.of(context),
+                                  ).copyWith(
+                                    p: Theme.of(context)
+                                        .textTheme
+                                        .labelSmall
+                                        ?.copyWith(
+                                          color: Theme.of(context)
+                                              .textTheme
+                                              .labelSmall
+                                              ?.color
+                                              ?.withOpacity(.3),
+                                        ),
+                                    a: TextStyle(
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                    ),
+                                  ),
+                                  onTapLink: (text, href, title) {
+                                    if (href != null && isValidUrl(href)) {
+                                      openUrl(context, href);
+                                    }
+                                  },
+                                ),
+                              ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(top: 16, bottom: 8),
+                              child: LoadingFilledButton(
+                                onPressed: () => _submit(context),
+                                child: Text(AppLocalizations.of(context)!
+                                    .accountCreate),
                               ),
                             ),
-                            onTapLink: (text, href, title) {
-                              if (href != null && isValidUrl(href)) {
-                                openUrl(context, href);
-                              }
-                            },
-                          ),
-                        ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 16, bottom: 8),
-                        child: LoadingElevatedButton(
-                          onPressed: () => _submit(context),
-                          child:
-                              Text(AppLocalizations.of(context)!.accountCreate),
+                            SizedBox(
+                                height: MediaQuery.of(context).padding.bottom),
+                          ],
                         ),
                       ),
-                      SizedBox(height: MediaQuery.of(context).padding.bottom),
-                    ],
+                    ),
                   ),
                 ),
-              ),
+              ],
             ),
           ),
         ],

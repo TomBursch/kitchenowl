@@ -57,7 +57,7 @@ class RecipeCubit extends Cubit<RecipeState> {
     emit(RecipeState(
       recipe: await recipe,
       updateState: state.updateState,
-      selectedYields: state.selectedYields,
+      selectedYields: (await recipe).yields,
       shoppingLists: shoppingLists != null ? await shoppingLists : const [],
     ));
   }

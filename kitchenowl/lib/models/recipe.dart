@@ -19,6 +19,7 @@ class Recipe extends Model implements ISuspensionBean {
   final String? imageHash;
   final List<RecipeItem> items;
   final Set<Tag> tags;
+  final bool public;
 
   const Recipe({
     this.id,
@@ -35,6 +36,7 @@ class Recipe extends Model implements ISuspensionBean {
     this.items = const [],
     this.tags = const {},
     this.plannedDays = const {},
+    this.public = false,
   });
 
   factory Recipe.fromJson(Map<String, dynamic> map) {
@@ -63,6 +65,7 @@ class Recipe extends Model implements ISuspensionBean {
       source: map['source'] ?? '',
       image: map['photo'],
       imageHash: map['photo_hash'],
+      public: map['public'],
       items: items,
       tags: tags,
       plannedDays: plannedDays,
@@ -79,6 +82,7 @@ class Recipe extends Model implements ISuspensionBean {
     int? yields,
     String? source,
     String? image,
+    bool? public,
     List<RecipeItem>? items,
     Set<Tag>? tags,
     Set<int>? plannedDays,
@@ -98,6 +102,7 @@ class Recipe extends Model implements ISuspensionBean {
         image: image ?? this.image,
         tags: tags ?? this.tags,
         plannedDays: plannedDays ?? this.plannedDays,
+        public: public ?? this.public,
       );
 
   Recipe withYields(int yields) {
@@ -126,6 +131,7 @@ class Recipe extends Model implements ISuspensionBean {
         tags,
         items,
         plannedDays,
+        public,
       ];
 
   @override
@@ -137,6 +143,7 @@ class Recipe extends Model implements ISuspensionBean {
         "prep_time": prepTime,
         "yields": yields,
         "source": source,
+        "public": public,
         if (image != null) "photo": image,
         "items": items.map((e) => e.toJson()).toList(),
         "tags": tags.map((e) => e.toString()).toList(),

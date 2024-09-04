@@ -6,6 +6,7 @@ import 'package:kitchenowl/app.dart';
 import 'package:kitchenowl/cubits/recipe_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/helpers/recipe_item_markdown_extension.dart';
+import 'package:kitchenowl/helpers/share.dart';
 import 'package:kitchenowl/helpers/url_launcher.dart';
 import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/models/item.dart';
@@ -60,7 +61,7 @@ class _RecipePageState extends State<RecipePage> {
   @override
   Widget build(BuildContext context) {
     return PopScope(
-      canPop: false,
+      canPop: cubit.state.updateState == UpdateEnum.unchanged,
       onPopInvokedWithResult: (didPop, result) {
         if (!didPop) Navigator.of(context).pop(cubit.state.updateState);
       },
@@ -413,6 +414,25 @@ class _RecipePageState extends State<RecipePage> {
                             icon: const Icon(Icons.edit),
                           ),
                         ),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 8),
+                        child: LoadingIconButton(
+                          tooltip: AppLocalizations.of(context)!.recipeEdit,
+                          variant: state.recipe.image == null ||
+                                  state.recipe.image!.isEmpty ||
+                                  isCollapsed
+                              ? LoadingIconButtonVariant.standard
+                              : LoadingIconButtonVariant.filledTonal,
+                          onPressed: () async {
+                            final uri = Uri.tryParse(App.currentServer +
+                                '/recipe/${widget.recipe.id}');
+                            if (uri == null) return;
+
+                            Share.shareUri(context, uri);
+                          },
+                          icon: const Icon(Icons.share_rounded),
+                        ),
+                      ),
                     ],
                   ),
                   SliverCrossAxisConstrained(

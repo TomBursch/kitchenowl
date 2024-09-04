@@ -6,6 +6,7 @@ import 'package:transparent_image/transparent_image.dart';
 
 class FlexibleImageSpaceBar extends StatelessWidget {
   final String title;
+  final int actionCount;
   final String imageUrl;
   final String? imageHash;
   final bool isCollapsed;
@@ -16,15 +17,16 @@ class FlexibleImageSpaceBar extends StatelessWidget {
     this.isCollapsed = false,
     String? imageUrl,
     this.imageHash,
+    this.actionCount = 1,
   }) : imageUrl = imageUrl ?? "";
 
   @override
   Widget build(BuildContext context) {
     return FlexibleSpaceBar(
-      titlePadding: const EdgeInsetsDirectional.only(
+      titlePadding: EdgeInsetsDirectional.only(
         start: 60,
         bottom: 16,
-        end: 36,
+        end: 16 + actionCount * 40,
       ),
       title: Text(
         title,

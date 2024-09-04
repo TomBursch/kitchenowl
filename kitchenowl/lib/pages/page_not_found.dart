@@ -27,8 +27,17 @@ class PageNotFound extends StatelessWidget {
               ),
               const SizedBox(height: 10),
               ElevatedButton(
-                onPressed:
-                    context.canPop() ? context.pop : () => context.go("/"),
+                onPressed: () {
+                  try {
+                    if (context.canPop()) {
+                      context.pop();
+                    } else {
+                      context.go("/");
+                    }
+                  } catch (e) {
+                    context.go("/");
+                  }
+                },
                 child: Text(AppLocalizations.of(context)!.back),
               ),
             ],

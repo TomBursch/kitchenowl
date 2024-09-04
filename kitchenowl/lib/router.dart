@@ -344,6 +344,24 @@ final router = GoRouter(
       ],
     ),
     GoRoute(
+      parentNavigatorKey: _rootNavigatorKey,
+      path: '/recipe/:recipeId',
+      builder: (context, state) => RecipePage(
+        recipe: (state.extra as Recipe?) ??
+            Recipe(
+              id: int.tryParse(
+                state.pathParameters['recipeId'] ?? '',
+              ),
+            ),
+        updateOnPlanningEdit:
+            state.uri.queryParameters['updateOnPlanningEdit'] ==
+                true.toString(),
+        selectedYields: int.tryParse(
+          state.uri.queryParameters['selectedYields'] ?? "",
+        ),
+      ),
+    ),
+    GoRoute(
       path: '/settings',
       parentNavigatorKey: _rootNavigatorKey,
       builder: (context, state) => SettingsPage(

@@ -38,8 +38,11 @@ class App extends StatefulWidget {
   static bool get isForcedOffline =>
       _instance!._authCubit.state.forcedOfflineMode;
 
-  static bool get isDefaultServer =>
-      ApiService.getInstance().baseUrl == Config.defaultServer + "/api";
+  static bool get isDefaultServer => currentServer == Config.defaultServer;
+
+  static String get currentServer => ApiService.getInstance()
+      .baseUrl
+      .substring(0, ApiService.getInstance().baseUrl.length - 4);
 
   static SettingsState get settings => _instance!._settingsCubit.state;
 

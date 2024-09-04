@@ -60,6 +60,8 @@ def addRecipe(args, household_id):
         recipe.yields = args["yields"]
     if "source" in args:
         recipe.source = args["source"]
+    if "public" in args:
+        recipe.public = args["public"]
     if "photo" in args and args["photo"] != recipe.photo:
         recipe.photo = file_has_access_or_download(args["photo"], recipe.photo)
     recipe.save()
@@ -109,6 +111,8 @@ def updateRecipe(args, id):  # noqa: C901
         recipe.yields = args["yields"]
     if "source" in args:
         recipe.source = args["source"]
+    if "public" in args:
+        recipe.public = args["public"]
     if "photo" in args and args["photo"] != recipe.photo:
         recipe.photo = file_has_access_or_download(args["photo"], recipe.photo)
     recipe.save()

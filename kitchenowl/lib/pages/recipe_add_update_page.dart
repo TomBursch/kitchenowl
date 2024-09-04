@@ -240,6 +240,36 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                                 AddUpdateRecipeState>(
                               bloc: cubit,
                               buildWhen: (previous, current) =>
+                                  previous.public != current.public,
+                              builder: (context, state) => Padding(
+                                padding:
+                                    const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                                child: SegmentedButton(
+                                  selected: {state.public},
+                                  segments: [
+                                    ButtonSegment(
+                                      value: false,
+                                      icon: const Icon(Icons.lock_rounded),
+                                      label: Text(AppLocalizations.of(context)!
+                                          .private),
+                                    ),
+                                    ButtonSegment(
+                                      value: true,
+                                      icon: const Icon(Icons.public_rounded),
+                                      label: Text(
+                                          AppLocalizations.of(context)!.public),
+                                    ),
+                                  ],
+                                  onSelectionChanged: (Set<bool> value) {
+                                    cubit.setPublic(value.first);
+                                  },
+                                ),
+                              ),
+                            ),
+                            BlocBuilder<AddUpdateRecipeCubit,
+                                AddUpdateRecipeState>(
+                              bloc: cubit,
+                              buildWhen: (previous, current) =>
                                   !setEquals(previous.tags, current.tags) ||
                                   !setEquals(
                                     previous.selectedTags,

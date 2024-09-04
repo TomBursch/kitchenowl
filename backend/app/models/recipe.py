@@ -20,6 +20,7 @@ class Recipe(db.Model, DbModelMixin, TimestampMixin, DbModelAuthorizeMixin):
     prep_time = db.Column(db.Integer)
     yields = db.Column(db.Integer)
     source = db.Column(db.String())
+    public = db.Column(db.Boolean(), nullable=False, default=False)
     suggestion_score = db.Column(db.Integer, server_default="0")
     suggestion_rank = db.Column(db.Integer, server_default="0")
     household_id = db.Column(

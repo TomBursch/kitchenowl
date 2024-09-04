@@ -242,7 +242,9 @@
       "privacyPolicy": {}
     }
   },
+  "@private": {},
   "@profile": {},
+  "@public": {},
   "@recipeAdd": {},
   "@recipeAddUrl": {},
   "@recipeDelete": {},
@@ -518,7 +520,9 @@
   "preparationTime": "Preparation time",
   "privacyPolicy": "Privacy policy",
   "privacyPolicyAgree": "By creating an account you agree to our {privacyPolicy}",
+  "private": "Private",
   "profile": "Profile",
+  "public": "Public",
   "recipeAdd": "Add recipe",
   "recipeAddUrl": "Add recipe from URL",
   "recipeDelete": "Delete recipe",

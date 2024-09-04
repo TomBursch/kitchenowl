@@ -46,6 +46,7 @@ const List<String> publicRoutes = [
   "/confirm-email",
   "/reset-password",
   "/forgot-password",
+  "/recipe",
 ];
 
 // GoRouter configuration
@@ -57,7 +58,7 @@ final router = GoRouter(
     if (authState is Setup) return "/setup";
     if (authState is Onboarding) return "/onboarding";
     if (authState is Unauthenticated &&
-        !publicRoutes.contains(state.uri.path)) {
+        !publicRoutes.any((path) => state.uri.path.startsWith(path))) {
       return "/signin";
     }
     if (authState is Unreachable) return "/unreachable";

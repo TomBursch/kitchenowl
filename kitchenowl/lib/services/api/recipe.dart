@@ -55,13 +55,13 @@ extension RecipeApi on ApiService {
     return body.map((e) => Recipe.fromJson(e)).toList();
   }
 
-  Future<Recipe?> getRecipe(Recipe recipe) async {
+  Future<(Recipe?, int)> getRecipe(Recipe recipe) async {
     final res = await get('$baseRoute/${recipe.id}');
-    if (res.statusCode != 200) return null;
+    if (res.statusCode != 200) return (null, res.statusCode);
 
     final body = jsonDecode(res.body);
 
-    return Recipe.fromJson(body);
+    return (Recipe.fromJson(body), 0);
   }
 
   Future<Recipe?> addRecipe(Household household, Recipe recipe) async {

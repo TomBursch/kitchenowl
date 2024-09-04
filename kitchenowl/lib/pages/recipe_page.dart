@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:kitchenowl/app.dart';
 import 'package:kitchenowl/cubits/recipe_cubit.dart';
@@ -65,8 +66,18 @@ class _RecipePageState extends State<RecipePage> {
       onPopInvokedWithResult: (didPop, result) {
         if (!didPop) Navigator.of(context).pop(cubit.state.updateState);
       },
-      child: BlocBuilder<RecipeCubit, RecipeState>(
+      child: BlocConsumer<RecipeCubit, RecipeState>(
         bloc: cubit,
+        listenWhen: (previous, current) => current is RecipeErrorState,
+        listener: (context, state) {
+          if (state is RecipeErrorState) {
+            if (Navigator.of(context).canPop()) {
+              Navigator.of(context).pop();
+            } else {
+              context.go("/");
+            }
+          }
+        },
         builder: (context, state) {
           final left = <Widget>[
             SliverPadding(
@@ -414,25 +425,26 @@ class _RecipePageState extends State<RecipePage> {
                             icon: const Icon(Icons.edit),
                           ),
                         ),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 8),
-                        child: LoadingIconButton(
-                          tooltip: AppLocalizations.of(context)!.recipeEdit,
-                          variant: state.recipe.image == null ||
-                                  state.recipe.image!.isEmpty ||
-                                  isCollapsed
-                              ? LoadingIconButtonVariant.standard
-                              : LoadingIconButtonVariant.filledTonal,
-                          onPressed: () async {
-                            final uri = Uri.tryParse(App.currentServer +
-                                '/recipe/${widget.recipe.id}');
-                            if (uri == null) return;
+                      if (state.recipe.public)
+                        Padding(
+                          padding: const EdgeInsets.only(right: 8),
+                          child: LoadingIconButton(
+                            tooltip: AppLocalizations.of(context)!.share,
+                            variant: state.recipe.image == null ||
+                                    state.recipe.image!.isEmpty ||
+                                    isCollapsed
+                                ? LoadingIconButtonVariant.standard
+                                : LoadingIconButtonVariant.filledTonal,
+                            onPressed: () async {
+                              final uri = Uri.tryParse(App.currentServer +
+                                  '/recipe/${widget.recipe.id}');
+                              if (uri == null) return;
 
-                            Share.shareUri(context, uri);
-                          },
-                          icon: const Icon(Icons.share_rounded),
+                              Share.shareUri(context, uri);
+                            },
+                            icon: const Icon(Icons.share_rounded),
+                          ),
                         ),
-                      ),
                     ],
                   ),
                   SliverCrossAxisConstrained(

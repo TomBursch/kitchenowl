@@ -57,7 +57,7 @@ class TransactionRecipeGetRecipesFiltered extends Transaction<List<Recipe>> {
   }
 }
 
-class TransactionRecipeGetRecipe extends Transaction<Recipe> {
+class TransactionRecipeGetRecipe extends Transaction<(Recipe?, int)> {
   final Recipe recipe;
 
   TransactionRecipeGetRecipe({required this.recipe, DateTime? timestamp})
@@ -67,13 +67,13 @@ class TransactionRecipeGetRecipe extends Transaction<Recipe> {
         );
 
   @override
-  Future<Recipe> runLocal() async {
-    return recipe;
+  Future<(Recipe?, int)> runLocal() async {
+    return (recipe, 0);
   }
 
   @override
-  Future<Recipe?> runOnline() async {
-    return await ApiService.getInstance().getRecipe(recipe);
+  Future<(Recipe?, int)> runOnline() async {
+    return ApiService.getInstance().getRecipe(recipe);
   }
 }
 

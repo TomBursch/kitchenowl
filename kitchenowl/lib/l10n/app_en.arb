@@ -278,6 +278,7 @@
   "@set": {},
   "@settings": {},
   "@setupTitle": {},
+  "@share": {},
   "@shoppingList": {},
   "@shoppingListDelete": {},
   "@shoppingListDeleteConfirmation": {
@@ -552,6 +553,7 @@
   "set": "Set",
   "settings": "Settings",
   "setupTitle": "Hey there! Ready to shop?",
+  "share": "Share",
   "shoppingList": "Shopping list",
   "shoppingListDelete": "Delete shopping list",
   "shoppingListDeleteConfirmation": "Are you sure you want to delete {shoppingList}?",

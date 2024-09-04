@@ -117,7 +117,10 @@ class _AppState extends State<App> {
                 if (state is Onboarding) return router.go("/onboarding");
                 if (state is Unauthenticated &&
                     (initialLocation == null ||
-                        !publicRoutes.contains(initialLocation!.path))) {
+                        !publicRoutes.any((path) =>
+                            initialLocation!.path.startsWith(path)))) {
+                  print(publicRoutes
+                      .any((path) => initialLocation!.path.startsWith(path)));
                   return router.go("/signin");
                 }
                 if (state is Unreachable) return router.go("/unreachable");

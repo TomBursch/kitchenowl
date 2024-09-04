@@ -32,12 +32,13 @@ def getAllRecipes(household_id):
 
 
 @recipe.route("/<int:id>", methods=["GET"])
-@jwt_required()
+@jwt_required(optional=True)
 def getRecipeById(id):
     recipe = Recipe.find_by_id(id)
     if not recipe:
         raise NotFoundRequest()
-    recipe.checkAuthorized()
+    if not recipe.public:
+        recipe.checkAuthorized()
     return jsonify(recipe.obj_to_full_dict())
 
 

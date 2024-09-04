@@ -45,7 +45,7 @@ class RecipeCubit extends Cubit<RecipeState> {
   }
 
   Future<void> refresh() async {
-    final recipe = _transactionHandler
+    final recipeFuture = _transactionHandler
         .runTransaction(TransactionRecipeGetRecipe(recipe: state.recipe));
     Future<List<ShoppingList>>? shoppingLists;
     if (household != null) {
@@ -54,10 +54,16 @@ class RecipeCubit extends Cubit<RecipeState> {
         forceOffline: true,
       );
     }
+    final (recipe, statusCode) = await recipeFuture;
+    if (recipe == null) {
+      emit(RecipeErrorState(recipe: state.recipe));
+      return;
+    }
+
     emit(RecipeState(
-      recipe: await recipe,
+      recipe: recipe,
       updateState: state.updateState,
-      selectedYields: (await recipe).yields,
+      selectedYields: recipe.yields,
       shoppingLists: shoppingLists != null ? await shoppingLists : const [],
     ));
   }
@@ -144,4 +150,8 @@ final class RecipeState extends Equatable {
         shoppingLists,
         updateState,
       ];
+}
+
+final class RecipeErrorState extends RecipeState {
+  RecipeErrorState({required super.recipe});
 }

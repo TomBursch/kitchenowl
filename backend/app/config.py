@@ -40,7 +40,7 @@ PROJECT_DIR = os.path.dirname(APP_DIR)
 
 STORAGE_PATH = os.getenv("STORAGE_PATH", PROJECT_DIR)
 UPLOAD_FOLDER = STORAGE_PATH + "/upload"
-ALLOWED_FILE_EXTENSIONS = {"txt", "pdf", "png", "jpg", "jpeg", "gif"}
+ALLOWED_FILE_EXTENSIONS = {"txt", "pdf", "png", "jpg", "jpeg", "gif", "webp", "jxl"}
 
 FRONT_URL = os.getenv("FRONT_URL")
 

@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/foundation.dart';
+import 'package:cached_network_image_platform_interface/cached_network_image_platform_interface.dart'
+    show ImageRenderMethodForWeb;
 import 'package:flutter/material.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
 
@@ -19,17 +20,11 @@ ImageProvider<Object> getImageProvider(
   int? maxWidth,
   int? maxHeight,
 }) {
-  if (kIsWeb) {
-    return NetworkImage(
-      buildUrl(image),
-      headers: _urlIsLocal(image) ? ApiService.getInstance().headers : null,
-    );
-  }
-
   return CachedNetworkImageProvider(
     buildUrl(image),
     maxWidth: maxWidth,
     maxHeight: maxHeight,
     headers: _urlIsLocal(image) ? ApiService.getInstance().headers : null,
+    imageRenderMethodForWeb: ImageRenderMethodForWeb.HttpGet,
   );
 }

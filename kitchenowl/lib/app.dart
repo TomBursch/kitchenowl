@@ -119,20 +119,33 @@ class _AppState extends State<App> {
                     (initialLocation == null ||
                         !publicRoutes.any((path) =>
                             initialLocation!.path.startsWith(path)))) {
-                  print(publicRoutes
-                      .any((path) => initialLocation!.path.startsWith(path)));
                   return router.go("/signin");
                 }
                 if (state is Unreachable) return router.go("/unreachable");
                 if (state is Unsupported) return router.go("/unsupported");
                 if (state is Loading) return router.go("/");
-                if (state is Authenticated &&
-                    (initialLocation == null || initialLocation?.path == "/")) {
-                  PreferenceStorage.getInstance()
-                      .readInt(key: 'lastHouseholdId')
-                      .then((id) =>
-                          router.go("/household${id == null ? "" : "/$id"}"));
-                  return;
+                if (state is Authenticated) {
+                  if ((initialLocation == null ||
+                      initialLocation?.path == "/")) {
+                    PreferenceStorage.getInstance()
+                        .readInt(key: 'lastHouseholdId')
+                        .then((id) =>
+                            router.go("/household${id == null ? "" : "/$id"}"));
+                    return;
+                  }
+                  if (initialLocation != null) {
+                    final match = RegExp(r'\/recipe\/(\d+)')
+                        .matchAsPrefix(initialLocation!.path);
+                    if (match != null) {
+                      // Redirect public recipe links to last household recipe links
+                      PreferenceStorage.getInstance()
+                          .readInt(key: 'lastHouseholdId')
+                          .then((id) => router.go(id == null
+                              ? initialLocation!.toString()
+                              : "/household/${id}/recipes/details/${match.group(1)}"));
+                      return;
+                    }
+                  }
                 }
                 router.go(initialLocation!.toString());
                 initialLocation = Uri(path: "/");

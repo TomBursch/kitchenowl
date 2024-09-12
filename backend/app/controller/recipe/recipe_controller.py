@@ -1,15 +1,11 @@
-import re
-
 from app.errors import NotFoundRequest, InvalidUsage
 from app.models import Household, RecipeItems, RecipeTags
 from flask import jsonify, Blueprint
 from flask_jwt_extended import jwt_required
 from app.helpers import validate_args, authorize_household
 from app.models import Recipe, Item, Tag
-from recipe_scrapers import scrape_html
-from recipe_scrapers._exceptions import SchemaOrgException, NoSchemaFoundInWildMode
 from app.service.file_has_access_or_download import file_has_access_or_download
-from app.service.ingredient_parsing import parseIngredients
+from app.service.recipe_scraping import scrape
 from .schemas import (
     SearchByNameRequest,
     AddRecipe,
@@ -202,56 +198,7 @@ def scrapeRecipe(args, household_id):
     if not household:
         raise NotFoundRequest()
 
-    try:
-        scraper = scrape_html(args["url"], wild_mode=True)
-    except:
-        return "Unsupported website", 400
-    recipe = Recipe()
-    recipe.name = scraper.title()
-    try:
-        recipe.time = int(scraper.total_time())
-    except (NotImplementedError, ValueError, TypeError, AttributeError, SchemaOrgException):
-        pass
-    try:
-        recipe.cook_time = int(scraper.cook_time())
-    except (NotImplementedError, ValueError, TypeError, AttributeError, SchemaOrgException):
-        pass
-    try:
-        recipe.prep_time = int(scraper.prep_time())
-    except (NotImplementedError, ValueError, TypeError, AttributeError, SchemaOrgException):
-        pass
-    try:
-        yields = re.search(r"\d*", scraper.yields())
-        if yields:
-            recipe.yields = int(yields.group())
-    except (NotImplementedError, ValueError, TypeError, AttributeError, SchemaOrgException):
-        pass
-    description = ""
-    try:
-        description = scraper.description() + "\n\n"
-    except (NotImplementedError, ValueError, TypeError, AttributeError, SchemaOrgException):
-        pass
-    try:
-        description = description + scraper.instructions()
-    except (NotImplementedError, ValueError, TypeError, AttributeError, SchemaOrgException):
-        pass
-    recipe.description = description
-    recipe.photo = scraper.image()
-    recipe.source = args["url"]
-    items = {}
-    for ingredient in parseIngredients(scraper.ingredients(), household.language):
-        name = ingredient.name if ingredient.name else ingredient.originalText
-        item = Item.find_name_starts_with(household_id, name)
-        if item:
-            items[ingredient.originalText] = item.obj_to_dict() | {
-                "description": ingredient.description,
-                "optional": False,
-            }
-        else:
-            items[ingredient.originalText] = None
-    return jsonify(
-        {
-            "recipe": recipe.obj_to_dict(),
-            "items": items,
-        }
-    )
+    res = scrape(args["url"], household)
+    if res:
+        return jsonify(res)
+    return "Unsupported website", 400

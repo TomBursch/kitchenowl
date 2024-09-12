@@ -248,6 +248,11 @@
   "@public": {},
   "@publicRecipeDescription": {},
   "@recipeAdd": {},
+  "@recipeAddToHousehold": {
+    "placeholders": {
+      "householdName": {}
+    }
+  },
   "@recipeAddUrl": {},
   "@recipeDelete": {},
   "@recipeDeleteConfirmation": {
@@ -524,11 +529,12 @@
   "privacyPolicy": "Privacy policy",
   "privacyPolicyAgree": "By creating an account you agree to our {privacyPolicy}",
   "private": "Private",
-  "privateRecipeDescription": "Only members of this household can view the recipe.",
+  "privateRecipeDescription": "Only members of the household can view the recipe.",
   "profile": "Profile",
   "public": "Public",
   "publicRecipeDescription": "Anyone with the link to this recipe can view it.",
   "recipeAdd": "Add recipe",
+  "recipeAddToHousehold": "Add to {householdName}",
   "recipeAddUrl": "Add recipe from URL",
   "recipeDelete": "Delete recipe",
   "recipeDeleteConfirmation": "Are you sure you want to remove {recipe}?",

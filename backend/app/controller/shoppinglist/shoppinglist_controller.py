@@ -389,6 +389,7 @@ def addRecipeItems(args, id):
     try:
         for recipeItem in args["items"]:
             item = Item.find_by_id(recipeItem["id"])
+            item.checkAuthorized()
             if item:
                 description = recipeItem["description"]
                 con = ShoppinglistItems.find_by_ids(shoppinglist.id, item.id)
@@ -423,4 +424,4 @@ def addRecipeItems(args, id):
         db.session.rollback()
         raise e
 
-    return jsonify(item.obj_to_dict())
+    return jsonify({"msg": "DONE"})

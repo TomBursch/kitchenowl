@@ -54,6 +54,7 @@ class Recipe(db.Model, DbModelMixin, TimestampMixin, DbModelAuthorizeMixin):
         res = self.obj_to_dict()
         res["items"] = [e.obj_to_item_dict() for e in self.items]
         res["tags"] = [e.obj_to_item_dict() for e in self.tags]
+        res["household"] = self.household.obj_to_public_dict()
         return res
 
     def obj_to_export_dict(self) -> dict:

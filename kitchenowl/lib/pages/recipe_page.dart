@@ -21,6 +21,7 @@ import 'package:kitchenowl/widgets/sliver_with_pinned_footer.dart';
 import 'package:markdown/markdown.dart' as md;
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:sliver_tools/sliver_tools.dart';
+import 'package:tuple/tuple.dart';
 
 class RecipePage extends StatefulWidget {
   final Household? household;
@@ -119,10 +120,12 @@ class _RecipePageState extends State<RecipePage> {
                     if (state.recipe.prepTime > 0)
                       Text(
                         "${AppLocalizations.of(context)!.preparationTime}: ${state.recipe.prepTime} ${AppLocalizations.of(context)!.minutesAbbrev}",
+                        style: Theme.of(context).textTheme.labelMedium,
                       ),
                     if (state.recipe.cookTime > 0)
                       Text(
                         "${AppLocalizations.of(context)!.cookingTime}: ${state.recipe.cookTime} ${AppLocalizations.of(context)!.minutesAbbrev}",
+                        style: Theme.of(context).textTheme.labelMedium,
                       ),
                     if (state.recipe.prepTime + state.recipe.cookTime > 0)
                       const SizedBox(height: 16),
@@ -240,70 +243,104 @@ class _RecipePageState extends State<RecipePage> {
               color: Theme.of(context).colorScheme.surface,
               child: Column(
                 children: [
-                  if (widget.household != null &&
-                      widget.household!.defaultShoppingList != null &&
+                  if (state.isOwningHousehold(state) &&
+                      state.household!.defaultShoppingList != null &&
                       state.recipe.items.isNotEmpty)
                     Padding(
                       padding: const EdgeInsets.all(16),
-                      child: BlocBuilder<RecipeCubit, RecipeState>(
-                        bloc: cubit,
-                        builder: (context, state) => Row(
-                          children: [
-                            Expanded(
-                              child: LoadingElevatedButton(
-                                onPressed: state.selectedItems.isEmpty
-                                    ? null
-                                    : cubit.addItemsToList,
-                                child: Text(
-                                  AppLocalizations.of(context)!
-                                      .addNumberIngredients(
-                                    state.selectedItems.length,
-                                  ),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: LoadingElevatedButton(
+                              onPressed: state.selectedItems.isEmpty
+                                  ? null
+                                  : cubit.addItemsToList,
+                              child: Text(
+                                AppLocalizations.of(context)!
+                                    .addNumberIngredients(
+                                  state.selectedItems.length,
                                 ),
                               ),
                             ),
-                            if (state.shoppingLists.length > 1)
-                              Padding(
-                                padding: const EdgeInsets.only(left: 8),
-                                child: LoadingElevatedButton(
-                                  onPressed: state.selectedItems.isEmpty
-                                      ? null
-                                      : () async {
-                                          ShoppingList? list =
-                                              await showDialog<ShoppingList>(
-                                            context: context,
-                                            builder: (context) => SelectDialog(
-                                              title:
-                                                  AppLocalizations.of(context)!
-                                                      .addNumberIngredients(
-                                                          state.selectedItems
-                                                              .length),
-                                              cancelText:
-                                                  AppLocalizations.of(context)!
-                                                      .cancel,
-                                              options: state.shoppingLists
-                                                  .map(
-                                                    (e) => SelectDialogOption(
-                                                      e,
-                                                      e.name,
-                                                    ),
-                                                  )
-                                                  .toList(),
-                                            ),
-                                          );
-                                          if (list != null) {
-                                            await cubit.addItemsToList(list);
-                                          }
-                                        },
-                                  child: const Icon(Icons.shopping_bag_rounded),
-                                ),
+                          ),
+                          if (state.shoppingLists.length > 1)
+                            Padding(
+                              padding: const EdgeInsets.only(left: 8),
+                              child: LoadingElevatedButton(
+                                onPressed: state.selectedItems.isEmpty
+                                    ? null
+                                    : () async {
+                                        ShoppingList? list =
+                                            await showDialog<ShoppingList>(
+                                          context: context,
+                                          builder: (context) => SelectDialog(
+                                            title: AppLocalizations.of(context)!
+                                                .addNumberIngredients(
+                                                    state.selectedItems.length),
+                                            cancelText:
+                                                AppLocalizations.of(context)!
+                                                    .cancel,
+                                            options: state.shoppingLists
+                                                .map(
+                                                  (e) => SelectDialogOption(
+                                                    e,
+                                                    e.name,
+                                                  ),
+                                                )
+                                                .toList(),
+                                          ),
+                                        );
+                                        if (list != null) {
+                                          await cubit.addItemsToList(list);
+                                        }
+                                      },
+                                child: const Icon(Icons.shopping_bag_rounded),
                               ),
-                          ],
+                            ),
+                        ],
+                      ),
+                    ),
+                  if (!App.isOffline &&
+                      !state.isOwningHousehold(state) &&
+                      state.household != null)
+                    Container(
+                      padding: const EdgeInsets.all(16),
+                      width: double.infinity,
+                      child: LoadingElevatedButton(
+                        onPressed: () async {
+                          if (state.household!.language == null ||
+                              state.household!.language !=
+                                  state.recipe.household?.language) {
+                            final res = await context.push(Uri(
+                              path:
+                                  "/household/${state.household!.id}/recipes/scrape",
+                              queryParameters: {
+                                "url": "kitchenowl:///recipe/${state.recipe.id}"
+                              },
+                            ).toString());
+                            if (mounted &&
+                                res != null &&
+                                res == UpdateEnum.updated) {
+                              Navigator.of(context).pop(UpdateEnum.updated);
+                            }
+                          } else {
+                            final res = await cubit.addRecipeToHousehold();
+                            if (mounted && res?.id != null) {
+                              context.go(
+                                "/household/${state.household!.id}/recipes/details/${res!.id!}",
+                                extra: Tuple2(state.household!, res),
+                              );
+                            }
+                          }
+                        },
+                        child: Text(
+                          AppLocalizations.of(context)!
+                              .recipeAddToHousehold(state.household!.name),
                         ),
                       ),
                     ),
-                  if (widget.household != null &&
-                      (widget.household!.featurePlanner ?? false))
+                  if (state.isOwningHousehold(state) &&
+                      (state.household!.featurePlanner ?? false))
                     Padding(
                       padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
                       child: Row(
@@ -395,7 +432,7 @@ class _RecipePageState extends State<RecipePage> {
                     imageHash: state.recipe.imageHash,
                     popValue: () => cubit.state.updateState,
                     actions: (isCollapsed) => [
-                      if (!App.isOffline && widget.household != null)
+                      if (!App.isOffline && state.isOwningHousehold(state))
                         Padding(
                           padding: const EdgeInsets.only(right: 8),
                           child: LoadingIconButton(
@@ -409,7 +446,7 @@ class _RecipePageState extends State<RecipePage> {
                               final res = await Navigator.of(context)
                                   .push<UpdateEnum>(MaterialPageRoute(
                                 builder: (context) => AddUpdateRecipePage(
-                                  household: widget.household!,
+                                  household: state.household!,
                                   recipe: state.recipe,
                                 ),
                               ));

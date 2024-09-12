@@ -200,6 +200,7 @@ final router = GoRouter(
         }),
     ShellRoute(
       builder: (context, state, child) => HouseholdPage(
+        key: ValueKey(state.pathParameters['id']),
         household: ((state.extra is Household?)
                 ? (state.extra as Household?)
                 : null) ??
@@ -250,6 +251,7 @@ final router = GoRouter(
                     final extra = (state.extra as Tuple2<Household, Recipe>?);
 
                     return RecipePage(
+                      key: ValueKey(state.pathParameters['recipeId']),
                       recipe: extra?.item2 ??
                           Recipe(
                             id: int.tryParse(
@@ -315,6 +317,7 @@ final router = GoRouter(
                   parentNavigatorKey: _rootNavigatorKey,
                   path: ':expenseId',
                   builder: (context, state) => ExpensePage(
+                    key: ValueKey(state.pathParameters['id']),
                     household: (state.extra as Tuple2<Household, Expense>?)
                             ?.item1 ??
                         Household(
@@ -348,6 +351,7 @@ final router = GoRouter(
       parentNavigatorKey: _rootNavigatorKey,
       path: '/recipe/:recipeId',
       builder: (context, state) => RecipePage(
+        key: ValueKey(state.pathParameters['recipeId']),
         recipe: (state.extra as Recipe?) ??
             Recipe(
               id: int.tryParse(

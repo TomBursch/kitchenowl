@@ -132,6 +132,41 @@ class _RecipeScraperPageState extends State<RecipeScraperPage> {
                     ],
                   ),
                 );
+              } else if (state is RecipeScraperUnauthorizedState) {
+                body = Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 60,
+                          vertical: 25,
+                        ),
+                        child: ConstrainedBox(
+                          constraints: BoxConstraints(maxWidth: 300),
+                          child: AspectRatio(
+                            aspectRatio: 1,
+                            child: SvgPicture(
+                              SvgAssetLoader(
+                                "assets/illustrations/right_direction.svg",
+                                colorMapper: KitchenOwlColorMapper(
+                                  accentColor:
+                                      Theme.of(context).colorScheme.primary,
+                                ),
+                              ),
+                              fit: BoxFit.scaleDown,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Text(
+                        AppLocalizations.of(context)!.privateRecipeDescription,
+                        style: Theme.of(context).textTheme.headlineMedium,
+                      ),
+                    ],
+                  ),
+                );
               } else {
                 body = const Center(child: CircularProgressIndicator());
               }

@@ -4,7 +4,7 @@ import app
 
 
 class DbModelAuthorizeMixin(object):
-    def checkAuthorized(self, requires_admin=False, household_id: int = None):
+    def checkAuthorized(self, requires_admin=False, household_id: int | None = None):
         """
         Checks if current user ist authorized to access this model. Throws and unauthorized exception if not
         IMPORTANT: requires household_id

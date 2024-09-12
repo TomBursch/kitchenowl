@@ -1,7 +1,10 @@
 from __future__ import annotations
 from typing import Self
+
+from flask_jwt_extended import current_user
 from app import db
 from app.config import UPLOAD_FOLDER
+from app.errors import ForbiddenRequest
 from app.helpers import DbModelMixin, TimestampMixin, DbModelAuthorizeMixin
 from app.models.user import User
 import os
@@ -36,6 +39,21 @@ class File(db.Model, DbModelMixin, TimestampMixin, DbModelAuthorizeMixin):
             and not self.expense
             and not self.profile_picture
         )
+
+    def checkAuthorized(self, requires_admin=False, household_id: int | None = None):
+        if self.created_by and current_user and self.created_by == current_user.id:
+            pass  # created by user can access his pictures
+        elif self.profile_picture:
+            pass  # profile pictures are public
+        elif self.recipe:
+            if not self.recipe.public:
+                super().checkAuthorized(household_id=self.recipe.household_id, requires_admin=requires_admin)
+        elif self.household:
+            super().checkAuthorized(household_id=self.household.id, requires_admin=requires_admin)
+        elif self.expense:
+            super().checkAuthorized(household_id=self.expense.household_id, requires_admin=requires_admin)
+        else:
+            raise ForbiddenRequest()
 
     @classmethod
     def find(cls, filename: str) -> Self:

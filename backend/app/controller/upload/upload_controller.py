@@ -56,18 +56,6 @@ def download_file(filename):
     if not f:
         raise NotFoundRequest()
 
-    if f.created_by and current_user and f.created_by == current_user.id:
-        pass  # created by user can access his pictures
-    elif f.profile_picture:
-        pass  # profile pictures are public
-    elif f.recipe:
-        if not f.recipe.public:
-            f.checkAuthorized(household_id=f.recipe.household_id)
-    elif f.household:
-        f.checkAuthorized(household_id=f.household.id)
-    elif f.expense:
-        f.checkAuthorized(household_id=f.expense.household_id)
-    else:
-        raise ForbiddenRequest()
+    f.checkAuthorized()
 
     return send_from_directory(UPLOAD_FOLDER, filename)

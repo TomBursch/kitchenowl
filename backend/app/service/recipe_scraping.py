@@ -68,6 +68,7 @@ def scrapeLocal(recipe_id: int, household: Household):
     recipe.checkAuthorized()
 
     recipe.source = "kitchenowl:///recipe/" + str(recipe.id)
+    recipe.public = False
     items = {}
 
     for ingredient in recipe.items:
@@ -90,6 +91,8 @@ def scrapeKitchenOwl(original_url: str, api_url: str, recipe_id: int) -> dict | 
 
     recipe = res.json()
     recipe["source"] = original_url
+    recipe["public"] = False
+    recipe["photo"] = api_url + "/upload/" + recipe["photo"]
     items = {}
 
     for ingredient in recipe["items"]:

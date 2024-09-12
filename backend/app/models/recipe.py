@@ -20,6 +20,7 @@ class Recipe(db.Model, DbModelMixin, TimestampMixin, DbModelAuthorizeMixin):
     prep_time = db.Column(db.Integer)
     yields = db.Column(db.Integer)
     source = db.Column(db.String())
+    public = db.Column(db.Boolean(), nullable=False, default=False)
     suggestion_score = db.Column(db.Integer, server_default="0")
     suggestion_rank = db.Column(db.Integer, server_default="0")
     household_id = db.Column(
@@ -53,6 +54,7 @@ class Recipe(db.Model, DbModelMixin, TimestampMixin, DbModelAuthorizeMixin):
         res = self.obj_to_dict()
         res["items"] = [e.obj_to_item_dict() for e in self.items]
         res["tags"] = [e.obj_to_item_dict() for e in self.tags]
+        res["household"] = self.household.obj_to_public_dict()
         return res
 
     def obj_to_export_dict(self) -> dict:

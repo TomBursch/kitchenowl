@@ -6,23 +6,27 @@ import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/models/planner.dart';
 import 'package:kitchenowl/models/recipe.dart';
 import 'package:kitchenowl/models/shoppinglist.dart';
+import 'package:kitchenowl/services/api/api_service.dart';
 import 'package:kitchenowl/services/transaction_handler.dart';
+import 'package:kitchenowl/services/transactions/household.dart';
 import 'package:kitchenowl/services/transactions/planner.dart';
 import 'package:kitchenowl/services/transactions/recipe.dart';
 import 'package:kitchenowl/services/transactions/shoppinglist.dart';
 
 class RecipeCubit extends Cubit<RecipeState> {
-  final Household? household;
   final TransactionHandler _transactionHandler;
 
   RecipeCubit(Household? household, Recipe recipe, int? selectedYields)
       : this.forTesting(TransactionHandler.getInstance(), household, recipe,
             selectedYields);
 
-  RecipeCubit.forTesting(TransactionHandler transactionHandler, this.household,
-      Recipe recipe, int? selectedYields)
+  RecipeCubit.forTesting(TransactionHandler transactionHandler,
+      Household? household, Recipe recipe, int? selectedYields)
       : _transactionHandler = transactionHandler,
-        super(RecipeState(recipe: recipe, selectedYields: selectedYields)) {
+        super(RecipeState(
+            recipe: recipe,
+            selectedYields: selectedYields,
+            household: household)) {
     refresh();
   }
 
@@ -45,29 +49,40 @@ class RecipeCubit extends Cubit<RecipeState> {
   }
 
   Future<void> refresh() async {
-    final recipe = _transactionHandler
+    final recipeFuture = _transactionHandler
         .runTransaction(TransactionRecipeGetRecipe(recipe: state.recipe));
     Future<List<ShoppingList>>? shoppingLists;
-    if (household != null) {
+    Future<Household?>? household;
+    if (state.household != null) {
       shoppingLists = _transactionHandler.runTransaction(
-        TransactionShoppingListGet(household: household!),
+        TransactionShoppingListGet(household: state.household!),
         forceOffline: true,
       );
+      household = _transactionHandler.runTransaction(
+        TransactionHouseholdGet(household: state.household!),
+      );
     }
+    final (recipe, statusCode) = await recipeFuture;
+    if (recipe == null) {
+      emit(RecipeErrorState(recipe: state.recipe));
+      return;
+    }
+
     emit(RecipeState(
-      recipe: await recipe,
+      recipe: recipe,
       updateState: state.updateState,
-      selectedYields: state.selectedYields,
+      selectedYields: recipe.yields,
       shoppingLists: shoppingLists != null ? await shoppingLists : const [],
+      household: (await household) ?? state.household,
     ));
   }
 
   Future<void> addItemsToList([ShoppingList? shoppingList]) async {
-    shoppingList ??= household?.defaultShoppingList;
+    shoppingList ??= state.household?.defaultShoppingList;
     if (shoppingList != null) {
       await _transactionHandler
           .runTransaction(TransactionShoppingListAddRecipeItems(
-        household: household!,
+        household: state.household!,
         shoppinglist: shoppingList,
         items: state.dynamicRecipe.items
             .where((item) => state.selectedItems.contains(item.name))
@@ -77,9 +92,9 @@ class RecipeCubit extends Cubit<RecipeState> {
   }
 
   Future<void> addRecipeToPlanner({int? day, bool updateOnAdd = false}) async {
-    if (household != null) {
+    if (state.household != null) {
       await _transactionHandler.runTransaction(TransactionPlannerAddRecipe(
-        household: household!,
+        household: state.household!,
         recipePlan: RecipePlan(
           recipe: state.recipe,
           day: day,
@@ -92,6 +107,21 @@ class RecipeCubit extends Cubit<RecipeState> {
       if (updateOnAdd) setUpdateState(UpdateEnum.updated);
     }
   }
+
+  Future<Recipe?> addRecipeToHousehold() async {
+    if (state.household != null) {
+      final res = await ApiService.getInstance().addRecipe(
+        state.household!,
+        state.recipe.copyWith(
+          source: "kitchenowl:///recipe/${state.recipe.id}",
+          public: false,
+        ),
+      );
+      if (res != null) setUpdateState(UpdateEnum.updated);
+      return res;
+    }
+    return null;
+  }
 }
 
 final class RecipeState extends Equatable {
@@ -101,6 +131,7 @@ final class RecipeState extends Equatable {
   final int selectedYields;
   final UpdateEnum updateState;
   final List<ShoppingList> shoppingLists;
+  final Household? household;
 
   RecipeState.custom({
     required this.recipe,
@@ -108,6 +139,7 @@ final class RecipeState extends Equatable {
     this.selectedYields = 0,
     this.updateState = UpdateEnum.unchanged,
     this.shoppingLists = const [],
+    this.household,
   }) : dynamicRecipe = recipe.withYields(selectedYields);
 
   RecipeState({
@@ -115,6 +147,7 @@ final class RecipeState extends Equatable {
     this.updateState = UpdateEnum.unchanged,
     int? selectedYields,
     this.shoppingLists = const [],
+    this.household,
   })  : selectedYields = selectedYields ?? recipe.yields,
         dynamicRecipe = recipe.withYields(selectedYields ?? recipe.yields),
         selectedItems =
@@ -126,6 +159,7 @@ final class RecipeState extends Equatable {
     int? selectedYields,
     UpdateEnum? updateState,
     List<ShoppingList>? shoppingLists,
+    Household? household,
   }) =>
       RecipeState.custom(
         recipe: recipe ?? this.recipe,
@@ -133,6 +167,7 @@ final class RecipeState extends Equatable {
         selectedYields: selectedYields ?? this.selectedYields,
         shoppingLists: shoppingLists ?? this.shoppingLists,
         updateState: updateState ?? this.updateState,
+        household: household ?? this.household,
       );
 
   @override
@@ -143,5 +178,13 @@ final class RecipeState extends Equatable {
         dynamicRecipe,
         shoppingLists,
         updateState,
+        household,
       ];
+
+  bool isOwningHousehold(RecipeState state) =>
+      household != null && recipe.householdId == household!.id;
+}
+
+final class RecipeErrorState extends RecipeState {
+  RecipeErrorState({required super.recipe});
 }

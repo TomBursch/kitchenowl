@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kitchenowl/helpers/url_launcher.dart';
+import 'package:kitchenowl/kitchenowl.dart';
 
 class RecipeSourceChip extends StatelessWidget {
   final String source;
@@ -9,13 +10,14 @@ class RecipeSourceChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (isValidUrl(source)) {
+      final host = (Uri.tryParse(source)?.host ?? source);
       return ActionChip(
         avatar: Icon(
           Icons.link,
           color: Theme.of(context).colorScheme.onPrimary,
         ),
         label: Text(
-          Uri.tryParse(source)?.host ?? source,
+          host.isEmpty ? AppLocalizations.of(context)!.recipeSource : host,
           style: TextStyle(
             color: Theme.of(context).colorScheme.onPrimary,
           ),

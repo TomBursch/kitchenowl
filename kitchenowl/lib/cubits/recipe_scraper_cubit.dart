@@ -23,6 +23,8 @@ class RecipeScraperCubit extends Cubit<RecipeScraperState> {
       emit(RecipeScraperLoadedState.fromScrape(res.$1!));
     } else if (res.$2 == 400) {
       emit(RecipeScraperUnsupportedState());
+    } else if (res.$2 == 403) {
+      emit(RecipeScraperForbiddenState());
     } else {
       emit(RecipeScraperErrorState());
     }
@@ -70,6 +72,8 @@ abstract class RecipeScraperState extends Equatable {
 class RecipeScraperLoadingState extends RecipeScraperState {}
 
 class RecipeScraperErrorState extends RecipeScraperState {}
+
+class RecipeScraperForbiddenState extends RecipeScraperState {}
 
 class RecipeScraperUnsupportedState extends RecipeScraperState {}
 

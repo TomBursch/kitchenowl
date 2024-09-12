@@ -48,7 +48,7 @@ def upload_file():
 
 
 @upload.route("<filename>", methods=["GET"])
-@jwt_required()
+@jwt_required(optional=True)
 def download_file(filename):
     filename = secure_filename(filename)
     f: File = File.query.filter(File.filename == filename).first()
@@ -56,20 +56,6 @@ def download_file(filename):
     if not f:
         raise NotFoundRequest()
 
-    if f.household or f.recipe:
-        household_id = None
-        if f.household:
-            household_id = f.household.id
-        if f.recipe:
-            household_id = f.recipe.household_id
-        if f.expense:
-            household_id = f.expense.household_id
-        f.checkAuthorized(household_id=household_id)
-    elif f.created_by and current_user and f.created_by == current_user.id:
-        pass  # created by user can access his pictures
-    elif f.profile_picture:
-        pass  # profile pictures are public
-    else:
-        raise ForbiddenRequest()
+    f.checkAuthorized()
 
     return send_from_directory(UPLOAD_FOLDER, filename)

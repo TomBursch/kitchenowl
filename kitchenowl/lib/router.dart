@@ -46,6 +46,7 @@ const List<String> publicRoutes = [
   "/confirm-email",
   "/reset-password",
   "/forgot-password",
+  "/recipe",
 ];
 
 // GoRouter configuration
@@ -57,7 +58,7 @@ final router = GoRouter(
     if (authState is Setup) return "/setup";
     if (authState is Onboarding) return "/onboarding";
     if (authState is Unauthenticated &&
-        !publicRoutes.contains(state.uri.path)) {
+        !publicRoutes.any((path) => state.uri.path.startsWith(path))) {
       return "/signin";
     }
     if (authState is Unreachable) return "/unreachable";
@@ -199,6 +200,7 @@ final router = GoRouter(
         }),
     ShellRoute(
       builder: (context, state, child) => HouseholdPage(
+        key: ValueKey(state.pathParameters['id']),
         household: ((state.extra is Household?)
                 ? (state.extra as Household?)
                 : null) ??
@@ -249,6 +251,7 @@ final router = GoRouter(
                     final extra = (state.extra as Tuple2<Household, Recipe>?);
 
                     return RecipePage(
+                      key: ValueKey(state.pathParameters['recipeId']),
                       recipe: extra?.item2 ??
                           Recipe(
                             id: int.tryParse(
@@ -314,6 +317,7 @@ final router = GoRouter(
                   parentNavigatorKey: _rootNavigatorKey,
                   path: ':expenseId',
                   builder: (context, state) => ExpensePage(
+                    key: ValueKey(state.pathParameters['id']),
                     household: (state.extra as Tuple2<Household, Expense>?)
                             ?.item1 ??
                         Household(
@@ -342,6 +346,25 @@ final router = GoRouter(
           ],
         ),
       ],
+    ),
+    GoRoute(
+      parentNavigatorKey: _rootNavigatorKey,
+      path: '/recipe/:recipeId',
+      builder: (context, state) => RecipePage(
+        key: ValueKey(state.pathParameters['recipeId']),
+        recipe: (state.extra as Recipe?) ??
+            Recipe(
+              id: int.tryParse(
+                state.pathParameters['recipeId'] ?? '',
+              ),
+            ),
+        updateOnPlanningEdit:
+            state.uri.queryParameters['updateOnPlanningEdit'] ==
+                true.toString(),
+        selectedYields: int.tryParse(
+          state.uri.queryParameters['selectedYields'] ?? "",
+        ),
+      ),
     ),
     GoRoute(
       path: '/settings',

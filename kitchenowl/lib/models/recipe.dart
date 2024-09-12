@@ -4,6 +4,8 @@ import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/models/model.dart';
 import 'package:kitchenowl/models/tag.dart';
 
+import 'household.dart';
+
 class Recipe extends Model implements ISuspensionBean {
   final int? id;
   final String name;
@@ -19,6 +21,11 @@ class Recipe extends Model implements ISuspensionBean {
   final String? imageHash;
   final List<RecipeItem> items;
   final Set<Tag> tags;
+  final bool public;
+  final int? householdId;
+
+  /// The household this recipe belongs to, the contained field is not complete and should only be used for external recipes
+  final Household? household;
 
   const Recipe({
     this.id,
@@ -35,6 +42,9 @@ class Recipe extends Model implements ISuspensionBean {
     this.items = const [],
     this.tags = const {},
     this.plannedDays = const {},
+    this.public = false,
+    this.householdId,
+    this.household,
   });
 
   factory Recipe.fromJson(Map<String, dynamic> map) {
@@ -63,9 +73,14 @@ class Recipe extends Model implements ISuspensionBean {
       source: map['source'] ?? '',
       image: map['photo'],
       imageHash: map['photo_hash'],
+      public: map['public'],
+      householdId: map['household_id'],
       items: items,
       tags: tags,
       plannedDays: plannedDays,
+      household: map.containsKey("household")
+          ? Household.fromJson(map['household'])
+          : null,
     );
   }
 
@@ -79,9 +94,11 @@ class Recipe extends Model implements ISuspensionBean {
     int? yields,
     String? source,
     String? image,
+    bool? public,
     List<RecipeItem>? items,
     Set<Tag>? tags,
     Set<int>? plannedDays,
+    int? householdId,
   }) =>
       Recipe(
         id: id,
@@ -98,6 +115,9 @@ class Recipe extends Model implements ISuspensionBean {
         image: image ?? this.image,
         tags: tags ?? this.tags,
         plannedDays: plannedDays ?? this.plannedDays,
+        public: public ?? this.public,
+        householdId: householdId ?? this.householdId,
+        household: this.household,
       );
 
   Recipe withYields(int yields) {
@@ -126,6 +146,9 @@ class Recipe extends Model implements ISuspensionBean {
         tags,
         items,
         plannedDays,
+        public,
+        householdId,
+        household,
       ];
 
   @override
@@ -137,6 +160,7 @@ class Recipe extends Model implements ISuspensionBean {
         "prep_time": prepTime,
         "yields": yields,
         "source": source,
+        "public": public,
         if (image != null) "photo": image,
         "items": items.map((e) => e.toJson()).toList(),
         "tags": tags.map((e) => e.toString()).toList(),
@@ -151,6 +175,7 @@ class Recipe extends Model implements ISuspensionBean {
       "tags": tags.map((e) => e.toJsonWithId()).toList(),
       if (imageHash != null) "photo_hash": imageHash,
       "planned_days": plannedDays.toList(),
+      "household_id": householdId,
     });
 
   @override

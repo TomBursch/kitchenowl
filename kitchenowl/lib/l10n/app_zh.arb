@@ -1,112 +1,182 @@
 {
-  "accountCreateTitle": "新建你的 KitchenOwl 账号",
-  "@accountCreateTitle": {},
-  "accountDelete": "删除账号",
-  "@accountDelete": {},
-  "accountDeleteConfirmation": "确定要删除你的账号吗？",
-  "@accountDeleteConfirmation": {},
-  "add": "新增",
-  "@add": {},
-  "addCategory": "新增分类",
-  "@addCategory": {},
-  "addDescriptionFromSource": "新增来自来源处的描述",
-  "@addDescriptionFromSource": {},
-  "addedBy": "由 {name} 添加",
-  "@addedBy": {
-    "placeholders": {
-      "name": {}
-    }
-  },
-  "addItemTitle": "新增物品",
-  "@addItemTitle": {},
-  "addLanguage": "新增语言",
-  "@addLanguage": {},
-  "addNumberIngredients": "新增 {number} 个原料",
-  "@addNumberIngredients": {
-    "placeholders": {
-      "number": {}
-    }
-  },
-  "addRecipeToPlanner": "添加到膳食计划（{number}份）",
-  "@addRecipeToPlanner": {
-    "placeholders": {
-      "number": {}
-    }
-  },
-  "about": "关于",
   "@about": {},
-  "accountCreate": "新建账号",
   "@accountCreate": {},
-  "addLanguageConfirm": "确定要将语言设置为 '{lang}' 吗？这个操作不能被撤销，并且会在你的房屋中新增物品和分类。",
+  "@accountCreateHint": {},
+  "@accountCreateTitle": {},
+  "@accountDelete": {},
+  "@accountDeleteConfirmation": {},
+  "@accountLinkedWithOtherUser": {},
+  "@accountsLinked": {},
+  "@add": {},
+  "@addCategory": {},
+  "@addDescriptionFromSource": {},
+  "@addItemTitle": {},
+  "@addLanguage": {},
   "@addLanguageConfirm": {
     "placeholders": {
       "lang": {}
     }
   },
-  "addRecipeToPlannerShort": "添加到膳食计划",
+  "@addNumberIngredients": {
+    "placeholders": {
+      "number": {}
+    }
+  },
+  "@addRecipeToPlanner": {
+    "placeholders": {
+      "number": {}
+    }
+  },
   "@addRecipeToPlannerShort": {
     "description": "A shorter title/button text used wherever the space is limited. Excludes the number of yields."
   },
-  "address": "地址",
-  "@address": {},
-  "addShoppingList": "新增购物清单",
   "@addShoppingList": {},
-  "addTag": "新增标签",
   "@addTag": {},
-  "admin": "管理员",
+  "@addedBy": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "@address": {},
   "@admin": {},
-  "appDescription": "KitchenOwl 助你管理杂货",
   "@appDescription": {},
-  "appTitle": "KitchenOwl",
   "@appTitle": {
     "description": "The title of the app"
   },
-  "back": "返回",
   "@back": {},
-  "categories": "分类",
-  "@categories": {},
-  "changeIcon": "替换图标",
-  "@changeIcon": {},
-  "balances": "余额",
   "@balances": {},
-  "camera": "相机",
   "@camera": {},
-  "cancel": "取消",
   "@cancel": {},
-  "categoriesMerge": "合并分类",
+  "@categories": {},
   "@categoriesMerge": {},
-  "category": "分类",
   "@category": {},
-  "categoryEdit": "编辑分类",
-  "@categoryEdit": {},
-  "categoryDelete": "删除分类",
   "@categoryDelete": {},
-  "categoryDeleteConfirmation": "确定要删除 {category}？所有物品中的这个分类都会被移除。",
   "@categoryDeleteConfirmation": {
     "placeholders": {
       "category": {}
     }
   },
-  "categoryExpenseDeleteConfirmation": "确定要删除{category}？所有支出中的这个分类都会被移除。",
+  "@categoryEdit": {},
   "@categoryExpenseDeleteConfirmation": {
     "placeholders": {
       "category": {}
     }
   },
-  "colorSelect": "选择一个颜色",
+  "@changeIcon": {},
   "@colorSelect": {},
-  "dangerZone": "危险区域",
-  "@dangerZone": {},
-  "darkmode": "深色模式",
-  "@darkmode": {},
-  "confirm": "确定",
   "@confirm": {},
-  "cookingTime": "烹饪时间",
   "@cookingTime": {},
-  "copied": "已复制",
   "@copied": {},
-  "daily": "每天",
   "@daily": {},
+  "@dangerZone": {},
+  "@darkmode": {},
+  "@date": {},
+  "@defaultKey": {},
+  "@defaultWord": {},
+  "@delete": {},
+  "@description": {},
+  "@done": {},
+  "@dynamicAccentColor": {},
+  "@email": {},
+  "@emailInvalid": {},
+  "@emailNotVerified": {},
+  "@emailResendVerification": {},
+  "@emailSuccessfullyVerified": {},
+  "@emailUpdate": {},
+  "@emailUsed": {},
+  "@error": {},
+  "@excludeFromStatistics": {},
+  "@expense": {},
+  "@expenseAdd": {},
+  "@expenseAmount": {},
+  "@expenseCategories": {},
+  "@expenseEdit": {},
+  "@expenseEmpty": {},
+  "@expenseFactor": {},
+  "@expenseOverviewComparedToPreviousMonth": {},
+  "@expenseOverviewTotalTitle": {
+    "placeholders": {
+      "month": {}
+    }
+  },
+  "@export": {},
+  "@fieldCannotBeEmpty": {
+    "placeholders": {
+      "field": {}
+    }
+  },
+  "@forceOfflineMode": {},
+  "@helpTranslate": {},
+  "about": "关于",
+  "accountCreate": "新建账号",
+  "accountCreateHint": "使用你愿意公开的名字，你的用户名和姓名将对其他用户可见。",
+  "accountCreateTitle": "新建你的 KitchenOwl 账号",
+  "accountDelete": "删除账号",
+  "accountDeleteConfirmation": "确定要删除你的账号吗？",
+  "accountLinkedWithOtherUser": "账户已与其他用户绑定",
+  "accountsLinked": "已绑定账户",
+  "add": "新增",
+  "addCategory": "新增分类",
+  "addDescriptionFromSource": "新增来自来源处的描述",
+  "addItemTitle": "新增物品",
+  "addLanguage": "新增语言",
+  "addLanguageConfirm": "确定要将语言设置为 '{lang}' 吗？这个操作不能被撤销，并且会在你的房屋中新增物品和分类。",
+  "addNumberIngredients": "新增 {number} 个原料",
+  "addRecipeToPlanner": "添加到膳食计划（{number}份）",
+  "addRecipeToPlannerShort": "添加到膳食计划",
+  "addShoppingList": "新增购物清单",
+  "addTag": "新增标签",
+  "addedBy": "由 {name} 添加",
+  "address": "地址",
+  "admin": "管理员",
+  "appDescription": "KitchenOwl 助你管理杂货",
+  "appTitle": "KitchenOwl",
+  "back": "返回",
+  "balances": "余额",
+  "camera": "相机",
+  "cancel": "取消",
+  "categories": "分类",
+  "categoriesMerge": "合并分类",
+  "category": "分类",
+  "categoryDelete": "删除分类",
+  "categoryDeleteConfirmation": "确定要删除 {category}？所有物品中的这个分类都会被移除。",
+  "categoryEdit": "编辑分类",
+  "categoryExpenseDeleteConfirmation": "确定要删除{category}？所有支出中的这个分类都会被移除。",
+  "changeIcon": "替换图标",
+  "colorSelect": "选择一个颜色",
+  "confirm": "确定",
+  "cookingTime": "烹饪时间",
+  "copied": "已复制",
+  "daily": "每天",
+  "dangerZone": "危险区域",
+  "darkmode": "深色模式",
   "date": "日期",
-  "@date": {}
+  "defaultKey": "默认键",
+  "defaultWord": "默认",
+  "delete": "删除",
+  "description": "注",
+  "done": "已完成",
+  "dynamicAccentColor": "动态主题颜色",
+  "email": "邮箱",
+  "emailInvalid": "无效的邮箱",
+  "emailNotVerified": "未验证",
+  "emailResendVerification": "重新发送验证邮件",
+  "emailSuccessfullyVerified": "邮件验证成功！",
+  "emailUpdate": "更新邮箱",
+  "emailUsed": "该邮箱已被用于其他账号",
+  "error": "发生了错误",
+  "excludeFromStatistics": "从统计数据中排除",
+  "expense": "支出",
+  "expenseAdd": "增加支出",
+  "expenseAmount": "数量",
+  "expenseCategories": "支出分类",
+  "expenseEdit": "编辑支出",
+  "expenseEmpty": "没有支出，创建一个吧！",
+  "expenseFactor": "指数倍数",
+  "expenseOverviewComparedToPreviousMonth": "和前几个月相比",
+  "expenseOverviewTotalTitle": "{month}的总支出:",
+  "export": "导出",
+  "fieldCannotBeEmpty": "{field} 不能为空。",
+  "forceOfflineMode": "强制使用离线模式",
+  "helpTranslate": "帮助翻译"
 }

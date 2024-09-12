@@ -5,7 +5,7 @@ Revises: 6c669d9ec3bd
 Create Date: 2023-04-20 16:28:00.255353
 
 """
-from datetime import datetime
+from datetime import datetime, timezone
 from alembic import op
 import sqlalchemy as sa
 from sqlalchemy import orm, inspect
@@ -25,8 +25,8 @@ depends_on = None
 class File(DeclarativeBase):
     __tablename__ = 'file'
     filename = sa.Column(sa.String, primary_key=True)
-    created_at = sa.Column(sa.DateTime, nullable=False, default=datetime.utcnow)
-    updated_at = sa.Column(sa.DateTime, nullable=False, default=datetime.utcnow)
+    created_at = sa.Column(sa.DateTime, nullable=False, default=datetime.now(timezone.utc))
+    updated_at = sa.Column(sa.DateTime, nullable=False, default=datetime.now(timezone.utc))
     created_by = sa.Column(sa.Integer, sa.ForeignKey('user.id'), nullable=True)
 
 class Recipe(DeclarativeBase):

@@ -98,7 +98,7 @@ class _LoginPageState extends State<LoginPage> {
                           children: [
                             const Spacer(),
                             Text(
-                              AppLocalizations.of(context)!.weelcomeBack,
+                              AppLocalizations.of(context)!.welcomeBack,
                               style: Theme.of(context).textTheme.headlineLarge,
                             ),
                             const SizedBox(height: 10),

@@ -148,7 +148,7 @@ icons_launcher:
     web:
       enable: true
       image_path: "assets/icon/icon.png"
-      favicon_path: "assets/icon/icon-rounded.png"
+      favicon_path: "assets/icon/favicon.png"
     macos:
       enable: true
       image_path: "assets/icon/icon.png"

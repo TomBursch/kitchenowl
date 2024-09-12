@@ -280,6 +280,7 @@ class ApiService {
 
       return response;
     } catch (e) {
+      debugPrint(e.toString());
       if (refreshOnException) await refresh();
     }
 

@@ -49,6 +49,12 @@ class Household(db.Model, DbModelMixin, TimestampMixin):
         if self.photo_file:
             res["photo_hash"] = self.photo_file.blur_hash
         return res
+    
+    def obj_to_public_dict(self) -> dict:
+        res = super().obj_to_dict(include_columns=["id", "name", "photo", "language"])
+        if self.photo_file:
+            res["photo_hash"] = self.photo_file.blur_hash
+        return res
 
     def obj_to_export_dict(self) -> dict:
         return {

@@ -8,10 +8,11 @@ from app.config import SUPPORTED_LANGUAGES
 LLM_MODEL = os.getenv("LLM_MODEL")
 LLM_API_URL = os.getenv("LLM_API_URL")
 
+
 class IngredientParsingResult:
-    originalText: str = None
-    name: str = None
-    description: str = None
+    originalText: str | None = None
+    name: str | None = None
+    description: str | None = None
 
     def __init__(self, original_text, name, description):
         self.originalText = original_text
@@ -34,8 +35,8 @@ def parseNLP(ingredients: list[str]) -> list[IngredientParsingResult]:
 
 
 def parseLLM(
-    ingredients: list[str], targetLanguageCode: str = None
-) -> list[IngredientParsingResult]:
+    ingredients: list[str], targetLanguageCode: str | None = None
+) -> list[IngredientParsingResult] | None:
     systemMessage = """
 You are a tool that returns only JSON in the form of [{"name": name, "description": description}, ...]. Split every string from the list into these two properties. You receive recipe ingredients and fill the name field with the singular name of the ingredient and everything else is the description. Translate the response into the specified language.
 
@@ -50,24 +51,32 @@ Return only JSON and nothing else.
         else ""
     )
 
+    messages = [
+        {
+            "role": "system",
+            "content": systemMessage,
+        }
+    ]
+    if targetLanguageCode in SUPPORTED_LANGUAGES:
+        messages.append(
+            {
+                "role": "user",
+                "content": f"Translate the response to {SUPPORTED_LANGUAGES[targetLanguageCode]}. Translate the JSON content to {SUPPORTED_LANGUAGES[targetLanguageCode]}. Your target language is {SUPPORTED_LANGUAGES[targetLanguageCode]}. Respond in {SUPPORTED_LANGUAGES[targetLanguageCode]} from the start.",
+            }
+        )
+
+    messages.append(
+        {
+            "role": "user",
+            "content": json.dumps(ingredients),
+        }
+    )
+
     response = completion(
         model=LLM_MODEL,
         api_base=LLM_API_URL,
         # response_format={"type": "json_object"},
-        messages=[
-            {
-                "role": "system",
-                "content": systemMessage,
-            },
-            {
-                "role": "user",
-                "content": f"Translate the response to {SUPPORTED_LANGUAGES[targetLanguageCode]}. Translate the JSON content to {SUPPORTED_LANGUAGES[targetLanguageCode]}. Your target language is {SUPPORTED_LANGUAGES[targetLanguageCode]}. Respond in {SUPPORTED_LANGUAGES[targetLanguageCode]} from the start.",
-            },
-            {
-                "role": "user",
-                "content": json.dumps(ingredients),
-            },
-        ],
+        messages=messages,
     )
 
     llmResponse = json.loads(response.choices[0].message.content)

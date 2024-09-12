@@ -38,8 +38,11 @@ class App extends StatefulWidget {
   static bool get isForcedOffline =>
       _instance!._authCubit.state.forcedOfflineMode;
 
-  static bool get isDefaultServer =>
-      ApiService.getInstance().baseUrl == Config.defaultServer + "/api";
+  static bool get isDefaultServer => currentServer == Config.defaultServer;
+
+  static String get currentServer => ApiService.getInstance()
+      .baseUrl
+      .substring(0, ApiService.getInstance().baseUrl.length - 4);
 
   static SettingsState get settings => _instance!._settingsCubit.state;
 
@@ -114,19 +117,35 @@ class _AppState extends State<App> {
                 if (state is Onboarding) return router.go("/onboarding");
                 if (state is Unauthenticated &&
                     (initialLocation == null ||
-                        !publicRoutes.contains(initialLocation!.path))) {
+                        !publicRoutes.any((path) =>
+                            initialLocation!.path.startsWith(path)))) {
                   return router.go("/signin");
                 }
                 if (state is Unreachable) return router.go("/unreachable");
                 if (state is Unsupported) return router.go("/unsupported");
                 if (state is Loading) return router.go("/");
-                if (state is Authenticated &&
-                    (initialLocation == null || initialLocation?.path == "/")) {
-                  PreferenceStorage.getInstance()
-                      .readInt(key: 'lastHouseholdId')
-                      .then((id) =>
-                          router.go("/household${id == null ? "" : "/$id"}"));
-                  return;
+                if (state is Authenticated) {
+                  if ((initialLocation == null ||
+                      initialLocation?.path == "/")) {
+                    PreferenceStorage.getInstance()
+                        .readInt(key: 'lastHouseholdId')
+                        .then((id) =>
+                            router.go("/household${id == null ? "" : "/$id"}"));
+                    return;
+                  }
+                  if (initialLocation != null) {
+                    final match = RegExp(r'\/recipe\/(\d+)')
+                        .matchAsPrefix(initialLocation!.path);
+                    if (match != null) {
+                      // Redirect public recipe links to last household recipe links
+                      PreferenceStorage.getInstance()
+                          .readInt(key: 'lastHouseholdId')
+                          .then((id) => router.go(id == null
+                              ? initialLocation!.toString()
+                              : "/household/${id}/recipes/details/${match.group(1)}"));
+                      return;
+                    }
+                  }
                 }
                 router.go(initialLocation!.toString());
                 initialLocation = Uri(path: "/");

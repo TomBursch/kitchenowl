@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 
 class SliverImageAppBar extends StatefulWidget {
@@ -26,6 +27,9 @@ class SliverImageAppBarrState extends State<SliverImageAppBar> {
 
   @override
   Widget build(BuildContext context) {
+    final actions =
+        widget.actions != null ? widget.actions!(isCollapsed) : null;
+
     return SliverAppBar(
       flexibleSpace: LayoutBuilder(builder: (context, constraints) {
         bool localIsCollapsed = constraints.biggest.height <=
@@ -43,6 +47,7 @@ class SliverImageAppBarrState extends State<SliverImageAppBar> {
           imageUrl: widget.imageUrl,
           imageHash: widget.imageHash,
           isCollapsed: isCollapsed,
+          actionCount: isCollapsed ? actions?.length ?? 0 : 0,
         );
       }),
       leading: AnimatedSwitcher(
@@ -54,14 +59,19 @@ class SliverImageAppBarrState extends State<SliverImageAppBar> {
           key: ValueKey('back' + isCollapsed.toString()),
           icon: const BackButtonIcon(),
           tooltip: MaterialLocalizations.of(context).backButtonTooltip,
-          onPressed: () => Navigator.of(context).pop(widget.popValue()),
+          onPressed: () {
+            if (Navigator.canPop(context))
+              Navigator.of(context).pop(widget.popValue());
+            else
+              context.go("/");
+          },
         ),
       ),
       expandedHeight: widget.imageUrl?.isNotEmpty ?? false
           ? (MediaQuery.of(context).size.height / 3.3).clamp(160, 350)
           : null,
       pinned: true,
-      actions: widget.actions != null ? widget.actions!(isCollapsed) : null,
+      actions: actions,
     );
   }
 }

@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:kitchenowl/enums/views_enum.dart';
 import 'package:kitchenowl/helpers/named_bytearray.dart';
 import 'package:kitchenowl/models/category.dart';
@@ -254,13 +252,6 @@ class HouseholdUpdateCubit
 
   Future<bool> deleteHousehold() {
     return ApiService.getInstance().deleteHousehold(household);
-  }
-
-  Future<void> exportHousehold(String path) async {
-    try {
-      final content = await ApiService.getInstance().exportHousehold(household);
-      if (content != null) File(path).writeAsString(content);
-    } catch (_) {}
   }
 
   Future<String?> getExportHousehold() {

@@ -240,6 +240,117 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                                 AddUpdateRecipeState>(
                               bloc: cubit,
                               buildWhen: (previous, current) =>
+                                  previous.public != current.public,
+                              builder: (context, state) => Padding(
+                                padding:
+                                    const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: SegmentedButton(
+                                        selected: {state.public},
+                                        segments: [
+                                          ButtonSegment(
+                                            value: false,
+                                            icon:
+                                                const Icon(Icons.lock_rounded),
+                                            label: Text(
+                                                AppLocalizations.of(context)!
+                                                    .private),
+                                          ),
+                                          ButtonSegment(
+                                            value: true,
+                                            icon: const Icon(
+                                                Icons.public_rounded),
+                                            label: Text(
+                                                AppLocalizations.of(context)!
+                                                    .public),
+                                          ),
+                                        ],
+                                        onSelectionChanged: (Set<bool> value) {
+                                          cubit.setPublic(value.first);
+                                        },
+                                      ),
+                                    ),
+                                    IconButton(
+                                      icon: Icon(Icons.info_outline_rounded),
+                                      onPressed: () => askForConfirmation(
+                                        context: context,
+                                        showCancel: false,
+                                        title: Text(
+                                            AppLocalizations.of(context)!
+                                                .about),
+                                        content: RichText(
+                                          text: TextSpan(
+                                            children: [
+                                              TextSpan(
+                                                text: AppLocalizations.of(
+                                                            context)!
+                                                        .private +
+                                                    " ",
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                              TextSpan(
+                                                text: AppLocalizations.of(
+                                                            context)!
+                                                        .privateRecipeDescription +
+                                                    "\n\n",
+                                                style: TextStyle(
+                                                  color: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyMedium
+                                                      ?.color
+                                                      ?.withOpacity(.8),
+                                                ),
+                                              ),
+                                              TextSpan(
+                                                text: AppLocalizations.of(
+                                                            context)!
+                                                        .public +
+                                                    " ",
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                              TextSpan(
+                                                text: AppLocalizations.of(
+                                                        context)!
+                                                    .publicRecipeDescription,
+                                                style: TextStyle(
+                                                  color: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyMedium
+                                                      ?.color
+                                                      ?.withOpacity(.8),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        confirmText:
+                                            AppLocalizations.of(context)!.okay,
+                                        confirmBackgroundColor:
+                                            Theme.of(context)
+                                                .colorScheme
+                                                .primary,
+                                        confirmForegroundColor:
+                                            Theme.of(context)
+                                                .colorScheme
+                                                .onPrimary,
+                                      ),
+                                      tooltip:
+                                          AppLocalizations.of(context)!.about,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            BlocBuilder<AddUpdateRecipeCubit,
+                                AddUpdateRecipeState>(
+                              bloc: cubit,
+                              buildWhen: (previous, current) =>
                                   !setEquals(previous.tags, current.tags) ||
                                   !setEquals(
                                     previous.selectedTags,

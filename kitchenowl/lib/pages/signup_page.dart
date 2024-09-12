@@ -8,6 +8,7 @@ import 'package:kitchenowl/cubits/auth_cubit.dart';
 import 'package:kitchenowl/cubits/server_info_cubit.dart';
 import 'package:kitchenowl/helpers/url_launcher.dart';
 import 'package:kitchenowl/kitchenowl.dart';
+import 'package:kitchenowl/router.dart';
 import 'package:kitchenowl/styles/color_mapper.dart';
 import 'package:kitchenowl/widgets/create_user_form_fields.dart';
 import 'package:responsive_builder/responsive_builder.dart';
@@ -186,13 +187,17 @@ class _SignupPageState extends State<SignupPage> {
         name: nameController.text,
         email: emailController.text,
         password: passwordController.text,
-        wrongCredentialsCallback: (msg) => showSnackbar(
-          context: context,
-          content: Text(
-            _extractErrorMessage(context, msg),
-          ),
-          width: null,
-        ),
+        wrongCredentialsCallback: (msg) {
+          showSnackbar(
+            context: context,
+            content: Text(
+              _extractErrorMessage(context, msg),
+            ),
+            width: null,
+          );
+          Future.delayed(
+              Duration(milliseconds: 1), () => router.go("/register"));
+        },
       );
     }
   }

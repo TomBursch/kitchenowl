@@ -132,7 +132,7 @@ class _RecipeScraperPageState extends State<RecipeScraperPage> {
                     ],
                   ),
                 );
-              } else if (state is RecipeScraperUnauthorizedState) {
+              } else if (state is RecipeScraperForbiddenState) {
                 body = Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -162,7 +162,8 @@ class _RecipeScraperPageState extends State<RecipeScraperPage> {
                       ),
                       Text(
                         AppLocalizations.of(context)!.privateRecipeDescription,
-                        style: Theme.of(context).textTheme.headlineMedium,
+                        style: Theme.of(context).textTheme.headlineSmall,
+                        textAlign: TextAlign.center,
                       ),
                     ],
                   ),

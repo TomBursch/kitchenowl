@@ -1,7 +1,9 @@
 import re
 from recipe_scrapers import scrape_html
 from recipe_scrapers._exceptions import SchemaOrgException
+import requests
 from app.config import FRONT_URL
+from app.errors import ForbiddenRequest
 from app.service.ingredient_parsing import parseIngredients
 
 from app.models import Recipe, Item, Household
@@ -60,6 +62,7 @@ def scrapePublic(url: str, household: Household) -> dict | None:
         "items": items,
     }
 
+
 def scrapeLocal(recipe_id: int, household: Household):
     recipe = Recipe.find_by_id(recipe_id)
     recipe.checkAuthorized()
@@ -68,18 +71,51 @@ def scrapeLocal(recipe_id: int, household: Household):
     items = {}
 
     for ingredient in recipe.items:
-        items[ingredient.item.name + " " + ingredient.description] = ingredient.obj_to_item_dict()
+        items[ingredient.item.name + " " + ingredient.description] = (
+            ingredient.obj_to_item_dict()
+        )
 
     return {
         "recipe": recipe.obj_to_dict(),
         "items": items,
     }
 
-def scrape(url: str, household: Household) -> dict | None:
-    match = re.fullmatch(r"(kitchenowl:\/\/|"+ re.escape((FRONT_URL or "").removesuffix("/")) + r")\/recipe\/(\d+)", url)
 
-    if match:
-        return scrapeLocal(int(match.group(2)), household)
-    
+def scrapeKitchenOwl(original_url: str, api_url: str, recipe_id: int) -> dict | None:
+    res = requests.get(api_url + "/recipe/" + str(recipe_id))
+    if res.status_code != requests.codes.ok:
+        if res.status_code == requests.codes.unauthorized:
+            raise ForbiddenRequest()
+        return None
+
+    recipe = res.json()
+    recipe["source"] = original_url
+    items = {}
+
+    for ingredient in recipe["items"]:
+        items[ingredient["name"] + " " + ingredient["description"]] = (
+            ingredient.obj_to_item_dict()
+        )
+
+    return {"recipe": recipe, "items": items}
+
+
+def scrape(url: str, household: Household) -> dict | None:
+    localMatch = re.fullmatch(
+        r"(kitchenowl:\/\/|"
+        + re.escape((FRONT_URL or "").removesuffix("/"))
+        + r")\/recipe\/(\d+)",
+        url,
+    )
+    if localMatch:
+        return scrapeLocal(int(localMatch.group(2)), household)
+
+    kitchenowlMatch = re.fullmatch(
+        r"(https:\/\/app\.kitchenowl\.org)\/recipe\/(\d+)", url
+    )
+    if kitchenowlMatch:
+        return scrapeKitchenOwl(
+            url, kitchenowlMatch.group(1) + "/api", int(kitchenowlMatch.group(2))
+        )
+
     return scrapePublic(url, household)
-    

@@ -140,31 +140,60 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                         tooltip: AppLocalizations.of(context)!.redo,
                       ),
                     ),
-                    if (mobileLayout)
-                      BlocBuilder<AddUpdateRecipeCubit, AddUpdateRecipeState>(
-                        bloc: cubit,
-                        builder: (context, state) => LoadingIconButton(
-                          icon: const Icon(Icons.save_rounded),
-                          tooltip: AppLocalizations.of(context)!.save,
-                          onPressed: state.isValid() && state.hasChanges
-                              ? () async {
-                                  final recipe = await cubit.saveRecipe();
-                                  if (!mounted) return;
-                                  Navigator.of(context).pop(UpdateEnum.updated);
-                                  if (recipe != null &&
-                                      widget.openRecipeAfterCreation) {
-                                    context.go(
-                                      "/household/${cubit.household.id}/recipes/details/${recipe.id}",
-                                      extra: Tuple2<Household, Recipe>(
-                                        cubit.household,
-                                        recipe,
-                                      ),
-                                    );
-                                  }
-                                }
-                              : null,
-                        ),
-                      ),
+                    BlocBuilder<AddUpdateRecipeCubit, AddUpdateRecipeState>(
+                      bloc: cubit,
+                      builder: (context, state) => mobileLayout
+                          ? LoadingIconButton(
+                              icon: const Icon(Icons.save_rounded),
+                              tooltip: AppLocalizations.of(context)!.save,
+                              onPressed: state.isValid() && state.hasChanges
+                                  ? () async {
+                                      final recipe = await cubit.saveRecipe();
+                                      if (!mounted) return;
+                                      Navigator.of(context)
+                                          .pop(UpdateEnum.updated);
+                                      if (recipe != null &&
+                                          widget.openRecipeAfterCreation) {
+                                        context.go(
+                                          "/household/${cubit.household.id}/recipes/details/${recipe.id}",
+                                          extra: Tuple2<Household, Recipe>(
+                                            cubit.household,
+                                            recipe,
+                                          ),
+                                        );
+                                      }
+                                    }
+                                  : null,
+                            )
+                          : Padding(
+                              padding: const EdgeInsets.only(left: 4, right: 8),
+                              child: LoadingFilledButton(
+                                onPressed: state.isValid() && state.hasChanges
+                                    ? () async {
+                                        final recipe = await cubit.saveRecipe();
+                                        if (!mounted) return;
+                                        Navigator.of(context)
+                                            .pop(UpdateEnum.updated);
+                                        if (recipe != null &&
+                                            widget.openRecipeAfterCreation) {
+                                          context.go(
+                                            "/household/${cubit.household.id}/recipes/details/${recipe.id}",
+                                            extra: Tuple2<Household, Recipe>(
+                                              cubit.household,
+                                              recipe,
+                                            ),
+                                          );
+                                        }
+                                      }
+                                    : null,
+                                child: Text(
+                                  isUpdate
+                                      ? AppLocalizations.of(context)!.save
+                                      : AppLocalizations.of(context)!.recipeAdd,
+                                ),
+                              ),
+                            ),
+                    )
                   ],
                 ),
                 body: Align(
@@ -599,45 +628,6 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                                 },
                                 child:
                                     Text(AppLocalizations.of(context)!.delete),
-                              ),
-                            ),
-                          ),
-                        if (!mobileLayout)
-                          SliverPadding(
-                            padding: EdgeInsets.fromLTRB(
-                                16, isUpdate ? 0 : 16, 16, 16),
-                            sliver: SliverToBoxAdapter(
-                              child: BlocBuilder<AddUpdateRecipeCubit,
-                                  AddUpdateRecipeState>(
-                                bloc: cubit,
-                                builder: (context, state) =>
-                                    LoadingElevatedButton(
-                                  onPressed: state.isValid() && state.hasChanges
-                                      ? () async {
-                                          final recipe =
-                                              await cubit.saveRecipe();
-                                          if (!mounted) return;
-                                          Navigator.of(context)
-                                              .pop(UpdateEnum.updated);
-                                          if (recipe != null &&
-                                              widget.openRecipeAfterCreation) {
-                                            context.go(
-                                              "/household/${cubit.household.id}/recipes/details/${recipe.id}",
-                                              extra: Tuple2<Household, Recipe>(
-                                                cubit.household,
-                                                recipe,
-                                              ),
-                                            );
-                                          }
-                                        }
-                                      : null,
-                                  child: Text(
-                                    isUpdate
-                                        ? AppLocalizations.of(context)!.save
-                                        : AppLocalizations.of(context)!
-                                            .recipeAdd,
-                                  ),
-                                ),
                               ),
                             ),
                           ),

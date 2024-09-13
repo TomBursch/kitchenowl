@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_blurhash/flutter_blurhash.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kitchenowl/app.dart';
 import 'package:kitchenowl/cubits/auth_cubit.dart';
@@ -7,6 +8,7 @@ import 'package:kitchenowl/cubits/household_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/enums/views_enum.dart';
 import 'package:kitchenowl/kitchenowl.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 class HouseholdDrawer extends StatelessWidget {
   final int selectedIndex;
@@ -55,11 +57,36 @@ class HouseholdDrawer extends StatelessWidget {
         BlocBuilder<HouseholdCubit, HouseholdState>(
           builder: (context, state) => Padding(
             padding: const EdgeInsets.fromLTRB(28, 16, 16, 10),
-            child: Text(
-              state.household.name,
-              style: Theme.of(context).textTheme.titleSmall,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                if (state.household.image != null)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 16),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(14),
+                      child: SizedBox(
+                        height: 150,
+                        child: FadeInImage(
+                          fit: BoxFit.cover,
+                          placeholder: state.household.imageHash != null
+                              ? BlurHashImage(state.household.imageHash!)
+                              : MemoryImage(kTransparentImage) as ImageProvider,
+                          image: getImageProvider(
+                            context,
+                            state.household.image!,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                Text(
+                  state.household.name,
+                  style: Theme.of(context).textTheme.titleSmall,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
             ),
           ),
         ),
@@ -72,6 +99,7 @@ class HouseholdDrawer extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
               ),
               icon: Icon(destination.toIcon(context)),
+              selectedIcon: Icon(destination.toSelectedIcon(context)),
             );
           },
         ),

@@ -1,3 +1,4 @@
+import hashlib
 import re
 from recipe_scrapers import scrape_html
 from recipe_scrapers._exceptions import SchemaOrgException
@@ -9,39 +10,75 @@ from app.service.ingredient_parsing import parseIngredients
 from app.models import Recipe, Item, Household
 
 
-def scrapePublic(url: str, household: Household) -> dict | None:
+def scrapePublic(url: str, html: str, household: Household) -> dict | None:
     try:
-        scraper = scrape_html(None, url, online=True, supported_only=False, wild_mode=True)
+        scraper = scrape_html(html, url, supported_only=False, wild_mode=True)
     except:
         return None
     recipe = Recipe()
     recipe.name = scraper.title()
     try:
         recipe.time = int(scraper.total_time())
-    except (NotImplementedError, ValueError, TypeError, AttributeError, SchemaOrgException):
+    except (
+        NotImplementedError,
+        ValueError,
+        TypeError,
+        AttributeError,
+        SchemaOrgException,
+    ):
         pass
     try:
         recipe.cook_time = int(scraper.cook_time())
-    except (NotImplementedError, ValueError, TypeError, AttributeError, SchemaOrgException):
+    except (
+        NotImplementedError,
+        ValueError,
+        TypeError,
+        AttributeError,
+        SchemaOrgException,
+    ):
         pass
     try:
         recipe.prep_time = int(scraper.prep_time())
-    except (NotImplementedError, ValueError, TypeError, AttributeError, SchemaOrgException):
+    except (
+        NotImplementedError,
+        ValueError,
+        TypeError,
+        AttributeError,
+        SchemaOrgException,
+    ):
         pass
     try:
         yields = re.search(r"\d*", scraper.yields())
         if yields:
             recipe.yields = int(yields.group())
-    except (NotImplementedError, ValueError, TypeError, AttributeError, SchemaOrgException):
+    except (
+        NotImplementedError,
+        ValueError,
+        TypeError,
+        AttributeError,
+        SchemaOrgException,
+    ):
         pass
     description = ""
     try:
         description = scraper.description() + "\n\n"
-    except (NotImplementedError, ValueError, TypeError, AttributeError, SchemaOrgException):
+    except (
+        NotImplementedError,
+        ValueError,
+        TypeError,
+        AttributeError,
+        SchemaOrgException,
+    ):
         pass
     try:
         description = description + scraper.instructions()
-    except (NotImplementedError, ValueError, TypeError, AttributeError, SchemaOrgException):
+    except (
+        NotImplementedError,
+        ValueError,
+        TypeError,
+        AttributeError,
+        SchemaOrgException,
+    ):
         pass
     recipe.description = description
     recipe.photo = scraper.image()
@@ -114,11 +151,20 @@ def scrape(url: str, household: Household) -> dict | None:
         return scrapeLocal(int(localMatch.group(2)), household)
 
     kitchenowlMatch = re.fullmatch(
-        r"(https:\/\/app\.kitchenowl\.org)\/recipe\/(\d+)", url
+        r"(https?:\/\/app\.kitchenowl\.org|.+)\/recipe\/(\d+)", url
     )
-    if kitchenowlMatch:
+    if kitchenowlMatch and url.startswith("https://app.kitchenowl.org/"):
+        return scrapeKitchenOwl(
+            url, "https://app.kitchenowl.org/api", int(kitchenowlMatch.group(2))
+        )
+
+    res = requests.get(url=url)
+    if res.status_code != requests.codes.ok:
+        return None
+
+    if kitchenowlMatch and hashlib.sha256(res.text.encode()).hexdigest() == "3fc2629051e92fa54c26cf5e44efac1014eb89a2eb46dd644dae4f3db5cd3eaa":
         return scrapeKitchenOwl(
             url, kitchenowlMatch.group(1) + "/api", int(kitchenowlMatch.group(2))
         )
 
-    return scrapePublic(url, household)
+    return scrapePublic(url, res.text, household)

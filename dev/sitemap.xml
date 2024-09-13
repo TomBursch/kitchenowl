@@ -2,62 +2,62 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://docs.kitchenowl.org/dev/</loc>
-         <lastmod>2024-09-12</lastmod>
+         <lastmod>2024-09-13</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.kitchenowl.org/dev/Tips-%26-Tricks/</loc>
-         <lastmod>2024-09-12</lastmod>
+         <lastmod>2024-09-13</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.kitchenowl.org/dev/Tips-%26-Tricks/markdown/</loc>
-         <lastmod>2024-09-12</lastmod>
+         <lastmod>2024-09-13</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.kitchenowl.org/dev/reference/API/</loc>
-         <lastmod>2024-09-12</lastmod>
+         <lastmod>2024-09-13</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.kitchenowl.org/dev/reference/contributing/</loc>
-         <lastmod>2024-09-12</lastmod>
+         <lastmod>2024-09-13</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.kitchenowl.org/dev/reference/management/</loc>
-         <lastmod>2024-09-12</lastmod>
+         <lastmod>2024-09-13</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.kitchenowl.org/dev/self-hosting/</loc>
-         <lastmod>2024-09-12</lastmod>
+         <lastmod>2024-09-13</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.kitchenowl.org/dev/self-hosting/advanced/</loc>
-         <lastmod>2024-09-12</lastmod>
+         <lastmod>2024-09-13</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.kitchenowl.org/dev/self-hosting/ingredient_parsing/</loc>
-         <lastmod>2024-09-12</lastmod>
+         <lastmod>2024-09-13</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.kitchenowl.org/dev/self-hosting/migration/</loc>
-         <lastmod>2024-09-12</lastmod>
+         <lastmod>2024-09-13</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.kitchenowl.org/dev/self-hosting/oidc/</loc>
-         <lastmod>2024-09-12</lastmod>
+         <lastmod>2024-09-13</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.kitchenowl.org/dev/self-hosting/reverse-proxy/</loc>
-         <lastmod>2024-09-12</lastmod>
+         <lastmod>2024-09-13</lastmod>
          <changefreq>daily</changefreq>
     </url>
 </urlset>

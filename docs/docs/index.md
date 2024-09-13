@@ -32,6 +32,7 @@ Please take a quick look at [Tips & Tricks](./Tips-&-Tricks/index.md) to get the
 - Add items to your shopping list and sync them in real-time with multiple users
 - Partial offline support, so you don't lose track of what to buy even when there is no signal
 - Manage recipes and add them to your shopping list
+- Share recipes with friends and family
 - Create a meal plan to always know what you'll be eating
 - Manage balances and track expenses of your household
 

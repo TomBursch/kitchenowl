@@ -21,5 +21,4 @@ Ollama is a locally hosted LLM. You can also run this on a remote host (e.g. you
 To use Ollama you need to set the following environment variables:
 
 - `LLM_MODEL`: The model name prefixed with `ollama` (e.g. `ollama/llama3.1`)
-- `OPENAI_API_KEY`: Your OpenAI API key
 - `LLM_API_URL`: The URL of the Ollama server (e.g. `http://localhost:11434`)

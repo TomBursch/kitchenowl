@@ -58,6 +58,7 @@ KitchenOwl is a smart self-hosted grocery list and recipe manager. Easily add it
 - Add items to your shopping list and sync them in real-time with multiple users
 - Partial offline support, so you don't lose track of what to buy even when there is no signal
 - Manage recipes and add them to your shopping list
+- Share recipes with friends and family
 - Create a meal plan to always know what you'll be eating
 - Manage balances and track expenses of your household
 
@@ -105,7 +106,7 @@ KitchenOwl is moving fast, to stay updated consider starring and watching the re
 
 ### 💬 Status
 
-- [x] Public Alpha: Still working on stuff (sometimes things might break)
+- [x] Public Alpha: Still working on stuff (rarely things might break)
 - [ ] Public Beta: Stable and most planned features complete
 - [ ] Public: Production-ready
 

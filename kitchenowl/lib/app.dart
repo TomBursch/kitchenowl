@@ -159,10 +159,9 @@ class _AppState extends State<App> {
                   if (state.dynamicAccentColor &&
                       lightDynamic != null &&
                       darkDynamic != null) {
-                    // On Android S+ devices, use the provided dynamic color scheme.
-                    // (Recommended) Harmonize the dynamic color scheme' built-in semantic colors.
-                    lightColorScheme = lightDynamic.harmonized();
-                    darkColorScheme = darkDynamic.harmonized();
+                    (lightColorScheme, darkColorScheme) =
+                        _generateDynamicColourSchemes(
+                            lightDynamic, darkDynamic);
                   } else if (state.accentColor != null) {
                     lightColorScheme =
                         ColorScheme.fromSeed(seedColor: state.accentColor!);
@@ -255,4 +254,45 @@ class _AppState extends State<App> {
       });
     }
   }
+
+  // TODO: Remove this once https://github.com/material-foundation/flutter-packages/pull/599 is merged
+  (ColorScheme light, ColorScheme dark) _generateDynamicColourSchemes(
+      ColorScheme lightDynamic, ColorScheme darkDynamic) {
+    var lightBase = ColorScheme.fromSeed(seedColor: lightDynamic.primary);
+    var darkBase = ColorScheme.fromSeed(
+        seedColor: darkDynamic.primary, brightness: Brightness.dark);
+
+    var lightAdditionalColours = _extractAdditionalColours(lightBase);
+    var darkAdditionalColours = _extractAdditionalColours(darkBase);
+
+    var lightScheme =
+        _insertAdditionalColours(lightBase, lightAdditionalColours);
+    var darkScheme = _insertAdditionalColours(darkBase, darkAdditionalColours);
+
+    return (lightScheme.harmonized(), darkScheme.harmonized());
+  }
+
+  List<Color> _extractAdditionalColours(ColorScheme scheme) => [
+        scheme.surface,
+        scheme.surfaceDim,
+        scheme.surfaceBright,
+        scheme.surfaceContainerLowest,
+        scheme.surfaceContainerLow,
+        scheme.surfaceContainer,
+        scheme.surfaceContainerHigh,
+        scheme.surfaceContainerHighest,
+      ];
+
+  ColorScheme _insertAdditionalColours(
+          ColorScheme scheme, List<Color> additionalColours) =>
+      scheme.copyWith(
+        surface: additionalColours[0],
+        surfaceDim: additionalColours[1],
+        surfaceBright: additionalColours[2],
+        surfaceContainerLowest: additionalColours[3],
+        surfaceContainerLow: additionalColours[4],
+        surfaceContainer: additionalColours[5],
+        surfaceContainerHigh: additionalColours[6],
+        surfaceContainerHighest: additionalColours[7],
+      );
 }

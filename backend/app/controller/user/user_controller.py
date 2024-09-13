@@ -93,6 +93,7 @@ def updateUser(args):
                 ChallengeMailVerify.create_challenge(user),
             )
     if "photo" in args and user.photo != args["photo"]:
+        print(args["photo"])
         user.photo = file_has_access_or_download(args["photo"], user.photo)
     user.save()
     return jsonify({"msg": "DONE"})

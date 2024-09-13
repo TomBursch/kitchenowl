@@ -81,18 +81,36 @@ class History(db.Model, DbModelMixin, TimestampMixin):
 
     @classmethod
     def get_recent(cls, shoppinglist_id: int, limit: int = 9) -> list[Self]:
-        sq = db.session.query(ShoppinglistItems.item_id).subquery().select()
-        sq2 = (
-            cls.query.filter(
-                cls.shoppinglist_id == shoppinglist_id,
-                cls.status == Status.DROPPED,
-                cls.item_id.notin_(sq),
+        if "postgresql" in db.engine.name:
+            sq = db.session.query(ShoppinglistItems.item_id).subquery().select()
+            sq2 = (
+                cls.query.filter(
+                    cls.shoppinglist_id == shoppinglist_id,
+                    cls.status == Status.DROPPED,
+                    cls.item_id.notin_(sq),
+                )
+                .distinct(cls.item_id)
+                .order_by(cls.item_id, cls.created_at.desc())
+                .limit(limit)
+                .subquery()
             )
-            .distinct(cls.item_id)
-            .order_by(cls.item_id, cls.created_at.desc())
-            .limit(limit)
-            .subquery()
-        )
-        alias = db.aliased(cls, sq2)
-        q = db.session.query(alias).order_by(alias.created_at.desc())
-        return q.all()
+            alias = db.aliased(cls, sq2)
+            q = db.session.query(alias).order_by(alias.created_at.desc())
+            return q.all()
+        else:
+            sq = db.session.query(ShoppinglistItems.item_id).subquery().select()
+            sq2 = (
+                db.session.query(func.max(cls.id))
+                .filter(cls.status == Status.DROPPED)
+                .filter(cls.item_id.notin_(sq))
+                .group_by(cls.item_id)
+                .join(cls.item)
+                .subquery()
+                .select()
+            )
+            return (
+                cls.query.filter(cls.shoppinglist_id == shoppinglist_id)
+                .filter(cls.id.in_(sq2))
+                .order_by(cls.created_at.desc(), cls.item_id)
+                .limit(limit)
+            )

@@ -12,7 +12,7 @@ from app.models import Recipe, Item, Household
 
 def scrapePublic(url: str, html: str, household: Household) -> dict | None:
     try:
-        scraper = scrape_html(html, url, supported_only=False, wild_mode=True)
+        scraper = scrape_html(html, url, supported_only=False)
     except:
         return None
     recipe = Recipe()
@@ -133,9 +133,7 @@ def scrapeKitchenOwl(original_url: str, api_url: str, recipe_id: int) -> dict | 
     items = {}
 
     for ingredient in recipe["items"]:
-        items[ingredient["name"] + " " + ingredient["description"]] = (
-            ingredient.obj_to_item_dict()
-        )
+        items[ingredient["name"] + " " + ingredient["description"]] = ingredient
 
     return {"recipe": recipe, "items": items}
 
@@ -162,7 +160,11 @@ def scrape(url: str, household: Household) -> dict | None:
     if res.status_code != requests.codes.ok:
         return None
 
-    if kitchenowlMatch and hashlib.sha256(res.text.encode()).hexdigest() == "3fc2629051e92fa54c26cf5e44efac1014eb89a2eb46dd644dae4f3db5cd3eaa":
+    if (
+        kitchenowlMatch
+        and hashlib.sha256(res.text.encode()).hexdigest()
+        == "87d851b8a5949da174eb8f43579438242ae2119f0a6cac0718884c52f2a77124"
+    ):
         return scrapeKitchenOwl(
             url, kitchenowlMatch.group(1) + "/api", int(kitchenowlMatch.group(2))
         )

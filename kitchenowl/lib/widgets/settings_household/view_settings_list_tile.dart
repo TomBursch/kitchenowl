@@ -23,7 +23,7 @@ class ViewSettingsListTile<Cubit extends HouseholdAddUpdateCubit>
       title: Text(
         view.toLocalizedString(context),
       ),
-      leading: Icon(view.toIcon(context)),
+      leading: Icon(view.toSelectedIcon(context)),
       contentPadding: EdgeInsets.only(left: 16),
       trailing: Row(
         mainAxisSize: MainAxisSize.min,

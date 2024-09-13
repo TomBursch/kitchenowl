@@ -40,7 +40,17 @@ enum ViewsEnum {
   IconData toIcon(BuildContext context) {
     return [
       Icons.shopping_bag_outlined,
-      Icons.receipt,
+      Icons.receipt_outlined,
+      Icons.calendar_today_outlined,
+      Icons.account_balance_outlined,
+      App.isOffline ? Icons.cloud_off_rounded : Icons.person_outline_rounded,
+    ][index];
+  }
+
+  IconData toSelectedIcon(BuildContext context) {
+    return [
+      Icons.shopping_bag_rounded,
+      Icons.receipt_rounded,
       Icons.calendar_today_rounded,
       Icons.account_balance_rounded,
       App.isOffline ? Icons.cloud_off_rounded : Icons.person_rounded,

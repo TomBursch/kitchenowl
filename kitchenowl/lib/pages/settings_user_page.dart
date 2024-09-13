@@ -191,6 +191,20 @@ class _SettingsUserPageState extends State<SettingsUserPage> {
                         labelText: AppLocalizations.of(context)!.name,
                       ),
                     ),
+                    if (cubit.userId == null && App.isDefaultServer) ...[
+                      const SizedBox(height: 8),
+                      Text(
+                        AppLocalizations.of(context)!.accountCreateHint,
+                        style:
+                            Theme.of(context).textTheme.labelMedium?.copyWith(
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .labelMedium
+                                      ?.color
+                                      ?.withOpacity(0.8),
+                                ),
+                      ),
+                    ],
                     const SizedBox(height: 8),
                     if (cubit.userId != null)
                       BlocBuilder<SettingsUserCubit, SettingsUserState>(
@@ -211,7 +225,7 @@ class _SettingsUserPageState extends State<SettingsUserPage> {
                       ),
                     const SizedBox(height: 8),
                     Padding(
-                      padding: const EdgeInsets.only(bottom: 32),
+                      padding: const EdgeInsets.only(bottom: 24),
                       child: LoadingElevatedButton(
                         onPressed: () => cubit.updateUser(
                           context: context,

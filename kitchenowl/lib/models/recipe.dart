@@ -73,7 +73,7 @@ class Recipe extends Model implements ISuspensionBean {
       source: map['source'] ?? '',
       image: map['photo'],
       imageHash: map['photo_hash'],
-      public: map['public'],
+      public: map['public'] ?? false,
       householdId: map['household_id'],
       items: items,
       tags: tags,

@@ -232,9 +232,18 @@
   "@preparationTime": {},
   "@privacyPolicy": {},
   "@privacyPolicyAgree": {},
+  "@private": {},
+  "@privateRecipeDescription": {},
   "@profile": {},
+  "@public": {},
+  "@publicRecipeDescription": {},
   "@recentItemsCategorize": {},
   "@recipeAdd": {},
+  "@recipeAddToHousehold": {
+    "placeholders": {
+      "householdName": {}
+    }
+  },
   "@recipeAddUrl": {},
   "@recipeDelete": {},
   "@recipeDeleteConfirmation": {
@@ -267,6 +276,7 @@
   "@set": {},
   "@settings": {},
   "@setupTitle": {},
+  "@share": {},
   "@shoppingList": {},
   "@shoppingListDelete": {},
   "@shoppingListDeleteConfirmation": {
@@ -508,9 +518,14 @@
   "preparationTime": "Vorbereitungszeit",
   "privacyPolicy": "Datenschutzrichtlinie",
   "privacyPolicyAgree": "Durch das Erstellen eines Kontos stimmst du der {privacyPolicy} zu",
+  "private": "Privat",
+  "privateRecipeDescription": "Nur Mitglieder des Haushaltes können das Rezept sehen.",
   "profile": "Profil",
+  "public": "Öffentlich",
+  "publicRecipeDescription": "Jeder mit dem Link zum Rezept kann es sehen.",
   "recentItemsCategorize": "Kategorisiere zuletzt benutze Artikel",
   "recipeAdd": "Rezept hinzufügen",
+  "recipeAddToHousehold": "Zu {householdName} hinzufügen",
   "recipeAddUrl": "Rezept von URL hinzufügen",
   "recipeDelete": "Rezept löschen",
   "recipeDeleteConfirmation": "Bist du dir sicher, dass du {recipe} löschen möchtest?",
@@ -523,7 +538,7 @@
   "recipes": "Rezepte",
   "recipesOverwrite": "Rezepte überschreiben",
   "recipesOverwriteDescription": "Wenn aktiviert, werden bestehende Rezepte mit dem gleichen Namen überschrieben",
-  "recipesRecent": "Zuletzt benutzt",
+  "recipesRecent": "Zuletzt",
   "recipesSuggested": "Empfohlen",
   "redo": "Wiederherstellen",
   "refresh": "Aktualisieren",
@@ -539,6 +554,7 @@
   "set": "Setzen",
   "settings": "Einstellungen",
   "setupTitle": "Hallo! Bereit zum Einkaufen?",
+  "share": "Teilen",
   "shoppingList": "Einkaufsliste",
   "shoppingListDelete": "Einkaufsliste löschen",
   "shoppingListDeleteConfirmation": "Bist du dir sicher, dass du {shoppingList} löschen möchtest?",

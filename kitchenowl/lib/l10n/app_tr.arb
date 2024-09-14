@@ -236,9 +236,18 @@
       "privacyPolicy": {}
     }
   },
+  "@private": {},
+  "@privateRecipeDescription": {},
   "@profile": {},
+  "@public": {},
+  "@publicRecipeDescription": {},
   "@recentItemsCategorize": {},
   "@recipeAdd": {},
+  "@recipeAddToHousehold": {
+    "placeholders": {
+      "householdName": {}
+    }
+  },
   "@recipeAddUrl": {},
   "@recipeDelete": {},
   "@recipeDeleteConfirmation": {
@@ -271,6 +280,7 @@
   "@set": {},
   "@settings": {},
   "@setupTitle": {},
+  "@share": {},
   "@shoppingList": {},
   "@shoppingListDelete": {},
   "@shoppingListDeleteConfirmation": {
@@ -512,9 +522,14 @@
   "preparationTime": "Hazırlanma zamanı",
   "privacyPolicy": "Gizlilik politikası",
   "privacyPolicyAgree": "Hesap yaratarak {privacyPolicy} kabul etmiş olursunuz",
+  "private": "Özel",
+  "privateRecipeDescription": "Tarifi yalnızca hane halkı üyeleri görüntüleyebilir.",
   "profile": "Profil",
+  "public": "Herkese açık",
+  "publicRecipeDescription": "Bu tarifin bağlantısına sahip olan herkes tarifi görüntüleyebilir.",
   "recentItemsCategorize": "Son ögeleri kategorilere ayır",
   "recipeAdd": "Tarif ekle",
+  "recipeAddToHousehold": "{householdName}'e ekle",
   "recipeAddUrl": "URL'den tarif ekle",
   "recipeDelete": "Tarif sil",
   "recipeDeleteConfirmation": "{recipe} tarifini kaldırmak istediğinizden emin misiniz?",
@@ -543,6 +558,7 @@
   "set": "Uygula",
   "settings": "Ayarlar",
   "setupTitle": "Selam! Alışverişe hazır mısınız?",
+  "share": "Paylaş",
   "shoppingList": "Alışveriş listesi",
   "shoppingListDelete": "Alışveriş listesini sil",
   "shoppingListDeleteConfirmation": "{shoppingList} listesini silmek istediğinizden emin misiniz?",

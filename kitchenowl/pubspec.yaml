@@ -66,7 +66,7 @@ dependencies:
   flutter_colorpicker: ^1.1.0
   sliver_tools: ^0.2.12
   go_router: ^14.1.1
-  socket_io_client: ^2.0.3+1
+  socket_io_client: ^3.0.0
   fraction: ^5.0.2
   flutter_blurhash: ^0.8.2
   transparent_image: ^2.0.1
@@ -78,8 +78,8 @@ dev_dependencies:
     sdk: flutter
   integration_test:
     sdk: flutter
-  flutter_lints: ^4.0.0
-  icons_launcher: ^2.1.5
+  flutter_lints: ^5.0.0
+  icons_launcher: ^3.0.0
   flutter_native_splash: ^2.3.5
 
 # The following section is specific to Flutter.

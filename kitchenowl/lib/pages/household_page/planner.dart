@@ -120,14 +120,17 @@ class _PlannerPageState extends State<PlannerPage> {
                   if (state.recipePlans.isEmpty)
                     SliverToBoxAdapter(
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        padding: const EdgeInsets.all(16),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             const Icon(Icons.no_food_rounded),
                             const SizedBox(height: 16),
-                            Text(AppLocalizations.of(context)!.plannerEmpty),
+                            Text(
+                              AppLocalizations.of(context)!.plannerEmpty,
+                              textAlign: TextAlign.center,
+                            ),
                           ],
                         ),
                       ),

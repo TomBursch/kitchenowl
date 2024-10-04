@@ -317,9 +317,12 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                                                             context)!
                                                         .private +
                                                     " ",
-                                                style: TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.bold),
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyMedium
+                                                    ?.copyWith(
+                                                        fontWeight:
+                                                            FontWeight.bold),
                                               ),
                                               TextSpan(
                                                 text: AppLocalizations.of(
@@ -339,9 +342,13 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                                                             context)!
                                                         .public +
                                                     " ",
-                                                style: TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.bold),
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyMedium
+                                                    ?.copyWith(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
                                               ),
                                               TextSpan(
                                                 text: AppLocalizations.of(

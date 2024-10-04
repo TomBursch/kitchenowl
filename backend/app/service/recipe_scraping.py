@@ -1,4 +1,3 @@
-import hashlib
 import re
 from recipe_scrapers import scrape_html
 from recipe_scrapers._exceptions import SchemaOrgException
@@ -162,8 +161,7 @@ def scrape(url: str, household: Household) -> dict | None:
 
     if (
         kitchenowlMatch
-        and hashlib.sha256(res.text.encode()).hexdigest()
-        == "87d851b8a5949da174eb8f43579438242ae2119f0a6cac0718884c52f2a77124"
+        and "<title>KitchenOwl</title>" in res.text
     ):
         return scrapeKitchenOwl(
             url, kitchenowlMatch.group(1) + "/api", int(kitchenowlMatch.group(2))

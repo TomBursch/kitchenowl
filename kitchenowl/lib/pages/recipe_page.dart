@@ -432,6 +432,26 @@ class _RecipePageState extends State<RecipePage> {
                     imageHash: state.recipe.imageHash,
                     popValue: () => cubit.state.updateState,
                     actions: (isCollapsed) => [
+                      if (state.recipe.public)
+                        Padding(
+                          padding: const EdgeInsets.only(right: 8),
+                          child: LoadingIconButton(
+                            tooltip: AppLocalizations.of(context)!.share,
+                            variant: state.recipe.image == null ||
+                                    state.recipe.image!.isEmpty ||
+                                    isCollapsed
+                                ? LoadingIconButtonVariant.standard
+                                : LoadingIconButtonVariant.filledTonal,
+                            onPressed: () async {
+                              final uri = Uri.tryParse(App.currentServer +
+                                  '/recipe/${widget.recipe.id}');
+                              if (uri == null) return;
+
+                              Share.shareUri(context, uri);
+                            },
+                            icon: Icon(Icons.adaptive.share_rounded),
+                          ),
+                        ),
                       if (!App.isOffline && state.isOwningHousehold(state))
                         Padding(
                           padding: const EdgeInsets.only(right: 8),
@@ -460,26 +480,6 @@ class _RecipePageState extends State<RecipePage> {
                               }
                             },
                             icon: const Icon(Icons.edit),
-                          ),
-                        ),
-                      if (state.recipe.public)
-                        Padding(
-                          padding: const EdgeInsets.only(right: 8),
-                          child: LoadingIconButton(
-                            tooltip: AppLocalizations.of(context)!.share,
-                            variant: state.recipe.image == null ||
-                                    state.recipe.image!.isEmpty ||
-                                    isCollapsed
-                                ? LoadingIconButtonVariant.standard
-                                : LoadingIconButtonVariant.filledTonal,
-                            onPressed: () async {
-                              final uri = Uri.tryParse(App.currentServer +
-                                  '/recipe/${widget.recipe.id}');
-                              if (uri == null) return;
-
-                              Share.shareUri(context, uri);
-                            },
-                            icon: const Icon(Icons.share_rounded),
                           ),
                         ),
                     ],

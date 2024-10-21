@@ -12,7 +12,7 @@ class DbListType(TypeDecorator):
         else:
             return "[]"
 
-    def process_result_value(self, value, dialect) -> set:
+    def process_result_value(self, value, dialect) -> list:
         if type(value) is str:
             return json.loads(value)
         return list()

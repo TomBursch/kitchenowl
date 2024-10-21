@@ -1,32 +1,33 @@
 from __future__ import annotations
 from datetime import datetime, timezone
-from typing import Self, Tuple
+from typing import Self, Tuple, List
 
 from flask import request
 from app import db
 from app.config import JWT_REFRESH_TOKEN_EXPIRES, JWT_ACCESS_TOKEN_EXPIRES
 from app.errors import UnauthorizedRequest
-from app.helpers import DbModelMixin, TimestampMixin
+from app.helpers import DbModelMixin
 from flask_jwt_extended import create_access_token, create_refresh_token, get_jti
 from app.models.user import User
+from sqlalchemy.orm import Mapped
 
 
-class Token(db.Model, DbModelMixin, TimestampMixin):
+class Token(db.Model , DbModelMixin):
     __tablename__ = "token"
 
-    id = db.Column(db.Integer, primary_key=True)
-    jti = db.Column(db.String(36), nullable=False, index=True)
-    type = db.Column(db.String(16), nullable=False)
-    name = db.Column(db.String(), nullable=False)
-    last_used_at = db.Column(db.DateTime)
-    refresh_token_id = db.Column(db.Integer, db.ForeignKey("token.id"), nullable=True)
-    user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    id: Mapped[int] = db.Column(db.Integer, primary_key=True)
+    jti: Mapped[str] = db.Column(db.String(36), nullable=False, index=True)
+    type: Mapped[str] = db.Column(db.String(16), nullable=False)
+    name: Mapped[str] = db.Column(db.String(), nullable=False)
+    last_used_at: Mapped[datetime] = db.Column(db.DateTime)
+    refresh_token_id: Mapped[int]= db.Column(db.Integer, db.ForeignKey("token.id"), nullable=True)
+    user_id: Mapped[int] = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
 
-    created_tokens = db.relationship(
+    created_tokens: Mapped[List["Token"]] = db.relationship(
         "Token", back_populates="refresh_token", cascade="all, delete-orphan"
     )
-    refresh_token = db.relationship("Token", remote_side=[id])
-    user = db.relationship("User")
+    refresh_token: Mapped["Token"] = db.relationship("Token", remote_side=[id])
+    user: Mapped["User"] = db.relationship("User")
 
     def obj_to_dict(self, skip_columns=None, include_columns=None) -> dict:
         if skip_columns:
@@ -98,7 +99,7 @@ class Token(db.Model, DbModelMixin, TimestampMixin):
     @classmethod
     def create_access_token(
         cls, user: User, refreshTokenModel: Self
-    ) -> Tuple[any, Self]:
+    ) -> Tuple[str, Self]:
         accesssToken = create_access_token(identity=user)
         model = cls()
         model.jti = get_jti(accesssToken)
@@ -111,8 +112,8 @@ class Token(db.Model, DbModelMixin, TimestampMixin):
 
     @classmethod
     def create_refresh_token(
-        cls, user: User, device: str = None, oldRefreshToken: Self = None
-    ) -> Tuple[any, Self]:
+        cls, user: User, device: str | None = None, oldRefreshToken: Self | None = None
+    ) -> Tuple[str, Self]:
         assert device or oldRefreshToken
         if oldRefreshToken and (
             oldRefreshToken.type != "refresh"

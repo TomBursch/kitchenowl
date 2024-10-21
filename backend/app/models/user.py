@@ -1,52 +1,53 @@
-from typing import Self
+from typing import Self, List
 
 from flask_jwt_extended import current_user
 from app import db
-from app.helpers import DbModelMixin, TimestampMixin
+from app.helpers import DbModelMixin
 from app.config import bcrypt
+from sqlalchemy.orm import Mapped
 
 
-class User(db.Model, DbModelMixin, TimestampMixin):
+class User(db.Model , DbModelMixin):
     __tablename__ = "user"
 
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(128))
-    username = db.Column(db.String(256), unique=True, nullable=False, index=True,)
-    email = db.Column(db.String(256), unique=True, nullable=True, index=True,)
-    password = db.Column(db.String(256), nullable=True)
-    photo = db.Column(db.String(), db.ForeignKey("file.filename", use_alter=True))
-    admin = db.Column(db.Boolean(), default=False)
-    email_verified = db.Column(db.Boolean(), default=False)
+    id: Mapped[int] = db.Column(db.Integer, primary_key=True)
+    name: Mapped[str] = db.Column(db.String(128))
+    username: Mapped[str] = db.Column(db.String(256), unique=True, nullable=False, index=True,)
+    email: Mapped[str] = db.Column(db.String(256), unique=True, nullable=True, index=True,)
+    password: Mapped[str] = db.Column(db.String(256), nullable=True)
+    photo: Mapped[str] = db.Column(db.String(), db.ForeignKey("file.filename", use_alter=True))
+    admin: Mapped[bool] = db.Column(db.Boolean(), default=False)
+    email_verified: Mapped[bool] = db.Column(db.Boolean(), default=False)
 
-    tokens = db.relationship(
+    tokens: Mapped[List["Token"]] = db.relationship(
         "Token", back_populates="user", cascade="all, delete-orphan"
     )
 
-    password_reset_challenge = db.relationship(
+    password_reset_challenge: Mapped[List["ChallengePasswordReset"]] = db.relationship(
         "ChallengePasswordReset", back_populates="user", cascade="all, delete-orphan"
     )
-    verify_mail_challenge = db.relationship(
+    verify_mail_challenge: Mapped[List["ChallengeMailVerify"]] = db.relationship(
         "ChallengeMailVerify", back_populates="user", cascade="all, delete-orphan"
     )
 
-    households = db.relationship(
+    households: Mapped[List["HouseholdMember"]] = db.relationship(
         "HouseholdMember", back_populates="user", cascade="all, delete-orphan"
     )
 
-    expenses_paid = db.relationship(
+    expenses_paid: Mapped[List["Expense"]] = db.relationship(
         "Expense", back_populates="paid_by", cascade="all, delete-orphan"
     )
-    expenses_paid_for = db.relationship(
+    expenses_paid_for: Mapped[List["ExpensePaidFor"]] = db.relationship(
         "ExpensePaidFor", back_populates="user", cascade="all, delete-orphan"
     )
-    photo_file = db.relationship(
+    photo_file: Mapped["File"] = db.relationship(
         "File", back_populates="profile_picture", foreign_keys=[photo], uselist=False
     )
 
-    oidc_links = db.relationship(
+    oidc_links: Mapped[List["OIDCLink"]] = db.relationship(
         "OIDCLink", back_populates="user", cascade="all, delete-orphan"
     )
-    oidc_link_requests = db.relationship(
+    oidc_link_requests: Mapped[List["OIDCRequest"]] = db.relationship(
         "OIDCRequest", back_populates="user", cascade="all, delete-orphan"
     )
 
@@ -59,9 +60,9 @@ class User(db.Model, DbModelMixin, TimestampMixin):
 
     def obj_to_dict(
         self,
-        include_email: bool = False,
         skip_columns: list[str] | None = None,
         include_columns: list[str] | None = None,
+        include_email: bool = False,
     ) -> dict:
         if skip_columns:
             skip_columns = skip_columns + ["password"]

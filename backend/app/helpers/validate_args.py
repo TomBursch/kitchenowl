@@ -1,10 +1,11 @@
+from marshmallow import Schema
 from marshmallow.exceptions import ValidationError
 from app.errors import InvalidUsage
 from flask import request
 from functools import wraps
 
 
-def validate_args(schema_cls):
+def validate_args(schema_cls: type[Schema]):
     def validate(func):
         @wraps(func)
         def func_wrapper(*args, **kwargs):

@@ -1,9 +1,9 @@
 from __future__ import annotations
 from typing import Self
 from app import db
+from app.helpers.timestamp_mixin import TimestampMixin
 
-
-class DbModelMixin(object):
+class DbModelMixin(TimestampMixin):
     def save(self) -> Self:
         """
         Persist changes to current instance in db

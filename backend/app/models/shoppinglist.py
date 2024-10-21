@@ -1,22 +1,23 @@
-from typing import Self
+from typing import Self, List
 from app import db
-from app.helpers import DbModelMixin, TimestampMixin, DbModelAuthorizeMixin
+from app.helpers import DbModelMixin, DbModelAuthorizeMixin
+from sqlalchemy.orm import Mapped
 
 
-class Shoppinglist(db.Model, DbModelMixin, TimestampMixin, DbModelAuthorizeMixin):
+class Shoppinglist(db.Model , DbModelMixin, DbModelAuthorizeMixin):
     __tablename__ = "shoppinglist"
 
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(128))
+    id: Mapped[int] = db.Column(db.Integer, primary_key=True)
+    name: Mapped[str] = db.Column(db.String(128))
 
-    household_id = db.Column(
+    household_id: Mapped[int] = db.Column(
         db.Integer, db.ForeignKey("household.id"), nullable=False, index=True
     )
 
-    household = db.relationship("Household", uselist=False)
-    items = db.relationship("ShoppinglistItems", cascade="all, delete-orphan")
+    household: Mapped["Household"] = db.relationship("Household", uselist=False)
+    items: Mapped[List["ShoppinglistItems"]] = db.relationship("ShoppinglistItems", cascade="all, delete-orphan")
 
-    history = db.relationship(
+    history: Mapped[List["History"]] = db.relationship(
         "History", back_populates="shoppinglist", cascade="all, delete-orphan"
     )
 
@@ -30,19 +31,19 @@ class Shoppinglist(db.Model, DbModelMixin, TimestampMixin, DbModelAuthorizeMixin
         return self.id == self.getDefault(self.household_id).id
 
 
-class ShoppinglistItems(db.Model, DbModelMixin, TimestampMixin):
+class ShoppinglistItems(db.Model , DbModelMixin):
     __tablename__ = "shoppinglist_items"
 
-    shoppinglist_id = db.Column(
+    shoppinglist_id: Mapped[int] = db.Column(
         db.Integer, db.ForeignKey("shoppinglist.id"), primary_key=True
     )
-    item_id = db.Column(db.Integer, db.ForeignKey("item.id"), primary_key=True)
-    description = db.Column("description", db.String())
-    created_by = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=True)
+    item_id: Mapped[int] = db.Column(db.Integer, db.ForeignKey("item.id"), primary_key=True)
+    description: Mapped[str] = db.Column(db.String)
+    created_by: Mapped[int] = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=True)
 
-    item = db.relationship("Item", back_populates="shoppinglists")
-    shoppinglist = db.relationship("Shoppinglist", back_populates="items")
-    created_by_user = db.relationship("User", foreign_keys=[created_by], uselist=False)
+    item: Mapped["Item"] = db.relationship("Item", back_populates="shoppinglists")
+    shoppinglist: Mapped["Shoppinglist"] = db.relationship("Shoppinglist", back_populates="items")
+    created_by_user: Mapped["User"] = db.relationship("User", foreign_keys=[created_by], uselist=False)
 
     def obj_to_item_dict(self) -> dict:
         res = self.item.obj_to_dict()

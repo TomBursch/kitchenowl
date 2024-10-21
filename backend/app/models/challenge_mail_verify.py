@@ -3,15 +3,16 @@ import hashlib
 from typing import Self
 import uuid
 from app import db
-from app.helpers import DbModelMixin, TimestampMixin
+from app.helpers import DbModelMixin
 from app.models.user import User
+from sqlalchemy.orm import Mapped
 
 
-class ChallengeMailVerify(db.Model, DbModelMixin, TimestampMixin):
-    challenge_hash = db.Column(db.String(256), primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+class ChallengeMailVerify(db.Model , DbModelMixin):
+    challenge_hash: Mapped[str] = db.Column(db.String(256), primary_key=True)
+    user_id: Mapped[int] = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
 
-    user = db.relationship("User")
+    user: Mapped["User"] = db.relationship("User")
 
     @classmethod
     def find_by_challenge(cls, challenge: str) -> Self:

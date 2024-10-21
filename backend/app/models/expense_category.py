@@ -1,19 +1,20 @@
 from __future__ import annotations
-from typing import Self
+from typing import Self, List
 from app import db
-from app.helpers import DbModelMixin, TimestampMixin, DbModelAuthorizeMixin
+from app.helpers import DbModelMixin, DbModelAuthorizeMixin
+from sqlalchemy.orm import Mapped
 
 
-class ExpenseCategory(db.Model, DbModelMixin, TimestampMixin, DbModelAuthorizeMixin):
+class ExpenseCategory(db.Model , DbModelMixin, DbModelAuthorizeMixin):
     __tablename__ = "expense_category"
 
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(128))
-    color = db.Column(db.BigInteger)
-    household_id = db.Column(db.Integer, db.ForeignKey("household.id"), nullable=False)
+    id: Mapped[int] = db.Column(db.Integer, primary_key=True)
+    name: Mapped[str] = db.Column(db.String(128))
+    color: Mapped[int] = db.Column(db.BigInteger)
+    household_id: Mapped[int] = db.Column(db.Integer, db.ForeignKey("household.id"), nullable=False)
 
-    household = db.relationship("Household", uselist=False)
-    expenses = db.relationship("Expense", back_populates="category")
+    household: Mapped["Household"] = db.relationship("Household", uselist=False)
+    expenses: Mapped[List["Household"]] = db.relationship("Expense", back_populates="category")
 
     def obj_to_full_dict(self) -> dict:
         res = super().obj_to_dict()

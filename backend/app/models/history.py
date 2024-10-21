@@ -1,9 +1,9 @@
-from datetime import datetime
 from typing import Self
 from app import db
-from app.helpers import DbModelMixin, TimestampMixin
+from app.helpers import DbModelMixin
 from .shoppinglist import ShoppinglistItems
 from sqlalchemy import func
+from sqlalchemy.orm import Mapped
 
 import enum
 
@@ -13,21 +13,21 @@ class Status(enum.Enum):
     DROPPED = -1
 
 
-class History(db.Model, DbModelMixin, TimestampMixin):
+class History(db.Model , DbModelMixin):
     __tablename__ = "history"
 
-    id = db.Column(db.Integer, primary_key=True)
+    id: Mapped[int] = db.Column(db.Integer, primary_key=True)
 
-    shoppinglist_id = db.Column(db.Integer, db.ForeignKey("shoppinglist.id"))
-    item_id = db.Column(db.Integer, db.ForeignKey("item.id"))
+    shoppinglist_id: Mapped[int] = db.Column(db.Integer, db.ForeignKey("shoppinglist.id"))
+    item_id: Mapped[int] = db.Column(db.Integer, db.ForeignKey("item.id"))
 
-    item = db.relationship("Item", uselist=False, back_populates="history")
-    shoppinglist = db.relationship(
+    item: Mapped["Item"] = db.relationship("Item", uselist=False, back_populates="history")
+    shoppinglist: Mapped["Shoppinglist"] = db.relationship(
         "Shoppinglist", uselist=False, back_populates="history"
     )
 
-    status = db.Column(db.Enum(Status))
-    description = db.Column("description", db.String())
+    status: Mapped[Status] = db.Column(db.Enum(Status))
+    description: Mapped[str] = db.Column("description", db.String())
 
     @classmethod
     def create_added_without_save(cls, shoppinglist, item, description="") -> Self:

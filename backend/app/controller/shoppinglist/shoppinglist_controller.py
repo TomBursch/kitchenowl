@@ -115,7 +115,7 @@ def deleteShoppinglist(id):
 @shoppinglist.route("/<int:id>/item/<int:item_id>", methods=["POST", "PUT"])
 @jwt_required()
 @validate_args(UpdateDescription)
-def updateItemDescription(args, id, item_id):
+def updateItemDescription(args, id: int, item_id: int):
     con = ShoppinglistItems.find_by_ids(id, item_id)
     if not con:
         shoppinglist = Shoppinglist.find_by_id(id)
@@ -305,13 +305,13 @@ def addShoppinglistItemByName(args, id):
 @shoppinglist.route("/<int:id>/item", methods=["DELETE"])
 @jwt_required()
 @validate_args(RemoveItem)
-def removeShoppinglistItem(args, id):
+def removeShoppinglistItem(args, id: int):
     shoppinglist = Shoppinglist.find_by_id(id)
     if not shoppinglist:
         raise NotFoundRequest()
     shoppinglist.checkAuthorized()
 
-    con = removeShoppinglistItem(
+    con = removeShoppinglistItemFunc(
         shoppinglist,
         args["item_id"],
         args["removed_at"] if "removed_at" in args else None,
@@ -332,14 +332,14 @@ def removeShoppinglistItem(args, id):
 @shoppinglist.route("/<int:id>/items", methods=["DELETE"])
 @jwt_required()
 @validate_args(RemoveItems)
-def removeShoppinglistItems(args, id):
+def removeShoppinglistItems(args, id: int):
     shoppinglist = Shoppinglist.find_by_id(id)
     if not shoppinglist:
         raise NotFoundRequest()
     shoppinglist.checkAuthorized()
 
     for arg in args["items"]:
-        con = removeShoppinglistItem(
+        con = removeShoppinglistItemFunc(
             shoppinglist,
             arg["item_id"],
             arg["removed_at"] if "removed_at" in arg else None,
@@ -357,9 +357,9 @@ def removeShoppinglistItems(args, id):
     return jsonify({"msg": "DONE"})
 
 
-def removeShoppinglistItem(
-    shoppinglist: Shoppinglist, item_id: int, removed_at: int = None
-) -> ShoppinglistItems:
+def removeShoppinglistItemFunc(
+    shoppinglist: Shoppinglist, item_id: int, removed_at: int | None = None
+) -> ShoppinglistItems | None:
     item = Item.find_by_id(item_id)
     if not item:
         return None

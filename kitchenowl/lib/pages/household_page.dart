@@ -41,10 +41,7 @@ class _HouseholdPageState extends State<HouseholdPage> {
   void initState() {
     super.initState();
     householdCubit = HouseholdCubit(widget.household);
-    shoppingListCubit = ShoppinglistCubit(
-      widget.household,
-      () => App.settings.recentItemsCount,
-    );
+    shoppingListCubit = ShoppinglistCubit(widget.household);
     recipeListCubit = RecipeListCubit(widget.household);
     plannerCubit = PlannerCubit(widget.household);
     expenseListCubit = ExpenseListCubit(widget.household);

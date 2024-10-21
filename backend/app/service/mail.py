@@ -1,6 +1,7 @@
 import smtplib, ssl, os
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+from email.utils import formatdate 
 from app.config import app, FRONT_URL
 from app.models import User
 
@@ -41,6 +42,7 @@ def mailConfigured():
 def sendMail(to: str, message: MIMEMultipart):
     with smtplib.SMTP_SSL(SMTP_HOST, SMTP_PORT, context=context) as server:
         server.login(SMTP_USER, SMTP_PASS)
+        message["Date"] = formatdate(localtime=True)
         message["From"] = SMTP_FROM
         message["To"] = to
         if SMTP_REPLY_TO:

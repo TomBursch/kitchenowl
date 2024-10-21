@@ -44,7 +44,7 @@ class Item(DeclarativeBase):
 class Planner(DeclarativeBase):
     __tablename__ = 'planner'
     recipe_id = sa.Column(sa.Integer, primary_key=True)
-    day = db.Column(db.Integer, primary_key=True)
+    day = sa.Column(db.Integer, primary_key=True)
     household_id = sa.Column(sa.Integer, sa.ForeignKey('household.id'), nullable=True)
     
 class Recipe(DeclarativeBase):

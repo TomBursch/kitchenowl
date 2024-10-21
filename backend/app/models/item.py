@@ -1,33 +1,34 @@
 from __future__ import annotations
-from typing import Self
+from typing import Self, List
 
 from sqlalchemy import func
 from app import db
-from app.helpers import DbModelMixin, TimestampMixin, DbModelAuthorizeMixin
+from app.helpers import DbModelMixin, DbModelAuthorizeMixin
 from app.models.category import Category
 from app.util import description_merger
+from sqlalchemy.orm import Mapped
 
 
-class Item(db.Model, DbModelMixin, TimestampMixin, DbModelAuthorizeMixin):
+class Item(db.Model , DbModelMixin, DbModelAuthorizeMixin):
     __tablename__ = "item"
 
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(128))
-    icon = db.Column(db.String(128), nullable=True)
-    category_id = db.Column(db.Integer, db.ForeignKey("category.id"))
-    default = db.Column(db.Boolean, default=False)
-    default_key = db.Column(db.String(128))
-    household_id = db.Column(
+    id: Mapped[int] = db.Column(db.Integer, primary_key=True)
+    name: Mapped[str] = db.Column(db.String(128))
+    icon: Mapped[str] = db.Column(db.String(128), nullable=True)
+    category_id: Mapped[int] = db.Column(db.Integer, db.ForeignKey("category.id"))
+    default: Mapped[bool] = db.Column(db.Boolean, default=False)
+    default_key: Mapped[str] = db.Column(db.String(128))
+    household_id: Mapped[int] = db.Column(
         db.Integer, db.ForeignKey("household.id"), nullable=False, index=True
     )
 
-    household = db.relationship("Household", uselist=False)
-    category = db.relationship("Category")
+    household: Mapped["Household"] = db.relationship("Household", uselist=False)
+    category: Mapped["Category"] = db.relationship("Category")
 
-    recipes = db.relationship(
+    recipes: Mapped[List["RecipeItems"]] = db.relationship(
         "RecipeItems", back_populates="item", cascade="all, delete-orphan"
     )
-    shoppinglists = db.relationship(
+    shoppinglists: Mapped[List["ShoppinglistItems"]] = db.relationship(
         "ShoppinglistItems", back_populates="item", cascade="all, delete-orphan"
     )
 

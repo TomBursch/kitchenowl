@@ -1,26 +1,27 @@
 from typing import Self
 from app import db
-from app.helpers import DbModelMixin, TimestampMixin
+from app.helpers import DbModelMixin
+from sqlalchemy.orm import Mapped
 
 
-class Association(db.Model, DbModelMixin, TimestampMixin):
+class Association(db.Model , DbModelMixin):
     __tablename__ = "association"
 
-    id = db.Column(db.Integer, primary_key=True)
+    id: Mapped[int] = db.Column(db.Integer, primary_key=True)
 
-    antecedent_id = db.Column(db.Integer, db.ForeignKey("item.id"))
-    consequent_id = db.Column(db.Integer, db.ForeignKey("item.id"))
-    support = db.Column(db.Float)
-    confidence = db.Column(db.Float)
-    lift = db.Column(db.Float)
+    antecedent_id: Mapped[int] = db.Column(db.Integer, db.ForeignKey("item.id"))
+    consequent_id: Mapped[int] = db.Column(db.Integer, db.ForeignKey("item.id"))
+    support: Mapped[float] = db.Column(db.Float)
+    confidence: Mapped[float] = db.Column(db.Float)
+    lift: Mapped[float] = db.Column(db.Float)
 
-    antecedent = db.relationship(
+    antecedent: Mapped["Item"] = db.relationship(
         "Item",
         uselist=False,
         foreign_keys=[antecedent_id],
         back_populates="antecedents",
     )
-    consequent = db.relationship(
+    consequent: Mapped["Item"] = db.relationship(
         "Item",
         uselist=False,
         foreign_keys=[consequent_id],

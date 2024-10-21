@@ -1,23 +1,24 @@
 from __future__ import annotations
-from typing import Self
+from typing import Self, List
 from app import db
-from app.helpers import DbModelMixin, TimestampMixin, DbModelAuthorizeMixin
+from app.helpers import DbModelMixin, DbModelAuthorizeMixin
+from sqlalchemy.orm import Mapped
 
 
-class Category(db.Model, DbModelMixin, TimestampMixin, DbModelAuthorizeMixin):
+class Category(db.Model , DbModelMixin, DbModelAuthorizeMixin):
     __tablename__ = "category"
 
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(128))
-    default = db.Column(db.Boolean, default=False)
-    default_key = db.Column(db.String(128))
-    ordering = db.Column(db.Integer, default=0)
-    household_id = db.Column(
+    id: Mapped[int] = db.Column(db.Integer, primary_key=True)
+    name: Mapped[str] = db.Column(db.String(128))
+    default: Mapped[bool] = db.Column(db.Boolean, default=False)
+    default_key: Mapped[str] = db.Column(db.String(128))
+    ordering: Mapped[int] = db.Column(db.Integer, default=0)
+    household_id: Mapped[int] = db.Column(
         db.Integer, db.ForeignKey("household.id"), nullable=False, index=True
     )
 
-    household = db.relationship("Household", uselist=False)
-    items = db.relationship("Item", back_populates="category")
+    household: Mapped["Household"] = db.relationship("Household", uselist=False)
+    items: Mapped[List["Item"]] = db.relationship("Item", back_populates="category")
 
     def obj_to_full_dict(self) -> dict:
         res = super().obj_to_dict()

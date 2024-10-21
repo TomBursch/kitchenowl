@@ -1,46 +1,47 @@
 from __future__ import annotations
-from typing import Self
+from typing import Self, List
 from app import db
-from app.helpers import DbModelMixin, TimestampMixin, DbModelAuthorizeMixin
+from app.helpers import DbModelMixin, DbModelAuthorizeMixin
 from .item import Item
 from .tag import Tag
 from .planner import Planner
 from random import randint
+from sqlalchemy.orm import Mapped
 
 
-class Recipe(db.Model, DbModelMixin, TimestampMixin, DbModelAuthorizeMixin):
+class Recipe(db.Model , DbModelMixin, DbModelAuthorizeMixin):
     __tablename__ = "recipe"
 
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(128))
-    description = db.Column(db.String())
-    photo = db.Column(db.String(), db.ForeignKey("file.filename"))
-    time = db.Column(db.Integer)
-    cook_time = db.Column(db.Integer)
-    prep_time = db.Column(db.Integer)
-    yields = db.Column(db.Integer)
-    source = db.Column(db.String())
-    public = db.Column(db.Boolean(), nullable=False, default=False)
-    suggestion_score = db.Column(db.Integer, server_default="0")
-    suggestion_rank = db.Column(db.Integer, server_default="0")
-    household_id = db.Column(
+    id: Mapped[int] = db.Column(db.Integer, primary_key=True)
+    name: Mapped[str] = db.Column(db.String(128))
+    description: Mapped[str] = db.Column(db.String())
+    photo: Mapped[str] = db.Column(db.String(), db.ForeignKey("file.filename"))
+    time: Mapped[int] = db.Column(db.Integer)
+    cook_time: Mapped[int] = db.Column(db.Integer)
+    prep_time: Mapped[int] = db.Column(db.Integer)
+    yields: Mapped[int] = db.Column(db.Integer)
+    source: Mapped[str] = db.Column(db.String())
+    public: Mapped[bool] = db.Column(db.Boolean(), nullable=False, default=False)
+    suggestion_score: Mapped[int] = db.Column(db.Integer, server_default="0")
+    suggestion_rank: Mapped[int] = db.Column(db.Integer, server_default="0")
+    household_id: Mapped[int] = db.Column(
         db.Integer, db.ForeignKey("household.id"), nullable=False, index=True
     )
 
-    household = db.relationship("Household", uselist=False)
-    recipe_history = db.relationship(
+    household: Mapped["Household"] = db.relationship("Household", uselist=False)
+    recipe_history: Mapped[List["RecipeHistory"]] = db.relationship(
         "RecipeHistory", back_populates="recipe", cascade="all, delete-orphan"
     )
-    items = db.relationship(
+    items: Mapped[List["RecipeItems"]] = db.relationship(
         "RecipeItems", back_populates="recipe", cascade="all, delete-orphan", lazy='selectin', order_by="RecipeItems._name",
     )
-    tags = db.relationship(
+    tags: Mapped[List["RecipeTags"]] = db.relationship(
         "RecipeTags", back_populates="recipe", cascade="all, delete-orphan", lazy='selectin', order_by="RecipeTags._name",
     )
-    plans = db.relationship(
+    plans: Mapped[List["Planner"]] = db.relationship(
         "Planner", back_populates="recipe", cascade="all, delete-orphan", lazy='selectin'
     )
-    photo_file = db.relationship("File", back_populates="recipe", uselist=False, lazy='selectin')
+    photo_file: Mapped["File"] = db.relationship("File", back_populates="recipe", uselist=False, lazy='selectin')
 
     def obj_to_dict(self) -> dict:
         res = super().obj_to_dict()
@@ -169,18 +170,18 @@ class Recipe(db.Model, DbModelMixin, TimestampMixin, DbModelAuthorizeMixin):
         )
 
 
-class RecipeItems(db.Model, DbModelMixin, TimestampMixin):
+class RecipeItems(db.Model , DbModelMixin):
     __tablename__ = "recipe_items"
 
-    recipe_id = db.Column(db.Integer, db.ForeignKey("recipe.id"), primary_key=True)
-    item_id = db.Column(db.Integer, db.ForeignKey("item.id"), primary_key=True)
-    description = db.Column("description", db.String())
-    optional = db.Column("optional", db.Boolean)
+    recipe_id: Mapped[int] = db.Column(db.Integer, db.ForeignKey("recipe.id"), primary_key=True)
+    item_id: Mapped[int] = db.Column(db.Integer, db.ForeignKey("item.id"), primary_key=True)
+    description: Mapped[str] = db.Column("description", db.String())
+    optional: Mapped[bool] = db.Column("optional", db.Boolean)
 
-    item = db.relationship("Item", back_populates="recipes", lazy="joined")
-    recipe = db.relationship("Recipe", back_populates="items")
+    item: Mapped["Item"] = db.relationship("Item", back_populates="recipes", lazy="joined")
+    recipe: Mapped["Recipe"] = db.relationship("Recipe", back_populates="items")
 
-    _name = db.column_property(db.select(Item.name).where(Item.id == item_id).scalar_subquery())
+    _name: Mapped[str] = db.column_property(db.select(Item.name).where(Item.id == item_id).scalar_subquery())
 
     def obj_to_item_dict(self) -> dict:
         res = self.item.obj_to_dict()
@@ -208,16 +209,16 @@ class RecipeItems(db.Model, DbModelMixin, TimestampMixin):
         ).first()
 
 
-class RecipeTags(db.Model, DbModelMixin, TimestampMixin):
+class RecipeTags(db.Model , DbModelMixin):
     __tablename__ = "recipe_tags"
 
-    recipe_id = db.Column(db.Integer, db.ForeignKey("recipe.id"), primary_key=True)
-    tag_id = db.Column(db.Integer, db.ForeignKey("tag.id"), primary_key=True)
+    recipe_id: Mapped[int] = db.Column(db.Integer, db.ForeignKey("recipe.id"), primary_key=True)
+    tag_id: Mapped[int] = db.Column(db.Integer, db.ForeignKey("tag.id"), primary_key=True)
 
-    tag = db.relationship("Tag", back_populates="recipes")
-    recipe = db.relationship("Recipe", back_populates="tags", lazy="joined")
+    tag: Mapped["Tag"] = db.relationship("Tag", back_populates="recipes")
+    recipe: Mapped["Recipe"] = db.relationship("Recipe", back_populates="tags", lazy="joined")
 
-    _name = db.column_property(db.select(Tag.name).where(Tag.id == tag_id).scalar_subquery())
+    _name: Mapped[str] = db.column_property(db.select(Tag.name).where(Tag.id == tag_id).scalar_subquery())
 
     def obj_to_item_dict(self) -> dict:
         res = self.tag.obj_to_dict()

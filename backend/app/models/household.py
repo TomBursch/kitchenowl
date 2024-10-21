@@ -1,43 +1,48 @@
-from typing import Self
+from typing import Self, List
 from app import db
-from app.helpers import DbModelMixin, TimestampMixin
+from app.helpers import DbModelMixin
 from app.helpers.db_list_type import DbListType
+from sqlalchemy.orm import Mapped
 
 
-class Household(db.Model, DbModelMixin, TimestampMixin):
+class Household(db.Model , DbModelMixin):
     __tablename__ = "household"
 
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(128), nullable=False)
-    photo = db.Column(db.String(), db.ForeignKey("file.filename"))
-    language = db.Column(db.String())
-    planner_feature = db.Column(db.Boolean(), nullable=False, default=True)
-    expenses_feature = db.Column(db.Boolean(), nullable=False, default=True)
+    id: Mapped[int] = db.Column(db.Integer, primary_key=True)
+    name: Mapped[str] = db.Column(db.String(128), nullable=False)
+    photo: Mapped[str] = db.Column(db.String(), db.ForeignKey("file.filename"))
+    language: Mapped[str] = db.Column(db.String())
+    planner_feature: Mapped[bool] = db.Column(
+        db.Boolean(), nullable=False, default=True
+    )
+    expenses_feature: Mapped[bool] = db.Column(
+        db.Boolean(), nullable=False, default=True
+    )
 
-    view_ordering = db.Column(DbListType(), default=list())
+    view_ordering: Mapped[List] = db.Column(DbListType(), default=list())
 
-    items = db.relationship(
+    items: Mapped[List["Item"]] = db.relationship(
         "Item", back_populates="household", cascade="all, delete-orphan"
     )
-    shoppinglists = db.relationship(
+    shoppinglists: Mapped[List["Shoppinglist"]] = db.relationship(
         "Shoppinglist", back_populates="household", cascade="all, delete-orphan"
     )
-    categories = db.relationship(
+    categories: Mapped[List["Category"]] = db.relationship(
         "Category", back_populates="household", cascade="all, delete-orphan"
     )
-    recipes = db.relationship(
+    recipes: Mapped[List["Recipe"]] = db.relationship(
         "Recipe", back_populates="household", cascade="all, delete-orphan"
     )
-    tags = db.relationship(
+    tags: Mapped[List["Tag"]] = db.relationship(
         "Tag", back_populates="household", cascade="all, delete-orphan"
     )
-    expenses = db.relationship(
+    expenses: Mapped[List["Expense"]] = db.relationship(
         "Expense", back_populates="household", cascade="all, delete-orphan"
     )
-    expenseCategories = db.relationship(
+    expenseCategories: Mapped[List["ExpenseCategory"]] = db.relationship(
         "ExpenseCategory", back_populates="household", cascade="all, delete-orphan"
     )
-    member = db.relationship(
+    member: Mapped[List["HouseholdMember"]] = db.relationship(
         "HouseholdMember", back_populates="household", cascade="all, delete-orphan"
     )
     photo_file = db.relationship("File", back_populates="household", uselist=False)
@@ -49,7 +54,7 @@ class Household(db.Model, DbModelMixin, TimestampMixin):
         if self.photo_file:
             res["photo_hash"] = self.photo_file.blur_hash
         return res
-    
+
     def obj_to_public_dict(self) -> dict:
         res = super().obj_to_dict(include_columns=["id", "name", "photo", "language"])
         if self.photo_file:
@@ -71,21 +76,23 @@ class Household(db.Model, DbModelMixin, TimestampMixin):
         }
 
 
-class HouseholdMember(db.Model, DbModelMixin, TimestampMixin):
+class HouseholdMember(db.Model , DbModelMixin):
     __tablename__ = "household_member"
 
-    household_id = db.Column(
+    household_id: Mapped[int] = db.Column(
         db.Integer, db.ForeignKey("household.id"), primary_key=True
     )
-    user_id = db.Column(db.Integer, db.ForeignKey("user.id"), primary_key=True)
+    user_id: Mapped[int] = db.Column(
+        db.Integer, db.ForeignKey("user.id"), primary_key=True
+    )
 
-    owner = db.Column(db.Boolean(), default=False, nullable=False)
-    admin = db.Column(db.Boolean(), default=False, nullable=False)
+    owner: Mapped[bool] = db.Column(db.Boolean(), default=False, nullable=False)
+    admin: Mapped[bool] = db.Column(db.Boolean(), default=False, nullable=False)
 
-    expense_balance = db.Column(db.Float(), default=0, nullable=False)
+    expense_balance: Mapped[float] = db.Column(db.Float(), default=0, nullable=False)
 
-    household = db.relationship("Household", back_populates="member")
-    user = db.relationship("User", back_populates="households")
+    household: Mapped["Household"] = db.relationship("Household", back_populates="member")
+    user: Mapped["User"] = db.relationship("User", back_populates="households")
 
     def obj_to_user_dict(self) -> dict:
         res = self.user.obj_to_dict()
@@ -121,7 +128,3 @@ class HouseholdMember(db.Model, DbModelMixin, TimestampMixin):
     @classmethod
     def find_by_user(cls, user_id: int) -> list[Self]:
         return cls.query.filter(cls.user_id == user_id).all()
-    
-    @classmethod
-    def find_by_household(cls, household_id: int) -> list[Self]:
-        return cls.query.filter(cls.household_id == household_id).all()

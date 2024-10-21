@@ -271,6 +271,7 @@
   "@set": {},
   "@settings": {},
   "@setupTitle": {},
+  "@share": {},
   "@shoppingList": {},
   "@shoppingListDelete": {},
   "@shoppingListDeleteConfirmation": {
@@ -543,6 +544,7 @@
   "set": "Aseta",
   "settings": "Asetukset",
   "setupTitle": "Hei siellä! Valmiina ostoksille?",
+  "share": "Jaa",
   "shoppingList": "Ostoslista",
   "shoppingListDelete": "Poista ostoslista",
   "shoppingListDeleteConfirmation": "Haluatko varmasti poistaa {shoppingList}?",

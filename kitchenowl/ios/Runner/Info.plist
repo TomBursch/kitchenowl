@@ -30,6 +30,7 @@
 	<string>6.0</string>
 	<key>CFBundleLocalizations</key>
 	<array>
+		<string>ar</string>
 		<string>be</string>
 		<string>bg</string>
 		<string>ca</string>

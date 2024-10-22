@@ -6,7 +6,6 @@ from app.config import (
     OPEN_REGISTRATION,
     EMAIL_MANDATORY,
 )
-from app.models import Settings
 from app.config import SUPPORTED_LANGUAGES, oidc_clients
 
 health = Blueprint("health", __name__)

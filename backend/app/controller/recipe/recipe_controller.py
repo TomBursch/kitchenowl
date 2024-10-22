@@ -1,4 +1,4 @@
-from app.errors import NotFoundRequest, InvalidUsage
+from app.errors import NotFoundRequest
 from app.models import Household, RecipeItems, RecipeTags
 from flask import jsonify, Blueprint
 from flask_jwt_extended import jwt_required

@@ -8,7 +8,7 @@ import blurhash
 from PIL import Image
 
 from app.config import UPLOAD_FOLDER
-from app.errors import ForbiddenRequest, NotFoundRequest
+from app.errors import NotFoundRequest
 from app.models import File
 from app.util.filename_validator import allowed_file
 

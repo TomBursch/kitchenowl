@@ -1,11 +1,14 @@
 from datetime import datetime
-from typing import Self, List
+from typing import Self, List, TYPE_CHECKING
 from app import db
 from app.helpers import DbModelMixin, DbModelAuthorizeMixin
 from sqlalchemy.orm import Mapped
 
+if TYPE_CHECKING:
+    from app.models import *
 
-class Expense(db.Model , DbModelMixin, DbModelAuthorizeMixin):
+
+class Expense(db.Model, DbModelMixin, DbModelAuthorizeMixin):
     __tablename__ = "expense"
 
     id: Mapped[int] = db.Column(db.Integer, primary_key=True)
@@ -73,7 +76,7 @@ class Expense(db.Model , DbModelMixin, DbModelAuthorizeMixin):
         )
 
 
-class ExpensePaidFor(db.Model , DbModelMixin):
+class ExpensePaidFor(db.Model, DbModelMixin):
     __tablename__ = "expense_paid_for"
 
     expense_id: Mapped[int] = db.Column(db.Integer, db.ForeignKey("expense.id"), primary_key=True)

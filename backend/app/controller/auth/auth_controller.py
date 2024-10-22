@@ -9,7 +9,7 @@ from app.helpers import validate_args
 from flask import jsonify, Blueprint, request
 from flask_jwt_extended import current_user, jwt_required, get_jwt
 from app.models import User, Token, OIDCLink, OIDCRequest, ChallengeMailVerify
-from app.errors import NotFoundRequest, UnauthorizedRequest, InvalidUsage
+from app.errors import NotFoundRequest, UnauthorizedRequest
 from app.service import mail
 from .schemas import Login, Signup, CreateLongLivedToken, GetOIDCLoginUrl, LoginOIDC
 from app.config import EMAIL_MANDATORY, FRONT_URL, jwt, OPEN_REGISTRATION, DISABLE_USERNAME_PASSWORD_LOGIN, oidc_clients
@@ -213,7 +213,7 @@ if FRONT_URL and len(oidc_clients) > 0:
     @validate_args(GetOIDCLoginUrl)
     def getOIDCLoginUrl(args):
         provider = args["provider"] if "provider" in args else "custom"
-        if not provider in oidc_clients:
+        if provider not in oidc_clients:
             raise NotFoundRequest()
         client = oidc_clients[provider]
         if not client:

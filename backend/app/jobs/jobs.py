@@ -19,7 +19,7 @@ from .cluster_shoppings import clusterShoppings
 if not MESSAGE_BROKER:
 
     @scheduler.task("cron", id="everyMonth", day="1", hour="0", minute="0")
-    def setup_daily():
+    def setup_monthly():
         with app.app_context():
             monthly()
 

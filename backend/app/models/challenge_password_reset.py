@@ -1,15 +1,18 @@
 from __future__ import annotations
 from datetime import datetime, timedelta, timezone
 import hashlib
-from typing import Self
+from typing import Self, TYPE_CHECKING
 import uuid
 from app import db
 from app.helpers import DbModelMixin
 from app.models.user import User
 from sqlalchemy.orm import Mapped
 
+if TYPE_CHECKING:
+    from app.models import *
 
-class ChallengePasswordReset(db.Model , DbModelMixin):
+
+class ChallengePasswordReset(db.Model, DbModelMixin):
     challenge_hash: Mapped[str] = db.Column(db.String(256), primary_key=True)
     user_id: Mapped[int] = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
 

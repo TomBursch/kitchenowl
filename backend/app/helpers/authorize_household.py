@@ -11,13 +11,13 @@ class RequiredRights(Enum):
     ADMIN_OR_SELF = 3
 
 
-def authorize_household(required: RequiredRights = RequiredRights.MEMBER) -> any:
+def authorize_household(required: RequiredRights = RequiredRights.MEMBER):
     def wrapper(func):
         @wraps(func)
         def decorator(*args, **kwargs):
-            if not "household_id" in kwargs:
+            if "household_id" not in kwargs:
                 raise Exception("Wrong usage of authorize_household")
-            if required == RequiredRights.ADMIN_OR_SELF and not "user_id" in kwargs:
+            if required == RequiredRights.ADMIN_OR_SELF and "user_id" not in kwargs:
                 raise Exception("Wrong usage of authorize_household")
             if not current_user:
                 raise UnauthorizedRequest()

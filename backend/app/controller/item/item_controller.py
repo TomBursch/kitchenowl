@@ -69,6 +69,7 @@ def searchItemByName(args, household_id):
         ]
     )
 
+
 @itemHousehold.route("", methods=["POST"])
 @jwt_required()
 @authorize_household()
@@ -91,6 +92,7 @@ def addItem(args, household_id):
     item.save()
 
     return jsonify(item.obj_to_dict())
+
 
 @item.route("/<int:id>", methods=["POST"])
 @jwt_required()

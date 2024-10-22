@@ -1,11 +1,14 @@
 from __future__ import annotations
-from typing import Self
+from typing import Self, TYPE_CHECKING
 from app import db
 from app.helpers import DbModelMixin, DbModelAuthorizeMixin
 from sqlalchemy.orm import Mapped
 
+if TYPE_CHECKING:
+    from app.models import *
 
-class Planner(db.Model , DbModelMixin, DbModelAuthorizeMixin):
+
+class Planner(db.Model, DbModelMixin, DbModelAuthorizeMixin):
     __tablename__ = "planner"
 
     recipe_id: Mapped[int] = db.Column(db.Integer, db.ForeignKey("recipe.id"), primary_key=True)

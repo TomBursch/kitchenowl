@@ -1,6 +1,7 @@
 {
   "@about": {},
   "@accountCreate": {},
+  "@accountCreateHint": {},
   "@accountCreateTitle": {},
   "@accountDelete": {},
   "@accountDeleteConfirmation": {},
@@ -235,9 +236,18 @@
       "privacyPolicy": {}
     }
   },
+  "@private": {},
+  "@privateRecipeDescription": {},
   "@profile": {},
+  "@public": {},
+  "@publicRecipeDescription": {},
   "@recentItemsCategorize": {},
   "@recipeAdd": {},
+  "@recipeAddToHousehold": {
+    "placeholders": {
+      "householdName": {}
+    }
+  },
   "@recipeAddUrl": {},
   "@recipeDelete": {},
   "@recipeDeleteConfirmation": {
@@ -270,6 +280,7 @@
   "@set": {},
   "@settings": {},
   "@setupTitle": {},
+  "@share": {},
   "@shoppingList": {},
   "@shoppingListDelete": {},
   "@shoppingListDeleteConfirmation": {
@@ -337,6 +348,7 @@
   "@usernameUnavailable": {},
   "@users": {},
   "@weekly": {},
+  "@welcomeBack": {},
   "@writeMarkdownHere": {},
   "@wrongUsernameOrPassword": {},
   "@yearly": {},
@@ -345,7 +357,8 @@
   "@you": {},
   "about": "Informazioni",
   "accountCreate": "Crea un account",
-  "accountCreateTitle": "Crea il tuo KitchenOwl account",
+  "accountCreateHint": "Il tuo nome utente e il tuo nome sono pubblici quindi scegli qualcosa che tu possa condividere senza problemi.",
+  "accountCreateTitle": "Crea il tuo account KitchenOwl",
   "accountDelete": "Elimina l'account",
   "accountDeleteConfirmation": "Sei sicuro/sicura di voler eliminare il tuo account?",
   "accountLinkedWithOtherUser": "Account già collegato ad un altro utente",
@@ -509,9 +522,14 @@
   "preparationTime": "Tempo di preparazione",
   "privacyPolicy": "Informativa sulla riservatezza",
   "privacyPolicyAgree": "Creando un account accetti le nostre {privacyPolicy}",
+  "private": "Privato",
+  "privateRecipeDescription": "Solo i membri della famiglia possono visualizzare la ricetta.",
   "profile": "Profilo",
+  "public": "Pubblico",
+  "publicRecipeDescription": "Chiunque può visualizzare la ricetta tramite il link.",
   "recentItemsCategorize": "Classificare gli elementi recenti",
   "recipeAdd": "Aggiungi una ricetta",
+  "recipeAddToHousehold": "Aggiungi a {householdName}",
   "recipeAddUrl": "Aggiungi una ricetta da un URL",
   "recipeDelete": "Elimina la ricetta",
   "recipeDeleteConfirmation": "Sei sicuro/a di voler rimuovere {recipe}?",
@@ -540,6 +558,7 @@
   "set": "Imposta",
   "settings": "Impostazioni",
   "setupTitle": "Ciao a tutti! Sei pronto/a a fare acquisti?",
+  "share": "Condividi",
   "shoppingList": "Lista della spesa",
   "shoppingListDelete": "Elimina la lista della spesa",
   "shoppingListDeleteConfirmation": "Sei sicuro/a di voler eliminare {shoppingList}?",
@@ -576,7 +595,7 @@
   "unsavedChangesTitle": "Hai modifiche non salvate",
   "unsupportedBackendMessage": "La versione del server non è supportata, aggiorna il backend",
   "unsupportedFrontendMessage": "La versione dell'app non è supportata, aggiorna l'app",
-  "unsupportedScrapeMessage": "Non è stato possibile eseguire lo scraping dell'URL",
+  "unsupportedScrapeMessage": "Questo sito web non è supportato",
   "usedIn": "Usato in",
   "user": "Utente",
   "userAdd": "Aggiungi un utente",
@@ -589,6 +608,7 @@
   "usernameUnavailable": "Lo username non è disponibile",
   "users": "Utenti",
   "weekly": "Settimanale",
+  "welcomeBack": "Bentornato",
   "writeMarkdownHere": "Puoi usare markdown qui!",
   "wrongUsernameOrPassword": "Nome utente o password errato",
   "yearly": "Annuale",

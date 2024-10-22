@@ -1,10 +1,13 @@
-from typing import Self, List
+from typing import Self, List, TYPE_CHECKING
 from app import db
 from app.helpers import DbModelMixin, DbModelAuthorizeMixin
 from sqlalchemy.orm import Mapped
 
+if TYPE_CHECKING:
+    from app.models import *
 
-class Tag(db.Model , DbModelMixin, DbModelAuthorizeMixin):
+
+class Tag(db.Model, DbModelMixin, DbModelAuthorizeMixin):
     __tablename__ = "tag"
 
     id: Mapped[int] = db.Column(db.Integer, primary_key=True)

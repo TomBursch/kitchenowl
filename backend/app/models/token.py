@@ -1,6 +1,6 @@
 from __future__ import annotations
 from datetime import datetime, timezone
-from typing import Self, Tuple, List
+from typing import Self, Tuple, List, TYPE_CHECKING
 
 from flask import request
 from app import db
@@ -11,8 +11,11 @@ from flask_jwt_extended import create_access_token, create_refresh_token, get_jt
 from app.models.user import User
 from sqlalchemy.orm import Mapped
 
+if TYPE_CHECKING:
+    from app.models import *
 
-class Token(db.Model , DbModelMixin):
+
+class Token(db.Model, DbModelMixin):
     __tablename__ = "token"
 
     id: Mapped[int] = db.Column(db.Integer, primary_key=True)
@@ -20,7 +23,7 @@ class Token(db.Model , DbModelMixin):
     type: Mapped[str] = db.Column(db.String(16), nullable=False)
     name: Mapped[str] = db.Column(db.String(), nullable=False)
     last_used_at: Mapped[datetime] = db.Column(db.DateTime)
-    refresh_token_id: Mapped[int]= db.Column(db.Integer, db.ForeignKey("token.id"), nullable=True)
+    refresh_token_id: Mapped[int] = db.Column(db.Integer, db.ForeignKey("token.id"), nullable=True)
     user_id: Mapped[int] = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
 
     created_tokens: Mapped[List["Token"]] = db.relationship(
@@ -139,7 +142,7 @@ class Token(db.Model , DbModelMixin):
         return refreshToken, model
 
     @classmethod
-    def create_longlived_token(cls, user: User, device: str) -> Tuple[any, Self]:
+    def create_longlived_token(cls, user: User, device: str) -> Tuple[str, Self]:
         accesssToken = create_access_token(identity=user, expires_delta=False)
         model = cls()
         model.jti = get_jti(accesssToken)

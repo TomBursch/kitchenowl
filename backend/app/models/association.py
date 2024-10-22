@@ -1,10 +1,13 @@
-from typing import Self
+from typing import Self, TYPE_CHECKING
 from app import db
 from app.helpers import DbModelMixin
 from sqlalchemy.orm import Mapped
 
+if TYPE_CHECKING:
+    from app.models import *
 
-class Association(db.Model , DbModelMixin):
+
+class Association(db.Model, DbModelMixin):
     __tablename__ = "association"
 
     id: Mapped[int] = db.Column(db.Integer, primary_key=True)

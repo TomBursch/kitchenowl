@@ -1,4 +1,4 @@
-from typing import Self, List
+from typing import Self, List, TYPE_CHECKING
 
 from flask_jwt_extended import current_user
 from app import db
@@ -6,8 +6,11 @@ from app.helpers import DbModelMixin
 from app.config import bcrypt
 from sqlalchemy.orm import Mapped
 
+if TYPE_CHECKING:
+    from app.models import *
 
-class User(db.Model , DbModelMixin):
+
+class User(db.Model, DbModelMixin):
     __tablename__ = "user"
 
     id: Mapped[int] = db.Column(db.Integer, primary_key=True)
@@ -50,7 +53,6 @@ class User(db.Model , DbModelMixin):
     oidc_link_requests: Mapped[List["OIDCRequest"]] = db.relationship(
         "OIDCRequest", back_populates="user", cascade="all, delete-orphan"
     )
-
 
     def check_password(self, password: str) -> bool:
         return self.password and bcrypt.check_password_hash(self.password, password)

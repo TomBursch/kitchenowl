@@ -3,6 +3,7 @@ from typing import Self
 from app import db
 from app.helpers.timestamp_mixin import TimestampMixin
 
+
 class DbModelMixin(TimestampMixin):
     def save(self) -> Self:
         """

@@ -1,7 +1,9 @@
-import smtplib, ssl, os
+import smtplib
+import ssl
+import os
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
-from email.utils import formatdate 
+from email.utils import formatdate
 from app.config import app, FRONT_URL
 from app.models import User
 
@@ -14,7 +16,7 @@ SMTP_REPLY_TO = os.getenv("SMTP_REPLY_TO")
 
 context = ssl.create_default_context()
 
-mail_configured: bool = None
+mail_configured: bool | None = None
 
 
 def mailConfigured():

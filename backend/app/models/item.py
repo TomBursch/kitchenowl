@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Self, List
+from typing import Self, List, TYPE_CHECKING
 
 from sqlalchemy import func
 from app import db
@@ -8,8 +8,11 @@ from app.models.category import Category
 from app.util import description_merger
 from sqlalchemy.orm import Mapped
 
+if TYPE_CHECKING:
+    from app.models import *
 
-class Item(db.Model , DbModelMixin, DbModelAuthorizeMixin):
+
+class Item(db.Model, DbModelMixin, DbModelAuthorizeMixin):
     __tablename__ = "item"
 
     id: Mapped[int] = db.Column(db.Integer, primary_key=True)
@@ -208,7 +211,7 @@ class Item(db.Model , DbModelMixin, DbModelAuthorizeMixin):
         contains = "%{0}%".format(name)
         one_error = []
         for index in range(len(name)):
-            name_one_error = name[:index] + "_" + name[index + 1 :]
+            name_one_error = name[:index] + "_" + name[index + 1:]
             one_error.append("%{0}%".format(name_one_error))
 
         for looking_for in [starts_with, contains] + one_error:

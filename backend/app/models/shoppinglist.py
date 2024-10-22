@@ -1,10 +1,13 @@
-from typing import Self, List
+from typing import Self, List, TYPE_CHECKING
 from app import db
 from app.helpers import DbModelMixin, DbModelAuthorizeMixin
 from sqlalchemy.orm import Mapped
 
+if TYPE_CHECKING:
+    from app.models import *
 
-class Shoppinglist(db.Model , DbModelMixin, DbModelAuthorizeMixin):
+
+class Shoppinglist(db.Model, DbModelMixin, DbModelAuthorizeMixin):
     __tablename__ = "shoppinglist"
 
     id: Mapped[int] = db.Column(db.Integer, primary_key=True)
@@ -31,7 +34,7 @@ class Shoppinglist(db.Model , DbModelMixin, DbModelAuthorizeMixin):
         return self.id == self.getDefault(self.household_id).id
 
 
-class ShoppinglistItems(db.Model , DbModelMixin):
+class ShoppinglistItems(db.Model, DbModelMixin):
     __tablename__ = "shoppinglist_items"
 
     shoppinglist_id: Mapped[int] = db.Column(

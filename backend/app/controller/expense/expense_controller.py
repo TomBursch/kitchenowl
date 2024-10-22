@@ -245,11 +245,11 @@ def getExpenseOverview(args, household_id):
         .join(Expense.category, isouter=True)
     )
 
-    groupByStr = "YYYY-MM" if "postgresql" in db.engine.name else "%Y-%m" 
+    groupByStr = "YYYY-MM" if "postgresql" in db.engine.name else "%Y-%m"
     if frame < 3:
         groupByStr += "-DD" if "postgresql" in db.engine.name else "-%d"
     if frame < 1:
-        groupByStr += " HH24" if "postgresql" in db.engine.name else" %H"
+        groupByStr += " HH24" if "postgresql" in db.engine.name else " %H"
 
     by_subframe_query = Expense.query.filter(
         Expense.household_id == household_id,

@@ -1,11 +1,14 @@
-from typing import Self, List
+from typing import Self, List, TYPE_CHECKING
 from app import db
 from app.helpers import DbModelMixin
 from app.helpers.db_list_type import DbListType
 from sqlalchemy.orm import Mapped
 
+if TYPE_CHECKING:
+    from app.models import *
 
-class Household(db.Model , DbModelMixin):
+
+class Household(db.Model, DbModelMixin):
     __tablename__ = "household"
 
     id: Mapped[int] = db.Column(db.Integer, primary_key=True)
@@ -76,7 +79,7 @@ class Household(db.Model , DbModelMixin):
         }
 
 
-class HouseholdMember(db.Model , DbModelMixin):
+class HouseholdMember(db.Model, DbModelMixin):
     __tablename__ = "household_member"
 
     household_id: Mapped[int] = db.Column(

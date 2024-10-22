@@ -1,6 +1,5 @@
 from marshmallow.exceptions import ValidationError
 from app.errors import InvalidUsage
-from flask import request
 from functools import wraps
 
 

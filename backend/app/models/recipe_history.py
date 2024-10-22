@@ -1,4 +1,4 @@
-from typing import Self
+from typing import Self, TYPE_CHECKING
 from app import db
 from app.helpers import DbModelMixin
 from .recipe import Recipe
@@ -8,13 +8,16 @@ from sqlalchemy.orm import Mapped
 
 import enum
 
+if TYPE_CHECKING:
+    from app.models import Household, Recipe
+
 
 class Status(enum.Enum):
     ADDED = 1
     DROPPED = -1
 
 
-class RecipeHistory(db.Model , DbModelMixin):
+class RecipeHistory(db.Model, DbModelMixin):
     __tablename__ = "recipe_history"
 
     id: Mapped[int] = db.Column(db.Integer, primary_key=True)

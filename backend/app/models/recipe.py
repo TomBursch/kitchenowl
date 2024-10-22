@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Self, List
+from typing import Self, List, TYPE_CHECKING
 from app import db
 from app.helpers import DbModelMixin, DbModelAuthorizeMixin
 from .item import Item
@@ -8,8 +8,11 @@ from .planner import Planner
 from random import randint
 from sqlalchemy.orm import Mapped
 
+if TYPE_CHECKING:
+    from app.models import *
 
-class Recipe(db.Model , DbModelMixin, DbModelAuthorizeMixin):
+
+class Recipe(db.Model, DbModelMixin, DbModelAuthorizeMixin):
     __tablename__ = "recipe"
 
     id: Mapped[int] = db.Column(db.Integer, primary_key=True)
@@ -170,7 +173,7 @@ class Recipe(db.Model , DbModelMixin, DbModelAuthorizeMixin):
         )
 
 
-class RecipeItems(db.Model , DbModelMixin):
+class RecipeItems(db.Model, DbModelMixin):
     __tablename__ = "recipe_items"
 
     recipe_id: Mapped[int] = db.Column(db.Integer, db.ForeignKey("recipe.id"), primary_key=True)
@@ -209,7 +212,7 @@ class RecipeItems(db.Model , DbModelMixin):
         ).first()
 
 
-class RecipeTags(db.Model , DbModelMixin):
+class RecipeTags(db.Model, DbModelMixin):
     __tablename__ = "recipe_tags"
 
     recipe_id: Mapped[int] = db.Column(db.Integer, db.ForeignKey("recipe.id"), primary_key=True)

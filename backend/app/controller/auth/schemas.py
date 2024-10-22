@@ -19,7 +19,7 @@ class Login(Schema):
 
 class Signup(Schema):
     username = fields.String(
-        required=True, validate=lambda a: a and not a.isspace() and not "@" in a
+        required=True, validate=lambda a: a and not a.isspace() and "@" not in a
     )
     email = fields.String(
         required=EMAIL_MANDATORY,

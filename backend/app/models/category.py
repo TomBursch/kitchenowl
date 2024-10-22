@@ -1,11 +1,14 @@
 from __future__ import annotations
-from typing import Self, List
+from typing import Self, List, TYPE_CHECKING
 from app import db
 from app.helpers import DbModelMixin, DbModelAuthorizeMixin
 from sqlalchemy.orm import Mapped
 
+if TYPE_CHECKING:
+    from app.models import *
 
-class Category(db.Model , DbModelMixin, DbModelAuthorizeMixin):
+
+class Category(db.Model, DbModelMixin, DbModelAuthorizeMixin):
     __tablename__ = "category"
 
     id: Mapped[int] = db.Column(db.Integer, primary_key=True)

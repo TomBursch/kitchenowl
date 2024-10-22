@@ -1,12 +1,15 @@
 from datetime import datetime, timedelta, timezone
-from typing import Self
+from typing import Self, TYPE_CHECKING
 
 from app import db
 from app.helpers import DbModelMixin
 from sqlalchemy.orm import Mapped
 
+if TYPE_CHECKING:
+    from app.models import *
 
-class OIDCLink(db.Model , DbModelMixin):
+
+class OIDCLink(db.Model, DbModelMixin):
     __tablename__ = "oidc_link"
 
     sub: Mapped[str] = db.Column(db.String(256), primary_key=True)
@@ -22,7 +25,7 @@ class OIDCLink(db.Model , DbModelMixin):
         return cls.query.filter(cls.sub == sub, cls.provider == provider).first()
 
 
-class OIDCRequest(db.Model , DbModelMixin):
+class OIDCRequest(db.Model, DbModelMixin):
     __tablename__ = "oidc_request"
 
     state: Mapped[str] = db.Column(db.String(256), primary_key=True)

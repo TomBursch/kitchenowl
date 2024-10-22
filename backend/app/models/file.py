@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Self
+from typing import Self, TYPE_CHECKING
 
 from flask_jwt_extended import current_user
 from app import db
@@ -10,8 +10,11 @@ from app.models.user import User
 import os
 from sqlalchemy.orm import Mapped
 
+if TYPE_CHECKING:
+    from app.models import *
 
-class File(db.Model , DbModelMixin, DbModelAuthorizeMixin):
+
+class File(db.Model, DbModelMixin, DbModelAuthorizeMixin):
     __tablename__ = "file"
 
     filename: Mapped[str] = db.Column(db.String(), primary_key=True)

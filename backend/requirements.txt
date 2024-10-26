@@ -160,7 +160,7 @@ vine==5.1.0
 w3lib==2.2.1
 wcwidth==0.2.13
 webencodings==0.5.1
-Werkzeug==3.0.4
+Werkzeug==3.0.6
 wsproto==1.2.0
 yarl==1.15.5
 zipp==3.20.2

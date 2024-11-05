@@ -104,6 +104,8 @@ class AuthCubit extends Cubit<AuthState> {
   void setupServer(String url) async {
     if (kIsWeb) return;
     emit(const Loading());
+    if (!url.contains("http")) url = "https://" + url;
+
     _newConnection(url);
   }
 

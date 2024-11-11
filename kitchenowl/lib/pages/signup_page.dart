@@ -165,7 +165,7 @@ class _SignupPageState extends State<SignupPage> {
                               ),
                             ),
                             SizedBox(
-                                height: MediaQuery.of(context).padding.bottom),
+                                height: MediaQuery.paddingOf(context).bottom),
                           ],
                         ),
                       ),

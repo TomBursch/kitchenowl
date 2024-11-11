@@ -74,7 +74,7 @@ class ImageSelector extends StatelessWidget {
       return getImageProvider(
         context,
         originalImage!,
-        maxWidth: MediaQuery.of(context).size.width.toInt(),
+        maxWidth: MediaQuery.sizeOf(context).width.toInt(),
       );
     } else {
       return null;

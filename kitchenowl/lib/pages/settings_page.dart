@@ -553,7 +553,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 textAlign: TextAlign.center,
               ),
               SizedBox(
-                height: MediaQuery.of(context).padding.bottom + 4,
+                height: MediaQuery.paddingOf(context).bottom + 4,
               ),
             ]),
           ),

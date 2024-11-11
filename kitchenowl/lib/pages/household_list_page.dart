@@ -124,7 +124,7 @@ class _HouseholdListPageState extends State<HouseholdListPage> with RouteAware {
                     ),
                   SliverToBoxAdapter(
                     child:
-                        SizedBox(height: MediaQuery.of(context).padding.bottom),
+                        SizedBox(height: MediaQuery.paddingOf(context).bottom),
                   ),
                 ],
               ),

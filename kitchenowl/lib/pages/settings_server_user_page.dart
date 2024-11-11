@@ -88,7 +88,7 @@ class _SettingsServerUserPageState extends State<SettingsServerUserPage> {
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
                   SizedBox(
-                    height: MediaQuery.of(context).padding.bottom + 4,
+                    height: MediaQuery.paddingOf(context).bottom + 4,
                   ),
                 ]),
               ),

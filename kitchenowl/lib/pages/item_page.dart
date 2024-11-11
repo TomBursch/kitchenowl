@@ -342,7 +342,7 @@ class _ItemPageState<T extends Item> extends State<ItemPage<T>> {
                     ),
                   SliverToBoxAdapter(
                     child:
-                        SizedBox(height: MediaQuery.of(context).padding.bottom),
+                        SizedBox(height: MediaQuery.paddingOf(context).bottom),
                   ),
                 ],
               ),

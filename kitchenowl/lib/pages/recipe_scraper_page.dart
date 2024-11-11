@@ -246,7 +246,7 @@ class _RecipeScraperPageState extends State<RecipeScraperPage> {
                       ),
                       SliverToBoxAdapter(
                         child: SizedBox(
-                          height: MediaQuery.of(context).padding.bottom,
+                          height: MediaQuery.paddingOf(context).bottom,
                         ),
                       ),
                     ],

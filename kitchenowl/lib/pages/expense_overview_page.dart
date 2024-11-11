@@ -320,7 +320,7 @@ class _ExpenseOverviewPageState extends State<ExpenseOverviewPage> {
               ),
               SliverToBoxAdapter(
                 child: SizedBox(
-                  height: MediaQuery.of(context).padding.bottom + 16,
+                  height: MediaQuery.paddingOf(context).bottom + 16,
                 ),
               ),
             ],

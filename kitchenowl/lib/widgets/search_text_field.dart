@@ -91,10 +91,10 @@ class _SearchTextFieldState extends State<SearchTextField> {
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 250),
         width: expanded
-            ? MediaQuery.of(context).size.width
+            ? MediaQuery.sizeOf(context).width
             : getValueForScreenType(
                 context: context,
-                mobile: MediaQuery.of(context).size.width,
+                mobile: MediaQuery.sizeOf(context).width,
                 tablet: 450,
                 desktop: 550,
               ),

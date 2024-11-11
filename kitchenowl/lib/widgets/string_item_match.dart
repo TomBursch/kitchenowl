@@ -31,7 +31,7 @@ class StringItemMatch extends StatelessWidget {
     return FractionallySizedBox(
       widthFactor: 1 /
           DynamicStyling.itemCrossAxisCount(
-            MediaQuery.of(context).size.width - 32,
+            MediaQuery.sizeOf(context).width - 32,
             context.read<SettingsCubit>().state.gridSize,
           ),
       alignment: Alignment.topCenter,

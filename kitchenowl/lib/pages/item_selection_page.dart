@@ -170,7 +170,7 @@ class _ItemSelectionPageState extends State<ItemSelectionPage> {
               ),
             ),
             SliverToBoxAdapter(
-              child: SizedBox(height: MediaQuery.of(context).padding.bottom),
+              child: SizedBox(height: MediaQuery.paddingOf(context).bottom),
             ),
           ],
         ),

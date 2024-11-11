@@ -349,7 +349,7 @@ class _SettingsUserPageState extends State<SettingsUserPage> {
                           ),
                         ),
                       ),
-                    SizedBox(height: MediaQuery.of(context).padding.bottom),
+                    SizedBox(height: MediaQuery.paddingOf(context).bottom),
                   ],
                 ),
               ),

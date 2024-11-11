@@ -33,7 +33,7 @@ class SliverImageAppBarrState extends State<SliverImageAppBar> {
     return SliverAppBar(
       flexibleSpace: LayoutBuilder(builder: (context, constraints) {
         bool localIsCollapsed = constraints.biggest.height <=
-            MediaQuery.of(context).padding.top + kToolbarHeight - 16 + 32;
+            MediaQuery.paddingOf(context).top + kToolbarHeight - 16 + 32;
         if (isCollapsed != localIsCollapsed)
           WidgetsBinding.instance.addPostFrameCallback((_) {
             if (mounted)
@@ -68,7 +68,7 @@ class SliverImageAppBarrState extends State<SliverImageAppBar> {
         ),
       ),
       expandedHeight: widget.imageUrl?.isNotEmpty ?? false
-          ? (MediaQuery.of(context).size.height / 3.3).clamp(160, 350)
+          ? (MediaQuery.sizeOf(context).height / 3.3).clamp(160, 350)
           : null,
       pinned: true,
       actions: actions,

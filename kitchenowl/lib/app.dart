@@ -209,7 +209,7 @@ class _AppState extends State<App> {
     switch (state.themeMode) {
       case ThemeMode.system:
         final Brightness brightnessValue =
-            MediaQuery.of(context).platformBrightness;
+            MediaQuery.platformBrightnessOf(context);
         if (brightnessValue == Brightness.dark) {
           continue dark;
         } else {

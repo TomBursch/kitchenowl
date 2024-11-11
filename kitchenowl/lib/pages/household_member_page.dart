@@ -135,7 +135,7 @@ class _HouseholdMemberPageState extends State<HouseholdMemberPage> {
                     ),
                     SliverToBoxAdapter(
                       child: SizedBox(
-                        height: MediaQuery.of(context).padding.bottom,
+                        height: MediaQuery.paddingOf(context).bottom,
                       ),
                     ),
                   ],

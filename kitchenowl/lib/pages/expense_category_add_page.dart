@@ -176,7 +176,7 @@ class _AddExpenseCategoryPageState extends State<AddExpenseCategoryPage> {
                   ),
                 ),
               SliverToBoxAdapter(
-                child: SizedBox(height: MediaQuery.of(context).padding.bottom),
+                child: SizedBox(height: MediaQuery.paddingOf(context).bottom),
               ),
             ],
           ),

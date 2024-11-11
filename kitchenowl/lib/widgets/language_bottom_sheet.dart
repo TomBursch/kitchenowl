@@ -80,7 +80,7 @@ class _LanguageBottomSheetState extends State<LanguageBottomSheet> {
                   ? const Icon(Icons.check_circle_rounded)
                   : null,
             ),
-          SizedBox(height: MediaQuery.of(context).padding.bottom),
+          SizedBox(height: MediaQuery.paddingOf(context).bottom),
         ],
       ),
     );

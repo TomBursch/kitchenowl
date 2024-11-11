@@ -413,7 +413,7 @@ class _RecipePageState extends State<RecipePage> {
                       ),
                     ),
                   SizedBox(
-                    height: MediaQuery.of(context).padding.bottom,
+                    height: MediaQuery.paddingOf(context).bottom,
                   ),
                 ],
               ),
@@ -499,7 +499,7 @@ class _RecipePageState extends State<RecipePage> {
                                   SliverToBoxAdapter(
                                     child: SizedBox(
                                       height:
-                                          MediaQuery.of(context).padding.bottom,
+                                          MediaQuery.paddingOf(context).bottom,
                                     ),
                                   ),
                                 ],

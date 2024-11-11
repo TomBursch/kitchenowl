@@ -88,6 +88,7 @@ class RecipeCubit extends Cubit<RecipeState> {
             .where((item) => state.selectedItems.contains(item.name))
             .toList(),
       ));
+      emit(state.copyWith(selectedItems: {}));
     }
   }
 

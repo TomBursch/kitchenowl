@@ -11,6 +11,7 @@ import 'package:kitchenowl/enums/views_enum.dart';
 import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/pages/household_page/household_drawer.dart';
 import 'package:kitchenowl/pages/household_page/household_navigation_rail.dart';
+import 'package:kitchenowl/pages/household_page/more.dart';
 import 'package:kitchenowl/pages/page_not_found.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
@@ -94,6 +95,17 @@ class _HouseholdPageState extends State<HouseholdPage>
       case ViewsEnum.balances:
         expenseListCubit.refresh();
         break;
+      case ViewsEnum.more:
+        showModalBottomSheet(
+          context: context,
+          showDragHandle: true,
+          isScrollControlled: true,
+          builder: (context) => BlocProvider.value(
+            value: householdCubit,
+            child: MorePage(),
+          ),
+        );
+        return;
       default:
         break;
     }
@@ -204,11 +216,13 @@ class _HouseholdPageState extends State<HouseholdPage>
                           NavigationDestinationLabelBehavior.onlyShowSelected,
                       destinations: pages
                           .map((e) => NavigationDestination(
-                                icon: Icon(e.toIcon(context)),
+                                icon: e.toIconWidget(context) ??
+                                    Icon(e.toIcon(context)),
                                 selectedIcon: Icon(e.toSelectedIcon(context)),
                                 label: e.toLocalizedShortString(context),
                                 tooltip: e.toLocalizedString(context),
                               ))
+                          .take(5)
                           .toList(),
                       selectedIndex: _selectedIndex,
                       onDestinationSelected: (i) => _onItemTapped(

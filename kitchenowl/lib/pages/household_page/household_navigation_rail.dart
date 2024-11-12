@@ -37,11 +37,13 @@ class HouseholdNavigationRail extends StatelessWidget {
           icon: const Icon(Icons.menu_rounded),
           label: Text(AppLocalizations.of(context)!.more),
         ),
-        ...pages.map((e) => NavigationRailDestination(
-              label: Text(e.toLocalizedString(context)),
-              icon: Icon(e.toIcon(context)),
-              selectedIcon: Icon(e.toSelectedIcon(context)),
-            )),
+        ...pages
+            .where((e) => e != ViewsEnum.more)
+            .map((e) => NavigationRailDestination(
+                  label: Text(e.toLocalizedString(context)),
+                  icon: Icon(e.toIcon(context)),
+                  selectedIcon: Icon(e.toSelectedIcon(context)),
+                )),
       ],
       selectedIndex: selectedIndex + 1,
       onDestinationSelected: (i) {

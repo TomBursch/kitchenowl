@@ -111,7 +111,7 @@ class Household extends Model {
     }
     if (viewOrdering != null) {
       data['view_ordering'] = viewOrdering!.map((e) => e.toString()).toList()
-        ..remove(ViewsEnum.profile.toString());
+        ..remove(ViewsEnum.more.toString());
     }
 
     return data;

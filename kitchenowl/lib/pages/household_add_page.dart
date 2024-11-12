@@ -84,7 +84,6 @@ class _HouseholdAddPageState extends State<HouseholdAddPage> {
                   HouseholdAddState>(
                 askConfirmation: false,
                 languageCanBeChanged: true,
-                showProfile: false,
               ),
             ),
             SliverCrossAxisConstrained(

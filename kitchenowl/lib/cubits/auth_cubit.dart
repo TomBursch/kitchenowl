@@ -141,10 +141,12 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
-  void onboard({
+  Future<void> onboard({
     required String username,
     required String name,
     required String password,
+    Function()? wrongCredentialsCallback,
+    Function()? correctCredentialsCallback,
   }) async {
     emit(const Loading());
     if (await ApiService.getInstance().isOnboarding()) {
@@ -152,8 +154,15 @@ class AuthCubit extends Cubit<AuthState> {
           await ApiService.getInstance().onboarding(username, name, password);
       if (token != null && ApiService.getInstance().isAuthenticated()) {
         await SecureStorage.getInstance().write(key: 'TOKEN', value: token);
+        await this.stream.any((s) => s is Authenticated);
+        if (correctCredentialsCallback != null) {
+          correctCredentialsCallback();
+        }
       } else {
-        updateState();
+        await updateState();
+        if (wrongCredentialsCallback != null) {
+          wrongCredentialsCallback();
+        }
       }
     }
   }
@@ -164,6 +173,7 @@ class AuthCubit extends Cubit<AuthState> {
     required String password,
     required String email,
     Function(String?)? wrongCredentialsCallback,
+    Function()? correctCredentialsCallback,
   }) async {
     emit(const Loading());
     final (token, msg) = await ApiService.getInstance().signup(
@@ -174,6 +184,10 @@ class AuthCubit extends Cubit<AuthState> {
     );
     if (token != null && ApiService.getInstance().isAuthenticated()) {
       await SecureStorage.getInstance().write(key: 'TOKEN', value: token);
+      await this.stream.any((s) => s is Authenticated);
+      if (correctCredentialsCallback != null) {
+        correctCredentialsCallback();
+      }
     } else {
       await updateState();
       if (ApiService.getInstance().connectionStatus == Connection.connected &&

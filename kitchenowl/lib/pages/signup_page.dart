@@ -198,6 +198,8 @@ class _SignupPageState extends State<SignupPage> {
           Future.delayed(
               Duration(milliseconds: 1), () => router.go("/register"));
         },
+        correctCredentialsCallback: () => Future.delayed(
+            Duration(milliseconds: 1), () => router.push("/tutorial")),
       );
     }
   }

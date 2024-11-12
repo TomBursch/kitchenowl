@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:kitchenowl/cubits/auth_cubit.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/widgets/create_user_form_fields.dart';
@@ -44,7 +45,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 16, bottom: 8),
-                      child: ElevatedButton(
+                      child: LoadingElevatedButton(
                         onPressed: () => _submit(context),
                         child: Text(AppLocalizations.of(context)!.start),
                       ),
@@ -67,12 +68,13 @@ class _OnboardingPageState extends State<OnboardingPage> {
     );
   }
 
-  void _submit(BuildContext context) {
+  Future<void> _submit(BuildContext context) async {
     if (_formKey.currentState!.validate()) {
-      BlocProvider.of<AuthCubit>(context).onboard(
+      await BlocProvider.of<AuthCubit>(context).onboard(
         username: usernameController.text,
         name: nameController.text,
         password: passwordController.text,
+        correctCredentialsCallback: () => context.push("/tutorial"),
       );
     }
   }

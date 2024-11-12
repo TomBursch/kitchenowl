@@ -335,14 +335,6 @@ final router = GoRouter(
                 ),
               ],
             ),
-            GoRoute(
-              path: "profile",
-              pageBuilder: (context, state) => FadeThroughTransitionPage(
-                key: state.pageKey,
-                name: state.name,
-                child: const ProfilePage(),
-              ),
-            ),
           ],
         ),
       ],

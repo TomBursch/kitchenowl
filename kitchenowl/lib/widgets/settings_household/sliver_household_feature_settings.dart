@@ -15,13 +15,11 @@ class SliverHouseholdFeatureSettings<
     State extends HouseholdAddUpdateState> extends StatelessWidget {
   final bool languageCanBeChanged;
   final bool askConfirmation;
-  final bool showProfile;
 
   const SliverHouseholdFeatureSettings({
     super.key,
     this.languageCanBeChanged = false,
     this.askConfirmation = true,
-    this.showProfile = true,
   });
 
   @override
@@ -66,11 +64,6 @@ class SliverHouseholdFeatureSettings<
                 .toList(),
           ),
         ),
-        if (showProfile)
-          const ViewSettingsListTile(
-            view: ViewsEnum.profile,
-            showHandleIfNotOptional: false,
-          ),
         Center(child: Text(AppLocalizations.of(context)!.longPressToReorder)),
         const SizedBox(height: 8),
         const Divider(indent: 16, endIndent: 16),

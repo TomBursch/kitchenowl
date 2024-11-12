@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_blurhash/flutter_blurhash.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kitchenowl/app.dart';
 import 'package:kitchenowl/cubits/auth_cubit.dart';
@@ -8,7 +7,7 @@ import 'package:kitchenowl/cubits/household_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/enums/views_enum.dart';
 import 'package:kitchenowl/kitchenowl.dart';
-import 'package:transparent_image/transparent_image.dart';
+import 'package:kitchenowl/widgets/household_image.dart';
 
 class HouseholdDrawer extends StatelessWidget {
   final int selectedIndex;
@@ -63,22 +62,7 @@ class HouseholdDrawer extends StatelessWidget {
                 if (state.household.image != null)
                   Padding(
                     padding: const EdgeInsets.only(bottom: 16),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(14),
-                      child: SizedBox(
-                        height: 150,
-                        child: FadeInImage(
-                          fit: BoxFit.cover,
-                          placeholder: state.household.imageHash != null
-                              ? BlurHashImage(state.household.imageHash!)
-                              : MemoryImage(kTransparentImage) as ImageProvider,
-                          image: getImageProvider(
-                            context,
-                            state.household.image!,
-                          ),
-                        ),
-                      ),
-                    ),
+                    child: HouseholdImage(household: state.household),
                   ),
                 Text(
                   state.household.name,
@@ -90,7 +74,7 @@ class HouseholdDrawer extends StatelessWidget {
             ),
           ),
         ),
-        ...pages.where((e) => e != ViewsEnum.profile).map(
+        ...pages.where((e) => e != ViewsEnum.more).map(
           (ViewsEnum destination) {
             return NavigationDrawerDestination(
               label: Text(

@@ -27,7 +27,8 @@ class HouseholdPage extends StatefulWidget {
   _HouseholdPageState createState() => _HouseholdPageState();
 }
 
-class _HouseholdPageState extends State<HouseholdPage> {
+class _HouseholdPageState extends State<HouseholdPage>
+    with WidgetsBindingObserver {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
   late final HouseholdCubit householdCubit;
@@ -44,16 +45,26 @@ class _HouseholdPageState extends State<HouseholdPage> {
     recipeListCubit = RecipeListCubit(widget.household);
     plannerCubit = PlannerCubit(widget.household);
     expenseListCubit = ExpenseListCubit(widget.household);
+    WidgetsBinding.instance.addObserver(this);
   }
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     householdCubit.close();
     shoppingListCubit.close();
     recipeListCubit.close();
     plannerCubit.close();
     expenseListCubit.close();
     super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      householdCubit.refresh();
+      shoppingListCubit.refresh();
+    }
   }
 
   void _onItemTapped(

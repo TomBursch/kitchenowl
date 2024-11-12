@@ -236,9 +236,18 @@
       "privacyPolicy": {}
     }
   },
+  "@private": {},
+  "@privateRecipeDescription": {},
   "@profile": {},
+  "@public": {},
+  "@publicRecipeDescription": {},
   "@recentItemsCategorize": {},
   "@recipeAdd": {},
+  "@recipeAddToHousehold": {
+    "placeholders": {
+      "householdName": {}
+    }
+  },
   "@recipeAddUrl": {},
   "@recipeDelete": {},
   "@recipeDeleteConfirmation": {
@@ -513,9 +522,14 @@
   "preparationTime": "Esivalmisteluiden kesto",
   "privacyPolicy": "Tietosuojakäytäntö",
   "privacyPolicyAgree": "{privacyPolicy} katsotaan hyväksytyksi, kun luot tunnuksen",
+  "private": "Yksityinen",
+  "privateRecipeDescription": "Vain kotitalouden jäsenet voivat nähdä reseptin.",
   "profile": "Profiili",
+  "public": "Julkinen",
+  "publicRecipeDescription": "Kaikki joilla on linkki, voivat nähdä reseptin.",
   "recentItemsCategorize": "Luokittele viimeisimmät kohteet",
   "recipeAdd": "Lisää resepti",
+  "recipeAddToHousehold": "Lisää kotitalouteen {householdName}",
   "recipeAddUrl": "Lisää resepti URL-osoitteesta",
   "recipeDelete": "Poista resepti",
   "recipeDeleteConfirmation": "Haluatko varmasti poistaa reseptin {recipe}?",

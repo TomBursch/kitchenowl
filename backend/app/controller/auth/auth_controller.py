@@ -12,7 +12,14 @@ from app.models import User, Token, OIDCLink, OIDCRequest, ChallengeMailVerify
 from app.errors import NotFoundRequest, UnauthorizedRequest
 from app.service import mail
 from .schemas import Login, Signup, CreateLongLivedToken, GetOIDCLoginUrl, LoginOIDC
-from app.config import EMAIL_MANDATORY, FRONT_URL, jwt, OPEN_REGISTRATION, DISABLE_USERNAME_PASSWORD_LOGIN, oidc_clients
+from app.config import (
+    EMAIL_MANDATORY,
+    FRONT_URL,
+    jwt,
+    OPEN_REGISTRATION,
+    DISABLE_USERNAME_PASSWORD_LOGIN,
+    oidc_clients,
+)
 
 auth = Blueprint("auth", __name__)
 
@@ -52,7 +59,12 @@ if not DISABLE_USERNAME_PASSWORD_LOGIN:
     @validate_args(Login)
     def login(args):
         username = args["username"].lower().replace(" ", "")
-        user = User.find_by_username(username)
+        user = None
+        if "@" not in username:
+            user = User.find_by_username(username)
+        else:
+            user = User.find_by_email(username)
+
         if not user or not user.check_password(args["password"]):
             raise UnauthorizedRequest(
                 message="Unauthorized: IP {} login attemp with wrong username or password".format(
@@ -83,7 +95,7 @@ if OPEN_REGISTRATION and not DISABLE_USERNAME_PASSWORD_LOGIN:
     @auth.route("signup", methods=["POST"])
     @validate_args(Signup)
     def signup(args):
-        username = args["username"].lower().replace(" ", "")
+        username = args["username"].lower().replace(" ", "").replace("@", "")
         user = User.find_by_username(username)
         if user:
             return "Request invalid: username", 400

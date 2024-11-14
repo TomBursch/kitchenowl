@@ -22,6 +22,12 @@ class _IconSelectionPageState extends State<IconSelectionPage> {
   String filter = "";
 
   @override
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(

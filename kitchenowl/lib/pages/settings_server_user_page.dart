@@ -15,6 +15,7 @@ class SettingsServerUserPage extends StatefulWidget {
 
 class _SettingsServerUserPageState extends State<SettingsServerUserPage> {
   late SettingsServerCubit cubit;
+  TextEditingController searchController = TextEditingController();
 
   @override
   void initState() {
@@ -25,6 +26,7 @@ class _SettingsServerUserPageState extends State<SettingsServerUserPage> {
   @override
   void dispose() {
     cubit.close();
+    searchController.dispose();
     super.dispose();
   }
 
@@ -61,10 +63,25 @@ class _SettingsServerUserPageState extends State<SettingsServerUserPage> {
                   ),
                 ],
               ),
+              SliverToBoxAdapter(
+                child: SizedBox(
+                  height: 70,
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 0, 16, 6),
+                    child: SearchTextField(
+                      controller: searchController,
+                      labelText: Nullable.empty(),
+                      hintText: AppLocalizations.of(context)!.userSearchHint,
+                      clearOnSubmit: false,
+                      onSearch: (s) async {
+                        cubit.filter(s);
+                      },
+                      textInputAction: TextInputAction.search,
+                    ),
+                  ),
+                ),
+              ),
               BlocBuilder<SettingsServerCubit, SettingsServerState>(
-                buildWhen: (prev, curr) =>
-                    prev.users != curr.users ||
-                    prev is LoadingSettingsServerState,
                 builder: (context, state) {
                   if (state is LoadingSettingsServerState) {
                     return const SliverToBoxAdapter(
@@ -72,10 +89,22 @@ class _SettingsServerUserPageState extends State<SettingsServerUserPage> {
                     );
                   }
 
+                  final filteredUsers = state.users
+                      .where((u) =>
+                          (u.email
+                                  ?.toLowerCase()
+                                  .contains(state.filter.toLowerCase()) ??
+                              false) ||
+                          u.username
+                              .toLowerCase()
+                              .contains(state.filter.toLowerCase()))
+                      .toList();
+
                   return SliverList(
                     delegate: SliverChildBuilderDelegate(
-                      childCount: state.users.length,
-                      (context, i) => ServerUserListTile(user: state.users[i]),
+                      childCount: filteredUsers.length,
+                      (context, i) =>
+                          ServerUserListTile(user: filteredUsers[i]),
                     ),
                   );
                 },

@@ -59,6 +59,7 @@ class ServerUserListTile extends StatelessWidget {
       child: UserListTile(
         user: user,
         markSelf: true,
+        showEmail: user.email != null,
         trailing: user.hasServerAdminRights()
             ? Icon(
                 Icons.admin_panel_settings_rounded,

@@ -13,6 +13,7 @@ class SettingsServerCubit extends Cubit<SettingsServerState> {
 
     emit(SettingsServerState(
       await users ?? [],
+      state.filter,
     ));
   }
 
@@ -34,24 +35,36 @@ class SettingsServerCubit extends Cubit<SettingsServerState> {
 
     return res;
   }
+
+  void filter(String query) {
+    emit(
+      state.copyWith(
+        filter: query,
+      ),
+    );
+  }
 }
 
 class SettingsServerState extends Equatable {
   final List<User> users;
+  final String filter;
 
   const SettingsServerState(
-    this.users,
-  );
+    this.users, [
+    this.filter = "",
+  ]);
 
   SettingsServerState copyWith({
     List<User>? users,
+    String? filter,
   }) =>
       SettingsServerState(
         users ?? this.users,
+        filter ?? this.filter,
       );
 
   @override
-  List<Object?> get props => [users];
+  List<Object?> get props => [users, filter];
 }
 
 class LoadingSettingsServerState extends SettingsServerState {
@@ -60,6 +73,7 @@ class LoadingSettingsServerState extends SettingsServerState {
   @override
   SettingsServerState copyWith({
     List<User>? users,
+    String? filter,
   }) =>
       LoadingSettingsServerState(
         users ?? this.users,

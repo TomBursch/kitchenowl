@@ -11,6 +11,7 @@ class UserListTile extends StatelessWidget {
   final Widget? trailing;
   final bool markSelf;
   final EdgeInsetsGeometry? contentPadding;
+  final bool showEmail;
 
   const UserListTile({
     super.key,
@@ -20,6 +21,7 @@ class UserListTile extends StatelessWidget {
     this.trailing,
     this.markSelf = false,
     this.contentPadding,
+    this.showEmail = false,
   });
 
   @override
@@ -46,7 +48,11 @@ class UserListTile extends StatelessWidget {
                           .id)
               ? ' (${AppLocalizations.of(context)!.you})'
               : '')),
-      subtitle: Text("@${user.username}"),
+      subtitle: Text("@${user.username}" +
+          (showEmail
+              ? "\n${user.email ?? AppLocalizations.of(context)!.none}"
+              : "")),
+      isThreeLine: showEmail,
       trailing: trailing,
       onTap: onTap,
     );

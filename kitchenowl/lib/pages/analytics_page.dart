@@ -54,10 +54,26 @@ class AnalyticsPage extends StatelessWidget {
                 ),
                 ListTile(
                   dense: true,
-                  title: const Text("Active"),
+                  title: const Text("Montly Active"),
                   subtitle: const Text("Online in the last 30 days"),
                   trailing: Text(
                     "${data['users']['active'].toString()} (${NumberFormat.percentPattern().format(data['users']['active'] / data['users']['total'])})",
+                  ),
+                ),
+                ListTile(
+                  dense: true,
+                  title: const Text("Daily Active"),
+                  subtitle: const Text("Online today"),
+                  trailing: Text(
+                    "${data['users']['dau'].toString()} (${NumberFormat.percentPattern().format(data['users']['dau'] / data['users']['total'])})",
+                  ),
+                ),
+                ListTile(
+                  dense: true,
+                  title: const Text("Weekly Active"),
+                  subtitle: const Text("Online this week"),
+                  trailing: Text(
+                    "${data['users']['wau'].toString()} (${NumberFormat.percentPattern().format(data['users']['wau'] / data['users']['total'])})",
                   ),
                 ),
                 ListTile(

@@ -1,4 +1,4 @@
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 import os
 from app.helpers import server_admin_required
 from app.models import User, Token, Household, OIDCLink
@@ -23,6 +23,14 @@ def getBaseAnalytics():
                 "verified": User.query.filter(User.email_verified == True).count(),
                 "active": db.session.query(Token.user_id)
                 .filter(Token.type == "refresh")
+                .group_by(Token.user_id)
+                .count(),
+                "wau": db.session.query(Token.user_id)
+                .filter(Token.type == "refresh", Token.created_at >= datetime.now(timezone.utc).date() - timedelta(days=datetime.now(timezone.utc).weekday()))
+                .group_by(Token.user_id)
+                .count(),
+                "dau": db.session.query(Token.user_id)
+                .filter(Token.type == "refresh", Token.created_at >= datetime.now(timezone.utc).date())
                 .group_by(Token.user_id)
                 .count(),
                 "online": db.session.query(Token.user_id)

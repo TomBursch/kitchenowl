@@ -75,11 +75,14 @@ class ApiService {
       final engine = CronetEngine.build(
         cacheMode: CacheMode.memory,
         cacheMaxSize: 2 * 1024 * 1024,
-        userAgent: "KitchenOwl Agent",
+        userAgent:
+            "KitchenOwl-${Platform.operatingSystem}/${Config.packageInfoSync?.version}",
       );
       _client = CronetClient.fromCronetEngine(engine, closeEngine: true);
     } else if (!kIsWeb) {
-      _client = IOClient(HttpClient()..userAgent = "KitchenOwl Agent");
+      _client = IOClient(HttpClient()
+        ..userAgent =
+            "KitchenOwl-${Platform.operatingSystem}/${Config.packageInfoSync?.version}");
     } else {
       _client = http.Client();
     }

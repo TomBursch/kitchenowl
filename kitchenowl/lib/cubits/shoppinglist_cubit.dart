@@ -262,16 +262,11 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
     emit(state.copyWith(sorting: sorting));
   }
 
-  void setShoppingList(
-    ShoppingList shoppingList, [
-    bool savePreference = false,
-  ]) {
-    if (savePreference) {
-      PreferenceStorage.getInstance().write(
-        key: 'selectedShoppinglist',
-        value: jsonEncode(shoppingList.toJsonWithId()),
-      );
-    }
+  void setShoppingList(ShoppingList shoppingList) {
+    PreferenceStorage.getInstance().write(
+      key: 'selectedShoppinglist',
+      value: jsonEncode(shoppingList.toJsonWithId()),
+    );
     emit(state.copyWith(
       selectedShoppinglistId: shoppingList.id,
     ));

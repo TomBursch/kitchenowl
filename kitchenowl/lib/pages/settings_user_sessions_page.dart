@@ -44,6 +44,9 @@ class SettingsUserSessionsPage extends StatelessWidget {
 
                     return TokenCard(
                       token: token,
+                      onLogout: () {
+                        cubit.logout(token);
+                      },
                     );
                   },
                   childCount: state.user?.tokens

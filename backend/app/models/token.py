@@ -30,7 +30,7 @@ class Token(db.Model, DbModelMixin):
         "Token", back_populates="refresh_token", cascade="all, delete-orphan"
     )
     refresh_token: Mapped["Token"] = db.relationship("Token", remote_side=[id])
-    user: Mapped["User"] = db.relationship("User")
+    user: Mapped["User"] = db.relationship("User", lazy='selectin')
 
     def obj_to_dict(self, skip_columns=None, include_columns=None) -> dict:
         if skip_columns:

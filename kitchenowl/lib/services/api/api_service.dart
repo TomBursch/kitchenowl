@@ -51,7 +51,7 @@ class ApiService {
   String householdPath(Household household) => "/household/${household.id}";
 
   static ApiService? _instance;
-  late final _client;
+  late final http.Client _client;
   late final Socket socket;
   final String baseUrl;
   String? _refreshToken;

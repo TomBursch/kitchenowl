@@ -371,11 +371,14 @@ class ApiService {
     return null;
   }
 
-  Future<bool> logout() async {
+  Future<bool> logout([int? tokenId]) async {
     if (isAuthenticated()) {
-      final res = await delete('/auth');
-      socket.disconnect();
-      if (res.statusCode == 200) refreshToken = '';
+      final res =
+          await delete('/auth' + (tokenId != null ? "/${tokenId}" : ""));
+      if (tokenId == null) {
+        socket.disconnect();
+        if (res.statusCode == 200) refreshToken = '';
+      }
 
       return res.statusCode == 200;
     }

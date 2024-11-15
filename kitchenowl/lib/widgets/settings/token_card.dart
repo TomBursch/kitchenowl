@@ -23,10 +23,10 @@ class TokenCard extends StatelessWidget {
         title: Text(
           token.name,
         ),
-        subtitle: token.lastUsedAt != null
+        subtitle: (token.lastUsedAt ?? token.createdAt) != null
             ? Text(
                 "${AppLocalizations.of(context)!.lastUsed}: ${DateFormat.yMMMEd().add_jm().format(
-                      token.lastUsedAt!,
+                      token.lastUsedAt ?? token.createdAt!,
                     )}",
               )
             : null,

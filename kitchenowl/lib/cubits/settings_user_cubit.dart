@@ -68,6 +68,11 @@ class SettingsUserCubit extends Cubit<SettingsUserState> {
     return token;
   }
 
+  Future<void> logout(Token token) async {
+    final success = await ApiService.getInstance().logout(token.id);
+    if (success) refresh();
+  }
+
   Future<void> deleteLongLivedToken(Token token) async {
     final success = await ApiService.getInstance().deleteLongLivedToken(token);
     if (success) refresh();

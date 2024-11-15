@@ -5,6 +5,8 @@ from app import db
 from app.helpers import DbModelMixin
 from app.config import bcrypt
 from sqlalchemy.orm import Mapped
+from sqlalchemy import DateTime
+from datetime import datetime, timezone
 
 if TYPE_CHECKING:
     from app.models import *
@@ -21,6 +23,7 @@ class User(db.Model, DbModelMixin):
     photo: Mapped[str] = db.Column(db.String(), db.ForeignKey("file.filename", use_alter=True))
     admin: Mapped[bool] = db.Column(db.Boolean(), default=False)
     email_verified: Mapped[bool] = db.Column(db.Boolean(), default=False)
+    last_seen: Mapped[datetime] = db.Column(DateTime, default=lambda: datetime.now(timezone.utc), nullable=True)
 
     tokens: Mapped[List["Token"]] = db.relationship(
         "Token", back_populates="user", cascade="all, delete-orphan"

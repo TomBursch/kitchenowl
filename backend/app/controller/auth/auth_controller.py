@@ -31,6 +31,7 @@ def check_if_token_revoked(jwt_header, jwt_payload: dict) -> bool:
     token = Token.find_by_jti(jti)
     if token is not None:
         token.last_used_at = datetime.now(timezone.utc)
+        token.user.last_seen = token.last_used_at
         token.save()
 
     return token is None
@@ -164,19 +165,24 @@ def refresh():
         }
     )
 
-
-@auth.route("", methods=["DELETE"])
+@auth.route("", methods=["DELETE"], defaults={'id': None})
+@auth.route("<int:id>", methods=["DELETE"])
 @jwt_required()
-def logout():
-    jwt = get_jwt()
-    token = Token.find_by_jti(jwt["jti"])
-    if not token:
+def logout(id):
+    if id:
+        token = Token.find_by_id(id)
+    else:
+        jwt = get_jwt()
+        token = Token.find_by_jti(jwt["jti"])
+    if not token or token.user_id != current_user.id:
         raise UnauthorizedRequest(
             message="Unauthorized: IP {}".format(request.remote_addr)
         )
 
     if token.type == "access":
         token.refresh_token.delete_token_familiy()
+    elif token.type == "refresh":
+        token.delete_token_familiy()
     else:
         token.delete()
 

@@ -145,6 +145,8 @@ icons_launcher:
     ios:
       enable: true
       image_path: "assets/icon/icon-small.png"
+      dark_path: "assets/icon/icon-small-green.png"
+      tinted_path: "assets/icon/icon-small-foreground.png"
     web:
       enable: true
       image_path: "assets/icon/icon.png"

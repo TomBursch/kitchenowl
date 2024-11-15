@@ -44,6 +44,7 @@ dependencies:
   package_info_plus: ^8.0.0
   device_info_plus: ^11.1.0
   http: ^1.1.2
+  cronet_http: ^1.3.2
   diffutil_dart: ^4.0.0
 
   responsive_builder: ^0.7.0

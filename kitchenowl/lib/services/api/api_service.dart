@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
+import 'package:http/io_client.dart';
 import 'package:kitchenowl/config.dart';
 import 'package:kitchenowl/helpers/named_bytearray.dart';
 import 'package:kitchenowl/models/household.dart';
@@ -49,7 +51,7 @@ class ApiService {
   String householdPath(Household household) => "/household/${household.id}";
 
   static ApiService? _instance;
-  final _client = http.Client();
+  late final _client;
   late final Socket socket;
   final String baseUrl;
   String? _refreshToken;
@@ -68,6 +70,13 @@ class ApiService {
   ApiService._internal(String baseUrl)
       : baseUrl = baseUrl.isNotEmpty ? baseUrl + _API_PATH : "" {
     _connectionNotifier.value = Connection.undefined;
+    if (!kIsWeb) {
+      _client = IOClient(HttpClient()
+        ..userAgent =
+            "KitchenOwl-${Platform.operatingSystem}/${Config.packageInfoSync?.version}");
+    } else {
+      _client = http.Client();
+    }
     socket = io(
       baseUrl,
       OptionBuilder()

@@ -69,7 +69,7 @@ jobs:
             asset_content_type: application/gzip
           - os: ubuntu-latest
             target: Android
-            build_target: apk
+            build_target: apk --dart-define=cronetHttpNoPlay=true
             build_path: kitchenowl/build/app/outputs/flutter-apk
             asset_extension: .apk
             asset_content_type: application/vnd.android.package-archive
@@ -147,8 +147,7 @@ jobs:
       # Checkout code, recreate missing files, and get packages.
       - name: Checkout code
         uses: actions/checkout@v2
-      - run: flutter create .
-      - run: flutter pub get
+      - run: flutter packages get
 
       - name: Configure Keystore for Android
         if: matrix.target == 'Android'

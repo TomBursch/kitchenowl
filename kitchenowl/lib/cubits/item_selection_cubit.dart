@@ -26,6 +26,20 @@ class ItemSelectionCubit extends Cubit<ItemSelectionState> {
     emit(state.copyWith(selectedItems: s));
   }
 
+  void remove(RecipePlan recipe) {
+    final s = Map.of(state.selectedItems);
+    if (!s.containsKey(recipe)) return;
+    s[recipe] = {};
+    emit(state.copyWith(selectedItems: s));
+  }
+
+  void add(RecipePlan recipe) {
+    final s = Map.of(state.selectedItems);
+    if (!s.containsKey(recipe)) return;
+    s[recipe] = Set.of(recipe.recipeWithYields.mandatoryItems);
+    emit(state.copyWith(selectedItems: s));
+  }
+
   List<RecipeItem> getResult() {
     return state.getResult();
   }

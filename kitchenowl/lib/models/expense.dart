@@ -6,6 +6,7 @@ import 'nullable.dart';
 class Expense extends Model {
   final int? id;
   final String name;
+  final String? description;
   final double amount;
   final String? image;
   final String? imageHash;
@@ -21,6 +22,7 @@ class Expense extends Model {
     this.id,
     this.name = '',
     this.amount = 0,
+    this.description,
     this.image,
     this.imageHash,
     required this.paidById,
@@ -40,6 +42,7 @@ class Expense extends Model {
       id: map['id'],
       name: map['name'],
       amount: map['amount'],
+      description: map['description'],
       image: map['photo'],
       imageHash: map['photo_hash'],
       excludeFromStatistics: map['exclude_from_statistics'],
@@ -56,6 +59,7 @@ class Expense extends Model {
   Expense copyWith({
     String? name,
     double? amount,
+    String? description,
     DateTime? date,
     String? image,
     bool? excludeFromStatistics,
@@ -67,6 +71,7 @@ class Expense extends Model {
         id: id,
         name: name ?? this.name,
         amount: amount ?? this.amount,
+        description: description ?? this.description,
         date: date ?? this.date,
         image: image ?? this.image,
         imageHash: imageHash,
@@ -82,6 +87,7 @@ class Expense extends Model {
         id,
         name,
         amount,
+        description,
         image,
         imageHash,
         category,
@@ -98,6 +104,7 @@ class Expense extends Model {
     return {
       "name": name,
       "amount": amount,
+      "description": description,
       if (image != null) "photo": image,
       'category': category?.id,
       "exclude_from_statistics": excludeFromStatistics,

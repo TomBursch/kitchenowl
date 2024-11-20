@@ -14,6 +14,7 @@ class ExpenseCategory(db.Model, DbModelMixin, DbModelAuthorizeMixin):
     id: Mapped[int] = db.Column(db.Integer, primary_key=True)
     name: Mapped[str] = db.Column(db.String(128))
     color: Mapped[int] = db.Column(db.BigInteger)
+    budget: Mapped[float] = db.Column(db.Float())
     household_id: Mapped[int] = db.Column(db.Integer, db.ForeignKey("household.id"), nullable=False)
 
     household: Mapped["Household"] = db.relationship("Household", uselist=False)

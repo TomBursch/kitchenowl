@@ -1,6 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:kitchenowl/cubits/household_add_update/household_update_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/kitchenowl.dart';
@@ -14,6 +15,7 @@ import 'package:sliver_tools/sliver_tools.dart';
 enum _ExpenseCategoryAction {
   rename,
   setColor,
+  setBudget,
   merge,
   delete;
 }
@@ -93,6 +95,10 @@ class HouseholdSettingsExpenseCategoryPage extends StatelessWidget {
                       title: Text(
                         state.expenseCategories.elementAt(i).name,
                       ),
+                      subtitle: state.expenseCategories[i].budget != null
+                          ? Text(
+                              "${AppLocalizations.of(context)!.budget}: ${NumberFormat.simpleCurrency().format(state.expenseCategories.elementAt(i).budget)}")
+                          : null,
                       onTap: () async {
                         _handleAction(
                           context,
@@ -167,6 +173,17 @@ class HouseholdSettingsExpenseCategoryPage extends StatelessWidget {
                                           onPressed: () => Navigator.of(context)
                                               .pop(_ExpenseCategoryAction
                                                   .setColor),
+                                        ),
+                                        ActionChip(
+                                          avatar: const Icon(
+                                              Icons.attach_money_rounded),
+                                          label: Text(
+                                            AppLocalizations.of(context)!
+                                                .budgetSet,
+                                          ),
+                                          onPressed: () => Navigator.of(context)
+                                              .pop(_ExpenseCategoryAction
+                                                  .setBudget),
                                         ),
                                         ActionChip(
                                           avatar:
@@ -251,6 +268,41 @@ class HouseholdSettingsExpenseCategoryPage extends StatelessWidget {
         if (color != null) {
           BlocProvider.of<HouseholdUpdateCubit>(context).updateExpenseCategory(
             expenseCategories.elementAt(categoryIndex).copyWith(color: color),
+          );
+        }
+        break;
+      case _ExpenseCategoryAction.setBudget:
+        final res = await showDialog<String>(
+          context: context,
+          builder: (BuildContext context) {
+            return TextDialog(
+              title: AppLocalizations.of(context)!.budgetSet,
+              doneText: AppLocalizations.of(context)!.set,
+              textInputType: TextInputType.numberWithOptions(decimal: true),
+              hintText: AppLocalizations.of(context)!.budget,
+              initialText:
+                  expenseCategories.elementAt(categoryIndex).budget?.toString(),
+              isInputValid: (s) =>
+                  s.trim().isNotEmpty &&
+                  s != expenseCategories.elementAt(categoryIndex).budget &&
+                  double.tryParse(s) != null,
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop("clear"),
+                  child: Text(AppLocalizations.of(context)!.clear),
+                )
+              ],
+            );
+          },
+        );
+
+        if (res != null) {
+          BlocProvider.of<HouseholdUpdateCubit>(context).updateExpenseCategory(
+            expenseCategories.elementAt(categoryIndex).copyWith(
+                  budget: res == "clear"
+                      ? Nullable.empty()
+                      : Nullable(double.tryParse(res)),
+                ),
           );
         }
         break;

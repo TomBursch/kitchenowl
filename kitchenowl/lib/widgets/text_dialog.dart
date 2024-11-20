@@ -7,6 +7,7 @@ class TextDialog extends StatefulWidget {
   final TextInputType? textInputType;
   final bool Function(String)? isInputValid;
   final String? initialText;
+  final List<Widget>? actions;
 
   const TextDialog({
     super.key,
@@ -16,6 +17,7 @@ class TextDialog extends StatefulWidget {
     this.initialText,
     this.textInputType,
     this.isInputValid,
+    this.actions,
   });
 
   @override
@@ -71,6 +73,7 @@ class _TextDialogState extends State<TextDialog> {
         ),
       ),
       actions: [
+        if (widget.actions != null) ...widget.actions!,
         FilledButton(
           onPressed: validText
               ? () => Navigator.of(context).pop(controller.text)

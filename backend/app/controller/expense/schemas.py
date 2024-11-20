@@ -27,6 +27,7 @@ class AddExpense(Schema):
 
     name = fields.String(required=True)
     amount = fields.Float(required=True)
+    description = fields.String()
     date = fields.Integer()
     photo = fields.String()
     category = fields.Integer(allow_none=True)
@@ -45,6 +46,7 @@ class UpdateExpense(Schema):
 
     name = fields.String()
     amount = fields.Float()
+    description = fields.String()
     date = fields.Integer()
     photo = fields.String()
     category = fields.Integer(allow_none=True)
@@ -56,11 +58,13 @@ class UpdateExpense(Schema):
 class AddExpenseCategory(Schema):
     name = fields.String(required=True, validate=lambda a: a and not a.isspace())
     color = fields.Integer(validate=lambda i: i >= 0, allow_none=True)
+    budget = fields.Float(allow_none=True)
 
 
 class UpdateExpenseCategory(Schema):
     name = fields.String(validate=lambda a: a and not a.isspace())
     color = fields.Integer(validate=lambda i: i >= 0, allow_none=True)
+    budget = fields.Float(allow_none=True)
 
     # if set this merges the specified category into this category thus combining them to one
     merge_category_id = fields.Integer(

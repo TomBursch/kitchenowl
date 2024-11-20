@@ -12,6 +12,7 @@ import 'package:kitchenowl/widgets/chart_pie_current_month.dart';
 import 'package:kitchenowl/widgets/choice_scroll.dart';
 import 'package:kitchenowl/widgets/expense/timeframe_dropdown_button.dart';
 import 'package:kitchenowl/widgets/expense_item.dart';
+import 'package:responsive_builder/responsive_builder.dart';
 
 class ExpenseListPage extends StatefulWidget {
   const ExpenseListPage({super.key});
@@ -72,110 +73,51 @@ class _ExpensePageState extends State<ExpenseListPage> {
 
               return BlocBuilder<ExpenseListCubit, ExpenseListCubitState>(
                 bloc: cubit,
-                builder: (context, state) => CustomScrollView(
-                  controller: scrollController,
-                  slivers: [
-                    SliverPadding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      sliver: SliverToBoxAdapter(
-                        child: Container(
-                          height: 80,
-                          alignment: Alignment.centerLeft,
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: Text(
-                                  AppLocalizations.of(context)!.balances,
-                                  style:
-                                      Theme.of(context).textTheme.headlineSmall,
-                                ),
-                              ),
-                              if (state.sorting == ExpenselistSorting.personal)
-                                TimeframeDropdownButton(
-                                  value: state.timeframe,
-                                  onChanged: cubit.setTimeframe,
-                                ),
-                              const SizedBox(width: 2),
-                              IconButton(
-                                onPressed: () {
-                                  final household =
-                                      BlocProvider.of<HouseholdCubit>(context)
-                                          .state
-                                          .household;
-                                  context.go(
-                                    "/household/${household.id}/balances/overview",
-                                    extra: state.sorting,
-                                  );
-                                },
-                                icon: const Icon(Icons.bar_chart_rounded),
-                                tooltip: AppLocalizations.of(context)!.overview,
-                              ),
-                            ],
+                builder: (context, state) {
+                  final isDesktop = getValueForScreenType(
+                    context: context,
+                    mobile: false,
+                    tablet: false,
+                    desktop: true,
+                  );
+
+                  final title = Container(
+                    height: 80,
+                    alignment: Alignment.centerLeft,
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            AppLocalizations.of(context)!.balances,
+                            style: Theme.of(context).textTheme.headlineSmall,
                           ),
                         ),
-                      ),
+                        if (state.sorting == ExpenselistSorting.personal ||
+                            isDesktop)
+                          TimeframeDropdownButton(
+                            value: state.timeframe,
+                            onChanged: cubit.setTimeframe,
+                          ),
+                        const SizedBox(width: 2),
+                        IconButton(
+                          onPressed: () {
+                            final household =
+                                BlocProvider.of<HouseholdCubit>(context)
+                                    .state
+                                    .household;
+                            context.go(
+                              "/household/${household.id}/balances/overview",
+                              extra: state.sorting,
+                            );
+                          },
+                          icon: const Icon(Icons.bar_chart_rounded),
+                          tooltip: AppLocalizations.of(context)!.overview,
+                        ),
+                      ],
                     ),
-                    if (householdState.household.member?.isNotEmpty ?? false)
-                      SliverToBoxAdapter(
-                        child: AnimatedCrossFade(
-                          crossFadeState:
-                              state.sorting == ExpenselistSorting.all ||
-                                      state.expenseOverview.byCategory.isEmpty
-                                  ? CrossFadeState.showFirst
-                                  : CrossFadeState.showSecond,
-                          duration: const Duration(milliseconds: 100),
-                          firstChild: ChartBarMemberDistribution(
-                            household: householdState.household,
-                          ),
-                          secondChild: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 16),
-                            child: SizedBox(
-                              height: 270,
-                              child: Row(
-                                children: [
-                                  if (state.expenseOverview.byCategory.values
-                                          .fold(0.0, (a, b) => a + b) !=
-                                      0)
-                                    Expanded(
-                                      flex: 2,
-                                      child: ChartPieCurrentMonth(
-                                        data: state.expenseOverview,
-                                        categories: state.categories,
-                                      ),
-                                    ),
-                                  Expanded(
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Text(
-                                          state.timeframe.getStringFromDateTime(
-                                            context,
-                                            DateTime.now(),
-                                          ),
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .headlineSmall,
-                                        ),
-                                        const Divider(),
-                                        Text(
-                                          NumberFormat.simpleCurrency().format(
-                                            state.expenseOverview.byCategory
-                                                .values
-                                                .fold(0.0, (a, b) => a + b),
-                                          ),
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .headlineSmall,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
+                  );
+
+                  final expenseList = [
                     SliverToBoxAdapter(
                       child: LeftRightWrap(
                         left: (state.categories.isEmpty)
@@ -334,8 +276,187 @@ class _ExpensePageState extends State<ExpenseListPage> {
                           ),
                         ),
                       ),
-                  ],
-                ),
+                  ];
+
+                  final charts;
+                  if (isDesktop)
+                    charts = Expanded(
+                      flex: 4,
+                      child: ListView(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            child: title,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            child: SizedBox(
+                              height: 270,
+                              child: Row(
+                                children: [
+                                  if (state.expenseOverview[state.sorting]!
+                                          .byCategory.values
+                                          .fold(0.0, (a, b) => a + b) !=
+                                      0)
+                                    Expanded(
+                                      flex: 2,
+                                      child: ChartPieCurrentMonth(
+                                        data: state
+                                            .expenseOverview[state.sorting]!,
+                                        categories: state.categories,
+                                      ),
+                                    ),
+                                  Expanded(
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Text(
+                                          state.timeframe.getStringFromDateTime(
+                                            context,
+                                            DateTime.now(),
+                                          ),
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .headlineSmall,
+                                        ),
+                                        const Divider(),
+                                        Text(
+                                          NumberFormat.simpleCurrency().format(
+                                            state
+                                                .expenseOverview[state.sorting]!
+                                                .byCategory
+                                                .values
+                                                .fold(0.0, (a, b) => a + b),
+                                          ),
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .headlineSmall,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Divider(
+                            height: 50,
+                            indent: 25,
+                            endIndent: 25,
+                          ),
+                          if (householdState.household.member?.isNotEmpty ??
+                              false)
+                            ChartBarMemberDistribution(
+                              household: householdState.household,
+                            ),
+                        ],
+                        shrinkWrap: true,
+                      ),
+                    );
+                  else if (householdState.household.member?.isNotEmpty ?? false)
+                    charts = SliverToBoxAdapter(
+                      child: AnimatedCrossFade(
+                        crossFadeState:
+                            state.sorting == ExpenselistSorting.all ||
+                                    state.expenseOverview[state.sorting]!
+                                        .byCategory.isEmpty
+                                ? CrossFadeState.showFirst
+                                : CrossFadeState.showSecond,
+                        duration: const Duration(milliseconds: 100),
+                        firstChild: ChartBarMemberDistribution(
+                          household: householdState.household,
+                        ),
+                        secondChild: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          child: SizedBox(
+                            height: 270,
+                            child: Row(
+                              children: [
+                                if (state
+                                        .expenseOverview[
+                                            ExpenselistSorting.personal]!
+                                        .byCategory
+                                        .values
+                                        .fold(0.0, (a, b) => a + b) !=
+                                    0)
+                                  Expanded(
+                                    flex: 2,
+                                    child: ChartPieCurrentMonth(
+                                      data: state.expenseOverview[
+                                          ExpenselistSorting.personal]!,
+                                      categories: state.categories,
+                                    ),
+                                  ),
+                                Expanded(
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Text(
+                                        state.timeframe.getStringFromDateTime(
+                                          context,
+                                          DateTime.now(),
+                                        ),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headlineSmall,
+                                      ),
+                                      const Divider(),
+                                      Text(
+                                        NumberFormat.simpleCurrency().format(
+                                          state
+                                              .expenseOverview[
+                                                  ExpenselistSorting.personal]!
+                                              .byCategory
+                                              .values
+                                              .fold(0.0, (a, b) => a + b),
+                                        ),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headlineSmall,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  else
+                    charts = null;
+
+                  return Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if (isDesktop) charts,
+                      Expanded(
+                        flex: 5,
+                        child: CustomScrollView(
+                          controller: scrollController,
+                          slivers: [
+                            if (!isDesktop) ...[
+                              SliverPadding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 16),
+                                sliver: SliverToBoxAdapter(
+                                  child: title,
+                                ),
+                              ),
+                              if (householdState.household.member?.isNotEmpty ??
+                                  false)
+                                charts,
+                            ] else
+                              SliverToBoxAdapter(
+                                child: const SizedBox(height: 16),
+                              ),
+                            ...expenseList,
+                          ],
+                        ),
+                      ),
+                    ],
+                  );
+                },
               );
             },
           ),

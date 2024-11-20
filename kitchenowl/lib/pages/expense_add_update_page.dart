@@ -31,6 +31,7 @@ class AddUpdateExpensePage extends StatefulWidget {
 
 class _AddUpdateExpensePageState extends State<AddUpdateExpensePage> {
   final TextEditingController amountController = TextEditingController();
+  final TextEditingController descriptionController = TextEditingController();
 
   late AddUpdateExpenseCubit cubit;
   bool isUpdate = false;
@@ -54,6 +55,7 @@ class _AddUpdateExpensePageState extends State<AddUpdateExpensePage> {
       );
     } else {
       amountController.text = widget.expense!.amount.abs().toStringAsFixed(2);
+      descriptionController.text = widget.expense!.description ?? "";
       cubit = AddUpdateExpenseCubit(widget.household, widget.expense!);
     }
   }
@@ -62,6 +64,7 @@ class _AddUpdateExpensePageState extends State<AddUpdateExpensePage> {
   void dispose() {
     cubit.close();
     amountController.dispose();
+    descriptionController.dispose();
     super.dispose();
   }
 
@@ -149,12 +152,27 @@ class _AddUpdateExpensePageState extends State<AddUpdateExpensePage> {
                             TextField(
                           controller: textEditingController,
                           focusNode: focusNode,
-                          onChanged: (s) => cubit.setName(s),
+                          onChanged: cubit.setName,
                           textInputAction: TextInputAction.next,
                           textCapitalization: TextCapitalization.sentences,
                           decoration: InputDecoration(
                             labelText: AppLocalizations.of(context)!.name,
                           ),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      TextField(
+                        onChanged: cubit.setDescription,
+                        textCapitalization: TextCapitalization.sentences,
+                        controller: descriptionController,
+                        maxLines: null,
+                        decoration: InputDecoration(
+                          border: const OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(14)),
+                          ),
+                          labelText: AppLocalizations.of(context)!.description,
+                          hintText:
+                              AppLocalizations.of(context)!.writeMarkdownHere,
                         ),
                       ),
                       const SizedBox(height: 16),

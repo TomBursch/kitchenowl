@@ -130,24 +130,22 @@ class ExpenseListCubit extends Cubit<ExpenseListCubitState> {
       search: search,
     ));
 
-    Future<ExpenseOverview>? monthOverview;
-    if (state.sorting == ExpenselistSorting.personal) {
-      monthOverview = TransactionHandler.getInstance()
-          .runTransaction(TransactionExpenseGetOverview(
-            household: household,
-            sorting: state.sorting,
-            timeframe: timeframe,
-            steps: 1,
-          ))
-          .then<ExpenseOverview>((v) => v[0] ?? const ExpenseOverview());
-    }
+    Future<ExpenseOverview> monthOverview = TransactionHandler.getInstance()
+        .runTransaction(TransactionExpenseGetOverview(
+          household: household,
+          sorting: state.sorting,
+          timeframe: timeframe,
+          steps: 1,
+        ))
+        .then<ExpenseOverview>((v) => v[0] ?? const ExpenseOverview());
 
     emit(ExpenseListCubitState(
       expenses: await expenses,
       sorting: sorting,
       categories: await categories,
       allLoaded: (await expenses).length < 30,
-      expenseOverview: (await monthOverview) ?? state.expenseOverview,
+      expenseOverview: Map.from(state.expenseOverview)
+        ..[sorting] = await monthOverview,
       timeframe: timeframe,
       filter: filter,
       search: search,
@@ -160,7 +158,7 @@ class ExpenseListCubitState extends Equatable {
   final List<Expense> expenses;
   final ExpenselistSorting sorting;
   final List<ExpenseCategory> categories;
-  final ExpenseOverview expenseOverview;
+  final Map<ExpenselistSorting, ExpenseOverview> expenseOverview;
   final bool allLoaded;
   final Timeframe timeframe;
   final List<ExpenseCategory?> filter;
@@ -182,7 +180,7 @@ class ExpenseListCubitState extends Equatable {
     ExpenselistSorting? sorting,
     bool? allLoaded,
     List<ExpenseCategory>? categories,
-    ExpenseOverview? expenseOverview,
+    Map<ExpenselistSorting, ExpenseOverview>? expenseOverview,
     Timeframe? timeframe,
     List<ExpenseCategory?>? filter,
     String? search,
@@ -210,7 +208,10 @@ class LoadingExpenseListCubitState extends ExpenseListCubitState {
     super.sorting,
     super.timeframe,
     super.filter,
-  }) : super(expenseOverview: const ExpenseOverview());
+  }) : super(expenseOverview: const {
+          ExpenselistSorting.all: ExpenseOverview(),
+          ExpenselistSorting.personal: ExpenseOverview(),
+        });
 
   @override
   ExpenseListCubitState copyWith({
@@ -218,7 +219,7 @@ class LoadingExpenseListCubitState extends ExpenseListCubitState {
     ExpenselistSorting? sorting,
     bool? allLoaded,
     List<ExpenseCategory>? categories,
-    ExpenseOverview? expenseOverview,
+    Map<ExpenselistSorting, ExpenseOverview>? expenseOverview,
     Timeframe? timeframe,
     List<ExpenseCategory?>? filter,
     String? search,

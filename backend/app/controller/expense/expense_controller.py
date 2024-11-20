@@ -103,6 +103,8 @@ def addExpense(args, household_id):
     expense.name = args["name"]
     expense.amount = args["amount"]
     expense.household_id = household_id
+    if "description" in args:
+        expense.description = args["description"]
     if "date" in args:
         expense.date = datetime.fromtimestamp(args["date"] / 1000, timezone.utc)
     if "photo" in args and args["photo"] != expense.photo:
@@ -150,6 +152,8 @@ def updateExpense(args, id):  # noqa: C901
         expense.name = args["name"]
     if "amount" in args:
         expense.amount = args["amount"]
+    if "description" in args:
+        expense.description = args["description"]
     if "date" in args:
         expense.date = datetime.fromtimestamp(args["date"] / 1000, timezone.utc)
     if "photo" in args and args["photo"] != expense.photo:
@@ -355,6 +359,8 @@ def addExpenseCategory(args, household_id):
     category = ExpenseCategory()
     category.name = args["name"]
     category.color = args["color"]
+    if "budget" in args:
+        category.budget = args["budget"]
     category.household_id = household_id
     category.save()
     return jsonify(category.obj_to_dict())
@@ -384,6 +390,8 @@ def updateExpenseCategory(args, id):
         category.name = args["name"]
     if "color" in args:
         category.color = args["color"]
+    if "budget" in args:
+        category.budget = args["budget"]
 
     category.save()
 

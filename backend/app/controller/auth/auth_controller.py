@@ -165,7 +165,8 @@ def refresh():
         }
     )
 
-@auth.route("", methods=["DELETE"], defaults={'id': None})
+
+@auth.route("", methods=["DELETE"], defaults={"id": None})
 @auth.route("<int:id>", methods=["DELETE"])
 @jwt_required()
 def logout(id):

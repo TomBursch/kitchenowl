@@ -55,13 +55,21 @@ class _ItemSelectionPageState extends State<ItemSelectionPage> {
           slivers: [
             for (final plan in widget.plans) ...[
               if (plan.recipe.items.isNotEmpty)
-                SliverPadding(
-                  padding: const EdgeInsets.all(16),
-                  sliver: SliverToBoxAdapter(
-                    child: Text(
+                SliverToBoxAdapter(
+                  child: CheckboxListTile(
+                    title: Text(
                       '${plan.recipe.name}${plan.yields != null ? " (${plan.yields} ${AppLocalizations.of(context)!.yields})" : ""}:',
                       style: Theme.of(context).textTheme.headlineSmall,
                     ),
+                    value: state.selectedItems[plan]!
+                        .containsAll(plan.recipeWithYields.mandatoryItems),
+                    onChanged: (newValue) {
+                      if (!(newValue ?? false)) {
+                        cubit.remove(plan);
+                      } else {
+                        cubit.add(plan);
+                      }
+                    },
                   ),
                 ),
               SliverItemGridList(

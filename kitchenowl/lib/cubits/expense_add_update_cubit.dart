@@ -17,6 +17,7 @@ class AddUpdateExpenseCubit extends Cubit<AddUpdateExpenseState> {
     this.expense = const Expense(paidById: 0),
   ]) : super(AddUpdateExpenseState(
           amount: expense.amount.abs(),
+          description: expense.description ?? "",
           date: expense.date ?? DateTime.now(),
           isIncome: expense.amount < 0,
           name: expense.name,
@@ -45,6 +46,7 @@ class AddUpdateExpenseCubit extends Cubit<AddUpdateExpenseState> {
           Expense(
             amount: amount,
             name: _state.name,
+            description: _state.description,
             date: _state.date,
             image: image ?? expense.image,
             excludeFromStatistics: _state.excludeFromStatistics,
@@ -56,6 +58,7 @@ class AddUpdateExpenseCubit extends Cubit<AddUpdateExpenseState> {
       } else {
         await ApiService.getInstance().updateExpense(expense.copyWith(
           name: _state.name,
+          description: _state.description,
           amount: amount,
           date: _state.date,
           image: image,
@@ -78,6 +81,10 @@ class AddUpdateExpenseCubit extends Cubit<AddUpdateExpenseState> {
 
   void setName(String name) {
     emit(state.copyWith(name: name));
+  }
+
+  void setDescription(String description) {
+    emit(state.copyWith(description: description));
   }
 
   void setDate(DateTime date) {
@@ -168,6 +175,7 @@ class AddUpdateExpenseCubit extends Cubit<AddUpdateExpenseState> {
 
 class AddUpdateExpenseState extends Equatable {
   final String name;
+  final String description;
   final double amount;
   final DateTime date;
   final bool isIncome;
@@ -181,6 +189,7 @@ class AddUpdateExpenseState extends Equatable {
   const AddUpdateExpenseState({
     this.name = "",
     required this.amount,
+    this.description = "",
     this.isIncome = false,
     this.image,
     this.excludeFromStatistics = false,
@@ -193,6 +202,7 @@ class AddUpdateExpenseState extends Equatable {
 
   AddUpdateExpenseState copyWith({
     String? name,
+    String? description,
     double? amount,
     int? paidBy,
     DateTime? date,
@@ -205,6 +215,7 @@ class AddUpdateExpenseState extends Equatable {
   }) =>
       AddUpdateExpenseState(
         name: name ?? this.name,
+        description: description ?? this.description,
         amount: amount ?? this.amount,
         date: date ?? this.date,
         isIncome: isIncome ?? this.isIncome,
@@ -223,6 +234,7 @@ class AddUpdateExpenseState extends Equatable {
   }) =>
       AddUpdateExpenseState(
         name: name,
+        description: description,
         amount: amount,
         date: date,
         isIncome: isIncome,
@@ -238,6 +250,7 @@ class AddUpdateExpenseState extends Equatable {
   @override
   List<Object?> get props => [
         name,
+        description,
         amount,
         date,
         isIncome,

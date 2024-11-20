@@ -14,6 +14,7 @@ class Expense(db.Model, DbModelMixin, DbModelAuthorizeMixin):
     id: Mapped[int] = db.Column(db.Integer, primary_key=True)
     name: Mapped[str] = db.Column(db.String(128))
     amount: Mapped[float] = db.Column(db.Float())
+    description: Mapped[str] = db.Column(db.String)
     date: Mapped[datetime] = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
     category_id: Mapped[int] = db.Column(db.Integer, db.ForeignKey("expense_category.id"))
     photo: Mapped[str] = db.Column(db.String(), db.ForeignKey("file.filename"))

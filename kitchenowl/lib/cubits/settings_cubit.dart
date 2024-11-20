@@ -28,6 +28,9 @@ class SettingsCubit extends Cubit<SettingsState> {
         .readBool(key: 'shoppingListTapToRemove');
     final recentItemsCategorize =
         PreferenceStorage.getInstance().readBool(key: 'recentItemsCategorize');
+    final restoreLastShoppingList = PreferenceStorage.getInstance()
+        .readBool(key: 'restoreLastShoppingList');
+
     Config.deviceInfo = DeviceInfoPlugin().deviceInfo;
     Config.packageInfo = PackageInfo.fromPlatform();
 
@@ -48,6 +51,7 @@ class SettingsCubit extends Cubit<SettingsState> {
       shoppingListListView: await shoppingListListView ?? false,
       shoppingListTapToRemove: await shoppingListTapToRemove ?? true,
       recentItemsCategorize: await recentItemsCategorize ?? false,
+      restoreLastShoppingList: await restoreLastShoppingList ?? false,
     ));
   }
 
@@ -109,6 +113,14 @@ class SettingsCubit extends Cubit<SettingsState> {
     );
     emit(state.copyWith(recentItemsCategorize: recentItemsCategorize));
   }
+
+  void setRestoreLastShoppinglist(bool restoreLastShoppingList) {
+    PreferenceStorage.getInstance().writeBool(
+      key: 'restoreLastShoppingList',
+      value: restoreLastShoppingList,
+    );
+    emit(state.copyWith(restoreLastShoppingList: restoreLastShoppingList));
+  }
 }
 
 class SettingsState extends Equatable {
@@ -120,6 +132,7 @@ class SettingsState extends Equatable {
   final bool shoppingListListView;
   final bool shoppingListTapToRemove;
   final bool recentItemsCategorize;
+  final bool restoreLastShoppingList;
 
   const SettingsState({
     this.themeMode = ThemeMode.system,
@@ -130,6 +143,7 @@ class SettingsState extends Equatable {
     this.shoppingListListView = false,
     this.shoppingListTapToRemove = true,
     this.recentItemsCategorize = false,
+    this.restoreLastShoppingList = false,
   });
 
   SettingsState copyWith({
@@ -141,6 +155,7 @@ class SettingsState extends Equatable {
     bool? shoppingListListView,
     bool? shoppingListTapToRemove,
     bool? recentItemsCategorize,
+    bool? restoreLastShoppingList,
   }) =>
       SettingsState(
         themeMode: themeMode ?? this.themeMode,
@@ -153,6 +168,8 @@ class SettingsState extends Equatable {
             shoppingListTapToRemove ?? this.shoppingListTapToRemove,
         recentItemsCategorize:
             recentItemsCategorize ?? this.recentItemsCategorize,
+        restoreLastShoppingList:
+            restoreLastShoppingList ?? this.restoreLastShoppingList,
       );
 
   @override
@@ -165,5 +182,6 @@ class SettingsState extends Equatable {
         shoppingListListView,
         shoppingListTapToRemove,
         recentItemsCategorize,
+        restoreLastShoppingList,
       ];
 }

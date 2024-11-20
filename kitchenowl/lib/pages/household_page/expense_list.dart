@@ -12,6 +12,7 @@ import 'package:kitchenowl/widgets/chart_pie_current_month.dart';
 import 'package:kitchenowl/widgets/choice_scroll.dart';
 import 'package:kitchenowl/widgets/expense/timeframe_dropdown_button.dart';
 import 'package:kitchenowl/widgets/expense_item.dart';
+import 'package:responsive_builder/responsive_builder.dart';
 
 class ExpenseListPage extends StatefulWidget {
   const ExpenseListPage({super.key});
@@ -72,270 +73,414 @@ class _ExpensePageState extends State<ExpenseListPage> {
 
               return BlocBuilder<ExpenseListCubit, ExpenseListCubitState>(
                 bloc: cubit,
-                builder: (context, state) => CustomScrollView(
-                  controller: scrollController,
-                  slivers: [
-                    SliverPadding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      sliver: SliverToBoxAdapter(
-                        child: Container(
-                          height: 80,
-                          alignment: Alignment.centerLeft,
-                          child: Row(
+                builder: (context, state) {
+                  final isDesktop = getValueForScreenType(
+                    context: context,
+                    mobile: false,
+                    tablet: false,
+                    desktop: true,
+                  );
+
+                  final title = Container(
+                    height: 80,
+                    alignment: Alignment.centerLeft,
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            AppLocalizations.of(context)!.balances,
+                            style: Theme.of(context).textTheme.headlineSmall,
+                          ),
+                        ),
+                        if (state.sorting == ExpenselistSorting.personal ||
+                            isDesktop)
+                          TimeframeDropdownButton(
+                            value: state.timeframe,
+                            onChanged: cubit.setTimeframe,
+                          ),
+                        const SizedBox(width: 2),
+                        IconButton(
+                          onPressed: () {
+                            final household =
+                                BlocProvider.of<HouseholdCubit>(context)
+                                    .state
+                                    .household;
+                            context.go(
+                              "/household/${household.id}/balances/overview",
+                              extra: state.sorting,
+                            );
+                          },
+                          icon: const Icon(Icons.bar_chart_rounded),
+                          tooltip: AppLocalizations.of(context)!.overview,
+                        ),
+                      ],
+                    ),
+                  );
+
+                  return Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if (isDesktop)
+                        Expanded(
+                          flex: 4,
+                          child: ListView(
                             children: [
-                              Expanded(
-                                child: Text(
-                                  AppLocalizations.of(context)!.balances,
-                                  style:
-                                      Theme.of(context).textTheme.headlineSmall,
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 16),
+                                child: title,
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 16),
+                                child: SizedBox(
+                                  height: 270,
+                                  child: Row(
+                                    children: [
+                                      if (state.expenseOverview[state.sorting]!
+                                              .byCategory.values
+                                              .fold(0.0, (a, b) => a + b) !=
+                                          0)
+                                        Expanded(
+                                          flex: 2,
+                                          child: ChartPieCurrentMonth(
+                                            data: state.expenseOverview[
+                                                state.sorting]!,
+                                            categories: state.categories,
+                                          ),
+                                        ),
+                                      Expanded(
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Text(
+                                              state.timeframe
+                                                  .getStringFromDateTime(
+                                                context,
+                                                DateTime.now(),
+                                              ),
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .headlineSmall,
+                                            ),
+                                            const Divider(),
+                                            Text(
+                                              NumberFormat.simpleCurrency()
+                                                  .format(
+                                                state
+                                                    .expenseOverview[
+                                                        state.sorting]!
+                                                    .byCategory
+                                                    .values
+                                                    .fold(0.0, (a, b) => a + b),
+                                              ),
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .headlineSmall,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
-                              if (state.sorting == ExpenselistSorting.personal)
-                                TimeframeDropdownButton(
-                                  value: state.timeframe,
-                                  onChanged: cubit.setTimeframe,
-                                ),
-                              const SizedBox(width: 2),
-                              IconButton(
-                                onPressed: () {
-                                  final household =
-                                      BlocProvider.of<HouseholdCubit>(context)
-                                          .state
-                                          .household;
-                                  context.go(
-                                    "/household/${household.id}/balances/overview",
-                                    extra: state.sorting,
-                                  );
-                                },
-                                icon: const Icon(Icons.bar_chart_rounded),
-                                tooltip: AppLocalizations.of(context)!.overview,
+                              Divider(
+                                height: 50,
+                                indent: 25,
+                                endIndent: 25,
+                              ),
+                              ChartBarMemberDistribution(
+                                household: householdState.household,
                               ),
                             ],
+                            shrinkWrap: true,
                           ),
                         ),
-                      ),
-                    ),
-                    if (householdState.household.member?.isNotEmpty ?? false)
-                      SliverToBoxAdapter(
-                        child: AnimatedCrossFade(
-                          crossFadeState:
-                              state.sorting == ExpenselistSorting.all ||
-                                      state.expenseOverview.byCategory.isEmpty
-                                  ? CrossFadeState.showFirst
-                                  : CrossFadeState.showSecond,
-                          duration: const Duration(milliseconds: 100),
-                          firstChild: ChartBarMemberDistribution(
-                            household: householdState.household,
-                          ),
-                          secondChild: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 16),
-                            child: SizedBox(
-                              height: 270,
-                              child: Row(
-                                children: [
-                                  if (state.expenseOverview.byCategory.values
-                                          .fold(0.0, (a, b) => a + b) !=
-                                      0)
-                                    Expanded(
-                                      flex: 2,
-                                      child: ChartPieCurrentMonth(
-                                        data: state.expenseOverview,
-                                        categories: state.categories,
-                                      ),
-                                    ),
-                                  Expanded(
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Text(
-                                          state.timeframe.getStringFromDateTime(
-                                            context,
-                                            DateTime.now(),
-                                          ),
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .headlineSmall,
-                                        ),
-                                        const Divider(),
-                                        Text(
-                                          NumberFormat.simpleCurrency().format(
-                                            state.expenseOverview.byCategory
-                                                .values
-                                                .fold(0.0, (a, b) => a + b),
-                                          ),
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .headlineSmall,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
+                      Expanded(
+                        flex: 5,
+                        child: CustomScrollView(
+                          controller: scrollController,
+                          slivers: [
+                            if (!isDesktop) ...[
+                              SliverPadding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 16),
+                                sliver: SliverToBoxAdapter(
+                                  child: title,
+                                ),
                               ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    SliverToBoxAdapter(
-                      child: LeftRightWrap(
-                        left: (state.categories.isEmpty)
-                            ? searchAnchor
-                            : ChoiceScroll(
-                                collapsable: true,
-                                icon: Icons.filter_list_rounded,
-                                onCollapse: cubit.clearFilter,
-                                actions: [
-                                  searchAnchor,
-                                ],
-                                children: state.categories.map((category) {
-                                  return Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 4,
+                              if (householdState.household.member?.isNotEmpty ??
+                                  false)
+                                SliverToBoxAdapter(
+                                  child: AnimatedCrossFade(
+                                    crossFadeState: state.sorting ==
+                                                ExpenselistSorting.all ||
+                                            state
+                                                .expenseOverview[state.sorting]!
+                                                .byCategory
+                                                .isEmpty
+                                        ? CrossFadeState.showFirst
+                                        : CrossFadeState.showSecond,
+                                    duration: const Duration(milliseconds: 100),
+                                    firstChild: ChartBarMemberDistribution(
+                                      household: householdState.household,
                                     ),
-                                    child: FilterChip(
-                                      label: Text(
-                                        category.name,
-                                        style: TextStyle(
-                                          color: state.filter.contains(category)
-                                              ? Theme.of(context)
-                                                  .colorScheme
-                                                  .onPrimary
-                                              : null,
-                                        ),
-                                      ),
-                                      selected: state.filter.contains(category),
-                                      selectedColor: Theme.of(context)
-                                          .colorScheme
-                                          .secondary,
-                                      onSelected: (v) =>
-                                          cubit.setFilter(category, v),
-                                    ),
-                                  );
-                                }).toList()
-                                  ..insert(
-                                    0,
-                                    Padding(
+                                    secondChild: Padding(
                                       padding: const EdgeInsets.symmetric(
-                                        horizontal: 4,
-                                      ),
-                                      child: FilterChip(
-                                        label: Text(
-                                          AppLocalizations.of(context)!.other,
-                                          style: TextStyle(
-                                            color: state.filter.contains(null)
-                                                ? Theme.of(context)
-                                                    .colorScheme
-                                                    .onPrimary
-                                                : null,
-                                          ),
+                                          horizontal: 16),
+                                      child: SizedBox(
+                                        height: 270,
+                                        child: Row(
+                                          children: [
+                                            if (state
+                                                    .expenseOverview[
+                                                        ExpenselistSorting
+                                                            .personal]!
+                                                    .byCategory
+                                                    .values
+                                                    .fold(
+                                                        0.0, (a, b) => a + b) !=
+                                                0)
+                                              Expanded(
+                                                flex: 2,
+                                                child: ChartPieCurrentMonth(
+                                                  data: state.expenseOverview[
+                                                      ExpenselistSorting
+                                                          .personal]!,
+                                                  categories: state.categories,
+                                                ),
+                                              ),
+                                            Expanded(
+                                              child: Column(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  Text(
+                                                    state.timeframe
+                                                        .getStringFromDateTime(
+                                                      context,
+                                                      DateTime.now(),
+                                                    ),
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .headlineSmall,
+                                                  ),
+                                                  const Divider(),
+                                                  Text(
+                                                    NumberFormat
+                                                            .simpleCurrency()
+                                                        .format(
+                                                      state
+                                                          .expenseOverview[
+                                                              ExpenselistSorting
+                                                                  .personal]!
+                                                          .byCategory
+                                                          .values
+                                                          .fold(0.0,
+                                                              (a, b) => a + b),
+                                                    ),
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .headlineSmall,
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
                                         ),
-                                        selected: state.filter.contains(null),
-                                        selectedColor: Theme.of(context)
-                                            .colorScheme
-                                            .secondary,
-                                        onSelected: (v) =>
-                                            cubit.setFilter(null, v),
                                       ),
                                     ),
                                   ),
+                                )
+                            ] else
+                              SliverToBoxAdapter(
+                                child: const SizedBox(height: 16),
                               ),
-                        right: Padding(
-                          padding: const EdgeInsets.only(right: 16),
-                          child: TrailingIconTextButton(
-                            text: state.sorting == ExpenselistSorting.all
-                                ? AppLocalizations.of(context)!.household
-                                : state.sorting == ExpenselistSorting.personal
-                                    ? AppLocalizations.of(context)!.personal
-                                    : AppLocalizations.of(context)!.other,
-                            icon: const Icon(Icons.sort),
-                            onPressed: cubit.incrementSorting,
-                          ),
-                        ),
-                      ),
-                    ),
-                    if (state.expenses.isNotEmpty)
-                      SliverPadding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        sliver: SliverImplicitAnimatedList(
-                          itemBuilder: (context, i, animation) =>
-                              SizeTransition(
-                            key: ValueKey(state.expenses[i].id),
-                            sizeFactor: animation,
-                            child: ExpenseItemWidget(
-                              expense: state.expenses[i],
-                              onUpdated: cubit.refresh,
-                              displayPersonalAmount:
-                                  state.sorting == ExpenselistSorting.personal,
-                            ),
-                          ),
-                          removeItemBuilder: (context, expense, animation) =>
-                              SizeTransition(
-                            key: ValueKey(expense.id),
-                            sizeFactor: animation,
-                            child: ExpenseItemWidget(
-                              expense: expense,
-                              onUpdated: cubit.refresh,
-                              displayPersonalAmount:
-                                  state.sorting == ExpenselistSorting.personal,
-                            ),
-                          ),
-                          items: state.expenses,
-                          equalityChecker: (p0, p1) => p0.id == p1.id,
-                        ),
-                      ),
-                    if (state is LoadingExpenseListCubitState && !App.isOffline)
-                      SliverList(
-                        delegate: SliverChildBuilderDelegate(
-                          (context, i) => const Padding(
-                            padding: EdgeInsets.symmetric(
-                              vertical: 4,
-                              horizontal: 16,
-                            ),
-                            child: ShimmerCard(
-                              trailing: ShimmerText(
-                                maxWidth: 50,
+                            SliverToBoxAdapter(
+                              child: LeftRightWrap(
+                                left: (state.categories.isEmpty)
+                                    ? searchAnchor
+                                    : ChoiceScroll(
+                                        collapsable: true,
+                                        icon: Icons.filter_list_rounded,
+                                        onCollapse: cubit.clearFilter,
+                                        actions: [
+                                          searchAnchor,
+                                        ],
+                                        children: state.categories
+                                            .map((category) {
+                                          return Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                              horizontal: 4,
+                                            ),
+                                            child: FilterChip(
+                                              label: Text(
+                                                category.name,
+                                                style: TextStyle(
+                                                  color: state.filter
+                                                          .contains(category)
+                                                      ? Theme.of(context)
+                                                          .colorScheme
+                                                          .onPrimary
+                                                      : null,
+                                                ),
+                                              ),
+                                              selected: state.filter
+                                                  .contains(category),
+                                              selectedColor: Theme.of(context)
+                                                  .colorScheme
+                                                  .secondary,
+                                              onSelected: (v) =>
+                                                  cubit.setFilter(category, v),
+                                            ),
+                                          );
+                                        }).toList()
+                                          ..insert(
+                                            0,
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                horizontal: 4,
+                                              ),
+                                              child: FilterChip(
+                                                label: Text(
+                                                  AppLocalizations.of(context)!
+                                                      .other,
+                                                  style: TextStyle(
+                                                    color: state.filter
+                                                            .contains(null)
+                                                        ? Theme.of(context)
+                                                            .colorScheme
+                                                            .onPrimary
+                                                        : null,
+                                                  ),
+                                                ),
+                                                selected:
+                                                    state.filter.contains(null),
+                                                selectedColor: Theme.of(context)
+                                                    .colorScheme
+                                                    .secondary,
+                                                onSelected: (v) =>
+                                                    cubit.setFilter(null, v),
+                                              ),
+                                            ),
+                                          ),
+                                      ),
+                                right: Padding(
+                                  padding: const EdgeInsets.only(right: 16),
+                                  child: TrailingIconTextButton(
+                                    text:
+                                        state.sorting == ExpenselistSorting.all
+                                            ? AppLocalizations.of(context)!
+                                                .household
+                                            : state.sorting ==
+                                                    ExpenselistSorting.personal
+                                                ? AppLocalizations.of(context)!
+                                                    .personal
+                                                : AppLocalizations.of(context)!
+                                                    .other,
+                                    icon: const Icon(Icons.sort),
+                                    onPressed: cubit.incrementSorting,
+                                  ),
+                                ),
                               ),
                             ),
-                          ),
-                          childCount: 3,
-                        ),
-                      ),
-                    if (state is! LoadingExpenseListCubitState &&
-                        state.expenses.isEmpty &&
-                        !App.isOffline)
-                      SliverToBoxAdapter(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 16),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              const Icon(Icons.money_off_rounded),
-                              const SizedBox(height: 16),
-                              Text(AppLocalizations.of(context)!.expenseEmpty),
-                            ],
-                          ),
-                        ),
-                      ),
-                    if (state.expenses.isEmpty && App.isOffline)
-                      SliverToBoxAdapter(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 16),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              const Icon(Icons.cloud_off),
-                              const SizedBox(height: 16),
-                              Text(
-                                AppLocalizations.of(context)!.offlineMessage,
+                            if (state.expenses.isNotEmpty)
+                              SliverPadding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 16),
+                                sliver: SliverImplicitAnimatedList(
+                                  itemBuilder: (context, i, animation) =>
+                                      SizeTransition(
+                                    key: ValueKey(state.expenses[i].id),
+                                    sizeFactor: animation,
+                                    child: ExpenseItemWidget(
+                                      expense: state.expenses[i],
+                                      onUpdated: cubit.refresh,
+                                      displayPersonalAmount: state.sorting ==
+                                          ExpenselistSorting.personal,
+                                    ),
+                                  ),
+                                  removeItemBuilder:
+                                      (context, expense, animation) =>
+                                          SizeTransition(
+                                    key: ValueKey(expense.id),
+                                    sizeFactor: animation,
+                                    child: ExpenseItemWidget(
+                                      expense: expense,
+                                      onUpdated: cubit.refresh,
+                                      displayPersonalAmount: state.sorting ==
+                                          ExpenselistSorting.personal,
+                                    ),
+                                  ),
+                                  items: state.expenses,
+                                  equalityChecker: (p0, p1) => p0.id == p1.id,
+                                ),
                               ),
-                            ],
-                          ),
+                            if (state is LoadingExpenseListCubitState &&
+                                !App.isOffline)
+                              SliverList(
+                                delegate: SliverChildBuilderDelegate(
+                                  (context, i) => const Padding(
+                                    padding: EdgeInsets.symmetric(
+                                      vertical: 4,
+                                      horizontal: 16,
+                                    ),
+                                    child: ShimmerCard(
+                                      trailing: ShimmerText(
+                                        maxWidth: 50,
+                                      ),
+                                    ),
+                                  ),
+                                  childCount: 3,
+                                ),
+                              ),
+                            if (state is! LoadingExpenseListCubitState &&
+                                state.expenses.isEmpty &&
+                                !App.isOffline)
+                              SliverToBoxAdapter(
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 16),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      const Icon(Icons.money_off_rounded),
+                                      const SizedBox(height: 16),
+                                      Text(AppLocalizations.of(context)!
+                                          .expenseEmpty),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            if (state.expenses.isEmpty && App.isOffline)
+                              SliverToBoxAdapter(
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 16),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      const Icon(Icons.cloud_off),
+                                      const SizedBox(height: 16),
+                                      Text(
+                                        AppLocalizations.of(context)!
+                                            .offlineMessage,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                          ],
                         ),
                       ),
-                  ],
-                ),
+                    ],
+                  );
+                },
               );
             },
           ),

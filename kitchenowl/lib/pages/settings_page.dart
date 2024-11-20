@@ -279,6 +279,24 @@ class _SettingsPageState extends State<SettingsPage> {
                 ),
                 ListTile(
                   title: Text(
+                    AppLocalizations.of(context)!.rememberLastShoppingList,
+                  ),
+                  leading: const Icon(Icons.restore_rounded),
+                  onTap: () => BlocProvider.of<SettingsCubit>(context)
+                      .setRestoreLastShoppinglist(
+                    !BlocProvider.of<SettingsCubit>(context)
+                        .state
+                        .restoreLastShoppingList,
+                  ),
+                  trailing: KitchenOwlSwitch(
+                    value: state.restoreLastShoppingList,
+                    onChanged: (value) =>
+                        BlocProvider.of<SettingsCubit>(context)
+                            .setRestoreLastShoppinglist(value),
+                  ),
+                ),
+                ListTile(
+                  title: Text(
                     AppLocalizations.of(context)!.itemsRecent,
                   ),
                   leading: const Icon(Icons.numbers_rounded),

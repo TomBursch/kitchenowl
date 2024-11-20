@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:collection/collection.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -263,10 +261,12 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
   }
 
   void setShoppingList(ShoppingList shoppingList) {
-    PreferenceStorage.getInstance().write(
-      key: 'selectedShoppinglist',
-      value: jsonEncode(shoppingList.toJsonWithId()),
-    );
+    if (shoppingList.id != null) {
+      PreferenceStorage.getInstance().writeInt(
+        key: 'selectedShoppinglist',
+        value: shoppingList.id!,
+      );
+    }
     emit(state.copyWith(
       selectedShoppinglistId: shoppingList.id,
     ));
@@ -299,10 +299,20 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
             .map((e) => e.id != null ? MapEntry(e.id!, e) : null)
             .whereNotNull()));
 
-    final shoppinglist =
-        state.selectedShoppinglist ?? shoppingLists.values.firstOrNull;
+    ShoppingList? shoppingList = state.selectedShoppinglist;
+    if (await PreferenceStorage.getInstance()
+            .readBool(key: "restoreLastShoppingList") ??
+        false) {
+      int? id = await PreferenceStorage.getInstance()
+          .readInt(key: "selectedShoppinglist");
+      if (id != null) {
+        shoppingList ??=
+            shoppingLists.values.firstWhereOrNull((s) => s.id == id);
+      }
+    }
+    shoppingList ??= shoppingLists.values.firstOrNull;
 
-    if (shoppinglist == null) return;
+    if (shoppingList == null) return;
 
     Future<List<Category>> categories =
         TransactionHandler.getInstance().runTransaction(
@@ -312,12 +322,12 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
 
     final resState = LoadingShoppinglistCubitState(
       shoppinglists: shoppingLists,
-      selectedShoppinglistId: shoppinglist.id,
+      selectedShoppinglistId: shoppingList.id,
       categories: await categories,
       sorting: state.sorting,
       selectedListItems: state.selectedListItems
           .map((e) =>
-              shoppinglist.items.firstWhereOrNull((item) => item.id == e.id))
+              shoppingList!.items.firstWhereOrNull((item) => item.id == e.id))
           .whereNotNull()
           .toList(),
     );

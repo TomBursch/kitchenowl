@@ -1,0 +1,4 @@
+- New icon
+- You can now publicly share recipes
+- New and updated translations
+- Many bug fixes and other improvements

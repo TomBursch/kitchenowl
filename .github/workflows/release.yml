@@ -144,10 +144,11 @@ jobs:
           flutter config --enable-windows-desktop
       - run: flutter config --no-analytics
       - run: flutter doctor -v
-      # Checkout code, recreate missing files, and get packages.
+      # Checkout code get packages.
       - name: Checkout code
         uses: actions/checkout@v2
       - run: flutter packages get
+        working-directory: kitchenowl
 
       - name: Configure Keystore for Android
         if: matrix.target == 'Android'

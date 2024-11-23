@@ -1,6 +1,7 @@
 {
   "@about": {},
   "@accountCreate": {},
+  "@accountCreateHint": {},
   "@accountCreateTitle": {},
   "@accountDelete": {},
   "@accountDeleteConfirmation": {},
@@ -347,6 +348,7 @@
   "@you": {},
   "about": "Sobre",
   "accountCreate": "Criar Conta",
+  "accountCreateHint": "O teu user e nome são públicos, escolhe uns que estejas confortável em partilhar com os outros.",
   "accountCreateTitle": "Crie sua conta KitchenOwl",
   "accountDelete": "Apagar Conta",
   "accountDeleteConfirmation": "Tem certeza que deseja apagar sua conta?",

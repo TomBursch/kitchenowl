@@ -1,6 +1,7 @@
 {
   "@about": {},
   "@accountCreate": {},
+  "@accountCreateHint": {},
   "@accountCreateTitle": {},
   "@accountDelete": {},
   "@accountDeleteConfirmation": {},
@@ -241,9 +242,18 @@
       "privacyPolicy": {}
     }
   },
+  "@private": {},
+  "@privateRecipeDescription": {},
   "@profile": {},
+  "@public": {},
+  "@publicRecipeDescription": {},
   "@recentItemsCategorize": {},
   "@recipeAdd": {},
+  "@recipeAddToHousehold": {
+    "placeholders": {
+      "householdName": {}
+    }
+  },
   "@recipeAddUrl": {},
   "@recipeDelete": {},
   "@recipeDeleteConfirmation": {
@@ -276,6 +286,7 @@
   "@set": {},
   "@settings": {},
   "@setupTitle": {},
+  "@share": {},
   "@shoppingList": {},
   "@shoppingListDelete": {},
   "@shoppingListDeleteConfirmation": {
@@ -343,6 +354,7 @@
   "@usernameUnavailable": {},
   "@users": {},
   "@weekly": {},
+  "@welcomeBack": {},
   "@writeMarkdownHere": {},
   "@wrongUsernameOrPassword": {},
   "@yearly": {},
@@ -351,6 +363,7 @@
   "@you": {},
   "about": "Über",
   "accountCreate": "Konto erstellen",
+  "accountCreateHint": "Dein Benutzername und Name sind öffentlich. Wähle etwas, mit dem du dich wohlfühlst.",
   "accountCreateTitle": "Erstelle dein KitchenOwl-Konto",
   "accountDelete": "Konto löschen",
   "accountDeleteConfirmation": "Bist du dir sicher, dass du dein Konto löschen möchtest?",
@@ -515,9 +528,14 @@
   "preparationTime": "Vorbereitungszeit",
   "privacyPolicy": "Datenschutzrichtlinie",
   "privacyPolicyAgree": "Mit dem Erstellen eines Kontos stimmst du unserer {privacyPolicy} zu",
+  "private": "Privat",
+  "privateRecipeDescription": "Nur Mitglieder des Haushaltes können das Rezept sehen.",
   "profile": "Profil",
+  "public": "Öffentlich",
+  "publicRecipeDescription": "Jede Person mit dem Link zum Rezept kann es sehen.",
   "recentItemsCategorize": "Kategorisiere kürzlich verwendete Artikel",
   "recipeAdd": "Rezept hinzufügen",
+  "recipeAddToHousehold": "Zu {householdName} hinzufügen",
   "recipeAddUrl": "Rezept von URL hinzufügen",
   "recipeDelete": "Rezept löschen",
   "recipeDeleteConfirmation": "Bist du sicher, dass du {recipe} löschen möchtest?",
@@ -546,6 +564,7 @@
   "set": "Setze",
   "settings": "Einstellungen",
   "setupTitle": "Hallo! Bereit zum Einkaufen?",
+  "share": "Teilen",
   "shoppingList": "Einkaufsliste",
   "shoppingListDelete": "Einkaufsliste löschen",
   "shoppingListDeleteConfirmation": "Bist du sicher, dass du {shoppingList} löschen möchtest?",
@@ -582,7 +601,7 @@
   "unsavedChangesTitle": "Du hast ungespeicherte Änderungen",
   "unsupportedBackendMessage": "Die Serverversion wird nicht unterstützt, bitte aktualisiere den Server",
   "unsupportedFrontendMessage": "Die Version der App wird vom Server nicht unterstützt. Bitte aktualisiere die App",
-  "unsupportedScrapeMessage": "Die URL konnte nicht ausgelesen werden",
+  "unsupportedScrapeMessage": "Die Webseite wird nicht unterstützt",
   "usedIn": "Verwendet in",
   "user": "Benutzer",
   "userAdd": "Benutzer hinzufügen",
@@ -595,6 +614,7 @@
   "usernameUnavailable": "Der Benutzername ist nicht verfügbar",
   "users": "Benutzer",
   "weekly": "Wöchentlich",
+  "welcomeBack": "Willkommen zurück",
   "writeMarkdownHere": "Hier kannst du Markdown verwenden!",
   "wrongUsernameOrPassword": "Benutzername oder Passwort falsch",
   "yearly": "Jährlich",

@@ -40,9 +40,11 @@ class App extends StatefulWidget {
 
   static bool get isDefaultServer => currentServer == Config.defaultServer;
 
-  static String get currentServer => ApiService.getInstance()
-      .baseUrl
-      .substring(0, ApiService.getInstance().baseUrl.length - 4);
+  static String get currentServer => ApiService.getInstance().baseUrl.isEmpty
+      ? Config.defaultServer
+      : ApiService.getInstance()
+          .baseUrl
+          .substring(0, ApiService.getInstance().baseUrl.length - 4);
 
   static SettingsState get settings => _instance!._settingsCubit.state;
 

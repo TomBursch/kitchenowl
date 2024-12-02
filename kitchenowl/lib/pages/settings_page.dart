@@ -529,7 +529,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 onTap: () => showLicensePage(
                   context: context,
                   applicationVersion: Config.packageInfoSync?.version,
-                  applicationLegalese: '\u{a9} 2023 KitchenOwl',
+                  applicationLegalese: '\u{a9} 2024 KitchenOwl',
                 ),
               ),
               Center(
@@ -547,7 +547,7 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(8, 8, 8, 4),
-                child: Text(
+                child: SelectableText(
                   "v${Config.packageInfoSync?.version} (${Config.packageInfoSync?.buildNumber})${App.serverInfo is ConnectedServerInfoState ? " | Server v${(App.serverInfo as ConnectedServerInfoState).version}" : ""}",
                   style: Theme.of(context).textTheme.labelSmall?.copyWith(
                         color: Theme.of(context)
@@ -560,7 +560,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 ),
               ),
               Text(
-                '\u{a9} 2023 KitchenOwl',
+                '\u{a9} 2024 KitchenOwl',
                 style: Theme.of(context).textTheme.labelSmall?.copyWith(
                       color: Theme.of(context)
                           .textTheme

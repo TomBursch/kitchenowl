@@ -11,6 +11,7 @@ from flask_jwt_extended import current_user, jwt_required, get_jwt
 from app.models import User, Token, OIDCLink, OIDCRequest, ChallengeMailVerify
 from app.errors import NotFoundRequest, UnauthorizedRequest
 from app.service import mail
+from app.service.file_has_access_or_download import file_has_access_or_download
 from .schemas import Login, Signup, CreateLongLivedToken, GetOIDCLoginUrl, LoginOIDC
 from app.config import (
     EMAIL_MANDATORY,
@@ -382,7 +383,7 @@ if FRONT_URL and len(oidc_clients) > 0:
                     if "email_verified" in userinfo
                     else False
                 ),
-                photo=userinfo["picture"] if "picture" in userinfo else None,
+                photo=file_has_access_or_download(userinfo["picture"]) if "picture" in userinfo else None,
             ).save()
             oidcLink = OIDCLink(
                 sub=userinfo["sub"], provider=provider, user_id=newUser.id

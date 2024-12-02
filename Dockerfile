@@ -105,7 +105,7 @@ ENV DEBUG='False'
 
 RUN chmod u+x ./entrypoint.sh
 
-CMD ["--ini", "wsgi.ini:web", "--gevent", "200"]
+CMD ["--ini", "wsgi.ini:web", "--gevent", "200", "--max-fd", "1048576"]
 ENTRYPOINT ["./entrypoint.sh"]
 
 EXPOSE 8080

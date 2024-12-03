@@ -1,3 +1,4 @@
+import 'package:kitchenowl/app.dart';
 import 'package:kitchenowl/enums/shoppinglist_sorting.dart';
 import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/models/item.dart';
@@ -9,13 +10,11 @@ import 'package:kitchenowl/services/api/api_service.dart';
 class TransactionShoppingListGet extends Transaction<List<ShoppingList>> {
   final Household household;
   final ShoppinglistSorting sorting;
-  final int recentItemlimit;
 
   TransactionShoppingListGet({
     DateTime? timestamp,
     required this.household,
     this.sorting = ShoppinglistSorting.alphabetical,
-    this.recentItemlimit = 9,
   }) : super.internal(
           timestamp ?? DateTime.now(),
           "TransactionShoppingListGet",
@@ -31,7 +30,7 @@ class TransactionShoppingListGet extends Transaction<List<ShoppingList>> {
     final lists = await ApiService.getInstance().getShoppingLists(
       household,
       sorting: sorting,
-      recentItemlimit: recentItemlimit + 3,
+      recentItemlimit: App.settings.recentItemsCount + 3,
     );
     if (lists != null) {
       MemStorage.getInstance().writeShoppingLists(household, lists);

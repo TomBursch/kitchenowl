@@ -7,7 +7,7 @@ import 'package:kitchenowl/services/api/api_service.dart';
 import 'package:kitchenowl/services/storage/mem_storage.dart';
 import 'package:kitchenowl/services/storage/storage.dart';
 import 'package:kitchenowl/services/transaction_handler.dart';
-import 'dart:html' as html;
+import 'package:kitchenowl/platform/dart_html/dart_html.dart' as html;
 
 class AuthCubit extends Cubit<AuthState> {
   bool _forcedOfflineMode = false;
@@ -33,7 +33,7 @@ class AuthCubit extends Cubit<AuthState> {
     url = kIsWeb
         ? kDebugMode
             ? "http://localhost:5000"
-            : html.document.baseUri.toString()
+            : html.getBaseUri()
         : await PreferenceStorage.getInstance().read(key: 'URL') ??
             Config.defaultServer;
     final token = await SecureStorage.getInstance().read(key: 'TOKEN');

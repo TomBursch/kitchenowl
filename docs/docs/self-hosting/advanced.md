@@ -49,6 +49,7 @@ Environment variables for `tombursch/kitchenowl` and `tombursch/kitchenowl-backe
 | `GOOGLE_CLIENT_ID`                |                            |                                                                                                                                                       |
 | `GOOGLE_CLIENT_SECRET`            |                            |                                                                                                                                                       |
 | `LLM_MODEL`                       |                            | Set a custom ingredient detection strategy for scraped recipes from the web. More at [Ingredient Parsing](./ingredient_parsing.md)                    |
+| `BASE_HREF`                       |                            | Sets the subdirectory KitchenOwl is hosted at. Must begin and end with a slash `/`. Only applicable to `tombursch/kitchenowl`                         |
 
 Additionally, to setting these environment variables you can also override the start command to scale the backend up.
 Add the following line or take a look at this exemplary [docker-compose.yml](https://github.com/TomBursch/kitchenowl/blob/main/docker-compose-postgres.yml) file:
@@ -66,9 +67,10 @@ Overriding the command is not recommended as we might change the underlying proc
 
 Environment variables for `tombursch/kitchenowl-web`:
 
-| Variable   | Default     | Description                                                                                                                                                          |
-| ---------- | ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `BACK_URL` | `back:5000` | Allows to set a custom address for the backend. Needs to be an uWSGI protocol endpoint. Should correspond to the name or IP of the backend container and port `5000` |
+| Variable    | Default     | Description                                                                                                                                                          |
+| ----------- | ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `BACK_URL`  | `back:5000` | Allows to set a custom address for the backend. Needs to be an uWSGI protocol endpoint. Should correspond to the name or IP of the backend container and port `5000` |
+| `BASE_HREF` |             | Sets the subdirectory KitchenOwl is hosted at. Must begin and end with a slash `/`.                                                                                  |
 
 ## Multiservice Setup
 

@@ -154,8 +154,13 @@ def scrape(url: str, household: Household) -> dict | None:
         return scrapeKitchenOwl(
             url, "https://app.kitchenowl.org/api", int(kitchenowlMatch.group(2))
         )
+    if 'http' not in url:
+        url = "http://" + url
 
-    res = requests.get(url=url)
+    try:
+        res = requests.get(url=url)
+    except:
+        return None
     if res.status_code != requests.codes.ok:
         return None
 

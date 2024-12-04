@@ -38,6 +38,7 @@
     }
   },
   "@address": {},
+  "@analysingWebsite": {},
   "@admin": {},
   "@appDescription": {},
   "@appTitle": {
@@ -189,6 +190,7 @@
       "name": {}
     }
   },
+  "@longerThanExpected": {},
   "@longPressToReorder": {},
   "@markAsPaid": {},
   "@mealPlanner": {},
@@ -387,6 +389,7 @@
   "addedBy": "Added by {name}",
   "address": "Address",
   "admin": "Admin",
+  "analysingWebsite": "Analysing website...",
   "appDescription": "KitchenOwl helps you organize your grocery life.",
   "appTitle": "KitchenOwl",
   "back": "Back",
@@ -492,6 +495,7 @@
   "loginTo": "Login to",
   "logout": "Logout",
   "logoutName": "Logout {name}",
+  "longerThanExpected": "This is taking longer than expected",
   "longPressToReorder": "Long press to reorder",
   "markAsPaid": "Mark as paid",
   "mealPlanner": "Meal planner",

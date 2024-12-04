@@ -10,10 +10,9 @@ If you have noticed a bug, please [create an issue](https://github.com/TomBursch
 
 If there is something you want to fix or add, the first step is to fork the repository.
 [:fontawesome-brands-github: Frontend](https://github.com/TomBursch/KitchenOwl){ .md-button }
-[:fontawesome-brands-github: Backend](https://github.com/TomBursch/KitchenOwl-backend){ .md-button }
 [:fontawesome-brands-github: Website](https://github.com/TomBursch/KitchenOwl-website){ .md-button }
 
-Next is to create a new branch with an appropriate name. The general format that should be used is
+Next is to create a new branch with an appropriate name. You can use the following format:
 
 ``` bash
 git checkout -b '<type>/<description>'
@@ -25,16 +24,18 @@ The `description` is a descriptive summary of the change the PR will make.
 
 ### General Rules
 
-- All PRs should be rebased (with main) and commits squashed prior to the final merge process
 - One PR per fix or feature
+- All PRs should be rebased (with main) and commits squashed prior to the final merge process
 
 ### Setup & Install
 === "Frontend"
     - [Install flutter](https://flutter.dev/docs/get-started/install)
+    - Go to `./kitchenowl`
     - Install dependencies: `flutter packages get`
     - Create empty environment file: `touch .env`
     - Run app: `flutter run`
 === "Backend"
+    - Go to `./backend`
     - Create a python environment `python3 -m venv venv`
     - Activate your python environment `source venv/bin/activate` (environment can be deactivated with `deactivate`)
     - Install dependencies `pip3 install -r requirements.txt`
@@ -42,12 +43,14 @@ The `description` is a descriptive summary of the change the PR will make.
     - Run debug server with `python3 wsgi.py`
     - The backend should be reachable at `localhost:5000`
 === "Docs"
-    - The docs are contained inside the frontend repository
-    - [Install MkDocs](https://www.mkdocs.org/getting-started/)
-    - [Install Material for MkDocs](https://squidfunk.github.io/mkdocs-material/getting-started/)
+    - Go to `./docs`
+    - Create a python environment `python3 -m venv venv`
+    - Activate your python environment `source venv/bin/activate` (environment can be deactivated with `deactivate`)
+    - Install dependencies `pip3 install -r requirements.txt`
     - Run docs: `mkdocs serve`
 === "Website"
     - [Install Hugo](https://gohugo.io/getting-started/quick-start/)
+    - Clone the website repository
     - Run website: `hugo server`
 
 ### Git Commit Message Style

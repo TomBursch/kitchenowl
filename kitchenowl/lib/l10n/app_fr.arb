@@ -57,6 +57,7 @@
     }
   },
   "@changeIcon": {},
+  "@clear": {},
   "@colorSelect": {},
   "@confirm": {},
   "@cookingTime": {},
@@ -391,6 +392,7 @@
   "categoryEdit": "Modifier la catégorie",
   "categoryExpenseDeleteConfirmation": "Êtes-vous sûr·e de vouloir supprimer {category} ? Ceci supprimera la catégorie de toutes les dépenses.",
   "changeIcon": "Changer l'icône",
+  "clear": "Supprimer",
   "colorSelect": "Sélectionnez une couleur",
   "confirm": "Confirmer",
   "cookingTime": "Temps de cuisson",

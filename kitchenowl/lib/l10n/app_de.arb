@@ -33,6 +33,7 @@
   },
   "@address": {},
   "@admin": {},
+  "@analysingWebsite": {},
   "@appDescription": {},
   "@appTitle": {
     "description": "The title of the app"
@@ -184,6 +185,7 @@
     }
   },
   "@longPressToReorder": {},
+  "@longerThanExpected": {},
   "@markAsPaid": {},
   "@mealPlanner": {},
   "@member": {},
@@ -377,6 +379,7 @@
   "addedBy": "Hinzugefügt von {name}",
   "address": "Adresse",
   "admin": "Admin",
+  "analysingWebsite": "Analysiere Website…",
   "appDescription": "KitchenOwl hilft dir dein Lebensmitteleinkauf zu erleichtern.",
   "appTitle": "KitchenOwl",
   "back": "Zurück",
@@ -483,6 +486,7 @@
   "logout": "Abmelden",
   "logoutName": "Melde {name} ab",
   "longPressToReorder": "Halte lang zum Umsortieren",
+  "longerThanExpected": "Das dauert länger als erwartet",
   "markAsPaid": "Als gezahlt markieren",
   "mealPlanner": "Essensplaner",
   "member": "Mitglied",

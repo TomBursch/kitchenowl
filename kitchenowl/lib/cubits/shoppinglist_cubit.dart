@@ -359,8 +359,12 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
             .map((e) => e.id != null ? MapEntry(e.id!, e) : null)
             .whereNotNull()));
 
-    final selectedShoppinglistId =
-        state.selectedShoppinglistId ?? shoppingLists.values.firstOrNull?.id;
+    int? selectedShoppinglistId = state.selectedShoppinglistId;
+    if (selectedShoppinglistId != null &&
+        !shoppingLists.containsKey(selectedShoppinglistId)) {
+      selectedShoppinglistId = null;
+    }
+    selectedShoppinglistId ??= shoppingLists.values.firstOrNull?.id;
 
     if (selectedShoppinglistId == null) return;
 

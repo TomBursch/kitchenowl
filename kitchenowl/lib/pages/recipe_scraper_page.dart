@@ -169,7 +169,32 @@ class _RecipeScraperPageState extends State<RecipeScraperPage> {
                   ),
                 );
               } else {
-                body = const Center(child: CircularProgressIndicator());
+                body = Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CircularProgressIndicator(),
+                      const SizedBox(height: 32),
+                      Text(
+                        AppLocalizations.of(context)!.analysingWebsite,
+                        style: Theme.of(context).textTheme.headlineSmall,
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 8),
+                      FutureBuilder(
+                        future: Future.delayed(const Duration(seconds: 15)),
+                        builder: (context, snapshot) =>
+                            snapshot.connectionState == ConnectionState.done
+                                ? Text(
+                                    AppLocalizations.of(context)!
+                                        .longerThanExpected,
+                                    textAlign: TextAlign.center,
+                                  )
+                                : const SizedBox(),
+                      ),
+                    ],
+                  ),
+                );
               }
 
               return Scaffold(

@@ -1080,6 +1080,11 @@ Additionally, the releases are tagged, so you can always choose a specific versi
 <td></td>
 <td>Set a custom ingredient detection strategy for scraped recipes from the web. More at <a href="../ingredient_parsing/">Ingredient Parsing</a></td>
 </tr>
+<tr>
+<td><code>BASE_HREF</code></td>
+<td></td>
+<td>Sets the subdirectory KitchenOwl is hosted at. Must begin and end with a slash <code>/</code>. Only applicable to <code>tombursch/kitchenowl</code></td>
+</tr>
 </tbody>
 </table>
 <p>Additionally, to setting these environment variables you can also override the start command to scale the backend up.
@@ -1105,6 +1110,11 @@ Add the following line or take a look at this exemplary <a href="https://github.
 <td><code>BACK_URL</code></td>
 <td><code>back:5000</code></td>
 <td>Allows to set a custom address for the backend. Needs to be an uWSGI protocol endpoint. Should correspond to the name or IP of the backend container and port <code>5000</code></td>
+</tr>
+<tr>
+<td><code>BASE_HREF</code></td>
+<td></td>
+<td>Sets the subdirectory KitchenOwl is hosted at. Must begin and end with a slash <code>/</code>.</td>
 </tr>
 </tbody>
 </table>

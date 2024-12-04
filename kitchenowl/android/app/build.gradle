@@ -28,6 +28,11 @@ if (keystorePropertiesFile.exists()) {
     keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 }
 
+dependencies {
+    implementation 'com.google.errorprone:error_prone_annotations:2.36.0' // required by flutter_secure_storage
+    implementation 'com.github.spotbugs:spotbugs-annotations:4.8.6' // required by flutter_secure_storage
+}
+
 android {
     namespace "com.tombursch.kitchenowl"
     compileSdkVersion flutter.compileSdkVersion

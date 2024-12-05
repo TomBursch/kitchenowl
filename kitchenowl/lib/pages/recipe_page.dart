@@ -1,24 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:kitchenowl/app.dart';
 import 'package:kitchenowl/cubits/recipe_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
-import 'package:kitchenowl/helpers/recipe_item_markdown_extension.dart';
 import 'package:kitchenowl/helpers/share.dart';
-import 'package:kitchenowl/helpers/url_launcher.dart';
 import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/models/recipe.dart';
 import 'package:kitchenowl/models/shoppinglist.dart';
 import 'package:kitchenowl/pages/recipe_add_update_page.dart';
 import 'package:kitchenowl/kitchenowl.dart';
+import 'package:kitchenowl/widgets/recipe_markdown_body.dart';
 import 'package:kitchenowl/widgets/recipe_source_chip.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:kitchenowl/widgets/sliver_with_pinned_footer.dart';
-import 'package:markdown/markdown.dart' as md;
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 import 'package:tuple/tuple.dart';
@@ -129,44 +125,8 @@ class _RecipePageState extends State<RecipePage> {
                       ),
                     if (state.recipe.prepTime + state.recipe.cookTime > 0)
                       const SizedBox(height: 16),
-                    MarkdownBody(
-                      data: state.recipe.description,
-                      shrinkWrap: true,
-                      styleSheet: MarkdownStyleSheet.fromTheme(
-                        Theme.of(context),
-                      ).copyWith(
-                        blockquoteDecoration: BoxDecoration(
-                          color: Theme.of(context).cardTheme.color ??
-                              Theme.of(context).cardColor,
-                          borderRadius: BorderRadius.circular(2.0),
-                        ),
-                      ),
-                      imageBuilder: (uri, title, alt) => CachedNetworkImage(
-                        imageUrl: uri.toString(),
-                        placeholder: (context, url) =>
-                            const CircularProgressIndicator(),
-                        errorWidget: (context, url, error) =>
-                            const Icon(Icons.error),
-                      ),
-                      onTapLink: (text, href, title) {
-                        if (href != null && isValidUrl(href)) {
-                          openUrl(context, href);
-                        }
-                      },
-                      builders: <String, MarkdownElementBuilder>{
-                        'recipeItem': RecipeItemMarkdownBuilder(
-                          cubit: cubit,
-                        ),
-                      },
-                      extensionSet: md.ExtensionSet(
-                        md.ExtensionSet.gitHubWeb.blockSyntaxes,
-                        md.ExtensionSet.gitHubWeb.inlineSyntaxes +
-                            [
-                              RecipeItemMarkdownSyntax(
-                                state.recipe,
-                              ),
-                            ],
-                      ),
+                    RecipeMarkdownBody(
+                      recipe: state.recipe,
                     ),
                   ],
                 ),

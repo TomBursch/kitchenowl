@@ -120,6 +120,11 @@
   "@go": {},
   "@grid": {},
   "@helpTranslate": {},
+  "@hi": {
+    "placeholders": {
+      "name": {}
+    }
+  },
   "@household": {},
   "@householdDelete": {},
   "@householdDeleteConfirmation": {
@@ -316,6 +321,7 @@
     }
   },
   "@signup": {},
+  "@skip": {},
   "@smaller": {},
   "@sortingAlgorithmic": {},
   "@sortingAlphabetical": {},
@@ -339,6 +345,9 @@
   "@themeSystem": {},
   "@total": {},
   "@totalTime": {},
+  "@tutorialItemDescription1": {},
+  "@tutorialItemDescription2": {},
+  "@tutorialRecipeDescription": {},
   "@uncategorized": {},
   "@underConstruction": {},
   "@undo": {},
@@ -459,6 +468,7 @@
   "go": "Go",
   "grid": "Grid",
   "helpTranslate": "Help translate",
+  "hi": "Hi {name}!",
   "household": "Household",
   "householdDelete": "Delete household",
   "householdDeleteConfirmation": "Are you sure you want to delete {household}? This will delete any items, recipes, and expenses associated with that household.",
@@ -593,6 +603,7 @@
   "shoppingLists": "Shopping lists",
   "signInWith": "Sign in with {provider}",
   "signup": "Sign up",
+  "skip": "Skip",
   "smaller": "Smaller",
   "sortingAlgorithmic": "Algorithmic",
   "sortingAlphabetical": "Alphabetical",
@@ -612,6 +623,9 @@
   "themeSystem": "System",
   "total": "Total",
   "totalTime": "Total time",
+  "tutorialItemDescription1": "",
+  "tutorialItemDescription2": "",
+  "tutorialRecipeDescription": "",
   "uncategorized": "Uncategorized",
   "underConstruction": "Under construction",
   "undo": "Undo",

@@ -38,37 +38,45 @@ class HouseholdSettingsShoppinglistPage extends StatelessWidget {
         ));
   }
 
+  static Future<String?> getShoppingListName(
+      BuildContext context, Iterable<ShoppingList> shoppingLists) async {
+    return await showDialog<String>(
+      context: context,
+      builder: (BuildContext context) {
+        return TextDialog(
+          title: AppLocalizations.of(context)!.addShoppingList,
+          doneText: AppLocalizations.of(context)!.add,
+          hintText: AppLocalizations.of(context)!.name,
+          isInputValid: (s) =>
+              s.isNotEmpty &&
+              !shoppingLists.any((shoppingList) => shoppingList.name == s),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
-            title: Text(AppLocalizations.of(context)!.shoppingLists),
-            actions: [
-              IconButton(
-                icon: const Icon(Icons.add),
-                tooltip: AppLocalizations.of(context)!.addShoppingList,
-                onPressed: () async {
-                  final res = await showDialog<String>(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return TextDialog(
-                        title: AppLocalizations.of(context)!.addShoppingList,
-                        doneText: AppLocalizations.of(context)!.add,
-                        hintText: AppLocalizations.of(context)!.name,
-                        isInputValid: (s) => s.isNotEmpty,
-                      );
-                    },
-                  );
-                  if (res != null) {
-                    BlocProvider.of<HouseholdUpdateCubit>(context)
-                        .addShoppingList(res);
-                  }
-                },
-              ),
-            ],
-          ),
+              title: Text(AppLocalizations.of(context)!.shoppingLists),
+              actions: [
+                BlocBuilder<HouseholdUpdateCubit, HouseholdUpdateState>(
+                    bloc: BlocProvider.of<HouseholdUpdateCubit>(context),
+                    builder: (context, state) => IconButton(
+                        icon: const Icon(Icons.add),
+                        tooltip: AppLocalizations.of(context)!.addShoppingList,
+                        onPressed: () async {
+                          final res = await getShoppingListName(
+                              context, state.shoppingLists);
+                          if (res != null) {
+                            BlocProvider.of<HouseholdUpdateCubit>(context)
+                                .addShoppingList(res);
+                          }
+                        }))
+              ]),
           SliverCrossAxisConstrained(
             maxCrossAxisExtent: 600,
             child: BlocBuilder<HouseholdUpdateCubit, HouseholdUpdateState>(

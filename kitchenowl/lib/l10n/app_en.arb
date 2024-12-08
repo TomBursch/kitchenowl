@@ -299,6 +299,7 @@
   "@setupTitle": {},
   "@share": {},
   "@shoppingList": {},
+  "@shoppingListAddTooltip": {},
   "@shoppingListContainsEntries": {
     "placeholders": {
       "entriesCount": {
@@ -600,6 +601,7 @@
   "setupTitle": "Hey there! Ready to shop?",
   "share": "Share",
   "shoppingList": "Shopping list",
+  "shoppingListAddTooltip": "Add a shopping list",
   "shoppingListContainsEntries": "{entriesCount, plural, =0{The shopping list contains no items.} =1{The shopping list contains 1 item.} other{The shopping list contains {entriesCount} items.}}",
   "shoppingListDelete": "Delete shopping list",
   "shoppingListDeleteConfirmation": "Are you sure you want to delete {shoppingList}?",

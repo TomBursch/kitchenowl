@@ -154,6 +154,14 @@ extension ShoppinglistApi on ApiService {
     socket.off("shoppinglist:delete", handler);
   }
 
+  void onShoppinglistUpdate(dynamic Function(dynamic) handler){
+    socket.on("shoppinglist:update", handler);
+  }
+
+  void offShoppinglistUpdate(dynamic Function(dynamic) handler){
+    socket.off("shoppinglist:update", handler);
+  }
+
   void onShoppinglistItemAdd(dynamic Function(dynamic) handler) {
     socket.on("shoppinglist_item:add", handler);
   }

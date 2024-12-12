@@ -294,6 +294,13 @@
   "@setupTitle": {},
   "@share": {},
   "@shoppingList": {},
+  "@shoppingListContainsEntries": {
+    "placeholders": {
+      "entriesCount": {
+        "type": "num"
+      }
+    }
+  },
   "@shoppingListDelete": {},
   "@shoppingListDeleteConfirmation": {
     "placeholders": {
@@ -578,6 +585,7 @@
   "setupTitle": "Hey there! Ready to shop?",
   "share": "Share",
   "shoppingList": "Shopping list",
+  "shoppingListContainsEntries": "{entriesCount, plural, =0{The shopping list contains no entrie(s).} =1{The shopping list contains 1 entry.} other{The shopping list contains {entriesCount} entries.}}",
   "shoppingListDelete": "Delete shopping list",
   "shoppingListDeleteConfirmation": "Are you sure you want to delete {shoppingList}?",
   "shoppingListEdit": "Edit shopping list",

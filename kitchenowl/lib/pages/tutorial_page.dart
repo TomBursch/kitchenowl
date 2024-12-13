@@ -72,6 +72,7 @@ class _TutorialPageState extends State<TutorialPage> {
                               Expanded(
                                 child: Text(AppLocalizations.of(context)!
                                     .tutorialItemDescription1),
+                                flex: 2,
                               ),
                               SearchTextField(
                                 controller: TextEditingController.fromValue(
@@ -96,7 +97,7 @@ class _TutorialPageState extends State<TutorialPage> {
                                   ),
                                 ),
                               ),
-                              const Spacer(flex: 2),
+                              const Spacer(flex: 3),
                             ],
                           ),
                           Column(
@@ -106,6 +107,7 @@ class _TutorialPageState extends State<TutorialPage> {
                               Expanded(
                                 child: Text(AppLocalizations.of(context)!
                                     .tutorialItemDescription2),
+                                flex: 2,
                               ),
                               SearchTextField(
                                 controller: TextEditingController.fromValue(
@@ -130,7 +132,7 @@ class _TutorialPageState extends State<TutorialPage> {
                                   ),
                                 ),
                               ),
-                              const Spacer(flex: 2),
+                              const Spacer(flex: 3),
                             ],
                           ),
                           Column(
@@ -140,28 +142,40 @@ class _TutorialPageState extends State<TutorialPage> {
                               Expanded(
                                 child: Text(AppLocalizations.of(context)!
                                     .tutorialRecipeDescription),
+                                flex: 2,
                               ),
-                              Text(_tutorialMarkdown),
-                              Divider(),
-                              RecipeMarkdownBody(
-                                recipeItemBuilder:
-                                    _TutorialRecipeItemMarkdownBuilder(
-                                  RecipeItem(
-                                    name: "Eggs",
-                                    description: "2",
-                                    icon: "eggs",
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Expanded(child: Text(_tutorialMarkdown)),
+                                  SizedBox(
+                                    height: 120,
+                                    width: 60,
+                                    child: VerticalDivider(),
                                   ),
-                                ),
-                                recipe: Recipe(
-                                  description: _tutorialMarkdown,
-                                  items: [
-                                    RecipeItem(
-                                      name: "Eggs",
-                                      description: "2",
-                                      icon: "eggs",
+                                  Expanded(
+                                    child: RecipeMarkdownBody(
+                                      recipeItemBuilder:
+                                          _TutorialRecipeItemMarkdownBuilder(
+                                        RecipeItem(
+                                          name: "Eggs",
+                                          description: "2",
+                                          icon: "eggs",
+                                        ),
+                                      ),
+                                      recipe: Recipe(
+                                        description: _tutorialMarkdown,
+                                        items: [
+                                          RecipeItem(
+                                            name: "Eggs",
+                                            description: "2",
+                                            icon: "eggs",
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
                               const Spacer(flex: 2),
                             ],

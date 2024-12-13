@@ -928,7 +928,7 @@
 <li>All PRs should be rebased (with main) and commits squashed prior to the final merge process</li>
 </ul>
 <h3 id="setup-install">Setup &amp; Install</h3>
-<div class="tabbed-set tabbed-alternate" data-tabs="1:4"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><input id="__tabbed_1_4" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Frontend</label><label for="__tabbed_1_2">Backend</label><label for="__tabbed_1_3">Docs</label><label for="__tabbed_1_4">Website</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:1"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Frontend</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <ul>
@@ -939,6 +939,26 @@
 <li>Run app: <code>flutter run</code></li>
 </ul>
 </div>
+</div>
+</div>
+<p>==== Debugging</p>
+<p>An example configuration (for launch.json) for debugging in VS Code when opening the root folder in the editor:</p>
+<div class="highlight"><pre><span></span><code>{
+    &quot;name&quot;: &quot;kitchenowl&quot;,
+    &quot;cwd&quot;: &quot;kitchenowl&quot;,
+    &quot;request&quot;: &quot;launch&quot;,
+    &quot;type&quot;: &quot;dart&quot;
+},
+{
+    &quot;name&quot;: &quot;kitchenowl (profile mode)&quot;,
+    &quot;request&quot;: &quot;launch&quot;,
+    &quot;type&quot;: &quot;dart&quot;,
+    &quot;flutterMode&quot;: &quot;profile&quot;
+}
+</code></pre></div>
+<p>For an easier debug setup see the section below.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:1"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Backend</label></div>
+<div class="tabbed-content">
 <div class="tabbed-block">
 <ul>
 <li>Go to <code>./backend</code></li>
@@ -946,10 +966,33 @@
 <li>Activate your python environment <code>source venv/bin/activate</code> (environment can be deactivated with <code>deactivate</code>)</li>
 <li>Install dependencies <code>pip3 install -r requirements.txt</code></li>
 <li>Initialize/Upgrade the sqlite database with <code>flask db upgrade</code></li>
-<li>Run debug server with <code>python3 wsgi.py</code></li>
+<li>Run debug server with <code>python3 wsgi.py</code> (to make the the server visible to any device add <code>--host=0.0.0.0</code> or the network IP address on which to provide the server)</li>
 <li>The backend should be reachable at <code>localhost:5000</code></li>
 </ul>
+<p><strong>Do not run the backend using <code>flask</code> as it won't initialize the sockets properly.</strong></p>
 </div>
+</div>
+</div>
+<p>==== Debugging</p>
+<p>An example configuration (for launch.json) for debugging in VS Code when opening the root folder in the editor:</p>
+<div class="highlight"><pre><span></span><code>{
+    &quot;name&quot;: &quot;Python Debugger: KitchenOwl&quot;,
+    &quot;type&quot;: &quot;debugpy&quot;,
+    &quot;request&quot;: &quot;launch&quot;,
+    &quot;cwd&quot;: &quot;${workspaceFolder}/backend/&quot;,
+    &quot;program&quot;: &quot;wsgi.py&quot;,
+    &quot;jinja&quot;: true,
+    &quot;justMyCode&quot;: true,
+    &quot;gevent&quot;: true
+},
+</code></pre></div>
+<p>To expose the backend to the complete network add the followig parameters:</p>
+<div class="highlight"><pre><span></span><code>args: [
+    &quot;--host=0.0.0.0&quot;
+]
+</code></pre></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">Docs</label><label for="__tabbed_3_2">Website</label></div>
+<div class="tabbed-content">
 <div class="tabbed-block">
 <ul>
 <li>Go to <code>./docs</code></li>
@@ -968,6 +1011,15 @@
 </div>
 </div>
 </div>
+<p>=== Debugging</p>
+<p>It is generally recommended to open the backend and the frontend projects in different VS Code instances. When developing in this way the debugging configuration for the backend must be adapted by removing <code>cwd</code>.</p>
+<p>If there is need to debug the interaction between two different different apps (i.e. Linux native and Web Browser) they can be started on the same host by running flutter multiple times:</p>
+<ul>
+<li><code>flutter run -d chrome</code></li>
+<li><code>flutter run -d linux</code></li>
+</ul>
+<p>The Android version can also be run by using an emulator on the same PC to avoid needing to expose the backend on the local network.</p>
+<p>The debugger in VS Code can also be started multiple times in the same editor session. This is not recommended as it can be confusing to understand in which instance breakpoints are being hit. It is easier to start mulitple VS Code sessions.</p>
 <h3 id="git-commit-message-style">Git Commit Message Style</h3>
 <p>This project uses the <a href="https://www.conventionalcommits.org/en/v1.0.0/#summary">conventional commits</a> format.</p>
 <p>Example commit messages:</p>

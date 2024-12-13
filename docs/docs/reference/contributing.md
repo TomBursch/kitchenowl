@@ -34,14 +34,65 @@ The `description` is a descriptive summary of the change the PR will make.
     - Install dependencies: `flutter packages get`
     - Create empty environment file: `touch .env`
     - Run app: `flutter run`
+
+==== Debugging
+
+An example configuration (for launch.json) for debugging in VS Code when opening the root folder in the editor:
+
+```
+{
+    "name": "kitchenowl",
+    "cwd": "kitchenowl",
+    "request": "launch",
+    "type": "dart"
+},
+{
+    "name": "kitchenowl (profile mode)",
+    "request": "launch",
+    "type": "dart",
+    "flutterMode": "profile"
+}
+```
+
+For an easier debug setup see the section below.
+
+
 === "Backend"
     - Go to `./backend`
     - Create a python environment `python3 -m venv venv`
     - Activate your python environment `source venv/bin/activate` (environment can be deactivated with `deactivate`)
     - Install dependencies `pip3 install -r requirements.txt`
     - Initialize/Upgrade the sqlite database with `flask db upgrade`
-    - Run debug server with `python3 wsgi.py`
+    - Run debug server with `python3 wsgi.py` (to make the the server visible to any device add `--host=0.0.0.0` or the network IP address on which to provide the server)
     - The backend should be reachable at `localhost:5000`
+
+    **Do not run the backend using `flask` as it won't initialize the sockets properly.**
+
+==== Debugging
+
+An example configuration (for launch.json) for debugging in VS Code when opening the root folder in the editor:
+
+```
+{
+    "name": "Python Debugger: KitchenOwl",
+    "type": "debugpy",
+    "request": "launch",
+    "cwd": "${workspaceFolder}/backend/",
+    "program": "wsgi.py",
+    "jinja": true,
+    "justMyCode": true,
+    "gevent": true
+},
+```
+
+To expose the backend to the complete network add the followig parameters:
+
+```
+args: [
+    "--host=0.0.0.0"
+]
+```
+
 === "Docs"
     - Go to `./docs`
     - Create a python environment `python3 -m venv venv`
@@ -52,6 +103,20 @@ The `description` is a descriptive summary of the change the PR will make.
     - [Install Hugo](https://gohugo.io/getting-started/quick-start/)
     - Clone the website repository
     - Run website: `hugo server`
+
+
+=== Debugging
+
+It is generally recommended to open the backend and the frontend projects in different VS Code instances. When developing in this way the debugging configuration for the backend must be adapted by removing `cwd`.
+
+If there is need to debug the interaction between two different different apps (i.e. Linux native and Web Browser) they can be started on the same host by running flutter multiple times:
+
+- `flutter run -d chrome`
+- `flutter run -d linux`
+
+The Android version can also be run by using an emulator on the same PC to avoid needing to expose the backend on the local network.
+
+The debugger in VS Code can also be started multiple times in the same editor session. This is not recommended as it can be confusing to understand in which instance breakpoints are being hit. It is easier to start mulitple VS Code sessions.
 
 ### Git Commit Message Style
 

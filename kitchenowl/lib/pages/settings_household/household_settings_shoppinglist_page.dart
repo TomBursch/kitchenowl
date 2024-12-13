@@ -14,6 +14,30 @@ enum _ShoppinglistAction {
 class HouseholdSettingsShoppinglistPage extends StatelessWidget {
   const HouseholdSettingsShoppinglistPage({super.key});
 
+  static Future<bool> confirmDeleteShoppingList(
+      BuildContext context, ShoppingList shoppinglist) async {
+    return await askForConfirmation(
+        context: context,
+        title: Text(
+          AppLocalizations.of(context)!.shoppingListDelete,
+        ),
+        content: SingleChildScrollView(
+          child: ListBody(
+            children: [
+              Text(
+                AppLocalizations.of(context)!.shoppingListDeleteConfirmation(
+                  shoppinglist.name,
+                ),
+              ),
+              if (shoppinglist.items.length > 0) const SizedBox(height: 20),
+              if (shoppinglist.items.length > 0)
+                Text(AppLocalizations.of(context)!
+                    .shoppingListContainsEntries(shoppinglist.items.length))
+            ],
+          ),
+        ));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -66,20 +90,9 @@ class HouseholdSettingsShoppinglistPage extends StatelessWidget {
                         state.shoppingLists.elementAt(i).name,
                       ),
                       isDismissable: i != 0,
-                      confirmDismiss: (direction) async {
-                        return (await askForConfirmation(
-                          context: context,
-                          title: Text(
-                            AppLocalizations.of(context)!.shoppingListDelete,
-                          ),
-                          content: Text(
-                            AppLocalizations.of(context)!
-                                .shoppingListDeleteConfirmation(
-                              state.shoppingLists.elementAt(i).name,
-                            ),
-                          ),
-                        ));
-                      },
+                      confirmDismiss: (direction) async =>
+                          await confirmDeleteShoppingList(
+                              context, state.shoppingLists.elementAt(i)),
                       onDismissed: (direction) {
                         BlocProvider.of<HouseholdUpdateCubit>(context)
                             .deleteShoppingList(
@@ -201,17 +214,8 @@ class HouseholdSettingsShoppinglistPage extends StatelessWidget {
         }
         break;
       case _ShoppinglistAction.delete:
-        if (await askForConfirmation(
-          context: context,
-          title: Text(
-            AppLocalizations.of(context)!.shoppingListDelete,
-          ),
-          content: Text(
-            AppLocalizations.of(context)!.shoppingListDeleteConfirmation(
-              shoppingLists.elementAt(shoppingListIndex).name,
-            ),
-          ),
-        )) {
+        if (await confirmDeleteShoppingList(
+            context, shoppingLists.elementAt(shoppingListIndex))) {
           BlocProvider.of<HouseholdUpdateCubit>(context).deleteShoppingList(
             shoppingLists.elementAt(shoppingListIndex),
           );

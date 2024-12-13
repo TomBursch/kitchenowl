@@ -28,6 +28,16 @@ class HouseholdUpdateCubit
     ApiService.getInstance()
         .getSupportedLanguages()
         .then((value) => emit(state.copyWith(supportedLanguages: value)));
+    ApiService.getInstance().onShoppinglistAdd(onShoppinglistAdd);
+    ApiService.getInstance().onShoppinglistDelete(onShoppinglistDelete);
+  }
+
+  void onShoppinglistAdd(dynamic data) {
+    refresh();
+  }
+  
+  void onShoppinglistDelete(dynamic data) {
+    refresh();
   }
 
   Future<void> refresh() async {

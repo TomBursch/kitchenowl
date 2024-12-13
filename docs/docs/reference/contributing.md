@@ -103,6 +103,16 @@ args: [
     - [Install Hugo](https://gohugo.io/getting-started/quick-start/)
     - Clone the website repository
     - Run website: `hugo server`
+=== Debugging
+==== Known Warnings
+
+When debugging the backend the following warning is shown:
+
+```
+WARNING in __init__: WebSocket transport not available. Install gevent-websocket for improved performance.
+```
+
+This only affects the backend when running in debug mode. This means it is not necessary to add it to `requirements.txt` for the project.
 
 
 === Debugging

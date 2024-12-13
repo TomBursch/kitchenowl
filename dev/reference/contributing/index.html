@@ -1011,6 +1011,12 @@
 </div>
 </div>
 </div>
+<p>=== Debugging
+==== Known Warnings</p>
+<p>When debugging the backend the following warning is shown:</p>
+<div class="highlight"><pre><span></span><code>WARNING in __init__: WebSocket transport not available. Install gevent-websocket for improved performance.
+</code></pre></div>
+<p>This only affects the backend when running in debug mode. This means it is not necessary to add it to <code>requirements.txt</code> for the project.</p>
 <p>=== Debugging</p>
 <p>It is generally recommended to open the backend and the frontend projects in different VS Code instances. When developing in this way the debugging configuration for the backend must be adapted by removing <code>cwd</code>.</p>
 <p>If there is need to debug the interaction between two different different apps (i.e. Linux native and Web Browser) they can be started on the same host by running flutter multiple times:</p>

@@ -54,7 +54,7 @@ class AnalyticsPage extends StatelessWidget {
                 ),
                 ListTile(
                   dense: true,
-                  title: const Text("Montly Active"),
+                  title: const Text("Monthly Active"),
                   subtitle: const Text("Online in the last 30 days"),
                   trailing: Text(
                     "${data['users']['active'].toString()} (${NumberFormat.percentPattern().format(data['users']['active'] / data['users']['total'])})",

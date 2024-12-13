@@ -33,16 +33,28 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
     });
     _initialLoad();
     refresh();
+    ApiService.getInstance().onShoppinglistAdd(onShoppinglistAdd);
+    ApiService.getInstance().onShoppinglistDelete(onShoppinglistDelete);
     ApiService.getInstance().onShoppinglistItemAdd(onShoppinglistItemAdd);
     ApiService.getInstance().onShoppinglistItemRemove(onShoppinglistItemRemove);
   }
 
   @override
   Future<void> close() async {
+    ApiService.getInstance().offShoppinglistAdd(onShoppinglistAdd);
+    ApiService.getInstance().offShoppinglistDelete(onShoppinglistDelete);
     ApiService.getInstance().offShoppinglistItemAdd(onShoppinglistItemAdd);
     ApiService.getInstance()
         .offShoppinglistItemRemove(onShoppinglistItemRemove);
     super.close();
+  }
+
+  void onShoppinglistAdd(dynamic data) {
+    refresh();
+  }
+
+  void onShoppinglistDelete(dynamic data) {
+    refresh();
   }
 
   void onShoppinglistItemAdd(dynamic data) {
@@ -289,15 +301,28 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
     return _refreshThread!;
   }
 
-  Future<void> _initialLoad() async {
+  Future<Map<int, ShoppingList>> fetchShoppingLists(bool forceOffline) async {
     final shoppingLists = await TransactionHandler.getInstance()
         .runTransaction(
           TransactionShoppingListGet(household: household),
-          forceOffline: true,
+          forceOffline: forceOffline,
         )
         .then((lists) => Map.fromEntries(lists
             .map((e) => e.id != null ? MapEntry(e.id!, e) : null)
             .nonNulls));
+
+    return shoppingLists;
+  }
+
+  Future<List<Category>> fetchCategories(bool forceOffline) {
+    return TransactionHandler.getInstance().runTransaction(
+      TransactionCategoriesGet(household: household),
+      forceOffline: true,
+    );
+  }
+
+  Future<void> _initialLoad() async {
+    final shoppingLists = await fetchShoppingLists(true);
 
     ShoppingList? shoppingList = state.selectedShoppinglist;
     if (await PreferenceStorage.getInstance()
@@ -314,11 +339,7 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
 
     if (shoppingList == null) return;
 
-    Future<List<Category>> categories =
-        TransactionHandler.getInstance().runTransaction(
-      TransactionCategoriesGet(household: household),
-      forceOffline: true,
-    );
+    Future<List<Category>> categories = fetchCategories(true);
 
     final resState = LoadingShoppinglistCubitState(
       shoppinglists: shoppingLists,
@@ -353,11 +374,7 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
       ));
     }
 
-    final shoppingLists = await TransactionHandler.getInstance()
-        .runTransaction(TransactionShoppingListGet(household: household))
-        .then((lists) => Map.fromEntries(lists
-            .map((e) => e.id != null ? MapEntry(e.id!, e) : null)
-            .nonNulls));
+    final shoppingLists = await fetchShoppingLists(false);
 
     int? selectedShoppinglistId = state.selectedShoppinglistId;
     if (selectedShoppinglistId != null &&
@@ -370,8 +387,7 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
 
     final shoppinglist = shoppingLists[selectedShoppinglistId];
 
-    Future<List<Category>> categories = TransactionHandler.getInstance()
-        .runTransaction(TransactionCategoriesGet(household: household));
+    Future<List<Category>> categories = fetchCategories(false);
 
     if (query != null && query.isNotEmpty) {
       // Split query into name and description

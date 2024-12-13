@@ -37,9 +37,17 @@ shoppinglistHousehold = Blueprint("shoppinglist", __name__)
 @authorize_household()
 @validate_args(CreateList)
 def createShoppinglist(args, household_id):
-    return jsonify(
-        Shoppinglist(name=args["name"], household_id=household_id).save().obj_to_dict()
+    shoppinglist = Shoppinglist(name=args["name"], household_id=household_id)
+    shoppinglist.save()
+    shoppinglist_dict = shoppinglist.obj_to_dict()
+    socketio.emit(
+        "shoppinglist:add",
+        {
+            "shoppinglist": shoppinglist_dict
+        },
+        to=household_id
     )
+    return jsonify(shoppinglist_dict)
 
 
 @shoppinglistHousehold.route("", methods=["GET"])
@@ -108,6 +116,13 @@ def deleteShoppinglist(id):
     if shoppinglist.isDefault():
         raise InvalidUsage()
     shoppinglist.delete()
+    socketio.emit(
+        "shoppinglist:delete",
+        {
+          "shoppinglist": shoppinglist.obj_to_dict()
+        },
+        to=shoppinglist.household_id
+    )
 
     return jsonify({"msg": "DONE"})
 

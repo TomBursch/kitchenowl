@@ -138,6 +138,22 @@ extension ShoppinglistApi on ApiService {
     return res.statusCode == 200;
   }
 
+  void onShoppinglistAdd(dynamic Function(dynamic) handler){
+    socket.on("shoppinglist:add", handler);
+  }
+
+  void offShoppinglistAdd(dynamic Function(dynamic) handler){
+    socket.off("shoppinglist:add", handler);
+  }
+
+  void onShoppinglistDelete(dynamic Function(dynamic) handler){
+    socket.on("shoppinglist:delete", handler);
+  }
+
+  void offShoppinglistDelete(dynamic Function(dynamic) handler){
+    socket.off("shoppinglist:delete", handler);
+  }
+
   void onShoppinglistItemAdd(dynamic Function(dynamic) handler) {
     socket.on("shoppinglist_item:add", handler);
   }

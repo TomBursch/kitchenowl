@@ -35,63 +35,26 @@ The `description` is a descriptive summary of the change the PR will make.
     - Create empty environment file: `touch .env`
     - Run app: `flutter run`
 
-==== Debugging
-
-An example configuration (for launch.json) for debugging in VS Code when opening the root folder in the editor:
-
-```
-{
-    "name": "kitchenowl",
-    "cwd": "kitchenowl",
-    "request": "launch",
-    "type": "dart"
-},
-{
-    "name": "kitchenowl (profile mode)",
-    "request": "launch",
-    "type": "dart",
-    "flutterMode": "profile"
-}
-```
-
-For an easier debug setup see the section below.
-
-
 === "Backend"
     - Go to `./backend`
     - Create a python environment `python3 -m venv venv`
     - Activate your python environment `source venv/bin/activate` (environment can be deactivated with `deactivate`)
     - Install dependencies `pip3 install -r requirements.txt`
-    - Initialize/Upgrade the sqlite database with `flask db upgrade`
-    - Run debug server with `python3 wsgi.py` (to make the the server visible to any device add `--host=0.0.0.0` or the network IP address on which to provide the server)
+    - Initialize/Upgrade the SQLite database with `flask db upgrade`
+    - Run debug server with `python3 wsgi.py` (to make the server visible to any device add `--host=0.0.0.0` or the network IP address on which to provide the server)
     - The backend should be reachable at `localhost:5000`
 
-    **Do not run the backend using `flask` as it won't initialize the sockets properly.**
+    !!! danger Known Warnings
+        Do not run the backend using `flask` as it won't initialize the sockets properly.
 
-==== Debugging
+    !!! info Known Warnings
+        When debugging the backend the following warning is shown:
 
-An example configuration (for launch.json) for debugging in VS Code when opening the root folder in the editor:
+        ```
+        WARNING in __init__: WebSocket transport not available. Install gevent-websocket for improved performance.
+        ```
 
-```
-{
-    "name": "Python Debugger: KitchenOwl",
-    "type": "debugpy",
-    "request": "launch",
-    "cwd": "${workspaceFolder}/backend/",
-    "program": "wsgi.py",
-    "jinja": true,
-    "justMyCode": true,
-    "gevent": true
-},
-```
-
-To expose the backend to the complete network add the followig parameters:
-
-```
-args: [
-    "--host=0.0.0.0"
-]
-```
+        This only affects the backend when running in debug mode and can be ignored.
 
 === "Docs"
     - Go to `./docs`
@@ -99,35 +62,66 @@ args: [
     - Activate your python environment `source venv/bin/activate` (environment can be deactivated with `deactivate`)
     - Install dependencies `pip3 install -r requirements.txt`
     - Run docs: `mkdocs serve`
+
 === "Website"
     - [Install Hugo](https://gohugo.io/getting-started/quick-start/)
     - Clone the website repository
     - Run website: `hugo server`
-=== Debugging
-==== Known Warnings
-
-When debugging the backend the following warning is shown:
-
-```
-WARNING in __init__: WebSocket transport not available. Install gevent-websocket for improved performance.
-```
-
-This only affects the backend when running in debug mode. This means it is not necessary to add it to `requirements.txt` for the project.
 
 
-=== Debugging
+### Debugging
+It is generally recommended opening the backend and the frontend projects in different VS Code instances.
+Here are some examples of configurations that work well with VS Code and allow you to set breakpoints:
 
-It is generally recommended to open the backend and the frontend projects in different VS Code instances. When developing in this way the debugging configuration for the backend must be adapted by removing `cwd`.
+=== "Frontend"
+    An example configuration for `kitchenowl/.vscode/launch.json`:
 
-If there is need to debug the interaction between two different different apps (i.e. Linux native and Web Browser) they can be started on the same host by running flutter multiple times:
+    ```
+    {
+        "configurations": [
+            {
+                "name": "kitchenowl",
+                "request": "launch",
+                "type": "dart"
+            },
+            {
+                "name": "kitchenowl (profile mode)",
+                "request": "launch",
+                "type": "dart",
+                "flutterMode": "profile"
+            }
+        ]
+    }
+    ```
+=== "Backend"
+    An example configuration for `backend/.vscode/launch.json`:
 
-- `flutter run -d chrome`
-- `flutter run -d linux`
+    ```
+    {
+        "configurations": [
+            {
+                "name": "Python Debugger: KitchenOwl",
+                "type": "debugpy",
+                "request": "launch",
+                "program": "wsgi.py",
+                "jinja": true,
+                "justMyCode": true,
+                "gevent": true
+            }
+        ]
+    }
+    ```
 
-The Android version can also be run by using an emulator on the same PC to avoid needing to expose the backend on the local network.
+    To expose the backend to the complete network add the followig parameters:
 
-The debugger in VS Code can also be started multiple times in the same editor session. This is not recommended as it can be confusing to understand in which instance breakpoints are being hit. It is easier to start mulitple VS Code sessions.
+    ```
+    args: [
+        "--host=0.0.0.0"
+    ]
+    ```
 
+If there is need to debug the interaction between two different app instances you can run flutter multiple times for different target devices. Either by running `flutter run -d <DEVICE_ID>` or by selecting `Run without Debugging` in VS Code multiple times. Be aware that it can be confusing to understand in which instance breakpoints are being hit when debugging multiple instances in VS Code.
+    
 ### Git Commit Message Style
 
 This project uses the [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/#summary) format.

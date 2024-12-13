@@ -58,8 +58,8 @@ class _ChartPieCurrentMonthState extends State<ChartPieCurrentMonth> {
         centerSpaceRadius: 0,
         sections: _getData(),
       ),
-      swapAnimationDuration: const Duration(milliseconds: 150),
-      swapAnimationCurve: Curves.linear,
+      duration: const Duration(milliseconds: 150),
+      curve: Curves.linear,
     );
   }
 

@@ -201,7 +201,7 @@ class _SettingsUserPageState extends State<SettingsUserPage> {
                                       .textTheme
                                       .labelMedium
                                       ?.color
-                                      ?.withOpacity(0.8),
+                                      ?.withAlpha(204),
                                 ),
                       ),
                     ],

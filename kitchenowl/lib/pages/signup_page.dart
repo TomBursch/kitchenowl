@@ -109,7 +109,7 @@ class _SignupPageState extends State<SignupPage> {
                                         .textTheme
                                         .labelMedium
                                         ?.color
-                                        ?.withOpacity(0.8),
+                                        ?.withAlpha(204),
                                   ),
                             ),
                             const SizedBox(height: 8),
@@ -141,7 +141,7 @@ class _SignupPageState extends State<SignupPage> {
                                               .textTheme
                                               .labelSmall
                                               ?.color
-                                              ?.withOpacity(.3),
+                                              ?.withAlpha(76),
                                         ),
                                     a: TextStyle(
                                       color:

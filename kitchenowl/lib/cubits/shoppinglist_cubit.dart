@@ -297,7 +297,7 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
         )
         .then((lists) => Map.fromEntries(lists
             .map((e) => e.id != null ? MapEntry(e.id!, e) : null)
-            .whereNotNull()));
+            .nonNulls));
 
     ShoppingList? shoppingList = state.selectedShoppinglist;
     if (await PreferenceStorage.getInstance()
@@ -328,7 +328,7 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
       selectedListItems: state.selectedListItems
           .map((e) =>
               shoppingList!.items.firstWhereOrNull((item) => item.id == e.id))
-          .whereNotNull()
+          .nonNulls
           .toList(),
     );
 
@@ -357,7 +357,7 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
         .runTransaction(TransactionShoppingListGet(household: household))
         .then((lists) => Map.fromEntries(lists
             .map((e) => e.id != null ? MapEntry(e.id!, e) : null)
-            .whereNotNull()));
+            .nonNulls));
 
     int? selectedShoppinglistId = state.selectedShoppinglistId;
     if (selectedShoppinglistId != null &&
@@ -418,7 +418,7 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
         selectedListItems: state.selectedListItems
             .map((e) =>
                 shoppinglist?.items.firstWhereOrNull((item) => item.id == e.id))
-            .whereNotNull()
+            .nonNulls
             .toList(),
       );
     } else {
@@ -430,7 +430,7 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
         selectedListItems: state.selectedListItems
             .map((e) =>
                 shoppinglist?.items.firstWhereOrNull((item) => item.id == e.id))
-            .whereNotNull()
+            .nonNulls
             .toList(),
       );
     }

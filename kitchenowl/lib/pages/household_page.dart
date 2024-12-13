@@ -106,8 +106,6 @@ class _HouseholdPageState extends State<HouseholdPage>
           ),
         );
         return;
-      default:
-        break;
     }
     context.go("/household/${widget.household.id}/${tapped.toString()}");
   }

@@ -23,7 +23,7 @@ class KitchenOwlSwitch extends StatelessWidget {
       scale: 0.9,
       child: CupertinoSwitch(
         value: value,
-        activeColor: Theme.of(context).colorScheme.secondary,
+        activeTrackColor: Theme.of(context).colorScheme.secondary,
         onChanged: onChanged,
       ),
     );

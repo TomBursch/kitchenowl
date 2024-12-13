@@ -182,7 +182,7 @@ class _RecipeListPageState extends State<RecipeListPage> {
                         color: Theme.of(context)
                             .colorScheme
                             .primary
-                            .withOpacity(1),
+                            .withAlpha(0xFF),
                         boxShadow: const [
                           BoxShadow(
                             color: Colors.black54,

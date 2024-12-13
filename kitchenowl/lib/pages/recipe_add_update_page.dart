@@ -334,7 +334,7 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                                                       .textTheme
                                                       .bodyMedium
                                                       ?.color
-                                                      ?.withOpacity(.8),
+                                                      ?.withAlpha(204),
                                                 ),
                                               ),
                                               TextSpan(
@@ -359,7 +359,7 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                                                       .textTheme
                                                       .bodyMedium
                                                       ?.color
-                                                      ?.withOpacity(.8),
+                                                      ?.withAlpha(204),
                                                 ),
                                               ),
                                             ],

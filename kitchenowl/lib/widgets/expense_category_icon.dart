@@ -22,7 +22,7 @@ class ExpenseCategoryIcon extends StatelessWidget {
           shape: BoxShape.circle,
           boxShadow: [
             BoxShadow(
-              color: Theme.of(context).colorScheme.shadow.withOpacity(.3),
+              color: Theme.of(context).colorScheme.shadow.withAlpha(76),
               blurRadius: 2,
               offset: const Offset(1, 1),
             ),

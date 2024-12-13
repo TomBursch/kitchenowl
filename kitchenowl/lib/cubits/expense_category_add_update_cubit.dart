@@ -59,7 +59,7 @@ class AddUpdateExpenseCategoryState extends Equatable {
         color: (color ?? Nullable(this.color)).value,
       );
 
-  bool isValid() => name.isNotEmpty && (color == null || color!.alpha == 255);
+  bool isValid() => name.isNotEmpty && (color == null || color!.a == 255);
 
   @override
   List<Object?> get props => [

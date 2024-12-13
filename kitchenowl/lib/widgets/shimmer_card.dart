@@ -11,8 +11,8 @@ class ShimmerCard extends StatelessWidget {
     return Card(
       margin: margin,
       child: Shimmer.fromColors(
-        baseColor: Colors.grey.withOpacity(.4),
-        highlightColor: Colors.grey[300]!.withOpacity(.9),
+        baseColor: Colors.grey.withAlpha(102),
+        highlightColor: Colors.grey[300]!.withAlpha(230),
         child: ListTile(
           trailing: trailing,
           title: const Row(

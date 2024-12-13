@@ -106,7 +106,7 @@ class _SelectableButtonCardState extends State<SelectableButtonCard> {
                                 ? Theme.of(context)
                                     .colorScheme
                                     .onPrimary
-                                    .withOpacity(.7)
+                                    .withAlpha(178)
                                 : null,
                           ),
                       maxLines: 2,

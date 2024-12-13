@@ -64,8 +64,8 @@ class _ChartBarMonthsState extends State<ChartBarMonths> {
             constraints.maxWidth / widget.numberOfMonthsToShow - barWidth - 10;
 
         return BarChart(
-          swapAnimationDuration: const Duration(milliseconds: 150),
-          swapAnimationCurve: Curves.linear,
+          duration: const Duration(milliseconds: 150),
+          curve: Curves.linear,
           BarChartData(
             alignment: BarChartAlignment.center,
             groupsSpace: barSpacing,

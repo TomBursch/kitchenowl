@@ -554,7 +554,7 @@ class _SettingsPageState extends State<SettingsPage> {
                             .textTheme
                             .labelSmall
                             ?.color
-                            ?.withOpacity(.3),
+                            ?.withAlpha(76),
                       ),
                   textAlign: TextAlign.center,
                 ),
@@ -566,7 +566,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           .textTheme
                           .labelSmall
                           ?.color
-                          ?.withOpacity(.3),
+                          ?.withAlpha(76),
                     ),
                 textAlign: TextAlign.center,
               ),

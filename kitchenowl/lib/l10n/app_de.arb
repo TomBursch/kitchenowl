@@ -114,6 +114,11 @@
   "@go": {},
   "@grid": {},
   "@helpTranslate": {},
+  "@hi": {
+    "placeholders": {
+      "name": {}
+    }
+  },
   "@household": {},
   "@householdDelete": {},
   "@householdDeleteConfirmation": {
@@ -284,6 +289,13 @@
   "@setupTitle": {},
   "@share": {},
   "@shoppingList": {},
+  "@shoppingListContainsEntries": {
+    "placeholders": {
+      "entriesCount": {
+        "type": "num"
+      }
+    }
+  },
   "@shoppingListDelete": {},
   "@shoppingListDeleteConfirmation": {
     "placeholders": {
@@ -299,6 +311,7 @@
     }
   },
   "@signup": {},
+  "@skip": {},
   "@smaller": {},
   "@sortingAlgorithmic": {},
   "@sortingAlphabetical": {},
@@ -322,6 +335,14 @@
   "@themeSystem": {},
   "@total": {},
   "@totalTime": {},
+  "@tutorialItemDescription1": {},
+  "@tutorialItemDescription2": {},
+  "@tutorialRecipeDescription": {},
+  "@tutorialRecipeMore": {
+    "placeholders": {
+      "url": {}
+    }
+  },
   "@uncategorized": {},
   "@underConstruction": {},
   "@undo": {},
@@ -442,6 +463,7 @@
   "go": "Los",
   "grid": "Gitter",
   "helpTranslate": "Hilf beim Übersetzen",
+  "hi": "Hi {name}!",
   "household": "Haushalt",
   "householdDelete": "Haushalt löschen",
   "householdDeleteConfirmation": "Bist du sicher, dass du {household} löschen möchtest? Das entfernt alle Produkte, Kategorien, Rezepte und Ausgaben.",
@@ -568,6 +590,7 @@
   "setupTitle": "Hallo! Bereit zum Einkaufen?",
   "share": "Teilen",
   "shoppingList": "Einkaufsliste",
+  "shoppingListContainsEntries": "{entriesCount, plural, =0{Die Einkaufsliste hat keine Artikel.} =1{Die Einkaufliste hat einen Artikel.} other{Die Einkaufsliste hat {entriesCount} Artikel.}}",
   "shoppingListDelete": "Einkaufsliste löschen",
   "shoppingListDeleteConfirmation": "Bist du dir sicher, dass du {shoppingList} löschen möchtest?",
   "shoppingListEdit": "Einkaufsliste bearbeiten",
@@ -575,6 +598,7 @@
   "shoppingLists": "Einkaufslisten",
   "signInWith": "Mit {provider} anmelden",
   "signup": "Registrieren",
+  "skip": "Überspringen",
   "smaller": "Kleiner",
   "sortingAlgorithmic": "Algorithmisch",
   "sortingAlphabetical": "Alphabetisch",
@@ -594,6 +618,10 @@
   "themeSystem": "System",
   "total": "Gesamt",
   "totalTime": "Gesamtzeit",
+  "tutorialItemDescription1": "Bei der Suche nach Artikeln kannst du mit einer Menge anfangen, die dann als Beschreibung hinzugefügt wird.",
+  "tutorialItemDescription2": "Oder, wenn Mengen nicht genug sind, kannst du ein Komma benutzen, um Artikel und Beschreibung zu trennen.",
+  "tutorialRecipeDescription": "Innerhalb von Rezepten kannst du Markdown benutzen. Grundlegende Funktionen sind Überschriften, die mit Rautenzeichen angegeben werden, nummerierte Listen für Anweisungsschritte und Verweise auf Zutaten mit einem @-Zeichen gefolgt von dem Namen der Zutat.",
+  "tutorialRecipeMore": "Weitere Informationen findest du in der [Dokumentation]({url}).",
   "uncategorized": "Unkategorisiert",
   "underConstruction": "Baustelle",
   "undo": "Rückgängig machen",

@@ -102,6 +102,7 @@ SUPPORTED_LANGUAGES = {
     "pt": "Português",
     "pt_BR": "Português Brasileiro",
     "ru": "Русский язык",
+    "sv": "Slovenčina",
     "sv": "Svenska",
     "tr": "Türkçe",
     "uk": "Українська",

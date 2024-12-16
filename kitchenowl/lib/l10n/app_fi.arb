@@ -33,6 +33,7 @@
   },
   "@address": {},
   "@admin": {},
+  "@analysingWebsite": {},
   "@appDescription": {},
   "@appTitle": {
     "description": "The title of the app"
@@ -184,6 +185,7 @@
     }
   },
   "@longPressToReorder": {},
+  "@longerThanExpected": {},
   "@markAsPaid": {},
   "@mealPlanner": {},
   "@member": {},
@@ -381,6 +383,7 @@
   "addedBy": "{name} lisäsi",
   "address": "Osoite",
   "admin": "Ylläpitäjä",
+  "analysingWebsite": "Analysoi verkkosivustoa..",
   "appDescription": "KitchenOwl auttaa sinua järjestämään päivittäistavaraelämäsi.",
   "appTitle": "KitchenOwl",
   "back": "Takaisin",
@@ -487,6 +490,7 @@
   "logout": "Kirjaudu ulos",
   "logoutName": "Kirjaa ulos {name}",
   "longPressToReorder": "Paina pitkään muokataksesi järjestystä",
+  "longerThanExpected": "Tämä kestää odotettua kauemmin",
   "markAsPaid": "Merkitse maksetuksi",
   "mealPlanner": "Ateriasuunnittelu",
   "member": "Jäsen",

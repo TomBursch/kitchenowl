@@ -62,7 +62,7 @@ class _TutorialPageState extends State<TutorialPage> {
                   ),
                   Expanded(
                     child: AbsorbPointer(
-                      absorbing: true,
+                      absorbing: step != 2,
                       child: IndexedStack(
                         children: [
                           Column(
@@ -111,7 +111,8 @@ class _TutorialPageState extends State<TutorialPage> {
                               ),
                               SearchTextField(
                                 controller: TextEditingController.fromValue(
-                                    TextEditingValue(text: "Cake, Frozen")),
+                                    TextEditingValue(
+                                        text: "Raspberry, Frozen")),
                                 onSearch: (s) => Future.value(),
                               ),
                               const SizedBox(height: 8),
@@ -122,9 +123,9 @@ class _TutorialPageState extends State<TutorialPage> {
                                     aspectRatio: 1,
                                     child: ShoppingItemWidget(
                                       item: ItemWithDescription(
-                                        name: "Cake",
+                                        name: "Raspberry",
                                         description: "Frozen",
-                                        icon: "cake",
+                                        icon: "raspberry",
                                       ),
                                       gridStyle: true,
                                       selected: true,
@@ -144,6 +145,38 @@ class _TutorialPageState extends State<TutorialPage> {
                                     .tutorialRecipeDescription),
                                 flex: 2,
                               ),
+                              Row(
+                                children: [
+                                  Expanded(
+                                      child: Text(
+                                    "Markdown",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .labelMedium!
+                                        .copyWith(
+                                          color: Theme.of(context)
+                                              .textTheme
+                                              .labelMedium
+                                              ?.color
+                                              ?.withAlpha(85),
+                                        ),
+                                  )),
+                                  Text(
+                                    AppLocalizations.of(context)!.recipes,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .labelMedium!
+                                        .copyWith(
+                                          color: Theme.of(context)
+                                              .textTheme
+                                              .labelMedium
+                                              ?.color
+                                              ?.withAlpha(85),
+                                        ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 15),
                               Row(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -177,7 +210,30 @@ class _TutorialPageState extends State<TutorialPage> {
                                   ),
                                 ],
                               ),
-                              const Spacer(flex: 2),
+                              const Spacer(flex: 1),
+                              KitchenOwlMarkdownBody(
+                                data: AppLocalizations.of(context)!
+                                    .tutorialRecipeMore(
+                                  "https://docs.kitchenowl.org/latest/Tips-%26-Tricks/markdown/",
+                                ),
+                                styleSheet: MarkdownStyleSheet(
+                                  p: Theme.of(context)
+                                      .textTheme
+                                      .labelMedium
+                                      ?.copyWith(
+                                        color: Theme.of(context)
+                                            .textTheme
+                                            .labelMedium
+                                            ?.color
+                                            ?.withAlpha(76),
+                                      ),
+                                  a: TextStyle(
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
+                                  ),
+                                ),
+                              ),
+                              const Spacer(flex: 1),
                             ],
                           )
                         ],

@@ -21,7 +21,11 @@
       "number": {}
     }
   },
-  "@addRecipeToPlanner": {},
+  "@addRecipeToPlanner": {
+    "placeholders": {
+      "number": {}
+    }
+  },
   "@addRecipeToPlannerShort": {},
   "@addShoppingList": {},
   "@addTag": {},

@@ -22,7 +22,11 @@
       "number": {}
     }
   },
-  "@addRecipeToPlanner": {},
+  "@addRecipeToPlanner": {
+    "placeholders": {
+      "number": {}
+    }
+  },
   "@addRecipeToPlannerShort": {},
   "@addShoppingList": {},
   "@addTag": {},
@@ -241,7 +245,11 @@
   "@plannerTitle": {},
   "@preparationTime": {},
   "@privacyPolicy": {},
-  "@privacyPolicyAgree": {},
+  "@privacyPolicyAgree": {
+    "placeholders": {
+      "privacyPolicy": {}
+    }
+  },
   "@private": {},
   "@privateRecipeDescription": {},
   "@profile": {},

@@ -21,7 +21,11 @@
       "number": {}
     }
   },
-  "@addRecipeToPlanner": {},
+  "@addRecipeToPlanner": {
+    "placeholders": {
+      "number": {}
+    }
+  },
   "@addRecipeToPlannerShort": {
     "description": "A shorter title/button text used wherever the space is limited. Excludes the number of yields."
   },

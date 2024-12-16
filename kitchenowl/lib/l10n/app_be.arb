@@ -32,7 +32,11 @@
   "addTag": "Дадаць тэг",
   "@addTag": {},
   "addRecipeToPlanner": "Дадаць у план страў ({number})",
-  "@addRecipeToPlanner": {},
+  "@addRecipeToPlanner": {
+    "placeholders": {
+      "number": {}
+    }
+  },
   "addRecipeToPlannerShort": "Дадаць у план страў",
   "@addRecipeToPlannerShort": {},
   "address": "Адрас",

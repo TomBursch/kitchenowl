@@ -94,6 +94,7 @@ SUPPORTED_LANGUAGES = {
     "hu": "Magyar nyelv",
     "id": "Bahasa Indonesia",
     "it": "Italiano",
+    "kab": "Taqbaylit",
     "ko": "한국어",
     "lt": "Lietuvių kalba",
     "nb_NO": "Bokmål",

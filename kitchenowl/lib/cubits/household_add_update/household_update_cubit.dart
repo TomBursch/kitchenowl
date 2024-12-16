@@ -32,10 +32,17 @@ class HouseholdUpdateCubit
     ApiService.getInstance().onShoppinglistDelete(onShoppinglistDelete);
   }
 
+  @override
+  Future<void> close() {
+    ApiService.getInstance().offShoppinglistAdd(onShoppinglistAdd);
+    ApiService.getInstance().offShoppinglistDelete(onShoppinglistDelete);
+    return super.close();
+  }
+
   void onShoppinglistAdd(dynamic data) {
     refresh();
   }
-  
+
   void onShoppinglistDelete(dynamic data) {
     refresh();
   }

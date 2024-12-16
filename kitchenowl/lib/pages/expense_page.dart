@@ -1,13 +1,10 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:intl/intl.dart';
 import 'package:kitchenowl/app.dart';
 import 'package:kitchenowl/cubits/expense_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
-import 'package:kitchenowl/helpers/url_launcher.dart';
 import 'package:kitchenowl/models/expense.dart';
 import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/pages/expense_add_update_page.dart';
@@ -113,31 +110,8 @@ class _ExpensePageState extends State<ExpensePage> {
                             margin: const EdgeInsets.fromLTRB(16, 24, 16, 4),
                             child: Padding(
                               padding: const EdgeInsets.all(16),
-                              child: MarkdownBody(
+                              child: KitchenOwlMarkdownBody(
                                 data: state.expense.description!,
-                                shrinkWrap: true,
-                                styleSheet: MarkdownStyleSheet.fromTheme(
-                                  Theme.of(context),
-                                ).copyWith(
-                                  blockquoteDecoration: BoxDecoration(
-                                    color: Theme.of(context).cardTheme.color ??
-                                        Theme.of(context).cardColor,
-                                    borderRadius: BorderRadius.circular(2.0),
-                                  ),
-                                ),
-                                imageBuilder: (uri, title, alt) =>
-                                    CachedNetworkImage(
-                                  imageUrl: uri.toString(),
-                                  placeholder: (context, url) =>
-                                      const CircularProgressIndicator(),
-                                  errorWidget: (context, url, error) =>
-                                      const Icon(Icons.error),
-                                ),
-                                onTapLink: (text, href, title) {
-                                  if (href != null && isValidUrl(href)) {
-                                    openUrl(context, href);
-                                  }
-                                },
                               ),
                             ),
                           ),

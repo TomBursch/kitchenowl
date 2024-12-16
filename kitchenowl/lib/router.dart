@@ -28,6 +28,7 @@ import 'package:kitchenowl/pages/settings_user_page.dart';
 import 'package:kitchenowl/pages/setup_page.dart';
 import 'package:kitchenowl/pages/signup_page.dart';
 import 'package:kitchenowl/pages/splash_page.dart';
+import 'package:kitchenowl/pages/tutorial_page.dart';
 import 'package:kitchenowl/pages/unreachable_page.dart';
 import 'package:kitchenowl/pages/household_page.dart';
 import 'package:kitchenowl/pages/unsupported_page.dart';
@@ -183,6 +184,15 @@ final router = GoRouter(
 
         return (authState is! Unreachable) ? "/" : null;
       },
+    ),
+    GoRoute(
+      path: '/tutorial',
+      pageBuilder: (context, state) => SharedAxisTransitionPage(
+        key: state.pageKey,
+        name: state.name,
+        transitionType: SharedAxisTransitionType.scaled,
+        child: const TutorialPage(),
+      ),
     ),
     GoRoute(
         path: "/household",

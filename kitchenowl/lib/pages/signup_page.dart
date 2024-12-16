@@ -124,15 +124,12 @@ class _SignupPageState extends State<SignupPage> {
                                 isValidUrl(privacyPolicyUrl))
                               Padding(
                                 padding: const EdgeInsets.only(top: 16),
-                                child: MarkdownBody(
+                                child: KitchenOwlMarkdownBody(
                                   data: AppLocalizations.of(context)!
                                       .privacyPolicyAgree(
                                     "[${AppLocalizations.of(context)!.privacyPolicy}]($privacyPolicyUrl)",
                                   ),
-                                  shrinkWrap: true,
-                                  styleSheet: MarkdownStyleSheet.fromTheme(
-                                    Theme.of(context),
-                                  ).copyWith(
+                                  styleSheet: MarkdownStyleSheet(
                                     p: Theme.of(context)
                                         .textTheme
                                         .labelSmall
@@ -148,11 +145,6 @@ class _SignupPageState extends State<SignupPage> {
                                           Theme.of(context).colorScheme.primary,
                                     ),
                                   ),
-                                  onTapLink: (text, href, title) {
-                                    if (href != null && isValidUrl(href)) {
-                                      openUrl(context, href);
-                                    }
-                                  },
                                 ),
                               ),
                             Padding(
@@ -198,6 +190,8 @@ class _SignupPageState extends State<SignupPage> {
           Future.delayed(
               Duration(milliseconds: 1), () => router.go("/register"));
         },
+        correctCredentialsCallback: () => Future.delayed(
+            Duration(milliseconds: 1), () => router.push("/tutorial")),
       );
     }
   }

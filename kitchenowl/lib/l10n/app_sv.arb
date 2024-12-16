@@ -33,6 +33,7 @@
   },
   "@address": {},
   "@admin": {},
+  "@analysingWebsite": {},
   "@appDescription": {},
   "@appTitle": {
     "description": "The title of the app"
@@ -184,6 +185,7 @@
     }
   },
   "@longPressToReorder": {},
+  "@longerThanExpected": {},
   "@markAsPaid": {},
   "@mealPlanner": {},
   "@member": {},
@@ -381,6 +383,7 @@
   "addedBy": "Tillagd av {name}",
   "address": "Adress",
   "admin": "Admin",
+  "analysingWebsite": "Analyserar hemsida...",
   "appDescription": "KitchenOwl hjälper dig att organisera ditt matliv.",
   "appTitle": "KitchenOwl",
   "back": "Tillbaka",
@@ -487,6 +490,7 @@
   "logout": "Logga ut",
   "logoutName": "Logga ut {name}",
   "longPressToReorder": "Tryck länge för att ändra ordning",
+  "longerThanExpected": "Detta tar längre än förväntat",
   "markAsPaid": "Markera som betald",
   "mealPlanner": "Måltids Planerare",
   "member": "Medlem",

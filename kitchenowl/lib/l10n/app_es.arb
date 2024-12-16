@@ -288,6 +288,13 @@
   "@setupTitle": {},
   "@share": {},
   "@shoppingList": {},
+  "@shoppingListContainsEntries": {
+    "placeholders": {
+      "entriesCount": {
+        "type": "num"
+      }
+    }
+  },
   "@shoppingListDelete": {},
   "@shoppingListDeleteConfirmation": {
     "placeholders": {
@@ -572,6 +579,7 @@
   "setupTitle": "¡Hola! ¿Listo para comprar?",
   "share": "Compartir",
   "shoppingList": "Lista de la compra",
+  "shoppingListContainsEntries": "{entriesCount, plural, =0{La lista de la compra no contiene ninguna entrada.} =1{La lista de la compra contiene 1 entrada.} other{La lista de la compra contiene {entriesCount} entradas.}}",
   "shoppingListDelete": "Borrar la lista de la compra",
   "shoppingListDeleteConfirmation": "¿Está seguro de que desea eliminar {shoppingList}?",
   "shoppingListEdit": "Editar la lista de la compra",

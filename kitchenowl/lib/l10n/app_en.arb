@@ -38,8 +38,8 @@
     }
   },
   "@address": {},
-  "@analysingWebsite": {},
   "@admin": {},
+  "@analysingWebsite": {},
   "@appDescription": {},
   "@appTitle": {
     "description": "The title of the app"
@@ -195,8 +195,8 @@
       "name": {}
     }
   },
-  "@longerThanExpected": {},
   "@longPressToReorder": {},
+  "@longerThanExpected": {},
   "@markAsPaid": {},
   "@mealPlanner": {},
   "@member": {},
@@ -517,8 +517,8 @@
   "loginTo": "Login to",
   "logout": "Logout",
   "logoutName": "Logout {name}",
-  "longerThanExpected": "This is taking longer than expected",
   "longPressToReorder": "Long press to reorder",
+  "longerThanExpected": "This is taking longer than expected",
   "markAsPaid": "Mark as paid",
   "mealPlanner": "Meal planner",
   "member": "Member",
@@ -600,7 +600,7 @@
   "setupTitle": "Hey there! Ready to shop?",
   "share": "Share",
   "shoppingList": "Shopping list",
-  "shoppingListContainsEntries": "{entriesCount, plural, =0{The shopping list contains no entrie(s).} =1{The shopping list contains 1 entry.} other{The shopping list contains {entriesCount} entries.}}",
+  "shoppingListContainsEntries": "{entriesCount, plural, =0{The shopping list contains no items.} =1{The shopping list contains 1 item.} other{The shopping list contains {entriesCount} items.}}",
   "shoppingListDelete": "Delete shopping list",
   "shoppingListDeleteConfirmation": "Are you sure you want to delete {shoppingList}?",
   "shoppingListEdit": "Edit shopping list",
@@ -628,10 +628,10 @@
   "themeSystem": "System",
   "total": "Total",
   "totalTime": "Total time",
-  "tutorialItemDescription1": "When searching for items you can add an amount at the start of your query and it will be added as a description.",
-  "tutorialItemDescription2": "Or, if amounts are not enough, use a comma to seperate the item name and description.",
-  "tutorialRecipeDescription": "Inside of recipes you can use Markdown. Basic features are headlines specified with hash signs, numbered lists for instruction steps, and references to ingredients using an at sign and the ingredient name.",
-  "tutorialRecipeMore": "For more information visit the [documentation]({url}).",
+  "tutorialItemDescription1": "When searching for items, you can add an amount at the start of your query, and it will be added as a description.",
+  "tutorialItemDescription2": "Or, if amounts are not enough, use a comma to separate the item name and description.",
+  "tutorialRecipeDescription": "Inside of recipes, you can use Markdown. Basic features are headlines specified with hash signs, numbered lists for instruction steps, and references to ingredients using an at sign followed by the ingredient name.",
+  "tutorialRecipeMore": "For more information, visit the [documentation]({url}).",
   "uncategorized": "Uncategorized",
   "underConstruction": "Under construction",
   "undo": "Undo",

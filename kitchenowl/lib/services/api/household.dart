@@ -16,11 +16,16 @@ extension HouseholdApi on ApiService {
     return body.map((e) => Household.fromJson(e)).toList();
   }
 
-  Future<Household?> getHousehold(Household household) async {
+  Future<({Household? household, int statusCode})> getHousehold(
+      Household household) async {
     final res = await get("$baseRoute/${household.id}");
-    if (res.statusCode != 200) return null;
+    if (res.statusCode != 200)
+      return (household: null, statusCode: res.statusCode);
 
-    return Household.fromJson(jsonDecode(res.body));
+    return (
+      household: Household.fromJson(jsonDecode(res.body)),
+      statusCode: 200,
+    );
   }
 
   Future<bool> updateHousehold(Household household) async {

@@ -48,8 +48,9 @@ class HouseholdUpdateCubit
   }
 
   Future<void> refresh() async {
-    Future<Household?> fHousehold =
-        ApiService.getInstance().getHousehold(this.household);
+    Future<Household?> fHousehold = ApiService.getInstance()
+        .getHousehold(this.household)
+        .then((res) => res.household);
 
     Future<List<ShoppingList>?> shoppingLists =
         ApiService.getInstance().getShoppingLists(this.household);

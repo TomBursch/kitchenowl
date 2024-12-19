@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/models/member.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
+import 'package:kitchenowl/services/transaction_handler.dart';
+import 'package:kitchenowl/services/transactions/household.dart';
 
 class HouseholdMemberCubit extends Cubit<HouseholdMemberState> {
   final Household household;
@@ -16,7 +18,9 @@ class HouseholdMemberCubit extends Cubit<HouseholdMemberState> {
 
   Future<void> refresh() async {
     Future<Household?> fHousehold =
-        ApiService.getInstance().getHousehold(this.household);
+        TransactionHandler.getInstance().runTransaction(
+      TransactionHouseholdGet(household: this.household),
+    );
 
     Household household = await fHousehold ?? this.household;
 

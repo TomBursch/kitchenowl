@@ -44,19 +44,25 @@ class TransactionHouseholdGet extends Transaction<Household?> {
 
   @override
   Future<Household?> runOnline() async {
-    final household =
-        await ApiService.getInstance().getHousehold(this.household);
-    if (household != null) {
+    final res = await ApiService.getInstance().getHousehold(this.household);
+    if (res.household != null) {
       final households = await MemStorage.getInstance().readHouseholds() ?? [];
       final i = households.indexWhere((e) => e.id == household.id);
       if (i >= 0) {
-        households[i] = household;
+        households[i] = res.household!;
       } else {
-        households.add(household);
+        households.add(res.household!);
       }
       MemStorage.getInstance().writeHouseholds(households);
+    } else if (res.statusCode == 403) {
+      final households = await MemStorage.getInstance().readHouseholds() ?? [];
+      final i = households.indexWhere((e) => e.id == household.id);
+      if (i >= 0) {
+        households.removeAt(i);
+        MemStorage.getInstance().writeHouseholds(households);
+      }
     }
 
-    return household;
+    return res.household;
   }
 }

@@ -9,11 +9,12 @@ import 'package:kitchenowl/models/shoppinglist.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
 import 'package:kitchenowl/services/storage/storage.dart';
 import 'package:kitchenowl/services/transactions/category.dart';
+import 'package:kitchenowl/services/transactions/household.dart';
 import 'package:kitchenowl/services/transactions/shoppinglist.dart';
 import 'package:kitchenowl/services/transaction_handler.dart';
 
 class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
-  final Household household;
+  Household household;
   Future<void>? _refreshThread;
   String? _refreshCurrentQuery;
 
@@ -35,6 +36,7 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
     refresh();
     ApiService.getInstance().onShoppinglistAdd(onShoppinglistAdd);
     ApiService.getInstance().onShoppinglistDelete(onShoppinglistDelete);
+    ApiService.getInstance().onShoppinglistUpdate(onShoppinglistUpdate);
     ApiService.getInstance().onShoppinglistItemAdd(onShoppinglistItemAdd);
     ApiService.getInstance().onShoppinglistItemRemove(onShoppinglistItemRemove);
   }
@@ -43,6 +45,7 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
   Future<void> close() async {
     ApiService.getInstance().offShoppinglistAdd(onShoppinglistAdd);
     ApiService.getInstance().offShoppinglistDelete(onShoppinglistDelete);
+    ApiService.getInstance().offShoppinglistUpdate(onShoppinglistUpdate);
     ApiService.getInstance().offShoppinglistItemAdd(onShoppinglistItemAdd);
     ApiService.getInstance()
         .offShoppinglistItemRemove(onShoppinglistItemRemove);
@@ -55,6 +58,23 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
 
   void onShoppinglistDelete(dynamic data) {
     refresh();
+  }
+
+  void onShoppinglistUpdate(dynamic data) {
+    refresh();
+  }
+
+  Future<void> updateHousehold() async {
+    final maybeHousehold =
+        await TransactionHandler.getInstance().runTransaction(
+      TransactionHouseholdGet(
+        household: household,
+      ),
+    );
+
+    if (maybeHousehold != null) {
+      household = maybeHousehold;
+    }
   }
 
   void onShoppinglistItemAdd(dynamic data) {
@@ -272,6 +292,22 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
     emit(state.copyWith(sorting: sorting));
   }
 
+  Future<bool> addShoppingList(String name) async {
+    final res = await ApiService.getInstance()
+        .addShoppingList(household, ShoppingList(name: name));
+    refresh();
+
+    return res;
+  }
+
+  Future<bool> deleteShoppingList(ShoppingList shoppingList) async {
+    if (household.defaultShoppingList == shoppingList) return false;
+    final res = await ApiService.getInstance().deleteShoppingList(shoppingList);
+    refresh();
+
+    return res;
+  }
+
   void setShoppingList(ShoppingList shoppingList) {
     if (shoppingList.id != null) {
       PreferenceStorage.getInstance().writeInt(
@@ -351,6 +387,7 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
               shoppingList!.items.firstWhereOrNull((item) => item.id == e.id))
           .nonNulls
           .toList(),
+      defaultShoppingList: household.defaultShoppingList,
     );
 
     if (state is LoadingShoppinglistCubitState) {
@@ -371,9 +408,11 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
         sorting: state.sorting,
         categories: state.categories,
         selectedListItems: state.selectedListItems,
+        defaultShoppingList: state.defaultShoppingList,
       ));
     }
 
+    await updateHousehold();
     final shoppingLists = await fetchShoppingLists(false);
 
     int? selectedShoppinglistId = state.selectedShoppinglistId;
@@ -436,6 +475,7 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
                 shoppinglist?.items.firstWhereOrNull((item) => item.id == e.id))
             .nonNulls
             .toList(),
+        defaultShoppingList: household.defaultShoppingList,
       );
     } else {
       resState = ShoppinglistCubitState(
@@ -448,6 +488,7 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
                 shoppinglist?.items.firstWhereOrNull((item) => item.id == e.id))
             .nonNulls
             .toList(),
+        defaultShoppingList: household.defaultShoppingList,
       );
     }
     if (query == _refreshCurrentQuery) {
@@ -487,6 +528,7 @@ class ShoppinglistCubitState extends Equatable {
   final List<Category> categories;
   final ShoppinglistSorting sorting;
   final List<ShoppinglistItem> selectedListItems;
+  final ShoppingList? defaultShoppingList;
   final ShoppingList? _selectedShoppinglist;
 
   const ShoppinglistCubitState._({
@@ -495,6 +537,7 @@ class ShoppinglistCubitState extends Equatable {
     this.sorting = ShoppinglistSorting.alphabetical,
     this.selectedListItems = const [],
     this.selectedShoppinglistId = null,
+    required this.defaultShoppingList,
   }) : this._selectedShoppinglist = null;
 
   ShoppinglistCubitState({
@@ -503,6 +546,7 @@ class ShoppinglistCubitState extends Equatable {
     this.categories = const [],
     this.sorting = ShoppinglistSorting.alphabetical,
     this.selectedListItems = const [],
+    required this.defaultShoppingList,
   }) : _selectedShoppinglist = shoppinglists[selectedShoppinglistId];
 
   ShoppingList? get selectedShoppinglist => _selectedShoppinglist;
@@ -521,6 +565,7 @@ class ShoppinglistCubitState extends Equatable {
         categories: categories ?? this.categories,
         sorting: sorting ?? this.sorting,
         selectedListItems: selectedListItems ?? this.selectedListItems,
+        defaultShoppingList: this.defaultShoppingList,
       );
 
   @override
@@ -540,6 +585,7 @@ class LoadingShoppinglistCubitState extends ShoppinglistCubitState {
     super.shoppinglists,
     super.categories,
     super.selectedListItems,
+    super.defaultShoppingList,
   }) : super._();
 
   @override
@@ -574,6 +620,7 @@ class SearchShoppinglistCubitState extends ShoppinglistCubitState {
     this.query = "",
     this.result = const [],
     super.selectedListItems,
+    super.defaultShoppingList,
   });
 
   @override

@@ -43,7 +43,7 @@ class Household extends Model {
       member = List.from(map['member'].map((e) => Member.fromJson(e)));
     }
 
-    return Household(
+    final household = Household(
       id: map['id'],
       name: map['name'],
       image: map['photo'],
@@ -57,6 +57,8 @@ class Household extends Model {
           ? ShoppingList.fromJson(map['default_shopping_list'])
           : null,
     );
+
+    return household;
   }
 
   Household copyWith({
@@ -66,6 +68,7 @@ class Household extends Model {
     bool? featurePlanner,
     bool? featureExpenses,
     List<ViewsEnum>? viewOrdering,
+    ShoppingList? defaultShoppingList
   }) =>
       Household(
         id: id,
@@ -76,6 +79,7 @@ class Household extends Model {
         featurePlanner: featurePlanner ?? this.featurePlanner,
         featureExpenses: featureExpenses ?? this.featureExpenses,
         viewOrdering: viewOrdering ?? this.viewOrdering,
+        defaultShoppingList: defaultShoppingList ?? this.defaultShoppingList
       );
 
   @override

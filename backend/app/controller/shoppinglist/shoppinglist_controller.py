@@ -103,7 +103,16 @@ def updateShoppinglist(args, id):
         shoppinglist.name = args["name"]
 
     shoppinglist.save()
-    return jsonify(shoppinglist.obj_to_dict())
+    shoppinglist_dict = shoppinglist.obj_to_dict();
+    socketio.emit(
+        "shoppinglist:update",
+        {
+            "shoppinglist": shoppinglist_dict
+        },
+        to=shoppinglist.household_id
+    )
+
+    return jsonify(shoppinglist_dict)
 
 
 @shoppinglist.route("/<int:id>", methods=["DELETE"])

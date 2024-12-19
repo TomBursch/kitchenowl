@@ -7,6 +7,7 @@ import 'package:kitchenowl/cubits/shoppinglist_cubit.dart';
 import 'package:kitchenowl/enums/shoppinglist_sorting.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/kitchenowl.dart';
+import 'package:kitchenowl/pages/settings_household/household_settings_shoppinglist_page.dart';
 import 'package:kitchenowl/widgets/choice_scroll.dart';
 import 'package:kitchenowl/widgets/shopping_list/shopping_list_choice_chip.dart';
 import 'package:kitchenowl/widgets/shopping_list/sliver_shopinglist_item_view.dart';
@@ -120,29 +121,70 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                         headerSliverBuilder: (context, innerBoxIsScrolled) => [
                           SliverToBoxAdapter(
                             child: LeftRightWrap(
-                              left: (state.shoppinglists.length < 2)
-                                  ? const SizedBox()
-                                  : ChoiceScroll(
-                                      children: state.shoppinglists.values
-                                          .sorted((a, b) => b.items.length
-                                              .compareTo(a.items.length))
-                                          .map(
-                                            (shoppinglist) =>
-                                                ShoppingListChoiceChip(
-                                              shoppingList: shoppinglist,
-                                              selected: shoppinglist.id ==
-                                                  state.selectedShoppinglistId,
-                                              onSelected: (bool selected) {
-                                                if (selected) {
-                                                  cubit.setShoppingList(
-                                                    shoppinglist,
-                                                  );
-                                                }
-                                              },
-                                            ),
-                                          )
-                                          .toList(),
-                                    ),
+                              left: Row(
+                                children: [
+                                  IconButton(
+                                      tooltip: AppLocalizations.of(context)!
+                                          .shoppingListAddTooltip,
+                                      onPressed: () async {
+                                        final res =
+                                            await HouseholdSettingsShoppinglistPage
+                                                .getShoppingListName(context,
+                                                    state.shoppinglists.values);
+                                        if (res != null) {
+                                          BlocProvider.of<ShoppinglistCubit>(
+                                                  context)
+                                              .addShoppingList(res);
+                                        }
+                                      },
+                                      icon: Icon(Icons.add,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary)),
+                                  (state.shoppinglists.length < 2)
+                                      ? const SizedBox()
+                                      : ChoiceScroll(
+                                          paddingLeft: 0,
+                                          children: state.shoppinglists.values
+                                              .sorted((a, b) =>
+                                                  a.name.compareTo(b.name))
+                                              .map(
+                                                (shoppinglist) =>
+                                                    ShoppingListChoiceChip(
+                                                        canDelete: state
+                                                                .defaultShoppingList !=
+                                                            shoppinglist,
+                                                        shoppingList:
+                                                            shoppinglist,
+                                                        selected: shoppinglist
+                                                                .id ==
+                                                            state
+                                                                .selectedShoppinglistId,
+                                                        onSelected:
+                                                            (bool selected) {
+                                                          if (selected) {
+                                                            cubit
+                                                                .setShoppingList(
+                                                              shoppinglist,
+                                                            );
+                                                          }
+                                                        },
+                                                        onDeleted: () async {
+                                                          final doIt =
+                                                              await HouseholdSettingsShoppinglistPage
+                                                                  .confirmDeleteShoppingList(
+                                                                      context,
+                                                                      shoppinglist);
+                                                          if (doIt) {
+                                                            cubit.deleteShoppingList(
+                                                                shoppinglist);
+                                                          }
+                                                        }),
+                                              )
+                                              .toList(),
+                                        ),
+                                ],
+                              ),
                               right: Padding(
                                 padding:
                                     const EdgeInsets.only(right: 16, bottom: 6),

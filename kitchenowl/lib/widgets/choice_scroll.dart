@@ -6,6 +6,7 @@ class ChoiceScroll extends StatefulWidget {
   final IconData? icon;
   final void Function()? onCollapse;
   final List<Widget>? actions;
+  final double paddingLeft;
 
   const ChoiceScroll({
     super.key,
@@ -14,6 +15,7 @@ class ChoiceScroll extends StatefulWidget {
     this.icon,
     this.onCollapse,
     this.actions,
+    this.paddingLeft = 12,
   });
 
   @override
@@ -33,7 +35,7 @@ class _ChoiceScrollState extends State<ChoiceScroll> {
   Widget build(BuildContext context) {
     Widget child = Row(
       children: [
-        const SizedBox(width: 12),
+        SizedBox(width: widget.paddingLeft),
         if (widget.actions != null) ...widget.actions!,
         if (widget.collapsable)
           IconButton(

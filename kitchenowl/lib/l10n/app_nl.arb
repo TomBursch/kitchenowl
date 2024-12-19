@@ -37,6 +37,7 @@
   },
   "@address": {},
   "@admin": {},
+  "@analysingWebsite": {},
   "@appDescription": {},
   "@appTitle": {
     "description": "The title of the app"
@@ -117,6 +118,11 @@
   "@go": {},
   "@grid": {},
   "@helpTranslate": {},
+  "@hi": {
+    "placeholders": {
+      "name": {}
+    }
+  },
   "@household": {},
   "@householdDelete": {},
   "@householdDeleteConfirmation": {
@@ -188,6 +194,7 @@
     }
   },
   "@longPressToReorder": {},
+  "@longerThanExpected": {},
   "@markAsPaid": {},
   "@mealPlanner": {},
   "@member": {},
@@ -290,6 +297,13 @@
   "@setupTitle": {},
   "@share": {},
   "@shoppingList": {},
+  "@shoppingListContainsEntries": {
+    "placeholders": {
+      "entriesCount": {
+        "type": "num"
+      }
+    }
+  },
   "@shoppingListDelete": {},
   "@shoppingListDeleteConfirmation": {
     "placeholders": {
@@ -305,6 +319,7 @@
     }
   },
   "@signup": {},
+  "@skip": {},
   "@smaller": {},
   "@sortingAlgorithmic": {},
   "@sortingAlphabetical": {},
@@ -328,6 +343,14 @@
   "@themeSystem": {},
   "@total": {},
   "@totalTime": {},
+  "@tutorialItemDescription1": {},
+  "@tutorialItemDescription2": {},
+  "@tutorialRecipeDescription": {},
+  "@tutorialRecipeMore": {
+    "placeholders": {
+      "url": {}
+    }
+  },
   "@uncategorized": {},
   "@underConstruction": {},
   "@undo": {},
@@ -385,6 +408,7 @@
   "addedBy": "Toegevoegd door {name}",
   "address": "Adres",
   "admin": "Beheerder",
+  "analysingWebsite": "Website analyseren...",
   "appDescription": "KitchenOwl helpt u uw boodschappenleven te organiseren.",
   "appTitle": "KitchenOwl",
   "back": "Terug",
@@ -447,6 +471,7 @@
   "go": "Ga",
   "grid": "Rooster",
   "helpTranslate": "Help vertalen",
+  "hi": "Hallo {name}!",
   "household": "Huishouden",
   "householdDelete": "Verwijder huishouden",
   "householdDeleteConfirmation": "Weet u zeker dat u {household} wilt verwijderen? Dit verwijdert alle artikelen, recepten en uitgaven van dat huishouden.",
@@ -491,6 +516,7 @@
   "logout": "Uitloggen",
   "logoutName": "{name} uitloggen",
   "longPressToReorder": "Lang drukken om opnieuw te rangschikken",
+  "longerThanExpected": "Dit duurt iets langer dan verwacht",
   "markAsPaid": "Markeer als betaald",
   "mealPlanner": "Maaltijdplanner",
   "member": "Lid",
@@ -572,6 +598,7 @@
   "setupTitle": "Hey daar! Klaar om te winkelen?",
   "share": "Delen",
   "shoppingList": "Boodschappenlijst",
+  "shoppingListContainsEntries": "{entriesCount, plural, =0{De boodschappenlijst bevat geen items.} =1{De boodschappenlijkst bevat 1 item.} other{De boodschappenlijkst bevat {entriesCount} items.}}",
   "shoppingListDelete": "Verwijder boodschappenlijst",
   "shoppingListDeleteConfirmation": "Weet u zeker dat je {shoppingList} wilt verwijderen?",
   "shoppingListEdit": "Boodschappenlijst aanpassen",
@@ -579,6 +606,7 @@
   "shoppingLists": "Boodschappenlijstjes",
   "signInWith": "Inloggen met {provider}",
   "signup": "Registreren",
+  "skip": "Overslaan",
   "smaller": "Kleiner",
   "sortingAlgorithmic": "Algoritmische",
   "sortingAlphabetical": "Alfabetisch",
@@ -598,6 +626,10 @@
   "themeSystem": "Systeem",
   "total": "Totaal",
   "totalTime": "Totale tijd",
+  "tutorialItemDescription1": "Bij het zoeken naar items kun je aan het begin van je zoekopdracht een hoeveelheid toevoegen, deze wordt dan als beschrijving toegevoegd.",
+  "tutorialItemDescription2": "Of, als hoeveelheden niet genoeg zijn, gebruik dan een komma om de naam van het item en de beschrijving van elkaar te scheiden.",
+  "tutorialRecipeDescription": "Binnen recepten kun je Markdown gebruiken. Basisfuncties zijn rubrieken gespecificeerd met een hekje teken, genummerde lijsten voor instructiestappen en verwijzingen naar ingrediënten met een apestaart-teken gevolgd door de naam van het ingrediënt.",
+  "tutorialRecipeMore": "Voor meer informatie, bezoek de [documentatie]({url}).",
   "uncategorized": "Ongecategoriseerd",
   "underConstruction": "Onder constructie",
   "undo": "Ongedaan maken",

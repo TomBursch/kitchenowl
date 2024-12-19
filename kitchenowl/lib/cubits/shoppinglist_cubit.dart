@@ -301,7 +301,8 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
     return _refreshThread!;
   }
 
-  Future<Map<int, ShoppingList>> fetchShoppingLists(bool forceOffline) async {
+  Future<Map<int, ShoppingList>> fetchShoppingLists(
+      [bool forceOffline = false]) async {
     final shoppingLists = await TransactionHandler.getInstance()
         .runTransaction(
           TransactionShoppingListGet(household: household),
@@ -314,10 +315,10 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
     return shoppingLists;
   }
 
-  Future<List<Category>> fetchCategories(bool forceOffline) {
+  Future<List<Category>> fetchCategories([bool forceOffline = false]) {
     return TransactionHandler.getInstance().runTransaction(
       TransactionCategoriesGet(household: household),
-      forceOffline: true,
+      forceOffline: forceOffline,
     );
   }
 
@@ -374,7 +375,7 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
       ));
     }
 
-    final shoppingLists = await fetchShoppingLists(false);
+    final shoppingLists = await fetchShoppingLists();
 
     int? selectedShoppinglistId = state.selectedShoppinglistId;
     if (selectedShoppinglistId != null &&
@@ -387,7 +388,7 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
 
     final shoppinglist = shoppingLists[selectedShoppinglistId];
 
-    Future<List<Category>> categories = fetchCategories(false);
+    Future<List<Category>> categories = fetchCategories();
 
     if (query != null && query.isNotEmpty) {
       // Split query into name and description

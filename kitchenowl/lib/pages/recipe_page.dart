@@ -63,417 +63,425 @@ class _RecipePageState extends State<RecipePage> {
       onPopInvokedWithResult: (didPop, result) {
         if (!didPop) Navigator.of(context).pop(cubit.state.updateState);
       },
-      child: BlocConsumer<RecipeCubit, RecipeState>(
-        bloc: cubit,
-        listenWhen: (previous, current) => current is RecipeErrorState,
-        listener: (context, state) {
-          if (state is RecipeErrorState) {
-            if (Navigator.of(context).canPop()) {
-              Navigator.of(context).pop();
-            } else {
-              context.go("/");
+      child: BlocProvider.value(
+        value: cubit,
+        child: BlocConsumer<RecipeCubit, RecipeState>(
+          bloc: cubit,
+          listenWhen: (previous, current) => current is RecipeErrorState,
+          listener: (context, state) {
+            if (state is RecipeErrorState) {
+              if (Navigator.of(context).canPop()) {
+                Navigator.of(context).pop();
+              } else {
+                context.go("/");
+              }
             }
-          }
-        },
-        builder: (context, state) {
-          final left = <Widget>[
-            SliverPadding(
-              padding: const EdgeInsets.fromLTRB(16, 4, 16, 0),
-              sliver: SliverList(
-                delegate: SliverChildListDelegate(
-                  [
-                    Wrap(
-                      runSpacing: 8,
-                      spacing: 5,
-                      children: [
-                        if (state.recipe.source.isNotEmpty)
-                          RecipeSourceChip(
-                            source: state.recipe.source,
-                          ),
-                        if ((state.recipe.time) > 0)
-                          Chip(
-                            avatar: Icon(
-                              Icons.alarm_rounded,
-                              color: Theme.of(context).colorScheme.onPrimary,
+          },
+          builder: (context, state) {
+            final left = <Widget>[
+              SliverPadding(
+                padding: const EdgeInsets.fromLTRB(16, 4, 16, 0),
+                sliver: SliverList(
+                  delegate: SliverChildListDelegate(
+                    [
+                      Wrap(
+                        runSpacing: 8,
+                        spacing: 5,
+                        children: [
+                          if (state.recipe.source.isNotEmpty)
+                            RecipeSourceChip(
+                              source: state.recipe.source,
                             ),
-                            label: Text(
-                              "${state.recipe.time} ${AppLocalizations.of(context)!.minutesAbbrev}",
-                              style: TextStyle(
+                          if ((state.recipe.time) > 0)
+                            Chip(
+                              avatar: Icon(
+                                Icons.alarm_rounded,
                                 color: Theme.of(context).colorScheme.onPrimary,
                               ),
+                              label: Text(
+                                "${state.recipe.time} ${AppLocalizations.of(context)!.minutesAbbrev}",
+                                style: TextStyle(
+                                  color:
+                                      Theme.of(context).colorScheme.onPrimary,
+                                ),
+                              ),
+                              backgroundColor:
+                                  Theme.of(context).colorScheme.primary,
+                              elevation: 3,
                             ),
-                            backgroundColor:
-                                Theme.of(context).colorScheme.primary,
-                            elevation: 3,
+                          ...state.recipe.tags.map((e) => Chip(
+                                key: Key(e.name),
+                                label: Text(e.name),
+                              )),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      if (state.recipe.prepTime > 0)
+                        Text(
+                          "${AppLocalizations.of(context)!.preparationTime}: ${state.recipe.prepTime} ${AppLocalizations.of(context)!.minutesAbbrev}",
+                          style: Theme.of(context).textTheme.labelMedium,
+                        ),
+                      if (state.recipe.cookTime > 0)
+                        Text(
+                          "${AppLocalizations.of(context)!.cookingTime}: ${state.recipe.cookTime} ${AppLocalizations.of(context)!.minutesAbbrev}",
+                          style: Theme.of(context).textTheme.labelMedium,
+                        ),
+                      if (state.recipe.prepTime + state.recipe.cookTime > 0)
+                        const SizedBox(height: 16),
+                      RecipeMarkdownBody(
+                        recipe: state.recipe,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ];
+
+            final right = SliverWithPinnedFooter(
+              sliver: SliverMainAxisGroup(slivers: [
+                if (state.recipe.yields > 0)
+                  SliverPadding(
+                    padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+                    sliver: SliverToBoxAdapter(
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              AppLocalizations.of(context)!.yields,
+                              style: Theme.of(context).textTheme.titleLarge,
+                            ),
                           ),
-                        ...state.recipe.tags.map((e) => Chip(
-                              key: Key(e.name),
-                              label: Text(e.name),
-                            )),
-                      ],
+                          NumberSelector(
+                            value: state.selectedYields,
+                            setValue: cubit.setSelectedYields,
+                            defaultValue: state.recipe.yields,
+                            lowerBound: 1,
+                          ),
+                        ],
+                      ),
                     ),
-                    const SizedBox(height: 8),
-                    if (state.recipe.prepTime > 0)
-                      Text(
-                        "${AppLocalizations.of(context)!.preparationTime}: ${state.recipe.prepTime} ${AppLocalizations.of(context)!.minutesAbbrev}",
-                        style: Theme.of(context).textTheme.labelMedium,
+                  ),
+                if (state.recipe.items.where((e) => !e.optional).isNotEmpty)
+                  SliverPadding(
+                    padding: const EdgeInsets.all(16),
+                    sliver: SliverToBoxAdapter(
+                      child: Text(
+                        '${AppLocalizations.of(context)!.ingredients}:',
+                        style: Theme.of(context).textTheme.titleLarge,
                       ),
-                    if (state.recipe.cookTime > 0)
-                      Text(
-                        "${AppLocalizations.of(context)!.cookingTime}: ${state.recipe.cookTime} ${AppLocalizations.of(context)!.minutesAbbrev}",
-                        style: Theme.of(context).textTheme.labelMedium,
+                    ),
+                  ),
+                if (state.recipe.items.where((e) => !e.optional).isNotEmpty)
+                  SliverItemGridList(
+                    items: state.dynamicRecipe.items
+                        .where((e) => !e.optional)
+                        .toList(),
+                    selected: (item) => state.selectedItems.contains(item.name),
+                    onPressed: Nullable(cubit.itemSelected),
+                    onLongPressed:
+                        const Nullable<void Function(RecipeItem)>.empty(),
+                  ),
+                if (state.recipe.items.where((e) => e.optional).isNotEmpty)
+                  SliverPadding(
+                    padding: const EdgeInsets.all(16),
+                    sliver: SliverToBoxAdapter(
+                      child: Text(
+                        '${AppLocalizations.of(context)!.ingredientsOptional}:',
+                        style: Theme.of(context).textTheme.titleLarge,
                       ),
-                    if (state.recipe.prepTime + state.recipe.cookTime > 0)
-                      const SizedBox(height: 16),
-                    RecipeMarkdownBody(
-                      recipe: state.recipe,
+                    ),
+                  ),
+                if (state.recipe.items.where((e) => e.optional).isNotEmpty)
+                  SliverItemGridList(
+                    items: state.dynamicRecipe.items
+                        .where((e) => e.optional)
+                        .toList(),
+                    selected: (item) => state.selectedItems.contains(item.name),
+                    onPressed: Nullable(cubit.itemSelected),
+                    onLongPressed:
+                        const Nullable<void Function(RecipeItem)>.empty(),
+                  ),
+              ]),
+              footer: Container(
+                color: Theme.of(context).colorScheme.surface,
+                child: Column(
+                  children: [
+                    if (state.isOwningHousehold(state) &&
+                        state.household!.defaultShoppingList != null &&
+                        state.recipe.items.isNotEmpty)
+                      Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: LoadingElevatedButton(
+                                onPressed: state.selectedItems.isEmpty
+                                    ? null
+                                    : cubit.addItemsToList,
+                                child: Text(
+                                  AppLocalizations.of(context)!
+                                      .addNumberIngredients(
+                                    state.selectedItems.length,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            if (state.shoppingLists.length > 1)
+                              Padding(
+                                padding: const EdgeInsets.only(left: 8),
+                                child: LoadingElevatedButton(
+                                  onPressed: state.selectedItems.isEmpty
+                                      ? null
+                                      : () async {
+                                          ShoppingList? list =
+                                              await showDialog<ShoppingList>(
+                                            context: context,
+                                            builder: (context) => SelectDialog(
+                                              title:
+                                                  AppLocalizations.of(context)!
+                                                      .addNumberIngredients(
+                                                          state.selectedItems
+                                                              .length),
+                                              cancelText:
+                                                  AppLocalizations.of(context)!
+                                                      .cancel,
+                                              options: state.shoppingLists
+                                                  .map(
+                                                    (e) => SelectDialogOption(
+                                                      e,
+                                                      e.name,
+                                                    ),
+                                                  )
+                                                  .toList(),
+                                            ),
+                                          );
+                                          if (list != null) {
+                                            await cubit.addItemsToList(list);
+                                          }
+                                        },
+                                  child: const Icon(Icons.shopping_bag_rounded),
+                                ),
+                              ),
+                          ],
+                        ),
+                      ),
+                    if (!App.isOffline &&
+                        !state.isOwningHousehold(state) &&
+                        state.household != null)
+                      Container(
+                        padding: const EdgeInsets.all(16),
+                        width: double.infinity,
+                        child: LoadingElevatedButton(
+                          onPressed: () async {
+                            if (state.household!.language == null ||
+                                state.household!.language !=
+                                    state.recipe.household?.language) {
+                              final res = await context.push(Uri(
+                                path:
+                                    "/household/${state.household!.id}/recipes/scrape",
+                                queryParameters: {
+                                  "url":
+                                      "kitchenowl:///recipe/${state.recipe.id}"
+                                },
+                              ).toString());
+                              if (mounted &&
+                                  res != null &&
+                                  res == UpdateEnum.updated) {
+                                Navigator.of(context).pop(UpdateEnum.updated);
+                              }
+                            } else {
+                              final res = await cubit.addRecipeToHousehold();
+                              if (mounted && res?.id != null) {
+                                context.go(
+                                  "/household/${state.household!.id}/recipes/details/${res!.id!}",
+                                  extra: Tuple2(state.household!, res),
+                                );
+                              }
+                            }
+                          },
+                          child: Text(
+                            AppLocalizations.of(context)!
+                                .recipeAddToHousehold(state.household!.name),
+                          ),
+                        ),
+                      ),
+                    if (state.isOwningHousehold(state) &&
+                        (state.household!.featurePlanner ?? false))
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: LoadingElevatedButton(
+                                child: Text(
+                                  state.selectedYields != state.recipe.yields
+                                      ? AppLocalizations.of(context)!
+                                          .addRecipeToPlanner(
+                                          state.selectedYields,
+                                        )
+                                      : AppLocalizations.of(context)!
+                                          .addRecipeToPlannerShort,
+                                ),
+                                onPressed: () async {
+                                  await cubit.addRecipeToPlanner(
+                                    updateOnAdd: widget.updateOnPlanningEdit,
+                                  );
+                                  if (!mounted) return;
+                                  Navigator.of(context).pop(
+                                    widget.updateOnPlanningEdit
+                                        ? UpdateEnum.updated
+                                        : UpdateEnum.unchanged,
+                                  );
+                                },
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            LoadingElevatedButton(
+                              child: const Icon(Icons.calendar_month_rounded),
+                              onPressed: () async {
+                                final weekdayMapping = {
+                                  0: DateTime.monday,
+                                  1: DateTime.tuesday,
+                                  2: DateTime.wednesday,
+                                  3: DateTime.thursday,
+                                  4: DateTime.friday,
+                                  5: DateTime.saturday,
+                                  6: DateTime.sunday,
+                                };
+                                int? day = await showDialog<int>(
+                                  context: context,
+                                  builder: (context) => SelectDialog(
+                                    title: AppLocalizations.of(context)!
+                                        .addRecipeToPlannerShort,
+                                    cancelText:
+                                        AppLocalizations.of(context)!.cancel,
+                                    options: weekdayMapping.entries
+                                        .map(
+                                          (e) => SelectDialogOption(
+                                            e.key,
+                                            DateFormat.E()
+                                                    .dateSymbols
+                                                    .STANDALONEWEEKDAYS[
+                                                e.value % 7],
+                                          ),
+                                        )
+                                        .toList(),
+                                  ),
+                                );
+                                if (day != null) {
+                                  await cubit.addRecipeToPlanner(
+                                    day: day >= 0 ? day : null,
+                                    updateOnAdd: widget.updateOnPlanningEdit,
+                                  );
+                                }
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                    SizedBox(
+                      height: MediaQuery.paddingOf(context).bottom,
                     ),
                   ],
                 ),
               ),
-            ),
-          ];
+            );
 
-          final right = SliverWithPinnedFooter(
-            sliver: SliverMainAxisGroup(slivers: [
-              if (state.recipe.yields > 0)
-                SliverPadding(
-                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-                  sliver: SliverToBoxAdapter(
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            AppLocalizations.of(context)!.yields,
-                            style: Theme.of(context).textTheme.titleLarge,
+            return Scaffold(
+              body: Align(
+                alignment: Alignment.topCenter,
+                child: CustomScrollView(
+                  primary: true,
+                  slivers: [
+                    SliverImageAppBar(
+                      title: state.recipe.name,
+                      imageUrl: state.recipe.image,
+                      imageHash: state.recipe.imageHash,
+                      popValue: () => cubit.state.updateState,
+                      actions: (isCollapsed) => [
+                        if (state.recipe.public)
+                          Padding(
+                            padding: const EdgeInsets.only(right: 8),
+                            child: LoadingIconButton(
+                              tooltip: AppLocalizations.of(context)!.share,
+                              variant: state.recipe.image == null ||
+                                      state.recipe.image!.isEmpty ||
+                                      isCollapsed
+                                  ? LoadingIconButtonVariant.standard
+                                  : LoadingIconButtonVariant.filledTonal,
+                              onPressed: () async {
+                                final uri = Uri.tryParse(App.currentServer +
+                                    '/recipe/${widget.recipe.id}');
+                                if (uri == null) return;
+
+                                Share.shareUri(context, uri);
+                              },
+                              icon: Icon(Icons.adaptive.share_rounded),
+                            ),
                           ),
-                        ),
-                        NumberSelector(
-                          value: state.selectedYields,
-                          setValue: cubit.setSelectedYields,
-                          defaultValue: state.recipe.yields,
-                          lowerBound: 1,
-                        ),
+                        if (!App.isOffline && state.isOwningHousehold(state))
+                          Padding(
+                            padding: const EdgeInsets.only(right: 8),
+                            child: LoadingIconButton(
+                              tooltip: AppLocalizations.of(context)!.recipeEdit,
+                              variant: state.recipe.image == null ||
+                                      state.recipe.image!.isEmpty ||
+                                      isCollapsed
+                                  ? LoadingIconButtonVariant.standard
+                                  : LoadingIconButtonVariant.filledTonal,
+                              onPressed: () async {
+                                final res = await Navigator.of(context)
+                                    .push<UpdateEnum>(MaterialPageRoute(
+                                  builder: (context) => AddUpdateRecipePage(
+                                    household: state.household!,
+                                    recipe: state.recipe,
+                                  ),
+                                ));
+                                if (res == UpdateEnum.updated) {
+                                  cubit.setUpdateState(UpdateEnum.updated);
+                                  await cubit.refresh();
+                                }
+                                if (res == UpdateEnum.deleted) {
+                                  if (!mounted) return;
+                                  Navigator.of(context).pop(UpdateEnum.deleted);
+                                }
+                              },
+                              icon: const Icon(Icons.edit),
+                            ),
+                          ),
                       ],
                     ),
-                  ),
-                ),
-              if (state.recipe.items.where((e) => !e.optional).isNotEmpty)
-                SliverPadding(
-                  padding: const EdgeInsets.all(16),
-                  sliver: SliverToBoxAdapter(
-                    child: Text(
-                      '${AppLocalizations.of(context)!.ingredients}:',
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ),
-                  ),
-                ),
-              if (state.recipe.items.where((e) => !e.optional).isNotEmpty)
-                SliverItemGridList(
-                  items: state.dynamicRecipe.items
-                      .where((e) => !e.optional)
-                      .toList(),
-                  selected: (item) => state.selectedItems.contains(item.name),
-                  onPressed: Nullable(cubit.itemSelected),
-                  onLongPressed:
-                      const Nullable<void Function(RecipeItem)>.empty(),
-                ),
-              if (state.recipe.items.where((e) => e.optional).isNotEmpty)
-                SliverPadding(
-                  padding: const EdgeInsets.all(16),
-                  sliver: SliverToBoxAdapter(
-                    child: Text(
-                      '${AppLocalizations.of(context)!.ingredientsOptional}:',
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ),
-                  ),
-                ),
-              if (state.recipe.items.where((e) => e.optional).isNotEmpty)
-                SliverItemGridList(
-                  items: state.dynamicRecipe.items
-                      .where((e) => e.optional)
-                      .toList(),
-                  selected: (item) => state.selectedItems.contains(item.name),
-                  onPressed: Nullable(cubit.itemSelected),
-                  onLongPressed:
-                      const Nullable<void Function(RecipeItem)>.empty(),
-                ),
-            ]),
-            footer: Container(
-              color: Theme.of(context).colorScheme.surface,
-              child: Column(
-                children: [
-                  if (state.isOwningHousehold(state) &&
-                      state.household!.defaultShoppingList != null &&
-                      state.recipe.items.isNotEmpty)
-                    Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: LoadingElevatedButton(
-                              onPressed: state.selectedItems.isEmpty
-                                  ? null
-                                  : cubit.addItemsToList,
-                              child: Text(
-                                AppLocalizations.of(context)!
-                                    .addNumberIngredients(
-                                  state.selectedItems.length,
-                                ),
-                              ),
-                            ),
-                          ),
-                          if (state.shoppingLists.length > 1)
-                            Padding(
-                              padding: const EdgeInsets.only(left: 8),
-                              child: LoadingElevatedButton(
-                                onPressed: state.selectedItems.isEmpty
-                                    ? null
-                                    : () async {
-                                        ShoppingList? list =
-                                            await showDialog<ShoppingList>(
-                                          context: context,
-                                          builder: (context) => SelectDialog(
-                                            title: AppLocalizations.of(context)!
-                                                .addNumberIngredients(
-                                                    state.selectedItems.length),
-                                            cancelText:
-                                                AppLocalizations.of(context)!
-                                                    .cancel,
-                                            options: state.shoppingLists
-                                                .map(
-                                                  (e) => SelectDialogOption(
-                                                    e,
-                                                    e.name,
-                                                  ),
-                                                )
-                                                .toList(),
-                                          ),
-                                        );
-                                        if (list != null) {
-                                          await cubit.addItemsToList(list);
-                                        }
-                                      },
-                                child: const Icon(Icons.shopping_bag_rounded),
-                              ),
-                            ),
-                        ],
-                      ),
-                    ),
-                  if (!App.isOffline &&
-                      !state.isOwningHousehold(state) &&
-                      state.household != null)
-                    Container(
-                      padding: const EdgeInsets.all(16),
-                      width: double.infinity,
-                      child: LoadingElevatedButton(
-                        onPressed: () async {
-                          if (state.household!.language == null ||
-                              state.household!.language !=
-                                  state.recipe.household?.language) {
-                            final res = await context.push(Uri(
-                              path:
-                                  "/household/${state.household!.id}/recipes/scrape",
-                              queryParameters: {
-                                "url": "kitchenowl:///recipe/${state.recipe.id}"
-                              },
-                            ).toString());
-                            if (mounted &&
-                                res != null &&
-                                res == UpdateEnum.updated) {
-                              Navigator.of(context).pop(UpdateEnum.updated);
-                            }
-                          } else {
-                            final res = await cubit.addRecipeToHousehold();
-                            if (mounted && res?.id != null) {
-                              context.go(
-                                "/household/${state.household!.id}/recipes/details/${res!.id!}",
-                                extra: Tuple2(state.household!, res),
-                              );
-                            }
-                          }
-                        },
-                        child: Text(
-                          AppLocalizations.of(context)!
-                              .recipeAddToHousehold(state.household!.name),
+                    SliverCrossAxisConstrained(
+                      maxCrossAxisExtent: 1600,
+                      child: getValueForScreenType<Widget>(
+                        context: context,
+                        mobile: SliverMainAxisGroup(
+                          slivers: left + [right],
                         ),
-                      ),
-                    ),
-                  if (state.isOwningHousehold(state) &&
-                      (state.household!.featurePlanner ?? false))
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: LoadingElevatedButton(
-                              child: Text(
-                                state.selectedYields != state.recipe.yields
-                                    ? AppLocalizations.of(context)!
-                                        .addRecipeToPlanner(
-                                        state.selectedYields,
-                                      )
-                                    : AppLocalizations.of(context)!
-                                        .addRecipeToPlannerShort,
-                              ),
-                              onPressed: () async {
-                                await cubit.addRecipeToPlanner(
-                                  updateOnAdd: widget.updateOnPlanningEdit,
-                                );
-                                if (!mounted) return;
-                                Navigator.of(context).pop(
-                                  widget.updateOnPlanningEdit
-                                      ? UpdateEnum.updated
-                                      : UpdateEnum.unchanged,
-                                );
-                              },
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          LoadingElevatedButton(
-                            child: const Icon(Icons.calendar_month_rounded),
-                            onPressed: () async {
-                              final weekdayMapping = {
-                                0: DateTime.monday,
-                                1: DateTime.tuesday,
-                                2: DateTime.wednesday,
-                                3: DateTime.thursday,
-                                4: DateTime.friday,
-                                5: DateTime.saturday,
-                                6: DateTime.sunday,
-                              };
-                              int? day = await showDialog<int>(
-                                context: context,
-                                builder: (context) => SelectDialog(
-                                  title: AppLocalizations.of(context)!
-                                      .addRecipeToPlannerShort,
-                                  cancelText:
-                                      AppLocalizations.of(context)!.cancel,
-                                  options: weekdayMapping.entries
-                                      .map(
-                                        (e) => SelectDialogOption(
-                                          e.key,
-                                          DateFormat.E()
-                                              .dateSymbols
-                                              .STANDALONEWEEKDAYS[e.value % 7],
-                                        ),
-                                      )
-                                      .toList(),
-                                ),
-                              );
-                              if (day != null) {
-                                await cubit.addRecipeToPlanner(
-                                  day: day >= 0 ? day : null,
-                                  updateOnAdd: widget.updateOnPlanningEdit,
-                                );
-                              }
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-                  SizedBox(
-                    height: MediaQuery.paddingOf(context).bottom,
-                  ),
-                ],
-              ),
-            ),
-          );
-
-          return Scaffold(
-            body: Align(
-              alignment: Alignment.topCenter,
-              child: CustomScrollView(
-                primary: true,
-                slivers: [
-                  SliverImageAppBar(
-                    title: state.recipe.name,
-                    imageUrl: state.recipe.image,
-                    imageHash: state.recipe.imageHash,
-                    popValue: () => cubit.state.updateState,
-                    actions: (isCollapsed) => [
-                      if (state.recipe.public)
-                        Padding(
-                          padding: const EdgeInsets.only(right: 8),
-                          child: LoadingIconButton(
-                            tooltip: AppLocalizations.of(context)!.share,
-                            variant: state.recipe.image == null ||
-                                    state.recipe.image!.isEmpty ||
-                                    isCollapsed
-                                ? LoadingIconButtonVariant.standard
-                                : LoadingIconButtonVariant.filledTonal,
-                            onPressed: () async {
-                              final uri = Uri.tryParse(App.currentServer +
-                                  '/recipe/${widget.recipe.id}');
-                              if (uri == null) return;
-
-                              Share.shareUri(context, uri);
-                            },
-                            icon: Icon(Icons.adaptive.share_rounded),
-                          ),
-                        ),
-                      if (!App.isOffline && state.isOwningHousehold(state))
-                        Padding(
-                          padding: const EdgeInsets.only(right: 8),
-                          child: LoadingIconButton(
-                            tooltip: AppLocalizations.of(context)!.recipeEdit,
-                            variant: state.recipe.image == null ||
-                                    state.recipe.image!.isEmpty ||
-                                    isCollapsed
-                                ? LoadingIconButtonVariant.standard
-                                : LoadingIconButtonVariant.filledTonal,
-                            onPressed: () async {
-                              final res = await Navigator.of(context)
-                                  .push<UpdateEnum>(MaterialPageRoute(
-                                builder: (context) => AddUpdateRecipePage(
-                                  household: state.household!,
-                                  recipe: state.recipe,
-                                ),
-                              ));
-                              if (res == UpdateEnum.updated) {
-                                cubit.setUpdateState(UpdateEnum.updated);
-                                await cubit.refresh();
-                              }
-                              if (res == UpdateEnum.deleted) {
-                                if (!mounted) return;
-                                Navigator.of(context).pop(UpdateEnum.deleted);
-                              }
-                            },
-                            icon: const Icon(Icons.edit),
-                          ),
-                        ),
-                    ],
-                  ),
-                  SliverCrossAxisConstrained(
-                    maxCrossAxisExtent: 1600,
-                    child: getValueForScreenType<Widget>(
-                      context: context,
-                      mobile: SliverMainAxisGroup(
-                        slivers: left + [right],
-                      ),
-                      tablet: SliverCrossAxisGroup(
-                        slivers: [
-                          SliverMainAxisGroup(
-                            slivers: left +
-                                [
-                                  SliverToBoxAdapter(
-                                    child: SizedBox(
-                                      height:
-                                          MediaQuery.paddingOf(context).bottom,
+                        tablet: SliverCrossAxisGroup(
+                          slivers: [
+                            SliverMainAxisGroup(
+                              slivers: left +
+                                  [
+                                    SliverToBoxAdapter(
+                                      child: SizedBox(
+                                        height: MediaQuery.paddingOf(context)
+                                            .bottom,
+                                      ),
                                     ),
-                                  ),
-                                ],
-                          ),
-                          right,
-                        ],
+                                  ],
+                            ),
+                            right,
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }

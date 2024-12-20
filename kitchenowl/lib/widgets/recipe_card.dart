@@ -163,6 +163,8 @@ class RecipeCard extends StatelessWidget {
                                   padding: EdgeInsets.zero,
                                 ).copyWith(
                                   elevation: ButtonStyleButton.allOrNull(0.0),
+                                  iconColor: WidgetStatePropertyAll(
+                                      Theme.of(context).colorScheme.onPrimary),
                                 ),
                                 onPressed: onAddToDate,
                                 child: const Icon(Icons.calendar_month_rounded),

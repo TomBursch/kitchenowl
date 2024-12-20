@@ -118,6 +118,11 @@
   "@go": {},
   "@grid": {},
   "@helpTranslate": {},
+  "@hi": {
+    "placeholders": {
+      "name": {}
+    }
+  },
   "@household": {},
   "@householdDelete": {},
   "@householdDeleteConfirmation": {
@@ -314,6 +319,7 @@
     }
   },
   "@signup": {},
+  "@skip": {},
   "@smaller": {},
   "@sortingAlgorithmic": {},
   "@sortingAlphabetical": {},
@@ -337,6 +343,14 @@
   "@themeSystem": {},
   "@total": {},
   "@totalTime": {},
+  "@tutorialItemDescription1": {},
+  "@tutorialItemDescription2": {},
+  "@tutorialRecipeDescription": {},
+  "@tutorialRecipeMore": {
+    "placeholders": {
+      "url": {}
+    }
+  },
   "@uncategorized": {},
   "@underConstruction": {},
   "@undo": {},
@@ -457,6 +471,7 @@
   "go": "Ir",
   "grid": "Cuadricula",
   "helpTranslate": "Ayuda en la traducción",
+  "hi": "¡Hola {name}!",
   "household": "Familiar",
   "householdDelete": "Borrar hogar",
   "householdDeleteConfirmation": "¿Está seguro de que desea eliminar {household}? Esto eliminará todos los artículos, recetas y gastos asociados a ese hogar.",
@@ -583,7 +598,7 @@
   "setupTitle": "¡Hola! ¿Listo para comprar?",
   "share": "Compartir",
   "shoppingList": "Lista de la compra",
-  "shoppingListContainsEntries": "{entriesCount, plural, =0{La lista de la compra no contiene ninguna entrada.} =1{La lista de la compra contiene 1 entrada.} other{La lista de la compra contiene {entriesCount} entradas.}}",
+  "shoppingListContainsEntries": "{entriesCount, plural, =0{La lista de la compra no contiene artículos.} =1{La lista de la compra contiene 1 artículo.} other{La lista de la compra contiene {entriesCount} artículos.}}",
   "shoppingListDelete": "Borrar la lista de la compra",
   "shoppingListDeleteConfirmation": "¿Está seguro de que desea eliminar {shoppingList}?",
   "shoppingListEdit": "Editar la lista de la compra",
@@ -591,6 +606,7 @@
   "shoppingLists": "Listas de la compra",
   "signInWith": "Iniciar sesión con {provider}",
   "signup": "Regístrate",
+  "skip": "Omitir",
   "smaller": "Más pequeño",
   "sortingAlgorithmic": "Algorítmico",
   "sortingAlphabetical": "Alfabetico",
@@ -610,6 +626,10 @@
   "themeSystem": "Sistema",
   "total": "Total",
   "totalTime": "Tiempo total",
+  "tutorialItemDescription1": "Al buscar artículos, puede añadir una cantidad al principio de la consulta, y se añadirá como descripción.",
+  "tutorialItemDescription2": "O, si las cantidades no son suficientes, utilice una coma para separar el nombre del artículo y la descripción.",
+  "tutorialRecipeDescription": "Dentro de las recetas, puede utilizar Markdown. Las características básicas son titulares especificados con signos de almohadilla, listas numeradas para los pasos de las instrucciones y referencias a los ingredientes utilizando una arroba seguida del nombre del ingrediente.",
+  "tutorialRecipeMore": "Para más información, visite la [documentación]({url}).",
   "uncategorized": "Sin categoría",
   "underConstruction": "En construcción",
   "undo": "Deshacer",

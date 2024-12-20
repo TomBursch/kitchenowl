@@ -118,6 +118,11 @@
   "@go": {},
   "@grid": {},
   "@helpTranslate": {},
+  "@hi": {
+    "placeholders": {
+      "name": {}
+    }
+  },
   "@household": {},
   "@householdDelete": {},
   "@householdDeleteConfirmation": {
@@ -292,6 +297,13 @@
   "@setupTitle": {},
   "@share": {},
   "@shoppingList": {},
+  "@shoppingListContainsEntries": {
+    "placeholders": {
+      "entriesCount": {
+        "type": "num"
+      }
+    }
+  },
   "@shoppingListDelete": {},
   "@shoppingListDeleteConfirmation": {
     "placeholders": {
@@ -307,6 +319,7 @@
     }
   },
   "@signup": {},
+  "@skip": {},
   "@smaller": {},
   "@sortingAlgorithmic": {},
   "@sortingAlphabetical": {},
@@ -330,6 +343,14 @@
   "@themeSystem": {},
   "@total": {},
   "@totalTime": {},
+  "@tutorialItemDescription1": {},
+  "@tutorialItemDescription2": {},
+  "@tutorialRecipeDescription": {},
+  "@tutorialRecipeMore": {
+    "placeholders": {
+      "url": {}
+    }
+  },
   "@uncategorized": {},
   "@underConstruction": {},
   "@undo": {},
@@ -450,6 +471,7 @@
   "go": "Mene",
   "grid": "Ruudukko",
   "helpTranslate": "Auta kääntämisessä",
+  "hi": "Hei {name}!",
   "household": "Kotitalous",
   "householdDelete": "Poista kotitalous",
   "householdDeleteConfirmation": "Haluatko varmasti poistaa kotitalouden {household}? Samalla poistetaan kaikki reseptit, kulut ja tuotteet.",
@@ -576,6 +598,7 @@
   "setupTitle": "Hei siellä! Valmiina ostoksille?",
   "share": "Jaa",
   "shoppingList": "Ostoslista",
+  "shoppingListContainsEntries": "{entriesCount, plural, =0{Ostoslistalle ei ole yhtään tuotetta.} =1{Ostoslistalla on yksi tuote.} other{Ostoslista sisältää {entriesCount} tuotetta.}}",
   "shoppingListDelete": "Poista ostoslista",
   "shoppingListDeleteConfirmation": "Haluatko varmasti poistaa {shoppingList}?",
   "shoppingListEdit": "Muokkaa ostoslistaa",
@@ -583,6 +606,7 @@
   "shoppingLists": "Ostoslistat",
   "signInWith": "Kirjaudu {provider} avulla",
   "signup": "Rekisteröidy",
+  "skip": "Ohita",
   "smaller": "Pienempi",
   "sortingAlgorithmic": "Algoritmi",
   "sortingAlphabetical": "Aakkosjärjestys",
@@ -602,6 +626,10 @@
   "themeSystem": "Järjestelmä",
   "total": "Yhteensä",
   "totalTime": "Kokonaisaika",
+  "tutorialItemDescription1": "Voit tarvittaessa lisätä halutun määrän hakukentän alkuun. Tämä lisätään tuotteen kuvauskenttään.",
+  "tutorialItemDescription2": "Mikäli määrä ei riitä, käytä pilkkua erottaaksesi tuotteiden nimet ja kuvauksen.",
+  "tutorialRecipeDescription": "Voit käyttää resepteissä Markdown merkintäkieltä. Perusominaisuuksiin kuuluu esimerkiksi otsikot, jotka määritellään ristikkomerkillä, numeroidut listat reseptien vaihdeiden kuvaamiseen ja viittaukset raaka-aineisiin käyttämällä ät-merkkiä tuotteiden nimen edessä.",
+  "tutorialRecipeMore": "Lisätietoja osoitteesta [documentation]({url}).",
   "uncategorized": "Luokittelematon",
   "underConstruction": "Työn alla",
   "undo": "Kumoa",
@@ -609,7 +637,7 @@
   "unreachableMessage": "Hmmmm… palvelimeen ei saatu yhteyttä",
   "unsavedChangesBody": "Oletko varma, että haluat palata?",
   "unsavedChangesTitle": "Sinulla on tallentamattomia muutoksia",
-  "unsupportedBackendMessage": "Palvelimen versiota ei tueta, päivitä ohjelmisto",
+  "unsupportedBackendMessage": "Palvelimen versiota ei tueta, päivitä palvelimen ohjelmisto",
   "unsupportedFrontendMessage": "Sovellusversiota ei tueta, päivitä sovellus",
   "unsupportedScrapeMessage": "Tämä verkkosivusto ei ole tuettu",
   "usedIn": "Käytetty",

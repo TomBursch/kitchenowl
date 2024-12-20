@@ -120,6 +120,11 @@
   "@go": {},
   "@grid": {},
   "@helpTranslate": {},
+  "@hi": {
+    "placeholders": {
+      "name": {}
+    }
+  },
   "@household": {},
   "@householdDelete": {},
   "@householdDeleteConfirmation": {
@@ -309,6 +314,7 @@
     }
   },
   "@signup": {},
+  "@skip": {},
   "@smaller": {},
   "@sortingAlgorithmic": {},
   "@sortingAlphabetical": {},
@@ -332,6 +338,8 @@
   "@themeSystem": {},
   "@total": {},
   "@totalTime": {},
+  "@tutorialItemDescription1": {},
+  "@tutorialItemDescription2": {},
   "@uncategorized": {},
   "@underConstruction": {},
   "@undo": {},
@@ -452,6 +460,7 @@
   "go": "Ísť",
   "grid": "Mriežka",
   "helpTranslate": "Pomôcť s prekladom",
+  "hi": "Ahoj {name}!",
   "household": "Domácnosť",
   "householdDelete": "Zmazať domácnosť",
   "householdDeleteConfirmation": "Ste si istý, že chcete zmazať {household}? Odoberiete tým všetky súvisiace položky, recepty a výdaje.",
@@ -585,6 +594,7 @@
   "shoppingLists": "Nákupné zoznamy",
   "signInWith": "Prihlásiť sa pomocou {provider}",
   "signup": "Zaregistrovať sa",
+  "skip": "Preskočiť",
   "smaller": "Menšie",
   "sortingAlgorithmic": "Algoritmicky",
   "sortingAlphabetical": "Abecedne",
@@ -604,6 +614,8 @@
   "themeSystem": "Systém",
   "total": "Celkom",
   "totalTime": "Celkový čas",
+  "tutorialItemDescription1": "Pri hľadaní produktov môžete pridať množstvá na začiatok textového poľa a následne budú pridané ako popis.",
+  "tutorialItemDescription2": "Alebo, ak množstvá nestačia, použite čiarku na oddelenie názvu produktu od popisu.",
   "uncategorized": "Bez kategórie",
   "underConstruction": "Vo vývoji",
   "undo": "Späť",

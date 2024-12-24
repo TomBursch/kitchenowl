@@ -37,6 +37,7 @@
   },
   "@address": {},
   "@admin": {},
+  "@analysingWebsite": {},
   "@appDescription": {},
   "@appTitle": {
     "description": "The title of the app"
@@ -114,6 +115,11 @@
   "@go": {},
   "@grid": {},
   "@helpTranslate": {},
+  "@hi": {
+    "placeholders": {
+      "name": {}
+    }
+  },
   "@household": {},
   "@householdDelete": {},
   "@householdDeleteConfirmation": {
@@ -381,6 +387,7 @@
   "addedBy": "Aggiunto da {name}",
   "address": "Indirizzo",
   "admin": "Amministratore",
+  "analysingWebsite": "Analisi del sito web...",
   "appDescription": "KitchenOwl ti aiuta a organizzare la tua spesa.",
   "appTitle": "KitchenOwl",
   "back": "Indietro",
@@ -440,6 +447,7 @@
   "go": "Vai",
   "grid": "Griglia",
   "helpTranslate": "Aiuta a tradurre",
+  "hi": "Ciao {name}!",
   "household": "Domestico",
   "householdDelete": "Elimina la famiglia",
   "householdDeleteConfirmation": "Sei sicuro di voler eliminare {household}? Ciò eliminerà tutti gli articoli, le ricette e le spese associate a quella famiglia.",

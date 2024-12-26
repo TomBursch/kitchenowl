@@ -118,6 +118,11 @@
   "@go": {},
   "@grid": {},
   "@helpTranslate": {},
+  "@hi": {
+    "placeholders": {
+      "name": {}
+    }
+  },
   "@household": {},
   "@householdDelete": {},
   "@householdDeleteConfirmation": {
@@ -292,6 +297,13 @@
   "@setupTitle": {},
   "@share": {},
   "@shoppingList": {},
+  "@shoppingListContainsEntries": {
+    "placeholders": {
+      "entriesCount": {
+        "type": "num"
+      }
+    }
+  },
   "@shoppingListDelete": {},
   "@shoppingListDeleteConfirmation": {
     "placeholders": {
@@ -307,6 +319,7 @@
     }
   },
   "@signup": {},
+  "@skip": {},
   "@smaller": {},
   "@sortingAlgorithmic": {},
   "@sortingAlphabetical": {},
@@ -330,6 +343,14 @@
   "@themeSystem": {},
   "@total": {},
   "@totalTime": {},
+  "@tutorialItemDescription1": {},
+  "@tutorialItemDescription2": {},
+  "@tutorialRecipeDescription": {},
+  "@tutorialRecipeMore": {
+    "placeholders": {
+      "url": {}
+    }
+  },
   "@uncategorized": {},
   "@underConstruction": {},
   "@undo": {},
@@ -450,6 +471,7 @@
   "go": "Kör",
   "grid": "Rutnät",
   "helpTranslate": "Hjälp att översätta",
+  "hi": "Hej {name}!",
   "household": "Hushåll",
   "householdDelete": "Ta bort hushåll",
   "householdDeleteConfirmation": "Är du säker på att du till ta bort {household}? Detta kommer att ta bort alla associerade artiklar, recept och utgifter.",
@@ -576,6 +598,7 @@
   "setupTitle": "Hej! Redo för att handla?",
   "share": "Dela",
   "shoppingList": "Handlingslista",
+  "shoppingListContainsEntries": "{entriesCount, plural, =0{Handlingslistan innehåller inga produkter.} =1{Handlingslistan innehåller 1 produkt.} other{Handlingslistan innehåller {entriesCount} produkter.}}",
   "shoppingListDelete": "Ta bort Handlingslista",
   "shoppingListDeleteConfirmation": "Är du säker på att du vill ta bort {shoppingList}?",
   "shoppingListEdit": "Ändra Handlingslista",
@@ -583,6 +606,7 @@
   "shoppingLists": "Handlingslistor",
   "signInWith": "Logga in med {provider}",
   "signup": "Bli medlem",
+  "skip": "Skippa",
   "smaller": "Mindre",
   "sortingAlgorithmic": "Algoritmisk",
   "sortingAlphabetical": "Alfabetisk",
@@ -602,6 +626,10 @@
   "themeSystem": "System",
   "total": "Total",
   "totalTime": "Total tid",
+  "tutorialItemDescription1": "När du söker efter en sak, kan du lägga en summa i början av din förfrågan, och det kommer att läggas till som beskrivning.",
+  "tutorialItemDescription2": "Eller om antalet inte är tillräckligt, använd ett komma för att separera produktnamn och beskrivning.",
+  "tutorialRecipeDescription": "I recept kan du använda Markdown. Grund funktioner är rubriker specificerad med nummertecken, numrerad lista för instruktion steg och referenser till ingredienser genom att använda snabel a följt av ingrediens namnet.",
+  "tutorialRecipeMore": "För mer information, besök [dokumentationen]({url}).",
   "uncategorized": "Okategoriserad",
   "underConstruction": "Under konstruktion",
   "undo": "Ångra",

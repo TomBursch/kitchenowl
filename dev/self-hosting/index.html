@@ -893,7 +893,7 @@
 <p>There are multiple ways you can install the KitchenOwl server.</p>
 <h2 id="official-installation">Official Installation</h2>
 <p>The official installation method is using <a href="https://docs.docker.com/engine/install/">Docker</a> and <a href="https://docs.docker.com/compose/">docker-compose</a>:</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="1:3"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Docker compose</label><label for="__tabbed_1_2">Docker (All-in-one) BETA</label><label for="__tabbed_1_3">Docker compose (All-in-one) BETA</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:3"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Docker compose</label><label for="__tabbed_1_2">Docker (All-in-one)</label><label for="__tabbed_1_3">Docker compose (All-in-one)</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <ol>
@@ -928,7 +928,7 @@ volumes:
 <div class="tabbed-block">
 <ol>
 <li>Create a volume <code>docker volume create kitchenowl_data</code></li>
-<li>Run <code>docker exec -d -p 8080:8080 -e "JWT_SECRET_KEY=PLEASE_CHANGE_ME" -v kitchenowl_data:/data tombursch/kitchenowl:latest</code></li>
+<li>Run <code>docker run -d -p 8080:8080 -e "JWT_SECRET_KEY=PLEASE_CHANGE_ME" -v kitchenowl_data:/data tombursch/kitchenowl:latest</code></li>
 </ol>
 </div>
 <div class="tabbed-block">

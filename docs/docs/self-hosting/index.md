@@ -35,11 +35,11 @@ The official installation method is using [Docker](https://docs.docker.com/engin
     3. If you want to use PostgreSQL, change the container names, or want to set other settings take a look at the [advanced](advanced.md) options
     4. Run `docker compose up -d`
 
-=== "Docker (All-in-one) BETA"
+=== "Docker (All-in-one)"
     1. Create a volume `docker volume create kitchenowl_data`
-    2. Run `docker exec -d -p 8080:8080 -e "JWT_SECRET_KEY=PLEASE_CHANGE_ME" -v kitchenowl_data:/data tombursch/kitchenowl:latest`
+    2. Run `docker run -d -p 8080:8080 -e "JWT_SECRET_KEY=PLEASE_CHANGE_ME" -v kitchenowl_data:/data tombursch/kitchenowl:latest`
 
-=== "Docker compose (All-in-one) BETA"
+=== "Docker compose (All-in-one)"
     1. Download [docker-compose.yml](https://github.com/TomBursch/kitchenowl/blob/main/docker-compose-single.yml)
     ```yml
     version: "3"

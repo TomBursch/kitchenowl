@@ -154,6 +154,7 @@ class ApiService {
   }
 
   static Future<void> connectTo(String url, {String? refreshToken}) async {
+    url = url.endsWith("/") ? url.substring(0, url.length - 1) : url;
     getInstance().dispose();
     _instance = ApiService._internal(url);
     _instance!.refreshToken = refreshToken ?? '';

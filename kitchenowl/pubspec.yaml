@@ -55,7 +55,7 @@ dependencies:
   flutter_markdown: ^0.7.1
   markdown: ^7.1.1
   tuple: ^2.0.1
-  fl_chart: ^0.69.0
+  fl_chart: ^0.70.0
   cached_network_image: ^3.3.0
   flutter_svg: ^2.0.10+1
   image_picker: ^1.0.4

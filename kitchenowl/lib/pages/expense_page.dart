@@ -105,9 +105,19 @@ class _ExpensePageState extends State<ExpensePage> {
                           style: Theme.of(context).textTheme.displayMedium,
                           textAlign: TextAlign.center,
                         ),
-                        if (state.expense.description != null)
+                        if (state.expense.category != null)
+                          Padding(
+                            padding: const EdgeInsets.only(top: 8, bottom: 8),
+                            child: Text(
+                              state.expense.category!.name,
+                              style: Theme.of(context).textTheme.titleSmall,
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        if (state.expense.description != null &&
+                            state.expense.description!.isNotEmpty)
                           Card(
-                            margin: const EdgeInsets.fromLTRB(16, 24, 16, 4),
+                            margin: const EdgeInsets.fromLTRB(16, 24, 16, 0),
                             child: Padding(
                               padding: const EdgeInsets.all(16),
                               child: KitchenOwlMarkdownBody(
@@ -115,12 +125,7 @@ class _ExpensePageState extends State<ExpensePage> {
                               ),
                             ),
                           ),
-                        if (state.expense.category != null)
-                          ListTile(
-                            title: Text(
-                              "${AppLocalizations.of(context)!.category} ${state.expense.category!.name}",
-                            ),
-                          ),
+                        const SizedBox(height: 24),
                         ListTile(
                           title: Text(
                             "${state.expense.isIncome ? AppLocalizations.of(context)!.expenseReceivedBy : AppLocalizations.of(context)!.expensePaidBy} ${state.household.member?.firstWhereOrNull(
@@ -135,7 +140,7 @@ class _ExpensePageState extends State<ExpensePage> {
                                 )
                               : null,
                         ),
-                        const SizedBox(height: 24),
+                        const SizedBox(height: 8),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 16),
                           child: Row(

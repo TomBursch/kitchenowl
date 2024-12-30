@@ -25,6 +25,7 @@ class AuthCubit extends Cubit<AuthState> {
             .then((value) => value ?? token);
       });
     }
+    _loadForcedOfflineMode();
     setup();
   }
 
@@ -277,8 +278,13 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
+  Future<void> _loadForcedOfflineMode() async {
+    _forcedOfflineMode = await PreferenceStorage.getInstance().readBool(key: 'forcedOfflineMode') ?? false;
+  }
+
   void setForcedOfflineMode(bool forcedOfflineMode) async {
     _forcedOfflineMode = forcedOfflineMode;
+    await PreferenceStorage.getInstance().writeBool(key: 'forcedOfflineMode', value: forcedOfflineMode);
     updateState(); // force refresh if state stays the same
     refresh();
   }

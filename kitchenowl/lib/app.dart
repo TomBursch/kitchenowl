@@ -26,8 +26,6 @@ import 'package:image_picker_platform_interface/image_picker_platform_interface.
 
 class App extends StatefulWidget {
   static App? _instance;
-  final TransactionHandler transactionHandler =
-      TransactionHandler.getInstance(); // TODO refactor to repository pattern
   final SettingsCubit _settingsCubit = SettingsCubit();
   final AuthCubit _authCubit = AuthCubit();
   final ServerInfoCubit _serverInfoCubit = ServerInfoCubit();
@@ -97,107 +95,103 @@ class _AppState extends State<App> {
           currentFocus.focusedChild?.unfocus();
         }
       },
-      child: RepositoryProvider.value(
-        value: widget.transactionHandler,
-        child: MultiRepositoryProvider(
+      child: MultiRepositoryProvider(
+        providers: [
+          RepositoryProvider.value(value: TransactionHandler.getInstance()),
+          RepositoryProvider.value(value: routeObserver),
+        ],
+        child: MultiBlocProvider(
           providers: [
-            RepositoryProvider.value(value: routeObserver),
+            BlocProvider.value(value: widget._authCubit),
+            BlocProvider.value(value: widget._settingsCubit),
+            BlocProvider.value(value: widget._serverInfoCubit),
           ],
-          child: MultiBlocProvider(
-            providers: [
-              BlocProvider.value(value: widget._authCubit),
-              BlocProvider.value(value: widget._settingsCubit),
-              BlocProvider.value(value: widget._serverInfoCubit),
-            ],
-            child: BlocListener<AuthCubit, AuthState>(
-              bloc: widget._authCubit,
-              listenWhen: (previous, current) =>
-                  previous != current &&
-                  !(previous is Authenticated && current is Authenticated),
-              listener: (context, state) {
-                if (state is Setup) return router.go("/setup");
-                if (state is Onboarding) return router.go("/onboarding");
-                if (state is Unauthenticated &&
-                    (initialLocation == null ||
-                        !publicRoutes.any((path) =>
-                            initialLocation!.path.startsWith(path)))) {
-                  return router.go("/signin");
+          child: BlocListener<AuthCubit, AuthState>(
+            bloc: widget._authCubit,
+            listenWhen: (previous, current) =>
+                previous != current &&
+                !(previous is Authenticated && current is Authenticated),
+            listener: (context, state) {
+              if (state is Setup) return router.go("/setup");
+              if (state is Onboarding) return router.go("/onboarding");
+              if (state is Unauthenticated &&
+                  (initialLocation == null ||
+                      !publicRoutes.any(
+                          (path) => initialLocation!.path.startsWith(path)))) {
+                return router.go("/signin");
+              }
+              if (state is Unreachable) return router.go("/unreachable");
+              if (state is Unsupported) return router.go("/unsupported");
+              if (state is Loading) return router.go("/");
+              if (state is Authenticated) {
+                if ((initialLocation == null || initialLocation?.path == "/")) {
+                  PreferenceStorage.getInstance()
+                      .readInt(key: 'lastHouseholdId')
+                      .then((id) =>
+                          router.go("/household${id == null ? "" : "/$id"}"));
+                  return;
                 }
-                if (state is Unreachable) return router.go("/unreachable");
-                if (state is Unsupported) return router.go("/unsupported");
-                if (state is Loading) return router.go("/");
-                if (state is Authenticated) {
-                  if ((initialLocation == null ||
-                      initialLocation?.path == "/")) {
+                if (initialLocation != null) {
+                  final match = RegExp(r'\/recipe\/(\d+)')
+                      .matchAsPrefix(initialLocation!.path);
+                  if (match != null) {
+                    // Redirect public recipe links to last household recipe links
                     PreferenceStorage.getInstance()
                         .readInt(key: 'lastHouseholdId')
-                        .then((id) =>
-                            router.go("/household${id == null ? "" : "/$id"}"));
+                        .then((id) => router.go(id == null
+                            ? initialLocation!.toString()
+                            : "/household/${id}/recipes/details/${match.group(1)}"));
                     return;
                   }
-                  if (initialLocation != null) {
-                    final match = RegExp(r'\/recipe\/(\d+)')
-                        .matchAsPrefix(initialLocation!.path);
-                    if (match != null) {
-                      // Redirect public recipe links to last household recipe links
-                      PreferenceStorage.getInstance()
-                          .readInt(key: 'lastHouseholdId')
-                          .then((id) => router.go(id == null
-                              ? initialLocation!.toString()
-                              : "/household/${id}/recipes/details/${match.group(1)}"));
-                      return;
-                    }
-                  }
                 }
-                router.go(initialLocation!.toString());
-                initialLocation = Uri(path: "/");
-              },
-              child: BlocBuilder<SettingsCubit, SettingsState>(
-                builder: (context, state) =>
-                    DynamicColorBuilder(builder: (lightDynamic, darkDynamic) {
-                  ColorScheme lightColorScheme = AppThemes.lightScheme;
-                  ColorScheme darkColorScheme = AppThemes.darkScheme;
+              }
+              router.go(initialLocation!.toString());
+              initialLocation = Uri(path: "/");
+            },
+            child: BlocBuilder<SettingsCubit, SettingsState>(
+              builder: (context, state) =>
+                  DynamicColorBuilder(builder: (lightDynamic, darkDynamic) {
+                ColorScheme lightColorScheme = AppThemes.lightScheme;
+                ColorScheme darkColorScheme = AppThemes.darkScheme;
 
-                  if (state.dynamicAccentColor &&
-                      lightDynamic != null &&
-                      darkDynamic != null) {
-                    (lightColorScheme, darkColorScheme) =
-                        _generateDynamicColourSchemes(
-                            lightDynamic, darkDynamic);
-                  } else if (state.accentColor != null) {
-                    lightColorScheme =
-                        ColorScheme.fromSeed(seedColor: state.accentColor!);
-                    darkColorScheme = ColorScheme.fromSeed(
-                      seedColor: state.accentColor!,
-                      brightness: Brightness.dark,
-                    );
-                  }
-
-                  return MaterialApp.router(
-                    builder: (context, child) =>
-                        AnnotatedRegion<SystemUiOverlayStyle>(
-                      value: _getSystemUI(context, state),
-                      child: child ?? const SizedBox(),
-                    ),
-                    onGenerateTitle: (BuildContext context) =>
-                        AppLocalizations.of(context)!.appTitle,
-                    localizationsDelegates:
-                        AppLocalizations.localizationsDelegates +
-                            [
-                              LocaleNamesLocalizationsDelegate(),
-                            ],
-                    supportedLocales: const [Locale('en')] +
-                        AppLocalizations.supportedLocales,
-                    theme: AppThemes.light(lightColorScheme),
-                    darkTheme: AppThemes.dark(darkColorScheme),
-                    themeMode: state.themeMode,
-                    color: AppColors.green,
-                    debugShowCheckedModeBanner: false,
-                    restorationScopeId: "com.tombursch.kitchenowl",
-                    routerConfig: router,
+                if (state.dynamicAccentColor &&
+                    lightDynamic != null &&
+                    darkDynamic != null) {
+                  (lightColorScheme, darkColorScheme) =
+                      _generateDynamicColourSchemes(lightDynamic, darkDynamic);
+                } else if (state.accentColor != null) {
+                  lightColorScheme =
+                      ColorScheme.fromSeed(seedColor: state.accentColor!);
+                  darkColorScheme = ColorScheme.fromSeed(
+                    seedColor: state.accentColor!,
+                    brightness: Brightness.dark,
                   );
-                }),
-              ),
+                }
+
+                return MaterialApp.router(
+                  builder: (context, child) =>
+                      AnnotatedRegion<SystemUiOverlayStyle>(
+                    value: _getSystemUI(context, state),
+                    child: child ?? const SizedBox(),
+                  ),
+                  onGenerateTitle: (BuildContext context) =>
+                      AppLocalizations.of(context)!.appTitle,
+                  localizationsDelegates:
+                      AppLocalizations.localizationsDelegates +
+                          [
+                            LocaleNamesLocalizationsDelegate(),
+                          ],
+                  supportedLocales:
+                      const [Locale('en')] + AppLocalizations.supportedLocales,
+                  theme: AppThemes.light(lightColorScheme),
+                  darkTheme: AppThemes.dark(darkColorScheme),
+                  themeMode: state.themeMode,
+                  color: AppColors.green,
+                  debugShowCheckedModeBanner: false,
+                  restorationScopeId: "com.tombursch.kitchenowl",
+                  routerConfig: router,
+                );
+              }),
             ),
           ),
         ),

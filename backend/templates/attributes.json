@@ -165,7 +165,7 @@
     },
     "bodywash": {
       "category": "hygiene",
-      "icon": "soap_bubble"
+      "icon": "shampoo"
     },
     "bread": {
       "category": "bread",
@@ -225,7 +225,9 @@
       "category": "dairy",
       "icon": "cheese"
     },
-    "caesar_dressing": {},
+    "caesar_dressing": {
+      "icon": "dressing"
+    },
     "cake": {
       "category": "snacks",
       "icon": "cake"
@@ -238,14 +240,26 @@
     "cane_sugar": {
       "icon": "sugar"
     },
-    "canned_apricots": {},
+    "canned_apricots": {
+      "icon": "apricot"
+    },
     "canned_beans": {},
-    "canned_mandarins": {},
+    "canned_mandarins": {
+      "icon": "citrus"
+    },
     "canned_peas": {},
-    "canned_pineapple": {},
-    "canned_soup": {},
-    "canned_tomato": {},
-    "canned_tuna": {},
+    "canned_pineapple": {
+      "icon": "pineapple"
+    },
+    "canned_soup": {
+      "icon": "can_soup"
+    },
+    "canned_tomato": {
+      "icon": "can_soup"
+    },
+    "canned_tuna": {
+      "icon": "fish_food"
+    },
     "cannelloni": {
       "category": "canned",
       "icon": "pasta"
@@ -298,7 +312,9 @@
       "icon": "cheese"
     },
     "cheese_puffs": {},
-    "cherries": {},
+    "cherries": {
+      "icon": "cherry"
+    },
     "cherry_tomatoes": {
       "category": "fruits_vegetables",
       "icon": "tomato"
@@ -360,7 +376,9 @@
       "category": "bread",
       "icon": "bread"
     },
-    "cider": {},
+    "cider": {
+      "icon": "wine_bottle"
+    },
     "cider_vinegar": {
       "category": "canned",
       "icon": "rice_vinegar"
@@ -411,7 +429,10 @@
       "icon": "coffee_beans"
     },
     "cognac": {},
-    "coke": {},
+    "coke": {
+      "category": "drinks",
+      "icon": "cola"
+    },
     "colorful_sprinkles": {
       "category": "dairy",
       "icon": "candy_cane"
@@ -446,7 +467,10 @@
       "category": "dairy",
       "icon": "flour"
     },
-    "cotton_pads": {},
+    "cotton_pads": {
+      "category": "hygiene",
+      "icon": "wipes"
+    },
     "cotton_rounds": {
       "category": "hygiene",
       "icon": "wipes"
@@ -490,7 +514,9 @@
       "category": "bread",
       "icon": "bread_loaf"
     },
-    "croissants": {},
+    "croissants": {
+      "icon": "croissant"
+    },
     "cucumber": {
       "category": "fruits_vegetables",
       "icon": "cucumber"
@@ -517,7 +543,9 @@
       "category": "canned",
       "icon": "ketchup"
     },
-    "dark_bread": {},
+    "dark_bread": {
+      "icon": "bread"
+    },
     "dates": {
       "category": "fruits_vegetables",
       "icon": "date_fruit"
@@ -551,12 +579,16 @@
     },
     "dishwashing_liquid": {},
     "dishwashing_powder": {},
-    "disinfectant": {},
+    "disinfectant": {
+      "icon": "dispenser"
+    },
     "disinfection_spray": {
       "category": "hygiene",
       "icon": "spray"
     },
-    "dressing": {},
+    "dressing": {
+      "icon": "dressing"
+    },
     "dried_basil": {},
     "dried_mint": {},
     "dried_parsley": {},
@@ -598,7 +630,8 @@
     },
     "escalope": {},
     "eyebrow_gel": {
-      "category": "hygiene"
+      "category": "hygiene",
+      "icon": "eyelash"
     },
     "fajita_sauce": {},
     "falafel": {
@@ -612,7 +645,9 @@
       "category": "drinks",
       "icon": "cola"
     },
-    "farmer_bread": {},
+    "farmer_bread": {
+      "icon": "bread"
+    },
     "fennel": {},
     "feta": {
       "category": "dairy",
@@ -627,7 +662,10 @@
       "category": "freezer",
       "icon": "fish_food"
     },
-    "flatbread": {},
+    "flatbread": {
+      "category": "bread",
+      "icon": "bread_loaf"
+    },
     "flour": {
       "category": "dairy",
       "icon": "flour"
@@ -669,7 +707,9 @@
     "frozen_vegetables": {},
     "fruit_drink": {},
     "fruit_jelly": {},
-    "fruit_tea": {},
+    "fruit_tea": {
+      "icon": "tea"
+    },
     "funeral_card": {
       "icon": "paper"
     },
@@ -685,7 +725,9 @@
       "category": "fruits_vegetables",
       "icon": "garlic"
     },
-    "garlic_bread": {},
+    "garlic_bread": {
+      "icon": "bread"
+    },
     "garlic_dip": {
       "category": "canned",
       "icon": "garlic"
@@ -763,9 +805,13 @@
       "icon": "chili_pepper"
     },
     "green_pesto": {
+      "category": "grain",
       "icon": "mayonnaise"
     },
-    "grill_cheese": {},
+    "grill_cheese": {
+      "category": "refrigerated",
+      "icon": "cheese"
+    },
     "grill_sauce": {},
     "guacamole": {},
     "hair_gel": {
@@ -813,7 +859,9 @@
       "category": "canned",
       "icon": "chili_pepper"
     },
-    "hazelnut_cookies": {},
+    "hazelnut_cookies": {
+      "icon": "cookies"
+    },
     "hazelnut_milk": {},
     "hazelnuts": {
       "category": "dairy",
@@ -843,7 +891,9 @@
       "category": "snacks",
       "icon": "biscuits"
     },
-    "honeydew_melon": {},
+    "honeydew_melon": {
+      "icon": "melon"
+    },
     "hot_dog_bun": {
       "category": "bread",
       "icon": "hot_dog"
@@ -883,7 +933,9 @@
       "icon": "grains_of_rice"
     },
     "juice": {},
-    "kale": {},
+    "kale": {
+      "icon": "cabbage"
+    },
     "katjes": {
       "category": "snacks",
       "icon": "coffee_beans"
@@ -985,14 +1037,21 @@
       "icon": "vodka"
     },
     "liquid_soap": {},
-    "liquor": {},
+    "liquor": {
+      "category": "drinks",
+      "icon": "vodka"
+    },
     "lobster": {},
     "low-fat_curd_cheese": {
       "category": "dairy",
       "icon": "yogurt"
     },
-    "macaroni": {},
-    "mackerel": {},
+    "macaroni": {
+      "icon": "pasta"
+    },
+    "mackerel": {
+      "icon": "fish_food"
+    },
     "maggi": {
       "icon": "soy_sauce"
     },
@@ -1043,12 +1102,16 @@
       "category": "refrigerated",
       "icon": "beef"
     },
-    "melon": {},
+    "melon": {
+      "icon": "melon"
+    },
     "microfiber_cloth": {
       "category": "hygiene",
       "icon": "cleaning_a_surface"
     },
-    "microwave_popcorn": {},
+    "microwave_popcorn": {
+      "icon": "popcorn"
+    },
     "milk": {
       "category": "dairy",
       "icon": "milk-carton"
@@ -1109,7 +1172,9 @@
       "category": "canned",
       "icon": "mustard"
     },
-    "naan_bread": {},
+    "naan_bread": {
+      "icon": "naan"
+    },
     "nacho_chips": {},
     "nail_file": {
       "category": "hygiene",
@@ -1194,12 +1259,16 @@
       "category": "hygiene",
       "icon": "trash_bag"
     },
-    "oysters": {},
+    "oysters": {
+      "icon": "shellfish"
+    },
     "pak_choi": {
       "category": "fruits_vegetables",
       "icon": "lettuce"
     },
-    "pancetta": {},
+    "pancetta": {
+      "icon": "bacon"
+    },
     "pantyhose": {
       "category": "hygiene",
       "icon": "nappy"
@@ -1263,7 +1332,9 @@
       "category": "freezer",
       "icon": "peas"
     },
-    "pecans": {},
+    "pecans": {
+      "icon": "pecan"
+    },
     "penne": {
       "category": "grain",
       "icon": "penne"
@@ -1275,8 +1346,12 @@
     "pepper_mill": {
       "category": "fruits_vegetables"
     },
-    "peppercorns": {},
-    "peppermint": {},
+    "peppercorns": {
+      "icon": "spice"
+    },
+    "peppermint": {
+      "icon": "basil"
+    },
     "peppers": {
       "category": "fruits_vegetables",
       "icon": "paprika"
@@ -1290,7 +1365,9 @@
       "icon": "mayonnaise"
     },
     "pet_food": {},
-    "pickles": {},
+    "pickles": {
+      "icon": "cucumber"
+    },
     "pilsner": {
       "category": "drinks",
       "icon": "beer_bottle"
@@ -1330,12 +1407,16 @@
       "category": "hygiene",
       "icon": "bandage"
     },
-    "plum": {},
+    "plum": {
+      "icon": "plum"
+    },
     "pointed_peppers": {
       "category": "fruits_vegetables",
       "icon": "paprika"
     },
-    "popcorn": {},
+    "popcorn": {
+      "icon": "popcorn"
+    },
     "porcini_mushrooms": {
       "category": "fruits_vegetables",
       "icon": "mushroom"
@@ -1375,7 +1456,9 @@
       "category": "drinks",
       "icon": "champagne_bottle"
     },
-    "prune": {},
+    "prune": {
+      "icon": "plum"
+    },
     "puff_pastry": {
       "category": "refrigerated",
       "icon": "salami_pizza"
@@ -1428,7 +1511,10 @@
       "category": "drinks",
       "icon": "energy_drink"
     },
-    "red_cabbage": {},
+    "red_cabbage": {
+      "category": "canned",
+      "icon": "cabbage"
+    },
     "red_chili": {
       "category": "fruits_vegetables",
       "icon": "chili_pepper"
@@ -1446,6 +1532,7 @@
       "icon": "onion"
     },
     "red_pesto": {
+      "category": "grain",
       "icon": "cookie_jar"
     },
     "red_wine": {
@@ -1516,7 +1603,9 @@
       "category": "fruits_vegetables",
       "icon": "basil"
     },
-    "rye_bread": {},
+    "rye_bread": {
+      "icon": "bread"
+    },
     "saffron": {},
     "saffron_threads": {
       "category": "canned",
@@ -1526,8 +1615,12 @@
       "category": "fruits_vegetables",
       "icon": "basil"
     },
-    "salad": {},
-    "salad_dressing": {},
+    "salad": {
+      "category": "fruits_vegetables"
+    },
+    "salad_dressing": {
+      "icon": "dressing"
+    },
     "salad_mix": {
       "category": "fruits_vegetables",
       "icon": "lettuce"
@@ -1536,7 +1629,9 @@
       "category": "fruits_vegetables",
       "icon": "chia_seeds"
     },
-    "salami": {},
+    "salami": {
+      "icon": "salami"
+    },
     "salmon": {},
     "salt": {
       "category": "canned",
@@ -1583,7 +1678,9 @@
       "category": "refrigerated",
       "icon": "pasta"
     },
-    "sea_salt": {},
+    "sea_salt": {
+      "icon": "salt_shaker"
+    },
     "seaweed": {},
     "semolina_porridge": {
       "category": "dairy",
@@ -1751,7 +1848,9 @@
       "category": "canned",
       "icon": "soy_sauce"
     },
-    "steak": {},
+    "steak": {
+      "icon": "beef"
+    },
     "strained_tomatoes": {
       "category": "canned",
       "icon": "tomato"
@@ -1990,8 +2089,12 @@
       "icon": "whipped_cream"
     },
     "white_beans": {},
-    "white_bread": {},
-    "white_chocolate": {},
+    "white_bread": {
+      "icon": "bread_loaf"
+    },
+    "white_chocolate": {
+      "icon": "chocolate_bar"
+    },
     "white_wine": {
       "category": "drinks",
       "icon": "wine_bottle"

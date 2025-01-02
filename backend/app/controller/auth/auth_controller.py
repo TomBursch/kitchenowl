@@ -28,53 +28,13 @@ auth = Blueprint("auth", __name__)
 # Callback function to check if a JWT exists in the database blocklist
 @jwt.token_in_blocklist_loader
 def check_if_token_revoked(jwt_header, jwt_payload: dict) -> bool:
-    from app import db
     jti = jwt_payload["jti"]
     token = Token.find_by_jti(jti)
     if token is not None:
-        # Check for invalidated refresh tokens first
-        if token.type == "invalidated_refresh":
-            # Delete any remaining tokens in the family
-            token.delete_token_familiy()
-            return True
-            
-        # Check if this token's chain has been superseded
-        if token.type == "access":
-            if token.refresh_token:  # This token has a parent
-                # Check if parent is not a valid refresh token
-                if token.refresh_token.type != "refresh":
-                    token.refresh_token.delete_token_familiy()
-                    return True
-                # Check if there are any newer tokens that have been used
-                newer_used = db.session.query(Token).filter(
-                    Token.refresh_token_id == token.refresh_token.id,
-                    Token.last_used_at != None,
-                    db.or_(
-                        Token.type == "refresh",
-                        db.and_(Token.type == "access", Token.id != token.id)
-                    )
-                ).first()
-                if newer_used:
-                    return True
-
-        if token.last_used_at is None:
-            # First use of this token
-            if token.type == "access":
-                # When an access token is first used, invalidate all other access tokens from the same refresh token chain
-                if token.refresh_token:  # This token has a parent
-                    # Delete any access tokens associated with the parent, except this one
-                    token.refresh_token.delete_created_access_tokens(exclude_token_id=token.id)
-                    # Also delete any access tokens from the parents parent chain
-                    if token.refresh_token.refresh_token:
-                        token.refresh_token.refresh_token.delete_created_access_tokens()
-
         token.last_used_at = datetime.now(timezone.utc)
         token.user.last_seen = token.last_used_at
-        db.session.commit()
-        return False
-    else:
-        return True
-
+        token.save()
+    return token is None
 
 # Register a callback function that takes whatever object is passed in as the
 # identity when creating JWTs and converts it to a JSON serializable format.

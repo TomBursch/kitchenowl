@@ -141,12 +141,10 @@ class Token(db.Model, DbModelMixin):
 
         # Check if this refresh token has already been used to create another refresh token
         if oldRefreshToken and oldRefreshToken.has_created_refresh_token():
-            newer_token = db.session.query(Token).filter(
+            for newer_token in db.session.query(Token).filter(
                 Token.refresh_token_id == oldRefreshToken.id,
                 Token.type == "refresh"
-            ).first()
-            
-            if newer_token:
+            ):
                 newer_access_used = db.session.query(Token).filter(
                     Token.refresh_token_id == newer_token.id,
                     Token.type == "access",

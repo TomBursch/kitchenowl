@@ -101,16 +101,14 @@ class Token(db.Model, DbModelMixin):
             > 0
         )
 
-    def delete_created_access_tokens(self, exclude_token_id=None):
+    def delete_created_access_tokens(self, commit=True):
         if self.type != "refresh":
             return
-        query = db.session.query(Token).filter(
+        Token.query.filter(
             Token.refresh_token_id == self.id, Token.type == "access"
-        )
-        if exclude_token_id is not None:
-            query = query.filter(Token.id != exclude_token_id)
-        query.delete()
-        db.session.commit()
+        ).delete()
+        if commit:
+            db.session.commit()
 
     @classmethod
     def create_access_token(
@@ -141,10 +139,10 @@ class Token(db.Model, DbModelMixin):
 
         # Check if this refresh token has already been used to create another refresh token
         if oldRefreshToken and oldRefreshToken.has_created_refresh_token():
-            for newer_token in db.session.query(Token).filter(
+            for newer_token in Token.query.filter(
                 Token.refresh_token_id == oldRefreshToken.id,
                 Token.type == "refresh"
-            ):
+            ).all():
                 newer_access_used = db.session.query(Token).filter(
                     Token.refresh_token_id == newer_token.id,
                     Token.type == "access",
@@ -161,11 +159,11 @@ class Token(db.Model, DbModelMixin):
                     )
                 else:
                     # Only invalidate the unused parallel refresh token chain
-                    for token in db.session.query(Token).filter(
+                    Token.query.filter(
                         Token.refresh_token_id == newer_token.id
-                    ).all():
-                        db.session.delete(token)
+                    ).delete()
                     newer_token.type = "invalidated_refresh"
+                    db.session.add(newer_token)
 
         refreshToken = create_refresh_token(identity=user)
         model = cls()
@@ -174,6 +172,7 @@ class Token(db.Model, DbModelMixin):
         model.name = device or oldRefreshToken.name
         model.user = user
         if oldRefreshToken:
+            oldRefreshToken.delete_created_access_tokens(commit=False)
             model.refresh_token = oldRefreshToken
         model.save()
         return refreshToken, model

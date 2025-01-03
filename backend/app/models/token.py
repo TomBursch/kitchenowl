@@ -48,6 +48,8 @@ class Token(db.Model, DbModelMixin):
     @classmethod
     def delete_expired_refresh(cls):
         filter_before = datetime.now(timezone.utc) - JWT_REFRESH_TOKEN_EXPIRES
+        
+        # Delete expired regular refresh tokens with no children
         for token in (
             db.session.query(cls)
             .filter(
@@ -58,6 +60,13 @@ class Token(db.Model, DbModelMixin):
             .all()
         ):
             token.delete_token_familiy(commit=False)
+
+        # Delete expired invalidated refresh tokens
+        db.session.query(cls).filter(
+            cls.created_at <= filter_before,
+            cls.type == "invalidated_refresh"
+        ).delete()
+        
         db.session.commit()
 
     @classmethod
@@ -71,8 +80,9 @@ class Token(db.Model, DbModelMixin):
     # Delete oldest refresh token -> log out device
     # Used e.g. when a refresh token is used twice
     def delete_token_familiy(self, commit=True):
-        if self.type != "refresh":
+        if self.type not in ["refresh", "invalidated_refresh"]:
             return
+
         token = self
         while token:
             if token.refresh_token:
@@ -91,12 +101,15 @@ class Token(db.Model, DbModelMixin):
             > 0
         )
 
-    def delete_created_access_tokens(self):
+    def delete_created_access_tokens(self, exclude_token_id=None):
         if self.type != "refresh":
             return
-        db.session.query(Token).filter(
+        query = db.session.query(Token).filter(
             Token.refresh_token_id == self.id, Token.type == "access"
-        ).delete()
+        )
+        if exclude_token_id is not None:
+            query = query.filter(Token.id != exclude_token_id)
+        query.delete()
         db.session.commit()
 
     @classmethod
@@ -118,16 +131,41 @@ class Token(db.Model, DbModelMixin):
         cls, user: User, device: str | None = None, oldRefreshToken: Self | None = None
     ) -> Tuple[str, Self]:
         assert device or oldRefreshToken
-        if oldRefreshToken and (
-            oldRefreshToken.type != "refresh"
-            or oldRefreshToken.has_created_refresh_token()
-        ):
+        if oldRefreshToken and oldRefreshToken.type != "refresh":
             oldRefreshToken.delete_token_familiy()
             raise UnauthorizedRequest(
                 message="Unauthorized: IP {} reused the same refresh token, logging out user".format(
                     request.remote_addr
                 )
             )
+
+        # Check if this refresh token has already been used to create another refresh token
+        if oldRefreshToken and oldRefreshToken.has_created_refresh_token():
+            for newer_token in db.session.query(Token).filter(
+                Token.refresh_token_id == oldRefreshToken.id,
+                Token.type == "refresh"
+            ):
+                newer_access_used = db.session.query(Token).filter(
+                    Token.refresh_token_id == newer_token.id,
+                    Token.type == "access",
+                    Token.last_used_at != None
+                ).count() > 0
+                
+                if newer_token.last_used_at is not None or newer_access_used:
+                    # The newer tokens have been used, this is a reuse attack
+                    oldRefreshToken.delete_token_familiy()
+                    raise UnauthorizedRequest(
+                        message="Unauthorized: IP {} reused the same refresh token, logging out user".format(
+                            request.remote_addr
+                        )
+                    )
+                else:
+                    # Only invalidate the unused parallel refresh token chain
+                    for token in db.session.query(Token).filter(
+                        Token.refresh_token_id == newer_token.id
+                    ).all():
+                        db.session.delete(token)
+                    newer_token.type = "invalidated_refresh"
 
         refreshToken = create_refresh_token(identity=user)
         model = cls()
@@ -136,7 +174,6 @@ class Token(db.Model, DbModelMixin):
         model.name = device or oldRefreshToken.name
         model.user = user
         if oldRefreshToken:
-            oldRefreshToken.delete_created_access_tokens()
             model.refresh_token = oldRefreshToken
         model.save()
         return refreshToken, model

@@ -90,7 +90,9 @@ def admin_client(client, admin_username, admin_name, admin_password):
         'password': admin_password
     }
     response = client.post('/api/onboarding', json=onboard_data)
+    assert response.status_code == 200, f"Failed to onboard admin: {response.get_json()}"
     data = response.get_json()
+    assert 'access_token' in data, f"No access token in response: {data}"
     client.environ_base['HTTP_AUTHORIZATION'] = f'Bearer {data["access_token"]}'
     return client
 
@@ -103,11 +105,13 @@ def user_client(admin_client, username, name, password):
         'password': password
     }
     response = admin_client.post('/api/user/new', json=data)
+    assert response.status_code == 200, f"Failed to create user: {response.get_json()}"
     data = {
         'username': username,
         'password': password
     }
     response = admin_client.post('/api/auth', json=data)
+    assert response.status_code == 200, f"Failed to login: {response.get_json()}"
     data = response.get_json()
     admin_client.environ_base['HTTP_AUTHORIZATION'] = f'Bearer {data["access_token"]}'
     return admin_client

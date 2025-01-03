@@ -36,6 +36,7 @@ def check_if_token_revoked(jwt_header, jwt_payload: dict) -> bool:
         token.save()
     return token is None
 
+
 # Register a callback function that takes whatever object is passed in as the
 # identity when creating JWTs and converts it to a JSON serializable format.
 @jwt.user_identity_loader

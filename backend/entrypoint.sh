@@ -9,7 +9,8 @@ if [ ! -f "/proc/net/if_inet6" ]; then
 fi
 
 # patch the web base href if requested
-if [ ! -z $BASE_HREF ]; then
+INDEX_HTML=/var/www/web/kitchenowl/index.html
+if [ ! -z $BASE_HREF ] && [ -f "$INDEX_HTML" ]; then
     if [[ $BASE_HREF == *"#"* ]]; then
         echo "$ME: error: BASE_HREF must not contain character '#'" >&2
         exit 1
@@ -20,7 +21,7 @@ if [ ! -z $BASE_HREF ]; then
         echo "$ME: error: BASE_HREF must end with a forward slash: /example/" >&2
         exit 1
     fi
-    sed -i "s#<base href=\"/\">#<base href=\"${BASE_HREF}\">#g" /var/www/web/kitchenowl/index.html
+    sed -i "s#<base href=\"/\">#<base href=\"${BASE_HREF}\">#g" "$INDEX_HTML"
 fi
 
 mkdir -p $STORAGE_PATH/upload

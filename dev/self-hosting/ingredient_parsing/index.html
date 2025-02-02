@@ -718,6 +718,15 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#openrouter" class="md-nav__link">
+    <span class="md-ellipsis">
+      OpenRouter
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -841,6 +850,15 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#openrouter" class="md-nav__link">
+    <span class="md-ellipsis">
+      OpenRouter
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -863,10 +881,10 @@
 <p>When scraping recipes from the web multiple strategies to map ingredients to household items are available.
 The scraping only returns a list of ingredients (like <code>3 cloves garlic</code>, <code>1/2 teaspoon salt</code>, <code>2 carrots chopped</code>) from which we need to extract the ingredient name and description. The names are then mapped to existing household items.</p>
 <p>The default method is to use a local <a href="https://github.com/strangetom/ingredient-parser/">natural language processing (NLP) model</a> trained on English ingredients. To use this leave the <code>LLM_MODEL</code> environment variable empty.</p>
-<p>Alternatively, you can use a <a href="https://github.com/BerriAI/litellm">Large Language Model (LLM)</a>, multiple models are supported. Using a LLM uses more resources but can provide better results, especially for languages other than English.
+<p>Alternatively, you can use a <a href="https://github.com/BerriAI/litellm">Large Language Model (LLM)</a>, multiple models are supported. Using an LLM uses more resources but can provide better results, especially for languages other than English.
 It can automatically translate the ingredient names to the household language for better item detection.</p>
 <h3 id="openai">OpenAI</h3>
-<p>To use OpenAi you need to set the following environment variables:</p>
+<p>To use OpenAI you need to set the following environment variables:</p>
 <ul>
 <li><code>LLM_MODEL</code>: The model name (e.g. <code>gpt-3.5-turbo</code>)</li>
 <li><code>OPENAI_API_KEY</code>: Your OpenAI API key</li>
@@ -877,6 +895,13 @@ To use Ollama you need to set the following environment variables:</p>
 <ul>
 <li><code>LLM_MODEL</code>: The model name prefixed with <code>ollama</code> (e.g. <code>ollama/llama3.1</code>)</li>
 <li><code>LLM_API_URL</code>: The URL of the Ollama server (e.g. <code>http://localhost:11434</code>)</li>
+</ul>
+<h3 id="openrouter">OpenRouter</h3>
+<p>To use OpenRouter you need to set the following environment variables:</p>
+<ul>
+<li><code>LLM_MODEL</code>: The model name prefixed with <code>openrouter</code> (e.g. <code>openrouter/mistralai/mistral-large</code>)</li>
+<li><code>LLM_API_URL</code>: <code>https://openrouter.ai/api/v1</code></li>
+<li><code>OPENROUTER_API_KEY</code>: Your OpenRouter API key</li>
 </ul>
 
 

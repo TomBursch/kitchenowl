@@ -57,10 +57,6 @@ class AuthCubit extends Cubit<AuthState> {
         await _caseDisconnected();
         break;
       case Connection.connected:
-        if (state is AuthenticatedOffline) {
-          // Keep offline state until successfully authenticated
-          return;
-        }
         if (await ApiService.getInstance().isOnboarding()) {
           emit(const Onboarding());
         } else {

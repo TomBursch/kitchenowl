@@ -184,7 +184,7 @@ class _ChartLineCurrentMonthState extends State<ChartLineCurrentMonth> {
     final showText = value % 10 == 0;
 
     return SideTitleWidget(
-      axisSide: meta.axisSide,
+      meta: meta,
       child: Text(
         showText
             ? NumberFormat.simpleCurrency(decimalDigits: 0).format(value)
@@ -206,7 +206,7 @@ class _ChartLineCurrentMonthState extends State<ChartLineCurrentMonth> {
         0;
 
     return SideTitleWidget(
-      axisSide: meta.axisSide,
+      meta: meta,
       child: Text(
         showText
             ? DateFormat.d().format(firstDay.copyWith(day: value.ceil()))

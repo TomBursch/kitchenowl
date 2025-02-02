@@ -104,7 +104,7 @@ class ChartBarMemberDistribution extends StatelessWidget {
     final showText = value % 10 == 0;
 
     return SideTitleWidget(
-      axisSide: meta.axisSide,
+      meta: meta,
       child: RotatedBox(
         quarterTurns: -1,
         child: Text(

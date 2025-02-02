@@ -49,6 +49,8 @@ Environment variables for `tombursch/kitchenowl` and `tombursch/kitchenowl-backe
 | `GOOGLE_CLIENT_ID`                |                            |                                                                                                                                                       |
 | `GOOGLE_CLIENT_SECRET`            |                            |                                                                                                                                                       |
 | `LLM_MODEL`                       |                            | Set a custom ingredient detection strategy for scraped recipes from the web. More at [Ingredient Parsing](./ingredient_parsing.md)                    |
+| `LLM_API_URL`                     |                            |                                                                                                                                                       |
+| `OPENAI_API_KEY`/`OPENROUTER_API_KEY`/etc.|                    | Depends on which provider you choose. See [LiteLLM docs](https://docs.litellm.ai/docs/providers)                                                      |
 | `BASE_HREF`                       |                            | Sets the subdirectory KitchenOwl is hosted at. Must begin and end with a slash `/`. Only applicable to `tombursch/kitchenowl`                         |
 
 Additionally, to setting these environment variables you can also override the start command to scale the backend up.

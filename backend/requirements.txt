@@ -147,7 +147,6 @@ tokenizers==0.21.0
 toml==0.10.2
 tomli==2.2.1
 tqdm==4.67.1
-typed_ast==1.5.5
 types-beautifulsoup4==4.12.0.20241020
 types-html5lib==1.1.11.20241018
 types-requests==2.32.0.20241016

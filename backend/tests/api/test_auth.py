@@ -1,8 +1,3 @@
-import pytest
-from datetime import datetime, timezone
-from app.models import Token
-
-
 import jwt
 
 def get_jti(token):

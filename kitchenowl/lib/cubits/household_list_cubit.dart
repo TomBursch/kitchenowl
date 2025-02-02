@@ -8,16 +8,22 @@ import 'package:kitchenowl/services/transactions/household.dart';
 
 class HouseholdListCubit extends Cubit<HouseholdListState> {
   HouseholdListCubit() : super(const LoadingHouseholdListState([])) {
+    refresh(true);
     refresh();
   }
 
-  Future<void> refresh() async {
-    Future<List<Household>?> households = TransactionHandler.getInstance()
-        .runTransaction(TransactionHouseholdGetAll());
+  Future<void> refresh([bool forceOffline = false]) async {
+    Future<List<Household>?> households =
+        TransactionHandler.getInstance().runTransaction(
+      TransactionHouseholdGetAll(),
+      forceOffline: forceOffline,
+    );
 
-    emit(HouseholdListState(
-      await households ?? [],
-    ));
+    if (!isClosed) {
+      emit(HouseholdListState(
+        await households ?? [],
+      ));
+    }
   }
 
   Future<void> leaveHousehold(Household household, Member member) async {

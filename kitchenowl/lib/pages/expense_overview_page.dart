@@ -166,11 +166,16 @@ class _ExpenseOverviewPageState extends State<ExpenseOverviewPage> {
                           Text(
                             " ${NumberFormat.simpleCurrency().format(
                               totalForSelectedMonth,
-                            )} ⌀ ${NumberFormat.simpleCurrency().format(
-                              state.getAverageForLastMonths(6),
                             )}",
                             style: Theme.of(context).textTheme.titleMedium,
                           ),
+                          if (state.getAverageForLastMonths(6).isFinite)
+                            Text(
+                              " ⌀ ${NumberFormat.simpleCurrency().format(
+                                state.getAverageForLastMonths(6),
+                              )}",
+                              style: Theme.of(context).textTheme.titleMedium,
+                            ),
                         ],
                       ),
                       if (state.monthOverview[state.selectedMonthIndex] != null)

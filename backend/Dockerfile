@@ -1,13 +1,13 @@
 # ------------
 # BUILDER
 # ------------
-FROM python:3.12-slim as builder
+FROM python:3.12-slim AS builder
 
 RUN apt-get update \
     && apt-get install --yes --no-install-recommends \
         gcc g++ libffi-dev libpcre3-dev build-essential cargo \
         libxml2-dev libxslt-dev cmake gfortran libopenblas-dev liblapack-dev pkg-config ninja-build \
-         autoconf automake zlib1g-dev libjpeg62-turbo-dev libssl-dev libsqlite3-dev
+         autoconf automake zlib1g-dev libjpeg62-turbo-dev libssl-dev libsqlite3-dev libicu-dev
 
 # Create virtual enviroment
 RUN python -m venv /opt/venv && /opt/venv/bin/pip install --no-cache-dir -U pip setuptools wheel
@@ -21,7 +21,7 @@ RUN python -c "import nltk; nltk.download('averaged_perceptron_tagger_eng', down
 # ------------
 # RUNNER
 # ------------
-FROM python:3.12-slim as runner
+FROM python:3.12-slim AS runner
 
 RUN apt-get update \
     && apt-get install --yes --no-install-recommends \

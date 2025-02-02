@@ -62,11 +62,25 @@ class _RecipeListPageState extends State<RecipeListPage> {
             child: BlocBuilder<RecipeListCubit, RecipeListState>(
               bloc: cubit,
               builder: (context, state) {
-                Widget header;
+                Widget header = Padding(
+                  padding: const EdgeInsets.only(right: 16),
+                  child: TrailingIconTextButton(
+                    onPressed: cubit.toggleView,
+                    text: state.listView
+                        ? AppLocalizations.of(context)!.sortingAlphabetical
+                        : AppLocalizations.of(context)!.grid,
+                    icon: Icon(state.listView
+                        ? Icons.view_agenda_rounded
+                        : Icons.grid_view_rounded),
+                  ),
+                );
                 if (state is! ListRecipeListState ||
                     state.tags.isEmpty ||
                     state is SearchRecipeListState) {
-                  header = const SizedBox();
+                  header = Align(
+                    alignment: Alignment.topRight,
+                    child: header,
+                  );
                 } else {
                   header = Align(
                     alignment: Alignment.centerLeft,
@@ -99,19 +113,7 @@ class _RecipeListPageState extends State<RecipeListPage> {
                             ),
                           );
                         }).toList()),
-                        right: Padding(
-                          padding: const EdgeInsets.only(right: 16),
-                          child: TrailingIconTextButton(
-                            onPressed: cubit.toggleView,
-                            text: state.listView
-                                ? AppLocalizations.of(context)!
-                                    .sortingAlphabetical
-                                : AppLocalizations.of(context)!.grid,
-                            icon: Icon(state.listView
-                                ? Icons.view_agenda_rounded
-                                : Icons.grid_view_rounded),
-                          ),
-                        ),
+                        right: header,
                       ),
                     ),
                   );

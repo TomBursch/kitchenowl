@@ -193,6 +193,7 @@ class ExpenseOverviewLoaded extends ExpenseOverviewState {
           .length;
 
   bool trendUp(double total, double average) {
+    if (!average.isFinite) return true;
     if (selectedMonthIndex == 0) {
       return total > DateTime.now().day * average / 30;
     } else {

@@ -1013,12 +1013,17 @@ Additionally, the releases are tagged, so you can always choose a specific versi
 <tr>
 <td><code>SMTP_HOST</code></td>
 <td></td>
-<td>You can connect to an SMTP server for sending password resets and verifying user emails. This not required.</td>
+<td>You can connect to an SMTP server for sending password resets and verifying user emails. This is not required.</td>
 </tr>
 <tr>
 <td><code>SMTP_PORT</code></td>
 <td><code>465</code></td>
 <td></td>
+</tr>
+<tr>
+<td><code>SMTP_USE_TLS</code></td>
+<td><code>false</code></td>
+<td>Automatically changes to <code>true</code> if <code>SMTP_PORT</code> is <code>587</code></td>
 </tr>
 <tr>
 <td><code>SMTP_USER</code></td>

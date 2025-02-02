@@ -151,7 +151,7 @@ class _ChartBarMonthsState extends State<ChartBarMonths> {
     final showText = value % 10 == 0;
 
     return SideTitleWidget(
-      axisSide: meta.axisSide,
+      meta: meta,
       child: Text(
         showText
             ? NumberFormat.simpleCurrency(decimalDigits: 0).format(value)
@@ -164,7 +164,7 @@ class _ChartBarMonthsState extends State<ChartBarMonths> {
 
   Widget bottomTitles(double value, TitleMeta meta) {
     return SideTitleWidget(
-      axisSide: meta.axisSide,
+      meta: meta,
       child: Text(_monthOffsetToString(value.toInt())),
     );
   }

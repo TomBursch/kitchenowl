@@ -8,7 +8,6 @@ import 'package:kitchenowl/helpers/named_bytearray.dart';
 import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/models/token.dart';
 import 'package:socket_io_client/socket_io_client.dart';
-import 'package:tuple/tuple.dart';
 
 // Export extensions
 export 'user.dart';
@@ -173,21 +172,21 @@ class ApiService {
     Connection status = Connection.disconnected;
     if (baseUrl.isNotEmpty) {
       final healthy = await getInstance().healthy();
-      _serverInfoNotifier.value = healthy.item2;
-      if (healthy.item1) {
-        if (healthy.item2 != null &&
-            healthy.item2!['min_frontend_version'] <=
+      _serverInfoNotifier.value = healthy.body;
+      if (healthy.success) {
+        if (healthy.body != null &&
+            healthy.body!['min_frontend_version'] <=
                 (int.tryParse((await Config.packageInfo)?.buildNumber ?? '0') ??
                     0) &&
-            (healthy.item2!['version'] ?? 0) >= Config.MIN_BACKEND_VERSION) {
+            (healthy.body!['version'] ?? 0) >= Config.MIN_BACKEND_VERSION) {
           status = switch (await getInstance().refreshAuth()) {
             null => Connection.disconnected,
             true => Connection.authenticated,
             false => Connection.connected,
           };
         } else {
-          status = healthy.item2 == null ||
-                  (healthy.item2!['version'] ?? 0) < Config.MIN_BACKEND_VERSION
+          status = healthy.body == null ||
+                  (healthy.body!['version'] ?? 0) < Config.MIN_BACKEND_VERSION
               ? Connection.unsupportedBackend
               : Connection.unsupportedFrontend;
         }
@@ -311,7 +310,7 @@ class ApiService {
     _connectionNotifier.value = newState;
   }
 
-  Future<Tuple2<bool, Map<String, dynamic>?>> healthy() async {
+  Future<({bool success, Map<String, dynamic>? body})> healthy() async {
     try {
       final res = await get(
         '/health/8M4F88S8ooi4sMbLBfkkV7ctWwgibW6V',
@@ -319,9 +318,9 @@ class ApiService {
         timeout: _TIMEOUT_HEALTH,
       );
       if (res.statusCode == 200) {
-        return Tuple2(
-          jsonDecode(res.body)['msg'] == 'OK',
-          jsonDecode(res.body),
+        return (
+          success: jsonDecode(res.body)['msg'] == 'OK',
+          body: jsonDecode(res.body) as Map<String, dynamic>?,
         );
       } else {
         debugPrint("Health check: Response code ${res.statusCode}");
@@ -330,7 +329,7 @@ class ApiService {
       debugPrint("Health check: ${ex.toString()}");
     }
 
-    return const Tuple2(false, null);
+    return const (success: false, body: null);
   }
 
   Future<bool?> refreshAuth() async {

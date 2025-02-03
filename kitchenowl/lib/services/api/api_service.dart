@@ -180,9 +180,11 @@ class ApiService {
                 (int.tryParse((await Config.packageInfo)?.buildNumber ?? '0') ??
                     0) &&
             (healthy.item2!['version'] ?? 0) >= Config.MIN_BACKEND_VERSION) {
-          await getInstance().refreshAuth()
-              ? status = Connection.authenticated
-              : status = Connection.connected;
+          status = switch (await getInstance().refreshAuth()) {
+            null => Connection.disconnected,
+            true => Connection.authenticated,
+            false => Connection.connected,
+          };
         } else {
           status = healthy.item2 == null ||
                   (healthy.item2!['version'] ?? 0) < Config.MIN_BACKEND_VERSION
@@ -331,7 +333,7 @@ class ApiService {
     return const Tuple2(false, null);
   }
 
-  Future<bool> refreshAuth() async {
+  Future<bool?> refreshAuth() async {
     if (_handleTokenBeforeReauth != null) {
       _refreshToken = await _handleTokenBeforeReauth!(_refreshToken);
     }
@@ -353,13 +355,13 @@ class ApiService {
         if (_handleTokenRotation != null) {
           _handleTokenRotation!(_refreshToken!);
         }
-        _setConnectionState(Connection.authenticated);
 
         return true;
+      } else if (res.statusCode == 401 || res.statusCode == 403) {
+        return false;
       }
     } catch (_) {}
-
-    return false;
+    return null;
   }
 
   Future<String?> login(String username, String password) async {

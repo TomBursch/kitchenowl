@@ -19,6 +19,11 @@ import 'package:responsive_builder/responsive_builder.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 import 'package:tuple/tuple.dart';
 
+int db_weekday(int shift) {
+  // subtract 1 because DateTime.weekday goes from 1 to 7. Kitchenowl-db from 0 to 6
+  return DateTime.now().add(Duration(days: shift)).weekday - 1;
+}
+
 class RecipePage extends StatefulWidget {
   final Household? household;
   final Recipe recipe;
@@ -339,15 +344,6 @@ class _RecipePageState extends State<RecipePage> {
                             LoadingElevatedButton(
                               child: const Icon(Icons.calendar_month_rounded),
                               onPressed: () async {
-                                final weekdayMapping = {
-                                  0: DateTime.monday,
-                                  1: DateTime.tuesday,
-                                  2: DateTime.wednesday,
-                                  3: DateTime.thursday,
-                                  4: DateTime.friday,
-                                  5: DateTime.saturday,
-                                  6: DateTime.sunday,
-                                };
                                 int? day = await showDialog<int>(
                                   context: context,
                                   builder: (context) => SelectDialog(
@@ -355,17 +351,13 @@ class _RecipePageState extends State<RecipePage> {
                                         .addRecipeToPlannerShort,
                                     cancelText:
                                         AppLocalizations.of(context)!.cancel,
-                                    options: weekdayMapping.entries
-                                        .map(
-                                          (e) => SelectDialogOption(
-                                            e.key,
-                                            DateFormat.E()
-                                                    .dateSymbols
-                                                    .STANDALONEWEEKDAYS[
-                                                e.value % 7],
-                                          ),
-                                        )
-                                        .toList(),
+                                    options: List.generate(7, (index) {
+                                      return SelectDialogOption(
+                                          db_weekday(index),
+                                          DateFormat.EEEE().format(
+                                              DateTime.now()
+                                                  .add(Duration(days: index))));
+                                    }),
                                   ),
                                 );
                                 if (day != null) {

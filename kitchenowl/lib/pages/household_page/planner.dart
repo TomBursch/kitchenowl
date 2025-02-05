@@ -22,6 +22,26 @@ int db_weekday(int shift) {
   return DateTime.now().add(Duration(days: shift)).weekday - 1;
 }
 
+String formatDateAsWeekday(DateTime date, BuildContext context,
+    {String default_format = 'EEEE'}) {
+  DateTime today = DateTime.now();
+  DateTime tomorrow = today.add(Duration(days: 1));
+
+  // Check if the date is today or tomorrow
+  if (date.year == today.year &&
+      date.month == today.month &&
+      date.day == today.day) {
+    return AppLocalizations.of(context)!.today;
+  } else if (date.year == tomorrow.year &&
+      date.month == tomorrow.month &&
+      date.day == tomorrow.day) {
+    return AppLocalizations.of(context)!.tomorrow;
+  } else {
+    // Return the weekday name
+    return DateFormat(default_format).format(date);
+  }
+}
+
 class PlannerPage extends StatefulWidget {
   const PlannerPage({super.key});
 
@@ -191,7 +211,7 @@ class _PlannerPageState extends State<PlannerPage> {
                                           padding:
                                               const EdgeInsets.only(top: 5),
                                           child: Text(
-                                            '${DateFormat.E().format(DateTime.now().add(Duration(days: i)))}',
+                                            '${formatDateAsWeekday(DateTime.now().add(Duration(days: i)), context, default_format: 'E')}',
                                             style: Theme.of(context)
                                                 .textTheme
                                                 .bodyLarge,
@@ -399,7 +419,9 @@ class _PlannerPageState extends State<PlannerPage> {
         cancelText: AppLocalizations.of(context)!.cancel,
         options: List.generate(7, (index) {
           return SelectDialogOption(
-              db_weekday(index), DateFormat.EEEE().format(DateTime.now().add(Duration(days: index))));
+              db_weekday(index),
+              formatDateAsWeekday(
+                  DateTime.now().add(Duration(days: index)), context));
         }),
       ),
     );

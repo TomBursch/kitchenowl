@@ -660,5 +660,7 @@
   "yearly": "Yearly",
   "yes": "Yes",
   "yields": "Yields",
-  "you": "you"
+  "you": "you",
+  "today": "Today",
+  "tomorrow": "Tomorrow"
 }

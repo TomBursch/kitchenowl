@@ -658,5 +658,7 @@
   "yearly": "Jährlich",
   "yes": "Ja",
   "yields": "Portionen",
-  "you": "du"
+  "you": "du",
+  "today": "Heute",
+  "tomorrow": "Morgen"
 }

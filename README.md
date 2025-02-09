@@ -46,6 +46,9 @@
   <a href='https://apps.apple.com/app/kitchenowl/id1557453670'>
     <img alt='Get it on the AppStore' src='docs/docs/img/badges/appstore.png' height="50" />
   </a>
+  <a href='https://my.home-assistant.io/redirect/hacs_repository/?owner=TomBursch&repository=kitchenowl-ha&category=integration'>
+    <img alt='Get it on the Home Assistant Community Store' src='docs/docs/img/badges/hacs_repository.svg' height="50" />
+  </a>
 </div>
 
 <h3 align="center">
@@ -116,8 +119,9 @@ KitchenOwl is moving fast, to stay updated consider starring and watching the re
 - [Docs](https://docs.kitchenowl.org)
 - [KitchenOwl Backend](https://github.com/TomBursch/kitchenowl-backend) Repository
 - [KitchenOwl Website](https://github.com/TomBursch/kitchenowl-website) Repository
+- [KitchenOwl Python Client](https://github.com/TomBursch/kitchenowl-python) Repository
+- [KitchenOwl Home Assistant Integration](https://github.com/TomBursch/kitchenowl-ha) Repository
 - [DockerHub](https://hub.docker.com/r/tombursch/kitchenowl)
-- Owl icon taken from [Freepik](https://www.flaticon.com/authors/freepik)
 - [Recipe scrapers](https://github.com/hhursev/recipe-scrapers) used for scraping recipes from the web
 - [Weblate](https://weblate.org/) is helping with continuous localization as part of their ongoing support for open-source software projects.
 

@@ -9,6 +9,7 @@ import 'package:kitchenowl/models/expense.dart';
 import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/pages/expense_add_update_page.dart';
 import 'package:kitchenowl/kitchenowl.dart';
+import 'package:sliver_tools/sliver_tools.dart';
 
 class ExpensePage extends StatefulWidget {
   final Household household;
@@ -51,46 +52,47 @@ class _ExpensePageState extends State<ExpensePage> {
         builder: (conext, state) => Scaffold(
           body: Align(
             alignment: Alignment.topCenter,
-            child: ConstrainedBox(
-              constraints: const BoxConstraints.expand(width: 1600),
-              child: CustomScrollView(
-                slivers: [
-                  SliverImageAppBar(
-                    title: state.expense.name,
-                    imageUrl: state.expense.image,
-                    imageHash: state.expense.imageHash,
-                    popValue: () => cubit.state.updateState,
-                    actions: (isCollapsed) => [
-                      if (!App.isOffline)
-                        LoadingIconButton(
-                          tooltip: AppLocalizations.of(context)!.expenseEdit,
-                          variant: state.expense.image == null ||
-                                  state.expense.image!.isEmpty ||
-                                  isCollapsed
-                              ? LoadingIconButtonVariant.standard
-                              : LoadingIconButtonVariant.filledTonal,
-                          onPressed: () async {
-                            final res = await Navigator.of(context)
-                                .push<UpdateEnum>(MaterialPageRoute(
-                              builder: (context) => AddUpdateExpensePage(
-                                household: state.household,
-                                expense: state.expense,
-                              ),
-                            ));
-                            if (res == UpdateEnum.updated) {
-                              cubit.setUpdateState(UpdateEnum.updated);
-                              await cubit.refresh();
-                            }
-                            if (res == UpdateEnum.deleted) {
-                              if (!mounted) return;
-                              Navigator.of(context).pop(UpdateEnum.deleted);
-                            }
-                          },
-                          icon: const Icon(Icons.edit),
-                        ),
-                    ],
-                  ),
-                  SliverList(
+            child: CustomScrollView(
+              primary: true,
+              slivers: [
+                SliverImageAppBar(
+                  title: state.expense.name,
+                  imageUrl: state.expense.image,
+                  imageHash: state.expense.imageHash,
+                  popValue: () => cubit.state.updateState,
+                  actions: (isCollapsed) => [
+                    if (!App.isOffline)
+                      LoadingIconButton(
+                        tooltip: AppLocalizations.of(context)!.expenseEdit,
+                        variant: state.expense.image == null ||
+                                state.expense.image!.isEmpty ||
+                                isCollapsed
+                            ? LoadingIconButtonVariant.standard
+                            : LoadingIconButtonVariant.filledTonal,
+                        onPressed: () async {
+                          final res = await Navigator.of(context)
+                              .push<UpdateEnum>(MaterialPageRoute(
+                            builder: (context) => AddUpdateExpensePage(
+                              household: state.household,
+                              expense: state.expense,
+                            ),
+                          ));
+                          if (res == UpdateEnum.updated) {
+                            cubit.setUpdateState(UpdateEnum.updated);
+                            await cubit.refresh();
+                          }
+                          if (res == UpdateEnum.deleted) {
+                            if (!mounted) return;
+                            Navigator.of(context).pop(UpdateEnum.deleted);
+                          }
+                        },
+                        icon: const Icon(Icons.edit),
+                      ),
+                  ],
+                ),
+                SliverCrossAxisConstrained(
+                  maxCrossAxisExtent: 1600,
+                  child: SliverList(
                     delegate: SliverChildListDelegate(
                       [
                         const SizedBox(height: 16),
@@ -160,7 +162,10 @@ class _ExpensePageState extends State<ExpensePage> {
                       ],
                     ),
                   ),
-                  SliverList(
+                ),
+                SliverCrossAxisConstrained(
+                  maxCrossAxisExtent: 1600,
+                  child: SliverList(
                     delegate: SliverChildBuilderDelegate(
                       (context, i) => ListTile(
                         title: Text(
@@ -186,12 +191,11 @@ class _ExpensePageState extends State<ExpensePage> {
                       childCount: state.expense.paidFor.length,
                     ),
                   ),
-                  SliverToBoxAdapter(
-                    child:
-                        SizedBox(height: MediaQuery.paddingOf(context).bottom),
-                  ),
-                ],
-              ),
+                ),
+                SliverToBoxAdapter(
+                  child: SizedBox(height: MediaQuery.paddingOf(context).bottom),
+                ),
+              ],
             ),
           ),
         ),

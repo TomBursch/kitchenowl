@@ -102,18 +102,20 @@ def scrapePublic(url: str, html: str, household: Household) -> dict | None:
 def scrapeLocal(recipe_id: int, household: Household):
     recipe = Recipe.find_by_id(recipe_id)
     recipe.checkAuthorized()
-
-    recipe.source = "kitchenowl:///recipe/" + str(recipe.id)
-    recipe.public = False
+    
     items = {}
-
     for ingredient in recipe.items:
         items[ingredient.item.name + " " + ingredient.description] = (
             ingredient.obj_to_item_dict()
         )
 
     return {
-        "recipe": recipe.obj_to_dict(),
+        "recipe": recipe.obj_to_dict()
+        | {
+            "id": None,
+            "public": False,
+            "source": "kitchenowl:///recipe/" + str(recipe.id),
+        },
         "items": items,
     }
 
@@ -128,7 +130,8 @@ def scrapeKitchenOwl(original_url: str, api_url: str, recipe_id: int) -> dict | 
     recipe = res.json()
     recipe["source"] = original_url
     recipe["public"] = False
-    recipe["photo"] = api_url + "/upload/" + recipe["photo"]
+    if recipe["photo"] is not None:
+        recipe["photo"] = api_url + "/upload/" + recipe["photo"]
     items = {}
 
     for ingredient in recipe["items"]:

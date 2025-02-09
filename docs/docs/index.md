@@ -25,6 +25,9 @@ Please take a quick look at [Tips & Tricks](./Tips-&-Tricks/index.md) to get the
 <a href='https://apps.apple.com/app/kitchenowl/id1557453670'>
     <img alt='Get it on the AppStore' src='./img/badges/appstore.png' style="height:50px" />
 </a>
+<a href='https://my.home-assistant.io/redirect/hacs_repository/?owner=TomBursch&repository=kitchenowl-ha&category=integration'>
+    <img alt='Get it on the Home Assistant Community Store' src='./img/badges/hacs_repository.svg' height="50" />
+</a>
 
 ## Features
 

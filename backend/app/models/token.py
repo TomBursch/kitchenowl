@@ -64,7 +64,7 @@ class Token(db.Model, DbModelMixin):
         # Delete expired invalidated refresh tokens
         db.session.query(cls).filter(
             cls.created_at <= filter_before,
-            cls.type == "invalidated_refresh"
+            cls.type == "revoked_refresh"
         ).delete()
         
         db.session.commit()
@@ -80,7 +80,7 @@ class Token(db.Model, DbModelMixin):
     # Delete oldest refresh token -> log out device
     # Used e.g. when a refresh token is used twice
     def delete_token_familiy(self, commit=True):
-        if self.type not in ["refresh", "invalidated_refresh"]:
+        if self.type not in ["refresh", "invalidated_refresh", "revoked_refresh"]:
             return
 
         token = self
@@ -162,7 +162,7 @@ class Token(db.Model, DbModelMixin):
                     Token.query.filter(
                         Token.refresh_token_id == newer_token.id
                     ).delete()
-                    newer_token.type = "invalidated_refresh"
+                    newer_token.type = "revoked_refresh"
                     db.session.add(newer_token)
 
         refreshToken = create_refresh_token(identity=user)

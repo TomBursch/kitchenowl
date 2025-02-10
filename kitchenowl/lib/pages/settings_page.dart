@@ -529,7 +529,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 onTap: () => showLicensePage(
                   context: context,
                   applicationVersion: Config.packageInfoSync?.version,
-                  applicationLegalese: '\u{a9} 2024 KitchenOwl',
+                  applicationLegalese: '\u{a9} 2025 KitchenOwl',
                 ),
               ),
               Center(
@@ -561,7 +561,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 ),
               ),
               Text(
-                '\u{a9} 2024 KitchenOwl',
+                '\u{a9} 2025 KitchenOwl',
                 style: Theme.of(context).textTheme.labelSmall?.copyWith(
                       color: Theme.of(context)
                           .textTheme

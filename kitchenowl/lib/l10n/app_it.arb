@@ -44,6 +44,8 @@
   },
   "@back": {},
   "@balances": {},
+  "@budget": {},
+  "@budgetSet": {},
   "@camera": {},
   "@cancel": {},
   "@categories": {},
@@ -62,6 +64,7 @@
     }
   },
   "@changeIcon": {},
+  "@clear": {},
   "@colorSelect": {},
   "@confirm": {},
   "@cookingTime": {},
@@ -191,6 +194,7 @@
     }
   },
   "@longPressToReorder": {},
+  "@longerThanExpected": {},
   "@markAsPaid": {},
   "@mealPlanner": {},
   "@member": {},
@@ -278,6 +282,7 @@
   "@recipesSuggested": {},
   "@redo": {},
   "@refresh": {},
+  "@rememberLastShoppingList": {},
   "@remove": {},
   "@rename": {},
   "@reportIssue": {},
@@ -292,6 +297,13 @@
   "@setupTitle": {},
   "@share": {},
   "@shoppingList": {},
+  "@shoppingListContainsEntries": {
+    "placeholders": {
+      "entriesCount": {
+        "type": "num"
+      }
+    }
+  },
   "@shoppingListDelete": {},
   "@shoppingListDeleteConfirmation": {
     "placeholders": {
@@ -307,6 +319,7 @@
     }
   },
   "@signup": {},
+  "@skip": {},
   "@smaller": {},
   "@sortingAlgorithmic": {},
   "@sortingAlphabetical": {},
@@ -328,8 +341,18 @@
   "@themeLight": {},
   "@themeMode": {},
   "@themeSystem": {},
+  "@today": {},
+  "@tomorrow": {},
   "@total": {},
   "@totalTime": {},
+  "@tutorialItemDescription1": {},
+  "@tutorialItemDescription2": {},
+  "@tutorialRecipeDescription": {},
+  "@tutorialRecipeMore": {
+    "placeholders": {
+      "url": {}
+    }
+  },
   "@uncategorized": {},
   "@underConstruction": {},
   "@undo": {},
@@ -392,6 +415,8 @@
   "appTitle": "KitchenOwl",
   "back": "Indietro",
   "balances": "Bilanci",
+  "budget": "Budget",
+  "budgetSet": "Stabilisci il budget",
   "camera": "Fotocamera",
   "cancel": "Annulla",
   "categories": "Categorie",
@@ -402,6 +427,7 @@
   "categoryEdit": "Modifica la categoria",
   "categoryExpenseDeleteConfirmation": "Sei sicuro/a di voler eliminare {category}? Questo rimuoverà la categoria da tutte le spese.",
   "changeIcon": "Cambia l'icona",
+  "clear": "Cancella",
   "colorSelect": "Seleziona un colore",
   "confirm": "Conferma",
   "cookingTime": "Tempo di cottura",
@@ -492,6 +518,7 @@
   "logout": "Esci",
   "logoutName": "Disconnetti {name}",
   "longPressToReorder": "Premi a lungo per riordinare",
+  "longerThanExpected": "Il processo sta richiedendo più tempo del previsto",
   "markAsPaid": "Contrassegna come pagato",
   "mealPlanner": "Pianificazione dei pasti",
   "member": "Membro",
@@ -529,7 +556,7 @@
   "passwordSave": "Aggiorna la password",
   "personal": "Personale",
   "planner": "Pianificatore",
-  "plannerEmpty": "Non ci sono pasti programmati, iniziate selezionando una delle tue ricette!",
+  "plannerEmpty": "Non ci sono pasti programmati, inizia selezionando una delle tue ricette!",
   "plannerTitle": "I tuoi pasti pianificati",
   "preparationTime": "Tempo di preparazione",
   "privacyPolicy": "Informativa sulla riservatezza",
@@ -558,6 +585,7 @@
   "recipesSuggested": "Suggerite",
   "redo": "Rifare",
   "refresh": "Aggiorna",
+  "rememberLastShoppingList": "Ricorda l'ultima lista della spesa utilizzata",
   "remove": "Rimuovi",
   "rename": "Rinomina",
   "reportIssue": "Segnala un problema",
@@ -572,6 +600,7 @@
   "setupTitle": "Ciao a tutti! Sei pronto/a a fare acquisti?",
   "share": "Condividi",
   "shoppingList": "Lista della spesa",
+  "shoppingListContainsEntries": "{entriesCount, plural, =0{The shopping list contains no items.} =1{The shopping list contains 1 item.} other{The shopping list contains {entriesCount} items.}}",
   "shoppingListDelete": "Elimina la lista della spesa",
   "shoppingListDeleteConfirmation": "Sei sicuro/a di voler eliminare {shoppingList}?",
   "shoppingListEdit": "Modifica la lista della spesa",
@@ -579,13 +608,14 @@
   "shoppingLists": "Liste della spesa",
   "signInWith": "Accedi con {provider}",
   "signup": "Registrati",
+  "skip": "Salta",
   "smaller": "Più piccolo",
   "sortingAlgorithmic": "Algoritmico",
   "sortingAlphabetical": "In ordine alfabetico",
   "start": "Inizia",
   "supportDevelopment": "Supporta lo sviluppo",
   "swipeToDelete": "Scorri per eliminare",
-  "swipeToDeleteAndLongPressToReorder": "Passa il dito per eliminare e premi a lungo per riordinare",
+  "swipeToDeleteAndLongPressToReorder": "Scorri per eliminare e premi a lungo per riordinare",
   "swipeToRemove": "Scorri per rimuovere",
   "tagDelete": "Elimina l'etichetta",
   "tagDeleteConfirmation": "Sei sicuro/a di voler eliminare {tag}? Questo rimuoverà l'etichetta da tutte le ricette che lo contengono.",
@@ -596,8 +626,14 @@
   "themeLight": "Chiaro",
   "themeMode": "Tema",
   "themeSystem": "Sistema",
+  "today": "Oggi",
+  "tomorrow": "Domani",
   "total": "Totale",
   "totalTime": "Tempo totale",
+  "tutorialItemDescription1": "Quando si cercano articoli, è possibile aggiungere un importo all'inizio della ricerca, che verrà aggiunto come descrizione.",
+  "tutorialItemDescription2": "Oppure, se gli importi non sono sufficienti, utilizzare una virgola per separare il nome dell'articolo e la descrizione.",
+  "tutorialRecipeDescription": "All'interno delle ricette è possibile utilizzare il markdown. Le funzionalità di base sono i titoli specificati con i segni del cancelletto, gli elenchi numerati per i passaggi delle istruzioni e i riferimenti agli ingredienti con il segno della chiocciola seguito dal nome dell'ingrediente.",
+  "tutorialRecipeMore": "Per ulteriori informazioni, visitare la [documentazione]({url}).",
   "uncategorized": "Non categorizzato",
   "underConstruction": "In costruzione",
   "undo": "Annulla",
@@ -626,5 +662,5 @@
   "yearly": "Annuale",
   "yes": "Sì",
   "yields": "Porzioni",
-  "you": "tu"
+  "you": "Tu"
 }

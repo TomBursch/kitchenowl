@@ -5,6 +5,7 @@ from app import db
 from app.helpers import validate_args, authorize_household
 from app.models import Recipe, RecipeHistory, Planner
 from .schemas import AddPlannedRecipe, RemovePlannedRecipe
+from datetime import datetime
 
 plannerHousehold = Blueprint("planner", __name__)
 
@@ -42,6 +43,8 @@ def addPlannedRecipe(args, household_id):
     if not recipe:
         raise NotFoundRequest()
     day = args["day"] if "day" in args else -1
+    when = args["when"] if "when" in args else datetime.min
+    print(f"WHEN: {when}")
     planner = Planner.find_by_day(household_id, recipe_id=recipe.id, day=day)
     if not planner:
         if day >= 0:
@@ -54,6 +57,7 @@ def addPlannedRecipe(args, household_id):
         planner.recipe_id = recipe.id
         planner.household_id = household_id
         planner.day = day
+        planner.when = when
         if "yields" in args:
             planner.yields = args["yields"]
         planner.save()
@@ -71,9 +75,13 @@ def removePlannedRecipeById(args, household_id, id):
     recipe = Recipe.find_by_id(id)
     if not recipe:
         raise NotFoundRequest()
-
-    day = args["day"] if "day" in args else -1
-    planner = Planner.find_by_day(household_id, recipe_id=recipe.id, day=day)
+    if "when" in args:
+        planner = Planner.find_by_datetime(household_id, recipe_id=recipe.id, when=args["when"])
+    elif "day" in args:
+        # backwards compatibility
+        planner = Planner.find_by_day(household_id, recipe_id=recipe.id, day=args["day"])
+    else:
+        planner = Planner.find_by_datetime(household_id, recipe_id=recipe.id, when=datetime.min)
     if planner:
         planner.delete()
         RecipeHistory.create_dropped(recipe, household_id)

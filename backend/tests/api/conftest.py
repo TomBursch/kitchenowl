@@ -1,6 +1,7 @@
 import pytest
 from app import app, db
-
+from unittest.mock import patch
+from datetime import datetime
 
 @pytest.fixture
 def client():
@@ -70,6 +71,7 @@ def recipe_yields():
 def recipe_time():
     return 30
 
+FIX_DATETIME = datetime(2023, 10, 1, 23, 59, 59)
 
 @pytest.fixture
 def onboarded_client(client, admin_username, admin_name, admin_password):
@@ -196,8 +198,10 @@ def planned_recipe(user_client_with_household, household_id, recipe_with_items):
     """Fixture that creates a meal plan with the test recipe"""
     plan_data = {
         'recipe_id': recipe_with_items,
-        'day': 0  # Plan for today
+        'day': 0,  # Plan for today
+        "when": FIX_DATETIME.isoformat()
     }
+    print(f"plan_data_ {plan_data}")
     response = user_client_with_household.post(
         f'/api/household/{household_id}/planner/recipe',
         json=plan_data

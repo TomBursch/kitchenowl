@@ -44,7 +44,6 @@ def addPlannedRecipe(args, household_id):
         raise NotFoundRequest()
     day = args["day"] if "day" in args else -1
     when = args["when"] if "when" in args else datetime.min
-    print(f"WHEN: {when}")
     planner = Planner.find_by_day(household_id, recipe_id=recipe.id, day=day)
     if not planner:
         if day >= 0:

@@ -19,14 +19,20 @@ class File(db.Model, DbModelMixin, DbModelAuthorizeMixin):
 
     filename: Mapped[str] = db.Column(db.String(), primary_key=True)
     blur_hash: Mapped[str] = db.Column(db.String(length=40), nullable=True)
-    created_by: Mapped[int] = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=True)
+    created_by: Mapped[int] = db.Column(
+        db.Integer, db.ForeignKey("user.id"), nullable=True
+    )
 
-    created_by_user: Mapped["User"] = db.relationship("User", foreign_keys=[created_by], uselist=False)
+    created_by_user: Mapped["User"] = db.relationship(
+        "User", foreign_keys=[created_by], uselist=False
+    )
 
     household: Mapped["Household"] = db.relationship("Household", uselist=False)
     recipe: Mapped["Recipe"] = db.relationship("Recipe", uselist=False)
     expense: Mapped["Expense"] = db.relationship("Expense", uselist=False)
-    profile_picture: Mapped["User"] = db.relationship("User", foreign_keys=[User.photo], uselist=False)
+    profile_picture: Mapped["User"] = db.relationship(
+        "User", foreign_keys=[User.photo], uselist=False
+    )
 
     def delete(self):
         """
@@ -51,11 +57,17 @@ class File(db.Model, DbModelMixin, DbModelAuthorizeMixin):
             pass  # profile pictures are public
         elif self.recipe:
             if not self.recipe.public:
-                super().checkAuthorized(household_id=self.recipe.household_id, requires_admin=requires_admin)
+                super().checkAuthorized(
+                    household_id=self.recipe.household_id, requires_admin=requires_admin
+                )
         elif self.household:
-            super().checkAuthorized(household_id=self.household.id, requires_admin=requires_admin)
+            super().checkAuthorized(
+                household_id=self.household.id, requires_admin=requires_admin
+            )
         elif self.expense:
-            super().checkAuthorized(household_id=self.expense.household_id, requires_admin=requires_admin)
+            super().checkAuthorized(
+                household_id=self.expense.household_id, requires_admin=requires_admin
+            )
         else:
             raise ForbiddenRequest()
 

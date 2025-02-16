@@ -17,13 +17,27 @@ class User(db.Model, DbModelMixin):
 
     id: Mapped[int] = db.Column(db.Integer, primary_key=True)
     name: Mapped[str] = db.Column(db.String(128))
-    username: Mapped[str] = db.Column(db.String(256), unique=True, nullable=False, index=True,)
-    email: Mapped[str] = db.Column(db.String(256), unique=True, nullable=True, index=True,)
+    username: Mapped[str] = db.Column(
+        db.String(256),
+        unique=True,
+        nullable=False,
+        index=True,
+    )
+    email: Mapped[str] = db.Column(
+        db.String(256),
+        unique=True,
+        nullable=True,
+        index=True,
+    )
     password: Mapped[str] = db.Column(db.String(256), nullable=True)
-    photo: Mapped[str] = db.Column(db.String(), db.ForeignKey("file.filename", use_alter=True))
+    photo: Mapped[str] = db.Column(
+        db.String(), db.ForeignKey("file.filename", use_alter=True)
+    )
     admin: Mapped[bool] = db.Column(db.Boolean(), default=False)
     email_verified: Mapped[bool] = db.Column(db.Boolean(), default=False)
-    last_seen: Mapped[datetime] = db.Column(DateTime, default=lambda: datetime.now(timezone.utc), nullable=True)
+    last_seen: Mapped[datetime] = db.Column(
+        DateTime, default=lambda: datetime.now(timezone.utc), nullable=True
+    )
 
     tokens: Mapped[List["Token"]] = db.relationship(
         "Token", back_populates="user", cascade="all, delete-orphan"
@@ -135,9 +149,11 @@ class User(db.Model, DbModelMixin):
     ) -> Self:
         return cls(
             username=username.lower().replace(" ", ""),
-            password=bcrypt.generate_password_hash(password).decode("utf-8")
-            if password
-            else None,
+            password=(
+                bcrypt.generate_password_hash(password).decode("utf-8")
+                if password
+                else None
+            ),
             name=name.strip(),
             email=email.strip() if email else None,
             admin=admin,

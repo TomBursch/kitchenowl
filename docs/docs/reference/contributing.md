@@ -40,6 +40,7 @@ The `description` is a descriptive summary of the change the PR will make.
     - Create a python environment `python3 -m venv venv`
     - Activate your python environment `source venv/bin/activate` (environment can be deactivated with `deactivate`)
     - Install dependencies `pip3 install -r requirements.txt`
+    - Install the pre-commit hooks `pre-commit install`
     - Initialize/Upgrade the SQLite database with `flask db upgrade`
     - Run debug server with `python3 wsgi.py` (to make the server visible to any device add `--host=0.0.0.0` or the network IP address on which to provide the server)
     - The backend should be reachable at `localhost:5000`

@@ -5,9 +5,25 @@ from app import db
 from app.helpers import validate_args, authorize_household
 from app.models import Recipe, RecipeHistory, Planner
 from .schemas import AddPlannedRecipe, RemovePlannedRecipe
-from datetime import datetime
+from datetime import datetime, timedelta
+import warnings
+
 
 plannerHousehold = Blueprint("planner", __name__)
+
+
+def next_weekday(weekday_number: int) -> datetime:
+    warnings.warn("deprecated", DeprecationWarning)
+    # Get today's date
+    today = datetime.now()
+    
+    # Calculate how many days to add to get to the next specified weekday
+    days_ahead = (weekday_number - today.weekday() + 7) % 7
+    
+    # Calculate the next weekday date
+    next_date = today + timedelta(days=days_ahead)
+    
+    return next_date
 
 
 @plannerHousehold.route("/recipes", methods=["GET"])
@@ -42,12 +58,15 @@ def addPlannedRecipe(args, household_id):
     recipe = Recipe.find_by_id(args["recipe_id"])
     if not recipe:
         raise NotFoundRequest()
-    day = args["day"] if "day" in args else -1
     when = args["when"] if "when" in args else datetime.min
-    planner = Planner.find_by_day(household_id, recipe_id=recipe.id, day=day)
+    if "day" in args:
+        # if outdated "day" was used, transform it into next date with that weekday
+        when = next_weekday(args["day"])
+        print(f"WHEN: {when}")
+    planner = Planner.find_by_datetime(household_id=household_id, recipe_id=recipe.id, when=when)
     if not planner:
-        if day >= 0:
-            old = Planner.find_by_day(household_id, recipe_id=recipe.id, day=-1)
+        if when > datetime.min:
+            old = Planner.find_by_datetime(household_id, recipe_id=recipe.id, when=datetime.min)
             if old:
                 old.delete()
         elif len(recipe.plans) > 0:
@@ -55,7 +74,6 @@ def addPlannedRecipe(args, household_id):
         planner = Planner()
         planner.recipe_id = recipe.id
         planner.household_id = household_id
-        planner.day = day
         planner.when = when
         if "yields" in args:
             planner.yields = args["yields"]
@@ -74,13 +92,12 @@ def removePlannedRecipeById(args, household_id, id):
     recipe = Recipe.find_by_id(id)
     if not recipe:
         raise NotFoundRequest()
-    if "when" in args:
-        planner = Planner.find_by_datetime(household_id, recipe_id=recipe.id, when=args["when"])
-    elif "day" in args:
-        # backwards compatibility
-        planner = Planner.find_by_day(household_id, recipe_id=recipe.id, day=args["day"])
-    else:
-        planner = Planner.find_by_datetime(household_id, recipe_id=recipe.id, when=datetime.min)
+    
+    when = args["when"] if "when" in args else datetime.min
+    if "day" in args:
+        # if outdated "day" was used, transform it into next date with that weekday
+        when = next_weekday(args["day"])
+    planner = Planner.find_by_datetime(household_id, recipe_id=recipe.id, when=when)
     if planner:
         planner.delete()
         RecipeHistory.create_dropped(recipe, household_id)

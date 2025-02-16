@@ -198,10 +198,32 @@ def planned_recipe(user_client_with_household, household_id, recipe_with_items):
     """Fixture that creates a meal plan with the test recipe"""
     plan_data = {
         'recipe_id': recipe_with_items,
-        'day': 0,  # Plan for today
         "when": FIX_DATETIME.isoformat()
     }
-    print(f"plan_data_ {plan_data}")
+    response = user_client_with_household.post(
+        f'/api/household/{household_id}/planner/recipe',
+        json=plan_data
+    )
+    assert response.status_code == 200
+    
+    # Verify plan was created
+    response = user_client_with_household.get(
+        f'/api/household/{household_id}/planner'
+    )
+    assert response.status_code == 200
+    planned_meals = response.get_json()
+    assert len(planned_meals) > 0
+    assert any(meal['recipe']['id'] == recipe_with_items for meal in planned_meals)
+    
+    return recipe_with_items  # Return recipe_id for convenience
+
+@pytest.fixture
+def planned_recipe_day_field_backwards_compatibility(user_client_with_household, household_id, recipe_with_items):
+    """Fixture that creates a meal plan with the test recipe"""
+    plan_data = {
+        'recipe_id': recipe_with_items,
+        "day": 0
+    }
     response = user_client_with_household.post(
         f'/api/household/{household_id}/planner/recipe',
         json=plan_data

@@ -13,7 +13,6 @@ class Planner(db.Model, DbModelMixin, DbModelAuthorizeMixin):
     __tablename__ = "planner"
 
     recipe_id: Mapped[int] = db.Column(db.Integer, db.ForeignKey("recipe.id"), primary_key=True)
-    day: Mapped[int] = db.Column(db.Integer, primary_key=True)
     when: Mapped[datetime] =  db.Column(db.DateTime,  primary_key=True)
     yields: Mapped[int] = db.Column(db.Integer)
     household_id: Mapped[int] = db.Column(
@@ -36,17 +35,12 @@ class Planner(db.Model, DbModelMixin, DbModelAuthorizeMixin):
         IMPORTANT: requires household_id column
         """
         return (
-            cls.query.filter(cls.household_id == household_id).order_by(cls.day).all()
+            cls.query.filter(cls.household_id == household_id).order_by(cls.when).all()
         )
 
-    @classmethod
-    def find_by_day(cls, household_id: int, recipe_id: int, day: int) -> Self:
-        return cls.query.filter(
-            cls.household_id == household_id, cls.recipe_id == recipe_id, cls.day == day
-        ).first()
 
     @classmethod
-    def find_by_datetime(cls, household_id: int, recipe_id: int, when:datetime) -> Self:
+    def find_by_datetime(cls, household_id: int, recipe_id: int, when: datetime) -> Self:
         return cls.query.filter(
             cls.household_id == household_id, cls.recipe_id == recipe_id, cls.when == when
         ).first()

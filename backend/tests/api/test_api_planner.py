@@ -28,11 +28,12 @@ def test_meal_planning_when_field(user_client_with_household, household_id, plan
     expected = FIX_DATETIME
     assert actual == expected
 
-def test_meal_planning_remove_by_day(user_client_with_household, household_id, planned_recipe):
+
+def test_meal_planning_remove_by_day(user_client_with_household, household_id, planned_recipe_day_field_backwards_compatibility):
     """Test removing meals from plan"""
     # Remove from meal plan
     response = user_client_with_household.delete(
-        f'/api/household/{household_id}/planner/recipe/{planned_recipe}',
+        f'/api/household/{household_id}/planner/recipe/{planned_recipe_day_field_backwards_compatibility}',
         json={'day': 0}
     )
     assert response.status_code == 200
@@ -43,7 +44,8 @@ def test_meal_planning_remove_by_day(user_client_with_household, household_id, p
     )
     assert response.status_code == 200
     planned_meals = response.get_json()
-    assert not any(meal['recipe']['id'] == planned_recipe for meal in planned_meals)
+    assert not any(meal['recipe']['id'] == planned_recipe_day_field_backwards_compatibility for meal in planned_meals)
+
 
 def test_meal_planning_remove_by_datetime(user_client_with_household, household_id, planned_recipe):
     """Test removing meals from plan"""

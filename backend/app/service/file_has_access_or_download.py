@@ -11,7 +11,9 @@ from flask_jwt_extended import current_user
 from werkzeug.utils import secure_filename
 
 
-def file_has_access_or_download(newPhoto: str, oldPhoto: str | None = None) -> str | None:
+def file_has_access_or_download(
+    newPhoto: str, oldPhoto: str | None = None
+) -> str | None:
     """
     Downloads the file if the url is an external URL or checks if the user has access to the file on this server
     If the user has no access oldPhoto is returned
@@ -40,13 +42,24 @@ def file_has_access_or_download(newPhoto: str, oldPhoto: str | None = None) -> s
         if not newPhoto:
             return None
         f = File.find(newPhoto)
-        if f and f.isUnused() and (f.created_by == current_user.id or current_user.admin):
+        if (
+            f
+            and f.isUnused()
+            and (f.created_by == current_user.id or current_user.admin)
+        ):
             return f.filename
         elif f:
             f.checkAuthorized()
-            filename = secure_filename(str(uuid.uuid4()) + "." + f.filename.split(".")[-1])
-            shutil.copyfile(os.path.join(UPLOAD_FOLDER, f.filename), os.path.join(UPLOAD_FOLDER, filename))
-            File(filename=filename, blur_hash=f.blur_hash, created_by=current_user.id).save()
+            filename = secure_filename(
+                str(uuid.uuid4()) + "." + f.filename.split(".")[-1]
+            )
+            shutil.copyfile(
+                os.path.join(UPLOAD_FOLDER, f.filename),
+                os.path.join(UPLOAD_FOLDER, filename),
+            )
+            File(
+                filename=filename, blur_hash=f.blur_hash, created_by=current_user.id
+            ).save()
             return filename
 
     return oldPhoto

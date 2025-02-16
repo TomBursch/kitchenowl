@@ -18,7 +18,9 @@ class Shoppinglist(db.Model, DbModelMixin, DbModelAuthorizeMixin):
     )
 
     household: Mapped["Household"] = db.relationship("Household", uselist=False)
-    items: Mapped[List["ShoppinglistItems"]] = db.relationship("ShoppinglistItems", cascade="all, delete-orphan")
+    items: Mapped[List["ShoppinglistItems"]] = db.relationship(
+        "ShoppinglistItems", cascade="all, delete-orphan"
+    )
 
     history: Mapped[List["History"]] = db.relationship(
         "History", back_populates="shoppinglist", cascade="all, delete-orphan"
@@ -40,13 +42,21 @@ class ShoppinglistItems(db.Model, DbModelMixin):
     shoppinglist_id: Mapped[int] = db.Column(
         db.Integer, db.ForeignKey("shoppinglist.id"), primary_key=True
     )
-    item_id: Mapped[int] = db.Column(db.Integer, db.ForeignKey("item.id"), primary_key=True)
+    item_id: Mapped[int] = db.Column(
+        db.Integer, db.ForeignKey("item.id"), primary_key=True
+    )
     description: Mapped[str] = db.Column(db.String)
-    created_by: Mapped[int] = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=True)
+    created_by: Mapped[int] = db.Column(
+        db.Integer, db.ForeignKey("user.id"), nullable=True
+    )
 
     item: Mapped["Item"] = db.relationship("Item", back_populates="shoppinglists")
-    shoppinglist: Mapped["Shoppinglist"] = db.relationship("Shoppinglist", back_populates="items")
-    created_by_user: Mapped["User"] = db.relationship("User", foreign_keys=[created_by], uselist=False)
+    shoppinglist: Mapped["Shoppinglist"] = db.relationship(
+        "Shoppinglist", back_populates="items"
+    )
+    created_by_user: Mapped["User"] = db.relationship(
+        "User", foreign_keys=[created_by], uselist=False
+    )
 
     def obj_to_item_dict(self) -> dict:
         res = self.item.obj_to_dict()

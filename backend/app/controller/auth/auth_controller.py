@@ -382,7 +382,11 @@ if FRONT_URL and len(oidc_clients) > 0:
                     if "email_verified" in userinfo
                     else False
                 ),
-                photo=file_has_access_or_download(userinfo["picture"]) if "picture" in userinfo else None,
+                photo=(
+                    file_has_access_or_download(userinfo["picture"])
+                    if "picture" in userinfo
+                    else None
+                ),
             ).save()
             oidcLink = OIDCLink(
                 sub=userinfo["sub"], provider=provider, user_id=newUser.id

@@ -64,7 +64,9 @@ def getAllExpenses(args, household_id):
 
     if "search" in args and args["search"]:
         if "*" in args["search"] or "_" in args["search"]:
-            query = args["search"].replace("_", "__").replace("*", "%").replace("?", "_")
+            query = (
+                args["search"].replace("_", "__").replace("*", "%").replace("?", "_")
+            )
         else:
             query = "%{0}%".format(args["search"])
         filter.append(Expense.name.ilike(query))
@@ -313,9 +315,9 @@ def getExpenseOverview(args, household_id):
             start = thisMonthStart - relativedelta(months=stepAgo)
             end = start + relativedelta(months=1)
         elif frame == 3:  # yearly
-            start = datetime.now(timezone.utc).date().replace(day=1, month=1) - relativedelta(
-                years=stepAgo
-            )
+            start = datetime.now(timezone.utc).date().replace(
+                day=1, month=1
+            ) - relativedelta(years=stepAgo)
             end = start + relativedelta(years=1)
 
         return Expense.date >= start, Expense.date <= end
@@ -334,9 +336,11 @@ def getExpenseOverview(args, household_id):
             "by_subframe": {
                 e.day: (float(e.balance) or 0)
                 for e in by_subframe_query.with_entities(
-                    func.to_char(Expense.date, groupByStr).label("day")
-                    if "postgresql" in db.engine.name
-                    else func.strftime(groupByStr, Expense.date).label("day"),
+                    (
+                        func.to_char(Expense.date, groupByStr).label("day")
+                        if "postgresql" in db.engine.name
+                        else func.strftime(groupByStr, Expense.date).label("day")
+                    ),
                     func.sum(Expense.amount * factor).label("balance"),
                 )
                 .filter(*getFilterForStepAgo(stepAgo))

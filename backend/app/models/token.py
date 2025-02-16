@@ -22,14 +22,18 @@ class Token(db.Model, DbModelMixin):
     type: Mapped[str] = db.Column(db.String(16), nullable=False)
     name: Mapped[str] = db.Column(db.String(), nullable=False)
     last_used_at: Mapped[datetime] = db.Column(db.DateTime)
-    refresh_token_id: Mapped[int] = db.Column(db.Integer, db.ForeignKey("token.id"), nullable=True)
-    user_id: Mapped[int] = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    refresh_token_id: Mapped[int] = db.Column(
+        db.Integer, db.ForeignKey("token.id"), nullable=True
+    )
+    user_id: Mapped[int] = db.Column(
+        db.Integer, db.ForeignKey("user.id"), nullable=False
+    )
 
     created_tokens: Mapped[List["Token"]] = db.relationship(
         "Token", back_populates="refresh_token", cascade="all, delete-orphan"
     )
     refresh_token: Mapped["Token"] = db.relationship("Token", remote_side=[id])
-    user: Mapped["User"] = db.relationship("User", lazy='selectin')
+    user: Mapped["User"] = db.relationship("User", lazy="selectin")
 
     def obj_to_dict(self, skip_columns=None, include_columns=None) -> dict:
         if skip_columns:
@@ -47,7 +51,7 @@ class Token(db.Model, DbModelMixin):
     @classmethod
     def delete_expired_refresh(cls):
         filter_before = datetime.now(timezone.utc) - JWT_REFRESH_TOKEN_EXPIRES
-        
+
         # Delete expired regular refresh tokens with no children
         for token in (
             db.session.query(cls)
@@ -62,10 +66,9 @@ class Token(db.Model, DbModelMixin):
 
         # Delete expired invalidated refresh tokens
         db.session.query(cls).filter(
-            cls.created_at <= filter_before,
-            cls.type == "revoked_refresh"
+            cls.created_at <= filter_before, cls.type == "revoked_refresh"
         ).delete()
-        
+
         db.session.commit()
 
     @classmethod
@@ -139,15 +142,19 @@ class Token(db.Model, DbModelMixin):
         # Check if this refresh token has already been used to create another refresh token
         if oldRefreshToken and oldRefreshToken.has_created_refresh_token():
             for newer_token in Token.query.filter(
-                Token.refresh_token_id == oldRefreshToken.id,
-                Token.type == "refresh"
+                Token.refresh_token_id == oldRefreshToken.id, Token.type == "refresh"
             ).all():
-                newer_access_used = db.session.query(Token).filter(
-                    Token.refresh_token_id == newer_token.id,
-                    Token.type == "access",
-                    Token.last_used_at != None
-                ).count() > 0
-                
+                newer_access_used = (
+                    db.session.query(Token)
+                    .filter(
+                        Token.refresh_token_id == newer_token.id,
+                        Token.type == "access",
+                        Token.last_used_at != None,
+                    )
+                    .count()
+                    > 0
+                )
+
                 if newer_token.last_used_at is not None or newer_access_used:
                     # The newer tokens have been used, this is a reuse attack
                     oldRefreshToken.delete_token_familiy()

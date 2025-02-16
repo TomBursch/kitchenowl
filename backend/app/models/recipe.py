@@ -36,15 +36,28 @@ class Recipe(db.Model, DbModelMixin, DbModelAuthorizeMixin):
         "RecipeHistory", back_populates="recipe", cascade="all, delete-orphan"
     )
     items: Mapped[List["RecipeItems"]] = db.relationship(
-        "RecipeItems", back_populates="recipe", cascade="all, delete-orphan", lazy='selectin', order_by="RecipeItems._name",
+        "RecipeItems",
+        back_populates="recipe",
+        cascade="all, delete-orphan",
+        lazy="selectin",
+        order_by="RecipeItems._name",
     )
     tags: Mapped[List["RecipeTags"]] = db.relationship(
-        "RecipeTags", back_populates="recipe", cascade="all, delete-orphan", lazy='selectin', order_by="RecipeTags._name",
+        "RecipeTags",
+        back_populates="recipe",
+        cascade="all, delete-orphan",
+        lazy="selectin",
+        order_by="RecipeTags._name",
     )
     plans: Mapped[List["Planner"]] = db.relationship(
-        "Planner", back_populates="recipe", cascade="all, delete-orphan", lazy='selectin'
+        "Planner",
+        back_populates="recipe",
+        cascade="all, delete-orphan",
+        lazy="selectin",
     )
-    photo_file: Mapped["File"] = db.relationship("File", back_populates="recipe", uselist=False, lazy='selectin')
+    photo_file: Mapped["File"] = db.relationship(
+        "File", back_populates="recipe", uselist=False, lazy="selectin"
+    )
 
     def obj_to_dict(self) -> dict:
         res = super().obj_to_dict()
@@ -176,15 +189,23 @@ class Recipe(db.Model, DbModelMixin, DbModelAuthorizeMixin):
 class RecipeItems(db.Model, DbModelMixin):
     __tablename__ = "recipe_items"
 
-    recipe_id: Mapped[int] = db.Column(db.Integer, db.ForeignKey("recipe.id"), primary_key=True)
-    item_id: Mapped[int] = db.Column(db.Integer, db.ForeignKey("item.id"), primary_key=True)
+    recipe_id: Mapped[int] = db.Column(
+        db.Integer, db.ForeignKey("recipe.id"), primary_key=True
+    )
+    item_id: Mapped[int] = db.Column(
+        db.Integer, db.ForeignKey("item.id"), primary_key=True
+    )
     description: Mapped[str] = db.Column("description", db.String())
     optional: Mapped[bool] = db.Column("optional", db.Boolean)
 
-    item: Mapped["Item"] = db.relationship("Item", back_populates="recipes", lazy="joined")
+    item: Mapped["Item"] = db.relationship(
+        "Item", back_populates="recipes", lazy="joined"
+    )
     recipe: Mapped["Recipe"] = db.relationship("Recipe", back_populates="items")
 
-    _name: Mapped[str] = db.column_property(db.select(Item.name).where(Item.id == item_id).scalar_subquery())
+    _name: Mapped[str] = db.column_property(
+        db.select(Item.name).where(Item.id == item_id).scalar_subquery()
+    )
 
     def obj_to_item_dict(self) -> dict:
         res = self.item.obj_to_dict()
@@ -215,13 +236,21 @@ class RecipeItems(db.Model, DbModelMixin):
 class RecipeTags(db.Model, DbModelMixin):
     __tablename__ = "recipe_tags"
 
-    recipe_id: Mapped[int] = db.Column(db.Integer, db.ForeignKey("recipe.id"), primary_key=True)
-    tag_id: Mapped[int] = db.Column(db.Integer, db.ForeignKey("tag.id"), primary_key=True)
+    recipe_id: Mapped[int] = db.Column(
+        db.Integer, db.ForeignKey("recipe.id"), primary_key=True
+    )
+    tag_id: Mapped[int] = db.Column(
+        db.Integer, db.ForeignKey("tag.id"), primary_key=True
+    )
 
     tag: Mapped["Tag"] = db.relationship("Tag", back_populates="recipes")
-    recipe: Mapped["Recipe"] = db.relationship("Recipe", back_populates="tags", lazy="joined")
+    recipe: Mapped["Recipe"] = db.relationship(
+        "Recipe", back_populates="tags", lazy="joined"
+    )
 
-    _name: Mapped[str] = db.column_property(db.select(Tag.name).where(Tag.id == tag_id).scalar_subquery())
+    _name: Mapped[str] = db.column_property(
+        db.select(Tag.name).where(Tag.id == tag_id).scalar_subquery()
+    )
 
     def obj_to_item_dict(self) -> dict:
         res = self.tag.obj_to_dict()

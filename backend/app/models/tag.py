@@ -13,7 +13,9 @@ class Tag(db.Model, DbModelMixin, DbModelAuthorizeMixin):
     id: Mapped[int] = db.Column(db.Integer, primary_key=True)
     name: Mapped[str] = db.Column(db.String(128))
 
-    household_id: Mapped[int] = db.Column(db.Integer, db.ForeignKey("household.id"), nullable=False)
+    household_id: Mapped[int] = db.Column(
+        db.Integer, db.ForeignKey("household.id"), nullable=False
+    )
 
     household: Mapped["Household"] = db.relationship("Household", uselist=False)
     recipes: Mapped[List["RecipeTags"]] = db.relationship(

@@ -211,7 +211,7 @@ class Item(db.Model, DbModelMixin, DbModelAuthorizeMixin):
         contains = "%{0}%".format(name)
         one_error = []
         for index in range(len(name)):
-            name_one_error = name[:index] + "_" + name[index + 1:]
+            name_one_error = name[:index] + "_" + name[index + 1 :]
             one_error.append("%{0}%".format(name_one_error))
 
         for looking_for in [starts_with, contains] + one_error:

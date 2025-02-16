@@ -14,7 +14,9 @@ if TYPE_CHECKING:
 
 class ChallengePasswordReset(db.Model, DbModelMixin):
     challenge_hash: Mapped[str] = db.Column(db.String(256), primary_key=True)
-    user_id: Mapped[int] = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    user_id: Mapped[int] = db.Column(
+        db.Integer, db.ForeignKey("user.id"), nullable=False
+    )
 
     user: Mapped["User"] = db.relationship("User")
 

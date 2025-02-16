@@ -102,7 +102,7 @@ def scrapePublic(url: str, html: str, household: Household) -> dict | None:
 def scrapeLocal(recipe_id: int, household: Household):
     recipe = Recipe.find_by_id(recipe_id)
     recipe.checkAuthorized()
-    
+
     items = {}
     for ingredient in recipe.items:
         items[ingredient.item.name + " " + ingredient.description] = (
@@ -157,7 +157,7 @@ def scrape(url: str, household: Household) -> dict | None:
         return scrapeKitchenOwl(
             url, "https://app.kitchenowl.org/api", int(kitchenowlMatch.group(2))
         )
-    if 'http' not in url:
+    if "http" not in url:
         url = "http://" + url
 
     try:
@@ -167,10 +167,7 @@ def scrape(url: str, household: Household) -> dict | None:
     if res.status_code != requests.codes.ok:
         return None
 
-    if (
-        kitchenowlMatch
-        and "<title>KitchenOwl</title>" in res.text
-    ):
+    if kitchenowlMatch and "<title>KitchenOwl</title>" in res.text:
         return scrapeKitchenOwl(
             url, kitchenowlMatch.group(1) + "/api", int(kitchenowlMatch.group(2))
         )

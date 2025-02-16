@@ -26,7 +26,9 @@ class DbModelMixin(TimestampMixin):
         db.session.commit()
 
     def obj_to_dict(
-        self, skip_columns: list[str] | None = None, include_columns: list[str] | None = None
+        self,
+        skip_columns: list[str] | None = None,
+        include_columns: list[str] | None = None,
     ) -> dict:
         d = {}
         for column in self.__table__.columns:

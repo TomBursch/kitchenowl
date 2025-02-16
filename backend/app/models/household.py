@@ -94,7 +94,9 @@ class HouseholdMember(db.Model, DbModelMixin):
 
     expense_balance: Mapped[float] = db.Column(db.Float(), default=0, nullable=False)
 
-    household: Mapped["Household"] = db.relationship("Household", back_populates="member")
+    household: Mapped["Household"] = db.relationship(
+        "Household", back_populates="member"
+    )
     user: Mapped["User"] = db.relationship("User", back_populates="households")
 
     def obj_to_user_dict(self) -> dict:

@@ -46,7 +46,9 @@ FRONT_URL = os.getenv("FRONT_URL")
 
 PRIVACY_POLICY_URL = os.getenv("PRIVACY_POLICY_URL")
 OPEN_REGISTRATION = os.getenv("OPEN_REGISTRATION", "False").lower() == "true"
-DISABLE_USERNAME_PASSWORD_LOGIN = os.getenv("DISABLE_USERNAME_PASSWORD_LOGIN", "False").lower() == "true"
+DISABLE_USERNAME_PASSWORD_LOGIN = (
+    os.getenv("DISABLE_USERNAME_PASSWORD_LOGIN", "False").lower() == "true"
+)
 EMAIL_MANDATORY = os.getenv("EMAIL_MANDATORY", "False").lower() == "true"
 DISABLE_ONBOARDING = os.getenv("DISABLE_ONBOARDING", "False").lower() == "true"
 
@@ -63,7 +65,9 @@ DB_URL = URL.create(
 MESSAGE_BROKER = os.getenv("MESSAGE_BROKER")
 
 JWT_ACCESS_TOKEN_EXPIRES = timedelta(minutes=15)
-JWT_REFRESH_TOKEN_EXPIRES = timedelta(days=int(os.getenv("JWT_REFRESH_TOKEN_EXPIRES", "30")))
+JWT_REFRESH_TOKEN_EXPIRES = timedelta(
+    days=int(os.getenv("JWT_REFRESH_TOKEN_EXPIRES", "30"))
+)
 
 OIDC_CLIENT_ID = os.getenv("OIDC_CLIENT_ID")
 OIDC_CLIENT_SECRET = os.getenv("OIDC_CLIENT_SECRET")

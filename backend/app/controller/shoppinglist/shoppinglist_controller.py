@@ -41,11 +41,7 @@ def createShoppinglist(args, household_id):
     shoppinglist.save()
     shoppinglist_dict = shoppinglist.obj_to_dict()
     socketio.emit(
-        "shoppinglist:add",
-        {
-            "shoppinglist": shoppinglist_dict
-        },
-        to=household_id
+        "shoppinglist:add", {"shoppinglist": shoppinglist_dict}, to=household_id
     )
     return jsonify(shoppinglist_dict)
 
@@ -118,10 +114,8 @@ def deleteShoppinglist(id):
     shoppinglist.delete()
     socketio.emit(
         "shoppinglist:delete",
-        {
-          "shoppinglist": shoppinglist.obj_to_dict()
-        },
-        to=shoppinglist.household_id
+        {"shoppinglist": shoppinglist.obj_to_dict()},
+        to=shoppinglist.household_id,
     )
 
     return jsonify({"msg": "DONE"})
@@ -162,9 +156,9 @@ def updateItemDescription(args, id: int, item_id: int):
 @jwt_required()
 @validate_args(GetItems)
 def getAllShoppingListItems(args, id):
-    '''
+    """
     Deprecated in favor of including it directly in the shopping list
-    '''
+    """
     shoppinglist = Shoppinglist.find_by_id(id)
     if not shoppinglist:
         raise NotFoundRequest()
@@ -190,9 +184,9 @@ def getAllShoppingListItems(args, id):
 @jwt_required()
 @validate_args(GetRecentItems)
 def getRecentItems(args, id):
-    '''
+    """
     Deprecated in favor of including it directly in the shopping list
-    '''
+    """
     shoppinglist = Shoppinglist.find_by_id(id)
     if not shoppinglist:
         raise NotFoundRequest()

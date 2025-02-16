@@ -9,7 +9,8 @@ onboarding = Blueprint("onboarding", __name__)
 
 @onboarding.route("", methods=["GET"])
 def isOnboarding():
-    if DISABLE_ONBOARDING: return jsonify({"onboarding": False})
+    if DISABLE_ONBOARDING:
+        return jsonify({"onboarding": False})
     onboarding = User.count() == 0
     return jsonify({"onboarding": onboarding})
 

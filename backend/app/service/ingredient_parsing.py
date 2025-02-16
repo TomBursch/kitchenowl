@@ -25,15 +25,19 @@ class IngredientParsingResult:
 
 
 def parseNLP(ingredients: list[str]) -> list[IngredientParsingResult]:
-    def nlpAmountToDescription(amount: ingredient_parser.dataclasses.IngredientAmount) -> str:
+    def nlpAmountToDescription(
+        amount: ingredient_parser.dataclasses.IngredientAmount,
+    ) -> str:
         if isinstance(amount, ingredient_parser.dataclasses.CompositeIngredientAmount):
             return amount.text
         return f"{amount.quantity} {amount.unit}"
-    
+
     def parseNLPSingle(ingredient: str) -> IngredientParsingResult:
         parsed = ingredient_parser.parse_ingredient(ingredient)
         name = parsed.name.text if parsed.name else None
-        description = nlpAmountToDescription(parsed.amount[0]) if len(parsed.amount) > 0 else ''
+        description = (
+            nlpAmountToDescription(parsed.amount[0]) if len(parsed.amount) > 0 else ""
+        )
         # description = description + (" " if description else "") + (parsed.comment.text if parsed.comment else "") # Usually cooking instructions
         return IngredientParsingResult(ingredient, name, description)
 

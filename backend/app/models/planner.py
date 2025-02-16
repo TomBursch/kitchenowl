@@ -11,7 +11,9 @@ if TYPE_CHECKING:
 class Planner(db.Model, DbModelMixin, DbModelAuthorizeMixin):
     __tablename__ = "planner"
 
-    recipe_id: Mapped[int] = db.Column(db.Integer, db.ForeignKey("recipe.id"), primary_key=True)
+    recipe_id: Mapped[int] = db.Column(
+        db.Integer, db.ForeignKey("recipe.id"), primary_key=True
+    )
     day: Mapped[int] = db.Column(db.Integer, primary_key=True)
     yields: Mapped[int] = db.Column(db.Integer)
     household_id: Mapped[int] = db.Column(

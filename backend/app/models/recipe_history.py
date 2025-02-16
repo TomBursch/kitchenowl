@@ -23,10 +23,14 @@ class RecipeHistory(db.Model, DbModelMixin):
     id: Mapped[int] = db.Column(db.Integer, primary_key=True)
 
     recipe_id: Mapped[int] = db.Column(db.Integer, db.ForeignKey("recipe.id"))
-    household_id: Mapped[int] = db.Column(db.Integer, db.ForeignKey("household.id"), nullable=False)
+    household_id: Mapped[int] = db.Column(
+        db.Integer, db.ForeignKey("household.id"), nullable=False
+    )
 
     household: Mapped["Household"] = db.relationship("Household", uselist=False)
-    recipe: Mapped["Recipe"] = db.relationship("Recipe", uselist=False, back_populates="recipe_history")
+    recipe: Mapped["Recipe"] = db.relationship(
+        "Recipe", uselist=False, back_populates="recipe_history"
+    )
 
     status: Mapped[Status] = db.Column(db.Enum(Status))
 

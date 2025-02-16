@@ -97,6 +97,7 @@ Pint==0.24.4
 pip-upgrade-tool==0.7.4
 platformdirs==4.3.6
 pluggy==1.5.0
+pre-commit==4.1.0
 prometheus_client==0.21.1
 prometheus_flask_exporter==0.23.1
 prompt_toolkit==3.0.50

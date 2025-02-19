@@ -74,7 +74,12 @@ abstract class AppThemes {
         builders: {
           // Use PredictiveBackPageTransitionsBuilder to get the predictive back route transition!
           TargetPlatform.android: PredictiveBackPageTransitionsBuilder(),
+          TargetPlatform.linux: FadeForwardsPageTransitionsBuilder(),
+          TargetPlatform.windows: FadeForwardsPageTransitionsBuilder(),
         },
+      ),
+      progressIndicatorTheme: ProgressIndicatorThemeData(
+        year2023: false,
       ),
     );
   }
@@ -131,7 +136,12 @@ abstract class AppThemes {
         builders: {
           // Use PredictiveBackPageTransitionsBuilder to get the predictive back route transition!
           TargetPlatform.android: PredictiveBackPageTransitionsBuilder(),
+          TargetPlatform.linux: FadeForwardsPageTransitionsBuilder(),
+          TargetPlatform.windows: FadeForwardsPageTransitionsBuilder(),
         },
+      ),
+      progressIndicatorTheme: ProgressIndicatorThemeData(
+        year2023: false,
       ),
     );
   }

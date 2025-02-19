@@ -111,7 +111,7 @@ class SliverHouseholdFeatureSettings<
                       ),
                       content: Text(
                         AppLocalizations.of(context)!
-                            .addLanguageConfirm(language),
+                            .addLanguageConfirm(language.value ?? ""),
                       ),
                     );
                     if (!confirm) return;

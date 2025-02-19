@@ -10,7 +10,7 @@ class ItemSelectionPage extends StatefulWidget {
   final List<RecipePlan> plans;
   final List<ShoppingList> shoppingLists;
   final String? title;
-  final String Function(Object) selectText;
+  final String Function(int) selectText;
   final Future<(ShoppingList?, List<RecipeItem>)?> Function(
       ShoppingList?, List<RecipeItem>)? handleResult;
 

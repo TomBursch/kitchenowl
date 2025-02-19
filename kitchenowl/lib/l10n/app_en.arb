@@ -14,17 +14,26 @@
   "@addLanguage": {},
   "@addLanguageConfirm": {
     "placeholders": {
-      "lang": {}
+      "lang": {
+        "type": "String",
+        "example": "English"
+      }
     }
   },
   "@addNumberIngredients": {
     "placeholders": {
-      "number": {}
+      "number": {
+        "type": "int",
+        "example": "2"
+      }
     }
   },
   "@addRecipeToPlanner": {
     "placeholders": {
-      "number": {}
+      "number": {
+        "type": "int",
+        "example": "2"
+      }
     }
   },
   "@addRecipeToPlannerShort": {
@@ -34,7 +43,10 @@
   "@addTag": {},
   "@addedBy": {
     "placeholders": {
-      "name": {}
+      "name": {
+        "type": "String",
+        "example": "Tom"
+      }
     }
   },
   "@address": {},
@@ -56,13 +68,19 @@
   "@categoryDelete": {},
   "@categoryDeleteConfirmation": {
     "placeholders": {
-      "category": {}
+      "category": {
+        "type": "String",
+        "example": "Frozen"
+      }
     }
   },
   "@categoryEdit": {},
   "@categoryExpenseDeleteConfirmation": {
     "placeholders": {
-      "category": {}
+      "category": {
+        "type": "String",
+        "example": "Frozen"
+      }
     }
   },
   "@changeIcon": {},
@@ -100,7 +118,10 @@
   "@expenseOverviewComparedToPreviousMonth": {},
   "@expenseOverviewTotalTitle": {
     "placeholders": {
-      "month": {}
+      "month": {
+        "type": "String",
+        "example": "January"
+      }
     }
   },
   "@expensePaidBy": {},
@@ -111,7 +132,10 @@
   "@features": {},
   "@fieldCannotBeEmpty": {
     "placeholders": {
-      "field": {}
+      "field": {
+        "type": "String",
+        "example": "Username"
+      }
     }
   },
   "@forceOfflineMode": {},
@@ -122,21 +146,30 @@
   "@helpTranslate": {},
   "@hi": {
     "placeholders": {
-      "name": {}
+      "name": {
+        "type": "String",
+        "example": "Tom"
+      }
     }
   },
   "@household": {},
   "@householdDelete": {},
   "@householdDeleteConfirmation": {
     "placeholders": {
-      "household": {}
+      "household": {
+        "type": "String",
+        "example": "Home"
+      }
     }
   },
   "@householdEmpty": {},
   "@householdLeave": {},
   "@householdLeaveConfirmation": {
     "placeholders": {
-      "household": {}
+      "household": {
+        "type": "String",
+        "example": "Home"
+      }
     }
   },
   "@householdNew": {},
@@ -152,7 +185,10 @@
   "@itemDelete": {},
   "@itemDeleteConfirmation": {
     "placeholders": {
-      "item": {}
+      "item": {
+        "type": "String",
+        "example": "Cake"
+      }
     }
   },
   "@itemRemoveInteraction": {},
@@ -162,8 +198,14 @@
   "@itemsMerge": {},
   "@itemsMergeConfirmation": {
     "placeholders": {
-      "item": {},
-      "other": {}
+      "item": {
+        "type": "String",
+        "example": "Cake"
+      },
+      "other": {
+        "type": "String",
+        "example": "Cake"
+      }
     }
   },
   "@itemsOptional": {},
@@ -180,7 +222,10 @@
   "@lltDelete": {},
   "@lltDeleteConfirmation": {
     "placeholders": {
-      "token": {}
+      "token": {
+        "type": "String",
+        "example": "HomeAssistant"
+      }
     }
   },
   "@lltNotShownAgain": {},
@@ -192,7 +237,10 @@
   "@logout": {},
   "@logoutName": {
     "placeholders": {
-      "name": {}
+      "name": {
+        "type": "String",
+        "example": "Tom"
+      }
     }
   },
   "@longPressToReorder": {},
@@ -218,7 +266,10 @@
   "@onboardingLoading": {},
   "@onboardingSettingsTitle": {
     "placeholders": {
-      "name": {}
+      "name": {
+        "type": "String",
+        "example": "Tom"
+      }
     }
   },
   "@onboardingTitle": {},
@@ -229,8 +280,14 @@
   "@overview": {},
   "@owesAB": {
     "placeholders": {
-      "nameA": {},
-      "nameB": {}
+      "nameA": {
+        "type": "String",
+        "example": "Tom"
+      },
+      "nameB": {
+        "type": "String",
+        "example": "Tom"
+      }
     }
   },
   "@pageNotFound": {},
@@ -249,7 +306,10 @@
   "@privacyPolicy": {},
   "@privacyPolicyAgree": {
     "placeholders": {
-      "privacyPolicy": {}
+      "privacyPolicy": {
+        "type": "String",
+        "example": "Privacy Policy"
+      }
     }
   },
   "@private": {},
@@ -261,14 +321,20 @@
   "@recipeAdd": {},
   "@recipeAddToHousehold": {
     "placeholders": {
-      "householdName": {}
+      "householdName": {
+        "type": "String",
+        "example": "Home"
+      }
     }
   },
   "@recipeAddUrl": {},
   "@recipeDelete": {},
   "@recipeDeleteConfirmation": {
     "placeholders": {
-      "recipe": {}
+      "recipe": {
+        "type": "String",
+        "example": "Cake"
+      }
     }
   },
   "@recipeEdit": {},
@@ -309,7 +375,10 @@
   "@shoppingListDelete": {},
   "@shoppingListDeleteConfirmation": {
     "placeholders": {
-      "shoppingList": {}
+      "shoppingList": {
+        "type": "String",
+        "example": "Supermarket"
+      }
     }
   },
   "@shoppingListEdit": {},
@@ -317,7 +386,10 @@
   "@shoppingLists": {},
   "@signInWith": {
     "placeholders": {
-      "provider": {}
+      "provider": {
+        "type": "String",
+        "example": "Authentik"
+      }
     }
   },
   "@signup": {},
@@ -333,7 +405,10 @@
   "@tagDelete": {},
   "@tagDeleteConfirmation": {
     "placeholders": {
-      "tag": {}
+      "tag": {
+        "type": "String",
+        "example": "Lunch"
+      }
     }
   },
   "@tagEdit": {},
@@ -352,7 +427,10 @@
   "@tutorialRecipeDescription": {},
   "@tutorialRecipeMore": {
     "placeholders": {
-      "url": {}
+      "url": {
+        "type": "String",
+        "example": "https://..."
+      }
     }
   },
   "@uncategorized": {},
@@ -373,7 +451,10 @@
   "@userDelete": {},
   "@userDeleteConfirmation": {
     "placeholders": {
-      "user": {}
+      "user": {
+        "type": "String",
+        "example": "Tom"
+      }
     }
   },
   "@userNotSignedIn": {},

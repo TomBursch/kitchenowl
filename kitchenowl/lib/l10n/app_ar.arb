@@ -14,17 +14,26 @@
   "@addLanguage": {},
   "@addLanguageConfirm": {
     "placeholders": {
-      "lang": {}
+      "lang": {
+        "type": "String",
+        "example": "English"
+      }
     }
   },
   "@addNumberIngredients": {
     "placeholders": {
-      "number": {}
+      "number": {
+        "type": "int",
+        "example": "2"
+      }
     }
   },
   "@addedBy": {
     "placeholders": {
-      "name": {}
+      "name": {
+        "type": "String",
+        "example": "Tom"
+      }
     }
   },
   "@address": {},
@@ -69,7 +78,10 @@
   "@features": {},
   "@fieldCannotBeEmpty": {
     "placeholders": {
-      "field": {}
+      "field": {
+        "type": "String",
+        "example": "Username"
+      }
     }
   },
   "@general": {},
@@ -81,7 +93,10 @@
   "@householdLeave": {},
   "@householdLeaveConfirmation": {
     "placeholders": {
-      "household": {}
+      "household": {
+        "type": "String",
+        "example": "Home"
+      }
     }
   },
   "@householdNew": {},
@@ -109,7 +124,10 @@
   "@logout": {},
   "@logoutName": {
     "placeholders": {
-      "name": {}
+      "name": {
+        "type": "String",
+        "example": "Tom"
+      }
     }
   },
   "@longPressToReorder": {},
@@ -131,8 +149,14 @@
   "@overview": {},
   "@owesAB": {
     "placeholders": {
-      "nameA": {},
-      "nameB": {}
+      "nameA": {
+        "type": "String",
+        "example": "Tom"
+      },
+      "nameB": {
+        "type": "String",
+        "example": "Tom"
+      }
     }
   },
   "@pageNotFound": {},
@@ -147,7 +171,10 @@
   "@privacyPolicy": {},
   "@privacyPolicyAgree": {
     "placeholders": {
-      "privacyPolicy": {}
+      "privacyPolicy": {
+        "type": "String",
+        "example": "Privacy Policy"
+      }
     }
   },
   "@private": {},
@@ -157,14 +184,20 @@
   "@recipeAdd": {},
   "@recipeAddToHousehold": {
     "placeholders": {
-      "householdName": {}
+      "householdName": {
+        "type": "String",
+        "example": "Home"
+      }
     }
   },
   "@recipeAddUrl": {},
   "@recipeDelete": {},
   "@recipeDeleteConfirmation": {
     "placeholders": {
-      "recipe": {}
+      "recipe": {
+        "type": "String",
+        "example": "Cake"
+      }
     }
   },
   "@recipeEdit": {},
@@ -180,14 +213,20 @@
   "@shoppingListDelete": {},
   "@shoppingListDeleteConfirmation": {
     "placeholders": {
-      "shoppingList": {}
+      "shoppingList": {
+        "type": "String",
+        "example": "Supermarket"
+      }
     }
   },
   "@shoppingListEdit": {},
   "@shoppingLists": {},
   "@signInWith": {
     "placeholders": {
-      "provider": {}
+      "provider": {
+        "type": "String",
+        "example": "Authentik"
+      }
     }
   },
   "@signup": {},
@@ -208,7 +247,10 @@
   "@userDelete": {},
   "@userDeleteConfirmation": {
     "placeholders": {
-      "user": {}
+      "user": {
+        "type": "String",
+        "example": "Tom"
+      }
     }
   },
   "@userSearchHint": {},

@@ -14,17 +14,26 @@
   "@addLanguage": {},
   "@addLanguageConfirm": {
     "placeholders": {
-      "lang": {}
+      "lang": {
+        "type": "String",
+        "example": "English"
+      }
     }
   },
   "@addNumberIngredients": {
     "placeholders": {
-      "number": {}
+      "number": {
+        "type": "int",
+        "example": "2"
+      }
     }
   },
   "@addRecipeToPlanner": {
     "placeholders": {
-      "number": {}
+      "number": {
+        "type": "int",
+        "example": "2"
+      }
     }
   },
   "@addRecipeToPlannerShort": {
@@ -34,7 +43,10 @@
   "@addTag": {},
   "@addedBy": {
     "placeholders": {
-      "name": {}
+      "name": {
+        "type": "String",
+        "example": "Tom"
+      }
     }
   },
   "@address": {},
@@ -53,13 +65,19 @@
   "@categoryDelete": {},
   "@categoryDeleteConfirmation": {
     "placeholders": {
-      "category": {}
+      "category": {
+        "type": "String",
+        "example": "Frozen"
+      }
     }
   },
   "@categoryEdit": {},
   "@categoryExpenseDeleteConfirmation": {
     "placeholders": {
-      "category": {}
+      "category": {
+        "type": "String",
+        "example": "Frozen"
+      }
     }
   },
   "@changeIcon": {},
@@ -96,13 +114,19 @@
   "@expenseOverviewComparedToPreviousMonth": {},
   "@expenseOverviewTotalTitle": {
     "placeholders": {
-      "month": {}
+      "month": {
+        "type": "String",
+        "example": "January"
+      }
     }
   },
   "@export": {},
   "@fieldCannotBeEmpty": {
     "placeholders": {
-      "field": {}
+      "field": {
+        "type": "String",
+        "example": "Username"
+      }
     }
   },
   "@forceOfflineMode": {},

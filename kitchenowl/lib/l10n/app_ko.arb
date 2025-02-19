@@ -10,7 +10,10 @@
   "@addTag": {},
   "@addedBy": {
     "placeholders": {
-      "name": {}
+      "name": {
+        "type": "String",
+        "example": "Tom"
+      }
     }
   },
   "@address": {},
@@ -60,7 +63,10 @@
   "@recipeDelete": {},
   "@recipeDeleteConfirmation": {
     "placeholders": {
-      "recipe": {}
+      "recipe": {
+        "type": "String",
+        "example": "Cake"
+      }
     }
   },
   "@recipeEdit": {},
@@ -78,7 +84,10 @@
   "@shoppingListDelete": {},
   "@shoppingListDeleteConfirmation": {
     "placeholders": {
-      "shoppingList": {}
+      "shoppingList": {
+        "type": "String",
+        "example": "Supermarket"
+      }
     }
   },
   "@shoppingListEdit": {},
@@ -86,7 +95,10 @@
   "@shoppingLists": {},
   "@signInWith": {
     "placeholders": {
-      "provider": {}
+      "provider": {
+        "type": "String",
+        "example": "Authentik"
+      }
     }
   },
   "@signup": {},

@@ -10,17 +10,26 @@
   "@addLanguage": {},
   "@addLanguageConfirm": {
     "placeholders": {
-      "lang": {}
+      "lang": {
+        "type": "String",
+        "example": "English"
+      }
     }
   },
   "@addNumberIngredients": {
     "placeholders": {
-      "number": {}
+      "number": {
+        "type": "int",
+        "example": "2"
+      }
     }
   },
   "@addRecipeToPlanner": {
     "placeholders": {
-      "number": {}
+      "number": {
+        "type": "int",
+        "example": "2"
+      }
     }
   },
   "@addRecipeToPlannerShort": {},
@@ -28,7 +37,10 @@
   "@addTag": {},
   "@addedBy": {
     "placeholders": {
-      "name": {}
+      "name": {
+        "type": "String",
+        "example": "Tom"
+      }
     }
   },
   "@address": {},
@@ -48,7 +60,10 @@
   "@categoryEdit": {},
   "@categoryExpenseDeleteConfirmation": {
     "placeholders": {
-      "category": {}
+      "category": {
+        "type": "String",
+        "example": "Frozen"
+      }
     }
   },
   "@changeIcon": {},
@@ -78,7 +93,10 @@
   "@expenseOverviewComparedToPreviousMonth": {},
   "@expenseOverviewTotalTitle": {
     "placeholders": {
-      "month": {}
+      "month": {
+        "type": "String",
+        "example": "January"
+      }
     }
   },
   "@expensePaidBy": {},
@@ -87,7 +105,10 @@
   "@features": {},
   "@fieldCannotBeEmpty": {
     "placeholders": {
-      "field": {}
+      "field": {
+        "type": "String",
+        "example": "Username"
+      }
     }
   },
   "@forceOfflineMode": {},
@@ -101,7 +122,10 @@
   "@householdLeave": {},
   "@householdLeaveConfirmation": {
     "placeholders": {
-      "household": {}
+      "household": {
+        "type": "String",
+        "example": "Home"
+      }
     }
   },
   "@householdNew": {},
@@ -116,13 +140,22 @@
   "@itemDelete": {},
   "@itemDeleteConfirmation": {
     "placeholders": {
-      "item": {}
+      "item": {
+        "type": "String",
+        "example": "Cake"
+      }
     }
   },
   "@itemsMergeConfirmation": {
     "placeholders": {
-      "item": {},
-      "other": {}
+      "item": {
+        "type": "String",
+        "example": "Cake"
+      },
+      "other": {
+        "type": "String",
+        "example": "Cake"
+      }
     }
   },
   "@language": {},
@@ -137,7 +170,10 @@
   "@logout": {},
   "@logoutName": {
     "placeholders": {
-      "name": {}
+      "name": {
+        "type": "String",
+        "example": "Tom"
+      }
     }
   },
   "@mealPlanner": {},
@@ -155,7 +191,10 @@
   "@onboardingLoading": {},
   "@onboardingSettingsTitle": {
     "placeholders": {
-      "name": {}
+      "name": {
+        "type": "String",
+        "example": "Tom"
+      }
     }
   },
   "@onboardingTitle": {},
@@ -176,7 +215,10 @@
   "@privacyPolicy": {},
   "@privacyPolicyAgree": {
     "placeholders": {
-      "privacyPolicy": {}
+      "privacyPolicy": {
+        "type": "String",
+        "example": "Privacy Policy"
+      }
     }
   },
   "@profile": {},
@@ -185,7 +227,10 @@
   "@recipeDelete": {},
   "@recipeDeleteConfirmation": {
     "placeholders": {
-      "recipe": {}
+      "recipe": {
+        "type": "String",
+        "example": "Cake"
+      }
     }
   },
   "@recipeEdit": {},
@@ -213,7 +258,10 @@
   "@shoppingListDelete": {},
   "@shoppingListDeleteConfirmation": {
     "placeholders": {
-      "shoppingList": {}
+      "shoppingList": {
+        "type": "String",
+        "example": "Supermarket"
+      }
     }
   },
   "@shoppingListEdit": {},
@@ -231,7 +279,10 @@
   "@tagDelete": {},
   "@tagDeleteConfirmation": {
     "placeholders": {
-      "tag": {}
+      "tag": {
+        "type": "String",
+        "example": "Lunch"
+      }
     }
   },
   "@tagEdit": {},
@@ -255,7 +306,10 @@
   "@userDelete": {},
   "@userDeleteConfirmation": {
     "placeholders": {
-      "user": {}
+      "user": {
+        "type": "String",
+        "example": "Tom"
+      }
     }
   },
   "@userSearchHint": {},

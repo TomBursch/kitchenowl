@@ -50,7 +50,10 @@
   "addRecipeToPlanner": "ਖਾਣੇ ਦੀ ਯੋਜਨਾ ਵਿੱਚ ਸ਼ਾਮਲ ਕਰੋ ({number} ਉਪਜਾਂ)",
   "@addRecipeToPlanner": {
     "placeholders": {
-      "number": {}
+      "number": {
+        "type": "int",
+        "example": "2"
+      }
     }
   }
 }

@@ -6,13 +6,19 @@
   "addLanguageConfirm": "Вы ўпэўнены, што жадаеце змяніць мову на '{lang}'? Гэта дзеянне нельга адрабіць, і да вашай сям'і будуць дададзены прадметы і катэгорыі.",
   "@addLanguageConfirm": {
     "placeholders": {
-      "lang": {}
+      "lang": {
+        "type": "String",
+        "example": "English"
+      }
     }
   },
   "addNumberIngredients": "Дадайце {number} інгрэдыентаў",
   "@addNumberIngredients": {
     "placeholders": {
-      "number": {}
+      "number": {
+        "type": "int",
+        "example": "2"
+      }
     }
   },
   "addCategory": "Дадаць катэгорыю",
@@ -34,7 +40,10 @@
   "addRecipeToPlanner": "Дадаць у план страў ({number})",
   "@addRecipeToPlanner": {
     "placeholders": {
-      "number": {}
+      "number": {
+        "type": "int",
+        "example": "2"
+      }
     }
   },
   "addRecipeToPlannerShort": "Дадаць у план страў",

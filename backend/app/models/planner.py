@@ -3,6 +3,7 @@ from typing import Self, TYPE_CHECKING
 from app import db
 from app.helpers import DbModelMixin, DbModelAuthorizeMixin
 from sqlalchemy.orm import Mapped
+from sqlalchemy import func
 from datetime import datetime
 
 if TYPE_CHECKING:
@@ -42,5 +43,5 @@ class Planner(db.Model, DbModelMixin, DbModelAuthorizeMixin):
     @classmethod
     def find_by_datetime(cls, household_id: int, recipe_id: int, when: datetime) -> Self:
         return cls.query.filter(
-            cls.household_id == household_id, cls.recipe_id == recipe_id, cls.when == when
+            cls.household_id == household_id, cls.recipe_id == recipe_id, func.date(cls.when) == when.date() 
         ).first()

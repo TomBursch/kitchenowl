@@ -61,7 +61,7 @@ def addPlannedRecipe(args, household_id):
     when = args["when"] if "when" in args else datetime.min
     if "day" in args:
         # if outdated "day" was used, transform it into next date with that weekday
-        when = next_weekday(args["day"])
+        when = next_weekday(args["day"]).replace(hour=23,minute=59, second=59)
         print(f"WHEN: {when}")
     planner = Planner.find_by_datetime(household_id=household_id, recipe_id=recipe.id, when=when)
     if not planner:

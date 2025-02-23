@@ -6,10 +6,10 @@ from oic import rndstr
 from oic.oic.message import AuthorizationResponse
 from oic.oauth2.message import ErrorResponse
 from app.helpers import validate_args
-from flask import jsonify, Blueprint, request
+from flask import jsonify, Blueprint
 from flask_jwt_extended import current_user, jwt_required, get_jwt
 from app.models import User, Token, OIDCLink, OIDCRequest, ChallengeMailVerify
-from app.errors import NotFoundRequest, UnauthorizedRequest
+from app.errors import NotFoundRequest, UnauthorizedRequest, getClientIp
 from app.service import mail
 from app.service.file_has_access_or_download import file_has_access_or_download
 from .schemas import Login, Signup, CreateLongLivedToken, GetOIDCLoginUrl, LoginOIDC
@@ -69,7 +69,7 @@ if not DISABLE_USERNAME_PASSWORD_LOGIN:
         if not user or not user.check_password(args["password"]):
             raise UnauthorizedRequest(
                 message="Unauthorized: IP {} login attemp with wrong username or password".format(
-                    request.remote_addr
+                    getClientIp()
                 )
             )
         device = "Unkown"
@@ -144,7 +144,7 @@ def refresh():
     if not user:
         raise UnauthorizedRequest(
             message="Unauthorized: IP {} refresh could not get current user".format(
-                request.remote_addr
+                getClientIp()
             )
         )
 
@@ -177,7 +177,7 @@ def logout(id):
         token = Token.find_by_jti(jwt["jti"])
     if not token or token.user_id != current_user.id:
         raise UnauthorizedRequest(
-            message="Unauthorized: IP {}".format(request.remote_addr)
+            message="Unauthorized: IP {}".format(getClientIp())
         )
 
     if token.type == "access":
@@ -197,7 +197,7 @@ def createLongLivedToken(args):
     user = current_user
     if not user:
         raise UnauthorizedRequest(
-            message="Unauthorized: IP {}".format(request.remote_addr)
+            message="Unauthorized: IP {}".format(getClientIp())
         )
 
     llToken, _ = Token.create_longlived_token(user, args["device"])
@@ -211,13 +211,13 @@ def deleteLongLivedToken(id):
     user = current_user
     if not user:
         raise UnauthorizedRequest(
-            message="Unauthorized: IP {}".format(request.remote_addr)
+            message="Unauthorized: IP {}".format(getClientIp())
         )
 
     token = Token.find_by_id(id)
     if token.user_id != user.id or token.type != "llt":
         raise UnauthorizedRequest(
-            message="Unauthorized: IP {}".format(request.remote_addr)
+            message="Unauthorized: IP {}".format(getClientIp())
         )
 
     token.delete()
@@ -238,7 +238,7 @@ if FRONT_URL and len(oidc_clients) > 0:
         if not client:
             raise UnauthorizedRequest(
                 message="Unauthorized: IP {} get login url for unknown OIDC provider".format(
-                    request.remote_addr
+                    getClientIp()
                 )
             )
         state = rndstr()
@@ -277,7 +277,7 @@ if FRONT_URL and len(oidc_clients) > 0:
         if not oidc_request:
             raise UnauthorizedRequest(
                 message="Unauthorized: IP {} login attemp with unknown OIDC state".format(
-                    request.remote_addr
+                    getClientIp()
                 )
             )
         provider = oidc_request.provider
@@ -286,7 +286,7 @@ if FRONT_URL and len(oidc_clients) > 0:
             oidc_request.delete()
             raise UnauthorizedRequest(
                 message="Unauthorized: IP {} login attemp with unknown OIDC provider".format(
-                    request.remote_addr
+                    getClientIp()
                 )
             )
 
@@ -296,7 +296,7 @@ if FRONT_URL and len(oidc_clients) > 0:
             oidc_request.delete()
             raise UnauthorizedRequest(
                 message="Unauthorized: IP {} login attemp for a different account".format(
-                    request.remote_addr
+                    getClientIp()
                 )
             )
 
@@ -319,14 +319,14 @@ if FRONT_URL and len(oidc_clients) > 0:
             oidc_request.delete()
             raise UnauthorizedRequest(
                 message="Unauthorized: IP {} login attemp for OIDC failed".format(
-                    request.remote_addr
+                    getClientIp()
                 )
             )
         userinfo = tokenResponse["id_token"]
         if userinfo["nonce"] != oidc_request.nonce:
             raise UnauthorizedRequest(
                 message="Unauthorized: IP {} login attemp for OIDC failed: mismatched nonce".format(
-                    request.remote_addr
+                    getClientIp()
                 )
             )
         oidc_request.delete()

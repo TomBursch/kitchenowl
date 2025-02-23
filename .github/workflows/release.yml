@@ -90,7 +90,7 @@ jobs:
             asset_content_type: application/x-rpm
           - os: ubuntu-latest
             target: Web
-            build_target: web --dart-define=FLUTTER_WEB_CANVASKIT_URL=/canvaskit/
+            build_target: web --no-web-resources-cdn
             build_path: kitchenowl/build/web
             asset_extension: .tar.gz
             asset_content_type: application/gzip

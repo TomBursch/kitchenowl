@@ -177,7 +177,7 @@ class _RecipePageState extends State<RecipePage> {
                             ),
                           ),
                           NumberSelector(
-                            value: state.selectedYields,
+                            value: state.selectedYields ?? state.recipe.yields,
                             setValue: cubit.setSelectedYields,
                             defaultValue: state.recipe.yields,
                             lowerBound: 1,
@@ -339,10 +339,12 @@ class _RecipePageState extends State<RecipePage> {
                             Expanded(
                               child: LoadingElevatedButton(
                                 child: Text(
-                                  state.selectedYields != state.recipe.yields
+                                  state.selectedYields != null &&
+                                          state.selectedYields !=
+                                              state.recipe.yields
                                       ? AppLocalizations.of(context)!
                                           .addRecipeToPlanner(
-                                          state.selectedYields,
+                                          state.selectedYields!,
                                         )
                                       : AppLocalizations.of(context)!
                                           .addRecipeToPlannerShort,

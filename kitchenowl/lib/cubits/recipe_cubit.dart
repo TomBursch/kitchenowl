@@ -71,7 +71,7 @@ class RecipeCubit extends Cubit<RecipeState> {
     emit(RecipeState(
       recipe: recipe,
       updateState: state.updateState,
-      selectedYields: recipe.yields,
+      selectedYields: state.selectedYields ?? recipe.yields,
       shoppingLists: shoppingLists != null ? await shoppingLists : const [],
       household: (await household) ?? state.household,
     ));
@@ -99,8 +99,9 @@ class RecipeCubit extends Cubit<RecipeState> {
         recipePlan: RecipePlan(
           recipe: state.recipe,
           day: day,
-          yields: state.recipe.yields != state.selectedYields &&
-                  state.selectedYields > 0
+          yields: state.selectedYields != null &&
+                  state.recipe.yields != state.selectedYields &&
+                  state.selectedYields! > 0
               ? state.selectedYields
               : null,
         ),
@@ -129,7 +130,7 @@ final class RecipeState extends Equatable {
   final Set<String> selectedItems;
   final Recipe recipe;
   final Recipe dynamicRecipe;
-  final int selectedYields;
+  final int? selectedYields;
   final UpdateEnum updateState;
   final List<ShoppingList> shoppingLists;
   final Household? household;

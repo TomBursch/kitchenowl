@@ -15,24 +15,24 @@
   "@addLanguageConfirm": {
     "placeholders": {
       "lang": {
-        "type": "String",
-        "example": "English"
+        "example": "English",
+        "type": "String"
       }
     }
   },
   "@addNumberIngredients": {
     "placeholders": {
       "number": {
-        "type": "int",
-        "example": "2"
+        "example": "2",
+        "type": "int"
       }
     }
   },
   "@addRecipeToPlanner": {
     "placeholders": {
       "number": {
-        "type": "int",
-        "example": "2"
+        "example": "2",
+        "type": "int"
       }
     }
   },
@@ -44,19 +44,22 @@
   "@addedBy": {
     "placeholders": {
       "name": {
-        "type": "String",
-        "example": "Tom"
+        "example": "Tom",
+        "type": "String"
       }
     }
   },
   "@address": {},
   "@admin": {},
+  "@analysingWebsite": {},
   "@appDescription": {},
   "@appTitle": {
     "description": "The title of the app"
   },
   "@back": {},
   "@balances": {},
+  "@budget": {},
+  "@budgetSet": {},
   "@camera": {},
   "@cancel": {},
   "@categories": {},
@@ -66,8 +69,8 @@
   "@categoryDeleteConfirmation": {
     "placeholders": {
       "category": {
-        "type": "String",
-        "example": "Frozen"
+        "example": "Frozen",
+        "type": "String"
       }
     }
   },
@@ -75,12 +78,13 @@
   "@categoryExpenseDeleteConfirmation": {
     "placeholders": {
       "category": {
-        "type": "String",
-        "example": "Frozen"
+        "example": "Frozen",
+        "type": "String"
       }
     }
   },
   "@changeIcon": {},
+  "@clear": {},
   "@colorSelect": {},
   "@confirm": {},
   "@cookingTime": {},
@@ -115,8 +119,8 @@
   "@expenseOverviewTotalTitle": {
     "placeholders": {
       "month": {
-        "type": "String",
-        "example": "January"
+        "example": "January",
+        "type": "String"
       }
     }
   },
@@ -129,8 +133,8 @@
   "@fieldCannotBeEmpty": {
     "placeholders": {
       "field": {
-        "type": "String",
-        "example": "Username"
+        "example": "Username",
+        "type": "String"
       }
     }
   },
@@ -140,13 +144,21 @@
   "@go": {},
   "@grid": {},
   "@helpTranslate": {},
+  "@hi": {
+    "placeholders": {
+      "name": {
+        "example": "Tom",
+        "type": "String"
+      }
+    }
+  },
   "@household": {},
   "@householdDelete": {},
   "@householdDeleteConfirmation": {
     "placeholders": {
       "household": {
-        "type": "String",
-        "example": "Home"
+        "example": "Home",
+        "type": "String"
       }
     }
   },
@@ -155,8 +167,8 @@
   "@householdLeaveConfirmation": {
     "placeholders": {
       "household": {
-        "type": "String",
-        "example": "Home"
+        "example": "Home",
+        "type": "String"
       }
     }
   },
@@ -174,8 +186,8 @@
   "@itemDeleteConfirmation": {
     "placeholders": {
       "item": {
-        "type": "String",
-        "example": "Cake"
+        "example": "Cake",
+        "type": "String"
       }
     }
   },
@@ -187,12 +199,12 @@
   "@itemsMergeConfirmation": {
     "placeholders": {
       "item": {
-        "type": "String",
-        "example": "Cake"
+        "example": "Cake",
+        "type": "String"
       },
       "other": {
-        "type": "String",
-        "example": "Cake"
+        "example": "Cake",
+        "type": "String"
       }
     }
   },
@@ -211,8 +223,8 @@
   "@lltDeleteConfirmation": {
     "placeholders": {
       "token": {
-        "type": "String",
-        "example": "HomeAssistant"
+        "example": "HomeAssistant",
+        "type": "String"
       }
     }
   },
@@ -226,12 +238,13 @@
   "@logoutName": {
     "placeholders": {
       "name": {
-        "type": "String",
-        "example": "Tom"
+        "example": "Tom",
+        "type": "String"
       }
     }
   },
   "@longPressToReorder": {},
+  "@longerThanExpected": {},
   "@markAsPaid": {},
   "@mealPlanner": {},
   "@member": {},
@@ -254,25 +267,26 @@
   "@onboardingSettingsTitle": {
     "placeholders": {
       "name": {
-        "type": "String",
-        "example": "Tom"
+        "example": "Tom",
+        "type": "String"
       }
     }
   },
   "@onboardingTitle": {},
   "@optional": {},
   "@or": {},
+  "@ordering": {},
   "@other": {},
   "@overview": {},
   "@owesAB": {
     "placeholders": {
       "nameA": {
-        "type": "String",
-        "example": "Tom"
+        "example": "Tom",
+        "type": "String"
       },
       "nameB": {
-        "type": "String",
-        "example": "Tom"
+        "example": "Tom",
+        "type": "String"
       }
     }
   },
@@ -293,20 +307,33 @@
   "@privacyPolicyAgree": {
     "placeholders": {
       "privacyPolicy": {
-        "type": "String",
-        "example": "Privacy Policy"
+        "example": "Privacy Policy",
+        "type": "String"
       }
     }
   },
+  "@private": {},
+  "@privateRecipeDescription": {},
   "@profile": {},
+  "@public": {},
+  "@publicRecipeDescription": {},
+  "@recentItemsCategorize": {},
   "@recipeAdd": {},
+  "@recipeAddToHousehold": {
+    "placeholders": {
+      "householdName": {
+        "example": "Home",
+        "type": "String"
+      }
+    }
+  },
   "@recipeAddUrl": {},
   "@recipeDelete": {},
   "@recipeDeleteConfirmation": {
     "placeholders": {
       "recipe": {
-        "type": "String",
-        "example": "Cake"
+        "example": "Cake",
+        "type": "String"
       }
     }
   },
@@ -321,7 +348,9 @@
   "@recipesOverwriteDescription": {},
   "@recipesRecent": {},
   "@recipesSuggested": {},
+  "@redo": {},
   "@refresh": {},
+  "@rememberLastShoppingList": {},
   "@remove": {},
   "@rename": {},
   "@reportIssue": {},
@@ -334,13 +363,21 @@
   "@set": {},
   "@settings": {},
   "@setupTitle": {},
+  "@share": {},
   "@shoppingList": {},
+  "@shoppingListContainsEntries": {
+    "placeholders": {
+      "entriesCount": {
+        "type": "num"
+      }
+    }
+  },
   "@shoppingListDelete": {},
   "@shoppingListDeleteConfirmation": {
     "placeholders": {
       "shoppingList": {
-        "type": "String",
-        "example": "Supermarket"
+        "example": "Supermarket",
+        "type": "String"
       }
     }
   },
@@ -350,12 +387,13 @@
   "@signInWith": {
     "placeholders": {
       "provider": {
-        "type": "String",
-        "example": "Authentik"
+        "example": "Authentik",
+        "type": "String"
       }
     }
   },
   "@signup": {},
+  "@skip": {},
   "@smaller": {},
   "@sortingAlgorithmic": {},
   "@sortingAlphabetical": {},
@@ -368,8 +406,8 @@
   "@tagDeleteConfirmation": {
     "placeholders": {
       "tag": {
-        "type": "String",
-        "example": "Lunch"
+        "example": "Lunch",
+        "type": "String"
       }
     }
   },
@@ -380,10 +418,24 @@
   "@themeLight": {},
   "@themeMode": {},
   "@themeSystem": {},
+  "@today": {},
+  "@tomorrow": {},
   "@total": {},
   "@totalTime": {},
+  "@tutorialItemDescription1": {},
+  "@tutorialItemDescription2": {},
+  "@tutorialRecipeDescription": {},
+  "@tutorialRecipeMore": {
+    "placeholders": {
+      "url": {
+        "example": "https://...",
+        "type": "String"
+      }
+    }
+  },
   "@uncategorized": {},
   "@underConstruction": {},
+  "@undo": {},
   "@unlink": {
     "description": "As in remove link to social account (e.g. Google)"
   },
@@ -400,8 +452,8 @@
   "@userDeleteConfirmation": {
     "placeholders": {
       "user": {
-        "type": "String",
-        "example": "Tom"
+        "example": "Tom",
+        "type": "String"
       }
     }
   },
@@ -412,6 +464,7 @@
   "@usernameUnavailable": {},
   "@users": {},
   "@weekly": {},
+  "@welcomeBack": {},
   "@writeMarkdownHere": {},
   "@wrongUsernameOrPassword": {},
   "@yearly": {},
@@ -421,42 +474,46 @@
   "about": "Sobre",
   "accountCreate": "Criar Conta",
   "accountCreateHint": "O teu user e nome são públicos, escolhe uns que estejas confortável em partilhar com os outros.",
-  "accountCreateTitle": "Crie sua conta KitchenOwl",
+  "accountCreateTitle": "Crie a sua conta KitchenOwl",
   "accountDelete": "Apagar Conta",
   "accountDeleteConfirmation": "Tem certeza que deseja apagar sua conta?",
-  "accountLinkedWithOtherUser": "Conta já vinculada a outro usuário",
+  "accountLinkedWithOtherUser": "Conta já vinculada a outro utilizador",
   "accountsLinked": "Contas vinculadas",
   "add": "Adicione",
   "addCategory": "Adicionar Categoria",
   "addDescriptionFromSource": "Insira a origem",
   "addItemTitle": "Inserir Itens",
   "addLanguage": "Inserir Idioma",
-  "addLanguageConfirm": "Tem certeza de que deseja definir o idioma como '{lang}'? Isso não pode ser desfeito e adicionará itens e categorias à sua residência.",
+  "addLanguageConfirm": "Tem a certeza de que deseja definir o idioma para '{lang}'? Isto não pode ser desfeito e adicionará itens e categorias à sua residência.",
   "addNumberIngredients": "Inserir {number} ingredientes",
   "addRecipeToPlanner": "Adicionar ao plano de refeições ({number} de receitas)",
   "addRecipeToPlannerShort": "Adicionar ao plano de refeição",
-  "addShoppingList": "Adicionar Lista de Compras",
-  "addTag": "Adicionar Tag",
+  "addShoppingList": "Adicionar à lista de compras",
+  "addTag": "Adicionar etiqueta",
   "addedBy": "Inserido por {name}",
   "address": "Endereço",
-  "admin": "Admin",
-  "appDescription": "KitchenOwl te ajuda a organizar suas compras.",
+  "admin": "Administrador",
+  "analysingWebsite": "A analisar website...",
+  "appDescription": "O KitchenOwl ajuda-te a organizar as tuas compras.",
   "appTitle": "KitchenOwl",
   "back": "Voltar",
   "balances": "Balanço",
-  "camera": "Câmera",
+  "budget": "Orçamento",
+  "budgetSet": "Definir orçamento",
+  "camera": "Câmara",
   "cancel": "Cancelar",
   "categories": "Categorias",
   "categoriesMerge": "Unir Categorias",
   "category": "Categoria",
   "categoryDelete": "Apagar Categoria",
-  "categoryDeleteConfirmation": "Tem certeza que quer apagar {category}? Isso irá remover a categoria de todos os itens.",
+  "categoryDeleteConfirmation": "Tem a certeza que quer apagar {category}? Isto irá remover a categoria de todos os itens.",
   "categoryEdit": "Editar Categoria",
-  "categoryExpenseDeleteConfirmation": "Tem certeza que quer apagar {category}? Isso irá remover a categoria de todas as despesas.",
+  "categoryExpenseDeleteConfirmation": "Tem a certeza que quer apagar {category}? Isto irá remover a categoria de todas as despesas.",
   "changeIcon": "Alterar Ícone",
+  "clear": "Limpar",
   "colorSelect": "Selecione uma cor",
   "confirm": "Confirme",
-  "cookingTime": "Hora de Cozinhar",
+  "cookingTime": "Tempo de confeção",
   "copied": "Copiado",
   "daily": "Diariamente",
   "dangerZone": "Zona de Perigo",
@@ -497,17 +554,18 @@
   "gallery": "Galeria",
   "general": "Geral",
   "go": "Ir",
-  "grid": "Grade",
+  "grid": "Grelha",
   "helpTranslate": "Ajude a traduzir",
+  "hi": "Olá {name}!",
   "household": "Residência",
   "householdDelete": "Apagar residência",
-  "householdDeleteConfirmation": "Tem certeza de que deseja apagar {household}? Isso apagará quaisquer elementos, receitas e despesas associadas a essa casa.",
+  "householdDeleteConfirmation": "Tem a certeza de que deseja apagar {household}? Isto apagará quaisquer elementos, receitas e despesas associadas a essa residência.",
   "householdEmpty": "Sem residências, comece criando uma!",
-  "householdLeave": "Sair do lar",
-  "householdLeaveConfirmation": "Tem certeza de que deseja sair de {household}?",
-  "householdNew": "Novo Domicílio",
+  "householdLeave": "Sair da residência",
+  "householdLeaveConfirmation": "Tem a certeza de que deseja sair de {household}?",
+  "householdNew": "Nova residência",
   "householdSwitch": "Trocar de residência",
-  "households": "Domicílios",
+  "households": "Residências",
   "icon": "Ícone",
   "imageSelect": "Selecione uma imagem",
   "import": "Importar",
@@ -516,13 +574,13 @@
   "ingredients": "Ingredientes",
   "ingredientsOptional": "Ingredientes opcionais",
   "itemDelete": "Apagar elemento",
-  "itemDeleteConfirmation": "Tem certeza de que deseja apagar {item}? Isso removerá o item de qualquer receita que o contenha.",
+  "itemDeleteConfirmation": "Tem a certeza de que deseja apagar {item}? Isto removerá o item de qualquer receita que o contenha.",
   "itemRemoveInteraction": "Interação para remover elementos",
   "itemSize": "Tamanho do elementos",
   "items": "Elementos",
   "itemsAdd": "Adicionar elementos",
   "itemsMerge": "Combinar elementos",
-  "itemsMergeConfirmation": "Tem certeza de que deseja combinar {item} e {other}? Isso não pode ser desfeito.",
+  "itemsMergeConfirmation": "Tem a certeza de que deseja combinar {item} e {other}? Isto não pode ser desfeito.",
   "itemsOptional": "Elementos opcionais",
   "itemsRecent": "Elementos recentes",
   "language": "Idioma",
@@ -533,24 +591,25 @@
   "list": "Lista",
   "lltCreate": "Criar token de longa duração",
   "lltDelete": "Apagar token de longa duração",
-  "lltDeleteConfirmation": "Tem certeza de que deseja apagar o token de longa duração '{token}'? Isso não pode ser desfeito.",
-  "lltNotShownAgain": "Grave o token, não poderá visualizá-lo novamente",
-  "lltWarningContent": "Tem certeza de que deseja criar um token de longa duração? Isso pode ser um risco de segurança. O token não expira e dá acesso total à sua conta.",
+  "lltDeleteConfirmation": "Tem a certeza de que deseja apagar o token de longa duração '{token}'? Isto não pode ser desfeito.",
+  "lltNotShownAgain": "Guarde o token; não poderá visualizá-lo novamente",
+  "lltWarningContent": "Tem a certeza de que deseja criar um token de longa duração? Isto pode ser um risco de segurança. O token não expira e dá acesso total à sua conta.",
   "lltWarningTitle": "Sabe o que está a fazer?",
   "llts": "Tokens de longa duração",
   "login": "Login",
   "loginTo": "Fazer login em",
   "logout": "Sair",
   "logoutName": "Sair {name}",
-  "longPressToReorder": "Imprensa longa para reordenar",
+  "longPressToReorder": "Toque longo para reordenar",
+  "longerThanExpected": "Está a levar mais tempo do que o esperado",
   "markAsPaid": "Marcar como pago",
-  "mealPlanner": "Planejador de refeições",
+  "mealPlanner": "Planeador de refeições",
   "member": "Membro",
   "memberAdd": "Adicionar membro",
   "memberRemove": "Remover membro",
   "members": "Membros",
   "merge": "Combinar",
-  "minutesAbbrev": "mín",
+  "minutesAbbrev": "min",
   "moneyTransfer": "Transferência de dinheiro",
   "monthly": "Mensal",
   "more": "Mais",
@@ -561,11 +620,12 @@
   "now": "Agora",
   "offlineMessage": "Está off-line",
   "okay": "Ok",
-  "onboardingLoading": "A importação do idioma pode demorar um pouco. Por favor, seja utente :)",
+  "onboardingLoading": "A importação do idioma pode demorar um pouco. Por favor, seja paciente :)",
   "onboardingSettingsTitle": "Olá {name}, vamos configurar o servidor!",
   "onboardingTitle": "Vamos criar um utilizador",
   "optional": "Opcional",
   "or": "ou",
+  "ordering": "Ordem",
   "other": "Outros",
   "overview": "Visão geral",
   "owesAB": "{nameA} deve a {nameB}",
@@ -573,34 +633,42 @@
   "password": "Senha",
   "passwordFieldTooShort": "Senha muito curta",
   "passwordForgot": "Esqueceu-se da palavra-passe?",
-  "passwordRepeat": "Repetir Senha",
+  "passwordRepeat": "Repetir senha",
   "passwordRepeatNoMatch": "As senhas não são iguais",
-  "passwordReset": "Redefinir palavra-passe",
-  "passwordSave": "Atualizar Senha",
+  "passwordReset": "Redefinir senha",
+  "passwordSave": "Atualizar senha",
   "personal": "Pessoal",
-  "planner": "Planejador",
-  "plannerEmpty": "Sem refeições planejadas, comece selecionando uma das suas receitas!",
-  "plannerTitle": "As suas refeições planejadas",
-  "preparationTime": "Tempo de preparo",
-  "privacyPolicy": "Política de Privacidade",
+  "planner": "Pleaneador",
+  "plannerEmpty": "Sem refeições planeadas, comece selecionando uma das suas receitas!",
+  "plannerTitle": "As suas refeições planeadas",
+  "preparationTime": "Tempo de preparação",
+  "privacyPolicy": "Política de privacidade",
   "privacyPolicyAgree": "Ao criar uma conta, concorda com a nossa {privacyPolicy}",
+  "private": "Privado",
+  "privateRecipeDescription": "Apenas membros da residência podem ver esta receita.",
   "profile": "Perfil",
+  "public": "Público",
+  "publicRecipeDescription": "Qualquer pessoa com um link para esta receita pode vê-la.",
+  "recentItemsCategorize": "Categorizar elementos recentes",
   "recipeAdd": "Adicionar receita",
-  "recipeAddUrl": "Adicionar receita do URL",
+  "recipeAddToHousehold": "Adicionar a {householdName}",
+  "recipeAddUrl": "Adicionar receita a partir de URL",
   "recipeDelete": "Apagar receita",
-  "recipeDeleteConfirmation": "Tem certeza de que deseja remover {recipe}?",
+  "recipeDeleteConfirmation": "Tem a certeza de que deseja remover {recipe}?",
   "recipeEdit": "Editar receita",
   "recipeEmpty": "Sem receitas, comece adicionando uma!",
   "recipeEmptySearch": "Não foram encontradas receitas :(",
   "recipeImageSelect": "Selecione uma imagem da receita",
   "recipeNew": "Nova receita",
-  "recipeSource": "Fonte da receita",
+  "recipeSource": "Origem da receita",
   "recipes": "Receitas",
   "recipesOverwrite": "Sobrescrever receitas",
   "recipesOverwriteDescription": "Se ativado, as receitas existentes com o mesmo nome serão substituídas",
   "recipesRecent": "Recentes",
   "recipesSuggested": "Sugerido",
+  "redo": "Refazer",
   "refresh": "Atualizar",
+  "rememberLastShoppingList": "Guardar a última lista de compras",
   "remove": "Remover",
   "rename": "Renomear",
   "reportIssue": "Relatar um problema",
@@ -613,15 +681,18 @@
   "set": "Definir",
   "settings": "Configurações",
   "setupTitle": "Olá! Pronto para fazer compras?",
+  "share": "Partilhar",
   "shoppingList": "Lista de compras",
+  "shoppingListContainsEntries": "{entriesCount, plural, =0{A lista de compras não contém elementos.} =1{A lista de compras contém 1 elemento.} other{A lista de compras contém {entriesCount} elementos.}}",
   "shoppingListDelete": "Apagar lista de compras",
-  "shoppingListDeleteConfirmation": "Tem certeza de que deseja apagar {shoppingList}?",
+  "shoppingListDeleteConfirmation": "Tem a certeza de que deseja apagar {shoppingList}?",
   "shoppingListEdit": "Editar lista de compras",
-  "shoppingListStyle": "Estilo de lista de compras",
+  "shoppingListStyle": "Estilo da lista de compras",
   "shoppingLists": "Listas de compras",
   "signInWith": "Entrar com {provider}",
-  "signup": "Cadastre-se",
-  "smaller": "Menores",
+  "signup": "Registar-se",
+  "skip": "Saltar",
+  "smaller": "Menor",
   "sortingAlgorithmic": "Algorítmico",
   "sortingAlphabetical": "Alfabética",
   "start": "Iniciar",
@@ -630,7 +701,7 @@
   "swipeToDeleteAndLongPressToReorder": "Deslize para apagar e mantenha pressionado para reordenar",
   "swipeToRemove": "Deslize para remover",
   "tagDelete": "Apagar etiqueta",
-  "tagDeleteConfirmation": "Tem certeza de que deseja apagar {tag}? Isso removerá a etiqueta de qualquer receita que a contenha.",
+  "tagDeleteConfirmation": "Tem a certeza de que deseja apagar {tag}? Isto removerá a etiqueta de qualquer receita que a contenha.",
   "tagEdit": "Editar etiqueta",
   "tags": "Etiquetas",
   "tap": "Tocar",
@@ -638,33 +709,41 @@
   "themeLight": "Claro",
   "themeMode": "Tema",
   "themeSystem": "Sistema",
+  "today": "Hoje",
+  "tomorrow": "Amanhã",
   "total": "Total",
   "totalTime": "Tempo total",
+  "tutorialItemDescription1": "Ao procurar elementos, pode adicionar uma quantia no início da pesquisa, e será adicionada à descrição.",
+  "tutorialItemDescription2": "Ou, se for necessário mais informação, use uma vírgula para separar o nome do elemento da sua descrição.",
+  "tutorialRecipeDescription": "Dentro das receitas, pode usar Markdown. Funcionalidades básicas incluem títulos especificados com cardinais, listas numeradas para os passos da receita, e referências aos ingredientes usando um @ seguido do nome do ingrediente.",
+  "tutorialRecipeMore": "Para mais informações, consulte a [documentação]({url}).",
   "uncategorized": "Sem categoria",
   "underConstruction": "Em construção",
+  "undo": "Desfazer",
   "unlink": "Desvincular",
-  "unreachableMessage": "Hmmmm... não foi possível aceder o servidor",
-  "unsavedChangesBody": "Tem certeza de que deseja voltar?",
-  "unsavedChangesTitle": "Tem alterações não gravadas",
-  "unsupportedBackendMessage": "A versão do servidor não é compatível, atualize o backend",
-  "unsupportedFrontendMessage": "A versão da app não é compatível, atualize a app",
-  "unsupportedScrapeMessage": "Não foi possível extrair dados do URL",
+  "unreachableMessage": "Hmmmm... não foi possível aceder ao servidor",
+  "unsavedChangesBody": "Tem a certeza de que deseja voltar?",
+  "unsavedChangesTitle": "Tem alterações não guardadas",
+  "unsupportedBackendMessage": "A versão do servidor não é compatível, por favor atualize o backend",
+  "unsupportedFrontendMessage": "A versão da aplicação não é compatível, por favor atualize a aplicação",
+  "unsupportedScrapeMessage": "Este website não é suportado",
   "usedIn": "Usado em",
   "user": "Utilizador",
   "userAdd": "Adicionar utilizador",
   "userDelete": "Apagar utilizador",
-  "userDeleteConfirmation": "Tem certeza de que deseja remover {user}?",
-  "userNotSignedIn": "Precisa estar conectado para vincular uma conta",
+  "userDeleteConfirmation": "Tem a certeza de que deseja remover {user}?",
+  "userNotSignedIn": "Precisa de estar autenticado para vincular uma conta",
   "userSearchHint": "Digite um nome",
   "username": "Nome de utilizador",
   "usernameInvalid": "O nome de utilizador não pode conter '@'",
   "usernameUnavailable": "O nome de utilizador não está disponível",
   "users": "Utilizadores",
   "weekly": "Semanal",
-  "writeMarkdownHere": "Pode usar o markdown aqui!",
+  "welcomeBack": "Bem-vindo de volta",
+  "writeMarkdownHere": "Pode usar markdown aqui!",
   "wrongUsernameOrPassword": "Nome de utilizador ou palavra-passe incorretos",
   "yearly": "Anualmente",
   "yes": "Sim",
-  "yields": "Rendimentos",
+  "yields": "Porções",
   "you": "você"
 }

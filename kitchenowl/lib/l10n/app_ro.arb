@@ -15,24 +15,24 @@
   "@addLanguageConfirm": {
     "placeholders": {
       "lang": {
-        "type": "String",
-        "example": "English"
+        "example": "English",
+        "type": "String"
       }
     }
   },
   "@addNumberIngredients": {
     "placeholders": {
       "number": {
-        "type": "int",
-        "example": "2"
+        "example": "2",
+        "type": "int"
       }
     }
   },
   "@addRecipeToPlanner": {
     "placeholders": {
       "number": {
-        "type": "int",
-        "example": "2"
+        "example": "2",
+        "type": "int"
       }
     }
   },
@@ -44,8 +44,8 @@
   "@addedBy": {
     "placeholders": {
       "name": {
-        "type": "String",
-        "example": "Tom"
+        "example": "Tom",
+        "type": "String"
       }
     }
   },
@@ -69,8 +69,8 @@
   "@categoryDeleteConfirmation": {
     "placeholders": {
       "category": {
-        "type": "String",
-        "example": "Frozen"
+        "example": "Frozen",
+        "type": "String"
       }
     }
   },
@@ -78,8 +78,8 @@
   "@categoryExpenseDeleteConfirmation": {
     "placeholders": {
       "category": {
-        "type": "String",
-        "example": "Frozen"
+        "example": "Frozen",
+        "type": "String"
       }
     }
   },
@@ -119,8 +119,8 @@
   "@expenseOverviewTotalTitle": {
     "placeholders": {
       "month": {
-        "type": "String",
-        "example": "January"
+        "example": "January",
+        "type": "String"
       }
     }
   },
@@ -133,8 +133,8 @@
   "@fieldCannotBeEmpty": {
     "placeholders": {
       "field": {
-        "type": "String",
-        "example": "Username"
+        "example": "Username",
+        "type": "String"
       }
     }
   },
@@ -147,8 +147,8 @@
   "@hi": {
     "placeholders": {
       "name": {
-        "type": "String",
-        "example": "Tom"
+        "example": "Tom",
+        "type": "String"
       }
     }
   },
@@ -157,8 +157,8 @@
   "@householdDeleteConfirmation": {
     "placeholders": {
       "household": {
-        "type": "String",
-        "example": "Home"
+        "example": "Home",
+        "type": "String"
       }
     }
   },
@@ -167,8 +167,8 @@
   "@householdLeaveConfirmation": {
     "placeholders": {
       "household": {
-        "type": "String",
-        "example": "Home"
+        "example": "Home",
+        "type": "String"
       }
     }
   },
@@ -186,8 +186,8 @@
   "@itemDeleteConfirmation": {
     "placeholders": {
       "item": {
-        "type": "String",
-        "example": "Cake"
+        "example": "Cake",
+        "type": "String"
       }
     }
   },
@@ -199,12 +199,12 @@
   "@itemsMergeConfirmation": {
     "placeholders": {
       "item": {
-        "type": "String",
-        "example": "Cake"
+        "example": "Cake",
+        "type": "String"
       },
       "other": {
-        "type": "String",
-        "example": "Cake"
+        "example": "Cake",
+        "type": "String"
       }
     }
   },
@@ -223,8 +223,8 @@
   "@lltDeleteConfirmation": {
     "placeholders": {
       "token": {
-        "type": "String",
-        "example": "HomeAssistant"
+        "example": "HomeAssistant",
+        "type": "String"
       }
     }
   },
@@ -238,8 +238,8 @@
   "@logoutName": {
     "placeholders": {
       "name": {
-        "type": "String",
-        "example": "Tom"
+        "example": "Tom",
+        "type": "String"
       }
     }
   },
@@ -267,8 +267,8 @@
   "@onboardingSettingsTitle": {
     "placeholders": {
       "name": {
-        "type": "String",
-        "example": "Tom"
+        "example": "Tom",
+        "type": "String"
       }
     }
   },
@@ -281,12 +281,12 @@
   "@owesAB": {
     "placeholders": {
       "nameA": {
-        "type": "String",
-        "example": "Tom"
+        "example": "Tom",
+        "type": "String"
       },
       "nameB": {
-        "type": "String",
-        "example": "Tom"
+        "example": "Tom",
+        "type": "String"
       }
     }
   },
@@ -307,8 +307,8 @@
   "@privacyPolicyAgree": {
     "placeholders": {
       "privacyPolicy": {
-        "type": "String",
-        "example": "Privacy Policy"
+        "example": "Privacy Policy",
+        "type": "String"
       }
     }
   },
@@ -322,8 +322,8 @@
   "@recipeAddToHousehold": {
     "placeholders": {
       "householdName": {
-        "type": "String",
-        "example": "Home"
+        "example": "Home",
+        "type": "String"
       }
     }
   },
@@ -332,8 +332,8 @@
   "@recipeDeleteConfirmation": {
     "placeholders": {
       "recipe": {
-        "type": "String",
-        "example": "Cake"
+        "example": "Cake",
+        "type": "String"
       }
     }
   },
@@ -376,8 +376,8 @@
   "@shoppingListDeleteConfirmation": {
     "placeholders": {
       "shoppingList": {
-        "type": "String",
-        "example": "Supermarket"
+        "example": "Supermarket",
+        "type": "String"
       }
     }
   },
@@ -387,8 +387,8 @@
   "@signInWith": {
     "placeholders": {
       "provider": {
-        "type": "String",
-        "example": "Authentik"
+        "example": "Authentik",
+        "type": "String"
       }
     }
   },
@@ -406,8 +406,8 @@
   "@tagDeleteConfirmation": {
     "placeholders": {
       "tag": {
-        "type": "String",
-        "example": "Lunch"
+        "example": "Lunch",
+        "type": "String"
       }
     }
   },
@@ -418,6 +418,8 @@
   "@themeLight": {},
   "@themeMode": {},
   "@themeSystem": {},
+  "@today": {},
+  "@tomorrow": {},
   "@total": {},
   "@totalTime": {},
   "@tutorialItemDescription1": {},
@@ -426,8 +428,8 @@
   "@tutorialRecipeMore": {
     "placeholders": {
       "url": {
-        "type": "String",
-        "example": "https://..."
+        "example": "https://...",
+        "type": "String"
       }
     }
   },
@@ -450,8 +452,8 @@
   "@userDeleteConfirmation": {
     "placeholders": {
       "user": {
-        "type": "String",
-        "example": "Tom"
+        "example": "Tom",
+        "type": "String"
       }
     }
   },
@@ -473,23 +475,23 @@
   "accountCreate": "Crează cont",
   "accountCreateHint": "Numele de utilizator și numele dvs. sunt publice, așa că alegeți ceva pe care vă simțiți confortabil să le împărtășiți altora.",
   "accountCreateTitle": "Crează un cont Kitchenowl",
-  "accountDelete": "Sterge Cont",
-  "accountDeleteConfirmation": "Esti sigur ca vrei sa-ti stergi contul?",
+  "accountDelete": "Şterge cont",
+  "accountDeleteConfirmation": "Eşti sigur că vrei să-ți ștergi contul?",
   "accountLinkedWithOtherUser": "Cont conectat deja de un alt utilizator",
   "accountsLinked": "Conturi conectate",
-  "add": "Adauga",
-  "addCategory": "Adauga Categorie",
-  "addDescriptionFromSource": "Adauga descriere de la sursa",
-  "addItemTitle": "Adauga Articole",
-  "addLanguage": "Adauga Limba",
-  "addLanguageConfirm": "Esti sigur ca vrei sa schimbi limba la '{lang}'? Aceasta actiune nu poate fi anulata si va adauga articole si categorii in casa ta.",
-  "addNumberIngredients": "Adauga {number} ingrediente",
-  "addRecipeToPlanner": "Adăugați la planul de masă ({number})",
+  "add": "Adaugă",
+  "addCategory": "Adaugă categorie",
+  "addDescriptionFromSource": "Adaugă descriere de la sursă",
+  "addItemTitle": "Adaugă articole",
+  "addLanguage": "Adaugă limba",
+  "addLanguageConfirm": "Ești sigur că vrei să schimbi limba la '{lang}'? Această acțiune nu poate fi anulată și va adăuga articole și categorii în gospodăria ta.",
+  "addNumberIngredients": "Adaugă {number} ingrediente",
+  "addRecipeToPlanner": "Adăugați la planul de masă ({number}servers)",
   "addRecipeToPlannerShort": "Adaugă un plan de mese",
-  "addShoppingList": "Adaugă lista cumpărături",
-  "addTag": "Adaugă tag",
+  "addShoppingList": "Adaugă listă de cumpărături",
+  "addTag": "Adaugă etichetă",
   "addedBy": "Adăugat de {name}",
-  "address": "Adresa",
+  "address": "Adresă",
   "admin": "Administrator",
   "analysingWebsite": "Se analizează site-ul web...",
   "appDescription": "KitchenOwl te ajută să organizezi lista de cumpărături.",
@@ -500,24 +502,24 @@
   "budgetSet": "Setați bugetul",
   "camera": "Cameră",
   "cancel": "Anulare",
-  "categories": "Cayegorii",
-  "categoriesMerge": "Combină categorii",
+  "categories": "Categorii",
+  "categoriesMerge": "Combină categoriile",
   "category": "Categorie",
   "categoryDelete": "Șterge categorie",
   "categoryDeleteConfirmation": "Ești sigur ca dorești să ștergi{category}? Vei șterge categoria de la toate articolele.",
   "categoryEdit": "Editează categoria",
-  "categoryExpenseDeleteConfirmation": "Ești sigur ca dorești să ștergi{category}? Vei șterge categoria de la toate cheltuielile.",
-  "changeIcon": "Schimbă icoana",
+  "categoryExpenseDeleteConfirmation": "Ești sigur că dorești să ștergi{category}? Vei șterge categoria de la toate cheltuielile.",
+  "changeIcon": "Schimbă pictograma",
   "clear": "Ștergere",
   "colorSelect": "Selectează o culoare",
   "confirm": "Confirmă",
   "cookingTime": "Timp de gătire",
   "copied": "Copiat",
   "daily": "Zilnic",
-  "dangerZone": "Zona de risc",
+  "dangerZone": "Zonă de risc",
   "darkmode": "Mod întunecat",
   "date": "Data",
-  "defaultKey": "Cheie implicita",
+  "defaultKey": "Cheie implicită",
   "defaultWord": "Mod implicit",
   "delete": "Șterge",
   "description": "Descriere",
@@ -529,7 +531,7 @@
   "emailResendVerification": "Retrimite emailul de verificare",
   "emailSuccessfullyVerified": "E-mail verificat cu succes!",
   "emailUpdate": "Reactualizează email",
-  "emailUsed": "E-mailul este deja asociat unui cont",
+  "emailUsed": "Email-ul este deja asociat unui cont",
   "error": "A apărut o eroare",
   "excludeFromStatistics": "Excludeți de la statistici",
   "expense": "Cheltuieli",
@@ -537,7 +539,7 @@
   "expenseAmount": "Sumă",
   "expenseCategories": "Categorii de cheltuieli",
   "expenseEdit": "Editați cheltuielile",
-  "expenseEmpty": "Nici o cheltuială, incepeți prin a adauga una!",
+  "expenseEmpty": "Nici o cheltuială, incepeți prin a adăuga una!",
   "expenseFactor": "Factor",
   "expenseOverviewComparedToPreviousMonth": "În comparație cu luna trecută",
   "expenseOverviewTotalTitle": "Total cheltuieli pentru {month}:",
@@ -548,12 +550,12 @@
   "export": "Exportă",
   "features": "Caracteristici",
   "fieldCannotBeEmpty": "{field} nu poate fi lasat gol.",
-  "forceOfflineMode": "Forțează mod offline",
+  "forceOfflineMode": "Forțează modul offline",
   "gallery": "Galerie",
   "general": "General",
   "go": "Mergeți",
   "grid": "Grilă",
-  "helpTranslate": "Ajutați traducerea",
+  "helpTranslate": "Ajutați la traducere",
   "hi": "Bună {name}!",
   "household": "Gospodărie",
   "householdDelete": "Ștergeți gospodăria",
@@ -566,22 +568,22 @@
   "households": "Gospodăriile",
   "icon": "Pictogramă",
   "imageSelect": "Selectați o imagine",
-  "import": "Import",
+  "import": "Importă",
   "importStartedHint": "Importul a început, poate dura câteva minute.",
   "income": "Venituri",
   "ingredients": "Ingrediente",
-  "ingredientsOptional": "Ingrediente optionale",
+  "ingredientsOptional": "Ingrediente opționale",
   "itemDelete": "Ștergeți articolul",
   "itemDeleteConfirmation": "Sigur doriți să ștergeți {item}? Acest lucru va elimina articolul din orice rețetă care îl conține.",
   "itemRemoveInteraction": "Eliminați interacțiunea cu elementul",
   "itemSize": "Mărimea articolului",
-  "items": "Articol",
+  "items": "Articole",
   "itemsAdd": "Adaugă articole",
-  "itemsMerge": "Combină articole",
-  "itemsMergeConfirmation": "Ești sigur ca dorești ca combini{item} și {other}? Acest lucru nu poate fi anulat.",
+  "itemsMerge": "Combină articolele",
+  "itemsMergeConfirmation": "Ești sigur că dorești să combini{item} și {other}? Acest lucru nu poate fi anulat.",
   "itemsOptional": "Articole opționale",
   "itemsRecent": "Articole recente",
-  "language": "Limba",
+  "language": "Limbă",
   "languageSelect": "Selectează limba",
   "larger": "Mai mare",
   "lastUsed": "Folosit ultima dată",
@@ -590,15 +592,15 @@
   "lltCreate": "Creați un token cu viață lungă",
   "lltDelete": "Stergeți un token cu viață lungă",
   "lltDeleteConfirmation": "Sigur doriți să ștergeți indicativul cu durată lungă de viață '{token}'? Acest lucru nu poate fi anulat.",
-  "lltNotShownAgain": "Salvați token-ul; nu o vei putea vedea din nou",
+  "lltNotShownAgain": "Salvați token-ul; nu îl vei putea vedea din nou",
   "lltWarningContent": "Sigur doriți să creați un token cu viață lungă? Acesta ar putea fi un risc de securitate. Tokenul nu expiră și oferă acces deplin la contul tău.",
   "lltWarningTitle": "Știi ce faci?",
   "llts": "Tokenuri cu viață lungă",
-  "login": "Logheazate",
-  "loginTo": "Logheqzate la",
-  "logout": "Delogheazate",
-  "logoutName": "Delogheazate{name}",
-  "longPressToReorder": "Apasă lung pt a rearanja",
+  "login": "Conectare",
+  "loginTo": "Conectare la",
+  "logout": "Deconectare",
+  "logoutName": "Deconecteaza {name}",
+  "longPressToReorder": "Apasă lung pentru a rearanja",
   "longerThanExpected": "Acest lucru durează mai mult decât se aștepta",
   "markAsPaid": "Marchează ca și plătit",
   "mealPlanner": "Planificatorul meselor",
@@ -606,7 +608,7 @@
   "memberAdd": "Adaugă membru",
   "memberRemove": "Elimină membru",
   "members": "Membrii",
-  "merge": "Combina",
+  "merge": "Combină",
   "minutesAbbrev": "Min",
   "moneyTransfer": "Transfer de bani",
   "monthly": "Lunar",
@@ -619,17 +621,17 @@
   "offlineMessage": "Ești offline",
   "okay": "În ordine",
   "onboardingLoading": "Importul limbii poate dura ceva timp. Te rog fii rabdator :)",
-  "onboardingSettingsTitle": "Bună {name}, hai să configuram serverul!",
+  "onboardingSettingsTitle": "Bună {name}, hai să configurăm serverul!",
   "onboardingTitle": "Hai să creăm un utilizator",
-  "optional": "Optional",
+  "optional": "Opțional",
   "or": "Sau",
   "ordering": "Ordonare",
   "other": "Altul",
   "overview": "Prezentare generală",
   "owesAB": "{nameA} îi datorează {nameB}",
   "pageNotFound": "Nu am putut găsi pagina",
-  "password": "Parola",
-  "passwordFieldTooShort": "Parola prea scurtă",
+  "password": "Parolă",
+  "passwordFieldTooShort": "Parolă prea scurtă",
   "passwordForgot": "Ai uitat parola?",
   "passwordRepeat": "Repetă parola",
   "passwordRepeatNoMatch": "Parolele nu sunt la fel",
@@ -648,7 +650,7 @@
   "public": "Public",
   "publicRecipeDescription": "Oricine are linkul către această rețetă o poate vizualiza.",
   "recentItemsCategorize": "Clasificați articolele recente",
-  "recipeAdd": "Adaugă rețeta",
+  "recipeAdd": "Adaugă rețetă",
   "recipeAddToHousehold": "Adăugați la {householdName}",
   "recipeAddUrl": "Adăugați rețeta de la URL",
   "recipeDelete": "Șterge rețeta",
@@ -657,7 +659,7 @@
   "recipeEmpty": "Fără rețete, începe prin a adăuga una!",
   "recipeEmptySearch": "Nu am gasit retete :(",
   "recipeImageSelect": "Selectați o imagine de rețetă",
-  "recipeNew": "Rețeta noua",
+  "recipeNew": "Rețeta nouă",
   "recipeSource": "Sursa rețetei",
   "recipes": "Rețete",
   "recipesOverwrite": "Suprascrieți rețetele",
@@ -665,21 +667,21 @@
   "recipesRecent": "Recent",
   "recipesSuggested": "Sugerat",
   "redo": "Refaceți",
-  "refresh": "Actualizeaza",
+  "refresh": "Actualizează",
   "rememberLastShoppingList": "Amintiți-vă de ultima listă de cumpărături folosită",
-  "remove": "Sterge",
+  "remove": "Elimină",
   "rename": "Redenumește",
-  "reportIssue": "Raportează o problema",
-  "reset": "Reseteaza",
+  "reportIssue": "Raportează o problemă",
+  "reset": "Resetează",
   "save": "Salvează",
   "searchHint": "Cauți ceva?",
   "server": "Server",
   "serverChange": "Schimbă serverul",
   "sessions": "Sesiuni",
-  "set": "Set",
+  "set": "Setează",
   "settings": "Setări",
   "setupTitle": "Hei acolo! Ești gata să faci cumpărături?",
-  "share": "Împărtășește",
+  "share": "Partajează",
   "shoppingList": "Listă de cumpărături",
   "shoppingListContainsEntries": "{entriesCount, plural, =0{Lista de cumpărături nu conține articole.} =1{Lista de cumpărături conține un articol.} other{Lista de cumpărături conține {entriesCount} articole.}}",
   "shoppingListDelete": "Șterge lista de cumpărături",
@@ -688,7 +690,7 @@
   "shoppingListStyle": "Stilul listei de cumpărături",
   "shoppingLists": "Liste de cumpărături",
   "signInWith": "Conectați-vă cu {provider}",
-  "signup": "Conectați-vă",
+  "signup": "Crează cont nou",
   "skip": "Sari peste",
   "smaller": "Mai mic",
   "sortingAlgorithmic": "Algoritmic",
@@ -696,7 +698,7 @@
   "start": "Start",
   "supportDevelopment": "Susțineți dezvoltarea",
   "swipeToDelete": "Glisați pentru a șterge",
-  "swipeToDeleteAndLongPressToReorder": "Glisați pentru a șterge și apăsați lung petru rearanjare",
+  "swipeToDeleteAndLongPressToReorder": "Glisați pentru a șterge și apăsați lung pentru rearanjare",
   "swipeToRemove": "Glisați pentru a elimina",
   "tagDelete": "Ștergeți eticheta",
   "tagDeleteConfirmation": "Ești sigur că vrei să ștergi {tag}? Asta va șterge eticheta din orice rețetă care o conține.",
@@ -707,6 +709,8 @@
   "themeLight": "Luminoasă",
   "themeMode": "Temă",
   "themeSystem": "Sistem",
+  "today": "Astăzi",
+  "tomorrow": "Mâine",
   "total": "Total",
   "totalTime": "Timp total",
   "tutorialItemDescription1": "Când căutați articole, puteți adăuga o sumă la începutul interogării dvs. și va fi adăugată ca descriere.",

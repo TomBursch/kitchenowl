@@ -163,8 +163,7 @@ class AddUpdateExpenseCubit extends Cubit<AddUpdateExpenseState> {
 
   Future<void> _getCategories() async {
     final categories =
-        (await ApiService.getInstance().getExpenseCategories(household)) ??
-            const [];
+        (await ApiService.getInstance().getExpenseCategories(household)) ?? [];
     final category = state.category;
     if (category != null && !categories.contains(category)) {
       categories.add(category);

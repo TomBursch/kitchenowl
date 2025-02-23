@@ -34,7 +34,9 @@ class Member extends User {
       name: map['name'],
       owner: map['owner'] ?? false,
       admin: map['admin'] ?? false,
-      balance: map['expense_balance'] ?? 0,
+      balance:
+          ((map['expense_balance'] as double? ?? 0) * 100).round().toDouble() /
+              100,
     );
   }
 

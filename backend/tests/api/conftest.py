@@ -73,6 +73,9 @@ def recipe_time():
 
 FIX_DATETIME = datetime(2025, 1, 1, 23, 59, 59)  # Wednesday
 
+def pytest_configure():
+    pytest.FIX_DATETIME = FIX_DATETIME
+
 @pytest.fixture
 def onboarded_client(client, admin_username, admin_name, admin_password):
     onboard_data = {

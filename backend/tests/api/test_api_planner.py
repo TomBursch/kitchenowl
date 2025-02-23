@@ -1,6 +1,5 @@
 from datetime import datetime, timezone
-from .conftest import FIX_DATETIME
-
+import pytest
 
 def test_meal_planning_basic(user_client_with_household, household_id, planned_recipe):
     """Test basic meal planning operations"""
@@ -25,7 +24,7 @@ def test_meal_planning_when_field(user_client_with_household, household_id, plan
     assert response.status_code == 200
     planned_meals = response.get_json()
     actual = datetime.fromtimestamp(planned_meals[0]["when"]/1000, timezone.utc).replace(tzinfo=None)
-    expected = FIX_DATETIME
+    expected = pytest.FIX_DATETIME
     assert actual == expected
 
 
@@ -34,7 +33,7 @@ def test_meal_planning_remove_by_datetime(user_client_with_household, household_
     # Remove from meal plan
     response = user_client_with_household.delete(
         f'/api/household/{household_id}/planner/recipe/{planned_recipe}',
-        json={'when': FIX_DATETIME.isoformat()}
+        json={'when': pytest.FIX_DATETIME.isoformat()}
     )
     assert response.status_code == 200
 
@@ -52,7 +51,7 @@ def test_recent_planned_recipes(user_client_with_household, household_id, planne
     # First remove the recipe from the plan
     response = user_client_with_household.delete(
         f'/api/household/{household_id}/planner/recipe/{planned_recipe}',
-        json={'when': FIX_DATETIME.isoformat()}
+        json={'when': pytest.FIX_DATETIME.isoformat()}
     )
     assert response.status_code == 200
 

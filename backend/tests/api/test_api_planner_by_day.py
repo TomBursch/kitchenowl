@@ -2,11 +2,18 @@ import pytest
 from freezegun import freeze_time
 from datetime import datetime, timezone
 
-def test_planned_recipe_day_field_backwards_compatibility(user_client_with_household, household_id, recipe_with_items):
+def test_planned_recipe_ad_second_on_another_day_backwards_compatibility(user_client_with_household, household_id, recipe_with_items, planned_recipe):
     """Fixture that creates a meal plan with the test recipe"""
+    actual_weekday = pytest.FIX_DATETIME.weekday()
+    if actual_weekday == 0:
+        new_weekday = 1
+    elif actual_weekday == 6:
+        new_weekday = 5
+    else:
+        new_weekday = actual_weekday -1
     plan_data = {
         'recipe_id': recipe_with_items,
-        "day": 0
+        "day": new_weekday
     }
     response = user_client_with_household.post(
         f'/api/household/{household_id}/planner/recipe',
@@ -20,8 +27,8 @@ def test_planned_recipe_day_field_backwards_compatibility(user_client_with_house
     )
     assert response.status_code == 200
     planned_meals = response.get_json()
-    assert len(planned_meals) > 0
-    assert any(meal['recipe']['id'] == recipe_with_items for meal in planned_meals)
+    assert len(planned_meals) == 2
+    assert sum(meal['recipe']['id'] == recipe_with_items for meal in planned_meals) == 2
     
 
 

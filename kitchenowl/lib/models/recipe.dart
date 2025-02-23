@@ -120,8 +120,8 @@ class Recipe extends Model implements ISuspensionBean {
         household: this.household,
       );
 
-  Recipe withYields(int yields) {
-    if (yields == this.yields) return this;
+  Recipe withYields(int? yields) {
+    if (yields == null || yields == this.yields) return this;
 
     return copyWith(
       items: items

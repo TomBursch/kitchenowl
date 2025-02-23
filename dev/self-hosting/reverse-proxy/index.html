@@ -797,6 +797,15 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#caddy" class="md-nav__link">
+    <span class="md-ellipsis">
+      Caddy
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -870,6 +879,15 @@
   <a href="#nginx" class="md-nav__link">
     <span class="md-ellipsis">
       Nginx
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#caddy" class="md-nav__link">
+    <span class="md-ellipsis">
+      Caddy
     </span>
   </a>
   
@@ -1066,6 +1084,20 @@ server {
     listen 80;
     listen [::]:80;
     return 404; # managed by Certbot
+}
+</code></pre></div>
+<h3 id="caddy">Caddy</h3>
+<p>Caddy will automatically set up an SSL certificate for the specified hostname.</p>
+<div class="highlight"><pre><span></span><code>kitchenowl.example.org {
+        reverse_proxy localhost:8080 # Set the address of your KitchenOwl frontend here
+        encode gzip
+        header {
+                X-Frame-Options &quot;SAMEORIGIN&quot;
+                X-XSS-Protection &quot;1; mode=block&quot;
+                X-Content-Type-Options &quot;nosniff&quot;
+                Strict-Transport-Security &quot;max-age=31536000; includeSubDomains; preload&quot;
+                Referrer-Policy &quot;strict-origin-when-cross-origin&quot;
+        }
 }
 </code></pre></div>
 

@@ -191,3 +191,21 @@ server {
     return 404; # managed by Certbot
 }
 ```
+
+### Caddy
+
+Caddy will automatically set up an SSL certificate for the specified hostname.
+
+```caddyfile
+kitchenowl.example.org {
+        reverse_proxy localhost:8080 # Set the address of your KitchenOwl frontend here
+        encode gzip
+        header {
+                X-Frame-Options "SAMEORIGIN"
+                X-XSS-Protection "1; mode=block"
+                X-Content-Type-Options "nosniff"
+                Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+                Referrer-Policy "strict-origin-when-cross-origin"
+        }
+}
+```

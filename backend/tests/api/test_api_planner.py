@@ -11,7 +11,7 @@ def test_meal_planning_basic(user_client_with_household, household_id, planned_r
     planned_meals = response.get_json()
     print(f"planned meals: {planned_meals}")
 
-    assert len(planned_meals) > 0
+    assert len(planned_meals) == 1
     assert any(meal['recipe']['id'] == planned_recipe for meal in planned_meals)
 
 

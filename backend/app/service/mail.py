@@ -9,7 +9,9 @@ from app.models import User
 
 SMTP_HOST = os.getenv("SMTP_HOST")
 SMTP_PORT = int(os.getenv("SMTP_PORT", 465))
-SMTP_USE_TLS = os.getenv("SMTP_USE_TLS", "true" if SMTP_PORT == 587 else "false").lower() == "true"
+SMTP_USE_TLS = (
+    os.getenv("SMTP_USE_TLS", "true" if SMTP_PORT == 587 else "false").lower() == "true"
+)
 SMTP_USER = os.getenv("SMTP_USER")
 SMTP_PASS = os.getenv("SMTP_PASS")
 SMTP_FROM = os.getenv("SMTP_FROM")
@@ -133,6 +135,7 @@ Have any questions? Check out https://kitchenowl.org/privacy/""".format(
     message.attach(MIMEText(text, "plain"))
     message.attach(MIMEText(html, "html"))
     sendMail(user.email, message)
+
 
 def _getMailServer():
     if SMTP_USE_TLS:

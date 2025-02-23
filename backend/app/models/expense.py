@@ -15,8 +15,12 @@ class Expense(db.Model, DbModelMixin, DbModelAuthorizeMixin):
     name: Mapped[str] = db.Column(db.String(128))
     amount: Mapped[float] = db.Column(db.Float())
     description: Mapped[str] = db.Column(db.String)
-    date: Mapped[datetime] = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
-    category_id: Mapped[int] = db.Column(db.Integer, db.ForeignKey("expense_category.id"))
+    date: Mapped[datetime] = db.Column(
+        db.DateTime, default=datetime.utcnow, nullable=False
+    )
+    category_id: Mapped[int] = db.Column(
+        db.Integer, db.ForeignKey("expense_category.id")
+    )
     photo: Mapped[str] = db.Column(db.String(), db.ForeignKey("file.filename"))
     paid_by_id: Mapped[int] = db.Column(db.Integer, db.ForeignKey("user.id"))
     household_id: Mapped[int] = db.Column(
@@ -30,7 +34,9 @@ class Expense(db.Model, DbModelMixin, DbModelAuthorizeMixin):
     paid_for: Mapped[List["Household"]] = db.relationship(
         "ExpensePaidFor", back_populates="expense", cascade="all, delete-orphan"
     )
-    photo_file: Mapped["File"] = db.relationship("File", back_populates="expense", uselist=False)
+    photo_file: Mapped["File"] = db.relationship(
+        "File", back_populates="expense", uselist=False
+    )
 
     def obj_to_dict(self) -> dict:
         res = super().obj_to_dict()
@@ -80,8 +86,12 @@ class Expense(db.Model, DbModelMixin, DbModelAuthorizeMixin):
 class ExpensePaidFor(db.Model, DbModelMixin):
     __tablename__ = "expense_paid_for"
 
-    expense_id: Mapped[int] = db.Column(db.Integer, db.ForeignKey("expense.id"), primary_key=True)
-    user_id: Mapped[int] = db.Column(db.Integer, db.ForeignKey("user.id"), primary_key=True)
+    expense_id: Mapped[int] = db.Column(
+        db.Integer, db.ForeignKey("expense.id"), primary_key=True
+    )
+    user_id: Mapped[int] = db.Column(
+        db.Integer, db.ForeignKey("user.id"), primary_key=True
+    )
     factor: Mapped[int] = db.Column(db.Integer())
 
     expense: Mapped["Expense"] = db.relationship("Expense", back_populates="paid_for")

@@ -32,7 +32,9 @@ class OIDCRequest(db.Model, DbModelMixin):
     provider: Mapped[str] = db.Column(db.String(24), primary_key=True)
     nonce: Mapped[str] = db.Column(db.String(256), nullable=False)
     redirect_uri: Mapped[str] = db.Column(db.String(256), nullable=False)
-    user_id: Mapped[int] = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=True)
+    user_id: Mapped[int] = db.Column(
+        db.Integer, db.ForeignKey("user.id"), nullable=True
+    )
 
     user: Mapped["User"] = db.relationship("User", back_populates="oidc_link_requests")
 

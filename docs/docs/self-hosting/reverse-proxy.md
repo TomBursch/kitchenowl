@@ -205,6 +205,7 @@ kitchenowl.example.org {
                 X-XSS-Protection "1; mode=block"
                 X-Content-Type-Options "nosniff"
                 Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+                Referrer-Policy "strict-origin-when-cross-origin"
         }
 }
 ```

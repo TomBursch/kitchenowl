@@ -2,10 +2,9 @@ from __future__ import annotations
 from datetime import datetime, timezone
 from typing import Self, Tuple, List, TYPE_CHECKING
 
-from flask import request
 from app import db
 from app.config import JWT_REFRESH_TOKEN_EXPIRES, JWT_ACCESS_TOKEN_EXPIRES
-from app.errors import UnauthorizedRequest
+from app.errors import UnauthorizedRequest, getClientIp
 from app.helpers import DbModelMixin
 from flask_jwt_extended import create_access_token, create_refresh_token, get_jti
 from app.models.user import User
@@ -133,7 +132,7 @@ class Token(db.Model, DbModelMixin):
             oldRefreshToken.delete_token_familiy()
             raise UnauthorizedRequest(
                 message="Unauthorized: IP {} reused the same refresh token, logging out user".format(
-                    request.remote_addr
+                    getClientIp()
                 )
             )
 
@@ -154,7 +153,7 @@ class Token(db.Model, DbModelMixin):
                     oldRefreshToken.delete_token_familiy()
                     raise UnauthorizedRequest(
                         message="Unauthorized: IP {} reused the same refresh token, logging out user".format(
-                            request.remote_addr
+                            getClientIp()
                         )
                     )
                 else:

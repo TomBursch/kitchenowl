@@ -1,5 +1,4 @@
 import pytest
-from freezegun import freeze_time
 from datetime import datetime, timezone
 
 def test_planned_recipe_ad_second_on_another_day_backwards_compatibility(user_client_with_household, household_id, recipe_with_items, planned_recipe):

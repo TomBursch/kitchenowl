@@ -2,7 +2,6 @@ import pytest
 from app import app, db
 from unittest.mock import patch
 from datetime import datetime, timedelta
-from freezegun import freeze_time
 
 @pytest.fixture
 def client():
@@ -202,7 +201,7 @@ def planned_recipe(user_client_with_household, household_id, recipe_with_items):
     """Fixture that creates a meal plan with the test recipe"""
     plan_data = {
         'recipe_id': recipe_with_items,
-        "when": FIX_DATETIME.isoformat()
+        "cooking_date": FIX_DATETIME.isoformat()
     }
     response = user_client_with_household.post(
         f'/api/household/{household_id}/planner/recipe',

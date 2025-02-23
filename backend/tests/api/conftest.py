@@ -1,7 +1,8 @@
 import pytest
 from app import app, db
 from unittest.mock import patch
-from datetime import datetime
+from datetime import datetime, timedelta
+from freezegun import freeze_time
 
 @pytest.fixture
 def client():
@@ -71,7 +72,7 @@ def recipe_yields():
 def recipe_time():
     return 30
 
-FIX_DATETIME = datetime(2025, 1, 1, 23, 59, 59)  # Wednesday
+FIX_DATETIME = datetime.today().replace(hour=23,minute=59, second=59, microsecond=0) + timedelta(days=2) # datetime(2025, 1, 1, 23, 59, 59)  # Wednesday
 
 def pytest_configure():
     pytest.FIX_DATETIME = FIX_DATETIME

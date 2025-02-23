@@ -2,7 +2,6 @@ import pytest
 from .conftest import FIX_DATETIME
 
 
-@pytest.fixture
 def planned_recipe_day_field_backwards_compatibility(user_client_with_household, household_id, recipe_with_items):
     """Fixture that creates a meal plan with the test recipe"""
     plan_data = {
@@ -42,15 +41,15 @@ def test_meal_planning_remove(user_client_with_household, household_id, planned_
     )
     assert response.status_code == 200
     planned_meals = response.get_json()
-    assert not any(meal['recipe']['id'] == planned_recipe_day_field_backwards_compatibility for meal in planned_meals)
+    assert not any(meal['recipe']['id'] == planned_recipe for meal in planned_meals)
 
 
-def test_meal_planning_dayplan_remove_by_day(user_client_with_household, household_id, planned_recipe_day_field_backwards_compatibility):
+def test_meal_planning_dayplan_remove_by_day(user_client_with_household, household_id, planned_recipe):
     """Test removing meals from plan"""
     # Remove from meal plan
     response = user_client_with_household.delete(
-        f'/api/household/{household_id}/planner/recipe/{planned_recipe_day_field_backwards_compatibility}',
-        json={'day': 0}
+        f'/api/household/{household_id}/planner/recipe/{planned_recipe}',
+        json={'day': FIX_DATETIME.weekday()}
     )
     assert response.status_code == 200
 
@@ -60,32 +59,16 @@ def test_meal_planning_dayplan_remove_by_day(user_client_with_household, househo
     )
     assert response.status_code == 200
     planned_meals = response.get_json()
-    assert not any(meal['recipe']['id'] == planned_recipe_day_field_backwards_compatibility for meal in planned_meals)
-
-def test_meal_planning_dayplan_remove_by_day(user_client_with_household, household_id, planned_recipe_day_field_backwards_compatibility):
-    """Test removing meals from plan"""
-    # Remove from meal plan
-    response = user_client_with_household.delete(
-        f'/api/household/{household_id}/planner/recipe/{planned_recipe_day_field_backwards_compatibility}',
-        json={'day': 0}
-    )
-    assert response.status_code == 200
-
-    # Verify removal
-    response = user_client_with_household.get(
-        f'/api/household/{household_id}/planner'
-    )
-    assert response.status_code == 200
-    planned_meals = response.get_json()
-    assert not any(meal['recipe']['id'] == planned_recipe_day_field_backwards_compatibility for meal in planned_meals)
+    assert not any(meal['recipe']['id'] == planned_recipe for meal in planned_meals)
 
 
-def test_recent_planned_recipes(user_client_with_household, household_id, planned_recipe_day_field_backwards_compatibility):
+
+def test_recent_planned_recipes(user_client_with_household, household_id, planned_recipe):
     """Test getting recently planned recipes"""
     # First remove the recipe from the plan
     response = user_client_with_household.delete(
-        f'/api/household/{household_id}/planner/recipe/{planned_recipe_day_field_backwards_compatibility}',
-        json={'day': 0}
+        f'/api/household/{household_id}/planner/recipe/{planned_recipe}',
+        json={'day': FIX_DATETIME.weekday()}
     )
     assert response.status_code == 200
 
@@ -96,5 +79,5 @@ def test_recent_planned_recipes(user_client_with_household, household_id, planne
     assert response.status_code == 200
     recent_recipes = response.get_json()
     assert len(recent_recipes) > 0
-    assert any(recipe['id'] == planned_recipe_day_field_backwards_compatibility for recipe in recent_recipes)
+    assert any(recipe['id'] == planned_recipe for recipe in recent_recipes)
 

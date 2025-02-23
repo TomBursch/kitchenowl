@@ -22,9 +22,9 @@ def is_within_next_7_days(target_date: datetime) -> bool:
     # Check if the target date is within the next 7 days
     return now <= target_date <= seven_days_later
 
-def transform_when_to_day(when: datetime) -> int:
-    if is_within_next_7_days(when):
-        return when.weekday()
+def transform_cooking_date_to_day(cooking_date: datetime) -> int:
+    if is_within_next_7_days(cooking_date):
+        return cooking_date.weekday()
 
 class Recipe(db.Model, DbModelMixin, DbModelAuthorizeMixin):
     __tablename__ = "recipe"
@@ -63,8 +63,8 @@ class Recipe(db.Model, DbModelMixin, DbModelAuthorizeMixin):
     def obj_to_dict(self) -> dict:
         res = super().obj_to_dict()
         res["planned"] = len(self.plans) > 0
-        #  res["planned_whens"] = [plan.when for plan in self.plans if plan.when > datetime.min]
-        res["planned_days"] = [transform_when_to_day(plan.when) for plan in self.plans if (plan.when > datetime.min) and (is_within_next_7_days(plan.when))]
+        #  res["planned_cooking_dates"] = [plan.cooking_date for plan in self.plans if plan.cooking_date > datetime.min]
+        res["planned_days"] = [transform_cooking_date_to_day(plan.cooking_date) for plan in self.plans if (plan.cooking_date > datetime.min) and (is_within_next_7_days(plan.cooking_date))]
         if self.photo_file:
             res["photo_hash"] = self.photo_file.blur_hash
         # print(f"res: {res}")

@@ -198,7 +198,7 @@ Caddy will automatically set up an SSL certificate for the specified hostname.
 
 ```caddyfile
 kitchenowl.example.org {
-        reverse_proxy localhost:8080 # Set the port of your KitchenOwn frontend here
+        reverse_proxy localhost:8080 # Set the address of your KitchenOwl frontend here
         encode gzip
         header {
                 X-Frame-Options "SAMEORIGIN"

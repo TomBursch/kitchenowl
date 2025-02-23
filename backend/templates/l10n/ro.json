@@ -1,0 +1,35 @@
+{
+  "categories": {
+    "bread": "🍞 Produse de patiserie",
+    "canned": "🥫 Conserve",
+    "dairy": "🥛 Lactate",
+    "drinks": "🍹 Băuturi",
+    "freezer": "❄️ Congelate",
+    "fruits_vegetables": "🥬Fructe și legume",
+    "grain": "🥟 Paste și tăieței",
+    "hygiene": "🚽 Igienă",
+    "refrigerated": "💧Refrigerate",
+    "snacks": "🥜 Gustări"
+  },
+  "items": {
+    "agave_syrup": "Sirop de agave",
+    "aioli": "Aioli",
+    "amaretto": "Amaretto",
+    "apple": "Mere",
+    "apple_pulp": "Piure de mere",
+    "applesauce": "Sos de mere",
+    "apricots": "Caise",
+    "apérol": "Aperol",
+    "arugula": "Rucola",
+    "asian_egg_noodles": "Tăieței cu ouă asiatici",
+    "asian_noodles": "Tăieței",
+    "asparagus": "Șparanghel",
+    "aspirin": "Aspirină",
+    "avocado": "Avocado",
+    "baby_potatoes": "Cartofi baby",
+    "baby_spinach": "Baby spanac",
+    "bacon": "Bacon",
+    "baguette": "Baghetă",
+    "bakefish": "Pește copt"
+  }
+}

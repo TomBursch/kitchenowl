@@ -176,9 +176,7 @@ def logout(id):
         jwt = get_jwt()
         token = Token.find_by_jti(jwt["jti"])
     if not token or token.user_id != current_user.id:
-        raise UnauthorizedRequest(
-            message="Unauthorized: IP {}".format(getClientIp())
-        )
+        raise UnauthorizedRequest(message="Unauthorized: IP {}".format(getClientIp()))
 
     if token.type == "access":
         token.refresh_token.delete_token_familiy()
@@ -196,9 +194,7 @@ def logout(id):
 def createLongLivedToken(args):
     user = current_user
     if not user:
-        raise UnauthorizedRequest(
-            message="Unauthorized: IP {}".format(getClientIp())
-        )
+        raise UnauthorizedRequest(message="Unauthorized: IP {}".format(getClientIp()))
 
     llToken, _ = Token.create_longlived_token(user, args["device"])
 
@@ -210,15 +206,11 @@ def createLongLivedToken(args):
 def deleteLongLivedToken(id):
     user = current_user
     if not user:
-        raise UnauthorizedRequest(
-            message="Unauthorized: IP {}".format(getClientIp())
-        )
+        raise UnauthorizedRequest(message="Unauthorized: IP {}".format(getClientIp()))
 
     token = Token.find_by_id(id)
     if token.user_id != user.id or token.type != "llt":
-        raise UnauthorizedRequest(
-            message="Unauthorized: IP {}".format(getClientIp())
-        )
+        raise UnauthorizedRequest(message="Unauthorized: IP {}".format(getClientIp()))
 
     token.delete()
 

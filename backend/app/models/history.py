@@ -21,10 +21,14 @@ class History(db.Model, DbModelMixin):
 
     id: Mapped[int] = db.Column(db.Integer, primary_key=True)
 
-    shoppinglist_id: Mapped[int] = db.Column(db.Integer, db.ForeignKey("shoppinglist.id"))
+    shoppinglist_id: Mapped[int] = db.Column(
+        db.Integer, db.ForeignKey("shoppinglist.id")
+    )
     item_id: Mapped[int] = db.Column(db.Integer, db.ForeignKey("item.id"))
 
-    item: Mapped["Item"] = db.relationship("Item", uselist=False, back_populates="history")
+    item: Mapped["Item"] = db.relationship(
+        "Item", uselist=False, back_populates="history"
+    )
     shoppinglist: Mapped["Shoppinglist"] = db.relationship(
         "Shoppinglist", uselist=False, back_populates="history"
     )

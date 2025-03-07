@@ -17,11 +17,9 @@ import 'package:kitchenowl/widgets/recipe_card.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:tuple/tuple.dart';
 
-int db_weekday(int shift) {
-  // subtract 1 because DateTime.weekday goes from 1 to 7. Kitchenowl-db from 0 to 6
-  return DateTime.now().add(Duration(days: shift)).weekday - 1;
+DateTime toEndOfDay(DateTime dt) {
+  return DateTime(dt.year, dt.month, dt.day, 23, 59, 59);
 }
-
 String formatDateAsWeekday(DateTime date, BuildContext context,
     {String default_format = 'EEEE'}) {
   DateTime today = DateTime.now();
@@ -41,6 +39,8 @@ String formatDateAsWeekday(DateTime date, BuildContext context,
     return DateFormat(default_format).format(date);
   }
 }
+
+final datetime_min = DateTime(1, 1, 1);
 
 class PlannerPage extends StatefulWidget {
   const PlannerPage({super.key});
@@ -189,7 +189,7 @@ class _PlannerPageState extends State<PlannerPage> {
                               ),
                             for (int i = 0; i < 7; i++)
                               for (final plan
-                                  in state.getPlannedOfDay(db_weekday(i)))
+                                  in state.getPlannedOfDate(DateTime.now().add(Duration(days: i))))
                                 KitchenOwlFractionallySizedBox(
                                   widthFactor: (1 /
                                       DynamicStyling.itemCrossAxisCount(
@@ -205,8 +205,7 @@ class _PlannerPageState extends State<PlannerPage> {
                                         CrossAxisAlignment.stretch,
                                     children: [
                                       if (plan ==
-                                          state.getPlannedOfDay(
-                                              db_weekday(i))[0])
+                                          state.getPlannedOfDate(DateTime.now().add(Duration(days: i)))[0])
                                         Padding(
                                           padding:
                                               const EdgeInsets.only(top: 5),
@@ -229,7 +228,7 @@ class _PlannerPageState extends State<PlannerPage> {
                                           onPressed: () {
                                             cubit.remove(
                                               plan.recipe,
-                                              db_weekday(i),
+                                              plan.cooking_date,
                                             );
                                           },
                                           onLongPressed: () => _openRecipePage(
@@ -412,23 +411,23 @@ class _PlannerPageState extends State<PlannerPage> {
     PlannerCubit cubit,
     Recipe recipe,
   ) async {
-    int? day = await showDialog<int>(
+    DateTime? cooking_date = await showDialog<DateTime>(
       context: context,
       builder: (context) => SelectDialog(
         title: AppLocalizations.of(context)!.addRecipeToPlannerShort,
         cancelText: AppLocalizations.of(context)!.cancel,
         options: List.generate(7, (index) {
           return SelectDialogOption(
-              db_weekday(index),
+              toEndOfDay(DateTime.now().add(Duration(days: index)) ),
               formatDateAsWeekday(
                   DateTime.now().add(Duration(days: index)), context));
         }),
       ),
     );
-    if (day != null) {
+    if (cooking_date != null) {
       await cubit.add(
         recipe,
-        day >= 0 ? day : null,
+        cooking_date.isAfter(datetime_min) ? cooking_date : null,
       );
     }
   }

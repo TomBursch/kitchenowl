@@ -19,9 +19,9 @@ import 'package:responsive_builder/responsive_builder.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 import 'package:tuple/tuple.dart';
 
-int db_weekday(int shift) {
-  // subtract 1 because DateTime.weekday goes from 1 to 7. Kitchenowl-db from 0 to 6
-  return DateTime.now().add(Duration(days: shift)).weekday - 1;
+final datetime_min = DateTime(1, 1, 1);
+DateTime toEndOfDay(DateTime dt) {
+  return DateTime(dt.year, dt.month, dt.day, 23, 59, 59);
 }
 
 String formatDateAsWeekday(DateTime date, BuildContext context,
@@ -366,7 +366,7 @@ class _RecipePageState extends State<RecipePage> {
                             LoadingElevatedButton(
                               child: const Icon(Icons.calendar_month_rounded),
                               onPressed: () async {
-                                int? day = await showDialog<int>(
+                                DateTime? cooking_date = await showDialog<DateTime>(
                                   context: context,
                                   builder: (context) => SelectDialog(
                                     title: AppLocalizations.of(context)!
@@ -375,7 +375,7 @@ class _RecipePageState extends State<RecipePage> {
                                         AppLocalizations.of(context)!.cancel,
                                     options: List.generate(7, (index) {
                                       return SelectDialogOption(
-                                          db_weekday(index),
+                                          toEndOfDay(DateTime.now().add(Duration(days: index)) ),
                                           formatDateAsWeekday(
                                               DateTime.now()
                                                   .add(Duration(days: index)),
@@ -383,9 +383,9 @@ class _RecipePageState extends State<RecipePage> {
                                     }),
                                   ),
                                 );
-                                if (day != null) {
+                                if (cooking_date != null) {
                                   await cubit.addRecipeToPlanner(
-                                    day: day >= 0 ? day : null,
+                                    cooking_date: cooking_date.isAfter(datetime_min) ? cooking_date : null,
                                     updateOnAdd: widget.updateOnPlanningEdit,
                                   );
                                 }

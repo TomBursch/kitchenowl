@@ -11,7 +11,7 @@ class Recipe extends Model implements ISuspensionBean {
   final String name;
   final String description;
   final bool isPlanned;
-  final Set<int> plannedDays;
+  final Set<DateTime> plannedCookingDates;
   final int time;
   final int cookTime;
   final int prepTime;
@@ -41,7 +41,7 @@ class Recipe extends Model implements ISuspensionBean {
     this.imageHash,
     this.items = const [],
     this.tags = const {},
-    this.plannedDays = const {},
+    this.plannedCookingDates = const {},
     this.public = false,
     this.householdId,
     this.household,
@@ -56,9 +56,18 @@ class Recipe extends Model implements ISuspensionBean {
     if (map.containsKey('tags')) {
       tags = Set.from(map['tags'].map((e) => Tag.fromJson(e)));
     }
-    Set<int> plannedDays = const {};
-    if (map.containsKey('planned_days')) {
-      plannedDays = Set.from(map['planned_days']);
+
+    Set<DateTime> plannedCookingDates = {};
+
+    if (map.containsKey('planned_cooking_dates') && map['planned_cooking_dates'] is List) {
+      for (var timestamp in map['planned_cooking_dates']) {
+        // Check if the timestamp is not null
+        if (timestamp != null) {
+          // Convert milliseconds to DateTime and add to the Set
+          DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(timestamp, isUtc: true);
+          plannedCookingDates.add(dateTime);
+        }
+      }
     }
 
     return Recipe(
@@ -77,7 +86,7 @@ class Recipe extends Model implements ISuspensionBean {
       householdId: map['household_id'],
       items: items,
       tags: tags,
-      plannedDays: plannedDays,
+      plannedCookingDates: plannedCookingDates,
       household: map.containsKey("household")
           ? Household.fromJson(map['household'])
           : null,
@@ -96,8 +105,8 @@ class Recipe extends Model implements ISuspensionBean {
     String? image,
     bool? public,
     List<RecipeItem>? items,
-    Set<Tag>? tags,
-    Set<int>? plannedDays,
+    Set<Tag>? tags,    
+    Set<DateTime>? plannedCookingDates,
     int? householdId,
   }) =>
       Recipe(
@@ -114,7 +123,7 @@ class Recipe extends Model implements ISuspensionBean {
         imageHash: imageHash,
         image: image ?? this.image,
         tags: tags ?? this.tags,
-        plannedDays: plannedDays ?? this.plannedDays,
+        plannedCookingDates: plannedCookingDates ?? this.plannedCookingDates,
         public: public ?? this.public,
         householdId: householdId ?? this.householdId,
         household: this.household,
@@ -145,7 +154,7 @@ class Recipe extends Model implements ISuspensionBean {
         imageHash,
         tags,
         items,
-        plannedDays,
+        plannedCookingDates,
         public,
         householdId,
         household,
@@ -174,7 +183,7 @@ class Recipe extends Model implements ISuspensionBean {
       "items": items.map((e) => e.toJsonWithId()).toList(),
       "tags": tags.map((e) => e.toJsonWithId()).toList(),
       if (imageHash != null) "photo_hash": imageHash,
-      "planned_days": plannedDays.toList(),
+      "planned_cooking_dates": plannedCookingDates.toList(),
       "household_id": householdId,
     });
 

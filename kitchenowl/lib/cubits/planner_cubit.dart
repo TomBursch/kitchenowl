@@ -9,6 +9,8 @@ import 'package:kitchenowl/services/transaction_handler.dart';
 import 'package:kitchenowl/services/transactions/planner.dart';
 import 'package:kitchenowl/services/transactions/shoppinglist.dart';
 
+final datetime_min = DateTime(1, 1, 1);
+
 class PlannerCubit extends Cubit<PlannerCubitState> {
   final Household household;
   bool _refreshLock = false;
@@ -17,21 +19,21 @@ class PlannerCubit extends Cubit<PlannerCubitState> {
     refresh();
   }
 
-  Future<void> remove(Recipe recipe, [int? day]) async {
+  Future<void> remove(Recipe recipe, [DateTime? cooking_date]) async {
     await TransactionHandler.getInstance()
         .runTransaction(TransactionPlannerRemoveRecipe(
       household: household,
       recipe: recipe,
-      day: day,
+      cooking_date: cooking_date,
     ));
     await refresh();
   }
 
-  Future<void> add(Recipe recipe, [int? day]) async {
+  Future<void> add(Recipe recipe, [DateTime? cooking_date]) async {
     await TransactionHandler.getInstance()
         .runTransaction(TransactionPlannerAddRecipe(
       household: household,
-      recipePlan: RecipePlan(recipe: recipe, day: day),
+      recipePlan: RecipePlan(recipe: recipe, cooking_date: cooking_date),
     ));
     await refresh();
   }
@@ -124,11 +126,13 @@ class LoadedPlannerCubitState extends PlannerCubitState {
 
   List<RecipePlan> getPlannedWithoutDay() {
     return recipePlans
-        .where((element) => element.day == null || element.day! < 0)
+        .where((element) => element.cooking_date == null || element.cooking_date?.compareTo(datetime_min) ==0)
         .toList();
   }
 
-  List<RecipePlan> getPlannedOfDay(int day) {
-    return recipePlans.where((element) => element.day == day).toList();
+
+  List<RecipePlan> getPlannedOfDate(DateTime cooking_date){
+     return recipePlans.where((element) => element.cooking_date?.day == cooking_date.day).toList();
   }
+
 }

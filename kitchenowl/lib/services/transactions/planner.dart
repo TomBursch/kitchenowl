@@ -5,6 +5,7 @@ import 'package:kitchenowl/services/api/api_service.dart';
 import 'package:kitchenowl/services/storage/mem_storage.dart';
 import 'package:kitchenowl/services/transaction.dart';
 
+
 class TransactionPlannerGetPlannedRecipes
     extends Transaction<List<RecipePlan>> {
   final Household household;
@@ -25,8 +26,8 @@ class TransactionPlannerGetPlannedRecipes
     recipes.retainWhere((e) => e.isPlanned);
 
     return recipes
-        .expand((r) => r.plannedDays.isNotEmpty
-            ? r.plannedDays.map((day) => RecipePlan(recipe: r, day: day))
+        .expand((r) => r.plannedCookingDates.isNotEmpty
+            ? r.plannedCookingDates.map((cooking_date) => RecipePlan(recipe: r, cooking_date: cooking_date))
             : [RecipePlan(recipe: r)])
         .toList();
   }
@@ -129,12 +130,12 @@ class TransactionPlannerAddRecipe extends Transaction<bool> {
 class TransactionPlannerRemoveRecipe extends Transaction<bool> {
   final Household household;
   final Recipe recipe;
-  final int? day;
+  final DateTime? cooking_date;
 
   TransactionPlannerRemoveRecipe({
     required this.household,
     required this.recipe,
-    this.day,
+    this.cooking_date,
     DateTime? timestamp,
   }) : super.internal(
           timestamp ?? DateTime.now(),
@@ -149,7 +150,7 @@ class TransactionPlannerRemoveRecipe extends Transaction<bool> {
         household: Household.fromJson(map['household']),
         recipe: Recipe.fromJson(map['recipe']),
         timestamp: timestamp,
-        day: map['day'],
+        cooking_date: map['cooking_date'],
       );
 
   @override
@@ -160,7 +161,7 @@ class TransactionPlannerRemoveRecipe extends Transaction<bool> {
     ..addAll({
       "household": household.toJsonWithId(),
       "recipe": recipe.toJsonWithId(),
-      "day": day,
+      "cooking_date": cooking_date?.toIso8601String(),
     });
 
   @override
@@ -170,7 +171,7 @@ class TransactionPlannerRemoveRecipe extends Transaction<bool> {
 
   @override
   Future<bool?> runOnline() {
-    return ApiService.getInstance().removePlannedRecipe(household, recipe, day);
+    return ApiService.getInstance().removePlannedRecipe(household, recipe, cooking_date);
   }
 }
 

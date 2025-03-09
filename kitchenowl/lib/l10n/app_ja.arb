@@ -1,0 +1,268 @@
+{
+  "@about": {},
+  "@accountCreate": {},
+  "@accountCreateHint": {},
+  "@accountCreateTitle": {},
+  "@accountDelete": {},
+  "@accountDeleteConfirmation": {},
+  "@accountLinkedWithOtherUser": {},
+  "@accountsLinked": {},
+  "@add": {},
+  "@addCategory": {},
+  "@addDescriptionFromSource": {},
+  "@addItemTitle": {},
+  "@addLanguage": {},
+  "@addNumberIngredients": {
+    "placeholders": {
+      "number": {
+        "example": "2",
+        "type": "int"
+      }
+    }
+  },
+  "@addRecipeToPlanner": {
+    "placeholders": {
+      "number": {
+        "example": "2",
+        "type": "int"
+      }
+    }
+  },
+  "@addRecipeToPlannerShort": {
+    "description": "A shorter title/button text used wherever the space is limited. Excludes the number of yields."
+  },
+  "@addShoppingList": {},
+  "@addTag": {},
+  "@addedBy": {
+    "placeholders": {
+      "name": {
+        "example": "Tom",
+        "type": "String"
+      }
+    }
+  },
+  "@admin": {},
+  "@appDescription": {},
+  "@back": {},
+  "@balances": {},
+  "@budget": {},
+  "@budgetSet": {},
+  "@camera": {},
+  "@cancel": {},
+  "@categories": {},
+  "@categoriesMerge": {},
+  "@category": {},
+  "@categoryDelete": {},
+  "@categoryDeleteConfirmation": {
+    "placeholders": {
+      "category": {
+        "example": "Frozen",
+        "type": "String"
+      }
+    }
+  },
+  "@categoryEdit": {},
+  "@categoryExpenseDeleteConfirmation": {
+    "placeholders": {
+      "category": {
+        "example": "Frozen",
+        "type": "String"
+      }
+    }
+  },
+  "@changeIcon": {},
+  "@clear": {},
+  "@colorSelect": {},
+  "@confirm": {},
+  "@cookingTime": {},
+  "@copied": {},
+  "@daily": {},
+  "@dangerZone": {},
+  "@darkmode": {},
+  "@date": {},
+  "@defaultKey": {},
+  "@defaultWord": {},
+  "@delete": {},
+  "@description": {},
+  "@done": {},
+  "@dynamicAccentColor": {},
+  "@email": {},
+  "@emailInvalid": {},
+  "@emailNotVerified": {},
+  "@emailResendVerification": {},
+  "@emailSuccessfullyVerified": {},
+  "@emailUpdate": {},
+  "@emailUsed": {},
+  "@error": {},
+  "@excludeFromStatistics": {},
+  "@expense": {},
+  "@expenseAdd": {},
+  "@expenseAmount": {},
+  "@expenseCategories": {},
+  "@expenseEdit": {},
+  "@expenseEmpty": {},
+  "@expenseOverviewComparedToPreviousMonth": {},
+  "@expenseOverviewTotalTitle": {
+    "placeholders": {
+      "month": {
+        "example": "January",
+        "type": "String"
+      }
+    }
+  },
+  "@expensePaidBy": {},
+  "@expensePaidFor": {},
+  "@expenseReceivedBy": {},
+  "@expenseReceivedFor": {},
+  "@export": {},
+  "@features": {},
+  "@fieldCannotBeEmpty": {
+    "placeholders": {
+      "field": {
+        "example": "Username",
+        "type": "String"
+      }
+    }
+  },
+  "@forceOfflineMode": {},
+  "@gallery": {},
+  "@general": {},
+  "@go": {},
+  "@grid": {},
+  "@hi": {
+    "placeholders": {
+      "name": {
+        "example": "Tom",
+        "type": "String"
+      }
+    }
+  },
+  "@household": {},
+  "@householdDelete": {},
+  "@householdDeleteConfirmation": {
+    "placeholders": {
+      "household": {
+        "example": "Home",
+        "type": "String"
+      }
+    }
+  },
+  "@householdEmpty": {},
+  "@householdLeave": {},
+  "@householdLeaveConfirmation": {
+    "placeholders": {
+      "household": {
+        "example": "Home",
+        "type": "String"
+      }
+    }
+  },
+  "@householdNew": {},
+  "@householdSwitch": {},
+  "@households": {},
+  "@icon": {},
+  "@imageSelect": {},
+  "@import": {},
+  "@importStartedHint": {},
+  "@income": {},
+  "@ingredients": {},
+  "@ingredientsOptional": {},
+  "@itemDelete": {},
+  "about": "このアプリについて",
+  "accountCreate": "アカウントを作成",
+  "accountCreateHint": "ユーザー名と氏名は公開されます。公開されて問題ないものを使ってください。",
+  "accountCreateTitle": "KitchenOwlアカウントを作成",
+  "accountDelete": "アカウントを削除",
+  "accountDeleteConfirmation": "本当にアカウントを削除しますか？",
+  "accountLinkedWithOtherUser": "このアカウントは既にほかのユーザーに紐づいています",
+  "accountsLinked": "紐づけられたアカウント",
+  "add": "追加",
+  "addCategory": "カテゴリを追加",
+  "addDescriptionFromSource": "出典元から説明を追加",
+  "addItemTitle": "アイテムを追加",
+  "addLanguage": "言語を追加",
+  "addNumberIngredients": "{number}の材料を追加",
+  "addRecipeToPlanner": "食事プランに追加({number}食)",
+  "addRecipeToPlannerShort": "献立に追加",
+  "addShoppingList": "買い物リストに追加",
+  "addTag": "タグを追加",
+  "addedBy": "{name}が追加",
+  "admin": "管理者",
+  "appDescription": "KitchenOwlはあなたの食生活をよくします。",
+  "back": "戻る",
+  "balances": "残金",
+  "budget": "予算",
+  "budgetSet": "予算を設定",
+  "camera": "カメラ",
+  "cancel": "キャンセル",
+  "categories": "カテゴリー",
+  "categoriesMerge": "カテゴリを統合",
+  "category": "カテゴリ",
+  "categoryDelete": "カテゴリを削除",
+  "categoryDeleteConfirmation": "{category}を削除していいですか？",
+  "categoryEdit": "カテゴリを編集",
+  "categoryExpenseDeleteConfirmation": "{category}を削除してもよいですか？",
+  "changeIcon": "アイコンを変更",
+  "clear": "クリア",
+  "colorSelect": "色を選択",
+  "confirm": "確認",
+  "cookingTime": "料理の時間",
+  "copied": "コピーしました",
+  "daily": "毎日",
+  "dangerZone": "危険な設定",
+  "darkmode": "ダークモード",
+  "date": "日付",
+  "defaultKey": "デフォルトキー",
+  "defaultWord": "デフォルト",
+  "delete": "削除",
+  "description": "説明",
+  "done": "完了",
+  "dynamicAccentColor": "ダイナミック・アクセントカラー",
+  "email": "Eメール",
+  "emailInvalid": "無効なEメール",
+  "emailNotVerified": "認証が済んでいない",
+  "emailResendVerification": "認証メールを再送",
+  "emailSuccessfullyVerified": "Eメールが認証されました。",
+  "emailUpdate": "Eメールをアップデート",
+  "emailUsed": "このEメールはすでにアカウントに紐づいています",
+  "error": "エラーが発生",
+  "excludeFromStatistics": "統計から除外",
+  "expense": "費用",
+  "expenseAdd": "費用を追加",
+  "expenseAmount": "量",
+  "expenseCategories": "費用カテゴリ",
+  "expenseEdit": "費用を編集",
+  "expenseEmpty": "費用の種類がないので、作成しましょう",
+  "expenseOverviewComparedToPreviousMonth": "昨月と比較",
+  "expenseOverviewTotalTitle": "{month}月の費用:",
+  "expensePaidBy": "支払った人:",
+  "expensePaidFor": "支払いの対象:",
+  "expenseReceivedBy": "受け取った人:",
+  "expenseReceivedFor": "受け取った対象:",
+  "export": "エクスポート",
+  "features": "機能",
+  "fieldCannotBeEmpty": "{field}は空ではだめです",
+  "forceOfflineMode": "オフライン利用を強制する",
+  "gallery": "ギャラリー",
+  "general": "一般",
+  "go": "行く",
+  "grid": "グリッド",
+  "hi": "こんにちは、{name}",
+  "household": "家庭",
+  "householdDelete": "家庭を削除",
+  "householdDeleteConfirmation": "{household}の家庭を削除してもよいですか？",
+  "householdEmpty": "家庭がありません。作成しましょう",
+  "householdLeave": "この家庭から離れる",
+  "householdLeaveConfirmation": "{household}を離れてもよいですか？",
+  "householdNew": "家庭を作成",
+  "householdSwitch": "家庭をスイッチ",
+  "households": "家庭",
+  "icon": "アイコン",
+  "imageSelect": "画像を選択",
+  "import": "インポート",
+  "importStartedHint": "インポートが始まりました",
+  "income": "収入",
+  "ingredients": "材料",
+  "ingredientsOptional": "任意の材料",
+  "itemDelete": "アイテムを削除"
+}

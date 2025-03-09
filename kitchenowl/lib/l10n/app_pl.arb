@@ -1,6 +1,7 @@
 {
   "@about": {},
   "@accountCreate": {},
+  "@accountCreateHint": {},
   "@accountCreateTitle": {},
   "@accountDelete": {},
   "@accountDeleteConfirmation": {},
@@ -14,24 +15,24 @@
   "@addLanguageConfirm": {
     "placeholders": {
       "lang": {
-        "type": "String",
-        "example": "English"
+        "example": "English",
+        "type": "String"
       }
     }
   },
   "@addNumberIngredients": {
     "placeholders": {
       "number": {
-        "type": "int",
-        "example": "2"
+        "example": "2",
+        "type": "int"
       }
     }
   },
   "@addRecipeToPlanner": {
     "placeholders": {
       "number": {
-        "type": "int",
-        "example": "2"
+        "example": "2",
+        "type": "int"
       }
     }
   },
@@ -41,19 +42,22 @@
   "@addedBy": {
     "placeholders": {
       "name": {
-        "type": "String",
-        "example": "Tom"
+        "example": "Tom",
+        "type": "String"
       }
     }
   },
   "@address": {},
   "@admin": {},
+  "@analysingWebsite": {},
   "@appDescription": {},
   "@appTitle": {
     "description": "The title of the app"
   },
   "@back": {},
   "@balances": {},
+  "@budget": {},
+  "@budgetSet": {},
   "@camera": {},
   "@cancel": {},
   "@categories": {},
@@ -63,8 +67,8 @@
   "@categoryDeleteConfirmation": {
     "placeholders": {
       "category": {
-        "type": "String",
-        "example": "Frozen"
+        "example": "Frozen",
+        "type": "String"
       }
     }
   },
@@ -72,12 +76,13 @@
   "@categoryExpenseDeleteConfirmation": {
     "placeholders": {
       "category": {
-        "type": "String",
-        "example": "Frozen"
+        "example": "Frozen",
+        "type": "String"
       }
     }
   },
   "@changeIcon": {},
+  "@clear": {},
   "@colorSelect": {},
   "@confirm": {},
   "@cookingTime": {},
@@ -112,8 +117,8 @@
   "@expenseOverviewTotalTitle": {
     "placeholders": {
       "month": {
-        "type": "String",
-        "example": "January"
+        "example": "January",
+        "type": "String"
       }
     }
   },
@@ -126,8 +131,8 @@
   "@fieldCannotBeEmpty": {
     "placeholders": {
       "field": {
-        "type": "String",
-        "example": "Username"
+        "example": "Username",
+        "type": "String"
       }
     }
   },
@@ -137,13 +142,21 @@
   "@go": {},
   "@grid": {},
   "@helpTranslate": {},
+  "@hi": {
+    "placeholders": {
+      "name": {
+        "example": "Tom",
+        "type": "String"
+      }
+    }
+  },
   "@household": {},
   "@householdDelete": {},
   "@householdDeleteConfirmation": {
     "placeholders": {
       "household": {
-        "type": "String",
-        "example": "Home"
+        "example": "Home",
+        "type": "String"
       }
     }
   },
@@ -152,8 +165,8 @@
   "@householdLeaveConfirmation": {
     "placeholders": {
       "household": {
-        "type": "String",
-        "example": "Home"
+        "example": "Home",
+        "type": "String"
       }
     }
   },
@@ -171,8 +184,8 @@
   "@itemDeleteConfirmation": {
     "placeholders": {
       "item": {
-        "type": "String",
-        "example": "Cake"
+        "example": "Cake",
+        "type": "String"
       }
     }
   },
@@ -184,12 +197,12 @@
   "@itemsMergeConfirmation": {
     "placeholders": {
       "item": {
-        "type": "String",
-        "example": "Cake"
+        "example": "Cake",
+        "type": "String"
       },
       "other": {
-        "type": "String",
-        "example": "Cake"
+        "example": "Cake",
+        "type": "String"
       }
     }
   },
@@ -208,8 +221,8 @@
   "@lltDeleteConfirmation": {
     "placeholders": {
       "token": {
-        "type": "String",
-        "example": "HomeAssistant"
+        "example": "HomeAssistant",
+        "type": "String"
       }
     }
   },
@@ -223,12 +236,13 @@
   "@logoutName": {
     "placeholders": {
       "name": {
-        "type": "String",
-        "example": "Tom"
+        "example": "Tom",
+        "type": "String"
       }
     }
   },
   "@longPressToReorder": {},
+  "@longerThanExpected": {},
   "@markAsPaid": {},
   "@mealPlanner": {},
   "@member": {},
@@ -251,8 +265,8 @@
   "@onboardingSettingsTitle": {
     "placeholders": {
       "name": {
-        "type": "String",
-        "example": "Tom"
+        "example": "Tom",
+        "type": "String"
       }
     }
   },
@@ -265,12 +279,12 @@
   "@owesAB": {
     "placeholders": {
       "nameA": {
-        "type": "String",
-        "example": "Tom"
+        "example": "Tom",
+        "type": "String"
       },
       "nameB": {
-        "type": "String",
-        "example": "Tom"
+        "example": "Tom",
+        "type": "String"
       }
     }
   },
@@ -291,8 +305,8 @@
   "@privacyPolicyAgree": {
     "placeholders": {
       "privacyPolicy": {
-        "type": "String",
-        "example": "Privacy Policy"
+        "example": "Privacy Policy",
+        "type": "String"
       }
     }
   },
@@ -304,8 +318,8 @@
   "@recipeDeleteConfirmation": {
     "placeholders": {
       "recipe": {
-        "type": "String",
-        "example": "Cake"
+        "example": "Cake",
+        "type": "String"
       }
     }
   },
@@ -338,8 +352,8 @@
   "@shoppingListDeleteConfirmation": {
     "placeholders": {
       "shoppingList": {
-        "type": "String",
-        "example": "Supermarket"
+        "example": "Supermarket",
+        "type": "String"
       }
     }
   },
@@ -349,8 +363,8 @@
   "@signInWith": {
     "placeholders": {
       "provider": {
-        "type": "String",
-        "example": "Authentik"
+        "example": "Authentik",
+        "type": "String"
       }
     }
   },
@@ -367,8 +381,8 @@
   "@tagDeleteConfirmation": {
     "placeholders": {
       "tag": {
-        "type": "String",
-        "example": "Lunch"
+        "example": "Lunch",
+        "type": "String"
       }
     }
   },
@@ -399,8 +413,8 @@
   "@userDeleteConfirmation": {
     "placeholders": {
       "user": {
-        "type": "String",
-        "example": "Tom"
+        "example": "Tom",
+        "type": "String"
       }
     }
   },
@@ -419,6 +433,7 @@
   "@you": {},
   "about": "O",
   "accountCreate": "Stwórz konto",
+  "accountCreateHint": "Twoja nazwa użytkownika i imię są publiczne, więc wybierz coś, czym chcesz się dzielić z innymi.",
   "accountCreateTitle": "Stwórz swoje konto KitchenOwl",
   "accountDelete": "Usuń konto",
   "accountDeleteConfirmation": "Czy jesteś pewien, że chcesz usunąć swoje konto?",
@@ -438,10 +453,13 @@
   "addedBy": "Dodane przez {name}",
   "address": "Adres",
   "admin": "Administrator",
+  "analysingWebsite": "Analizowanie strony...",
   "appDescription": "KitchenOwl pomoże Ci z organizacją zakupów spożywczych.",
   "appTitle": "KitchenOwl",
   "back": "Powrót",
   "balances": "Saldo",
+  "budget": "Budżet",
+  "budgetSet": "Ustaw budżet",
   "camera": "Aparat",
   "cancel": "Anuluj",
   "categories": "Kategorie",
@@ -452,6 +470,7 @@
   "categoryEdit": "Edytuj kategorię",
   "categoryExpenseDeleteConfirmation": "Czy jesteś pewien, że chcesz usunąć {category}? To działanie usunie ją ze wszystkich wydatków.",
   "changeIcon": "Zmień ikonę",
+  "clear": "Wyczyść",
   "colorSelect": "Wybierz kolor",
   "confirm": "Potwierdź",
   "cookingTime": "Czas gotowania",
@@ -497,6 +516,7 @@
   "go": "Idź",
   "grid": "Siatka",
   "helpTranslate": "Pomóż przetłumaczyć",
+  "hi": "Cześć {name}!",
   "household": "Domostwo",
   "householdDelete": "Usuń domostwo",
   "householdDeleteConfirmation": "Czy jesteś pewien, że chcesz usunąć {household}? To działanie usunie wszystkie artykuły, przepisy i wydatki.",
@@ -541,6 +561,7 @@
   "logout": "Wyloguj",
   "logoutName": "Wyloguj {name}",
   "longPressToReorder": "Naciśnij i przytrzymaj, aby zmienić kolejność",
+  "longerThanExpected": "To trwa dłużej, niż się spodziewano",
   "markAsPaid": "Oznacz jako opłacone",
   "mealPlanner": "Jadłospis",
   "member": "Członek",

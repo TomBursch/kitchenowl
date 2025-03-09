@@ -15,24 +15,24 @@
   "@addLanguageConfirm": {
     "placeholders": {
       "lang": {
-        "type": "String",
-        "example": "English"
+        "example": "English",
+        "type": "String"
       }
     }
   },
   "@addNumberIngredients": {
     "placeholders": {
       "number": {
-        "type": "int",
-        "example": "2"
+        "example": "2",
+        "type": "int"
       }
     }
   },
   "@addRecipeToPlanner": {
     "placeholders": {
       "number": {
-        "type": "int",
-        "example": "2"
+        "example": "2",
+        "type": "int"
       }
     }
   },
@@ -44,8 +44,8 @@
   "@addedBy": {
     "placeholders": {
       "name": {
-        "type": "String",
-        "example": "Tom"
+        "example": "Tom",
+        "type": "String"
       }
     }
   },
@@ -59,6 +59,7 @@
   "@back": {},
   "@balances": {},
   "@budget": {},
+  "@budgetSet": {},
   "@camera": {},
   "@cancel": {},
   "@categories": {},
@@ -68,8 +69,8 @@
   "@categoryDeleteConfirmation": {
     "placeholders": {
       "category": {
-        "type": "String",
-        "example": "Frozen"
+        "example": "Frozen",
+        "type": "String"
       }
     }
   },
@@ -77,12 +78,13 @@
   "@categoryExpenseDeleteConfirmation": {
     "placeholders": {
       "category": {
-        "type": "String",
-        "example": "Frozen"
+        "example": "Frozen",
+        "type": "String"
       }
     }
   },
   "@changeIcon": {},
+  "@clear": {},
   "@colorSelect": {},
   "@confirm": {},
   "@cookingTime": {},
@@ -98,9 +100,13 @@
   "@dynamicAccentColor": {},
   "@email": {},
   "@emailInvalid": {},
+  "@emailNotVerified": {},
+  "@emailResendVerification": {},
+  "@emailSuccessfullyVerified": {},
   "@emailUpdate": {},
   "@emailUsed": {},
   "@error": {},
+  "@excludeFromStatistics": {},
   "@expense": {},
   "@expenseAdd": {},
   "@expenseAmount": {},
@@ -112,8 +118,8 @@
   "@expenseOverviewTotalTitle": {
     "placeholders": {
       "month": {
-        "type": "String",
-        "example": "January"
+        "example": "January",
+        "type": "String"
       }
     }
   },
@@ -121,12 +127,13 @@
   "@expensePaidFor": {},
   "@expenseReceivedBy": {},
   "@expenseReceivedFor": {},
+  "@export": {},
   "@features": {},
   "@fieldCannotBeEmpty": {
     "placeholders": {
       "field": {
-        "type": "String",
-        "example": "Username"
+        "example": "Username",
+        "type": "String"
       }
     }
   },
@@ -136,13 +143,21 @@
   "@go": {},
   "@grid": {},
   "@helpTranslate": {},
+  "@hi": {
+    "placeholders": {
+      "name": {
+        "example": "Tom",
+        "type": "String"
+      }
+    }
+  },
   "@household": {},
   "@householdDelete": {},
   "@householdDeleteConfirmation": {
     "placeholders": {
       "household": {
-        "type": "String",
-        "example": "Home"
+        "example": "Home",
+        "type": "String"
       }
     }
   },
@@ -151,15 +166,18 @@
   "@householdLeaveConfirmation": {
     "placeholders": {
       "household": {
-        "type": "String",
-        "example": "Home"
+        "example": "Home",
+        "type": "String"
       }
     }
   },
   "@householdNew": {},
   "@householdSwitch": {},
   "@households": {},
+  "@icon": {},
   "@imageSelect": {},
+  "@import": {},
+  "@importStartedHint": {},
   "@income": {},
   "@ingredients": {},
   "@ingredientsOptional": {},
@@ -167,8 +185,8 @@
   "@itemDeleteConfirmation": {
     "placeholders": {
       "item": {
-        "type": "String",
-        "example": "Cake"
+        "example": "Cake",
+        "type": "String"
       }
     }
   },
@@ -180,12 +198,12 @@
   "@itemsMergeConfirmation": {
     "placeholders": {
       "item": {
-        "type": "String",
-        "example": "Cake"
+        "example": "Cake",
+        "type": "String"
       },
       "other": {
-        "type": "String",
-        "example": "Cake"
+        "example": "Cake",
+        "type": "String"
       }
     }
   },
@@ -201,8 +219,8 @@
   "@lltDeleteConfirmation": {
     "placeholders": {
       "token": {
-        "type": "String",
-        "example": "HomeAssistant"
+        "example": "HomeAssistant",
+        "type": "String"
       }
     }
   },
@@ -216,8 +234,8 @@
   "@logoutName": {
     "placeholders": {
       "name": {
-        "type": "String",
-        "example": "Tom"
+        "example": "Tom",
+        "type": "String"
       }
     }
   },
@@ -240,8 +258,8 @@
   "@onboardingSettingsTitle": {
     "placeholders": {
       "name": {
-        "type": "String",
-        "example": "Tom"
+        "example": "Tom",
+        "type": "String"
       }
     }
   },
@@ -253,12 +271,12 @@
   "@owesAB": {
     "placeholders": {
       "nameA": {
-        "type": "String",
-        "example": "Tom"
+        "example": "Tom",
+        "type": "String"
       },
       "nameB": {
-        "type": "String",
-        "example": "Tom"
+        "example": "Tom",
+        "type": "String"
       }
     }
   },
@@ -277,8 +295,8 @@
   "@privacyPolicyAgree": {
     "placeholders": {
       "privacyPolicy": {
-        "type": "String",
-        "example": "Privacy Policy"
+        "example": "Privacy Policy",
+        "type": "String"
       }
     }
   },
@@ -289,8 +307,8 @@
   "@recipeDeleteConfirmation": {
     "placeholders": {
       "recipe": {
-        "type": "String",
-        "example": "Cake"
+        "example": "Cake",
+        "type": "String"
       }
     }
   },
@@ -321,8 +339,8 @@
   "@shoppingListDeleteConfirmation": {
     "placeholders": {
       "shoppingList": {
-        "type": "String",
-        "example": "Supermarket"
+        "example": "Supermarket",
+        "type": "String"
       }
     }
   },
@@ -342,8 +360,8 @@
   "@tagDeleteConfirmation": {
     "placeholders": {
       "tag": {
-        "type": "String",
-        "example": "Lunch"
+        "example": "Lunch",
+        "type": "String"
       }
     }
   },
@@ -370,8 +388,8 @@
   "@userDeleteConfirmation": {
     "placeholders": {
       "user": {
-        "type": "String",
-        "example": "Tom"
+        "example": "Tom",
+        "type": "String"
       }
     }
   },
@@ -415,6 +433,7 @@
   "back": "Voltar",
   "balances": "Balanços",
   "budget": "Orçamento",
+  "budgetSet": "Definir orçamento",
   "camera": "Câmera",
   "cancel": "Cancelar",
   "categories": "Categorias",
@@ -425,6 +444,7 @@
   "categoryEdit": "Editar categoria",
   "categoryExpenseDeleteConfirmation": "Tem certeza de que deseja excluir {category}? Isso removerá a categoria de todas as despesas.",
   "changeIcon": "Alterar ícone",
+  "clear": "Limpar",
   "colorSelect": "Selecione uma cor",
   "confirm": "Confirmar",
   "cookingTime": "Tempo de cozimento",
@@ -440,9 +460,13 @@
   "dynamicAccentColor": "Cor de destaque dinâmica",
   "email": "E-mail",
   "emailInvalid": "E-mail inválido",
+  "emailNotVerified": "Não verificado",
+  "emailResendVerification": "Reenviar email de verificação",
+  "emailSuccessfullyVerified": "Email verificado com sucesso!",
   "emailUpdate": "Atualizar e-mail",
   "emailUsed": "O e-mail já está associado a uma conta",
   "error": "Ocorreu um erro",
+  "excludeFromStatistics": "Excluir das estátisticas",
   "expense": "Gastos",
   "expenseAdd": "Adicionar despesa",
   "expenseAmount": "Valor",
@@ -456,6 +480,7 @@
   "expensePaidFor": "Pago",
   "expenseReceivedBy": "Recebido de",
   "expenseReceivedFor": "Recebido por",
+  "export": "Exportar",
   "features": "Recursos",
   "fieldCannotBeEmpty": "{field} não pode estar vazio.",
   "forceOfflineMode": "Forçar modo off-line",
@@ -464,6 +489,7 @@
   "go": "Ir",
   "grid": "Grade",
   "helpTranslate": "Ajude a traduzir",
+  "hi": "Olá {name}!",
   "household": "Residência",
   "householdDelete": "Excluir residência",
   "householdDeleteConfirmation": "Tem certeza de que deseja excluir {household}? Isso removerá todos os itens, receitas e despesas da existência.",
@@ -473,7 +499,10 @@
   "householdNew": "Novo Domicílio",
   "householdSwitch": "Trocar de residência",
   "households": "Domicílios",
+  "icon": "Ícone",
   "imageSelect": "Selecione uma imagem",
+  "import": "Importar",
+  "importStartedHint": "Importação iniciada, isso pode levar alguns minutos.",
   "income": "Renda",
   "ingredients": "Ingredientes",
   "ingredientsOptional": "Ingredientes opcionais",

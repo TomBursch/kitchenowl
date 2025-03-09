@@ -39,7 +39,11 @@ class RecipePlan extends Model {
   factory RecipePlan.fromJson(Map<String, dynamic> map) {
     DateTime? _cooking_date;
     if (map.containsKey("day") && map['day'] != null) {
-      _cooking_date = toEndOfDay(nextWeekday(map['day']));   
+      if (map['day'] == -1) {
+        _cooking_date = datetime_min;
+      } else {
+        _cooking_date = toEndOfDay(nextWeekday(map['day'])); 
+      }
     }
     if (map.containsKey("cooking_date")) {
       _cooking_date = DateTime.fromMillisecondsSinceEpoch(map["cooking_date"], isUtc: true); 

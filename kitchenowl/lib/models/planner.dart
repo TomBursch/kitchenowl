@@ -67,7 +67,7 @@ class RecipePlan extends Model {
   @override
   Map<String, dynamic> toJson() => {
         "recipe_id": recipe.id,
-        "cooking_date":  cooking_date?.toIso8601String(),
+        if (cooking_date != null) "cooking_date":  cooking_date?.toIso8601String(),
         if (yields != null) "yields": yields,
       };
 

@@ -16,7 +16,7 @@ services:
       start_period: 80s
 
   kitchenowl:
-    image: natelbeckwith/owly:latest
+    image: natelbeckwith/owly:plasma
     restart: unless-stopped
     depends_on:
       db:
@@ -35,6 +35,9 @@ services:
       - kitchenowl_files:/data
     ports:
       - "8080:8080"
+
+
+  swoop: 
 
 volumes:
   kitchenowl_files:

@@ -32,6 +32,8 @@ RUN flutter config --enable-web
 RUN flutter config --no-analytics
 RUN flutter upgrade
 
+
+
 # Run flutter doctor
 RUN flutter doctor -v
 

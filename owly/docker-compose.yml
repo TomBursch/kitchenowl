@@ -1,0 +1,41 @@
+services:
+  db:
+    image: postgres:15
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: kitchenowl
+      POSTGRES_USER: owldbuser
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - kitchenowl_db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d $$POSTGRES_DB -U $$POSTGRES_USER"]
+      interval: 30s
+      timeout: 60s
+      retries: 5
+      start_period: 80s
+
+  kitchenowl:
+    image: tombursch/kitchenowl:latest
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
+      DB_DRIVER: postgresql
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: kitchenowl
+      DB_USER: owldbuser
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      LLM_MODEL: gpt-3.5-turbo
+    volumes:
+      - kitchenowl_files:/data
+    ports:
+      - "8081:8080"
+
+volumes:
+  kitchenowl_files:
+  kitchenowl_db:

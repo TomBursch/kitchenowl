@@ -3,8 +3,8 @@ services:
     image: postgres:15
     restart: unless-stopped
     environment:
-      POSTGRES_DB: kitchenowl
-      POSTGRES_USER: owldbuser
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
       - kitchenowl_db:/var/lib/postgresql/data
@@ -26,11 +26,11 @@ services:
       DB_DRIVER: postgresql
       DB_HOST: db
       DB_PORT: 5432
-      DB_NAME: kitchenowl
-      DB_USER: owldbuser
+      DB_NAME: ${POSTGRES_DB}
+      DB_USER: ${POSTGRES_USER}
       DB_PASSWORD: ${POSTGRES_PASSWORD}
       OPENAI_API_KEY: ${OPENAI_API_KEY}
-      LLM_MODEL: gpt-3.5-turbo
+      LLM_MODEL: ${LLM_MODEL}
     volumes:
       - kitchenowl_files:/data
     ports:

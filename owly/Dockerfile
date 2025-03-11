@@ -1,7 +1,7 @@
 # ------------
 # WEB BUILDER
 # ------------
-FROM --platform=$BUILDPLATFORM debian:latest AS app_builder
+FROM --platform=$BUILDPLATFORM debian:latest AS web_builder
 
 # Install dependencies
 RUN apt-get update -y
@@ -95,7 +95,7 @@ ENV PATH="/opt/venv/bin:$PATH"
 
 # Setup Frontend
 RUN mkdir -p /var/www/web/kitchenowl
-COPY --from=app_builder /usr/local/src/app/build/web /var/www/web/kitchenowl
+COPY --from=web_builder /usr/local/src/app/build/web /var/www/web/kitchenowl
 
 # Setup KitchenOwl Backend
 COPY backend/wsgi.ini backend/wsgi.py backend/entrypoint.sh backend/manage.py backend/manage_default_items.py backend/upgrade_default_items.py /usr/src/kitchenowl/

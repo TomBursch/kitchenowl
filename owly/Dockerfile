@@ -26,8 +26,8 @@ RUN git clone https://github.com/flutter/flutter.git -b stable /usr/local/src/fl
 ENV PATH="${PATH}:/usr/local/src/flutter/bin"
 
 # Enable flutter web
-RUN flutter config --no-analytics
 RUN flutter config --enable-web
+RUN flutter config --no-analytics
 RUN flutter upgrade
 
 # Create a new user and group
@@ -37,32 +37,25 @@ RUN useradd -ms /bin/bash flutteruser
 RUN mkdir -p /usr/local/src/app && chown -R flutteruser:flutteruser /usr/local/src/app /usr/local/src/flutter
 # Switch to that user
 USER flutteruser
+ENV PATH="${PATH}:/usr/local/src/flutter/bin"
 
 
 
 RUN flutter doctor -v
-RUN cd /usr/local/src/flutter
-RUN flutter pub get
+# Set the working directory to the app files within the container
+WORKDIR /usr/local/src/app
+
+RUN flutter packages get
 
 # Build the app for the web
 RUN flutter build web --release --no-web-resources-cdn
 
+
 # Copy the app files to the container
-ADD kitchenowl/.metadata kitchenowl/l10n.yaml kitchenowl/pubspec.yaml kitchenowl/pubspec.lock /usr/local/src/app/
 COPY kitchenowl/.metadata kitchenowl/l10n.yaml kitchenowl/pubspec.yaml kitchenowl/pubspec.lock /usr/local/src/app/
 COPY kitchenowl/web /usr/local/src/app/web
 COPY kitchenowl/assets /usr/local/src/app/assets
 COPY kitchenowl/fonts /usr/local/src/app/fonts
-
-# Set the working directory to the app files within the container
-WORKDIR /usr/local/src/app
-
-# Get App Dependencies
-RUN flutter pub get
-
-
-# Build the app for the web
-RUN flutter build web --release --no-web-resources-cdn
 
 
 RUN flutter test

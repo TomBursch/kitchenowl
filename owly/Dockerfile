@@ -38,6 +38,7 @@ RUN chown -R flutter:root /usr/local/src/flutter
 # Install the flutter dependencies
 RUN apt-get update -y
 USER flutter
+ENV PATH="${PATH}:/usr/local/src/flutter/bin"
 # Run flutter doctor
 RUN flutter doctor -v
 USER root

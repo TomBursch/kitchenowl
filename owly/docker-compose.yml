@@ -16,7 +16,7 @@ services:
       start_period: 80s
 
   kitchenowl:
-    image: tombursch/kitchenowl:latest
+    image: natelbeckwith/owly:latest
     restart: unless-stopped
     depends_on:
       db:
@@ -25,7 +25,7 @@ services:
       JWT_SECRET_KEY: ${JWT_SECRET_KEY}
       DB_DRIVER: postgresql
       DB_HOST: db
-      DB_PORT: 5432
+      DB_PORT: ${POSTGRES_PORT}
       DB_NAME: ${POSTGRES_DB}
       DB_USER: ${POSTGRES_USER}
       DB_PASSWORD: ${POSTGRES_PASSWORD}
@@ -34,7 +34,7 @@ services:
     volumes:
       - kitchenowl_files:/data
     ports:
-      - "8081:8080"
+      - "8080:8080"
 
 volumes:
   kitchenowl_files:

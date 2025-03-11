@@ -32,18 +32,23 @@ RUN flutter config --enable-web
 RUN flutter config --no-analytics
 RUN flutter upgrade
 
+RUN adduser --system --home /home/flutter --shell /bin/bash flutter
+RUN chown -R flutter:root /usr/local/src/flutter
 
-
+# Install the flutter dependencies
+RUN apt-get update -y
+USER flutter
 # Run flutter doctor
 RUN flutter doctor -v
-
+USER root
 # Copy the app files to the container
 COPY kitchenowl/.metadata kitchenowl/l10n.yaml kitchenowl/pubspec.yaml kitchenowl/pubspec.lock /usr/local/src/app/
 COPY kitchenowl/lib /usr/local/src/app/lib
 COPY kitchenowl/web /usr/local/src/app/web
 COPY kitchenowl/assets /usr/local/src/app/assets
 COPY kitchenowl/fonts /usr/local/src/app/fonts
-
+RUN chown -R flutter:root /usr/local/src/
+USER flutter
 # Set the working directory to the app files within the container
 WORKDIR /usr/local/src/app
 
@@ -52,6 +57,9 @@ RUN flutter packages get
 
 # Build the app for the web
 RUN flutter build web --release --no-web-resources-cdn
+
+
+RUN flutter clean
 
 # ------------
 # BACKEND BUILDER

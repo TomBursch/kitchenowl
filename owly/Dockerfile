@@ -4,23 +4,25 @@
 FROM --platform=$BUILDPLATFORM debian:latest AS app_builder
 
 # Install dependencies
-RUN apt update -y && apt upgrade -y && apt install -y --no-install-recommends \
-  git \
-  wget \
-  curl \
-  zip \
-  unzip \
-  apt-transport-https \
-  ca-certificates \
-  gnupg \
-  python3 \
-  libstdc++6 \
-  libglu1-mesa \
-  libglu1-mesa && apt clean
+RUN apt-get update -y
+RUN apt-get upgrade -y
+# Install basics
+RUN apt-get install -y --no-install-recommends \
+        git \
+        wget \
+        curl \
+        zip \
+        unzip \
+        apt-transport-https \
+        ca-certificates \
+        gnupg \
+        python3 \
+        libstdc++6 \
+        libglu1-mesa
+RUN apt-get clean
+
 # Clone the flutter repo
 RUN git clone https://github.com/flutter/flutter.git -b stable /usr/local/src/flutter
-
-
 
 # Set flutter path
 ENV PATH="${PATH}:/usr/local/src/flutter/bin"
@@ -30,47 +32,42 @@ RUN flutter config --enable-web
 RUN flutter config --no-analytics
 RUN flutter upgrade
 
-# Create a new user and group
-RUN useradd -ms /bin/bash flutteruser
+RUN adduser --system --home /home/flutter --shell /bin/bash flutter
+RUN chown -R flutter:root /usr/local/src/flutter
 
-# Set ownership of the flutter directory to this new user
-RUN mkdir -p /usr/local/src/app && chown -R flutteruser:flutteruser /usr/local/src/app /usr/local/src/flutter
-# Switch to that user
-USER flutteruser
-ENV PATH="${PATH}:/usr/local/src/flutter/bin"
-
-
-
+# Install the flutter dependencies
+RUN apt-get update -y
+USER flutter
+# Run flutter doctor
 RUN flutter doctor -v
+USER root
+# Copy the app files to the container
+COPY kitchenowl/.metadata kitchenowl/l10n.yaml kitchenowl/pubspec.yaml kitchenowl/pubspec.lock /usr/local/src/app/
+COPY kitchenowl/lib /usr/local/src/app/lib
+COPY kitchenowl/web /usr/local/src/app/web
+COPY kitchenowl/assets /usr/local/src/app/assets
+COPY kitchenowl/fonts /usr/local/src/app/fonts
+RUN chown -R flutter:root /usr/local/src/app
+USER flutter
 # Set the working directory to the app files within the container
 WORKDIR /usr/local/src/app
 
+# Get App Dependencies
 RUN flutter packages get
 
 # Build the app for the web
 RUN flutter build web --release --no-web-resources-cdn
 
-
-# Copy the app files to the container
-COPY kitchenowl/.metadata kitchenowl/l10n.yaml kitchenowl/pubspec.yaml kitchenowl/pubspec.lock /usr/local/src/app/
-COPY kitchenowl/web /usr/local/src/app/web
-COPY kitchenowl/assets /usr/local/src/app/assets
-COPY kitchenowl/fonts /usr/local/src/app/fonts
-
-
-RUN flutter test
-
-RUN flutter clean
-
 # ------------
 # BACKEND BUILDER
 # ------------
-FROM --platform=$BUILDPLATFORM python:3.12-slim AS backend_builder
+FROM python:3.12-slim AS backend_builder
 
-RUN apt update && apt install --yes --no-install-recommends \
+RUN apt-get update \
+        && apt-get install --yes --no-install-recommends \
         gcc g++ libffi-dev libpcre3-dev build-essential cargo \
         libxml2-dev libxslt-dev cmake gfortran libopenblas-dev liblapack-dev pkg-config ninja-build \
-        autoconf automake zlib1g-dev libjpeg62-turbo-dev libssl-dev libsqlite3-dev && rm -rf /var/lib/apt/lists/*
+        autoconf automake zlib1g-dev libjpeg62-turbo-dev libssl-dev libsqlite3-dev
 
 # Create virtual enviroment
 RUN python -m venv /opt/venv && /opt/venv/bin/pip install --no-cache-dir -U pip setuptools wheel
@@ -78,17 +75,18 @@ ENV PATH="/opt/venv/bin:$PATH"
 
 COPY backend/requirements.txt .
 RUN pip3 install --no-cache-dir -r requirements.txt && find /opt/venv \( -type d -a -name test -o -name tests \) -o \( -type f -a -name '*.pyc' -o -name '*.pyo' \) -exec rm -rf '{}' \+
-RUN pip3 install --no-cache-dir -r requirements.txt \
-    && find /opt/venv \( -type d -a -name test -o -name tests \) -o \( -type f -a -name '*.pyc' -o -name '*.pyo' \) -exec rm -rf '{}' \+
+
 RUN python -c "import nltk; nltk.download('averaged_perceptron_tagger_eng', download_dir='/opt/venv/nltk_data')"
 
 # ------------
 # RUNNER
 # ------------
-FROM --platform=$BUILDPLATFORM python:3.12-slim AS runner
-RUN apt update && apt install --yes --no-install-recommends \
-        libxml2 libpcre3 curl media-types && rm -rf /var/lib/apt/lists/*
-RUN rm -rf /var/lib/apt/lists/*
+FROM python:3.12-slim AS runner
+
+RUN apt-get update \
+        && apt-get install --yes --no-install-recommends \
+        libxml2 libpcre3 curl media-types \
+        && rm -rf /var/lib/apt/lists/*
 
 # Use virtual enviroment
 COPY --from=backend_builder /opt/venv /opt/venv
@@ -106,13 +104,15 @@ COPY backend/migrations /usr/src/kitchenowl/migrations
 WORKDIR /usr/src/kitchenowl
 VOLUME ["/data"]
 
-# HEALTHCHECK --interval=60s --timeout=3s CMD curl --fail http://localhost:5000/api/health/8M4F88S8ooi4sMbLBfkkV7ctWwgibW6V || exit 1
+HEALTHCHECK --interval=60s --timeout=3s CMD uwsgi_curl localhost:5000 /api/health/8M4F88S8ooi4sMbLBfkkV7ctWwgibW6V || exit 1
 
 ENV STORAGE_PATH='/data'
 ENV JWT_SECRET_KEY='PLEASE_CHANGE_ME'
-ENV DEBUG=False
+ENV DEBUG='False'
 
-HEALTHCHECK --interval=60s --timeout=3s CMD curl --fail http://localhost:5000/api/health/8M4F88S8ooi4sMbLBfkkV7ctWwgibW6V || exit 1
+RUN chmod u+x ./entrypoint.sh
+
+CMD ["--ini", "wsgi.ini:web", "--gevent", "200", "--max-fd", "1048576"]
 ENTRYPOINT ["./entrypoint.sh"]
 
 EXPOSE 8080

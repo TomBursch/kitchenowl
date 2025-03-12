@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 import json
 import time
 
-load_dotenv('../.env')
+load_dotenv('owly/.env')
 
 
 openai.api_key = os.getenv("OPENAI_API_KEY")
@@ -52,4 +52,5 @@ def get_recipe_data(url):
     except Exception as e:
         print(f"Error scraping {url}: {e}")
         return None
+
 

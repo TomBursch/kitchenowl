@@ -1,0 +1,9 @@
+
+services:
+  swoop:
+    image: docker.io/natelbeckwith/swoop:dev
+    container_name: swoop
+    restart: unless-stopped
+    ports:
+      - 8080:8080
+

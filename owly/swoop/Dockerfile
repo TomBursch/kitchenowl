@@ -19,7 +19,7 @@ WORKDIR /usr/src/app
 COPY  swoop_data /usr/src/app/swoop
 RUN chmod +x /usr/src/app/swoop/scraper.py
 
-RUN adduser --system --home /home/swoop --shell /bin/bash swoop
+RUN adduser --system --no-create-home --shell /bin/bash swoop
 
 RUN chown -Rh swoop:root /usr/src/app
 RUN python3 -m venv /usr/src/app/venv 

@@ -1,11 +1,12 @@
 #
 # swoop_docker
 #
-FROM debian:stable-slim
+FROM python:3.12-slim
 RUN apt-get update -y
 RUN apt-get upgrade -y
 
-RUN apt-get install -y \
+RUN apt-get install -y --no-install-recommends \
+    apt-utils \
     curl \
     git \
     wget \
@@ -14,23 +15,22 @@ RUN apt-get install -y \
     python3-venv
 
 RUN apt-get autoremove -y
-
 WORKDIR /usr/src/app
-
-COPY  pyfiles /usr/src/app/pyfiles
-
-
-RUN python3 -m venv /usr/src/app/venv
-ENV PATH="${PATH}:/usr/src/app/venv/bin"
+COPY  swoop_data /usr/src/app/swoop
+RUN chmod +x /usr/src/app/swoop/scraper.py
 
 RUN adduser --system --home /home/swoop --shell /bin/bash swoop
-RUN chmod +x /usr/src/app/pyfiles/scraper.py
-RUN chmod +x /usr/src/app/venv/bin/activate
 
-RUN chown -R  swoop:root /usr/src/app/
+RUN chown -Rh swoop:root /usr/src/app
+RUN python3 -m venv /usr/src/app/venv 
+RUN /usr/src/app/venv/bin/pip3 install --no-cache-dir pip setuptools wheel
+RUN /usr/src/app/venv/bin/pip3 install --no-cache-dir -r /usr/src/app/swoop/requirements.txt
+
 USER swoop
-ENV PATH="${PATH}:/usr/src/app/venv/bin"
+WORKDIR /usr/src/app
+ENV PATH="/usr/src/app/venv/bin:$PATH"
 
-RUN source /usr/src/app/venv/bin/activate
-RUN pip install --upgrade pip
-RUN pip install -r /usr/src/app/pyfiles/requirements.txt
+ENTRYPOINT [ "/bin/bash", "-c", "exec bash && source /usr/src/app/venv/bin/activate" ]
+
+
+

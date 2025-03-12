@@ -1,0 +1,8 @@
+recipe-scrapers
+beautifulsoup4
+requests
+pillow
+psycopg2-binary
+dotenv
+requests
+openai

@@ -1,0 +1,12 @@
+recipe-scrapers
+beautifulsoup4
+lxml
+requests
+pillow
+pydantic
+matplotlib
+pandas
+numpy
+scikit-learn
+scikit-image
+scipy

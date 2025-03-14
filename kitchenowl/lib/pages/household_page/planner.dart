@@ -40,6 +40,23 @@ String formatDateAsWeekday(DateTime date, BuildContext context,
   }
 }
 
+String _formatDate(int daysToAdd, BuildContext context) {
+  DateTime date = DateTime.now().add(Duration(days: daysToAdd));
+  if (daysToAdd < 7) {
+    return formatDateAsWeekday(date, context, default_format: 'E');
+  } else {
+    return DateFormat.yMMMd().format(date);
+  }
+}
+
+
+int daysBetween(DateTime from, DateTime to) {
+  // otherwise it's rounded
+    from = DateTime(from.year, from.month, from.day);
+    to = DateTime(to.year, to.month, to.day);
+  return (to.difference(from).inHours / 24).round();
+}
+
 class PlannerPage extends StatefulWidget {
   const PlannerPage({super.key});
 
@@ -185,9 +202,10 @@ class _PlannerPageState extends State<PlannerPage> {
                                   ),
                                 ),
                               ),
-                            for (int i = 0; i < 7; i++)
-                              for (final plan
-                                  in state.getPlannedOfDate(DateTime.now().add(Duration(days: i))))
+                            for (final cookingDate in state.getUniqueCookingDays())
+                              
+                              for (final plan in state.getPlannedOfDate(cookingDate))
+                                  
                                 KitchenOwlFractionallySizedBox(
                                   widthFactor: (1 /
                                       DynamicStyling.itemCrossAxisCount(
@@ -203,12 +221,12 @@ class _PlannerPageState extends State<PlannerPage> {
                                         CrossAxisAlignment.stretch,
                                     children: [
                                       if (plan ==
-                                          state.getPlannedOfDate(DateTime.now().add(Duration(days: i)))[0])
+                                          state.getPlannedOfDate(cookingDate)[0])
                                         Padding(
                                           padding:
                                               const EdgeInsets.only(top: 5),
                                           child: Text(
-                                            '${formatDateAsWeekday(DateTime.now().add(Duration(days: i)), context, default_format: 'E')}',
+                                            '${_formatDate(daysBetween(DateTime.now(),cookingDate), context)}',
                                             style: Theme.of(context)
                                                 .textTheme
                                                 .bodyLarge,
@@ -409,19 +427,17 @@ class _PlannerPageState extends State<PlannerPage> {
     PlannerCubit cubit,
     Recipe recipe,
   ) async {
-
     final DateTime? cooking_date = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
       firstDate: DateTime(2000),
-      lastDate: DateTime.now()
-      .add(const Duration(days: 400)),
+      lastDate: DateTime.now().add(const Duration(days: 400)),
     );
     print("selected cooking date: $cooking_date");
     if (cooking_date != null) {
       await cubit.add(
         recipe,
-        cooking_date.millisecondsSinceEpoch > 0 ? cooking_date : null,
+        cooking_date.millisecondsSinceEpoch > 0 ? toEndOfDay(cooking_date) : null,
       );
     }
   }

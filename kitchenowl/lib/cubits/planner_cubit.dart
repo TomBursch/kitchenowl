@@ -130,7 +130,28 @@ class LoadedPlannerCubitState extends PlannerCubitState {
 
 
   List<RecipePlan> getPlannedOfDate(DateTime cooking_date){
-     return recipePlans.where((element) => element.cooking_date?.day == cooking_date.day).toList();
+    return recipePlans.where((element) => element.cooking_date?.day == cooking_date.day).toList();
   }
+
+  
+  List<DateTime> getUniqueCookingDays() {
+    // Use a Set to store unique days
+    Set<DateTime> uniqueDays = {};
+
+    for (var recipe in recipePlans) {
+      if (recipe.cooking_date != null) {
+        // Create a new DateTime object with the year, month, and day
+        DateTime dateOnly = DateTime(
+          recipe.cooking_date!.year,
+          recipe.cooking_date!.month,
+          recipe.cooking_date!.day,
+        );
+        uniqueDays.add(dateOnly);
+      }
+    }
+    // Convert the Set to a List and return
+    return uniqueDays.toList()..sort(); 
+  }
+
 
 }

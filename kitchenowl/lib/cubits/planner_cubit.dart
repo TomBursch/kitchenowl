@@ -9,8 +9,6 @@ import 'package:kitchenowl/services/transaction_handler.dart';
 import 'package:kitchenowl/services/transactions/planner.dart';
 import 'package:kitchenowl/services/transactions/shoppinglist.dart';
 
-final datetime_min = DateTime(1, 1, 1);
-
 class PlannerCubit extends Cubit<PlannerCubitState> {
   final Household household;
   bool _refreshLock = false;
@@ -126,7 +124,7 @@ class LoadedPlannerCubitState extends PlannerCubitState {
 
   List<RecipePlan> getPlannedWithoutDay() {
     return recipePlans
-        .where((element) => element.cooking_date == null || element.cooking_date?.compareTo(datetime_min) ==0)
+        .where((element) => element.cooking_date == null || (element.cooking_date != null && element.cooking_date!.millisecondsSinceEpoch < 0))
         .toList();
   }
 

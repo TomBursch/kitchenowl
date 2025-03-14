@@ -19,7 +19,6 @@ import 'package:responsive_builder/responsive_builder.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 import 'package:tuple/tuple.dart';
 
-final datetime_min = DateTime(1, 1, 1);
 DateTime toEndOfDay(DateTime dt) {
   return DateTime(dt.year, dt.month, dt.day, 23, 59, 59);
 }
@@ -384,8 +383,9 @@ class _RecipePageState extends State<RecipePage> {
                                   ),
                                 );
                                 if (cooking_date != null) {
+                                  print(cooking_date);
                                   await cubit.addRecipeToPlanner(
-                                    cooking_date: cooking_date.isAfter(datetime_min) ? cooking_date : null,
+                                    cooking_date: cooking_date.millisecondsSinceEpoch > 0 ? cooking_date : null,
                                     updateOnAdd: widget.updateOnPlanningEdit,
                                   );
                                 }

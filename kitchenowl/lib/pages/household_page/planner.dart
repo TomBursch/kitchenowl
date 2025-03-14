@@ -40,8 +40,6 @@ String formatDateAsWeekday(DateTime date, BuildContext context,
   }
 }
 
-final datetime_min = DateTime(1, 1, 1);
-
 class PlannerPage extends StatefulWidget {
   const PlannerPage({super.key});
 
@@ -427,7 +425,7 @@ class _PlannerPageState extends State<PlannerPage> {
     if (cooking_date != null) {
       await cubit.add(
         recipe,
-        cooking_date.isAfter(datetime_min) ? cooking_date : null,
+        cooking_date.millisecondsSinceEpoch > 0 ? cooking_date : null,
       );
     }
   }

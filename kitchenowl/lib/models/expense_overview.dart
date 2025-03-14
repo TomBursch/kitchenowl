@@ -33,6 +33,12 @@ class ExpenseOverview extends Model {
     return byCategory.isEmpty ? 0 : byCategory.values.reduce((v, e) => v + e);
   }
 
+  double getExpenseTotalForPeriod() {
+    return byCategory.isEmpty
+        ? 0
+        : byCategory.values.reduce((v, e) => e > 0 ? v + e : v);
+  }
+
   @override
   List<Object?> get props => [timeframe, byCategory, bySubTimeframe];
 

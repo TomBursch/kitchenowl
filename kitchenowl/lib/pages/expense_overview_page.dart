@@ -93,6 +93,8 @@ class _ExpenseOverviewPageState extends State<ExpenseOverviewPage> {
 
           final totalForSelectedMonth =
               state.getTotalForMonth(state.selectedMonthIndex);
+          final expenseTotalForSelectedMonth =
+              state.getExpenseTotalForMonth(state.selectedMonthIndex);
 
           return CustomScrollView(
             slivers: [
@@ -218,9 +220,10 @@ class _ExpenseOverviewPageState extends State<ExpenseOverviewPage> {
                         return Card(
                           child: ListTile(
                             leading: Padding(
-                              padding: (amount / totalForSelectedMonth >= 0)
-                                  ? EdgeInsets.zero
-                                  : const EdgeInsets.all(4.0),
+                              padding:
+                                  (amount / expenseTotalForSelectedMonth >= 0)
+                                      ? EdgeInsets.zero
+                                      : const EdgeInsets.all(4.0),
                               child: ExpenseCategoryIcon(
                                 name: category?.name ?? '🪙',
                                 color: category?.color,
@@ -231,10 +234,11 @@ class _ExpenseOverviewPageState extends State<ExpenseOverviewPage> {
                             trailing: Text(
                               NumberFormat.simpleCurrency().format(amount),
                             ),
-                            subtitle: (amount / totalForSelectedMonth >= 0)
-                                ? Text(NumberFormat.percentPattern()
-                                    .format(amount / totalForSelectedMonth))
-                                : null,
+                            subtitle:
+                                (amount / expenseTotalForSelectedMonth >= 0)
+                                    ? Text(NumberFormat.percentPattern().format(
+                                        amount / expenseTotalForSelectedMonth))
+                                    : null,
                             onTap: () => Navigator.of(context).push(
                               MaterialPageRoute(
                                 builder: (context) => ExpenseMonthListPage(

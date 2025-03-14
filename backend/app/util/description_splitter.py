@@ -98,7 +98,7 @@ def clean(input: str) -> str:
             "⅜": "0.375",
             "⅝": "0.625",
             "⅞": "0.875",
-        }.get(match.group(), match.group),
+        }.get(match.group(), match.group()),
         input,
     )
 

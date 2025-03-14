@@ -13,6 +13,8 @@ import app.util.description_splitter as description_splitter
     ("Gouda 5g", "Gouda", "5g"),
     ("Gouda + 5 Kartoffeln", "Gouda + 5 Kartoffeln", ""),
     ("Gouda + 5 Pumpkin", "Gouda + 5 Pumpkin", ""),
+    ("250g 500g Kartoffeln", "250g 500g Kartoffeln", ""),
+    ("0.5 500g Kartoffeln", "0.5 500g Kartoffeln", "")
 ])
 def testDescriptionMerge(query, item, description):
     assert description_splitter.split(query) == (item, description)

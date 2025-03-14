@@ -409,19 +409,15 @@ class _PlannerPageState extends State<PlannerPage> {
     PlannerCubit cubit,
     Recipe recipe,
   ) async {
-    DateTime? cooking_date = await showDialog<DateTime>(
+
+    final DateTime? cooking_date = await showDatePicker(
       context: context,
-      builder: (context) => SelectDialog(
-        title: AppLocalizations.of(context)!.addRecipeToPlannerShort,
-        cancelText: AppLocalizations.of(context)!.cancel,
-        options: List.generate(7, (index) {
-          return SelectDialogOption(
-              toEndOfDay(DateTime.now().add(Duration(days: index)) ),
-              formatDateAsWeekday(
-                  DateTime.now().add(Duration(days: index)), context));
-        }),
-      ),
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime.now()
+      .add(const Duration(days: 400)),
     );
+    print("selected cooking date: $cooking_date");
     if (cooking_date != null) {
       await cubit.add(
         recipe,

@@ -9,9 +9,45 @@ import 'package:kitchenowl/models/recipe.dart';
 import 'package:markdown/markdown.dart' as md;
 
 class RecipeItemMarkdownBuilder extends MarkdownElementBuilder {
+  final List<RecipeItem> items;
+
+  RecipeItemMarkdownBuilder({required this.items});
+
+  @override
+  Widget? visitElementAfter(md.Element element, TextStyle? preferredStyle) {
+    RecipeItem item = items.firstWhere(
+      (e) => e.name.toLowerCase() == element.textContent,
+    );
+    IconData? icon = ItemIcons.get(item);
+    return RichText(
+      text: TextSpan(children: [
+        WidgetSpan(
+          alignment: PlaceholderAlignment.middle,
+          child: Chip(
+            avatar: icon != null ? Icon(icon) : null,
+            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            padding: EdgeInsets.zero,
+            labelPadding:
+                icon != null ? const EdgeInsets.only(left: 1, right: 4) : null,
+            label: Text(item.name +
+                (item.description.isNotEmpty
+                    ? " (${_limitString(item.description)})"
+                    : "")),
+          ),
+        ),
+      ]),
+    );
+  }
+
+  String _limitString(String s) {
+    return s.length > 15 ? "${s.substring(0, math.min(15, s.length))}..." : s;
+  }
+}
+
+class RecipeCubitItemMarkdownBuilder extends MarkdownElementBuilder {
   final RecipeCubit cubit;
 
-  RecipeItemMarkdownBuilder({required this.cubit});
+  RecipeCubitItemMarkdownBuilder({required this.cubit});
 
   @override
   Widget? visitElementAfter(md.Element element, TextStyle? preferredStyle) {

@@ -1,14 +1,18 @@
 import 'dart:convert';
 
+import 'package:animations/animations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:kitchenowl/helpers/recipe_item_markdown_extension.dart';
 import 'package:kitchenowl/helpers/url_launcher.dart';
 import 'package:kitchenowl/kitchenowl.dart';
+import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/models/recipe.dart';
 import 'package:kitchenowl/widgets/kitchenowl_markdown_builder.dart';
 import 'package:markdown/markdown.dart' as md;
+import 'package:sliver_tools/sliver_tools.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
 class RecipeCookingPage extends StatefulWidget {
@@ -63,7 +67,17 @@ class _RecipeCookingPageState extends State<RecipeCookingPage> {
       result.last.add(node);
     }
 
+    if (result.last.isEmpty) result.removeLast();
+
     return result;
+  }
+
+  List<Set<RecipeItem>> _extractItems(List<List<md.Node>> steps) {
+    return steps.map((step) {
+      final visitor = _ExtractItemVisitor(recipe: widget.recipe);
+      step.forEach((e) => e.accept(visitor));
+      return visitor.items;
+    }).toList();
   }
 
   @override
@@ -77,6 +91,7 @@ class _RecipeCookingPageState extends State<RecipeCookingPage> {
     );
 
     List<List<md.Node>> nodes = _parseAndGroupMarkdown(extensionSet);
+    List<Set<RecipeItem>> stepItems = _extractItems(nodes);
 
     return Scaffold(
       body: SafeArea(
@@ -113,51 +128,84 @@ class _RecipeCookingPageState extends State<RecipeCookingPage> {
                 ],
               ),
               Expanded(
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: ConstrainedBox(
-                    constraints: BoxConstraints.tightFor(width: 1600),
-                    child: IndexedStack(
-                      children: nodes.fold(
-                        [],
-                        (List<Widget> acc, List<md.Node> w) => acc
-                          ..add(
-                            KitchenOwlMarkdownBuilder(
-                              nodes: w,
-                              imageBuilder: (uri, title, alt) =>
-                                  CachedNetworkImage(
-                                imageUrl: uri.toString(),
-                                placeholder: (context, url) =>
-                                    const CircularProgressIndicator(),
-                                errorWidget: (context, url, error) =>
-                                    const Icon(Icons.error),
-                              ),
-                              builders: <String, MarkdownElementBuilder>{
-                                'recipeItem': RecipeItemMarkdownBuilder(
-                                    items: widget.recipe.items)
+                child: CustomScrollView(
+                  slivers: [
+                    SliverCrossAxisConstrained(
+                      maxCrossAxisExtent: 1600,
+                      child: SliverPadding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        sliver: SliverToBoxAdapter(
+                          child: AnimatedSize(
+                            duration: const Duration(milliseconds: 100),
+                            child: PageTransitionSwitcher(
+                              transitionBuilder: (
+                                Widget child,
+                                Animation<double> animation,
+                                Animation<double> secondaryAnimation,
+                              ) {
+                                return SharedAxisTransition(
+                                  animation: animation,
+                                  secondaryAnimation: secondaryAnimation,
+                                  transitionType:
+                                      SharedAxisTransitionType.horizontal,
+                                  child: child,
+                                );
                               },
-                              styleSheet: MarkdownStyleSheet.fromTheme(
-                                Theme.of(context),
-                              ).copyWith(
-                                blockquoteDecoration: BoxDecoration(
-                                  color: Theme.of(context).cardTheme.color ??
-                                      Theme.of(context).cardColor,
-                                  borderRadius: BorderRadius.circular(2.0),
+                              child: KitchenOwlMarkdownBuilder(
+                                key: ValueKey(step),
+                                nodes: nodes[step],
+                                imageBuilder: (uri, title, alt) =>
+                                    CachedNetworkImage(
+                                  imageUrl: uri.toString(),
+                                  placeholder: (context, url) =>
+                                      const CircularProgressIndicator(),
+                                  errorWidget: (context, url, error) =>
+                                      const Icon(Icons.error),
                                 ),
-                                textScaleFactor: textScaleFactor,
+                                builders: <String, MarkdownElementBuilder>{
+                                  'recipeItem': RecipeItemMarkdownBuilder(
+                                      items: widget.recipe.items)
+                                },
+                                styleSheet: MarkdownStyleSheet.fromTheme(
+                                  Theme.of(context),
+                                ).copyWith(
+                                  blockquoteDecoration: BoxDecoration(
+                                    color: Theme.of(context).cardTheme.color ??
+                                        Theme.of(context).cardColor,
+                                    borderRadius: BorderRadius.circular(2.0),
+                                  ),
+                                  textScaleFactor: textScaleFactor,
+                                ),
+                                onTapLink: (text, href, title) {
+                                  if (href != null && isValidUrl(href)) {
+                                    openUrl(context, href);
+                                  }
+                                },
+                                extensionSet: extensionSet,
                               ),
-                              onTapLink: (text, href, title) {
-                                if (href != null && isValidUrl(href)) {
-                                  openUrl(context, href);
-                                }
-                              },
-                              extensionSet: extensionSet,
                             ),
                           ),
+                        ),
                       ),
-                      index: step,
                     ),
-                  ),
+                    const SliverCrossAxisConstrained(
+                      maxCrossAxisExtent: 1600,
+                      child: SliverToBoxAdapter(
+                        child: Divider(
+                          indent: 16,
+                          endIndent: 16,
+                          height: 32,
+                        ),
+                      ),
+                    ),
+                    SliverCrossAxisConstrained(
+                      maxCrossAxisExtent: 1600,
+                      child: SliverItemGridList(
+                        items: widget.recipe.items,
+                        selected: (item) => stepItems[step].contains(item),
+                      ),
+                    ),
+                  ],
                 ),
               ),
               Padding(
@@ -211,4 +259,28 @@ class _RecipeCookingPageState extends State<RecipeCookingPage> {
       ),
     );
   }
+}
+
+class _ExtractItemVisitor extends md.NodeVisitor {
+  final Recipe recipe;
+  final Set<RecipeItem> items = {};
+
+  _ExtractItemVisitor({required this.recipe});
+
+  @override
+  void visitElementAfter(md.Element element) {}
+
+  @override
+  bool visitElementBefore(md.Element element) {
+    if (element.tag != 'recipeItem') return true;
+
+    RecipeItem? item = recipe.items.firstWhereOrNull(
+      (e) => e.name.toLowerCase() == element.textContent,
+    );
+    if (item != null) items.add(item);
+    return false;
+  }
+
+  @override
+  void visitText(md.Text text) {}
 }

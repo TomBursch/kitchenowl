@@ -12,6 +12,7 @@ import 'package:kitchenowl/models/recipe.dart';
 import 'package:kitchenowl/models/shoppinglist.dart';
 import 'package:kitchenowl/pages/recipe_add_update_page.dart';
 import 'package:kitchenowl/kitchenowl.dart';
+import 'package:kitchenowl/pages/recipe_cooking_page.dart';
 import 'package:kitchenowl/widgets/recipe_markdown_body.dart';
 import 'package:kitchenowl/widgets/recipe_source_chip.dart';
 import 'package:kitchenowl/widgets/sliver_with_pinned_footer.dart';
@@ -432,6 +433,25 @@ class _RecipePageState extends State<RecipePage> {
                                 Share.shareUri(context, uri);
                               },
                               icon: Icon(Icons.adaptive.share_rounded),
+                            ),
+                          ),
+                        if (state.recipe.description.isNotEmpty)
+                          Padding(
+                            padding: const EdgeInsets.only(right: 8),
+                            child: LoadingIconButton(
+                              tooltip: AppLocalizations.of(context)!.start,
+                              variant: state.recipe.image == null ||
+                                      state.recipe.image!.isEmpty ||
+                                      isCollapsed
+                                  ? LoadingIconButtonVariant.standard
+                                  : LoadingIconButtonVariant.filledTonal,
+                              onPressed: () =>
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => RecipeCookingPage(
+                                  recipe: state.dynamicRecipe,
+                                ),
+                              )),
+                              icon: const Icon(Icons.soup_kitchen_rounded),
                             ),
                           ),
                         if (!App.isOffline && state.isOwningHousehold(state))

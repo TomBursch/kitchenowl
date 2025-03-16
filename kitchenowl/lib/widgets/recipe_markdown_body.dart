@@ -23,7 +23,7 @@ class RecipeMarkdownBody extends StatelessWidget {
       data: recipe.description,
       builders: <String, MarkdownElementBuilder>{
         'recipeItem': recipeItemBuilder ??
-            RecipeItemMarkdownBuilder(
+            RecipeCubitItemMarkdownBuilder(
               cubit: BlocProvider.of<RecipeCubit>(context),
             ),
       },

@@ -135,12 +135,10 @@ class LoadedPlannerCubitState extends PlannerCubitState {
 
   
   List<DateTime> getUniqueCookingDays() {
-    // Use a Set to store unique days
     Set<DateTime> uniqueDays = {};
 
     for (var recipe in recipePlans) {
-      if (recipe.cooking_date != null) {
-        // Create a new DateTime object with the year, month, and day
+      if (recipe.cooking_date != null && recipe.cooking_date!.millisecondsSinceEpoch > 0) {
         DateTime dateOnly = DateTime(
           recipe.cooking_date!.year,
           recipe.cooking_date!.month,
@@ -149,7 +147,6 @@ class LoadedPlannerCubitState extends PlannerCubitState {
         uniqueDays.add(dateOnly);
       }
     }
-    // Convert the Set to a List and return
     return uniqueDays.toList()..sort(); 
   }
 

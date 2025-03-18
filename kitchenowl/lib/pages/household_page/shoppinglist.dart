@@ -63,6 +63,8 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                       if (state.result.first is! ShoppinglistItem) {
                         cubit.add(state.result.first);
                       }
+                    } else {
+                      cubit.search(searchController.text);
                     }
                   },
                 ),

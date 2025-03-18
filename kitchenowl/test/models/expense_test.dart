@@ -73,20 +73,20 @@ void main() {
     // Then
     expect(e1 == e2, equals(false));
   });
-  // test("Expense should de-/serialize", () {
-  //   // Given
-  //   final e = Expense(
-  //     id: 1,
-  //     name: "Name",
-  //     date: DateTime(2023),
-  //     paidById: 3,
-  //     paidFor: [PaidForModel(userId: 5)],
-  //     amount: 105,
-  //     category: ExpenseCategory(id: 4, name: "Name"),
-  //   );
-  //   // When
-  //   final actual = Expense.fromJson(e.toJsonWithId());
-  //   // Then
-  //   expect(actual, equals(e));
-  // });
+  test("Expense should de-/serialize", () {
+    // Given
+    final e = Expense(
+      id: 1,
+      name: "Name",
+      date: DateTime(2023),
+      paidById: 3,
+      paidFor: [PaidForModel(userId: 5)],
+      amount: 105,
+      category: ExpenseCategory(id: 4, name: "Name"),
+    );
+    // When
+    final actual = Expense.fromJson(e.toJsonWithId());
+    // Then
+    expect(actual, equals(e));
+  });
 }

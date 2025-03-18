@@ -66,6 +66,10 @@ class _ItemSearchPageState extends State<ItemSearchPage> {
                 alwaysExpanded: true,
                 textInputAction: TextInputAction.done,
                 onSubmitted: () {
+                  if (cubit.state.query != searchController.text) {
+                    cubit.search(searchController.text);
+                    return;
+                  }
                   if (cubit.state.selectedItems
                       .contains(cubit.state.searchResults.first)) return;
                   if (!widget.multiple) {

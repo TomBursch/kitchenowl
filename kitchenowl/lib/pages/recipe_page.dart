@@ -23,25 +23,6 @@ DateTime toEndOfDay(DateTime dt) {
   return DateTime(dt.year, dt.month, dt.day, 23, 59, 59);
 }
 
-String formatDateAsWeekday(DateTime date, BuildContext context,
-    {String default_format = 'EEEE'}) {
-  DateTime today = DateTime.now();
-  DateTime tomorrow = today.add(Duration(days: 1));
-
-  // Check if the date is today or tomorrow
-  if (date.year == today.year &&
-      date.month == today.month &&
-      date.day == today.day) {
-    return AppLocalizations.of(context)!.today;
-  } else if (date.year == tomorrow.year &&
-      date.month == tomorrow.month &&
-      date.day == tomorrow.day) {
-    return AppLocalizations.of(context)!.tomorrow;
-  } else {
-    // Return the weekday name
-    return DateFormat(default_format).format(date);
-  }
-}
 
 class RecipePage extends StatefulWidget {
   final Household? household;
@@ -365,22 +346,11 @@ class _RecipePageState extends State<RecipePage> {
                             LoadingElevatedButton(
                               child: const Icon(Icons.calendar_month_rounded),
                               onPressed: () async {
-                                DateTime? cooking_date = await showDialog<DateTime>(
+                                final DateTime? cooking_date = await showDatePicker(
                                   context: context,
-                                  builder: (context) => SelectDialog(
-                                    title: AppLocalizations.of(context)!
-                                        .addRecipeToPlannerShort,
-                                    cancelText:
-                                        AppLocalizations.of(context)!.cancel,
-                                    options: List.generate(7, (index) {
-                                      return SelectDialogOption(
-                                          toEndOfDay(DateTime.now().add(Duration(days: index)) ),
-                                          formatDateAsWeekday(
-                                              DateTime.now()
-                                                  .add(Duration(days: index)),
-                                              context));
-                                    }),
-                                  ),
+                                  initialDate: DateTime.now(),
+                                  firstDate: DateTime(2000),
+                                  lastDate: DateTime.now().add(const Duration(days: 400)),
                                 );
                                 if (cooking_date != null) {
                                   await cubit.addRecipeToPlanner(
@@ -388,6 +358,9 @@ class _RecipePageState extends State<RecipePage> {
                                     updateOnAdd: widget.updateOnPlanningEdit,
                                   );
                                 }
+
+
+
                               },
                             ),
                           ],

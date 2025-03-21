@@ -9,10 +9,7 @@ class AddPlannedRecipe(Schema):
     recipe_id = fields.Integer(
         required=True,
     )
-    day = fields.Integer(
-        validate=Range(min=0, min_inclusive=True, max=6, max_inclusive=True)
-    )
-    cooking_date = fields.DateTime(format="iso")
+    cooking_date = fields.Integer()
     yields = fields.Integer()
 
 
@@ -20,8 +17,5 @@ class RemovePlannedRecipe(Schema):
     class Meta:
         unknown = EXCLUDE
 
-    day = fields.Integer(
-        validate=Range(min=0, min_inclusive=True, max=6, max_inclusive=True)
-    )
-    cooking_date = fields.DateTime(format="iso")
+    cooking_date = fields.Integer()
 

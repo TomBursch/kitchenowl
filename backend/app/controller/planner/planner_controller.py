@@ -5,7 +5,7 @@ from app import db
 from app.helpers import validate_args, authorize_household
 from app.models import Recipe, RecipeHistory, Planner
 from .schemas import AddPlannedRecipe, RemovePlannedRecipe
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 import warnings
 
 
@@ -75,7 +75,7 @@ def addPlannedRecipe(args, household_id):
     recipe = Recipe.find_by_id(args["recipe_id"])
     if not recipe:
         raise NotFoundRequest()
-    cooking_date = args["cooking_date"] if "cooking_date" in args else datetime.min
+    cooking_date = datetime.fromtimestamp(args["cooking_date"] / 1000) if "cooking_date" in args else datetime.min
     if "day" in args:
         # if outdated "day" was used, transform it into next date with that weekday
         cooking_date = next_weekday(args["day"]).replace(hour=23,minute=59, second=59, microsecond=0)
@@ -109,7 +109,7 @@ def removePlannedRecipeById(args, household_id, id):
     if not recipe:
         raise NotFoundRequest()
     
-    cooking_date = args["cooking_date"] if "cooking_date" in args else datetime.min
+    cooking_date = datetime.fromtimestamp(args["cooking_date"] / 1000, timezone.utc) if "cooking_date" in args else datetime.min
     if "day" in args:
         # if outdated "day" was used, transform it into next date with that weekday
         cooking_date = next_weekday(args["day"]).replace(hour=23,minute=59, second=59, microsecond=0)

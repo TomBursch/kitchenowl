@@ -139,12 +139,7 @@ class LoadedPlannerCubitState extends PlannerCubitState {
 
     for (var recipe in recipePlans) {
       if (recipe.cooking_date != null && recipe.cooking_date!.millisecondsSinceEpoch > 0) {
-        DateTime dateOnly = DateTime(
-          recipe.cooking_date!.year,
-          recipe.cooking_date!.month,
-          recipe.cooking_date!.day,
-        );
-        uniqueDays.add(dateOnly);
+        uniqueDays.add(recipe.cooking_date!);
       }
     }
     return uniqueDays.toList()..sort(); 

@@ -10,19 +10,19 @@ DateTime toEndOfDay(DateTime dt) {
 
 class RecipePlan extends Model {
   final Recipe recipe;
-  final DateTime? cooking_date; // privat gemacht
+  final DateTime? cooking_date; 
   final int? yields;
 
   RecipePlan({
     required this.recipe,
-    this.cooking_date, // Parameter umbenennen
+    this.cooking_date, 
     this.yields,
   }); 
 
   factory RecipePlan.fromJson(Map<String, dynamic> map) {
     return RecipePlan(
       recipe: Recipe.fromJson(map['recipe']),
-      cooking_date: DateTime.fromMillisecondsSinceEpoch(map["cooking_date"], isUtc: false),
+      cooking_date: DateTime.fromMillisecondsSinceEpoch(map["cooking_date"], isUtc: true),
       yields: map['yields'],
     );
   }

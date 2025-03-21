@@ -433,7 +433,6 @@ class _PlannerPageState extends State<PlannerPage> {
       firstDate: DateTime(2000),
       lastDate: DateTime.now().add(const Duration(days: 400)),
     );
-    print("selected cooking date: $cooking_date");
     if (cooking_date != null) {
       await cubit.add(
         recipe,

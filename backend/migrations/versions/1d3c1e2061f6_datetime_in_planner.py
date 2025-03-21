@@ -46,22 +46,22 @@ def upgrade():
         batch_op.drop_constraint('pk_planner') # manually added
         batch_op.create_primary_key('pk_planner', ['recipe_id', 'cooking_date'])
 
-        # # Data migration
-        # bind = op.get_bind()
-        # session = orm.Session(bind=bind)
+    # Data migration
+    bind = op.get_bind()
+    session = orm.Session(bind=bind)
 
-        # planner = session.query(Planner).all()
-        # for plan in planner:
-        #     plan.cooking_date = next_weekday(plan.day)
+    planner = session.query(Planner).all()
+    for plan in planner:
+        plan.cooking_date = next_weekday(plan.day)
 
-        # try:
-        #     session.bulk_save_objects(planner)
-        #     session.commit()
-        # except Exception as e:
-        #     session.rollback()
-        #     raise e
-        # # Data migration end
-
+    try:
+        session.bulk_save_objects(planner)
+        session.commit()
+    except Exception as e:
+        session.rollback()
+        raise e
+    # Data migration end
+    with op.batch_alter_table('planner', schema=None) as batch_op:
         batch_op.drop_column('day')
   
 

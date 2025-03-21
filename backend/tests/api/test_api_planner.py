@@ -24,7 +24,7 @@ def test_meal_planning_cooking_date_field(user_client_with_household, household_
     assert response.status_code == 200
     planned_meals = response.get_json()
     actual = datetime.fromtimestamp(planned_meals[0]["cooking_date"]/1000, timezone.utc).replace(tzinfo=None)
-    expected = pytest.FIX_DATETIME
+    expected = datetime.fromtimestamp(pytest.FIX_DATETIME/1000, None)
     assert actual == expected
 
 
@@ -33,7 +33,7 @@ def test_meal_planning_remove_by_datetime(user_client_with_household, household_
     # Remove from meal plan
     response = user_client_with_household.delete(
         f'/api/household/{household_id}/planner/recipe/{planned_recipe}',
-        json={'cooking_date': pytest.FIX_DATETIME.isoformat()}
+        json={'cooking_date': pytest.FIX_DATETIME}
     )
     assert response.status_code == 200
 
@@ -51,7 +51,7 @@ def test_recent_planned_recipes(user_client_with_household, household_id, planne
     # First remove the recipe from the plan
     response = user_client_with_household.delete(
         f'/api/household/{household_id}/planner/recipe/{planned_recipe}',
-        json={'cooking_date': pytest.FIX_DATETIME.isoformat()}
+        json={'cooking_date': pytest.FIX_DATETIME    }
     )
     assert response.status_code == 200
 

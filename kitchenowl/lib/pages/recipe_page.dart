@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
 import 'package:kitchenowl/app.dart';
 import 'package:kitchenowl/cubits/recipe_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';

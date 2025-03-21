@@ -24,6 +24,7 @@ String formatDateAsWeekday(DateTime date, BuildContext context,
     {String default_format = 'EEEE'}) {
   DateTime today = DateTime.now();
   DateTime tomorrow = today.add(Duration(days: 1));
+  DateTime yesterday = today.subtract(Duration(days: 1));
 
   // Check if the date is today or tomorrow
   if (date.year == today.year &&
@@ -34,6 +35,9 @@ String formatDateAsWeekday(DateTime date, BuildContext context,
       date.month == tomorrow.month &&
       date.day == tomorrow.day) {
     return AppLocalizations.of(context)!.tomorrow;
+  } else if (date.year == yesterday.year && date.month == yesterday.month && date.day == yesterday.day) {
+    return AppLocalizations.of(context)!.yesterday;
+      
   } else {
     // Return the weekday name
     return DateFormat(default_format).format(date);
@@ -42,7 +46,7 @@ String formatDateAsWeekday(DateTime date, BuildContext context,
 
 String _formatDate(int daysToAdd, BuildContext context) {
   DateTime date = DateTime.now().add(Duration(days: daysToAdd));
-  if (daysToAdd < 7) {
+  if (daysToAdd >= -1 && daysToAdd < 7) {
     return formatDateAsWeekday(date, context, default_format: 'E');
   } else {
     return DateFormat.yMMMd().format(date);

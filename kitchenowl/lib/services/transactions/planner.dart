@@ -161,7 +161,7 @@ class TransactionPlannerRemoveRecipe extends Transaction<bool> {
     ..addAll({
       "household": household.toJsonWithId(),
       "recipe": recipe.toJsonWithId(),
-      "cooking_date": cooking_date?.toIso8601String(),
+      "cooking_date": cooking_date?.millisecondsSinceEpoch,
     });
 
   @override

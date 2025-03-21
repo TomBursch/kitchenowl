@@ -22,7 +22,7 @@ class RecipePlan extends Model {
   factory RecipePlan.fromJson(Map<String, dynamic> map) {
     return RecipePlan(
       recipe: Recipe.fromJson(map['recipe']),
-      cooking_date: DateTime.fromMillisecondsSinceEpoch(map["cooking_date"], isUtc: true),
+      cooking_date: DateTime.fromMillisecondsSinceEpoch(map["cooking_date"], isUtc: false),
       yields: map['yields'],
     );
   }
@@ -39,7 +39,7 @@ class RecipePlan extends Model {
   @override
   Map<String, dynamic> toJson() => {
         "recipe_id": recipe.id,
-        if (cooking_date != null) "cooking_date":  cooking_date?.toIso8601String(),
+        if (cooking_date != null) "cooking_date":  cooking_date?.millisecondsSinceEpoch,
         if (yields != null) "yields": yields,
       };
 

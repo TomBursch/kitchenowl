@@ -8,6 +8,8 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
       - kitchenowl_db:/var/lib/postgresql/data
+    networks:
+      - proxy_net
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -d $$POSTGRES_DB -U $$POSTGRES_USER"]
       interval: 30s
@@ -33,9 +35,15 @@ services:
       LLM_MODEL: ${LLM_MODEL}
     volumes:
       - kitchenowl_files:/data
-    ports:
-      - "8080:8080"
+    expose:
+      - "8080"
+    networks:
+      - proxy_net
 
 volumes:
   kitchenowl_files:
   kitchenowl_db:
+
+networks:
+  proxy_net:
+    external: true

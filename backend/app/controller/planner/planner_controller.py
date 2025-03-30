@@ -6,7 +6,6 @@ from app.helpers import validate_args, authorize_household
 from app.models import Recipe, RecipeHistory, Planner
 from .schemas import AddPlannedRecipe, RemovePlannedRecipe
 from datetime import datetime, timedelta, timezone
-import warnings
 
 
 plannerHousehold = Blueprint("planner", __name__)
@@ -24,6 +23,7 @@ def is_within_next_7_days(target_date: datetime) -> bool:
 def transform_cooking_date_to_day(cooking_date: datetime) -> int:
     if is_within_next_7_days(cooking_date):
         return cooking_date.weekday()
+    return -1
 
 def next_weekday(weekday_number: int) -> datetime:
     # Get today's date

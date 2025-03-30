@@ -105,6 +105,7 @@ SUPPORTED_LANGUAGES = {
     "ro": "Română",
     "ru": "Русский язык",
     "sk": "Slovenčina",
+    "sl": "Slovenščina",
     "sv": "Svenska",
     "ta": "தமிழ்",
     "tr": "Türkçe",

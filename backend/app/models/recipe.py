@@ -67,7 +67,6 @@ class Recipe(db.Model, DbModelMixin, DbModelAuthorizeMixin):
         res["planned_cooking_dates"] = [plan.cooking_date for plan in self.plans if (plan.cooking_date > datetime.min) and (is_within_next_7_days(plan.cooking_date))]
         if self.photo_file:
             res["photo_hash"] = self.photo_file.blur_hash
-        # print(f"res: {res}")
         return res
 
     def obj_to_full_dict(self) -> dict:

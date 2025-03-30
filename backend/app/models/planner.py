@@ -14,7 +14,7 @@ class Planner(db.Model, DbModelMixin, DbModelAuthorizeMixin):
     __tablename__ = "planner"
 
     recipe_id: Mapped[int] = db.Column(db.Integer, db.ForeignKey("recipe.id"), primary_key=True)
-    cooking_date: Mapped[datetime] =  db.Column(db.DateTime,  primary_key=True)
+    cooking_date: Mapped[datetime] = db.Column(db.DateTime, primary_key=True)
     yields: Mapped[int] = db.Column(db.Integer)
     household_id: Mapped[int] = db.Column(
         db.Integer, db.ForeignKey("household.id"), nullable=False, index=True

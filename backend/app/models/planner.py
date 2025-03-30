@@ -19,7 +19,6 @@ class Planner(db.Model, DbModelMixin, DbModelAuthorizeMixin):
     household_id: Mapped[int] = db.Column(
         db.Integer, db.ForeignKey("household.id"), nullable=False, index=True
     )
-    
 
     household: Mapped["Household"] = db.relationship("Household", uselist=False)
     recipe: Mapped["Recipe"] = db.relationship("Recipe", back_populates="plans")

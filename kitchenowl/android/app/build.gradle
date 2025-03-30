@@ -53,7 +53,7 @@ android {
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
-        resConfigs 'en', 'ar', 'be', 'bg', 'ca', 'ca_valencia', 'cs', 'da', 'de', 'de_CH', 'el', 'es', 'fi', 'fr', 'he', 'hi', 'hu', 'id', 'it', 'ja', 'kab', 'ko', 'lt', 'nb', 'nl', 'pa', 'pl', 'pt', 'pt_BR', 'ro', 'ru', 'sk', 'sv', 'ta', 'tr', 'uk', 'vi', 'zh'
+        resConfigs 'en', 'ar', 'be', 'bg', 'ca', 'ca_valencia', 'cs', 'da', 'de', 'de_CH', 'el', 'es', 'fi', 'fr', 'he', 'hi', 'hu', 'id', 'it', 'ja', 'kab', 'ko', 'lt', 'nb', 'nl', 'pa', 'pl', 'pt', 'pt_BR', 'ro', 'ru', 'sk', 'sl', 'sv', 'ta', 'tr', 'uk', 'vi', 'zh'
     }
 
     signingConfigs {

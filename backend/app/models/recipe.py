@@ -7,10 +7,25 @@ from .tag import Tag
 from .planner import Planner
 from random import randint
 from sqlalchemy.orm import Mapped
+from datetime import datetime, timedelta
 
 if TYPE_CHECKING:
     from app.models import *
 
+def is_within_next_7_days(target_date: datetime) -> bool:
+    # Get the current date and time
+    now = datetime.now()
+    
+    # Calculate the date 7 days from now
+    seven_days_later = now + timedelta(days=7)
+    
+    # Check if the target date is within the next 7 days
+    return now <= target_date <= seven_days_later
+
+def transform_cooking_date_to_day(cooking_date: datetime) -> int:
+    if is_within_next_7_days(cooking_date):
+        return cooking_date.weekday()
+    return -1
 
 class Recipe(db.Model, DbModelMixin, DbModelAuthorizeMixin):
     __tablename__ = "recipe"
@@ -49,7 +64,8 @@ class Recipe(db.Model, DbModelMixin, DbModelAuthorizeMixin):
     def obj_to_dict(self) -> dict:
         res = super().obj_to_dict()
         res["planned"] = len(self.plans) > 0
-        res["planned_days"] = [plan.day for plan in self.plans if plan.day >= 0]
+        res["planned_days"] = [transform_cooking_date_to_day(plan.cooking_date) for plan in self.plans if (plan.cooking_date > datetime.min) and is_within_next_7_days(plan.cooking_date)]
+        res["planned_cooking_dates"] = [plan.cooking_date for plan in self.plans if plan.cooking_date > datetime.min]
         if self.photo_file:
             res["photo_hash"] = self.photo_file.blur_hash
         return res

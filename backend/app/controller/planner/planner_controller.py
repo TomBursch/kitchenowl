@@ -5,8 +5,38 @@ from app import db
 from app.helpers import validate_args, authorize_household
 from app.models import Recipe, RecipeHistory, Planner
 from .schemas import AddPlannedRecipe, RemovePlannedRecipe
+from datetime import datetime, timedelta, timezone
+
 
 plannerHousehold = Blueprint("planner", __name__)
+
+def is_within_next_7_days(target_date: datetime) -> bool:
+    # Get the current date and time
+    now = datetime.now()
+    
+    # Calculate the date 7 days from now
+    seven_days_later = now + timedelta(days=7)
+    
+    # Check if the target date is within the next 7 days
+    return now <= target_date <= seven_days_later
+
+def transform_cooking_date_to_day(cooking_date: datetime) -> int:
+    if is_within_next_7_days(cooking_date):
+        return cooking_date.weekday()
+    return -1
+
+def next_weekday(weekday_number: int) -> datetime:
+    # Get today's date
+    today = datetime.now()
+    
+    # Calculate how many days to add to get to the next specified weekday
+    days_ahead = (weekday_number - today.weekday() + 7) % 7
+    
+    # Calculate the next weekday date
+    next_date = today + timedelta(days=days_ahead)
+    
+    return next_date
+
 
 
 @plannerHousehold.route("/recipes", methods=["GET"])
@@ -30,7 +60,11 @@ def getAllPlannedRecipes(household_id):
 @authorize_household()
 def getPlanner(household_id):
     plans = Planner.all_from_household(household_id)
-    return jsonify([e.obj_to_full_dict() for e in plans])
+    k = [e.obj_to_full_dict() for e in plans]
+    # add day for backwards compatibility
+    for d in k:
+        d["day"] = transform_cooking_date_to_day(d["cooking_date"])
+    return jsonify(k)
 
 
 @plannerHousehold.route("/recipe", methods=["POST"])
@@ -41,11 +75,14 @@ def addPlannedRecipe(args, household_id):
     recipe = Recipe.find_by_id(args["recipe_id"])
     if not recipe:
         raise NotFoundRequest()
-    day = args["day"] if "day" in args else -1
-    planner = Planner.find_by_day(household_id, recipe_id=recipe.id, day=day)
+    cooking_date = datetime.fromtimestamp(args["cooking_date"] / 1000) if "cooking_date" in args else datetime.min
+    if "day" in args:
+        # if outdated "day" was used, transform it into next date with that weekday
+        cooking_date = next_weekday(args["day"]).replace(hour=23,minute=59, second=59, microsecond=0)
+    planner = Planner.find_by_datetime(household_id=household_id, recipe_id=recipe.id, cooking_date=cooking_date)
     if not planner:
-        if day >= 0:
-            old = Planner.find_by_day(household_id, recipe_id=recipe.id, day=-1)
+        if cooking_date > datetime.min:
+            old = Planner.find_by_datetime(household_id, recipe_id=recipe.id, cooking_date=datetime.min)
             if old:
                 old.delete()
         elif len(recipe.plans) > 0:
@@ -53,7 +90,7 @@ def addPlannedRecipe(args, household_id):
         planner = Planner()
         planner.recipe_id = recipe.id
         planner.household_id = household_id
-        planner.day = day
+        planner.cooking_date = cooking_date
         if "yields" in args:
             planner.yields = args["yields"]
         planner.save()
@@ -71,9 +108,12 @@ def removePlannedRecipeById(args, household_id, id):
     recipe = Recipe.find_by_id(id)
     if not recipe:
         raise NotFoundRequest()
-
-    day = args["day"] if "day" in args else -1
-    planner = Planner.find_by_day(household_id, recipe_id=recipe.id, day=day)
+    
+    cooking_date = datetime.fromtimestamp(args["cooking_date"] / 1000, timezone.utc) if "cooking_date" in args else datetime.min
+    if "day" in args:
+        # if outdated "day" was used, transform it into next date with that weekday
+        cooking_date = next_weekday(args["day"]).replace(hour=23,minute=59, second=59, microsecond=0)
+    planner = Planner.find_by_datetime(household_id, recipe_id=recipe.id, cooking_date=cooking_date)
     if planner:
         planner.delete()
         RecipeHistory.create_dropped(recipe, household_id)

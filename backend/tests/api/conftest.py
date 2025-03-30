@@ -1,6 +1,7 @@
 import pytest
 from app import app, db
-
+from unittest.mock import patch
+from datetime import datetime, timedelta, timezone
 
 @pytest.fixture
 def client():
@@ -70,6 +71,10 @@ def recipe_yields():
 def recipe_time():
     return 30
 
+FIX_DATETIME = int((datetime.now(timezone.utc).replace(hour=23,minute=59, second=59, microsecond=0).replace(tzinfo=None) + timedelta(days=2)).timestamp() * 1000)
+
+def pytest_configure():
+    pytest.FIX_DATETIME = FIX_DATETIME
 
 @pytest.fixture
 def onboarded_client(client, admin_username, admin_name, admin_password):
@@ -196,7 +201,7 @@ def planned_recipe(user_client_with_household, household_id, recipe_with_items):
     """Fixture that creates a meal plan with the test recipe"""
     plan_data = {
         'recipe_id': recipe_with_items,
-        'day': 0  # Plan for today
+        "cooking_date": FIX_DATETIME
     }
     response = user_client_with_household.post(
         f'/api/household/{household_id}/planner/recipe',
@@ -214,3 +219,4 @@ def planned_recipe(user_client_with_household, household_id, recipe_with_items):
     assert any(meal['recipe']['id'] == recipe_with_items for meal in planned_meals)
     
     return recipe_with_items  # Return recipe_id for convenience
+

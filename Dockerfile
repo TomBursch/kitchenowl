@@ -63,11 +63,12 @@ RUN apt-get update \
         autoconf automake zlib1g-dev libjpeg62-turbo-dev libssl-dev libsqlite3-dev
 
 # Create virtual enviroment
-RUN python -m venv /opt/venv && /opt/venv/bin/pip install --no-cache-dir -U pip setuptools wheel
+RUN pip install uv
+ENV UV_PROJECT_ENVIRONMENT="/opt/venv"
 ENV PATH="/opt/venv/bin:$PATH"
 
-COPY backend/requirements.txt .
-RUN pip3 install --no-cache-dir -r requirements.txt && find /opt/venv \( -type d -a -name test -o -name tests \) -o \( -type f -a -name '*.pyc' -o -name '*.pyo' \) -exec rm -rf '{}' \+
+COPY backend/pyproject.toml backend/uv.lock backend/.python-version ./
+RUN uv sync --no-dev && find /opt/venv \( -type d -a -name test -o -name tests \) -o \( -type f -a -name '*.pyc' -o -name '*.pyo' \) -exec rm -rf '{}' \+
 
 RUN python -c "import nltk; nltk.download('averaged_perceptron_tagger_eng', download_dir='/opt/venv/nltk_data')"
 

@@ -175,8 +175,10 @@ Manage KitchenOwl\n---\nWhat do you want to do?
                 manageFiles()
         elif selection == "4":
             print("Starting jobs (might take a while)...")
-            jobs.daily()
-            jobs.halfHourly()
+            with app.app_context():
+                jobs.monthly()
+                jobs.daily()
+                jobs.halfHourly()
             print("Done!")
         else:
             exit()

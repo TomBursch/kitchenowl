@@ -959,12 +959,13 @@
 </div>
 <div class="tabbed-block">
 <ul>
+<li>Install Python 3.12+ and <a href="https://docs.astral.sh/uv/getting-started/">UV</a></li>
 <li>Go to <code>./backend</code></li>
-<li>Create a python environment <code>python3 -m venv venv</code></li>
-<li>Activate your python environment <code>source venv/bin/activate</code> (environment can be deactivated with <code>deactivate</code>)</li>
 <li>Install dependencies <code>pip3 install -r requirements.txt</code></li>
-<li>Initialize/Upgrade the SQLite database with <code>flask db upgrade</code></li>
-<li>Run debug server with <code>python3 wsgi.py</code> (to make the server visible to any device add <code>--host=0.0.0.0</code> or the network IP address on which to provide the server)</li>
+<li>Optionally: Activate your python environment <code>source .venv/bin/activate</code> (allows you to omit <code>uv run</code> in the following steps, environment can be deactivated with <code>deactivate</code>)</li>
+<li>Initialize/Upgrade requirements for the recipe scraper <code>uv run python -c "import nltk; nltk.download('averaged_perceptron_tagger_eng', download_dir='./venv/nltk_data')"</code></li>
+<li>Initialize/Upgrade the SQLite database with <code>uv run flask db upgrade</code></li>
+<li>Run debug server with <code>uv run wsgi.py</code></li>
 <li>The backend should be reachable at <code>localhost:5000</code></li>
 </ul>
 <div class="admonition danger known warnings">

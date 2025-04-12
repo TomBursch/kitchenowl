@@ -1,5 +1,4 @@
 version = 1
-revision = 1
 requires-python = ">=3.12"
 
 [[package]]
@@ -1148,12 +1147,12 @@ dependencies = [
     { name = "prometheus-client" },
     { name = "prometheus-flask-exporter" },
     { name = "pyjwt" },
+    { name = "pyuwsgi" },
     { name = "recipe-scrapers" },
     { name = "requests" },
     { name = "sqlalchemy" },
     { name = "sqlite-icu" },
     { name = "tqdm" },
-    { name = "uwsgi" },
     { name = "werkzeug" },
 ]
 
@@ -1193,12 +1192,12 @@ requires-dist = [
     { name = "prometheus-client", specifier = ">=0.21.1" },
     { name = "prometheus-flask-exporter", specifier = ">=0.23.2" },
     { name = "pyjwt", specifier = "==2.9.0" },
+    { name = "pyuwsgi", specifier = ">=2.0.28" },
     { name = "recipe-scrapers", specifier = ">=15.6.0" },
     { name = "requests", specifier = ">=2.32.3" },
     { name = "sqlalchemy", specifier = ">=2.0.40" },
     { name = "sqlite-icu", specifier = ">=1.0" },
     { name = "tqdm", specifier = ">=4.67.1" },
-    { name = "uwsgi", specifier = ">=2.0.28" },
     { name = "werkzeug", specifier = ">=3.1.3" },
 ]
 
@@ -1863,6 +1862,8 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/a1/4c/78307b989d4855f806fff16424f837400e22df3695725f6aa45553e3a13c/pycryptodomex-3.22.0-cp37-abi3-musllinux_1_2_x86_64.whl", hash = "sha256:bfe4fe3233ef3e58028a3ad8f28473653b78c6d56e088ea04fe7550c63d4d16b", size = 2265831 },
     { url = "https://files.pythonhosted.org/packages/fb/ad/cc69805083af164419a4413bc0ebc791e17103327da6979b14d5d3c7e7e5/pycryptodomex-3.22.0-cp37-abi3-win32.whl", hash = "sha256:2cac9ed5c343bb3d0075db6e797e6112514764d08d667c74cb89b931aac9dddd", size = 1766824 },
     { url = "https://files.pythonhosted.org/packages/15/c8/79ab16e5b95a8988caee792236a776beceabcaa2518979d4e21b6ee20f57/pycryptodomex-3.22.0-cp37-abi3-win_amd64.whl", hash = "sha256:ff46212fda7ee86ec2f4a64016c994e8ad80f11ef748131753adb67e9b722ebd", size = 1797989 },
+    { url = "https://files.pythonhosted.org/packages/7f/71/b32ff0b2f9196d7ef85e2f663cf3e5d66ac361caeacc1bef43de757b2ba4/pycryptodomex-3.22.0-pp27-pypy_73-manylinux2010_x86_64.whl", hash = "sha256:5bf3ce9211d2a9877b00b8e524593e2209e370a287b3d5e61a8c45f5198487e2", size = 1704200 },
+    { url = "https://files.pythonhosted.org/packages/30/ae/bc3180c927df70080cfab2420ea4ddd9ca88219457975a45447609edaf44/pycryptodomex-3.22.0-pp27-pypy_73-win32.whl", hash = "sha256:684cb57812cd243217c3d1e01a720c5844b30f0b7b64bb1a49679f7e1e8a54ac", size = 1778647 },
 ]
 
 [[package]]
@@ -2086,6 +2087,30 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/f8/bf/abbd3cdfb8fbc7fb3d4d38d320f2441b1e7cbe29be4f23797b4a2b5d8aac/pytz-2025.2.tar.gz", hash = "sha256:360b9e3dbb49a209c21ad61809c7fb453643e048b38924c765813546746e81c3", size = 320884 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/81/c4/34e93fe5f5429d7570ec1fa436f1986fb1f00c3e0f43a589fe2bbcd22c3f/pytz-2025.2-py2.py3-none-any.whl", hash = "sha256:5ddf76296dd8c44c26eb8f4b6f35488f3ccbf6fbbd7adee0b7262d43f0ec2f00", size = 509225 },
+]
+
+[[package]]
+name = "pyuwsgi"
+version = "2.0.28.post1"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/06/50/1438aa4b04a30b62280f2ac1a614f0ae3c6ef0327f84302c840249a2616d/pyuwsgi-2.0.28.post1.tar.gz", hash = "sha256:3b85217fd489d623512066ffed0cfc4c95bd3321655e9c6ea13cf6c7f064c9b0", size = 856346 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/1c/d3/63f8d35e445fccfccb9f7b568db7f96b16cdd06ea6615b474cf1f66337b3/pyuwsgi-2.0.28.post1-cp312-cp312-macosx_10_9_x86_64.whl", hash = "sha256:9390e8a2297186ede814d5863a06fa98b91295c813fdd3d08fe1357793476486", size = 663610 },
+    { url = "https://files.pythonhosted.org/packages/21/9b/5cc43eae61af2fcffe38dd9a1381ae1591a6058aaccaea72c6f5e29ca371/pyuwsgi-2.0.28.post1-cp312-cp312-macosx_11_0_arm64.whl", hash = "sha256:06a0294910de374ff43032b41333f7f9b62d59308b7f3eea29bc64d78fb93613", size = 589468 },
+    { url = "https://files.pythonhosted.org/packages/4f/2a/cc0a1927f10235d26008a5e348eb596d88a50a4a09c42cb54ebaa295a4ec/pyuwsgi-2.0.28.post1-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:64b40503a87621e79efe4306b77595a0cbcb69afa4f3428a85e4e8ac46068d88", size = 881465 },
+    { url = "https://files.pythonhosted.org/packages/aa/6b/2315b270787846f4e8dc3589d4a8201cb7aa99db57dc6d3a883210c754e9/pyuwsgi-2.0.28.post1-cp312-cp312-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:1157f49bfb360c1883feec82553adbed1e4a447e5ced66f36525a92f0e46397e", size = 940156 },
+    { url = "https://files.pythonhosted.org/packages/df/13/7d73f07240fe26499188a4f630ab3292dcf32536aa491a43620cc852b380/pyuwsgi-2.0.28.post1-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:941d44a67760dc173c0f8318f8b7bd1ef7927533d6efb4641b2ea9e934f09981", size = 889417 },
+    { url = "https://files.pythonhosted.org/packages/fb/49/a084bcf40a159bc0855447b3eab8b7710453342310cdc7d99803d15d8707/pyuwsgi-2.0.28.post1-cp312-cp312-musllinux_1_2_aarch64.whl", hash = "sha256:5a90b72a25ba1a34299f4958237a12f18154b373a9a0a93a6267af5e8798c1ee", size = 861901 },
+    { url = "https://files.pythonhosted.org/packages/56/48/329628c988438ed709218332f9a08282cdd657b688c652d56167cb870cc1/pyuwsgi-2.0.28.post1-cp312-cp312-musllinux_1_2_i686.whl", hash = "sha256:2c29fdf5baaff9d717aedb63e7b78b90bec561afc099f952db44699adcb0c575", size = 933175 },
+    { url = "https://files.pythonhosted.org/packages/8f/42/07f42601ae6a8ff162317190f53ba59311fe0ebeedf523bd79b69ab667c5/pyuwsgi-2.0.28.post1-cp312-cp312-musllinux_1_2_x86_64.whl", hash = "sha256:7e8fd6f2116d2afce52965c940a96a939e9d9c7409f3e19ba445a25e33779f08", size = 871006 },
+    { url = "https://files.pythonhosted.org/packages/54/7d/e591df9501dd2591629a2cff11d30047bdc25b51bac53ce81294e50ea6d5/pyuwsgi-2.0.28.post1-cp313-cp313-macosx_10_13_x86_64.whl", hash = "sha256:787fd67086df87921bc8837ef018cd7cf02834136f4735811375c1e17b776b40", size = 657834 },
+    { url = "https://files.pythonhosted.org/packages/f3/58/c64c3e1ef751b3a8d7cdda17e1ec0fd4edfd03f8f8684af04754573004e1/pyuwsgi-2.0.28.post1-cp313-cp313-macosx_11_0_arm64.whl", hash = "sha256:f27ee3445eab37fabbe3afc6af68220c8f0bd28c5228d6a2ec7886d080614ad4", size = 589465 },
+    { url = "https://files.pythonhosted.org/packages/ff/ad/fa5014f7653094006378a0c5e0c3349bdaaecdde4c90168bd3e8a1024da7/pyuwsgi-2.0.28.post1-cp313-cp313-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:5bdd7ec17f795049ef346dc10efbfce6c1a9500f3f39262c86107c70b9a83cb9", size = 881423 },
+    { url = "https://files.pythonhosted.org/packages/17/4d/14aa75acf80347c9dea087c8b9046c78977113bafdf9625998e5e1172a76/pyuwsgi-2.0.28.post1-cp313-cp313-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:f4563fa76d64a2c309eb902511a1fcdce66865a03785c61494db5c53136ffa7a", size = 940149 },
+    { url = "https://files.pythonhosted.org/packages/5e/5e/872c6c20e71d971d7bc5ce15b28a7589efc0cf0ce8907c71cfccc83cd66b/pyuwsgi-2.0.28.post1-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:32838668eab84ac6847876d9da72768552fca556e09a1fe3a63facb976bd12ad", size = 889435 },
+    { url = "https://files.pythonhosted.org/packages/be/42/d6213e452801edf88a6d33d143940fba768e12077bfe2302fea97d40117e/pyuwsgi-2.0.28.post1-cp313-cp313-musllinux_1_2_aarch64.whl", hash = "sha256:c9feafdfa73a632767a0cb1bafd285e36fba925b9c9ddd2b3311f2963c917c9f", size = 861908 },
+    { url = "https://files.pythonhosted.org/packages/cf/76/4ff14815ee0fc3aea5c510dc4de8a487e5a1173a1bb2d81c03c52fc6491e/pyuwsgi-2.0.28.post1-cp313-cp313-musllinux_1_2_i686.whl", hash = "sha256:20d23ddbf28a831543d586c9e5727c9c28d7be7bd7cb853c7db2e0c529f605bf", size = 933187 },
+    { url = "https://files.pythonhosted.org/packages/8c/65/1d90d5baa3c0360d7524b7390fc2dae5d26be8f995fb3f9eda76cfb2fc2e/pyuwsgi-2.0.28.post1-cp313-cp313-musllinux_1_2_x86_64.whl", hash = "sha256:c0b1b09bdf836a6cacf35e2bb06f6ad4b7dff6c6ad48895e1b1c0b0d19bbbfcc", size = 870991 },
 ]
 
 [[package]]
@@ -2554,12 +2579,6 @@ sdist = { url = "https://files.pythonhosted.org/packages/aa/63/e53da845320b757bf
 wheels = [
     { url = "https://files.pythonhosted.org/packages/c8/19/4ec628951a74043532ca2cf5d97b7b14863931476d117c471e8e2b1eb39f/urllib3-2.3.0-py3-none-any.whl", hash = "sha256:1cee9ad369867bfdbbb48b7dd50374c0967a0bb7710050facf0dd6911440e3df", size = 128369 },
 ]
-
-[[package]]
-name = "uwsgi"
-version = "2.0.28"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/24/c2/d58480aadc9a1f420dd96fc43cf0dcd8cb5ededb95cab53743529c23b6cd/uwsgi-2.0.28.tar.gz", hash = "sha256:79ca1891ef2df14508ab0471ee8c0eb94bd2d51d03f32f90c4bbe557ab1e99d0", size = 816212 }
 
 [[package]]
 name = "vine"

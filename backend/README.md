@@ -14,3 +14,4 @@ Take a look at the general contribution rules [here](../CONTRIBUTING.md).
 - Initialize/Upgrade the SQLite database with `uv run flask db upgrade`
 - Run debug server with `uv run wsgi.py`
 - The backend should be reachable at `localhost:5000`
+- For some simple interactions with the backend (like adding a user), you can use `uv run manage.py` 

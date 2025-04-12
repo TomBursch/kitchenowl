@@ -1,6 +1,5 @@
-from typing import Self, TYPE_CHECKING
+from typing import Self, TYPE_CHECKING, cast
 from app import db
-from app.helpers import DbModelMixin
 from .recipe import Recipe
 from .planner import Planner
 from sqlalchemy import func
@@ -8,8 +7,12 @@ from sqlalchemy.orm import Mapped
 
 import enum
 
+Model = db.Model
 if TYPE_CHECKING:
     from app.models import Household, Recipe
+    from app.helpers.db_model_base import DbModelBase
+
+    Model = DbModelBase
 
 
 class Status(enum.Enum):
@@ -17,16 +20,25 @@ class Status(enum.Enum):
     DROPPED = -1
 
 
-class RecipeHistory(db.Model, DbModelMixin):
+class RecipeHistory(Model):
     __tablename__ = "recipe_history"
 
     id: Mapped[int] = db.Column(db.Integer, primary_key=True)
 
     recipe_id: Mapped[int] = db.Column(db.Integer, db.ForeignKey("recipe.id"))
-    household_id: Mapped[int] = db.Column(db.Integer, db.ForeignKey("household.id"), nullable=False)
+    household_id: Mapped[int] = db.Column(
+        db.Integer, db.ForeignKey("household.id"), nullable=False
+    )
 
-    household: Mapped["Household"] = db.relationship("Household", uselist=False)
-    recipe: Mapped["Recipe"] = db.relationship("Recipe", uselist=False, back_populates="recipe_history")
+    household: Mapped["Household"] = cast(
+        Mapped["Household"], db.relationship("Household", uselist=False, init=False)
+    )
+    recipe: Mapped["Recipe"] = cast(
+        Mapped["Recipe"],
+        db.relationship(
+            "Recipe", uselist=False, back_populates="recipe_history", init=False
+        ),
+    )
 
     status: Mapped[Status] = db.Column(db.Enum(Status))
 
@@ -45,11 +57,6 @@ class RecipeHistory(db.Model, DbModelMixin):
             status=Status.DROPPED,
             household_id=household_id,
         ).save()
-
-    def obj_to_item_dict(self) -> dict:
-        res = self.item.obj_to_dict()
-        res["timestamp"] = getattr(self, "created_at")
-        return res
 
     @classmethod
     def find_added(cls, household_id: int) -> list[Self]:
@@ -85,4 +92,4 @@ class RecipeHistory(db.Model, DbModelMixin):
             .subquery()
             .select()
         )
-        return cls.query.filter(cls.id.in_(sq2)).order_by(cls.id.desc()).limit(9)
+        return cls.query.filter(cls.id.in_(sq2)).order_by(cls.id.desc()).limit(9).all()

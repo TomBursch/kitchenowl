@@ -15,7 +15,7 @@ DEEPL_AUTH_KEY = os.getenv('DEEPL_AUTH_KEY', "")
 
 
 def update_names(saveToTemplate: bool = False, consensus_count: int = 2):
-    default_items = {}
+    default_items: dict[str, dict] = {}
     def nameToKey(name: str) -> str:
         return name.lower().strip().replace(" ", "_")
     def loadLang(lang: str):
@@ -30,16 +30,16 @@ def update_names(saveToTemplate: bool = False, consensus_count: int = 2):
     items = Item.query.with_entities(Item.name, func.count().label('count'), Household.language).filter(Item.default_key == None, Household.language.in_(supported_lang)).join(Household, isouter=True).group_by(Item.name, Household.language).having(func.count().label('count') >= consensus_count).order_by(desc("count")).all()
     for item in items:
         if item.language == "en":
-            if not nameToKey(item.name) in default_items["en"]['items']:
+            if nameToKey(item.name) not in default_items["en"]['items']:
                 default_items["en"]['items'][nameToKey(item.name)] = item.name
         else:
-            if not item.language in default_items:
+            if item.language not in default_items:
                 loadLang(item.language)
             engl_name = json.loads(requests.post("https://api-free.deepl.com/v2/translate", {"target_lang": "EN-US", "source_lang": item.language.upper(), "text": item.name},
                                                         headers={'Authorization': 'DeepL-Auth-Key ' + DEEPL_AUTH_KEY}).content)['translations'][0]["text"]
-            if not nameToKey(engl_name) in default_items[item.language]['items']:
+            if nameToKey(engl_name) not in default_items[item.language]['items']:
                 default_items[item.language]['items'][nameToKey(engl_name)] = item.name
-            if not nameToKey(engl_name) in default_items["en"]['items']:
+            if nameToKey(engl_name) not in default_items["en"]['items']:
                 default_items["en"]['items'][nameToKey(engl_name)] = engl_name
 
 

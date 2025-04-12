@@ -64,7 +64,9 @@ def getAllExpenses(args, household_id):
 
     if "search" in args and args["search"]:
         if "*" in args["search"] or "_" in args["search"]:
-            query = args["search"].replace("_", "__").replace("*", "%").replace("?", "_")
+            query = (
+                args["search"].replace("_", "__").replace("*", "%").replace("?", "_")
+            )
         else:
             query = "%{0}%".format(args["search"])
         filter.append(Expense.name.ilike(query))
@@ -236,8 +238,8 @@ def getExpenseOverview(args, household_id):
     thisMonthStart = datetime.now(timezone.utc).date().replace(day=1)
 
     steps = args["steps"] if "steps" in args else 5
-    frame = args["frame"] if args["frame"] != None else 2
-    page = args["page"] if "page" in args and args["page"] != None else 0
+    frame = args["frame"] if args["frame"] is not None else 2
+    page = args["page"] if "page" in args and args["page"] is not None else 0
 
     factor = 1
     by_category_query = (
@@ -313,9 +315,9 @@ def getExpenseOverview(args, household_id):
             start = thisMonthStart - relativedelta(months=stepAgo)
             end = start + relativedelta(months=1)
         elif frame == 3:  # yearly
-            start = datetime.now(timezone.utc).date().replace(day=1, month=1) - relativedelta(
-                years=stepAgo
-            )
+            start = datetime.now(timezone.utc).date().replace(
+                day=1, month=1
+            ) - relativedelta(years=stepAgo)
             end = start + relativedelta(years=1)
 
         return Expense.date >= start, Expense.date <= end

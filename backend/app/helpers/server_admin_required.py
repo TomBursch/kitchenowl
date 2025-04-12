@@ -9,9 +9,7 @@ def server_admin_required():
         def decorator(*args, **kwargs):
             if not current_user or not current_user.admin:
                 raise ForbiddenRequest(
-                    message="Elevated rights required. IP {}".format(
-                        getClientIp()
-                    )
+                    message="Elevated rights required. IP {}".format(getClientIp())
                 )
             return func(*args, **kwargs)
 

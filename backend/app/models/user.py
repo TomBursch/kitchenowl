@@ -1,64 +1,142 @@
-from typing import Self, List, TYPE_CHECKING
+from typing import Optional, Self, List, TYPE_CHECKING, cast
 
 from flask_jwt_extended import current_user
 from app import db
-from app.helpers import DbModelMixin
 from app.config import bcrypt
 from sqlalchemy.orm import Mapped
 from sqlalchemy import DateTime
 from datetime import datetime, timezone
 
+Model = db.Model
 if TYPE_CHECKING:
-    from app.models import *
+    from app.models import (
+        Token,
+        ChallengePasswordReset,
+        ChallengeMailVerify,
+        HouseholdMember,
+        Expense,
+        ExpensePaidFor,
+        File,
+        OIDCLink,
+        OIDCRequest,
+    )
+    from app.helpers.db_model_base import DbModelBase
+
+    Model = DbModelBase
 
 
-class User(db.Model, DbModelMixin):
+class User(Model):
     __tablename__ = "user"
 
     id: Mapped[int] = db.Column(db.Integer, primary_key=True)
     name: Mapped[str] = db.Column(db.String(128))
-    username: Mapped[str] = db.Column(db.String(256), unique=True, nullable=False, index=True,)
-    email: Mapped[str] = db.Column(db.String(256), unique=True, nullable=True, index=True,)
-    password: Mapped[str] = db.Column(db.String(256), nullable=True)
-    photo: Mapped[str] = db.Column(db.String(), db.ForeignKey("file.filename", use_alter=True))
+    username: Mapped[str] = db.Column(
+        db.String(256),
+        unique=True,
+        nullable=False,
+        index=True,
+    )
+    email: Mapped[Optional[str]] = db.Column(
+        db.String(256),
+        unique=True,
+        nullable=True,
+        index=True,
+    )
+    password: Mapped[Optional[str]] = db.Column(db.String(256), nullable=True)
+    photo: Mapped[str | None] = db.Column(
+        db.String(), db.ForeignKey("file.filename", use_alter=True)
+    )
     admin: Mapped[bool] = db.Column(db.Boolean(), default=False)
     email_verified: Mapped[bool] = db.Column(db.Boolean(), default=False)
-    last_seen: Mapped[datetime] = db.Column(DateTime, default=lambda: datetime.now(timezone.utc), nullable=True)
-
-    tokens: Mapped[List["Token"]] = db.relationship(
-        "Token", back_populates="user", cascade="all, delete-orphan"
+    last_seen: Mapped[Optional[datetime]] = db.Column(
+        DateTime, default=lambda: datetime.now(timezone.utc), nullable=True
     )
 
-    password_reset_challenge: Mapped[List["ChallengePasswordReset"]] = db.relationship(
-        "ChallengePasswordReset", back_populates="user", cascade="all, delete-orphan"
-    )
-    verify_mail_challenge: Mapped[List["ChallengeMailVerify"]] = db.relationship(
-        "ChallengeMailVerify", back_populates="user", cascade="all, delete-orphan"
-    )
-
-    households: Mapped[List["HouseholdMember"]] = db.relationship(
-        "HouseholdMember", back_populates="user", cascade="all, delete-orphan"
+    tokens: Mapped[List["Token"]] = cast(
+        Mapped[List["Token"]],
+        db.relationship(
+            "Token", back_populates="user", cascade="all, delete-orphan", init=False
+        ),
     )
 
-    expenses_paid: Mapped[List["Expense"]] = db.relationship(
-        "Expense", back_populates="paid_by", cascade="all, delete-orphan"
+    password_reset_challenge: Mapped[List["ChallengePasswordReset"]] = cast(
+        Mapped[List["ChallengePasswordReset"]],
+        db.relationship(
+            "ChallengePasswordReset",
+            back_populates="user",
+            cascade="all, delete-orphan",
+            init=False,
+        ),
     )
-    expenses_paid_for: Mapped[List["ExpensePaidFor"]] = db.relationship(
-        "ExpensePaidFor", back_populates="user", cascade="all, delete-orphan"
-    )
-    photo_file: Mapped["File"] = db.relationship(
-        "File", back_populates="profile_picture", foreign_keys=[photo], uselist=False
+    verify_mail_challenge: Mapped[List["ChallengeMailVerify"]] = cast(
+        Mapped[List["ChallengeMailVerify"]],
+        db.relationship(
+            "ChallengeMailVerify",
+            back_populates="user",
+            cascade="all, delete-orphan",
+            init=False,
+        ),
     )
 
-    oidc_links: Mapped[List["OIDCLink"]] = db.relationship(
-        "OIDCLink", back_populates="user", cascade="all, delete-orphan"
+    households: Mapped[List["HouseholdMember"]] = cast(
+        Mapped[List["HouseholdMember"]],
+        db.relationship(
+            "HouseholdMember",
+            back_populates="user",
+            cascade="all, delete-orphan",
+            init=False,
+        ),
     )
-    oidc_link_requests: Mapped[List["OIDCRequest"]] = db.relationship(
-        "OIDCRequest", back_populates="user", cascade="all, delete-orphan"
+
+    expenses_paid: Mapped[List["Expense"]] = cast(
+        Mapped[List["Expense"]],
+        db.relationship(
+            "Expense",
+            back_populates="paid_by",
+            cascade="all, delete-orphan",
+            init=False,
+        ),
+    )
+    expenses_paid_for: Mapped[List["ExpensePaidFor"]] = cast(
+        Mapped[List["ExpensePaidFor"]],
+        db.relationship(
+            "ExpensePaidFor",
+            back_populates="user",
+            cascade="all, delete-orphan",
+            init=False,
+        ),
+    )
+    photo_file: Mapped["File"] = cast(
+        Mapped["File"],
+        db.relationship(
+            "File",
+            back_populates="profile_picture",
+            foreign_keys=[photo],
+            uselist=False,
+            init=False,
+        ),
+    )
+
+    oidc_links: Mapped[List["OIDCLink"]] = cast(
+        Mapped[List["OIDCLink"]],
+        db.relationship(
+            "OIDCLink", back_populates="user", cascade="all, delete-orphan", init=False
+        ),
+    )
+    oidc_link_requests: Mapped[List["OIDCRequest"]] = cast(
+        Mapped[List["OIDCRequest"]],
+        db.relationship(
+            "OIDCRequest",
+            back_populates="user",
+            cascade="all, delete-orphan",
+            init=False,
+        ),
     )
 
     def check_password(self, password: str) -> bool:
-        return self.password and bcrypt.check_password_hash(self.password, password)
+        return bool(self.password) and bcrypt.check_password_hash(
+            self.password, password
+        )
 
     def set_password(self, password: str):
         self.password = bcrypt.generate_password_hash(password).decode("utf-8")
@@ -117,11 +195,11 @@ class User(db.Model, DbModelMixin):
         super().delete()
 
     @classmethod
-    def find_by_username(cls, username: str) -> Self:
+    def find_by_username(cls, username: str) -> Self | None:
         return cls.query.filter(cls.username == username).first()
 
     @classmethod
-    def find_by_email(cls, email: str) -> Self:
+    def find_by_email(cls, email: str) -> Self | None:
         return cls.query.filter(cls.email == email.strip()).first()
 
     @classmethod
@@ -155,4 +233,5 @@ class User(db.Model, DbModelMixin):
             )
             .order_by(cls.name)
             .limit(15)
+            .all()
         )

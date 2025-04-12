@@ -117,7 +117,7 @@ Settings for {user.name} (@{user.username}) (server admin: {user.admin})
             else:
                 print("Passwords do not match")
         elif selection == "2":
-            id = input("Enter the household id:")
+            id = int(input("Enter the household id:"))
             household = Household.find_by_id(id)
             if not household:
                 print("No household found with that id")

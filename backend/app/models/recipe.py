@@ -1,7 +1,7 @@
 from __future__ import annotations
-from typing import Self, List, TYPE_CHECKING
+from typing import Self, List, TYPE_CHECKING, cast
 from app import db
-from app.helpers import DbModelMixin, DbModelAuthorizeMixin
+from app.helpers import DbModelAuthorizeMixin
 from .item import Item
 from .tag import Tag
 from .planner import Planner
@@ -9,31 +9,38 @@ from random import randint
 from sqlalchemy.orm import Mapped
 from datetime import datetime, timedelta
 
+Model = db.Model
 if TYPE_CHECKING:
-    from app.models import *
+    from app.models import Household, RecipeHistory, File
+    from app.helpers.db_model_base import DbModelBase
+
+    Model = DbModelBase
+
 
 def is_within_next_7_days(target_date: datetime) -> bool:
     # Get the current date and time
     now = datetime.now()
-    
+
     # Calculate the date 7 days from now
     seven_days_later = now + timedelta(days=7)
-    
+
     # Check if the target date is within the next 7 days
     return now <= target_date <= seven_days_later
+
 
 def transform_cooking_date_to_day(cooking_date: datetime) -> int:
     if is_within_next_7_days(cooking_date):
         return cooking_date.weekday()
     return -1
 
-class Recipe(db.Model, DbModelMixin, DbModelAuthorizeMixin):
+
+class Recipe(Model, DbModelAuthorizeMixin):
     __tablename__ = "recipe"
 
     id: Mapped[int] = db.Column(db.Integer, primary_key=True)
     name: Mapped[str] = db.Column(db.String(128))
     description: Mapped[str] = db.Column(db.String())
-    photo: Mapped[str] = db.Column(db.String(), db.ForeignKey("file.filename"))
+    photo: Mapped[str | None] = db.Column(db.String(), db.ForeignKey("file.filename"))
     time: Mapped[int] = db.Column(db.Integer)
     cook_time: Mapped[int] = db.Column(db.Integer)
     prep_time: Mapped[int] = db.Column(db.Integer)
@@ -46,26 +53,73 @@ class Recipe(db.Model, DbModelMixin, DbModelAuthorizeMixin):
         db.Integer, db.ForeignKey("household.id"), nullable=False, index=True
     )
 
-    household: Mapped["Household"] = db.relationship("Household", uselist=False)
-    recipe_history: Mapped[List["RecipeHistory"]] = db.relationship(
-        "RecipeHistory", back_populates="recipe", cascade="all, delete-orphan"
+    household: Mapped["Household"] = cast(
+        Mapped["Household"], db.relationship("Household", uselist=False, init=False)
     )
-    items: Mapped[List["RecipeItems"]] = db.relationship(
-        "RecipeItems", back_populates="recipe", cascade="all, delete-orphan", lazy='selectin', order_by="RecipeItems._name",
+    recipe_history: Mapped[List["RecipeHistory"]] = cast(
+        Mapped[List["RecipeHistory"]],
+        db.relationship(
+            "RecipeHistory",
+            back_populates="recipe",
+            cascade="all, delete-orphan",
+            init=False,
+        ),
     )
-    tags: Mapped[List["RecipeTags"]] = db.relationship(
-        "RecipeTags", back_populates="recipe", cascade="all, delete-orphan", lazy='selectin', order_by="RecipeTags._name",
+    items: Mapped[List["RecipeItems"]] = cast(
+        Mapped[List["RecipeItems"]],
+        db.relationship(
+            "RecipeItems",
+            back_populates="recipe",
+            cascade="all, delete-orphan",
+            lazy="selectin",
+            order_by="RecipeItems._name",
+            init=False,
+        ),
     )
-    plans: Mapped[List["Planner"]] = db.relationship(
-        "Planner", back_populates="recipe", cascade="all, delete-orphan", lazy='selectin'
+    tags: Mapped[List["RecipeTags"]] = cast(
+        Mapped[List["RecipeTags"]],
+        db.relationship(
+            "RecipeTags",
+            back_populates="recipe",
+            cascade="all, delete-orphan",
+            lazy="selectin",
+            order_by="RecipeTags._name",
+            init=False,
+        ),
     )
-    photo_file: Mapped["File"] = db.relationship("File", back_populates="recipe", uselist=False, lazy='selectin')
+    plans: Mapped[List["Planner"]] = cast(
+        Mapped[List["Planner"]],
+        db.relationship(
+            "Planner",
+            back_populates="recipe",
+            cascade="all, delete-orphan",
+            lazy="selectin",
+            init=False,
+        ),
+    )
+    photo_file: Mapped["File"] = cast(
+        Mapped["File"],
+        db.relationship(
+            "File", back_populates="recipe", uselist=False, lazy="selectin", init=False
+        ),
+    )
 
-    def obj_to_dict(self) -> dict:
-        res = super().obj_to_dict()
+    def obj_to_dict(
+        self,
+        skip_columns: list[str] | None = None,
+        include_columns: list[str] | None = None,
+    ) -> dict:
+        res = super().obj_to_dict(skip_columns, include_columns)
         res["planned"] = len(self.plans) > 0
-        res["planned_days"] = [transform_cooking_date_to_day(plan.cooking_date) for plan in self.plans if (plan.cooking_date > datetime.min) and is_within_next_7_days(plan.cooking_date)]
-        res["planned_cooking_dates"] = [plan.cooking_date for plan in self.plans if plan.cooking_date > datetime.min]
+        res["planned_days"] = [
+            transform_cooking_date_to_day(plan.cooking_date)
+            for plan in self.plans
+            if (plan.cooking_date > datetime.min)
+            and is_within_next_7_days(plan.cooking_date)
+        ]
+        res["planned_cooking_dates"] = [
+            plan.cooking_date for plan in self.plans if plan.cooking_date > datetime.min
+        ]
         if self.photo_file:
             res["photo_hash"] = self.photo_file.blur_hash
         return res
@@ -148,14 +202,10 @@ class Recipe(db.Model, DbModelMixin, DbModelAuthorizeMixin):
         )
 
     @classmethod
-    def find_by_name(cls, household_id: int, name: str) -> Self:
+    def find_by_name(cls, household_id: int, name: str) -> Self | None:
         return cls.query.filter(
             cls.household_id == household_id, cls.name == name
         ).first()
-
-    @classmethod
-    def find_by_id(cls, id: int) -> Self:
-        return cls.query.filter(cls.id == id).first()
 
     @classmethod
     def search_name(cls, household_id: int, name: str) -> list[Self]:
@@ -189,18 +239,30 @@ class Recipe(db.Model, DbModelMixin, DbModelAuthorizeMixin):
         )
 
 
-class RecipeItems(db.Model, DbModelMixin):
+class RecipeItems(Model):
     __tablename__ = "recipe_items"
 
-    recipe_id: Mapped[int] = db.Column(db.Integer, db.ForeignKey("recipe.id"), primary_key=True)
-    item_id: Mapped[int] = db.Column(db.Integer, db.ForeignKey("item.id"), primary_key=True)
+    recipe_id: Mapped[int] = db.Column(
+        db.Integer, db.ForeignKey("recipe.id"), primary_key=True
+    )
+    item_id: Mapped[int] = db.Column(
+        db.Integer, db.ForeignKey("item.id"), primary_key=True
+    )
     description: Mapped[str] = db.Column("description", db.String())
     optional: Mapped[bool] = db.Column("optional", db.Boolean)
 
-    item: Mapped["Item"] = db.relationship("Item", back_populates="recipes", lazy="joined")
-    recipe: Mapped["Recipe"] = db.relationship("Recipe", back_populates="items")
+    item: Mapped["Item"] = cast(
+        Mapped["Item"],
+        db.relationship("Item", back_populates="recipes", lazy="joined", init=False),
+    )
+    recipe: Mapped["Recipe"] = cast(
+        Mapped["Recipe"],
+        db.relationship("Recipe", back_populates="items", init=False),
+    )
 
-    _name: Mapped[str] = db.column_property(db.select(Item.name).where(Item.id == item_id).scalar_subquery())
+    _name: Mapped[str] = db.column_property(
+        db.select(Item.name).where(Item.id == item_id).scalar_subquery()
+    )
 
     def obj_to_item_dict(self) -> dict:
         res = self.item.obj_to_dict()
@@ -222,22 +284,34 @@ class RecipeItems(db.Model, DbModelMixin):
         return res
 
     @classmethod
-    def find_by_ids(cls, recipe_id: int, item_id: int) -> Self:
+    def find_by_ids(cls, recipe_id: int, item_id: int) -> Self | None:
         return cls.query.filter(
             cls.recipe_id == recipe_id, cls.item_id == item_id
         ).first()
 
 
-class RecipeTags(db.Model, DbModelMixin):
+class RecipeTags(Model):
     __tablename__ = "recipe_tags"
 
-    recipe_id: Mapped[int] = db.Column(db.Integer, db.ForeignKey("recipe.id"), primary_key=True)
-    tag_id: Mapped[int] = db.Column(db.Integer, db.ForeignKey("tag.id"), primary_key=True)
+    recipe_id: Mapped[int] = db.Column(
+        db.Integer, db.ForeignKey("recipe.id"), primary_key=True
+    )
+    tag_id: Mapped[int] = db.Column(
+        db.Integer, db.ForeignKey("tag.id"), primary_key=True
+    )
 
-    tag: Mapped["Tag"] = db.relationship("Tag", back_populates="recipes")
-    recipe: Mapped["Recipe"] = db.relationship("Recipe", back_populates="tags", lazy="joined")
+    tag: Mapped["Tag"] = cast(
+        Mapped["Tag"],
+        db.relationship("Tag", back_populates="recipes", init=False),
+    )
+    recipe: Mapped["Recipe"] = cast(
+        Mapped["Recipe"],
+        db.relationship("Recipe", back_populates="tags", lazy="joined", init=False),
+    )
 
-    _name: Mapped[str] = db.column_property(db.select(Tag.name).where(Tag.id == tag_id).scalar_subquery())
+    _name: Mapped[str] = db.column_property(
+        db.select(Tag.name).where(Tag.id == tag_id).scalar_subquery()
+    )
 
     def obj_to_item_dict(self) -> dict:
         res = self.tag.obj_to_dict()
@@ -246,7 +320,7 @@ class RecipeTags(db.Model, DbModelMixin):
         return res
 
     @classmethod
-    def find_by_ids(cls, recipe_id: int, tag_id: int) -> Self:
+    def find_by_ids(cls, recipe_id: int, tag_id: int) -> Self | None:
         return cls.query.filter(
             cls.recipe_id == recipe_id, cls.tag_id == tag_id
         ).first()

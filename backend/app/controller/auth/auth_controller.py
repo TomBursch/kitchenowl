@@ -49,7 +49,7 @@ def user_identity_lookup(user: User):
 # successful lookup, or None if the lookup failed for any reason (for example
 # if the user has been deleted from the database).
 @jwt.user_lookup_loader
-def user_lookup_callback(_jwt_header, jwt_data) -> User:
+def user_lookup_callback(_jwt_header, jwt_data) -> User | None:
     identity = jwt_data["sub"]
     return User.find_by_id(identity)
 
@@ -176,9 +176,7 @@ def logout(id):
         jwt = get_jwt()
         token = Token.find_by_jti(jwt["jti"])
     if not token or token.user_id != current_user.id:
-        raise UnauthorizedRequest(
-            message="Unauthorized: IP {}".format(getClientIp())
-        )
+        raise UnauthorizedRequest(message="Unauthorized: IP {}".format(getClientIp()))
 
     if token.type == "access":
         token.refresh_token.delete_token_familiy()
@@ -196,9 +194,7 @@ def logout(id):
 def createLongLivedToken(args):
     user = current_user
     if not user:
-        raise UnauthorizedRequest(
-            message="Unauthorized: IP {}".format(getClientIp())
-        )
+        raise UnauthorizedRequest(message="Unauthorized: IP {}".format(getClientIp()))
 
     llToken, _ = Token.create_longlived_token(user, args["device"])
 
@@ -210,15 +206,11 @@ def createLongLivedToken(args):
 def deleteLongLivedToken(id):
     user = current_user
     if not user:
-        raise UnauthorizedRequest(
-            message="Unauthorized: IP {}".format(getClientIp())
-        )
+        raise UnauthorizedRequest(message="Unauthorized: IP {}".format(getClientIp()))
 
     token = Token.find_by_id(id)
-    if token.user_id != user.id or token.type != "llt":
-        raise UnauthorizedRequest(
-            message="Unauthorized: IP {}".format(getClientIp())
-        )
+    if not token or token.user_id != user.id or token.type != "llt":
+        raise UnauthorizedRequest(message="Unauthorized: IP {}".format(getClientIp()))
 
     token.delete()
 
@@ -382,7 +374,9 @@ if FRONT_URL and len(oidc_clients) > 0:
                     if "email_verified" in userinfo
                     else False
                 ),
-                photo=file_has_access_or_download(userinfo["picture"]) if "picture" in userinfo else None,
+                photo=file_has_access_or_download(userinfo["picture"])
+                if "picture" in userinfo
+                else None,
             ).save()
             oidcLink = OIDCLink(
                 sub=userinfo["sub"], provider=provider, user_id=newUser.id

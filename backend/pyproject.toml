@@ -42,4 +42,13 @@ dependencies = [
 ]
 
 [dependency-groups]
-dev = ["pytest", "pytest-cov", "ruff"]
+dev = [
+    "pytest", 
+    "pytest-cov",
+    "ruff",
+    "pyright"
+]
+
+[tool.pyright]
+reportMissingTypeStubs = true
+typeCheckingMode = "strict"

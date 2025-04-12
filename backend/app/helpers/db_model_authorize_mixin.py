@@ -1,6 +1,5 @@
 from flask_jwt_extended import current_user
 from app.errors import UnauthorizedRequest, ForbiddenRequest
-import app
 
 
 class DbModelAuthorizeMixin(object):

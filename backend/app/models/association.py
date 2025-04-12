@@ -1,13 +1,16 @@
-from typing import Self, TYPE_CHECKING
+from typing import Self, TYPE_CHECKING, cast
 from app import db
-from app.helpers import DbModelMixin
 from sqlalchemy.orm import Mapped
 
+Model = db.Model
 if TYPE_CHECKING:
-    from app.models import *
+    from app.models import Item
+    from app.helpers.db_model_base import DbModelBase
+
+    Model = DbModelBase
 
 
-class Association(db.Model, DbModelMixin):
+class Association(Model):
     __tablename__ = "association"
 
     id: Mapped[int] = db.Column(db.Integer, primary_key=True)
@@ -18,17 +21,25 @@ class Association(db.Model, DbModelMixin):
     confidence: Mapped[float] = db.Column(db.Float)
     lift: Mapped[float] = db.Column(db.Float)
 
-    antecedent: Mapped["Item"] = db.relationship(
-        "Item",
-        uselist=False,
-        foreign_keys=[antecedent_id],
-        back_populates="antecedents",
+    antecedent: Mapped["Item"] = cast(
+        Mapped["Item"],
+        db.relationship(
+            "Item",
+            uselist=False,
+            foreign_keys=[antecedent_id],
+            back_populates="antecedents",
+            init=False,
+        ),
     )
-    consequent: Mapped["Item"] = db.relationship(
-        "Item",
-        uselist=False,
-        foreign_keys=[consequent_id],
-        back_populates="consequents",
+    consequent: Mapped["Item"] = cast(
+        Mapped["Item"],
+        db.relationship(
+            "Item",
+            uselist=False,
+            foreign_keys=[consequent_id],
+            back_populates="consequents",
+            init=False,
+        ),
     )
 
     @classmethod

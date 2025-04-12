@@ -2,7 +2,6 @@ from functools import wraps
 from enum import Enum
 from flask_jwt_extended import current_user
 from app.errors import UnauthorizedRequest, ForbiddenRequest
-from app.models import HouseholdMember
 
 
 class RequiredRights(Enum):
@@ -12,6 +11,8 @@ class RequiredRights(Enum):
 
 
 def authorize_household(required: RequiredRights = RequiredRights.MEMBER):
+    from app.models import HouseholdMember
+    
     def wrapper(func):
         @wraps(func)
         def decorator(*args, **kwargs):

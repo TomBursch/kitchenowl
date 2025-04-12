@@ -1,4 +1,4 @@
-from typing import Self
+from typing import Self, cast
 from lark import Lark, Transformer, Tree, Token
 from lark.visitors import Interpreter
 import re
@@ -32,21 +32,22 @@ class TreeItem(Tree):
         for c in children:
             if isinstance(c, Token) and c.type == "NUMBER":
                 self.number = c
-            else:
+            elif isinstance(c, Tree):
                 self.unit = c
 
     def unitIsCount(self) -> bool:
-        return not self.unit or self.unit.children[0].type == "COUNT"
+        return not self.unit or cast(Token, self.unit.children[0]).type == "COUNT"
 
     def sameUnit(self, other: Self) -> bool:
         return (self.unitIsCount() and other.unitIsCount()) or (
-            self.unit
-            and other.unit
+            self.unit is not None
+            and other.unit is not None
             and (
-                self.unit.children[0].type == other.unit.children[0].type
-                and not other.unit.children[0].type == "DESCRIPTION"
-                or self.unit.children[0].lower().strip()
-                == other.unit.children[0].lower().strip()
+                cast(Token, self.unit.children[0]).type
+                == cast(Token, other.unit.children[0]).type
+                and not cast(Token, other.unit.children[0]).type == "DESCRIPTION"
+                or cast(Token, self.unit.children[0]).lower().strip()
+                == cast(Token, other.unit.children[0]).lower().strip()
             )
         )
 
@@ -64,7 +65,7 @@ class Printer(Interpreter):
         res = ""
         for child in item.children:
             if isinstance(child, Tree):
-                if res and child.children[0].type == "DESCRIPTION":
+                if res and  cast(Token, child.children[0]).type == "DESCRIPTION":
                     res += " "
                 res += self.visit(child)
             elif child.type == "NUMBER":
@@ -110,9 +111,9 @@ def merge(description: str, added: str) -> str:
 
             # Add up numbers
             unit: Tree = item.unit
-            if unit and unit.children[0].type == "SI_WEIGHT":
+            if unit and  cast(Token, unit.children[0]).type == "SI_WEIGHT":
                 merge_SI_Weight(targetItem, item)
-            elif unit and unit.children[0].type == "SI_VOLUME":
+            elif unit and  cast(Token, unit.children[0]).type == "SI_VOLUME":
                 merge_SI_Volume(targetItem, item)
             else:
                 targetItem.number.value = targetItem.number.value + (

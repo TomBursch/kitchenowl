@@ -74,6 +74,7 @@ dependencies:
   universal_html: ^2.2.4
   sign_in_with_apple: ^6.0.0
   wakelock_plus: ^1.2.10
+  fuzzywuzzy: ^1.2.0
 
 dev_dependencies:
   flutter_test:

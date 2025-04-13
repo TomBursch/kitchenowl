@@ -79,7 +79,7 @@ class SliverShopinglistItemView extends StatelessWidget {
     return SliverMainAxisGroup(slivers: [
       if (main is List) ...main,
       if (main is! List) main,
-      if ((shoppingList?.recentItems.isNotEmpty ?? false) || isLoading)
+      if (((shoppingList?.recentItems.isNotEmpty ?? false) && (App.settings.recentItemsCount > 0)) || isLoading)
         SliverCategoryItemGridList<ItemWithDescription>(
           name: '${AppLocalizations.of(context)!.itemsRecent}:',
           items: shoppingList?.recentItems

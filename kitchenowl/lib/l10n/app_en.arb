@@ -382,6 +382,7 @@
     }
   },
   "@shoppingListEdit": {},
+  "@shoppingListEmpty": {},
   "@shoppingListStyle": {},
   "@shoppingLists": {},
   "@signInWith": {
@@ -687,6 +688,7 @@
   "shoppingListDelete": "Delete shopping list",
   "shoppingListDeleteConfirmation": "Are you sure you want to delete {shoppingList}?",
   "shoppingListEdit": "Edit shopping list",
+  "shoppingListEmpty": "The shopping list is empty. Add the first item using the search function above.",
   "shoppingListStyle": "Shopping list style",
   "shoppingLists": "Shopping lists",
   "signInWith": "Sign in with {provider}",

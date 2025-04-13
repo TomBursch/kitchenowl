@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -129,8 +130,15 @@ class _ExpensePageState extends State<ExpenseListPage> {
                                 actions: [
                                   searchAnchor,
                                 ],
-                                children: state.categories.map((category) {
+                                children: state.categories
+                                    .sorted((a, b) => state.filter
+                                        .contains(a)
+                                        .hashCode
+                                        .compareTo(
+                                            state.filter.contains(b).hashCode))
+                                    .map((category) {
                                   return Padding(
+                                    key: ValueKey(category.id),
                                     padding: const EdgeInsets.symmetric(
                                       horizontal: 4,
                                     ),
@@ -155,8 +163,9 @@ class _ExpensePageState extends State<ExpenseListPage> {
                                   );
                                 }).toList()
                                   ..insert(
-                                    0,
+                                    state.filter.length,
                                     Padding(
+                                      key: ValueKey(null),
                                       padding: const EdgeInsets.symmetric(
                                         horizontal: 4,
                                       ),

@@ -1,4 +1,5 @@
 import 'package:azlistview_plus/azlistview_plus.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/cubits/recipe_list_cubit.dart';
@@ -89,8 +90,19 @@ class _RecipeListPageState extends State<RecipeListPage> {
                       child: LeftRightWrap(
                         crossAxisSpacing: 6,
                         left: ChoiceScroll(
-                            children: state.tags.map((tag) {
+                            children: state.tags
+                                .sorted((a, b) =>
+                                    (state is FilteredListRecipeListState)
+                                        ? state.selectedTags
+                                            .contains(a)
+                                            .hashCode
+                                            .compareTo(state.selectedTags
+                                                .contains(b)
+                                                .hashCode)
+                                        : 0)
+                                .map((tag) {
                           return Padding(
+                            key: ValueKey(tag.id),
                             padding: const EdgeInsets.symmetric(horizontal: 4),
                             child: FilterChip(
                               label: Text(

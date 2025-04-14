@@ -13,6 +13,7 @@ import 'package:kitchenowl/pages/household_page/household_drawer.dart';
 import 'package:kitchenowl/pages/household_page/household_navigation_rail.dart';
 import 'package:kitchenowl/pages/household_page/more.dart';
 import 'package:kitchenowl/pages/page_not_found.dart';
+import 'package:kitchenowl/router.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
 class HouseholdPage extends StatefulWidget {
@@ -47,6 +48,16 @@ class _HouseholdPageState extends State<HouseholdPage>
     plannerCubit = PlannerCubit(widget.household);
     expenseListCubit = ExpenseListCubit(widget.household);
     WidgetsBinding.instance.addObserver(this);
+
+    if (router.state.uri.path.contains("recipes")) {
+      recipeListCubit.refresh();
+    }
+    if (router.state.uri.path.contains("planner")) {
+      plannerCubit.refresh();
+    }
+    if (router.state.uri.path.contains("balances")) {
+      expenseListCubit.refresh();
+    }
   }
 
   @override

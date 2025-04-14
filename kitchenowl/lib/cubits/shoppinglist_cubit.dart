@@ -280,6 +280,8 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
       );
     }
     emit(state.copyWith(
+      selectedListItems:
+          shoppingList.id != state.selectedShoppinglistId ? [] : null,
       selectedShoppinglistId: shoppingList.id,
     ));
   }

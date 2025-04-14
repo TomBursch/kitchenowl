@@ -11,13 +11,13 @@ class Member extends User {
     required super.username,
     this.owner = false,
     super.serverAdmin = false,
-    this.admin = false,
+    this.admin = true,
     this.balance = 0,
   });
 
   factory Member.fromUser(
     User user, {
-    bool admin = false,
+    bool admin = true,
   }) {
     return Member(
       id: user.id,
@@ -33,7 +33,7 @@ class Member extends User {
       username: map['username'],
       name: map['name'],
       owner: map['owner'] ?? false,
-      admin: map['admin'] ?? false,
+      admin: map['admin'] ?? true,
       balance:
           ((map['expense_balance'] as double? ?? 0) * 100).round().toDouble() /
               100,

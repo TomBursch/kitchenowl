@@ -90,7 +90,7 @@ class HouseholdMember(db.Model, DbModelMixin):
     )
 
     owner: Mapped[bool] = db.Column(db.Boolean(), default=False, nullable=False)
-    admin: Mapped[bool] = db.Column(db.Boolean(), default=False, nullable=False)
+    admin: Mapped[bool] = db.Column(db.Boolean(), default=True, nullable=False)
 
     expense_balance: Mapped[float] = db.Column(db.Float(), default=0, nullable=False)
 

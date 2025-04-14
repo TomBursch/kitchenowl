@@ -380,6 +380,7 @@
     }
   },
   "@shoppingListEdit": {},
+  "@shoppingListEmpty": {},
   "@shoppingListStyle": {},
   "@shoppingLists": {},
   "@signInWith": {
@@ -685,6 +686,7 @@
   "shoppingListDelete": "Borrar la lista de la compra",
   "shoppingListDeleteConfirmation": "¿Está seguro de que desea eliminar {shoppingList}?",
   "shoppingListEdit": "Editar la lista de la compra",
+  "shoppingListEmpty": "La lista de la compra está vacía. Añada el primer artículo utilizando la función de búsqueda anterior.",
   "shoppingListStyle": "Estilo de lista de la compra",
   "shoppingLists": "Listas de la compra",
   "signInWith": "Iniciar sesión con {provider}",

@@ -13,15 +13,15 @@ class HouseholdListCubit extends Cubit<HouseholdListState> {
   }
 
   Future<void> refresh([bool forceOffline = false]) async {
-    Future<List<Household>?> households =
-        TransactionHandler.getInstance().runTransaction(
+    List<Household>? households =
+        await TransactionHandler.getInstance().runTransaction(
       TransactionHouseholdGetAll(),
       forceOffline: forceOffline,
     );
 
     if (!isClosed) {
       emit(HouseholdListState(
-        await households ?? [],
+        households ?? [],
       ));
     }
   }

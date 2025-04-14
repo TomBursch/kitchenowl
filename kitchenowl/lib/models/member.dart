@@ -54,7 +54,7 @@ class Member extends User {
         "username": username,
         "name": name,
         "owner": owner,
-        "admin": serverAdmin,
+        "admin": admin || serverAdmin,
         "expense_balance": balance,
       };
 

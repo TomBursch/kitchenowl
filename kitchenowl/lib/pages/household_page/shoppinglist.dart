@@ -75,19 +75,59 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
             child: BlocBuilder<ShoppinglistCubit, ShoppinglistCubitState>(
               bloc: cubit,
               builder: (context, state) {
+                final header = LeftRightWrap(
+                  left: (state.shoppinglists.length < 2)
+                      ? const SizedBox()
+                      : ChoiceScroll(
+                          children: state.shoppinglists.values
+                              .sorted((a, b) =>
+                                  b.items.length.compareTo(a.items.length))
+                              .map(
+                                (shoppinglist) => ShoppingListChoiceChip(
+                                  shoppingList: shoppinglist,
+                                  selected: shoppinglist.id ==
+                                      state.selectedShoppinglistId,
+                                  onSelected: (bool selected) {
+                                    if (selected) {
+                                      cubit.setShoppingList(
+                                        shoppinglist,
+                                      );
+                                    }
+                                  },
+                                ),
+                              )
+                              .toList(),
+                        ),
+                  right: Padding(
+                    padding: const EdgeInsets.only(right: 16, bottom: 6),
+                    child: TrailingIconTextButton(
+                      onPressed: cubit.incrementSorting,
+                      text: state.sorting == ShoppinglistSorting.alphabetical
+                          ? AppLocalizations.of(context)!.sortingAlphabetical
+                          : state.sorting == ShoppinglistSorting.algorithmic
+                              ? AppLocalizations.of(context)!.sortingAlgorithmic
+                              : AppLocalizations.of(context)!.category,
+                      icon: const Icon(Icons.sort),
+                    ),
+                  ),
+                );
+
                 if (state is! SearchShoppinglistCubitState &&
                     state is! LoadingShoppinglistCubitState &&
-                    state.shoppinglists.values.every((list) =>
-                        list.items.isEmpty && list.recentItems.isEmpty)) {
+                    (state.selectedShoppinglist?.items.isEmpty ?? true) &&
+                    ((state.selectedShoppinglist?.recentItems.isEmpty ??
+                            true) ||
+                        (App.settings.recentItemsCount == 0))) {
                   return Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      // header,
+                      header,
                       const Spacer(),
-                      const Icon(Icons.no_food_rounded),
+                      const Icon(Icons.remove_shopping_cart_rounded),
                       const SizedBox(height: 16),
-                      Text(AppLocalizations.of(context)!.shoppingListEmpty),
+                      Text(
+                        AppLocalizations.of(context)!.shoppingListEmpty,
+                        textAlign: TextAlign.center,
+                      ),
                       const Spacer(),
                     ],
                   );
@@ -141,52 +181,7 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                       : NestedScrollView(
                           headerSliverBuilder: (context, innerBoxIsScrolled) =>
                               [
-                            SliverToBoxAdapter(
-                              child: LeftRightWrap(
-                                left: (state.shoppinglists.length < 2)
-                                    ? const SizedBox()
-                                    : ChoiceScroll(
-                                        children: state.shoppinglists.values
-                                            .sorted((a, b) => b.items.length
-                                                .compareTo(a.items.length))
-                                            .map(
-                                              (shoppinglist) =>
-                                                  ShoppingListChoiceChip(
-                                                shoppingList: shoppinglist,
-                                                selected: shoppinglist.id ==
-                                                    state
-                                                        .selectedShoppinglistId,
-                                                onSelected: (bool selected) {
-                                                  if (selected) {
-                                                    cubit.setShoppingList(
-                                                      shoppinglist,
-                                                    );
-                                                  }
-                                                },
-                                              ),
-                                            )
-                                            .toList(),
-                                      ),
-                                right: Padding(
-                                  padding: const EdgeInsets.only(
-                                      right: 16, bottom: 6),
-                                  child: TrailingIconTextButton(
-                                    onPressed: cubit.incrementSorting,
-                                    text: state.sorting ==
-                                            ShoppinglistSorting.alphabetical
-                                        ? AppLocalizations.of(context)!
-                                            .sortingAlphabetical
-                                        : state.sorting ==
-                                                ShoppinglistSorting.algorithmic
-                                            ? AppLocalizations.of(context)!
-                                                .sortingAlgorithmic
-                                            : AppLocalizations.of(context)!
-                                                .category,
-                                    icon: const Icon(Icons.sort),
-                                  ),
-                                ),
-                              ),
-                            ),
+                            SliverToBoxAdapter(child: header),
                           ],
                           body: RefreshIndicator(
                             onRefresh: cubit.refresh,

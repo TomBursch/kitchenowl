@@ -34,9 +34,11 @@ class ExpenseOverview extends Model {
   }
 
   double getExpenseTotalForPeriod() {
-    return byCategory.isEmpty
-        ? 0
-        : byCategory.values.reduce((v, e) => e > 0 ? v + e : v);
+    return byCategory.values.where((v) => v > 0).fold(0.0, (sum, e) => sum + e);
+  }
+
+  double getIncomeTotalForPeriod() {
+    return byCategory.values.where((v) => v < 0).fold(0.0, (sum, e) => sum + e);
   }
 
   @override

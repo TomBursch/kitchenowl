@@ -93,8 +93,6 @@ class _ExpenseOverviewPageState extends State<ExpenseOverviewPage> {
 
           final totalForSelectedMonth =
               state.getTotalForMonth(state.selectedMonthIndex);
-          final expenseTotalForSelectedMonth =
-              state.getExpenseTotalForMonth(state.selectedMonthIndex);
 
           return CustomScrollView(
             slivers: [
@@ -212,6 +210,7 @@ class _ExpenseOverviewPageState extends State<ExpenseOverviewPage> {
                             .sorted((a, b) => b.value.compareTo(a.value))
                             .elementAt(i);
                         final amount = entry.value;
+                        final amountPercentage = state.getTransactionAmountPercentage(amount);
                         final category = entry.key < 0
                             ? null
                             : state.categories
@@ -221,7 +220,7 @@ class _ExpenseOverviewPageState extends State<ExpenseOverviewPage> {
                           child: ListTile(
                             leading: Padding(
                               padding:
-                                  (amount / expenseTotalForSelectedMonth >= 0)
+                                  (amountPercentage > 0)
                                       ? EdgeInsets.zero
                                       : const EdgeInsets.all(4.0),
                               child: ExpenseCategoryIcon(
@@ -235,9 +234,9 @@ class _ExpenseOverviewPageState extends State<ExpenseOverviewPage> {
                               NumberFormat.simpleCurrency().format(amount),
                             ),
                             subtitle:
-                                (amount / expenseTotalForSelectedMonth >= 0)
+                                (amountPercentage > 0)
                                     ? Text(NumberFormat.percentPattern().format(
-                                        amount / expenseTotalForSelectedMonth))
+                                        amountPercentage))
                                     : null,
                             onTap: () => Navigator.of(context).push(
                               MaterialPageRoute(

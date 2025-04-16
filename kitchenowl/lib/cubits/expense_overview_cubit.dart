@@ -185,6 +185,17 @@ class ExpenseOverviewLoaded extends ExpenseOverviewState {
     return monthOverview[i]?.getExpenseTotalForPeriod() ?? 0;
   }
 
+  double getIncomeTotalForMonth(int i) {
+    return monthOverview[i]?.getIncomeTotalForPeriod() ?? 0;
+  }
+
+  double getTransactionAmountPercentage(double amount) {
+    final total = amount > 0 
+        ? getExpenseTotalForMonth(selectedMonthIndex) 
+        : getIncomeTotalForMonth(selectedMonthIndex);
+    return total != 0 ? amount / total : -1;
+  }
+
   double getAverageForLastMonths(int n) =>
       monthOverview.values
           .skip(1)

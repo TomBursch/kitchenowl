@@ -1,4 +1,3 @@
-import 'package:azlistview_plus/azlistview_plus.dart';
 import 'package:fraction/fraction.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/models/model.dart';
@@ -6,7 +5,7 @@ import 'package:kitchenowl/models/tag.dart';
 
 import 'household.dart';
 
-class Recipe extends Model implements ISuspensionBean {
+class Recipe extends Model {
   final int? id;
   final String name;
   final String description;
@@ -177,15 +176,6 @@ class Recipe extends Model implements ISuspensionBean {
       "planned_days": plannedDays.toList(),
       "household_id": householdId,
     });
-
-  @override
-  bool get isShowSuspension => true;
-
-  @override
-  String getSuspensionTag() => name[0].toUpperCase();
-
-  @override
-  set isShowSuspension(bool isShowSuspension) {}
 
   List<RecipeItem> get optionalItems => items.where((e) => e.optional).toList();
   List<RecipeItem> get mandatoryItems =>

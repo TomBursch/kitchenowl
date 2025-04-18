@@ -1,35 +1,59 @@
 from __future__ import annotations
 from datetime import datetime, timezone
-from typing import Self, Tuple, List, TYPE_CHECKING
+from typing import Optional, Self, Tuple, List, TYPE_CHECKING, cast
 
 from app import db
 from app.config import JWT_REFRESH_TOKEN_EXPIRES, JWT_ACCESS_TOKEN_EXPIRES
 from app.errors import UnauthorizedRequest, getClientIp
-from app.helpers import DbModelMixin
 from flask_jwt_extended import create_access_token, create_refresh_token, get_jti
 from app.models.user import User
 from sqlalchemy.orm import Mapped
 
+Model = db.Model
 if TYPE_CHECKING:
-    from app.models import *
+    from app.models import User
+    from app.helpers.db_model_base import DbModelBase
+
+    Model = DbModelBase
 
 
-class Token(db.Model, DbModelMixin):
+class Token(Model):
     __tablename__ = "token"
 
     id: Mapped[int] = db.Column(db.Integer, primary_key=True)
     jti: Mapped[str] = db.Column(db.String(36), nullable=False, index=True)
     type: Mapped[str] = db.Column(db.String(16), nullable=False)
     name: Mapped[str] = db.Column(db.String(), nullable=False)
-    last_used_at: Mapped[datetime] = db.Column(db.DateTime)
-    refresh_token_id: Mapped[int] = db.Column(db.Integer, db.ForeignKey("token.id"), nullable=True)
-    user_id: Mapped[int] = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
-
-    created_tokens: Mapped[List["Token"]] = db.relationship(
-        "Token", back_populates="refresh_token", cascade="all, delete-orphan"
+    last_used_at: Mapped[datetime | None] = db.Column(db.DateTime)
+    refresh_token_id: Mapped[Optional[int]] = db.Column(
+        db.Integer, db.ForeignKey("token.id"), nullable=True
     )
-    refresh_token: Mapped["Token"] = db.relationship("Token", remote_side=[id])
-    user: Mapped["User"] = db.relationship("User", lazy='selectin')
+    user_id: Mapped[int] = db.Column(
+        db.Integer, db.ForeignKey("user.id"), nullable=False
+    )
+
+    created_tokens: Mapped[List["Token"]] = cast(
+        Mapped[List["Token"]],
+        db.relationship(
+            "Token",
+            back_populates="refresh_token",
+            cascade="all, delete-orphan",
+        ),
+    )
+    refresh_token: Mapped["Token"] = cast(
+        Mapped["Token"],
+        db.relationship(
+            "Token",
+            remote_side=[id],
+        ),
+    )
+    user: Mapped["User"] = cast(
+        Mapped["User"],
+        db.relationship(
+            "User",
+            lazy="selectin",
+        ),
+    )
 
     def obj_to_dict(self, skip_columns=None, include_columns=None) -> dict:
         if skip_columns:
@@ -41,13 +65,13 @@ class Token(db.Model, DbModelMixin):
         )
 
     @classmethod
-    def find_by_jti(cls, jti: str) -> Self:
+    def find_by_jti(cls, jti: str) -> Self | None:
         return cls.query.filter(cls.jti == jti).first()
 
     @classmethod
     def delete_expired_refresh(cls):
         filter_before = datetime.now(timezone.utc) - JWT_REFRESH_TOKEN_EXPIRES
-        
+
         # Delete expired regular refresh tokens with no children
         for token in (
             db.session.query(cls)
@@ -62,10 +86,9 @@ class Token(db.Model, DbModelMixin):
 
         # Delete expired invalidated refresh tokens
         db.session.query(cls).filter(
-            cls.created_at <= filter_before,
-            cls.type == "revoked_refresh"
+            cls.created_at <= filter_before, cls.type == "revoked_refresh"
         ).delete()
-        
+
         db.session.commit()
 
     @classmethod
@@ -115,7 +138,7 @@ class Token(db.Model, DbModelMixin):
     ) -> Tuple[str, Self]:
         accesssToken = create_access_token(identity=user)
         model = cls()
-        model.jti = get_jti(accesssToken)
+        model.jti = cast(str, get_jti(accesssToken))
         model.type = "access"
         model.name = refreshTokenModel.name
         model.user = user
@@ -139,15 +162,19 @@ class Token(db.Model, DbModelMixin):
         # Check if this refresh token has already been used to create another refresh token
         if oldRefreshToken and oldRefreshToken.has_created_refresh_token():
             for newer_token in Token.query.filter(
-                Token.refresh_token_id == oldRefreshToken.id,
-                Token.type == "refresh"
+                Token.refresh_token_id == oldRefreshToken.id, Token.type == "refresh"
             ).all():
-                newer_access_used = db.session.query(Token).filter(
-                    Token.refresh_token_id == newer_token.id,
-                    Token.type == "access",
-                    Token.last_used_at != None
-                ).count() > 0
-                
+                newer_access_used = (
+                    db.session.query(Token)
+                    .filter(
+                        Token.refresh_token_id == newer_token.id,
+                        Token.type == "access",
+                        Token.last_used_at != None,
+                    )
+                    .count()
+                    > 0
+                )
+
                 if newer_token.last_used_at is not None or newer_access_used:
                     # The newer tokens have been used, this is a reuse attack
                     oldRefreshToken.delete_token_familiy()
@@ -166,9 +193,9 @@ class Token(db.Model, DbModelMixin):
 
         refreshToken = create_refresh_token(identity=user)
         model = cls()
-        model.jti = get_jti(refreshToken)
+        model.jti = cast(str, get_jti(refreshToken))
         model.type = "refresh"
-        model.name = device or oldRefreshToken.name
+        model.name = device or (oldRefreshToken.name if oldRefreshToken else "Unknown")
         model.user = user
         if oldRefreshToken:
             oldRefreshToken.delete_created_access_tokens(commit=False)
@@ -180,7 +207,7 @@ class Token(db.Model, DbModelMixin):
     def create_longlived_token(cls, user: User, device: str) -> Tuple[str, Self]:
         accesssToken = create_access_token(identity=user, expires_delta=False)
         model = cls()
-        model.jti = get_jti(accesssToken)
+        model.jti = cast(str, get_jti(accesssToken))
         model.type = "llt"
         model.name = device
         model.user = user

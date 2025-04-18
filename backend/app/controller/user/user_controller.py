@@ -25,7 +25,12 @@ user = Blueprint("user", __name__)
 @jwt_required()
 @server_admin_required()
 def getAllUsers():
-    return jsonify([e.obj_to_dict(include_email=True) for e in User.query.order_by(desc(User.admin), User.username).all()])
+    return jsonify(
+        [
+            e.obj_to_dict(include_email=True)
+            for e in User.query.order_by(desc(User.admin), User.username).all()
+        ]
+    )
 
 
 @user.route("", methods=["GET"])
@@ -82,7 +87,11 @@ def updateUser(args):
         user.email_verified = False
         ChallengeMailVerify.delete_by_user(user)
         if mail.mailConfigured():
-            gevent.spawn(mail.sendVerificationMail, user.id, ChallengeMailVerify.create_challenge(user))
+            gevent.spawn(
+                mail.sendVerificationMail,
+                user.id,
+                ChallengeMailVerify.create_challenge(user),
+            )
     if "photo" in args and user.photo != args["photo"]:
         user.photo = file_has_access_or_download(args["photo"], user.photo)
     user.save()

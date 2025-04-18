@@ -17,7 +17,7 @@ def get_health():
         "msg": "OK",
         "version": BACKEND_VERSION,
         "min_frontend_version": MIN_FRONTEND_VERSION,
-        "oidc_provider": list(oidc_clients.keys())
+        "oidc_provider": list(oidc_clients.keys()),
     }
     if PRIVACY_POLICY_URL:
         info["privacy_policy"] = PRIVACY_POLICY_URL

@@ -1,23 +1,40 @@
-from typing import Self, List, TYPE_CHECKING
+from typing import Self, List, TYPE_CHECKING, cast
 from app import db
-from app.helpers import DbModelMixin, DbModelAuthorizeMixin
+from app.helpers import DbModelAuthorizeMixin
 from sqlalchemy.orm import Mapped
 
+Model = db.Model
 if TYPE_CHECKING:
-    from app.models import *
+    from app.models import Household, RecipeTags
+    from app.helpers.db_model_base import DbModelBase
+
+    Model = DbModelBase
 
 
-class Tag(db.Model, DbModelMixin, DbModelAuthorizeMixin):
+class Tag(Model, DbModelAuthorizeMixin):
     __tablename__ = "tag"
 
     id: Mapped[int] = db.Column(db.Integer, primary_key=True)
     name: Mapped[str] = db.Column(db.String(128))
 
-    household_id: Mapped[int] = db.Column(db.Integer, db.ForeignKey("household.id"), nullable=False)
+    household_id: Mapped[int] = db.Column(
+        db.Integer, db.ForeignKey("household.id"), nullable=False
+    )
 
-    household: Mapped["Household"] = db.relationship("Household", uselist=False)
-    recipes: Mapped[List["RecipeTags"]] = db.relationship(
-        "RecipeTags", back_populates="tag", cascade="all, delete-orphan"
+    household: Mapped["Household"] = cast(
+        Mapped["Household"],
+        db.relationship(
+            "Household",
+            uselist=False,
+        ),
+    )
+    recipes: Mapped[List["RecipeTags"]] = cast(
+        Mapped[List["RecipeTags"]],
+        db.relationship(
+            "RecipeTags",
+            back_populates="tag",
+            cascade="all, delete-orphan",
+        ),
     )
 
     def obj_to_full_dict(self) -> dict:
@@ -57,11 +74,7 @@ class Tag(db.Model, DbModelMixin, DbModelAuthorizeMixin):
         ).save()
 
     @classmethod
-    def find_by_name(cls, household_id: int, name: str) -> Self:
+    def find_by_name(cls, household_id: int, name: str) -> Self | None:
         return cls.query.filter(
             cls.household_id == household_id, cls.name == name
         ).first()
-
-    @classmethod
-    def find_by_id(cls, id: int) -> Self:
-        return cls.query.filter(cls.id == id).first()

@@ -41,11 +41,7 @@ def createShoppinglist(args, household_id):
     shoppinglist.save()
     shoppinglist_dict = shoppinglist.obj_to_dict()
     socketio.emit(
-        "shoppinglist:add",
-        {
-            "shoppinglist": shoppinglist_dict
-        },
-        to=household_id
+        "shoppinglist:add", {"shoppinglist": shoppinglist_dict}, to=household_id
     )
     return jsonify(shoppinglist_dict)
 
@@ -118,10 +114,8 @@ def deleteShoppinglist(id):
     shoppinglist.delete()
     socketio.emit(
         "shoppinglist:delete",
-        {
-          "shoppinglist": shoppinglist.obj_to_dict()
-        },
-        to=shoppinglist.household_id
+        {"shoppinglist": shoppinglist.obj_to_dict()},
+        to=str(shoppinglist.household_id),
     )
 
     return jsonify({"msg": "DONE"})
@@ -153,7 +147,7 @@ def updateItemDescription(args, id: int, item_id: int):
             "item": con.obj_to_item_dict(),
             "shoppinglist": con.shoppinglist.obj_to_dict(),
         },
-        to=con.shoppinglist.household_id,
+        to=str(con.shoppinglist.household_id),
     )
     return jsonify(con.obj_to_item_dict())
 
@@ -162,9 +156,9 @@ def updateItemDescription(args, id: int, item_id: int):
 @jwt_required()
 @validate_args(GetItems)
 def getAllShoppingListItems(args, id):
-    '''
+    """
     Deprecated in favor of including it directly in the shopping list
-    '''
+    """
     shoppinglist = Shoppinglist.find_by_id(id)
     if not shoppinglist:
         raise NotFoundRequest()
@@ -190,9 +184,9 @@ def getAllShoppingListItems(args, id):
 @jwt_required()
 @validate_args(GetRecentItems)
 def getRecentItems(args, id):
-    '''
+    """
     Deprecated in favor of including it directly in the shopping list
-    '''
+    """
     shoppinglist = Shoppinglist.find_by_id(id)
     if not shoppinglist:
         raise NotFoundRequest()
@@ -224,6 +218,7 @@ def getSuggestionsBasedOnLastAddedItems(id, item_count):
         )
         .order_by(History.created_at.desc())
         .limit(3)
+        .all()
     )
 
     for recent in recently_added:
@@ -234,6 +229,7 @@ def getSuggestionsBasedOnLastAddedItems(id, item_count):
             )
             .order_by(Association.lift.desc())
             .limit(item_count)
+            .all()
         )
         for rule in assocs:
             suggestions.append(rule.consequent)
@@ -258,6 +254,7 @@ def getSuggestionsBasedOnFrequency(id, item_count):
             Item.query.filter(Item.id.notin_(subquery))
             .order_by(Item.support.desc(), Item.name)
             .limit(item_count)
+            .all()
         )
     return suggestions
 
@@ -311,7 +308,7 @@ def addShoppinglistItemByName(args, id):
                 "item": con.obj_to_item_dict(),
                 "shoppinglist": shoppinglist.obj_to_dict(),
             },
-            to=shoppinglist.household_id,
+            to=str(shoppinglist.household_id),
         )
 
     return jsonify(item.obj_to_dict())
@@ -338,7 +335,7 @@ def removeShoppinglistItem(args, id: int):
                 "item": con.obj_to_item_dict(),
                 "shoppinglist": shoppinglist.obj_to_dict(),
             },
-            to=shoppinglist.household_id,
+            to=str(shoppinglist.household_id),
         )
 
     return jsonify({"msg": "DONE"})
@@ -366,7 +363,7 @@ def removeShoppinglistItems(args, id: int):
                     "item": con.obj_to_item_dict(),
                     "shoppinglist": shoppinglist.obj_to_dict(),
                 },
-                to=shoppinglist.household_id,
+                to=str(shoppinglist.household_id),
             )
 
     return jsonify({"msg": "DONE"})
@@ -404,8 +401,8 @@ def addRecipeItems(args, id):
     try:
         for recipeItem in args["items"]:
             item = Item.find_by_id(recipeItem["id"])
-            item.checkAuthorized()
             if item:
+                item.checkAuthorized()
                 description = recipeItem["description"]
                 con = ShoppinglistItems.find_by_ids(shoppinglist.id, item.id)
                 if con:
@@ -431,7 +428,7 @@ def addRecipeItems(args, id):
                         "item": con.obj_to_item_dict(),
                         "shoppinglist": shoppinglist.obj_to_dict(),
                     },
-                    to=shoppinglist.household_id,
+                    to=str(shoppinglist.household_id),
                 )
 
         db.session.commit()

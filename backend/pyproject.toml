@@ -43,10 +43,11 @@ dependencies = [
 
 [dependency-groups]
 dev = [
-    "pytest", 
+    "pytest",
     "pytest-cov",
     "ruff",
-    "pyright"
+    "pyright",
+    "pre-commit",
 ]
 
 [tool.pyright]

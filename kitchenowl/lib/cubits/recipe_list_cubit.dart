@@ -89,7 +89,7 @@ class RecipeListCubit extends Cubit<RecipeListState> {
       forceOffline: true,
     );
 
-    if (state is LoadingRecipeListState) {
+    if (state is LoadingRecipeListState && recipeList.isNotEmpty) {
       emit(ListRecipeListState(
         recipes: recipeList,
         tags: await tags,

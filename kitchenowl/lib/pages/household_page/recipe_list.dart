@@ -1,9 +1,9 @@
-import 'package:azlistview_plus/azlistview_plus.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/cubits/recipe_list_cubit.dart';
 import 'package:kitchenowl/kitchenowl.dart';
+import 'package:kitchenowl/widgets/index_bar.dart';
 import 'package:kitchenowl/widgets/choice_scroll.dart';
 import 'package:kitchenowl/widgets/recipe_card.dart';
 import 'package:kitchenowl/widgets/recipe_item.dart';
@@ -17,16 +17,42 @@ class RecipeListPage extends StatefulWidget {
 
 class _RecipeListPageState extends State<RecipeListPage> {
   final TextEditingController searchController = TextEditingController();
+  late final IndexScrollController scrollController;
+  final headerKey = GlobalKey();
+
+  double getRowHeight() {
+    if (!mounted) return 1;
+    if (BlocProvider.of<RecipeListCubit>(context).state.listView) return 56;
+    return ((headerKey.currentContext!.size!.width - 16 - 32) / getRowCount()) /
+        0.8;
+  }
+
+  double getHeaderHeight() {
+    return headerKey.currentContext!.size!.height;
+  }
+
+  int getRowCount() {
+    if (!mounted) return 1;
+    if (BlocProvider.of<RecipeListCubit>(context).state.listView) return 1;
+    // header width - list padding
+    return ((headerKey.currentContext!.size!.width - 16 - 32) / 350).ceil();
+  }
 
   @override
   void initState() {
     super.initState();
     searchController.text = BlocProvider.of<RecipeListCubit>(context).query;
+    scrollController = IndexScrollController(
+      getRowHeight: getRowHeight,
+      getHeaderHeight: getHeaderHeight,
+      getItemRowCount: getRowCount,
+    );
   }
 
   @override
   void dispose() {
     searchController.dispose();
+    scrollController.dispose();
     super.dispose();
   }
 
@@ -79,11 +105,13 @@ class _RecipeListPageState extends State<RecipeListPage> {
                     state.tags.isEmpty ||
                     state is SearchRecipeListState) {
                   header = Align(
+                    key: headerKey,
                     alignment: Alignment.topRight,
                     child: header,
                   );
                 } else {
                   header = Align(
+                    key: headerKey,
                     alignment: Alignment.centerLeft,
                     child: Padding(
                       padding: const EdgeInsets.only(bottom: 6),
@@ -173,87 +201,70 @@ class _RecipeListPageState extends State<RecipeListPage> {
                   );
                 }
 
-                Widget child;
-                if (state.listView) {
-                  child = AzListView(
-                    itemCount: recipes.length + 1,
-                    data: <ISuspensionBean>[
-                          _HeaderBean(recipes.first.getSuspensionTag())
-                        ] +
-                        recipes,
-                    indexBarData: SuspensionUtil.getTagIndexList(recipes),
-                    indexBarAlignment: Alignment.centerLeft,
-                    indexBarOptions: IndexBarOptions(
-                      needRebuild: true,
-                      selectTextStyle: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
-                      selectItemDecoration: const BoxDecoration(),
-                      indexHintWidth: 50,
-                      indexHintHeight: 50,
-                      indexHintDecoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Theme.of(context)
-                            .colorScheme
-                            .primary
-                            .withAlpha(0xFF),
-                        boxShadow: const [
-                          BoxShadow(
-                            color: Colors.black54,
-                            offset: Offset(1, 1),
-                            blurRadius: 6,
-                            spreadRadius: -2,
+                return RefreshIndicator(
+                  onRefresh: cubit.refresh,
+                  child: Stack(
+                    children: [
+                      CustomScrollView(
+                        controller: scrollController,
+                        slivers: [
+                          SliverToBoxAdapter(child: header),
+                          SliverPadding(
+                            padding: const EdgeInsets.only(left: 32, right: 16),
+                            sliver: state.listView
+                                ? SliverList(
+                                    delegate: SliverChildBuilderDelegate(
+                                      (context, i) => RecipeItemWidget(
+                                        recipe: recipes[i],
+                                        onUpdated: cubit.refresh,
+                                      ),
+                                      childCount: recipes.length,
+                                    ),
+                                  )
+                                : SliverGrid.builder(
+                                    itemCount: recipes.length,
+                                    gridDelegate:
+                                        const SliverGridDelegateWithMaxCrossAxisExtent(
+                                      maxCrossAxisExtent: 350,
+                                      childAspectRatio: 0.8,
+                                    ),
+                                    itemBuilder: (context, i) => RecipeCard(
+                                      key: Key(recipes[i].name),
+                                      recipe: recipes[i],
+                                      onUpdated: cubit.refresh,
+                                    ),
+                                  ),
                           ),
                         ],
                       ),
-                      indexHintTextStyle: TextStyle(
-                        fontSize: 20,
-                        color: Theme.of(context).colorScheme.onPrimary,
-                      ),
-                      indexHintAlignment: Alignment.centerLeft,
-                    ),
-                    hapticFeedback: true,
-                    itemBuilder: (context, i) {
-                      if (i == 0) return header;
-                      i--;
-                      return Padding(
-                        key: Key(recipes[i].name),
-                        padding: const EdgeInsets.only(left: 32, right: 16),
-                        child: RecipeItemWidget(
-                          recipe: recipes[i],
-                          onUpdated: cubit.refresh,
-                        ),
-                      );
-                    },
-                  );
-                } else {
-                  child = CustomScrollView(
-                    primary: true,
-                    slivers: [
-                      SliverToBoxAdapter(child: header),
-                      SliverPadding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        sliver: SliverGrid.builder(
-                          itemCount: recipes.length,
-                          gridDelegate:
-                              const SliverGridDelegateWithMaxCrossAxisExtent(
-                            maxCrossAxisExtent: 350,
-                            childAspectRatio: 0.8,
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: IndexBar(
+                          controller: scrollController,
+                          names: recipes.map((r) => r.name).toList(),
+                          indexHintDecoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Theme.of(context)
+                                .colorScheme
+                                .primary
+                                .withAlpha(0xFF),
+                            boxShadow: const [
+                              BoxShadow(
+                                color: Colors.black54,
+                                offset: Offset(1, 1),
+                                blurRadius: 6,
+                                spreadRadius: -2,
+                              ),
+                            ],
                           ),
-                          itemBuilder: (context, i) => RecipeCard(
-                            key: Key(recipes[i].name),
-                            recipe: recipes[i],
-                            onUpdated: cubit.refresh,
+                          indexHintTextStyle: TextStyle(
+                            fontSize: 20,
+                            color: Theme.of(context).colorScheme.onPrimary,
                           ),
                         ),
                       ),
                     ],
-                  );
-                }
-
-                return RefreshIndicator(
-                  onRefresh: cubit.refresh,
-                  child: child,
+                  ),
                 );
               },
             ),
@@ -262,19 +273,4 @@ class _RecipeListPageState extends State<RecipeListPage> {
       ),
     );
   }
-}
-
-class _HeaderBean implements ISuspensionBean {
-  String suspensionTag;
-
-  _HeaderBean(this.suspensionTag);
-
-  @override
-  bool get isShowSuspension => true;
-
-  @override
-  String getSuspensionTag() => suspensionTag;
-
-  @override
-  set isShowSuspension(bool _isShowSuspension) {}
 }

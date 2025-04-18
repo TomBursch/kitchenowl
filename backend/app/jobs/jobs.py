@@ -1,6 +1,7 @@
 from datetime import timedelta
+from typing import TYPE_CHECKING, cast
 from app.jobs.recipe_suggestions import computeRecipeSuggestions
-from app.config import app, scheduler, celery_app, MESSAGE_BROKER
+from app.config import app, scheduler, celery_app
 from celery.schedules import crontab
 from app.models import (
     Token,
@@ -15,8 +16,10 @@ from .item_ordering import findItemOrdering
 from .item_suggestions import findItemSuggestions
 from .cluster_shoppings import clusterShoppings
 
+if TYPE_CHECKING:
+    from celery.utils.dispatch import Signal
 
-if not MESSAGE_BROKER:
+if scheduler is not None:
 
     @scheduler.task("cron", id="everyMonth", day="1", hour="0", minute="0")
     def setup_monthly():
@@ -33,7 +36,8 @@ if not MESSAGE_BROKER:
         with app.app_context():
             halfHourly()
 
-else:
+
+if celery_app is not None:
 
     @celery_app.task
     def monthlyTask():
@@ -47,7 +51,10 @@ else:
     def halfHourlyTask():
         halfHourly()
 
-    @celery_app.on_after_configure.connect
+    @cast(
+        "Signal",
+        celery_app.on_after_configure,
+    ).connect
     def setup_periodic_tasks(sender, **kwargs):
         sender.add_periodic_task(
             timedelta(minutes=30), halfHourlyTask, name="every30min"
@@ -76,9 +83,12 @@ def daily():
     for household in Household.all():
         # shopping tasks
         shopping_instances = clusterShoppings(
-            Shoppinglist.query.filter(Shoppinglist.household_id == household.id)
-            .first()
-            .id
+            cast(
+                Shoppinglist,
+                Shoppinglist.query.filter(
+                    Shoppinglist.household_id == household.id
+                ).first(),
+            ).id
         )
         if shopping_instances:
             findItemOrdering(shopping_instances)

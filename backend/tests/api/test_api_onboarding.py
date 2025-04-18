@@ -2,7 +2,9 @@ import pytest
 
 
 def test_onboarding_status_true(client):
-    response = client.get('/api/onboarding',)
+    response = client.get(
+        "/api/onboarding",
+    )
     assert response.status_code == 200
     data = response.get_json()
     assert "onboarding" in data
@@ -10,7 +12,9 @@ def test_onboarding_status_true(client):
 
 
 def test_onboarding_status_false(onboarded_client):
-    response = onboarded_client.get('/api/onboarding',)
+    response = onboarded_client.get(
+        "/api/onboarding",
+    )
     assert response.status_code == 200
     data = response.get_json()
     assert "onboarding" in data
@@ -19,11 +23,11 @@ def test_onboarding_status_false(onboarded_client):
 
 def test_onboarding(client, admin_username, admin_name, admin_password):
     onboard_data = {
-        'username': admin_username,
-        'name': admin_name,
-        'password': admin_password
+        "username": admin_username,
+        "name": admin_name,
+        "password": admin_password,
     }
-    response = client.post('/api/onboarding', json=onboard_data)
+    response = client.post("/api/onboarding", json=onboard_data)
     assert response.status_code == 200
     data = response.get_json()
     assert "access_token" in data

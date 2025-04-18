@@ -1,8 +1,7 @@
 from datetime import timedelta
-from http import client
+from typing import cast
 from celery import Celery, Task
 from flask_socketio import SocketIO
-from sqlalchemy import MetaData
 from sqlalchemy.engine import URL
 from sqlalchemy.event import listen
 from apispec import APISpec
@@ -18,6 +17,7 @@ from app.errors import (
     InvalidUsage,
 )
 from app.util import KitchenOwlJSONProvider
+from app.helpers.db_model_base import DbModelBase
 from oic.oic import Client
 from oic.oic.message import RegistrationResponse
 from oic.utils.authn.client import CLIENT_AUTHN_METHOD
@@ -46,7 +46,9 @@ FRONT_URL = os.getenv("FRONT_URL")
 
 PRIVACY_POLICY_URL = os.getenv("PRIVACY_POLICY_URL")
 OPEN_REGISTRATION = os.getenv("OPEN_REGISTRATION", "False").lower() == "true"
-DISABLE_USERNAME_PASSWORD_LOGIN = os.getenv("DISABLE_USERNAME_PASSWORD_LOGIN", "False").lower() == "true"
+DISABLE_USERNAME_PASSWORD_LOGIN = (
+    os.getenv("DISABLE_USERNAME_PASSWORD_LOGIN", "False").lower() == "true"
+)
 EMAIL_MANDATORY = os.getenv("EMAIL_MANDATORY", "False").lower() == "true"
 DISABLE_ONBOARDING = os.getenv("DISABLE_ONBOARDING", "False").lower() == "true"
 
@@ -57,13 +59,15 @@ DB_URL = URL.create(
     username=os.getenv("DB_USER"),
     password=os.getenv("DB_PASSWORD"),
     host=os.getenv("DB_HOST"),
-    port=os.getenv("DB_PORT"),
+    port=int(cast(str, os.getenv("DB_PORT"))) if os.getenv("DB_PORT") else None,
     database=os.getenv("DB_NAME", STORAGE_PATH + "/database.db"),
 )
 MESSAGE_BROKER = os.getenv("MESSAGE_BROKER")
 
 JWT_ACCESS_TOKEN_EXPIRES = timedelta(minutes=15)
-JWT_REFRESH_TOKEN_EXPIRES = timedelta(days=int(os.getenv("JWT_REFRESH_TOKEN_EXPIRES", "30")))
+JWT_REFRESH_TOKEN_EXPIRES = timedelta(
+    days=int(os.getenv("JWT_REFRESH_TOKEN_EXPIRES", "30"))
+)
 
 OIDC_CLIENT_ID = os.getenv("OIDC_CLIENT_ID")
 OIDC_CLIENT_SECRET = os.getenv("OIDC_CLIENT_SECRET")
@@ -140,9 +144,8 @@ convention = {
     "pk": "pk_%(table_name)s",
 }
 
-metadata = MetaData(naming_convention=convention)
 
-db = SQLAlchemy(app, metadata=metadata)
+db = SQLAlchemy(app, model_class=DbModelBase)
 migrate = Migrate(app, db, render_as_batch=True)
 bcrypt = Bcrypt(app)
 jwt = JWTManager(app)
@@ -182,37 +185,37 @@ api_spec = APISpec(
     },
     plugins=[MarshmallowPlugin()],
 )
-oidc_clients = {}
+oidc_clients: dict[str, Client] = {}
 if FRONT_URL:
     if OIDC_CLIENT_ID and OIDC_CLIENT_SECRET and OIDC_ISSUER:
-        client = Client(client_authn_method=CLIENT_AUTHN_METHOD)
-        client.provider_config(OIDC_ISSUER)
-        client.store_registration_info(
+        oidc_client = Client(client_authn_method=CLIENT_AUTHN_METHOD)
+        oidc_client.provider_config(OIDC_ISSUER)
+        oidc_client.store_registration_info(
             RegistrationResponse(
                 client_id=OIDC_CLIENT_ID, client_secret=OIDC_CLIENT_SECRET
             )
         )
-        oidc_clients["custom"] = client
+        oidc_clients["custom"] = oidc_client
     if GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET:
-        client = Client(client_authn_method=CLIENT_AUTHN_METHOD)
-        client.provider_config("https://accounts.google.com/")
-        client.store_registration_info(
+        oidc_client = Client(client_authn_method=CLIENT_AUTHN_METHOD)
+        oidc_client.provider_config("https://accounts.google.com/")
+        oidc_client.store_registration_info(
             RegistrationResponse(
                 client_id=GOOGLE_CLIENT_ID,
                 client_secret=GOOGLE_CLIENT_SECRET,
             )
         )
-        oidc_clients["google"] = client
+        oidc_clients["google"] = oidc_client
     if APPLE_CLIENT_ID and APPLE_CLIENT_SECRET:
-        client = Client(client_authn_method=CLIENT_AUTHN_METHOD)
-        client.provider_config("https://appleid.apple.com/")
-        client.store_registration_info(
+        oidc_client = Client(client_authn_method=CLIENT_AUTHN_METHOD)
+        oidc_client.provider_config("https://appleid.apple.com/")
+        oidc_client.store_registration_info(
             RegistrationResponse(
                 client_id=APPLE_CLIENT_ID,
                 client_secret=APPLE_CLIENT_SECRET,
             )
         )
-        oidc_clients["apple"] = client
+        oidc_clients["apple"] = oidc_client
 
 
 if COLLECT_METRICS:
@@ -257,7 +260,7 @@ if DB_URL.drivername == "sqlite":
 
     def load_extension(conn, unused):
         conn.enable_load_extension(True)
-        conn.load_extension(sqlite_icu.extension_path().replace(".so", ""))
+        conn.load_extension(cast(str, sqlite_icu.extension_path()).replace(".so", ""))
         conn.enable_load_extension(False)
 
     with app.app_context():

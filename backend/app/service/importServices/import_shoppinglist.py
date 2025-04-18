@@ -1,4 +1,4 @@
-from app.models import Household, Shoppinglist
+from app.models import Household
 
 
 def importShoppinglist(household: Household, args: dict):

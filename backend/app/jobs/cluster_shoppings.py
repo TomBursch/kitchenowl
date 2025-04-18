@@ -6,7 +6,7 @@ from dbscan1d.core import DBSCAN1D
 import numpy as np
 
 
-def clusterShoppings(shoppinglist_id: int) -> list:
+def clusterShoppings(shoppinglist_id: int) -> list | None:
     dropped = History.find_dropped_by_shoppinglist_id(shoppinglist_id)
 
     if len(dropped) == 0:
@@ -24,7 +24,7 @@ def clusterShoppings(shoppinglist_id: int) -> list:
     dbs = DBSCAN1D(eps=eps, min_samples=min_samples)
     labels = dbs.fit_predict(timestamps)
 
-    if len(labels) == 0:
+    if not labels:
         app.logger.info("no shopping instances identified")
         return None
 

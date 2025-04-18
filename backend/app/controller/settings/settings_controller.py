@@ -1,5 +1,4 @@
-from .schemas import SetSettingsSchema
-from app.helpers import validate_args, server_admin_required
+from app.helpers import server_admin_required
 from flask import jsonify, Blueprint
 from flask_jwt_extended import jwt_required
 from app.models import Settings

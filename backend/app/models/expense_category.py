@@ -1,24 +1,42 @@
 from __future__ import annotations
-from typing import Self, List, TYPE_CHECKING
+from typing import Self, List, TYPE_CHECKING, cast
 from app import db
-from app.helpers import DbModelMixin, DbModelAuthorizeMixin
+from app.helpers import DbModelAuthorizeMixin
 from sqlalchemy.orm import Mapped
 
+Model = db.Model
 if TYPE_CHECKING:
-    from app.models import *
+    from app.models import Household, Expense
+    from app.helpers.db_model_base import DbModelBase
+
+    Model = DbModelBase
 
 
-class ExpenseCategory(db.Model, DbModelMixin, DbModelAuthorizeMixin):
+class ExpenseCategory(Model, DbModelAuthorizeMixin):
     __tablename__ = "expense_category"
 
     id: Mapped[int] = db.Column(db.Integer, primary_key=True)
     name: Mapped[str] = db.Column(db.String(128))
     color: Mapped[int] = db.Column(db.BigInteger)
     budget: Mapped[float] = db.Column(db.Float())
-    household_id: Mapped[int] = db.Column(db.Integer, db.ForeignKey("household.id"), nullable=False)
+    household_id: Mapped[int] = db.Column(
+        db.Integer, db.ForeignKey("household.id"), nullable=False
+    )
 
-    household: Mapped["Household"] = db.relationship("Household", uselist=False)
-    expenses: Mapped[List["Household"]] = db.relationship("Expense", back_populates="category")
+    household: Mapped["Household"] = cast(
+        Mapped["Household"],
+        db.relationship(
+            "Household",
+            uselist=False,
+        ),
+    )
+    expenses: Mapped[List["Expense"]] = cast(
+        Mapped[List["Expense"]],
+        db.relationship(
+            "Expense",
+            back_populates="category",
+        ),
+    )
 
     def obj_to_full_dict(self) -> dict:
         res = super().obj_to_dict()
@@ -48,13 +66,13 @@ class ExpenseCategory(db.Model, DbModelMixin, DbModelAuthorizeMixin):
             raise e
 
     @classmethod
-    def find_by_name(cls, houshold_id: int, name: str) -> Self:
+    def find_by_name(cls, houshold_id: int, name: str) -> Self | None:
         return cls.query.filter(
             cls.name == name, cls.household_id == houshold_id
         ).first()
 
     @classmethod
-    def find_by_id(cls, id: int) -> Self:
+    def find_by_id(cls, id: int) -> Self | None:
         return cls.query.filter(cls.id == id).first()
 
     @classmethod

@@ -38,7 +38,8 @@ The `description` is a descriptive summary of the change the PR will make.
 === "Backend"
     - Install Python 3.12+ and [UV](https://docs.astral.sh/uv/getting-started/)
     - Go to `./backend`
-    - Install dependencies `pip3 install -r requirements.txt`
+    - Install dependencies `uv sync`
+    - Install the pre-commit hooks `uv pre-commit install`
     - Optionally: Activate your python environment `source .venv/bin/activate` (allows you to omit `uv run` in the following steps, environment can be deactivated with `deactivate`)
     - Initialize/Upgrade requirements for the recipe scraper `uv run python -c "import nltk; nltk.download('averaged_perceptron_tagger_eng', download_dir='./venv/nltk_data')"`
     - Initialize/Upgrade the SQLite database with `uv run flask db upgrade`

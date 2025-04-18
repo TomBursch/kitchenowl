@@ -125,7 +125,6 @@
     }
   },
   "@expenseOverviewExpenses": {},
-  "@expenseOverviewExpenseDetails": {},
   "@expensePaidBy": {},
   "@expensePaidFor": {},
   "@expenseReceivedBy": {},
@@ -547,7 +546,6 @@
   "expenseOverviewComparedToPreviousMonth": "Compared to previous months",
   "expenseOverviewTotalTitle": "Total for {month}:",
   "expenseOverviewExpenses": "Expenses",
-  "expenseOverviewExpenseDetails": "Expense Details",
   "expensePaidBy": "Paid by",
   "expensePaidFor": "Paid for",
   "expenseReceivedBy": "Received by",

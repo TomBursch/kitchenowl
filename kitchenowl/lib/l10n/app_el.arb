@@ -118,7 +118,6 @@
     }
   },
   "@expenseOverviewExpenses": {},
-  "@expenseOverviewExpenseDetails": {},
   "@expensePaidBy": {},
   "@expensePaidFor": {},
   "@expenseReceivedBy": {},
@@ -487,7 +486,6 @@
   "expenseOverviewComparedToPreviousMonth": "Συγκριτικά με προηγούμενους μήνες",
   "expenseOverviewTotalTitle": "Συνολικά έξοδα για τον μήνα {month}:",
   "expenseOverviewExpenses": "Έξοδα",
-  "expenseOverviewExpenseDetails": "Λεπτομέρειες εξόδων",
   "expensePaidBy": "Πληρώθηκε από",
   "expensePaidFor": "Πληρώθηκε εκ μέρους του",
   "expenseReceivedBy": "Λήφθηκε από",

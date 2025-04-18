@@ -48,7 +48,9 @@ dependencies:
   diffutil_dart: ^4.0.0
 
   responsive_builder: ^0.7.0
-  dynamic_color: ^1.7.0
+
+  # TODO: Remove this once https://github.com/material-foundation/flutter-packages/pull/599 is merged
+  dynamic_system_colors: ^1.8.0
   flutter_localized_locales: ^2.0.5
 
   flutter_markdown: ^0.7.1

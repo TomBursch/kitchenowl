@@ -1,6 +1,7 @@
 {
   "@about": {},
   "@accountCreate": {},
+  "@accountCreateHint": {},
   "@accountCreateTitle": {},
   "@accountDelete": {},
   "@accountDeleteConfirmation": {},
@@ -14,24 +15,24 @@
   "@addLanguageConfirm": {
     "placeholders": {
       "lang": {
-        "type": "String",
-        "example": "English"
+        "example": "English",
+        "type": "String"
       }
     }
   },
   "@addNumberIngredients": {
     "placeholders": {
       "number": {
-        "type": "int",
-        "example": "2"
+        "example": "2",
+        "type": "int"
       }
     }
   },
   "@addRecipeToPlanner": {
     "placeholders": {
       "number": {
-        "type": "int",
-        "example": "2"
+        "example": "2",
+        "type": "int"
       }
     }
   },
@@ -41,19 +42,22 @@
   "@addedBy": {
     "placeholders": {
       "name": {
-        "type": "String",
-        "example": "Tom"
+        "example": "Tom",
+        "type": "String"
       }
     }
   },
   "@address": {},
   "@admin": {},
+  "@analysingWebsite": {},
   "@appDescription": {},
   "@appTitle": {
     "description": "The title of the app"
   },
   "@back": {},
   "@balances": {},
+  "@budget": {},
+  "@budgetSet": {},
   "@camera": {},
   "@cancel": {},
   "@categories": {},
@@ -63,8 +67,8 @@
   "@categoryDeleteConfirmation": {
     "placeholders": {
       "category": {
-        "type": "String",
-        "example": "Frozen"
+        "example": "Frozen",
+        "type": "String"
       }
     }
   },
@@ -72,12 +76,13 @@
   "@categoryExpenseDeleteConfirmation": {
     "placeholders": {
       "category": {
-        "type": "String",
-        "example": "Frozen"
+        "example": "Frozen",
+        "type": "String"
       }
     }
   },
   "@changeIcon": {},
+  "@clear": {},
   "@colorSelect": {},
   "@confirm": {},
   "@cookingTime": {},
@@ -112,8 +117,8 @@
   "@expenseOverviewTotalTitle": {
     "placeholders": {
       "month": {
-        "type": "String",
-        "example": "January"
+        "example": "January",
+        "type": "String"
       }
     }
   },
@@ -126,8 +131,8 @@
   "@fieldCannotBeEmpty": {
     "placeholders": {
       "field": {
-        "type": "String",
-        "example": "Username"
+        "example": "Username",
+        "type": "String"
       }
     }
   },
@@ -137,13 +142,21 @@
   "@go": {},
   "@grid": {},
   "@helpTranslate": {},
+  "@hi": {
+    "placeholders": {
+      "name": {
+        "example": "Tom",
+        "type": "String"
+      }
+    }
+  },
   "@household": {},
   "@householdDelete": {},
   "@householdDeleteConfirmation": {
     "placeholders": {
       "household": {
-        "type": "String",
-        "example": "Home"
+        "example": "Home",
+        "type": "String"
       }
     }
   },
@@ -152,8 +165,8 @@
   "@householdLeaveConfirmation": {
     "placeholders": {
       "household": {
-        "type": "String",
-        "example": "Home"
+        "example": "Home",
+        "type": "String"
       }
     }
   },
@@ -171,8 +184,8 @@
   "@itemDeleteConfirmation": {
     "placeholders": {
       "item": {
-        "type": "String",
-        "example": "Cake"
+        "example": "Cake",
+        "type": "String"
       }
     }
   },
@@ -184,12 +197,12 @@
   "@itemsMergeConfirmation": {
     "placeholders": {
       "item": {
-        "type": "String",
-        "example": "Cake"
+        "example": "Cake",
+        "type": "String"
       },
       "other": {
-        "type": "String",
-        "example": "Cake"
+        "example": "Cake",
+        "type": "String"
       }
     }
   },
@@ -208,8 +221,8 @@
   "@lltDeleteConfirmation": {
     "placeholders": {
       "token": {
-        "type": "String",
-        "example": "HomeAssistant"
+        "example": "HomeAssistant",
+        "type": "String"
       }
     }
   },
@@ -223,12 +236,13 @@
   "@logoutName": {
     "placeholders": {
       "name": {
-        "type": "String",
-        "example": "Tom"
+        "example": "Tom",
+        "type": "String"
       }
     }
   },
   "@longPressToReorder": {},
+  "@longerThanExpected": {},
   "@markAsPaid": {},
   "@mealPlanner": {},
   "@member": {},
@@ -251,8 +265,8 @@
   "@onboardingSettingsTitle": {
     "placeholders": {
       "name": {
-        "type": "String",
-        "example": "Tom"
+        "example": "Tom",
+        "type": "String"
       }
     }
   },
@@ -265,12 +279,12 @@
   "@owesAB": {
     "placeholders": {
       "nameA": {
-        "type": "String",
-        "example": "Tom"
+        "example": "Tom",
+        "type": "String"
       },
       "nameB": {
-        "type": "String",
-        "example": "Tom"
+        "example": "Tom",
+        "type": "String"
       }
     }
   },
@@ -291,21 +305,33 @@
   "@privacyPolicyAgree": {
     "placeholders": {
       "privacyPolicy": {
-        "type": "String",
-        "example": "Privacy Policy"
+        "example": "Privacy Policy",
+        "type": "String"
       }
     }
   },
+  "@private": {},
+  "@privateRecipeDescription": {},
   "@profile": {},
+  "@public": {},
+  "@publicRecipeDescription": {},
   "@recentItemsCategorize": {},
   "@recipeAdd": {},
+  "@recipeAddToHousehold": {
+    "placeholders": {
+      "householdName": {
+        "example": "Home",
+        "type": "String"
+      }
+    }
+  },
   "@recipeAddUrl": {},
   "@recipeDelete": {},
   "@recipeDeleteConfirmation": {
     "placeholders": {
       "recipe": {
-        "type": "String",
-        "example": "Cake"
+        "example": "Cake",
+        "type": "String"
       }
     }
   },
@@ -320,7 +346,9 @@
   "@recipesOverwriteDescription": {},
   "@recipesRecent": {},
   "@recipesSuggested": {},
+  "@redo": {},
   "@refresh": {},
+  "@rememberLastShoppingList": {},
   "@remove": {},
   "@rename": {},
   "@reportIssue": {},
@@ -333,28 +361,38 @@
   "@set": {},
   "@settings": {},
   "@setupTitle": {},
+  "@share": {},
   "@shoppingList": {},
+  "@shoppingListContainsEntries": {
+    "placeholders": {
+      "entriesCount": {
+        "type": "num"
+      }
+    }
+  },
   "@shoppingListDelete": {},
   "@shoppingListDeleteConfirmation": {
     "placeholders": {
       "shoppingList": {
-        "type": "String",
-        "example": "Supermarket"
+        "example": "Supermarket",
+        "type": "String"
       }
     }
   },
   "@shoppingListEdit": {},
+  "@shoppingListEmpty": {},
   "@shoppingListStyle": {},
   "@shoppingLists": {},
   "@signInWith": {
     "placeholders": {
       "provider": {
-        "type": "String",
-        "example": "Authentik"
+        "example": "Authentik",
+        "type": "String"
       }
     }
   },
   "@signup": {},
+  "@skip": {},
   "@smaller": {},
   "@sortingAlgorithmic": {},
   "@sortingAlphabetical": {},
@@ -367,8 +405,8 @@
   "@tagDeleteConfirmation": {
     "placeholders": {
       "tag": {
-        "type": "String",
-        "example": "Lunch"
+        "example": "Lunch",
+        "type": "String"
       }
     }
   },
@@ -379,10 +417,24 @@
   "@themeLight": {},
   "@themeMode": {},
   "@themeSystem": {},
+  "@today": {},
+  "@tomorrow": {},
   "@total": {},
   "@totalTime": {},
+  "@tutorialItemDescription1": {},
+  "@tutorialItemDescription2": {},
+  "@tutorialRecipeDescription": {},
+  "@tutorialRecipeMore": {
+    "placeholders": {
+      "url": {
+        "example": "https://...",
+        "type": "String"
+      }
+    }
+  },
   "@uncategorized": {},
   "@underConstruction": {},
+  "@undo": {},
   "@unlink": {
     "description": "As in remove link to social account (e.g. Google)"
   },
@@ -399,8 +451,8 @@
   "@userDeleteConfirmation": {
     "placeholders": {
       "user": {
-        "type": "String",
-        "example": "Tom"
+        "example": "Tom",
+        "type": "String"
       }
     }
   },
@@ -411,6 +463,7 @@
   "@usernameUnavailable": {},
   "@users": {},
   "@weekly": {},
+  "@welcomeBack": {},
   "@writeMarkdownHere": {},
   "@wrongUsernameOrPassword": {},
   "@yearly": {},
@@ -419,6 +472,7 @@
   "@you": {},
   "about": "Πληροφορίες",
   "accountCreate": "Δημιουργία λογαριασμού",
+  "accountCreateHint": "Το όνομα χρήστη και το ονοματεπώνυμό σας είναι δημόσια, οπότε διαλέξτε κάτι που να αισθάνεστε άνετα να το μοιράζεστε με άλλους.",
   "accountCreateTitle": "Δημιουργήστε τον λογαριασμό σας στο KitchenOwl",
   "accountDelete": "Διαγραφή λογαριασμού",
   "accountDeleteConfirmation": "Είστε σίγουροι πως θέλετε να διαγράψετε τον λογαριασμό σας;",
@@ -438,10 +492,13 @@
   "addedBy": "Προστέθηκε από {name}",
   "address": "Διεύθυνση",
   "admin": "Διαχειριστής",
+  "analysingWebsite": "Ανάλυση ιστοσελίδας...",
   "appDescription": "Το KitchenOwl σας βοηθάει να οργανώσετε τα ψώνια σας.",
   "appTitle": "KitchenOwl",
   "back": "Πίσω",
   "balances": "Υπόλοιπα",
+  "budget": "Προϋπολογισμός",
+  "budgetSet": "Όρισε προϋπολογισμό",
   "camera": "Κάμερα",
   "cancel": "Ακύρωση",
   "categories": "Κατηγορίες",
@@ -452,6 +509,7 @@
   "categoryEdit": "Επεξεργασία Κατηγορίας",
   "categoryExpenseDeleteConfirmation": "Είστε σίγουροι πως θέλετε να διαγράψετε τη κατηγορία {category}; Αυτό θα αφαιρέσει τη κατηγορία από όλα τα έξοδα.",
   "changeIcon": "Αλλαγή εικόνας",
+  "clear": "Καθαρισμός",
   "colorSelect": "Επιλέξτε χρώμα",
   "confirm": "Επιβεβαίωση",
   "cookingTime": "Χρόνος μαγειρέματος",
@@ -497,6 +555,7 @@
   "go": "Πήγαινε",
   "grid": "Πλέγμα",
   "helpTranslate": "Βοήθησε στη μετάφραση",
+  "hi": "Γεια σου {name}!",
   "household": "Νοικοκυριό",
   "householdDelete": "Διαγραφή νοικοκυριού",
   "householdDeleteConfirmation": "Είστε σίγουροι πως θέλετε να διαγράψετε το {household}; Αυτό θα διαγράψει όλα τα είδη, συνταγές και έξοδα του νοικοκυριού οριστικά.",
@@ -541,6 +600,7 @@
   "logout": "Αποσύνδεση",
   "logoutName": "Αποσύνδεση {name}",
   "longPressToReorder": "Κρατήστε πατημένο για αλλαγή διάταξης",
+  "longerThanExpected": "Αυτό παίρνει περισσότερο χρόνο από το ανεμενόμενο",
   "markAsPaid": "Σημείωση ως πληρωμένο",
   "mealPlanner": "Πρόγραμμα γευμάτων",
   "member": "Μέλος",
@@ -583,9 +643,14 @@
   "preparationTime": "Ώρα προετοιμασίας",
   "privacyPolicy": "Πολιτική απορρήτου",
   "privacyPolicyAgree": "Με τη δημιουργία λογαριασμού συμφωνείτε στη {privacyPolicy}",
+  "private": "Ιδιωτικό",
+  "privateRecipeDescription": "Μόνο μέλη του νοικοκυριού μπορούν να δουν τη συνταγή.",
   "profile": "Προφίλ",
+  "public": "Δημόσιο",
+  "publicRecipeDescription": "Οποιοσδήποτε με τον σύνδεσμο για τη συνταγή μπορεί να τη δει.",
   "recentItemsCategorize": "Κατηγοριοποίηση πρόσφταων ειδών",
   "recipeAdd": "Προσθήκη συνταγής",
+  "recipeAddToHousehold": "Πρόσθεσε στο {householdName}",
   "recipeAddUrl": "Προσθήκη συνταγής από σύνδεσμο",
   "recipeDelete": "Διαγραφή συνταγής",
   "recipeDeleteConfirmation": "Είστε σίγουροι πως θέλετε να διαγράψετε το {recipe}?",
@@ -600,7 +665,9 @@
   "recipesOverwriteDescription": "Αν ενεργοποιηθεί, οι υπάρχουσες συνταγές με το ίδιο όνομα θα αντικατασταθούν",
   "recipesRecent": "Πρόσφατα",
   "recipesSuggested": "Προτεινόμενα",
+  "redo": "Διόρθωση",
   "refresh": "Ανανέωση",
+  "rememberLastShoppingList": "Θυμίσου την προηγούμενη λίστα αγοράς",
   "remove": "Αφαίρεση",
   "rename": "Μετονομασία",
   "reportIssue": "Αναφέρετε κάποιο θέμα",
@@ -613,14 +680,18 @@
   "set": "Ορισμός",
   "settings": "Ρυθμίσεις",
   "setupTitle": "Γεια σας! Έτοιμοι να ψωνίσετε;",
+  "share": "Κοινοποίηση",
   "shoppingList": "Λίστα αγορών",
+  "shoppingListContainsEntries": "{entriesCount, plural, =0{Η λίστα αγοράς είναι άδεια.} =1{Η λίστα αγοράς έχει ένα αντικείμενο.} other{Η λίστα αγοράς έχει {entriesCount} αντικείμενα.}}",
   "shoppingListDelete": "Διαγραφή λίστας αγορών",
   "shoppingListDeleteConfirmation": "Είστε σίγουροι πως θέλετε να διαγράψετε τη λίστα {shoppingList};",
   "shoppingListEdit": "Επεξεργασία λίστας αγορών",
+  "shoppingListEmpty": "Η λίστα αγοράς είναι άδεια. Προσθέστε ένα αντικείμενο χρησιμοποιώντας τη λειτουργία εύρεσης πιο πάνω.",
   "shoppingListStyle": "Στυλ λίστας αγορών",
   "shoppingLists": "Λίστες αγορών",
   "signInWith": "Σύνδεση με {provider}",
   "signup": "Εγγραφείτε",
+  "skip": "Προσπέραση",
   "smaller": "Μικρότερο",
   "sortingAlgorithmic": "Αλγοριθμικά",
   "sortingAlphabetical": "Αλφαβητικά",
@@ -638,17 +709,24 @@
   "themeLight": "Φωτεινό",
   "themeMode": "Θέμα",
   "themeSystem": "Σύστημα",
+  "today": "Σήμερα",
+  "tomorrow": "Αύριο",
   "total": "Σύνολο",
   "totalTime": "Συνολικός χρόνος",
+  "tutorialItemDescription1": "Όταν αναζητείτε ένα αντικείμενο, μπορείτε να προσθέσετε μία ποσότητα στην αρχή της αναζήτησης, και αυτή θα προστεθεί σαν περιγραφή.",
+  "tutorialItemDescription2": "Ή, αν οι ποσότητες δεν αρκούν, χρησιμοποιήστε ένα κόμμα (,) για να διαχωρίσετε το όνομα αντικειμένο και την περιγραφή.",
+  "tutorialRecipeDescription": "Στις συνταγές μπορείτε να χρησιμοποιήσετε Markdown. Βασικές λειτουργίες είναι τίτλοι βάζοντας δίεση (#), αριθμημένες λίστες για βήματα οδηγιών βάζοντας αριθμό και τελεία (1.), και αναφορές σε υλικά βάζοντας παπάκι (@) και μετά το όνομα του υλικού.",
+  "tutorialRecipeMore": "Για περισσότερες πληροφορίες, επισκεφθείτε το [documentation]({url}).",
   "uncategorized": "Χωρίς κατηγορία",
   "underConstruction": "Υπό κατασκευή",
+  "undo": "Αναίρεση",
   "unlink": "Αποσύνδεση",
   "unreachableMessage": "Χμμμ... δε μπορούσαμε να επικοινωνήσουμε με τον διακομιστή",
   "unsavedChangesBody": "Είστε σίγουροι πως θέλετε να πάτε πίσω;",
   "unsavedChangesTitle": "Έχετε μη αποθηκευμένες αλλαγές",
   "unsupportedBackendMessage": "Αυτή η έκδοση διακομιστή δεν υποστηρίζεται, παρακαλώ αναβαθμίστε την υποδομή",
   "unsupportedFrontendMessage": "Αυτή η έκδοση της εφαρμογής δεν υποστηρίζεται, παρακαλώ αναβαθμίστε την εφαρμογή",
-  "unsupportedScrapeMessage": "Το URL δεν ήταν δυνατό να καταργηθεί",
+  "unsupportedScrapeMessage": "Αυτή η ιστοσελίδα δεν υποστηρίζεται",
   "usedIn": "Χρησιμοποιείται σε",
   "user": "Χρήστης",
   "userAdd": "Προσθήκη Χρήστη",
@@ -661,6 +739,7 @@
   "usernameUnavailable": "Το όνομα χρήστη δεν είναι διαθέσιμο",
   "users": "Χρήστες",
   "weekly": "Εβδομαδιαία",
+  "welcomeBack": "Καλωσήρθατε",
   "writeMarkdownHere": "Μπορείτε να χρησιμοποιήσετε το markdown εδώ!",
   "wrongUsernameOrPassword": "Λάθος όνομα χρήστη ή κωδικός",
   "yearly": "Ετήσια",

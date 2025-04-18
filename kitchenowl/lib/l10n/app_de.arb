@@ -686,7 +686,7 @@
   "shoppingListDelete": "Einkaufsliste löschen",
   "shoppingListDeleteConfirmation": "Bist du dir sicher, dass du {shoppingList} löschen möchtest?",
   "shoppingListEdit": "Einkaufsliste bearbeiten",
-  "shoppingListEmpty": "Die Einkaufsliste ist leer. Füge deinen ersten Artikel über die Suchfunktion oben hinzu.",
+  "shoppingListEmpty": "Die Einkaufsliste ist leer. Füge einen Artikel über die Suchfunktion oben hinzu.",
   "shoppingListStyle": "Einkaufslisten-Stil",
   "shoppingLists": "Einkaufslisten",
   "signInWith": "Mit {provider} anmelden",

@@ -10,6 +10,7 @@ import 'package:kitchenowl/models/expense.dart';
 import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/pages/expense_add_update_page.dart';
 import 'package:kitchenowl/pages/expense_month_list_page.dart';
+import 'package:kitchenowl/styles/colors.dart';
 import 'package:kitchenowl/widgets/chart_bar_member_distribution.dart';
 import 'package:kitchenowl/widgets/chart_bar_months.dart';
 import 'package:kitchenowl/widgets/chart_line_current_month.dart';
@@ -93,7 +94,9 @@ class _ExpenseOverviewPageState extends State<ExpenseOverviewPage> {
 
           final totalForSelectedMonth =
               state.getTotalForMonth(state.selectedMonthIndex);
-          final expenseTotalForSelectedMonth =
+          final totalIncomeForSelectedMonth =
+              state.getIncomeTotalForMonth(state.selectedMonthIndex);
+          final totalExpensesForSelectedMonth =
               state.getExpenseTotalForMonth(state.selectedMonthIndex);
 
           return CustomScrollView(
@@ -150,34 +153,117 @@ class _ExpenseOverviewPageState extends State<ExpenseOverviewPage> {
                         ),
                       ),
                       const SizedBox(height: 32),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Text(
+                      ExpansionTile(
+                        tilePadding: EdgeInsets.zero,
+                        childrenPadding: EdgeInsets.zero,
+                        title: Card(
+                          elevation: 3,
+                          child: ListTile(
+                            title: Text(
                               AppLocalizations.of(context)!
                                   .expenseOverviewTotalTitle(
                                 _monthOffsetToString(state.selectedMonthIndex),
                               ),
                               style: Theme.of(context).textTheme.titleMedium,
                             ),
-                          ),
-                          Icon(state.trendUp(totalForSelectedMonth,
-                                  state.getAverageForLastMonths(6))
-                              ? Icons.trending_up_rounded
-                              : Icons.trending_down_rounded),
-                          Text(
-                            " ${NumberFormat.simpleCurrency().format(
-                              totalForSelectedMonth,
-                            )}",
-                            style: Theme.of(context).textTheme.titleMedium,
-                          ),
-                          if (state.getAverageForLastMonths(6).isFinite)
-                            Text(
-                              " ⌀ ${NumberFormat.simpleCurrency().format(
-                                state.getAverageForLastMonths(6),
-                              )}",
-                              style: Theme.of(context).textTheme.titleMedium,
+                            trailing: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  state.trendUp(totalForSelectedMonth,
+                                          state.getAverageForLastMonths(6))
+                                      ? Icons.trending_up_rounded
+                                      : Icons.trending_down_rounded,
+                                ),
+                                SizedBox(width: 8),
+                                Text(
+                                  NumberFormat.simpleCurrency()
+                                      .format(totalForSelectedMonth.abs()),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleLarge
+                                      ?.copyWith(
+                                        color: totalForSelectedMonth < 0
+                                            ? Theme.of(context)
+                                                .colorScheme
+                                                .error
+                                            : AppColors.green,
+                                      ),
+                                ),
+                                if (state
+                                    .getAverageForLastMonths(6)
+                                    .isFinite) ...[
+                                  SizedBox(width: 8),
+                                  Text(
+                                    "⌀ ${NumberFormat.simpleCurrency().format(state.getAverageForLastMonths(6))}",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.copyWith(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onSurface
+                                              .withOpacity(0.6),
+                                        ),
+                                  ),
+                                ],
+                              ],
                             ),
+                          ),
+                        ),
+                        children: [
+                          Card(
+                            child: Column(
+                              children: [
+                                ListTile(
+                                  leading: Icon(Icons.add_circle_outline,
+                                      color: AppColors.green),
+                                  title: Text(
+                                    AppLocalizations.of(context)!.income,
+                                    style:
+                                        Theme.of(context).textTheme.bodyMedium,
+                                  ),
+                                  trailing: Text(
+                                    NumberFormat.simpleCurrency().format(
+                                        totalIncomeForSelectedMonth.abs()),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.copyWith(
+                                          color: AppColors.green,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                  ),
+                                ),
+                                Divider(thickness: 1),
+                                ListTile(
+                                  leading: Icon(Icons.remove_circle_outline,
+                                      color:
+                                          Theme.of(context).colorScheme.error),
+                                  title: Text(
+                                    AppLocalizations.of(context)!
+                                        .expenseOverviewExpenses,
+                                    style:
+                                        Theme.of(context).textTheme.bodyMedium,
+                                  ),
+                                  trailing: Text(
+                                    NumberFormat.simpleCurrency()
+                                        .format(totalExpensesForSelectedMonth),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.copyWith(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .error,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                         ],
                       ),
                       if (state.monthOverview[state.selectedMonthIndex] != null)
@@ -212,6 +298,8 @@ class _ExpenseOverviewPageState extends State<ExpenseOverviewPage> {
                             .sorted((a, b) => b.value.compareTo(a.value))
                             .elementAt(i);
                         final amount = entry.value;
+                        final amountPercentage =
+                            state.getTransactionAmountPercentage(amount);
                         final category = entry.key < 0
                             ? null
                             : state.categories
@@ -220,10 +308,9 @@ class _ExpenseOverviewPageState extends State<ExpenseOverviewPage> {
                         return Card(
                           child: ListTile(
                             leading: Padding(
-                              padding:
-                                  (amount / expenseTotalForSelectedMonth >= 0)
-                                      ? EdgeInsets.zero
-                                      : const EdgeInsets.all(4.0),
+                              padding: (amountPercentage > 0)
+                                  ? EdgeInsets.zero
+                                  : const EdgeInsets.all(4.0),
                               child: ExpenseCategoryIcon(
                                 name: category?.name ?? '🪙',
                                 color: category?.color,
@@ -234,11 +321,10 @@ class _ExpenseOverviewPageState extends State<ExpenseOverviewPage> {
                             trailing: Text(
                               NumberFormat.simpleCurrency().format(amount),
                             ),
-                            subtitle:
-                                (amount / expenseTotalForSelectedMonth >= 0)
-                                    ? Text(NumberFormat.percentPattern().format(
-                                        amount / expenseTotalForSelectedMonth))
-                                    : null,
+                            subtitle: (amountPercentage > 0)
+                                ? Text(NumberFormat.percentPattern()
+                                    .format(amountPercentage))
+                                : null,
                             onTap: () => Navigator.of(context).push(
                               MaterialPageRoute(
                                 builder: (context) => ExpenseMonthListPage(

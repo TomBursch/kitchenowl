@@ -124,6 +124,7 @@
       }
     }
   },
+  "@expenseOverviewExpenses": {},
   "@expensePaidBy": {},
   "@expensePaidFor": {},
   "@expenseReceivedBy": {},
@@ -543,7 +544,8 @@
   "expenseEmpty": "No expenses, start by creating one!",
   "expenseFactor": "Factor",
   "expenseOverviewComparedToPreviousMonth": "Compared to previous months",
-  "expenseOverviewTotalTitle": "Total expenses for {month}:",
+  "expenseOverviewTotalTitle": "Total for {month}:",
+  "expenseOverviewExpenses": "Expenses",
   "expensePaidBy": "Paid by",
   "expensePaidFor": "Paid for",
   "expenseReceivedBy": "Received by",

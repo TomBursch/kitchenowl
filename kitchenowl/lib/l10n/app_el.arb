@@ -114,6 +114,7 @@
   "@expenseEmpty": {},
   "@expenseFactor": {},
   "@expenseOverviewComparedToPreviousMonth": {},
+  "@expenseOverviewExpenses": {},
   "@expenseOverviewTotalTitle": {
     "placeholders": {
       "month": {
@@ -122,7 +123,6 @@
       }
     }
   },
-  "@expenseOverviewExpenses": {},
   "@expensePaidBy": {},
   "@expensePaidFor": {},
   "@expenseReceivedBy": {},
@@ -542,8 +542,8 @@
   "expenseEmpty": "Δεν υπάρχουν έξοδα, ξεκινήστε δημιουργώντας ένα!",
   "expenseFactor": "Παράγοντας",
   "expenseOverviewComparedToPreviousMonth": "Συγκριτικά με προηγούμενους μήνες",
-  "expenseOverviewTotalTitle": "Συνολικά έξοδα για τον μήνα {month}:",
   "expenseOverviewExpenses": "Έξοδα",
+  "expenseOverviewTotalTitle": "Συνολικά έξοδα για τον μήνα {month}:",
   "expensePaidBy": "Πληρώθηκε από",
   "expensePaidFor": "Πληρώθηκε εκ μέρους του",
   "expenseReceivedBy": "Λήφθηκε από",

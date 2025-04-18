@@ -33,24 +33,39 @@ class Expense(Model, DbModelAuthorizeMixin):
     exclude_from_statistics = db.Column(db.Boolean, default=False, nullable=False)
 
     household: Mapped["Household"] = cast(
-        Mapped["Household"], db.relationship("Household", uselist=False, init=False)
+        Mapped["Household"],
+        db.relationship(
+            "Household",
+            uselist=False,
+        ),
     )
     category: Mapped[Optional["ExpenseCategory"]] = cast(
-        Mapped["ExpenseCategory"], db.relationship("ExpenseCategory", init=False)
+        Mapped["ExpenseCategory"],
+        db.relationship(
+            "ExpenseCategory",
+        ),
     )
-    paid_by: Mapped["User"] = cast(Mapped["User"], db.relationship("User", init=False))
+    paid_by: Mapped["User"] = cast(
+        Mapped["User"],
+        db.relationship(
+            "User",
+        ),
+    )
     paid_for: Mapped[List["ExpensePaidFor"]] = cast(
         Mapped[List["ExpensePaidFor"]],
         db.relationship(
             "ExpensePaidFor",
             back_populates="expense",
             cascade="all, delete-orphan",
-            init=False,
         ),
     )
     photo_file: Mapped["File"] = cast(
         Mapped["File"],
-        db.relationship("File", back_populates="expense", uselist=False, init=False),
+        db.relationship(
+            "File",
+            back_populates="expense",
+            uselist=False,
+        ),
     )
 
     def obj_to_dict(
@@ -115,11 +130,17 @@ class ExpensePaidFor(Model):
 
     expense: Mapped["Expense"] = cast(
         Mapped["Expense"],
-        db.relationship("Expense", back_populates="paid_for", init=False),
+        db.relationship(
+            "Expense",
+            back_populates="paid_for",
+        ),
     )
     user: Mapped["User"] = cast(
         Mapped["User"],
-        db.relationship("User", back_populates="expenses_paid_for", init=False),
+        db.relationship(
+            "User",
+            back_populates="expenses_paid_for",
+        ),
     )
 
     def obj_to_user_dict(self):

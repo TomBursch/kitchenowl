@@ -65,7 +65,7 @@ class Printer(Interpreter):
         res = ""
         for child in item.children:
             if isinstance(child, Tree):
-                if res and  cast(Token, child.children[0]).type == "DESCRIPTION":
+                if res and cast(Token, child.children[0]).type == "DESCRIPTION":
                     res += " "
                 res += self.visit(child)
             elif child.type == "NUMBER":
@@ -111,9 +111,9 @@ def merge(description: str, added: str) -> str:
 
             # Add up numbers
             unit: Tree = item.unit
-            if unit and  cast(Token, unit.children[0]).type == "SI_WEIGHT":
+            if unit and cast(Token, unit.children[0]).type == "SI_WEIGHT":
                 merge_SI_Weight(targetItem, item)
-            elif unit and  cast(Token, unit.children[0]).type == "SI_VOLUME":
+            elif unit and cast(Token, unit.children[0]).type == "SI_VOLUME":
                 merge_SI_Volume(targetItem, item)
             else:
                 targetItem.number.value = targetItem.number.value + (

@@ -22,11 +22,18 @@ class Shoppinglist(Model, DbModelAuthorizeMixin):
     )
 
     household: Mapped["Household"] = cast(
-        Mapped["Household"], db.relationship("Household", uselist=False, init=False)
+        Mapped["Household"],
+        db.relationship(
+            "Household",
+            uselist=False,
+        ),
     )
     items: Mapped[List["ShoppinglistItems"]] = cast(
         Mapped[List["ShoppinglistItems"]],
-        db.relationship("ShoppinglistItems", cascade="all, delete-orphan", init=False),
+        db.relationship(
+            "ShoppinglistItems",
+            cascade="all, delete-orphan",
+        ),
     )
 
     history: Mapped[List["History"]] = cast(
@@ -35,7 +42,6 @@ class Shoppinglist(Model, DbModelAuthorizeMixin):
             "History",
             back_populates="shoppinglist",
             cascade="all, delete-orphan",
-            init=False,
         ),
     )
 
@@ -66,15 +72,25 @@ class ShoppinglistItems(Model):
 
     item: Mapped["Item"] = cast(
         Mapped["Item"],
-        db.relationship("Item", back_populates="shoppinglists", init=False),
+        db.relationship(
+            "Item",
+            back_populates="shoppinglists",
+        ),
     )
     shoppinglist: Mapped["Shoppinglist"] = cast(
         Mapped["Shoppinglist"],
-        db.relationship("Shoppinglist", back_populates="items", init=False),
+        db.relationship(
+            "Shoppinglist",
+            back_populates="items",
+        ),
     )
     created_by_user: Mapped["User"] = cast(
         Mapped["User"],
-        db.relationship("User", foreign_keys=[created_by], uselist=False, init=False),
+        db.relationship(
+            "User",
+            foreign_keys=[created_by],
+            uselist=False,
+        ),
     )
 
     def obj_to_item_dict(self) -> dict:

@@ -29,21 +29,41 @@ class File(Model, DbModelAuthorizeMixin):
 
     created_by_user: Mapped["User"] = cast(
         Mapped["User"],
-        db.relationship("User", foreign_keys=[created_by], uselist=False, init=False),
+        db.relationship(
+            "User",
+            foreign_keys=[created_by],
+            uselist=False,
+        ),
     )
 
     household: Mapped["Household"] = cast(
-        Mapped["Household"], db.relationship("Household", uselist=False, init=False)
+        Mapped["Household"],
+        db.relationship(
+            "Household",
+            uselist=False,
+        ),
     )
     recipe: Mapped["Recipe"] = cast(
-        Mapped["Recipe"], db.relationship("Recipe", uselist=False, init=False)
+        Mapped["Recipe"],
+        db.relationship(
+            "Recipe",
+            uselist=False,
+        ),
     )
     expense: Mapped["Expense"] = cast(
-        Mapped["Expense"], db.relationship("Expense", uselist=False, init=False)
+        Mapped["Expense"],
+        db.relationship(
+            "Expense",
+            uselist=False,
+        ),
     )
     profile_picture: Mapped["User"] = cast(
         Mapped["User"],
-        db.relationship("User", foreign_keys=[User.photo], uselist=False, init=False),
+        db.relationship(
+            "User",
+            foreign_keys=[User.photo],
+            uselist=False,
+        ),
     )
 
     def delete(self):

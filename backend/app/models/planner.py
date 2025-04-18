@@ -27,10 +27,18 @@ class Planner(Model, DbModelAuthorizeMixin):
     )
 
     household: Mapped["Household"] = cast(
-        Mapped["Household"], db.relationship("Household", uselist=False, init=False)
+        Mapped["Household"],
+        db.relationship(
+            "Household",
+            uselist=False,
+        ),
     )
     recipe: Mapped["Recipe"] = cast(
-        Mapped["Recipe"], db.relationship("Recipe", back_populates="plans", init=False)
+        Mapped["Recipe"],
+        db.relationship(
+            "Recipe",
+            back_populates="plans",
+        ),
     )
 
     def obj_to_full_dict(self) -> dict:

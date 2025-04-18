@@ -40,7 +40,9 @@ class Household(Model):
     items: Mapped[List["Item"]] = cast(
         Mapped[List["Item"]],
         db.relationship(
-            "Item", back_populates="household", cascade="all, delete-orphan", init=False
+            "Item",
+            back_populates="household",
+            cascade="all, delete-orphan",
         ),
     )
     shoppinglists: Mapped[List["Shoppinglist"]] = cast(
@@ -49,7 +51,6 @@ class Household(Model):
             "Shoppinglist",
             back_populates="household",
             cascade="all, delete-orphan",
-            init=False,
         ),
     )
     categories: Mapped[List["Category"]] = cast(
@@ -58,7 +59,6 @@ class Household(Model):
             "Category",
             back_populates="household",
             cascade="all, delete-orphan",
-            init=False,
         ),
     )
     recipes: Mapped[List["Recipe"]] = cast(
@@ -67,13 +67,14 @@ class Household(Model):
             "Recipe",
             back_populates="household",
             cascade="all, delete-orphan",
-            init=False,
         ),
     )
     tags: Mapped[List["Tag"]] = cast(
         Mapped[List["Tag"]],
         db.relationship(
-            "Tag", back_populates="household", cascade="all, delete-orphan", init=False
+            "Tag",
+            back_populates="household",
+            cascade="all, delete-orphan",
         ),
     )
     expenses: Mapped[List["Expense"]] = cast(
@@ -82,7 +83,6 @@ class Household(Model):
             "Expense",
             back_populates="household",
             cascade="all, delete-orphan",
-            init=False,
         ),
     )
     expenseCategories: Mapped[List["ExpenseCategory"]] = cast(
@@ -91,7 +91,6 @@ class Household(Model):
             "ExpenseCategory",
             back_populates="household",
             cascade="all, delete-orphan",
-            init=False,
         ),
     )
     member: Mapped[List["HouseholdMember"]] = cast(
@@ -100,12 +99,15 @@ class Household(Model):
             "HouseholdMember",
             back_populates="household",
             cascade="all, delete-orphan",
-            init=False,
         ),
     )
     photo_file: Mapped["File"] = cast(
         Mapped["File"],
-        db.relationship("File", back_populates="household", uselist=False, init=False),
+        db.relationship(
+            "File",
+            back_populates="household",
+            uselist=False,
+        ),
     )
 
     def obj_to_dict(
@@ -158,10 +160,17 @@ class HouseholdMember(Model):
 
     household: Mapped["Household"] = cast(
         Mapped["Household"],
-        db.relationship("Household", back_populates="member", init=False),
+        db.relationship(
+            "Household",
+            back_populates="member",
+        ),
     )
     user: Mapped["User"] = cast(
-        Mapped["User"], db.relationship("User", back_populates="households", init=False)
+        Mapped["User"],
+        db.relationship(
+            "User",
+            back_populates="households",
+        ),
     )
 
     def obj_to_user_dict(self) -> dict:

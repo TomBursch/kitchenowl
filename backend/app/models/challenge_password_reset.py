@@ -21,7 +21,12 @@ class ChallengePasswordReset(Model):
         db.Integer, db.ForeignKey("user.id"), nullable=False
     )
 
-    user: Mapped["User"] = cast(Mapped["User"], db.relationship("User", init=False))
+    user: Mapped["User"] = cast(
+        Mapped["User"],
+        db.relationship(
+            "User",
+        ),
+    )
 
     @classmethod
     def find_by_challenge(cls, challenge: str) -> Self | None:

@@ -12,7 +12,7 @@ class RequiredRights(Enum):
 
 def authorize_household(required: RequiredRights = RequiredRights.MEMBER):
     from app.models import HouseholdMember
-    
+
     def wrapper(func):
         @wraps(func)
         def decorator(*args, **kwargs):

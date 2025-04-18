@@ -25,11 +25,18 @@ class Category(Model, DbModelAuthorizeMixin):
     )
 
     household: Mapped["Household"] = cast(
-        Mapped["Household"], db.relationship("Household", uselist=False, init=False)
+        Mapped["Household"],
+        db.relationship(
+            "Household",
+            uselist=False,
+        ),
     )
     items: Mapped[List["Item"]] = cast(
         Mapped[List["Item"]],
-        db.relationship("Item", back_populates="category", init=False),
+        db.relationship(
+            "Item",
+            back_populates="category",
+        ),
     )
 
     def obj_to_full_dict(self) -> dict:
@@ -46,7 +53,11 @@ class Category(Model, DbModelAuthorizeMixin):
 
     @classmethod
     def create_by_name(
-        cls, household_id: int, name, default: bool = False, default_key: str | None = None
+        cls,
+        household_id: int,
+        name,
+        default: bool = False,
+        default_key: str | None = None,
     ) -> Self:
         return cls(
             name=name,

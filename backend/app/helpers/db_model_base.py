@@ -1,13 +1,13 @@
 from dataclasses import field
 from typing import TYPE_CHECKING, Any, Self
-from sqlalchemy.orm import DeclarativeBase, MappedAsDataclass
+from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy import MetaData
 from sqlalchemy.orm import Query
 
 from app.helpers.db_model_timestamp_mixin import DbModelTimestampMixin
 
 
-class DbModelBase(DeclarativeBase, DbModelTimestampMixin, MappedAsDataclass):
+class DbModelBase(DeclarativeBase, DbModelTimestampMixin):
     metadata = MetaData(
         naming_convention={
             "ix": "ix_%(column_0_label)s",

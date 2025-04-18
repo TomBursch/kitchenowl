@@ -22,7 +22,9 @@ class Item(Model, DbModelAuthorizeMixin):
     id: Mapped[int] = db.Column(db.Integer, primary_key=True)
     name: Mapped[str] = db.Column(db.String(128))
     icon: Mapped[str | None] = db.Column(db.String(128), nullable=True)
-    category_id: Mapped[int | None] = db.Column(db.Integer, db.ForeignKey("category.id"))
+    category_id: Mapped[int | None] = db.Column(
+        db.Integer, db.ForeignKey("category.id")
+    )
     default: Mapped[bool] = db.Column(db.Boolean, default=False)
     default_key: Mapped[str | None] = db.Column(db.String(128))
     household_id: Mapped[int] = db.Column(
@@ -30,10 +32,17 @@ class Item(Model, DbModelAuthorizeMixin):
     )
 
     household: Mapped["Household"] = cast(
-        Mapped["Household"], db.relationship("Household", uselist=False, init=False)
+        Mapped["Household"],
+        db.relationship(
+            "Household",
+            uselist=False,
+        ),
     )
     category: Mapped[Optional["Category"]] = cast(
-        Mapped["Category"], db.relationship("Category", init=False)
+        Mapped["Category"],
+        db.relationship(
+            "Category",
+        ),
     )
 
     recipes: Mapped[List["RecipeItems"]] = cast(
@@ -42,7 +51,6 @@ class Item(Model, DbModelAuthorizeMixin):
             "RecipeItems",
             back_populates="item",
             cascade="all, delete-orphan",
-            init=False,
         ),
     )
     shoppinglists: Mapped[List["ShoppinglistItems"]] = cast(
@@ -51,7 +59,6 @@ class Item(Model, DbModelAuthorizeMixin):
             "ShoppinglistItems",
             back_populates="item",
             cascade="all, delete-orphan",
-            init=False,
         ),
     )
 

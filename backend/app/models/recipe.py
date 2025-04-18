@@ -54,7 +54,11 @@ class Recipe(Model, DbModelAuthorizeMixin):
     )
 
     household: Mapped["Household"] = cast(
-        Mapped["Household"], db.relationship("Household", uselist=False, init=False)
+        Mapped["Household"],
+        db.relationship(
+            "Household",
+            uselist=False,
+        ),
     )
     recipe_history: Mapped[List["RecipeHistory"]] = cast(
         Mapped[List["RecipeHistory"]],
@@ -62,7 +66,6 @@ class Recipe(Model, DbModelAuthorizeMixin):
             "RecipeHistory",
             back_populates="recipe",
             cascade="all, delete-orphan",
-            init=False,
         ),
     )
     items: Mapped[List["RecipeItems"]] = cast(
@@ -73,7 +76,6 @@ class Recipe(Model, DbModelAuthorizeMixin):
             cascade="all, delete-orphan",
             lazy="selectin",
             order_by="RecipeItems._name",
-            init=False,
         ),
     )
     tags: Mapped[List["RecipeTags"]] = cast(
@@ -84,7 +86,6 @@ class Recipe(Model, DbModelAuthorizeMixin):
             cascade="all, delete-orphan",
             lazy="selectin",
             order_by="RecipeTags._name",
-            init=False,
         ),
     )
     plans: Mapped[List["Planner"]] = cast(
@@ -94,13 +95,15 @@ class Recipe(Model, DbModelAuthorizeMixin):
             back_populates="recipe",
             cascade="all, delete-orphan",
             lazy="selectin",
-            init=False,
         ),
     )
     photo_file: Mapped["File"] = cast(
         Mapped["File"],
         db.relationship(
-            "File", back_populates="recipe", uselist=False, lazy="selectin", init=False
+            "File",
+            back_populates="recipe",
+            uselist=False,
+            lazy="selectin",
         ),
     )
 
@@ -253,11 +256,18 @@ class RecipeItems(Model):
 
     item: Mapped["Item"] = cast(
         Mapped["Item"],
-        db.relationship("Item", back_populates="recipes", lazy="joined", init=False),
+        db.relationship(
+            "Item",
+            back_populates="recipes",
+            lazy="joined",
+        ),
     )
     recipe: Mapped["Recipe"] = cast(
         Mapped["Recipe"],
-        db.relationship("Recipe", back_populates="items", init=False),
+        db.relationship(
+            "Recipe",
+            back_populates="items",
+        ),
     )
 
     _name: Mapped[str] = db.column_property(
@@ -302,11 +312,18 @@ class RecipeTags(Model):
 
     tag: Mapped["Tag"] = cast(
         Mapped["Tag"],
-        db.relationship("Tag", back_populates="recipes", init=False),
+        db.relationship(
+            "Tag",
+            back_populates="recipes",
+        ),
     )
     recipe: Mapped["Recipe"] = cast(
         Mapped["Recipe"],
-        db.relationship("Recipe", back_populates="tags", lazy="joined", init=False),
+        db.relationship(
+            "Recipe",
+            back_populates="tags",
+            lazy="joined",
+        ),
     )
 
     _name: Mapped[str] = db.column_property(

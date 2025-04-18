@@ -31,12 +31,18 @@ class RecipeHistory(Model):
     )
 
     household: Mapped["Household"] = cast(
-        Mapped["Household"], db.relationship("Household", uselist=False, init=False)
+        Mapped["Household"],
+        db.relationship(
+            "Household",
+            uselist=False,
+        ),
     )
     recipe: Mapped["Recipe"] = cast(
         Mapped["Recipe"],
         db.relationship(
-            "Recipe", uselist=False, back_populates="recipe_history", init=False
+            "Recipe",
+            uselist=False,
+            back_populates="recipe_history",
         ),
     )
 

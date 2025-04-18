@@ -22,7 +22,11 @@ class OIDCLink(Model):
     )
 
     user: Mapped["User"] = cast(
-        Mapped["User"], db.relationship("User", back_populates="oidc_links", init=False)
+        Mapped["User"],
+        db.relationship(
+            "User",
+            back_populates="oidc_links",
+        ),
     )
 
     @classmethod
@@ -43,7 +47,10 @@ class OIDCRequest(Model):
 
     user: Mapped[Optional["User"]] = cast(
         Mapped[Optional["User"]],
-        db.relationship("User", back_populates="oidc_link_requests", init=False),
+        db.relationship(
+            "User",
+            back_populates="oidc_link_requests",
+        ),
     )
 
     @classmethod

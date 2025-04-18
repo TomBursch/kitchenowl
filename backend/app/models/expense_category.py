@@ -24,11 +24,18 @@ class ExpenseCategory(Model, DbModelAuthorizeMixin):
     )
 
     household: Mapped["Household"] = cast(
-        Mapped["Household"], db.relationship("Household", uselist=False, init=False)
+        Mapped["Household"],
+        db.relationship(
+            "Household",
+            uselist=False,
+        ),
     )
     expenses: Mapped[List["Expense"]] = cast(
         Mapped[List["Expense"]],
-        db.relationship("Expense", back_populates="category", init=False),
+        db.relationship(
+            "Expense",
+            back_populates="category",
+        ),
     )
 
     def obj_to_full_dict(self) -> dict:

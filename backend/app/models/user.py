@@ -55,7 +55,9 @@ class User(Model):
     tokens: Mapped[List["Token"]] = cast(
         Mapped[List["Token"]],
         db.relationship(
-            "Token", back_populates="user", cascade="all, delete-orphan", init=False
+            "Token",
+            back_populates="user",
+            cascade="all, delete-orphan",
         ),
     )
 
@@ -65,7 +67,6 @@ class User(Model):
             "ChallengePasswordReset",
             back_populates="user",
             cascade="all, delete-orphan",
-            init=False,
         ),
     )
     verify_mail_challenge: Mapped[List["ChallengeMailVerify"]] = cast(
@@ -74,7 +75,6 @@ class User(Model):
             "ChallengeMailVerify",
             back_populates="user",
             cascade="all, delete-orphan",
-            init=False,
         ),
     )
 
@@ -84,7 +84,6 @@ class User(Model):
             "HouseholdMember",
             back_populates="user",
             cascade="all, delete-orphan",
-            init=False,
         ),
     )
 
@@ -94,7 +93,6 @@ class User(Model):
             "Expense",
             back_populates="paid_by",
             cascade="all, delete-orphan",
-            init=False,
         ),
     )
     expenses_paid_for: Mapped[List["ExpensePaidFor"]] = cast(
@@ -103,7 +101,6 @@ class User(Model):
             "ExpensePaidFor",
             back_populates="user",
             cascade="all, delete-orphan",
-            init=False,
         ),
     )
     photo_file: Mapped["File"] = cast(
@@ -113,14 +110,15 @@ class User(Model):
             back_populates="profile_picture",
             foreign_keys=[photo],
             uselist=False,
-            init=False,
         ),
     )
 
     oidc_links: Mapped[List["OIDCLink"]] = cast(
         Mapped[List["OIDCLink"]],
         db.relationship(
-            "OIDCLink", back_populates="user", cascade="all, delete-orphan", init=False
+            "OIDCLink",
+            back_populates="user",
+            cascade="all, delete-orphan",
         ),
     )
     oidc_link_requests: Mapped[List["OIDCRequest"]] = cast(
@@ -129,7 +127,6 @@ class User(Model):
             "OIDCRequest",
             back_populates="user",
             cascade="all, delete-orphan",
-            init=False,
         ),
     )
 

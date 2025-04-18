@@ -22,12 +22,18 @@ class Tag(Model, DbModelAuthorizeMixin):
     )
 
     household: Mapped["Household"] = cast(
-        Mapped["Household"], db.relationship("Household", uselist=False, init=False)
+        Mapped["Household"],
+        db.relationship(
+            "Household",
+            uselist=False,
+        ),
     )
     recipes: Mapped[List["RecipeTags"]] = cast(
         Mapped[List["RecipeTags"]],
         db.relationship(
-            "RecipeTags", back_populates="tag", cascade="all, delete-orphan", init=False
+            "RecipeTags",
+            back_populates="tag",
+            cascade="all, delete-orphan",
         ),
     )
 

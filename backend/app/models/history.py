@@ -31,12 +31,18 @@ class History(Model):
 
     item: Mapped["Item"] = cast(
         Mapped["Item"],
-        db.relationship("Item", uselist=False, back_populates="history", init=False),
+        db.relationship(
+            "Item",
+            uselist=False,
+            back_populates="history",
+        ),
     )
     shoppinglist: Mapped["Shoppinglist"] = cast(
         Mapped["Shoppinglist"],
         db.relationship(
-            "Shoppinglist", uselist=False, back_populates="history", init=False
+            "Shoppinglist",
+            uselist=False,
+            back_populates="history",
         ),
     )
 

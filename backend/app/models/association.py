@@ -28,7 +28,6 @@ class Association(Model):
             uselist=False,
             foreign_keys=[antecedent_id],
             back_populates="antecedents",
-            init=False,
         ),
     )
     consequent: Mapped["Item"] = cast(
@@ -38,7 +37,6 @@ class Association(Model):
             uselist=False,
             foreign_keys=[consequent_id],
             back_populates="consequents",
-            init=False,
         ),
     )
 

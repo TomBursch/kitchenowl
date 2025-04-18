@@ -24,7 +24,7 @@ class Token(Model):
     jti: Mapped[str] = db.Column(db.String(36), nullable=False, index=True)
     type: Mapped[str] = db.Column(db.String(16), nullable=False)
     name: Mapped[str] = db.Column(db.String(), nullable=False)
-    last_used_at: Mapped[datetime] = db.Column(db.DateTime)
+    last_used_at: Mapped[datetime | None] = db.Column(db.DateTime)
     refresh_token_id: Mapped[Optional[int]] = db.Column(
         db.Integer, db.ForeignKey("token.id"), nullable=True
     )
@@ -38,14 +38,21 @@ class Token(Model):
             "Token",
             back_populates="refresh_token",
             cascade="all, delete-orphan",
-            init=False,
         ),
     )
     refresh_token: Mapped["Token"] = cast(
-        Mapped["Token"], db.relationship("Token", remote_side=[id], init=False)
+        Mapped["Token"],
+        db.relationship(
+            "Token",
+            remote_side=[id],
+        ),
     )
     user: Mapped["User"] = cast(
-        Mapped["User"], db.relationship("User", lazy="selectin", init=False)
+        Mapped["User"],
+        db.relationship(
+            "User",
+            lazy="selectin",
+        ),
     )
 
     def obj_to_dict(self, skip_columns=None, include_columns=None) -> dict:

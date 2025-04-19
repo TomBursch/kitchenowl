@@ -25,8 +25,9 @@ class TransactionPlannerGetPlannedRecipes
     recipes.retainWhere((e) => e.isPlanned);
 
     return recipes
-        .expand((r) => r.plannedDays.isNotEmpty
-            ? r.plannedDays.map((day) => RecipePlan(recipe: r, day: day))
+        .expand((r) => r.plannedCookingDates.isNotEmpty
+            ? r.plannedCookingDates.map((cookingDate) =>
+                RecipePlan(recipe: r, cookingDate: cookingDate))
             : [RecipePlan(recipe: r)])
         .toList();
   }
@@ -129,12 +130,12 @@ class TransactionPlannerAddRecipe extends Transaction<bool> {
 class TransactionPlannerRemoveRecipe extends Transaction<bool> {
   final Household household;
   final Recipe recipe;
-  final int? day;
+  final DateTime? cookingDate;
 
   TransactionPlannerRemoveRecipe({
     required this.household,
     required this.recipe,
-    this.day,
+    this.cookingDate,
     DateTime? timestamp,
   }) : super.internal(
           timestamp ?? DateTime.now(),
@@ -149,7 +150,7 @@ class TransactionPlannerRemoveRecipe extends Transaction<bool> {
         household: Household.fromJson(map['household']),
         recipe: Recipe.fromJson(map['recipe']),
         timestamp: timestamp,
-        day: map['day'],
+        cookingDate: map['cooking_date'],
       );
 
   @override
@@ -160,7 +161,7 @@ class TransactionPlannerRemoveRecipe extends Transaction<bool> {
     ..addAll({
       "household": household.toJsonWithId(),
       "recipe": recipe.toJsonWithId(),
-      "day": day,
+      "cooking_date": cookingDate?.millisecondsSinceEpoch,
     });
 
   @override
@@ -170,7 +171,8 @@ class TransactionPlannerRemoveRecipe extends Transaction<bool> {
 
   @override
   Future<bool?> runOnline() {
-    return ApiService.getInstance().removePlannedRecipe(household, recipe, day);
+    return ApiService.getInstance()
+        .removePlannedRecipe(household, recipe, cookingDate);
   }
 }
 

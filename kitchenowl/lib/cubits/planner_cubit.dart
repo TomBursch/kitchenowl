@@ -17,21 +17,21 @@ class PlannerCubit extends Cubit<PlannerCubitState> {
     refresh();
   }
 
-  Future<void> remove(Recipe recipe, [int? day]) async {
+  Future<void> remove(Recipe recipe, [DateTime? cookingDate]) async {
     await TransactionHandler.getInstance()
         .runTransaction(TransactionPlannerRemoveRecipe(
       household: household,
       recipe: recipe,
-      day: day,
+      cookingDate: cookingDate,
     ));
     await refresh();
   }
 
-  Future<void> add(Recipe recipe, [int? day]) async {
+  Future<void> add(Recipe recipe, [DateTime? cookingDate]) async {
     await TransactionHandler.getInstance()
         .runTransaction(TransactionPlannerAddRecipe(
       household: household,
-      recipePlan: RecipePlan(recipe: recipe, day: day),
+      recipePlan: RecipePlan(recipe: recipe, cookingDate: cookingDate),
     ));
     await refresh();
   }
@@ -124,11 +124,28 @@ class LoadedPlannerCubitState extends PlannerCubitState {
 
   List<RecipePlan> getPlannedWithoutDay() {
     return recipePlans
-        .where((element) => element.day == null || element.day! < 0)
+        .where((element) =>
+            element.cookingDate == null ||
+            (element.cookingDate != null &&
+                element.cookingDate!.millisecondsSinceEpoch < 0))
         .toList();
   }
 
-  List<RecipePlan> getPlannedOfDay(int day) {
-    return recipePlans.where((element) => element.day == day).toList();
+  List<RecipePlan> getPlannedOfDate(DateTime cookingDate) {
+    return recipePlans
+        .where((element) => element.cookingDate?.day == cookingDate.day)
+        .toList();
+  }
+
+  List<DateTime> getUniqueCookingDays() {
+    Set<DateTime> uniqueDays = {};
+
+    for (var recipe in recipePlans) {
+      if (recipe.cookingDate != null &&
+          recipe.cookingDate!.millisecondsSinceEpoch > 0) {
+        uniqueDays.add(recipe.cookingDate!);
+      }
+    }
+    return uniqueDays.toList()..sort();
   }
 }

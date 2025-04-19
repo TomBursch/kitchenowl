@@ -92,13 +92,14 @@ class RecipeCubit extends Cubit<RecipeState> {
     }
   }
 
-  Future<void> addRecipeToPlanner({int? day, bool updateOnAdd = false}) async {
+  Future<void> addRecipeToPlanner(
+      {DateTime? cookingDate, bool updateOnAdd = false}) async {
     if (state.household != null) {
       await _transactionHandler.runTransaction(TransactionPlannerAddRecipe(
         household: state.household!,
         recipePlan: RecipePlan(
           recipe: state.recipe,
-          day: day,
+          cookingDate: cookingDate,
           yields: state.selectedYields != null &&
                   state.recipe.yields != state.selectedYields &&
                   state.selectedYields! > 0

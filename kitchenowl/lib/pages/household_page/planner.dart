@@ -21,8 +21,11 @@ DateTime toEndOfDay(DateTime dt) {
   return DateTime(dt.year, dt.month, dt.day, 23, 59, 59);
 }
 
-String formatDateAsWeekday(DateTime date, BuildContext context,
-    {String default_format = 'EEEE'}) {
+String formatDateAsWeekday(
+  BuildContext context,
+  DateTime date, {
+  String default_format = 'EEEE',
+}) {
   DateTime today = DateTime.now();
   DateTime tomorrow = today.add(Duration(days: 1));
   DateTime yesterday = today.subtract(Duration(days: 1));
@@ -46,10 +49,10 @@ String formatDateAsWeekday(DateTime date, BuildContext context,
   }
 }
 
-String _formatDate(int daysToAdd, BuildContext context) {
+String _formatDate(BuildContext context, int daysToAdd) {
   DateTime date = DateTime.now().add(Duration(days: daysToAdd));
   if (daysToAdd >= -1 && daysToAdd < 7) {
-    return formatDateAsWeekday(date, context, default_format: 'E');
+    return formatDateAsWeekday(context, date, default_format: 'E');
   } else {
     return DateFormat.yMMMd().format(date);
   }
@@ -233,7 +236,7 @@ class _PlannerPageState extends State<PlannerPage> {
                                           padding:
                                               const EdgeInsets.only(top: 5),
                                           child: Text(
-                                            '${_formatDate(daysBetween(DateTime.now(), cookingDate), context)}',
+                                            '${_formatDate(context, daysBetween(DateTime.now(), cookingDate))}',
                                             style: Theme.of(context)
                                                 .textTheme
                                                 .bodyLarge,

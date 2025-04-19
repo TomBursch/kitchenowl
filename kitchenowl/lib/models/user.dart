@@ -56,6 +56,7 @@ class User extends Model {
         name,
         email,
         emailVerified,
+        image,
         username,
         serverAdmin,
         tokens,

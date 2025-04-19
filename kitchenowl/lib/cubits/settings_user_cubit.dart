@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/cubits/auth_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
+import 'package:kitchenowl/helpers/named_bytearray.dart';
 import 'package:kitchenowl/models/token.dart';
 import 'package:kitchenowl/models/user.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
@@ -12,7 +13,7 @@ import 'package:kitchenowl/services/api/api_service.dart';
 class SettingsUserCubit extends Cubit<SettingsUserState> {
   final int? userId;
   SettingsUserCubit(this.userId, [User? initialUserData])
-      : super(SettingsUserState(initialUserData, false, UpdateEnum.unchanged)) {
+      : super(SettingsUserState(user: initialUserData)) {
     refresh();
   }
 
@@ -26,27 +27,34 @@ class SettingsUserCubit extends Cubit<SettingsUserState> {
 
   Future<void> updateUser({
     required BuildContext context,
-    String? name,
     String? username,
     String? password,
     String? email,
   }) async {
     if (state.user == null) return;
+    String? image;
+    if (state.image != null) {
+      image = state.image!.isEmpty
+          ? ''
+          : await ApiService.getInstance().uploadBytes(state.image!);
+    }
     bool res = false;
     res = userId != null
         ? await ApiService.getInstance().updateUserById(
             userId!,
-            name: name,
+            name: state.name,
             password: password,
             email: email,
+            image: image,
             admin: (state.setAdmin != state.user!.serverAdmin)
                 ? state.setAdmin
                 : null,
           )
         : await ApiService.getInstance().updateUser(
-            name: name,
+            name: state.name,
             password: password,
             email: email,
+            image: image,
           );
     if (res) {
       emit(state.copyWith(updateState: UpdateEnum.updated));
@@ -57,8 +65,16 @@ class SettingsUserCubit extends Cubit<SettingsUserState> {
     }
   }
 
+  void setName(String name) {
+    emit(state.copyWith(name: name));
+  }
+
   void setAdmin(bool newAdmin) {
     emit(state.copyWith(setAdmin: newAdmin));
+  }
+
+  void setImage(NamedByteArray image) {
+    emit(state.copyWith(image: image));
   }
 
   Future<String?> addLongLivedToken(String name) async {
@@ -94,22 +110,38 @@ class SettingsUserCubit extends Cubit<SettingsUserState> {
 
 class SettingsUserState extends Equatable {
   final User? user;
+
+  final String? name;
+  final NamedByteArray? image;
   final bool setAdmin;
   final UpdateEnum updateState;
 
-  const SettingsUserState(this.user, this.setAdmin, this.updateState);
+  const SettingsUserState({
+    this.user,
+    this.name,
+    this.setAdmin = false,
+    this.updateState = UpdateEnum.unchanged,
+    this.image,
+  });
 
   @override
-  List<Object?> get props => [user, setAdmin, updateState];
+  List<Object?> get props => [user, name, setAdmin, updateState, image];
 
   SettingsUserState copyWith({
     User? user,
+    String? name,
     bool? setAdmin,
     UpdateEnum? updateState,
+    NamedByteArray? image,
   }) =>
       SettingsUserState(
-        user ?? this.user,
-        setAdmin ?? this.setAdmin,
-        updateState ?? this.updateState,
+        user: user ?? this.user,
+        name: name ?? this.name,
+        setAdmin: setAdmin ?? this.setAdmin,
+        updateState: updateState ?? this.updateState,
+        image: image ?? this.image,
       );
+
+  bool hasChanges() =>
+      name != null && (user == null || user!.name != name) || image != null;
 }

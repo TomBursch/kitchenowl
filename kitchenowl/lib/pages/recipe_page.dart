@@ -19,10 +19,6 @@ import 'package:responsive_builder/responsive_builder.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 import 'package:tuple/tuple.dart';
 
-DateTime toEndOfDay(DateTime dt) {
-  return DateTime(dt.year, dt.month, dt.day, 23, 59, 59);
-}
-
 class RecipePage extends StatefulWidget {
   final Household? household;
   final Recipe recipe;

@@ -77,4 +77,5 @@ def downgrade():
         batch_op.drop_constraint('pk_planner')
         batch_op.create_primary_key('pk_planner', ['recipe_id', 'day'])
         batch_op.drop_column('cooking_date')
+
     # ### end Alembic commands ###

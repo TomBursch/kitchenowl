@@ -13,6 +13,7 @@ Model = db.Model
 if TYPE_CHECKING:
     from app.models import Household, RecipeHistory, File
     from app.helpers.db_model_base import DbModelBase
+
     Model = DbModelBase
 
 
@@ -124,7 +125,6 @@ class Recipe(Model, DbModelAuthorizeMixin):
         ]
         if self.photo_file:
             res["photo_hash"] = self.photo_file.blur_hash
-        # print(f"res: {res}")
         return res
 
     def obj_to_full_dict(self) -> dict:

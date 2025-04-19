@@ -76,10 +76,6 @@ def recipe_yields():
 def recipe_time():
     return 30
 
-FIX_DATETIME = int((datetime.now(timezone.utc).replace(hour=23,minute=59, second=59, microsecond=0).replace(tzinfo=None) + timedelta(days=2)).timestamp() * 1000)
-
-def pytest_configure():
-    pytest.FIX_DATETIME = FIX_DATETIME
 
 FIX_DATETIME = int(
     (
@@ -241,4 +237,3 @@ def planned_recipe(user_client_with_household, household_id, recipe_with_items):
     assert any(meal["recipe"]["id"] == recipe_with_items for meal in planned_meals)
 
     return recipe_with_items  # Return recipe_id for convenience
-

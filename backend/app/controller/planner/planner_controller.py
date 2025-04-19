@@ -10,33 +10,6 @@ from datetime import datetime, timedelta, timezone
 
 plannerHousehold = Blueprint("planner", __name__)
 
-def is_within_next_7_days(target_date: datetime) -> bool:
-    # Get the current date and time
-    now = datetime.now()
-    
-    # Calculate the date 7 days from now
-    seven_days_later = now + timedelta(days=7)
-    
-    # Check if the target date is within the next 7 days
-    return now <= target_date <= seven_days_later
-
-def transform_cooking_date_to_day(cooking_date: datetime) -> int:
-    if is_within_next_7_days(cooking_date):
-        return cooking_date.weekday()
-
-def next_weekday(weekday_number: int) -> datetime:
-    # Get today's date
-    today = datetime.now()
-    
-    # Calculate how many days to add to get to the next specified weekday
-    days_ahead = (weekday_number - today.weekday() + 7) % 7
-    
-    # Calculate the next weekday date
-    next_date = today + timedelta(days=days_ahead)
-    
-    return next_date
-
-
 
 def is_within_next_7_days(target_date: datetime) -> bool:
     # Get the current date and time

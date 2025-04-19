@@ -25,7 +25,6 @@ class Planner(Model, DbModelAuthorizeMixin):
     household_id: Mapped[int] = db.Column(
         db.Integer, db.ForeignKey("household.id"), nullable=False, index=True
     )
-    
 
     household: Mapped["Household"] = cast(
         Mapped["Household"],
@@ -58,7 +57,6 @@ class Planner(Model, DbModelAuthorizeMixin):
             .order_by(cls.cooking_date)
             .all()
         )
-
 
     @classmethod
     def find_by_datetime(

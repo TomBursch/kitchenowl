@@ -70,6 +70,7 @@ class PlannerPage extends StatefulWidget {
 
 class _PlannerPageState extends State<PlannerPage> {
   final TextEditingController searchController = TextEditingController();
+  final ScrollController suggestedRecipesScrollController = ScrollController();
 
   @override
   void initState() {
@@ -281,9 +282,9 @@ class _PlannerPageState extends State<PlannerPage> {
                       child: SizedBox(
                         height: getValueForScreenType(
                           context: context,
-                          mobile: 375,
-                          tablet: 415,
-                          desktop: 415,
+                          mobile: 365,
+                          tablet: 405,
+                          desktop: 405,
                         ),
                         child: ListView.builder(
                           padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -321,8 +322,15 @@ class _PlannerPageState extends State<PlannerPage> {
                               ),
                             ),
                             LoadingIconButton(
-                              onPressed: cubit.refreshSuggestions,
-                              icon: const Icon(Icons.refresh),
+                              onPressed: () async {
+                                await cubit.refreshSuggestions();
+                                suggestedRecipesScrollController.animateTo(
+                                  0,
+                                  duration: const Duration(milliseconds: 400),
+                                  curve: Curves.easeIn,
+                                );
+                              },
+                              icon: const Icon(Icons.shuffle_rounded),
                               tooltip: AppLocalizations.of(context)!.refresh,
                             ),
                           ],
@@ -334,11 +342,12 @@ class _PlannerPageState extends State<PlannerPage> {
                       child: SizedBox(
                         height: getValueForScreenType(
                           context: context,
-                          mobile: 375,
-                          tablet: 415,
-                          desktop: 415,
+                          mobile: 365,
+                          tablet: 405,
+                          desktop: 405,
                         ),
                         child: ListView.builder(
+                          controller: suggestedRecipesScrollController,
                           padding: const EdgeInsets.symmetric(horizontal: 16),
                           itemBuilder: (context, i) => RecipeCard(
                             recipe: state.suggestedRecipes[i],

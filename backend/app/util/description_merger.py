@@ -1,4 +1,4 @@
-from typing import Self
+from typing import Self, cast
 from lark import Lark, Transformer, Tree, Token
 from lark.visitors import Interpreter
 import re
@@ -11,9 +11,9 @@ unit: COUNT | SI_WEIGHT | SI_VOLUME | DESCRIPTION
 COUNT.5: "x"i
 SI_WEIGHT.5: "mg"i | "g"i | "kg"i
 SI_VOLUME.5: "ml"i | "l"i
-DESCRIPTION: /[^0-9, ][^,]*/
+DESCRIPTION: /[^, ][^,]*/
 
-DECIMAL: INT "." INT? | "." INT | INT "," INT
+DECIMAL: INT "." INT? | "." INT
 FLOAT: INT _EXP | DECIMAL _EXP?
 NUMBER.10: FLOAT | INT
 
@@ -27,26 +27,27 @@ class TreeItem(Tree):
     def __init__(self, data: str, children) -> None:
         self.data = data
         self.children = children
-        self.number: Token = None
-        self.unit: Tree = None
+        self.number: Token | None = None
+        self.unit: Tree | None = None
         for c in children:
             if isinstance(c, Token) and c.type == "NUMBER":
                 self.number = c
-            else:
+            elif isinstance(c, Tree):
                 self.unit = c
 
     def unitIsCount(self) -> bool:
-        return not self.unit or self.unit.children[0].type == "COUNT"
+        return not self.unit or cast(Token, self.unit.children[0]).type == "COUNT"
 
     def sameUnit(self, other: Self) -> bool:
         return (self.unitIsCount() and other.unitIsCount()) or (
-            self.unit
-            and other.unit
+            self.unit is not None
+            and other.unit is not None
             and (
-                self.unit.children[0].type == other.unit.children[0].type
-                and not other.unit.children[0].type == "DESCRIPTION"
-                or self.unit.children[0].lower().strip()
-                == other.unit.children[0].lower().strip()
+                cast(Token, self.unit.children[0]).type
+                == cast(Token, other.unit.children[0]).type
+                and not cast(Token, other.unit.children[0]).type == "DESCRIPTION"
+                or cast(Token, self.unit.children[0]).lower().strip()
+                == cast(Token, other.unit.children[0]).lower().strip()
             )
         )
 
@@ -64,7 +65,7 @@ class Printer(Interpreter):
         res = ""
         for child in item.children:
             if isinstance(child, Tree):
-                if res and child.children[0].type == "DESCRIPTION":
+                if res and cast(Token, child.children[0]).type == "DESCRIPTION":
                     res += " "
                 res += self.visit(child)
             elif child.type == "NUMBER":
@@ -95,7 +96,7 @@ def merge(description: str, added: str) -> str:
     addTree = transformer.transform(parser.parse(added))
 
     for item in addTree.children:
-        targetItem: TreeItem = next(
+        targetItem: TreeItem | None = next(
             desTree.find_pred(lambda t: t.data == "item" and item.sameUnit(t)), None
         )
 
@@ -110,9 +111,9 @@ def merge(description: str, added: str) -> str:
 
             # Add up numbers
             unit: Tree = item.unit
-            if unit and unit.children[0].type == "SI_WEIGHT":
+            if unit and cast(Token, unit.children[0]).type == "SI_WEIGHT":
                 merge_SI_Weight(targetItem, item)
-            elif unit and unit.children[0].type == "SI_VOLUME":
+            elif unit and cast(Token, unit.children[0]).type == "SI_VOLUME":
                 merge_SI_Volume(targetItem, item)
             else:
                 targetItem.number.value = targetItem.number.value + (
@@ -124,7 +125,7 @@ def merge(description: str, added: str) -> str:
 
 def clean(input: str) -> str:
     input = re.sub(
-        "¼|½|¾|⅐|⅑|⅒|⅓|⅔|⅕|⅖|⅗|⅘|⅙|⅚|⅛|⅜|⅝|⅞",
+        r"¼|½|¾|⅐|⅑|⅒|⅓|⅔|⅕|⅖|⅗|⅘|⅙|⅚|⅛|⅜|⅝|⅞",
         lambda match: {
             "¼": "0.25",
             "½": "0.5",
@@ -144,7 +145,7 @@ def clean(input: str) -> str:
             "⅜": "0.375",
             "⅝": "0.625",
             "⅞": "0.875",
-        }.get(match.group(), match.group),
+        }.get(match.group(), match.group()),
         input,
     )
 
@@ -152,6 +153,13 @@ def clean(input: str) -> str:
     input = re.sub(
         r"(\d+((\.)\d+)?)\/(\d+((\.)\d+)?)",
         lambda match: str(float(match.group(1)) / float(match.group(4))),
+        input,
+    )
+
+    # replace 1,2 with 1.2 (but not 1,000 with 1.000)
+    input = re.sub(
+        r"(\d+),(\d{1,2})(?!\d)",
+        lambda match: match.group(1) + "." + match.group(2),
         input,
     )
 

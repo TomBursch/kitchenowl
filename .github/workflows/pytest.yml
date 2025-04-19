@@ -23,24 +23,19 @@ jobs:
         working-directory: backend
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.12'
-        cache: 'pip'
-        cache-dependency-path: backend/requirements.txt
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install flake8 pytest pytest-cov
-        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-    - name: Lint with flake8
-      run: |
-        # stop the build if there are Python syntax errors or undefined names
-        flake8 app tests --count --select=E9,F63,F7,F82 --show-source --statistics
-        # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
-        flake8 app tests --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-    - name: Test with pytest and coverage
-      run: |
-        pytest --cov=./ --cov-report=term
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - name: Install the project
+        run: uv sync --all-extras --dev
+        
+      #- name: Lint with Ruff
+      #  run: uv run ruff check
+
+      - name: Run tests
+        # For example, using `pytest`
+        run: uv run pytest --cov=./ --cov-report=term

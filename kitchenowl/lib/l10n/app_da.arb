@@ -1,6 +1,7 @@
 {
   "@about": {},
   "@accountCreate": {},
+  "@accountCreateHint": {},
   "@accountCreateTitle": {},
   "@accountDelete": {},
   "@accountDeleteConfirmation": {},
@@ -14,24 +15,24 @@
   "@addLanguageConfirm": {
     "placeholders": {
       "lang": {
-        "type": "String",
-        "example": "English"
+        "example": "English",
+        "type": "String"
       }
     }
   },
   "@addNumberIngredients": {
     "placeholders": {
       "number": {
-        "type": "int",
-        "example": "2"
+        "example": "2",
+        "type": "int"
       }
     }
   },
   "@addRecipeToPlanner": {
     "placeholders": {
       "number": {
-        "type": "int",
-        "example": "2"
+        "example": "2",
+        "type": "int"
       }
     }
   },
@@ -41,19 +42,22 @@
   "@addedBy": {
     "placeholders": {
       "name": {
-        "type": "String",
-        "example": "Tom"
+        "example": "Tom",
+        "type": "String"
       }
     }
   },
   "@address": {},
   "@admin": {},
+  "@analysingWebsite": {},
   "@appDescription": {},
   "@appTitle": {
     "description": "The title of the app"
   },
   "@back": {},
   "@balances": {},
+  "@budget": {},
+  "@budgetSet": {},
   "@camera": {},
   "@cancel": {},
   "@categories": {},
@@ -63,8 +67,8 @@
   "@categoryDeleteConfirmation": {
     "placeholders": {
       "category": {
-        "type": "String",
-        "example": "Frozen"
+        "example": "Frozen",
+        "type": "String"
       }
     }
   },
@@ -72,12 +76,13 @@
   "@categoryExpenseDeleteConfirmation": {
     "placeholders": {
       "category": {
-        "type": "String",
-        "example": "Frozen"
+        "example": "Frozen",
+        "type": "String"
       }
     }
   },
   "@changeIcon": {},
+  "@clear": {},
   "@colorSelect": {},
   "@confirm": {},
   "@cookingTime": {},
@@ -86,6 +91,7 @@
   "@dangerZone": {},
   "@darkmode": {},
   "@date": {},
+  "@defaultKey": {},
   "@defaultWord": {},
   "@delete": {},
   "@description": {},
@@ -111,8 +117,8 @@
   "@expenseOverviewTotalTitle": {
     "placeholders": {
       "month": {
-        "type": "String",
-        "example": "January"
+        "example": "January",
+        "type": "String"
       }
     }
   },
@@ -125,8 +131,8 @@
   "@fieldCannotBeEmpty": {
     "placeholders": {
       "field": {
-        "type": "String",
-        "example": "Username"
+        "example": "Username",
+        "type": "String"
       }
     }
   },
@@ -136,13 +142,21 @@
   "@go": {},
   "@grid": {},
   "@helpTranslate": {},
+  "@hi": {
+    "placeholders": {
+      "name": {
+        "example": "Tom",
+        "type": "String"
+      }
+    }
+  },
   "@household": {},
   "@householdDelete": {},
   "@householdDeleteConfirmation": {
     "placeholders": {
       "household": {
-        "type": "String",
-        "example": "Home"
+        "example": "Home",
+        "type": "String"
       }
     }
   },
@@ -151,8 +165,8 @@
   "@householdLeaveConfirmation": {
     "placeholders": {
       "household": {
-        "type": "String",
-        "example": "Home"
+        "example": "Home",
+        "type": "String"
       }
     }
   },
@@ -170,8 +184,8 @@
   "@itemDeleteConfirmation": {
     "placeholders": {
       "item": {
-        "type": "String",
-        "example": "Cake"
+        "example": "Cake",
+        "type": "String"
       }
     }
   },
@@ -183,12 +197,12 @@
   "@itemsMergeConfirmation": {
     "placeholders": {
       "item": {
-        "type": "String",
-        "example": "Cake"
+        "example": "Cake",
+        "type": "String"
       },
       "other": {
-        "type": "String",
-        "example": "Cake"
+        "example": "Cake",
+        "type": "String"
       }
     }
   },
@@ -207,8 +221,8 @@
   "@lltDeleteConfirmation": {
     "placeholders": {
       "token": {
-        "type": "String",
-        "example": "HomeAssistant"
+        "example": "HomeAssistant",
+        "type": "String"
       }
     }
   },
@@ -222,12 +236,13 @@
   "@logoutName": {
     "placeholders": {
       "name": {
-        "type": "String",
-        "example": "Tom"
+        "example": "Tom",
+        "type": "String"
       }
     }
   },
   "@longPressToReorder": {},
+  "@longerThanExpected": {},
   "@markAsPaid": {},
   "@mealPlanner": {},
   "@member": {},
@@ -250,8 +265,8 @@
   "@onboardingSettingsTitle": {
     "placeholders": {
       "name": {
-        "type": "String",
-        "example": "Tom"
+        "example": "Tom",
+        "type": "String"
       }
     }
   },
@@ -263,12 +278,12 @@
   "@owesAB": {
     "placeholders": {
       "nameA": {
-        "type": "String",
-        "example": "Tom"
+        "example": "Tom",
+        "type": "String"
       },
       "nameB": {
-        "type": "String",
-        "example": "Tom"
+        "example": "Tom",
+        "type": "String"
       }
     }
   },
@@ -289,21 +304,33 @@
   "@privacyPolicyAgree": {
     "placeholders": {
       "privacyPolicy": {
-        "type": "String",
-        "example": "Privacy Policy"
+        "example": "Privacy Policy",
+        "type": "String"
       }
     }
   },
+  "@private": {},
+  "@privateRecipeDescription": {},
   "@profile": {},
+  "@public": {},
+  "@publicRecipeDescription": {},
   "@recentItemsCategorize": {},
   "@recipeAdd": {},
+  "@recipeAddToHousehold": {
+    "placeholders": {
+      "householdName": {
+        "example": "Home",
+        "type": "String"
+      }
+    }
+  },
   "@recipeAddUrl": {},
   "@recipeDelete": {},
   "@recipeDeleteConfirmation": {
     "placeholders": {
       "recipe": {
-        "type": "String",
-        "example": "Cake"
+        "example": "Cake",
+        "type": "String"
       }
     }
   },
@@ -318,7 +345,9 @@
   "@recipesOverwriteDescription": {},
   "@recipesRecent": {},
   "@recipesSuggested": {},
+  "@redo": {},
   "@refresh": {},
+  "@rememberLastShoppingList": {},
   "@remove": {},
   "@rename": {},
   "@reportIssue": {},
@@ -331,13 +360,21 @@
   "@set": {},
   "@settings": {},
   "@setupTitle": {},
+  "@share": {},
   "@shoppingList": {},
+  "@shoppingListContainsEntries": {
+    "placeholders": {
+      "entriesCount": {
+        "type": "num"
+      }
+    }
+  },
   "@shoppingListDelete": {},
   "@shoppingListDeleteConfirmation": {
     "placeholders": {
       "shoppingList": {
-        "type": "String",
-        "example": "Supermarket"
+        "example": "Supermarket",
+        "type": "String"
       }
     }
   },
@@ -347,12 +384,13 @@
   "@signInWith": {
     "placeholders": {
       "provider": {
-        "type": "String",
-        "example": "Authentik"
+        "example": "Authentik",
+        "type": "String"
       }
     }
   },
   "@signup": {},
+  "@skip": {},
   "@smaller": {},
   "@sortingAlgorithmic": {},
   "@sortingAlphabetical": {},
@@ -365,8 +403,8 @@
   "@tagDeleteConfirmation": {
     "placeholders": {
       "tag": {
-        "type": "String",
-        "example": "Lunch"
+        "example": "Lunch",
+        "type": "String"
       }
     }
   },
@@ -377,15 +415,33 @@
   "@themeLight": {},
   "@themeMode": {},
   "@themeSystem": {},
+  "@today": {},
+  "@tomorrow": {},
   "@total": {},
   "@totalTime": {},
+  "@tutorialItemDescription1": {},
+  "@tutorialItemDescription2": {},
+  "@tutorialRecipeDescription": {},
+  "@tutorialRecipeMore": {
+    "placeholders": {
+      "url": {
+        "example": "https://...",
+        "type": "String"
+      }
+    }
+  },
   "@uncategorized": {},
   "@underConstruction": {},
+  "@undo": {},
+  "@unlink": {
+    "description": "As in remove link to social account (e.g. Google)"
+  },
   "@unreachableMessage": {},
   "@unsavedChangesBody": {},
   "@unsavedChangesTitle": {},
   "@unsupportedBackendMessage": {},
   "@unsupportedFrontendMessage": {},
+  "@unsupportedScrapeMessage": {},
   "@usedIn": {},
   "@user": {},
   "@userAdd": {},
@@ -393,8 +449,8 @@
   "@userDeleteConfirmation": {
     "placeholders": {
       "user": {
-        "type": "String",
-        "example": "Tom"
+        "example": "Tom",
+        "type": "String"
       }
     }
   },
@@ -405,6 +461,7 @@
   "@usernameUnavailable": {},
   "@users": {},
   "@weekly": {},
+  "@welcomeBack": {},
   "@writeMarkdownHere": {},
   "@wrongUsernameOrPassword": {},
   "@yearly": {},
@@ -413,6 +470,7 @@
   "@you": {},
   "about": "Om",
   "accountCreate": "Opret konto",
+  "accountCreateHint": "Dit brugernavn og navn er offentligt, så vælg noget, du har det fint med at dele med andre.",
   "accountCreateTitle": "Opret din KitchenOwl-konto",
   "accountDelete": "Slet konto",
   "accountDeleteConfirmation": "Er du sikker på, at du vil slette din konto?",
@@ -432,20 +490,24 @@
   "addedBy": "Tilføjet af {name}",
   "address": "Adresse",
   "admin": "Admin",
+  "analysingWebsite": "Analyserer hjemmeside...",
   "appDescription": "KitchenOwl hjælper dig med at organisere dit dagligvareliv.",
   "appTitle": "KitchenOwl",
   "back": "Tilbage",
   "balances": "Saldi",
+  "budget": "Budget",
+  "budgetSet": "Læg et budget",
   "camera": "Kamera",
-  "cancel": "Annullér",
+  "cancel": "Annuller",
   "categories": "Kategorier",
   "categoriesMerge": "Flet kategorier",
   "category": "Kategori",
   "categoryDelete": "Slet kategori",
   "categoryDeleteConfirmation": "Er du sikker på, at du vil slette {category}? Dette fjerner kategorien fra alle varer.",
-  "categoryEdit": "Redigér kategori",
+  "categoryEdit": "Rediger kategori",
   "categoryExpenseDeleteConfirmation": "Er du sikker på, at du vil slette {category}? Dette fjerner kategorien fra alle udgifter.",
   "changeIcon": "Skift ikon",
+  "clear": "Ryd",
   "colorSelect": "Vælg en farve",
   "confirm": "Bekræft",
   "cookingTime": "Tilberedningstid",
@@ -454,25 +516,26 @@
   "dangerZone": "Farezone",
   "darkmode": "Mørk tilstand",
   "date": "Dato",
+  "defaultKey": "Standardnøgle",
   "defaultWord": "Standard",
   "delete": "Slet",
   "description": "Beskrivelse",
-  "done": "Udført",
+  "done": "Færdig",
   "dynamicAccentColor": "Dynamisk accentfarve",
   "email": "E-mail",
   "emailInvalid": "Ugyldig e-mail",
   "emailNotVerified": "Ikke bekræftet",
-  "emailResendVerification": "Send bekræftelses-e-mail igen",
+  "emailResendVerification": "Send bekræftelsesmail igen",
   "emailSuccessfullyVerified": "E-mail blev bekræftet!",
-  "emailUpdate": "Opdatér e-mail",
+  "emailUpdate": "Opdater e-mail",
   "emailUsed": "Denne e-mail er allerede tilknyttet en anden konto",
   "error": "Der opstod en fejl",
-  "excludeFromStatistics": "Ekskludér fra statistikker",
+  "excludeFromStatistics": "Ekskluder fra statistikker",
   "expense": "Udgift",
   "expenseAdd": "Tilføj udgift",
   "expenseAmount": "Beløb",
   "expenseCategories": "Udgiftskategorier",
-  "expenseEdit": "Redigér udgift",
+  "expenseEdit": "Rediger udgift",
   "expenseEmpty": "Ingen udgifter. Start ved at oprette en!",
   "expenseFactor": "Faktor",
   "expenseOverviewComparedToPreviousMonth": "Sammenlignet med tidligere måneder",
@@ -483,13 +546,14 @@
   "expenseReceivedFor": "Modtaget til",
   "export": "Eksportér",
   "features": "Funktioner",
-  "fieldCannotBeEmpty": "{field} kan ikke være tom.",
+  "fieldCannotBeEmpty": "{field} må ikke være tom.",
   "forceOfflineMode": "Tving offline-tilstand",
   "gallery": "Galleri",
   "general": "Generelt",
   "go": "Videre",
   "grid": "Gitter",
   "helpTranslate": "Hjælp med at oversætte",
+  "hi": "Hej {name}!",
   "household": "Husholdning",
   "householdDelete": "Slet husholdning",
   "householdDeleteConfirmation": "Er du sikker på, at du vil slette {household}? Dette fjerner alle varer, opskrifter og udgifter tilknyttet den.",
@@ -502,14 +566,14 @@
   "icon": "Ikon",
   "imageSelect": "Vælg et billede",
   "import": "Importér",
-  "importStartedHint": "Import er startet; det kan tage et par minutter.",
+  "importStartedHint": "Import er startet. Det kan tage et par minutter.",
   "income": "Indtægt",
   "ingredients": "Ingredienser",
   "ingredientsOptional": "Valgfrie ingredienser",
   "itemDelete": "Slet vare",
   "itemDeleteConfirmation": "Er du sikker på, at du vil slette {item}? Dette fjerner varen fra de opskrifter, der indeholder den.",
   "itemRemoveInteraction": "Fjern vareinteraktion",
-  "itemSize": "Vare størrelse",
+  "itemSize": "Varestørrelse",
   "items": "Varer",
   "itemsAdd": "Tilføj varer",
   "itemsMerge": "Flet varer",
@@ -524,16 +588,17 @@
   "list": "Liste",
   "lltCreate": "Opret token med lang levetid",
   "lltDelete": "Slet token med lang levetid",
-  "lltDeleteConfirmation": "Er du sikker på, at du vil slette token '{token}'? Dette kan ikke fortrydes.",
+  "lltDeleteConfirmation": "Er du sikker på, at du vil slette token '{token}'? Det kan ikke fortrydes.",
   "lltNotShownAgain": "Gem tokenet; du vil ikke kunne se det igen",
   "lltWarningContent": "Er du sikker på, at du ønsker at oprette et token med lang levetid? Det kan potentielt udgøre en sikkerhedsrisiko. Tokenet udløber ikke og giver fuld adgang til din konto.",
   "lltWarningTitle": "Ved du, hvad du laver?",
-  "llts": "Token med lang levetid",
-  "login": "Login",
+  "llts": "Tokens med lang levetid",
+  "login": "Log ind",
   "loginTo": "Log ind på",
   "logout": "Log ud",
   "logoutName": "Log {name} ud",
-  "longPressToReorder": "Tryk langt for at omarrangere",
+  "longPressToReorder": "Hold nede for at omarrangere",
+  "longerThanExpected": "Det tager længere tid end forventet",
   "markAsPaid": "Markér som betalt",
   "mealPlanner": "Madplanlægger",
   "member": "Medlem",
@@ -553,11 +618,11 @@
   "offlineMessage": "Du er offline",
   "okay": "Okay",
   "onboardingLoading": "Importerer sprog; dette kan tage noget tid. Vær tålmodig :)",
-  "onboardingSettingsTitle": "Hej {name}, lad os konfigurere serveren!",
+  "onboardingSettingsTitle": "Hej {name}, lad os opsætte serveren!",
   "onboardingTitle": "Lad os oprette en bruger",
   "optional": "Valgfrit",
   "or": "eller",
-  "other": "Andre",
+  "other": "Andet",
   "overview": "Oversigt",
   "owesAB": "{nameA} skylder {nameB}",
   "pageNotFound": "Kunne ikke finde denne side",
@@ -567,32 +632,39 @@
   "passwordRepeat": "Gentag adgangskode",
   "passwordRepeatNoMatch": "Adgangkoderne er ikke ens",
   "passwordReset": "Nulstil adgangskode",
-  "passwordSave": "Opdatér adgangskode",
+  "passwordSave": "Opdater adgangskode",
   "personal": "Personligt",
   "planner": "Planlægger",
-  "plannerEmpty": "Ingen måltider planlagt; start ved at vælge en af dine opskrifter!",
+  "plannerEmpty": "Ingen måltider planlagt. Start ved at vælge en af dine opskrifter!",
   "plannerTitle": "Dine planlagte måltider",
   "preparationTime": "Forberedelsestid",
   "privacyPolicy": "Privatlivspolitik",
   "privacyPolicyAgree": "Ved at oprette en konto accepterer du vores {privacyPolicy}",
+  "private": "Privat",
+  "privateRecipeDescription": "Kun medlemmer af husholdningen kan se opskriften.",
   "profile": "Profil",
-  "recentItemsCategorize": "Kategorisér seneste varer",
+  "public": "Offentlig",
+  "publicRecipeDescription": "Enhver med dette link kan se opskriften.",
+  "recentItemsCategorize": "Kategoriser seneste varer",
   "recipeAdd": "Tilføj opskrift",
+  "recipeAddToHousehold": "Føj til {householdName}",
   "recipeAddUrl": "Tilføj opskrift fra URL",
   "recipeDelete": "Slet opskrift",
   "recipeDeleteConfirmation": "Er du sikker på, at du vil fjerne {recipe}?",
-  "recipeEdit": "Redigér opskrift",
-  "recipeEmpty": "Ingen opskrifter; start ved at tilføje en!",
+  "recipeEdit": "Rediger opskrift",
+  "recipeEmpty": "Ingen opskrifter. Start ved at tilføje en!",
   "recipeEmptySearch": "Ingen opskrifter fundet :(",
   "recipeImageSelect": "Vælg et opskriftsbillede",
   "recipeNew": "Ny opskrift",
   "recipeSource": "Opskriftskilde",
   "recipes": "Opskrifter",
   "recipesOverwrite": "Overskriv opskrifter",
-  "recipesOverwriteDescription": "Hvis aktiveret, vil eksisterende opskrifter med samme navn overskrives",
+  "recipesOverwriteDescription": "Hvis aktiveret, overskrives eksisterende opskrifter med samme navn",
   "recipesRecent": "Seneste",
   "recipesSuggested": "Foreslået",
-  "refresh": "Opdatér",
+  "redo": "Gør om",
+  "refresh": "Opdater",
+  "rememberLastShoppingList": "Husk sidst brugte indkøbsliste",
   "remove": "Fjern",
   "rename": "Omdøb",
   "reportIssue": "Rapportér et problem",
@@ -602,43 +674,55 @@
   "server": "Server",
   "serverChange": "Skift server",
   "sessions": "Sessioner",
-  "set": "Sæt",
+  "set": "Indstil",
   "settings": "Indstillinger",
   "setupTitle": "Hej med dig! Klar til at købe ind?",
+  "share": "Del",
   "shoppingList": "Indkøbsliste",
+  "shoppingListContainsEntries": "{entriesCount, plural, =0{Indkøbslisten er tom.} =1{Indkøbslisten indeholder 1 vare.} other{Indkøbslisten indeholder {entriesCount} varer.}}",
   "shoppingListDelete": "Slet indkøbsliste",
   "shoppingListDeleteConfirmation": "Er du sikker på, du vil slette {shoppingList}?",
-  "shoppingListEdit": "Redigér indkøbsliste",
-  "shoppingListStyle": "Indkøbsliste stil",
+  "shoppingListEdit": "Rediger indkøbsliste",
+  "shoppingListStyle": "Indkøbslistestil",
   "shoppingLists": "Indkøbslister",
   "signInWith": "Log ind med {provider}",
-  "signup": "Registrér",
+  "signup": "Tilmeld",
+  "skip": "Spring over",
   "smaller": "Mindre",
   "sortingAlgorithmic": "Algoritmisk",
   "sortingAlphabetical": "Alfabetisk",
   "start": "Start",
   "supportDevelopment": "Støt udviklingen",
   "swipeToDelete": "Stryg for at slette",
-  "swipeToDeleteAndLongPressToReorder": "Stryg for at slette, og tryk langt for at omarrangere",
+  "swipeToDeleteAndLongPressToReorder": "Stryg for at slette, og hold nede for at omarrangere",
   "swipeToRemove": "Stryg for at fjerne",
   "tagDelete": "Slet etiket",
   "tagDeleteConfirmation": "Er du sikker på, at du vil slette {tag}? Dette fjerner etikettet fra de opskrifter, der indeholder det.",
-  "tagEdit": "Redigér etiket",
+  "tagEdit": "Rediger etiket",
   "tags": "Etiketter",
   "tap": "Tryk",
   "themeDark": "Mørk",
   "themeLight": "Lys",
   "themeMode": "Tema",
   "themeSystem": "System",
+  "today": "I dag",
+  "tomorrow": "I morgen",
   "total": "I alt",
-  "totalTime": "Samlet tid",
+  "totalTime": "Tid i alt",
+  "tutorialItemDescription1": "Når du søger efter varer, kan du tilføje et antal i starten af søgningen, som så tilføjes som en beskrivelse.",
+  "tutorialItemDescription2": "Eller, hvis antal ikke er nok, brug et komma til at adskille varenavn og beskrivelse.",
+  "tutorialRecipeDescription": "I opskrifter kan du bruge Markdown. Grundlæggende funktioner inkluderer hashtag(s) for overskrifter, nummererede lister til instruktioner og ingredienshenvisninger med @ efterfulgt af ingrediensnavnet.",
+  "tutorialRecipeMore": "For mere information, besøg [dokumentationen]({url}).",
   "uncategorized": "Ikke kategoriseret",
-  "underConstruction": "Under opbygning",
+  "underConstruction": "Under udvikling",
+  "undo": "Fortryd",
+  "unlink": "Fjern link",
   "unreachableMessage": "Hmm… kunne ikke nå serveren",
-  "unsavedChangesBody": "Er du sikker på, du vil gå tilbage?",
-  "unsavedChangesTitle": "Du har ændringer, der ikke er gemt",
-  "unsupportedBackendMessage": "Serverversionen er ikke understøttet; opdatér venligst backend",
-  "unsupportedFrontendMessage": "Appversionen er ikke understøttet; opdatér venligst appen",
+  "unsavedChangesBody": "Er du sikker på, at du vil gå tilbage?",
+  "unsavedChangesTitle": "Du har ikke-gemte ændringer",
+  "unsupportedBackendMessage": "Serverversionen er ikke understøttet; opdater venligst backend",
+  "unsupportedFrontendMessage": "Appversionen er ikke understøttet; opdater venligst appen",
+  "unsupportedScrapeMessage": "Dette websted understøttes ikke",
   "usedIn": "Brugt i",
   "user": "Bruger",
   "userAdd": "Tilføj bruger",
@@ -647,14 +731,15 @@
   "userNotSignedIn": "Du skal være logget ind for at tilknytte en konto",
   "userSearchHint": "Skriv et navn",
   "username": "Brugernavn",
-  "usernameInvalid": "Brugernavn kan ikke indeholde '@'",
+  "usernameInvalid": "Brugernavn må ikke indeholde '@'",
   "usernameUnavailable": "Brugernavnet er utilgængeligt",
   "users": "Brugere",
   "weekly": "Ugentlig",
+  "welcomeBack": "Velkommen tilbage",
   "writeMarkdownHere": "Du kan bruge markdown her!",
   "wrongUsernameOrPassword": "Forkert brugernavn eller adgangskode",
   "yearly": "Årlig",
   "yes": "Ja",
-  "yields": "Udbytter",
+  "yields": "Portioner",
   "you": "du"
 }

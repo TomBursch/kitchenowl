@@ -1,6 +1,7 @@
 {
   "@about": {},
   "@accountCreate": {},
+  "@accountCreateHint": {},
   "@accountCreateTitle": {},
   "@accountDelete": {},
   "@accountDeleteConfirmation": {},
@@ -14,24 +15,24 @@
   "@addLanguageConfirm": {
     "placeholders": {
       "lang": {
-        "type": "String",
-        "example": "English"
+        "example": "English",
+        "type": "String"
       }
     }
   },
   "@addNumberIngredients": {
     "placeholders": {
       "number": {
-        "type": "int",
-        "example": "2"
+        "example": "2",
+        "type": "int"
       }
     }
   },
   "@addRecipeToPlanner": {
     "placeholders": {
       "number": {
-        "type": "int",
-        "example": "2"
+        "example": "2",
+        "type": "int"
       }
     }
   },
@@ -43,19 +44,22 @@
   "@addedBy": {
     "placeholders": {
       "name": {
-        "type": "String",
-        "example": "Tom"
+        "example": "Tom",
+        "type": "String"
       }
     }
   },
   "@address": {},
   "@admin": {},
+  "@analysingWebsite": {},
   "@appDescription": {},
   "@appTitle": {
     "description": "The title of the app"
   },
   "@back": {},
   "@balances": {},
+  "@budget": {},
+  "@budgetSet": {},
   "@camera": {},
   "@cancel": {},
   "@categories": {},
@@ -65,8 +69,8 @@
   "@categoryDeleteConfirmation": {
     "placeholders": {
       "category": {
-        "type": "String",
-        "example": "Frozen"
+        "example": "Frozen",
+        "type": "String"
       }
     }
   },
@@ -74,12 +78,13 @@
   "@categoryExpenseDeleteConfirmation": {
     "placeholders": {
       "category": {
-        "type": "String",
-        "example": "Frozen"
+        "example": "Frozen",
+        "type": "String"
       }
     }
   },
   "@changeIcon": {},
+  "@clear": {},
   "@colorSelect": {},
   "@confirm": {},
   "@cookingTime": {},
@@ -114,8 +119,8 @@
   "@expenseOverviewTotalTitle": {
     "placeholders": {
       "month": {
-        "type": "String",
-        "example": "January"
+        "example": "January",
+        "type": "String"
       }
     }
   },
@@ -128,8 +133,8 @@
   "@fieldCannotBeEmpty": {
     "placeholders": {
       "field": {
-        "type": "String",
-        "example": "Username"
+        "example": "Username",
+        "type": "String"
       }
     }
   },
@@ -139,13 +144,21 @@
   "@go": {},
   "@grid": {},
   "@helpTranslate": {},
+  "@hi": {
+    "placeholders": {
+      "name": {
+        "example": "Tom",
+        "type": "String"
+      }
+    }
+  },
   "@household": {},
   "@householdDelete": {},
   "@householdDeleteConfirmation": {
     "placeholders": {
       "household": {
-        "type": "String",
-        "example": "Home"
+        "example": "Home",
+        "type": "String"
       }
     }
   },
@@ -154,8 +167,8 @@
   "@householdLeaveConfirmation": {
     "placeholders": {
       "household": {
-        "type": "String",
-        "example": "Home"
+        "example": "Home",
+        "type": "String"
       }
     }
   },
@@ -173,8 +186,8 @@
   "@itemDeleteConfirmation": {
     "placeholders": {
       "item": {
-        "type": "String",
-        "example": "Cake"
+        "example": "Cake",
+        "type": "String"
       }
     }
   },
@@ -186,12 +199,12 @@
   "@itemsMergeConfirmation": {
     "placeholders": {
       "item": {
-        "type": "String",
-        "example": "Cake"
+        "example": "Cake",
+        "type": "String"
       },
       "other": {
-        "type": "String",
-        "example": "Cake"
+        "example": "Cake",
+        "type": "String"
       }
     }
   },
@@ -210,8 +223,8 @@
   "@lltDeleteConfirmation": {
     "placeholders": {
       "token": {
-        "type": "String",
-        "example": "HomeAssistant"
+        "example": "HomeAssistant",
+        "type": "String"
       }
     }
   },
@@ -225,12 +238,13 @@
   "@logoutName": {
     "placeholders": {
       "name": {
-        "type": "String",
-        "example": "Tom"
+        "example": "Tom",
+        "type": "String"
       }
     }
   },
   "@longPressToReorder": {},
+  "@longerThanExpected": {},
   "@markAsPaid": {},
   "@mealPlanner": {},
   "@member": {},
@@ -253,8 +267,8 @@
   "@onboardingSettingsTitle": {
     "placeholders": {
       "name": {
-        "type": "String",
-        "example": "Tom"
+        "example": "Tom",
+        "type": "String"
       }
     }
   },
@@ -267,12 +281,12 @@
   "@owesAB": {
     "placeholders": {
       "nameA": {
-        "type": "String",
-        "example": "Tom"
+        "example": "Tom",
+        "type": "String"
       },
       "nameB": {
-        "type": "String",
-        "example": "Tom"
+        "example": "Tom",
+        "type": "String"
       }
     }
   },
@@ -293,21 +307,33 @@
   "@privacyPolicyAgree": {
     "placeholders": {
       "privacyPolicy": {
-        "type": "String",
-        "example": "Privacy Policy"
+        "example": "Privacy Policy",
+        "type": "String"
       }
     }
   },
+  "@private": {},
+  "@privateRecipeDescription": {},
   "@profile": {},
+  "@public": {},
+  "@publicRecipeDescription": {},
   "@recentItemsCategorize": {},
   "@recipeAdd": {},
+  "@recipeAddToHousehold": {
+    "placeholders": {
+      "householdName": {
+        "example": "Home",
+        "type": "String"
+      }
+    }
+  },
   "@recipeAddUrl": {},
   "@recipeDelete": {},
   "@recipeDeleteConfirmation": {
     "placeholders": {
       "recipe": {
-        "type": "String",
-        "example": "Cake"
+        "example": "Cake",
+        "type": "String"
       }
     }
   },
@@ -315,8 +341,22 @@
   "@recipeEmpty": {},
   "@recipeEmptySearch": {},
   "@recipeImageSelect": {},
+  "@recipeNew": {},
+  "@recipeSource": {},
+  "@recipes": {},
+  "@recipesOverwrite": {},
+  "@recipesOverwriteDescription": {},
+  "@recipesRecent": {},
+  "@recipesSuggested": {},
+  "@redo": {},
+  "@refresh": {},
+  "@rememberLastShoppingList": {},
+  "@remove": {},
+  "@rename": {},
+  "@reportIssue": {},
   "about": "За нас",
   "accountCreate": "Създайте акаунт",
+  "accountCreateHint": "Вашето потребителско име и име са публични, така че изберете нещо, което бихте споделили с останалите потребители.",
   "accountCreateTitle": "Създайте своя KitchenOwl акаунт",
   "accountDelete": "Изтрий акаунт",
   "accountDeleteConfirmation": "Сигурни ли сте, че искате да изтриете своя акаунт?",
@@ -336,10 +376,13 @@
   "addedBy": "Добавено от {name}",
   "address": "Адрес",
   "admin": "Админ",
+  "analysingWebsite": "Уебсайтът се анализира...",
   "appDescription": "KitchenOwl ви помага да организирате живота си в магазина за хранителни стоки.",
   "appTitle": "KitchenOwl",
   "back": "Назад",
   "balances": "Баланси",
+  "budget": "Бюджет",
+  "budgetSet": "Изберете бюджет",
   "camera": "Камера",
   "cancel": "Откажи",
   "categories": "Категории",
@@ -350,6 +393,7 @@
   "categoryEdit": "Редактирай категория",
   "categoryExpenseDeleteConfirmation": "Сигурен ли си, че искаш да изтриеш {category}? Това ще изтрие тази категория от всички разходи.",
   "changeIcon": "Промени икона",
+  "clear": "Изчисти",
   "colorSelect": "Избери цвят",
   "confirm": "Потвърди",
   "cookingTime": "Време за готвене",
@@ -395,6 +439,7 @@
   "go": "Напред",
   "grid": "Решетка",
   "helpTranslate": "Помогни за превода",
+  "hi": "Здравей, {name}!",
   "household": "Домакинство",
   "householdDelete": "Изтрий домакинство",
   "householdDeleteConfirmation": "Сигурен ли си, че искаш да изтриеш {household}? Това ще изтрие всички артикули, рецепти и разходи, свързани с това домакинство.",
@@ -439,6 +484,7 @@
   "logout": "Изход",
   "logoutName": "Изход {name}",
   "longPressToReorder": "Задръж дълго за промяна на реда",
+  "longerThanExpected": "Това отнема повече време от очакваното",
   "markAsPaid": "Маркирай като платено",
   "mealPlanner": "Хранителен план",
   "member": "Член",
@@ -481,14 +527,32 @@
   "preparationTime": "Време за приготвяне",
   "privacyPolicy": "Политика за поверителност",
   "privacyPolicyAgree": "Създавайки акаунт, Вие се съгласявате с нашата {privacyPolicy}",
+  "private": "Частно",
+  "privateRecipeDescription": "Само членове на домакинството могат да видят тази рецепта.",
   "profile": "Профил",
+  "public": "Публично",
+  "publicRecipeDescription": "Всеки с този линк може да види рецептата.",
   "recentItemsCategorize": "Категоризирай скорошните артикули",
   "recipeAdd": "Добави рецепта",
+  "recipeAddToHousehold": "Добави в {householdName}",
   "recipeAddUrl": "Добави рецепта от URL",
   "recipeDelete": "Изтрий рецепта",
   "recipeDeleteConfirmation": "Сигурен ли си, че искаш да изтриеш {recipe}?",
   "recipeEdit": "Редактирай рецепта",
   "recipeEmpty": "Няма рецепти, започни като добавиш някоя!",
   "recipeEmptySearch": "Не открихме рецепти :(",
-  "recipeImageSelect": "Избери изображение за рецептата"
+  "recipeImageSelect": "Избери изображение за рецептата",
+  "recipeNew": "Нова рецепта",
+  "recipeSource": "Източник на рецептата",
+  "recipes": "Рецепти",
+  "recipesOverwrite": "Презапиши рецепти",
+  "recipesOverwriteDescription": "Ако е активирано, текущите рецепти със същото име ще бъдат презаписани",
+  "recipesRecent": "Скорошни",
+  "recipesSuggested": "Препоръчани",
+  "redo": "Отмени",
+  "refresh": "Обнови",
+  "rememberLastShoppingList": "Запомни последно използвания списък за пазаруване",
+  "remove": "Премахни",
+  "rename": "Преименувай",
+  "reportIssue": "Докладвай проблем"
 }

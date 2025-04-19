@@ -2,13 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:kitchenowl/cubits/auth_cubit.dart';
-import 'package:kitchenowl/item_icons.dart';
+import 'package:kitchenowl/helpers/recipe_item_markdown_extension.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/models/recipe.dart';
 import 'package:kitchenowl/widgets/recipe_markdown_body.dart';
 import 'package:kitchenowl/widgets/shopping_item.dart';
-import 'package:markdown/markdown.dart' as md;
 
 class TutorialPage extends StatefulWidget {
   const TutorialPage({super.key});
@@ -189,12 +188,14 @@ class _TutorialPageState extends State<TutorialPage> {
                                   Expanded(
                                     child: RecipeMarkdownBody(
                                       recipeItemBuilder:
-                                          _TutorialRecipeItemMarkdownBuilder(
-                                        RecipeItem(
-                                          name: "Eggs",
-                                          description: "2",
-                                          icon: "eggs",
-                                        ),
+                                          RecipeItemMarkdownBuilder(
+                                        items: [
+                                          RecipeItem(
+                                            name: "Eggs",
+                                            description: "2",
+                                            icon: "eggs",
+                                          ),
+                                        ],
                                       ),
                                       recipe: Recipe(
                                         description: _tutorialMarkdown,
@@ -282,34 +283,6 @@ class _TutorialPageState extends State<TutorialPage> {
           ),
         ),
       ),
-    );
-  }
-}
-
-class _TutorialRecipeItemMarkdownBuilder extends MarkdownElementBuilder {
-  final RecipeItem item;
-  _TutorialRecipeItemMarkdownBuilder(this.item);
-
-  @override
-  Widget? visitElementAfter(md.Element element, TextStyle? preferredStyle) {
-    IconData? icon = ItemIcons.get(item);
-    return RichText(
-      text: TextSpan(children: [
-        WidgetSpan(
-            alignment: PlaceholderAlignment.middle,
-            child: Chip(
-              avatar: icon != null ? Icon(icon) : null,
-              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-              padding: EdgeInsets.zero,
-              labelPadding: icon != null
-                  ? const EdgeInsets.only(left: 1, right: 4)
-                  : null,
-              label: Text(item.name +
-                  (item.description.isNotEmpty
-                      ? " (${item.description})"
-                      : "")),
-            )),
-      ]),
     );
   }
 }

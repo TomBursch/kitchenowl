@@ -51,7 +51,7 @@ class Expense extends Model {
           : null,
       date: DateTime.fromMillisecondsSinceEpoch(map['date'], isUtc: true)
           .toLocal(),
-      paidById: map['paid_by_id'],
+      paidById: map['paid_by_id'] ?? map['paid_by']['id'],
       paidFor: paidFor,
     );
   }
@@ -106,7 +106,7 @@ class Expense extends Model {
       "amount": amount,
       "description": description,
       if (image != null) "photo": image,
-      'category': category?.id,
+      "category": category?.id,
       "exclude_from_statistics": excludeFromStatistics,
       "date": date!.toUtc().millisecondsSinceEpoch,
       "paid_by": {"id": paidById},
@@ -119,6 +119,7 @@ class Expense extends Model {
     ..addAll({
       "id": id,
       if (imageHash != null) "photo_hash": imageHash,
+      "category": category?.toJsonWithId(),
     });
 }
 
@@ -139,7 +140,7 @@ class PaidForModel extends Model {
 
   factory PaidForModel.fromJson(Map<String, dynamic> map) {
     return PaidForModel(
-      userId: map['user_id'],
+      userId: map['user_id'] ?? map['id'],
       factor: map['factor'],
     );
   }

@@ -90,7 +90,8 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
               nameController.text = state.name;
             if (descController.text != state.description)
               descController.text = state.description;
-            if (yieldsController.text != state.yields.toString())
+            if (yieldsController.text != state.yields.toString() &&
+                state.yields > 0)
               yieldsController.text = state.yields.toString();
             if (sourceController.text != state.source)
               sourceController.text = state.source;

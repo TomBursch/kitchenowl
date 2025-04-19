@@ -26,15 +26,15 @@ class TreeItem(Tree):
     def __init__(self, data: str, children) -> None:
         self.data = data
         self.children = children
-        self.number: Token = None
-        self.unit: Tree = None
-        self.name: Token = None
+        self.number: Token | None = None
+        self.unit: Tree | None = None
+        self.name: Token | None = None
         for c in children:
             if isinstance(c, Token) and c.type == "NUMBER":
                 self.number = c
             elif isinstance(c, Token) and (c.type == "NAME" or c.type == "NAME_WO_NUM"):
                 self.name = c
-            else:
+            elif isinstance(c, Tree):
                 self.unit = c
 
 
@@ -98,7 +98,7 @@ def clean(input: str) -> str:
             "⅜": "0.375",
             "⅝": "0.625",
             "⅞": "0.875",
-        }.get(match.group(), match.group),
+        }.get(match.group(), match.group()),
         input,
     )
 

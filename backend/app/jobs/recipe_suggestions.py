@@ -1,3 +1,4 @@
+from typing import cast
 from sqlalchemy import func
 from app.models import Recipe, RecipeHistory
 from app import app, db
@@ -15,9 +16,11 @@ def computeRecipeSuggestions(household_id: int):
             RecipeHistory.status == Status.ADDED,
             RecipeHistory.household_id == household_id,
             RecipeHistory.created_at
-            >= datetime.datetime.now(datetime.timezone.utc) - datetime.timedelta(days=182),
+            >= datetime.datetime.now(datetime.timezone.utc)
+            - datetime.timedelta(days=182),
             RecipeHistory.created_at
-            <= datetime.datetime.now(datetime.timezone.utc) - datetime.timedelta(days=7),
+            <= datetime.datetime.now(datetime.timezone.utc)
+            - datetime.timedelta(days=7),
         )
         .group_by(RecipeHistory.recipe_id)
         .all()
@@ -32,7 +35,7 @@ def computeRecipeSuggestions(household_id: int):
         r = Recipe.find_by_id(e.recipe_id)
         if not r:
             continue
-        r.suggestion_score = e.count
+        r.suggestion_score = cast(int, e.count)
         db.session.add(r)
 
     # commit changes to db

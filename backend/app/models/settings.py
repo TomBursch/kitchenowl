@@ -1,13 +1,15 @@
-from typing import Self, TYPE_CHECKING
+from typing import TYPE_CHECKING, Self
 from app import db
-from app.helpers import DbModelMixin
 from sqlalchemy.orm import Mapped
 
+Model = db.Model
 if TYPE_CHECKING:
-    from app.models import *
+    from app.helpers.db_model_base import DbModelBase
+
+    Model = DbModelBase
 
 
-class Settings(db.Model, DbModelMixin):
+class Settings(Model):
     __tablename__ = "settings"
 
     id: Mapped[int] = db.Column(db.Integer, primary_key=True, nullable=False)

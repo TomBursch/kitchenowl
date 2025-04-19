@@ -182,6 +182,7 @@ class _SettingsUserPageState extends State<SettingsUserPage> {
                       decoration: InputDecoration(
                         labelText: AppLocalizations.of(context)!.name,
                       ),
+                      onChanged: cubit.setName,
                     ),
                     if (cubit.userId == null && App.isDefaultServer) ...[
                       const SizedBox(height: 8),
@@ -218,12 +219,17 @@ class _SettingsUserPageState extends State<SettingsUserPage> {
                     const SizedBox(height: 8),
                     Padding(
                       padding: const EdgeInsets.only(bottom: 24),
-                      child: LoadingElevatedButton(
-                        onPressed: () => cubit.updateUser(
-                          context: context,
-                          name: nameController.text,
+                      child: BlocBuilder<SettingsUserCubit, SettingsUserState>(
+                        bloc: cubit,
+                        builder: (context, state) => LoadingElevatedButton(
+                          onPressed: state.hasChanges() &&
+                                  (state.name?.isNotEmpty ?? true)
+                              ? () => cubit.updateUser(
+                                    context: context,
+                                  )
+                              : null,
+                          child: Text(AppLocalizations.of(context)!.save),
                         ),
-                        child: Text(AppLocalizations.of(context)!.save),
                       ),
                     ),
                     const Divider(),

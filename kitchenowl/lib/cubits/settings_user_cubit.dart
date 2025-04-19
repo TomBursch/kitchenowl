@@ -27,7 +27,6 @@ class SettingsUserCubit extends Cubit<SettingsUserState> {
 
   Future<void> updateUser({
     required BuildContext context,
-    String? name,
     String? username,
     String? password,
     String? email,
@@ -43,7 +42,7 @@ class SettingsUserCubit extends Cubit<SettingsUserState> {
     res = userId != null
         ? await ApiService.getInstance().updateUserById(
             userId!,
-            name: name,
+            name: state.name,
             password: password,
             email: email,
             image: image,
@@ -52,7 +51,7 @@ class SettingsUserCubit extends Cubit<SettingsUserState> {
                 : null,
           )
         : await ApiService.getInstance().updateUser(
-            name: name,
+            name: state.name,
             password: password,
             email: email,
             image: image,
@@ -64,6 +63,10 @@ class SettingsUserCubit extends Cubit<SettingsUserState> {
       }
       await refresh();
     }
+  }
+
+  void setName(String name) {
+    emit(state.copyWith(name: name));
   }
 
   void setAdmin(bool newAdmin) {
@@ -108,30 +111,37 @@ class SettingsUserCubit extends Cubit<SettingsUserState> {
 class SettingsUserState extends Equatable {
   final User? user;
 
+  final String? name;
   final NamedByteArray? image;
   final bool setAdmin;
   final UpdateEnum updateState;
 
   const SettingsUserState({
     this.user,
+    this.name,
     this.setAdmin = false,
     this.updateState = UpdateEnum.unchanged,
     this.image,
   });
 
   @override
-  List<Object?> get props => [user, setAdmin, updateState, image];
+  List<Object?> get props => [user, name, setAdmin, updateState, image];
 
   SettingsUserState copyWith({
     User? user,
+    String? name,
     bool? setAdmin,
     UpdateEnum? updateState,
     NamedByteArray? image,
   }) =>
       SettingsUserState(
         user: user ?? this.user,
+        name: name ?? this.name,
         setAdmin: setAdmin ?? this.setAdmin,
         updateState: updateState ?? this.updateState,
         image: image ?? this.image,
       );
+
+  bool hasChanges() =>
+      name != null && (user == null || user!.name != name) || image != null;
 }

@@ -114,6 +114,7 @@
   "@expenseEmpty": {},
   "@expenseFactor": {},
   "@expenseOverviewComparedToPreviousMonth": {},
+  "@expenseOverviewExpenses": {},
   "@expenseOverviewTotalTitle": {
     "placeholders": {
       "month": {
@@ -541,7 +542,8 @@
   "expenseEmpty": "Расходов нет. Начните с добавления одного!",
   "expenseFactor": "Фактор",
   "expenseOverviewComparedToPreviousMonth": "В сравнении с прошлым месяцем",
-  "expenseOverviewTotalTitle": "Общие расходы за {month}:",
+  "expenseOverviewExpenses": "Расходы",
+  "expenseOverviewTotalTitle": "В сумме за {month}:",
   "expensePaidBy": "Оплачено",
   "expensePaidFor": "За что заплачено",
   "expenseReceivedBy": "Получено",

@@ -23,7 +23,6 @@ DateTime toEndOfDay(DateTime dt) {
   return DateTime(dt.year, dt.month, dt.day, 23, 59, 59);
 }
 
-
 class RecipePage extends StatefulWidget {
   final Household? household;
   final Recipe recipe;
@@ -346,21 +345,23 @@ class _RecipePageState extends State<RecipePage> {
                             LoadingElevatedButton(
                               child: const Icon(Icons.calendar_month_rounded),
                               onPressed: () async {
-                                final DateTime? cooking_date = await showDatePicker(
+                                final DateTime? cookingDate =
+                                    await showDatePicker(
                                   context: context,
                                   initialDate: DateTime.now(),
                                   firstDate: DateTime(2000),
-                                  lastDate: DateTime.now().add(const Duration(days: 400)),
+                                  lastDate: DateTime.now()
+                                      .add(const Duration(days: 400)),
                                 );
-                                if (cooking_date != null) {
+                                if (cookingDate != null) {
                                   await cubit.addRecipeToPlanner(
-                                    cooking_date: cooking_date.millisecondsSinceEpoch > 0 ? cooking_date : null,
+                                    cookingDate:
+                                        cookingDate.millisecondsSinceEpoch > 0
+                                            ? cookingDate
+                                            : null,
                                     updateOnAdd: widget.updateOnPlanningEdit,
                                   );
                                 }
-
-
-
                               },
                             ),
                           ],

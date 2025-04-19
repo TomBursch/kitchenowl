@@ -5,7 +5,6 @@ import 'package:kitchenowl/services/api/api_service.dart';
 import 'package:kitchenowl/services/storage/mem_storage.dart';
 import 'package:kitchenowl/services/transaction.dart';
 
-
 class TransactionPlannerGetPlannedRecipes
     extends Transaction<List<RecipePlan>> {
   final Household household;
@@ -27,7 +26,8 @@ class TransactionPlannerGetPlannedRecipes
 
     return recipes
         .expand((r) => r.plannedCookingDates.isNotEmpty
-            ? r.plannedCookingDates.map((cooking_date) => RecipePlan(recipe: r, cooking_date: cooking_date))
+            ? r.plannedCookingDates.map((cookingDate) =>
+                RecipePlan(recipe: r, cookingDate: cookingDate))
             : [RecipePlan(recipe: r)])
         .toList();
   }
@@ -130,12 +130,12 @@ class TransactionPlannerAddRecipe extends Transaction<bool> {
 class TransactionPlannerRemoveRecipe extends Transaction<bool> {
   final Household household;
   final Recipe recipe;
-  final DateTime? cooking_date;
+  final DateTime? cookingDate;
 
   TransactionPlannerRemoveRecipe({
     required this.household,
     required this.recipe,
-    this.cooking_date,
+    this.cookingDate,
     DateTime? timestamp,
   }) : super.internal(
           timestamp ?? DateTime.now(),
@@ -150,7 +150,7 @@ class TransactionPlannerRemoveRecipe extends Transaction<bool> {
         household: Household.fromJson(map['household']),
         recipe: Recipe.fromJson(map['recipe']),
         timestamp: timestamp,
-        cooking_date: map['cooking_date'],
+        cookingDate: map['cooking_date'],
       );
 
   @override
@@ -161,7 +161,7 @@ class TransactionPlannerRemoveRecipe extends Transaction<bool> {
     ..addAll({
       "household": household.toJsonWithId(),
       "recipe": recipe.toJsonWithId(),
-      "cooking_date": cooking_date?.millisecondsSinceEpoch,
+      "cooking_date": cookingDate?.millisecondsSinceEpoch,
     });
 
   @override
@@ -171,7 +171,8 @@ class TransactionPlannerRemoveRecipe extends Transaction<bool> {
 
   @override
   Future<bool?> runOnline() {
-    return ApiService.getInstance().removePlannedRecipe(household, recipe, cooking_date);
+    return ApiService.getInstance()
+        .removePlannedRecipe(household, recipe, cookingDate);
   }
 }
 

@@ -17,21 +17,21 @@ class PlannerCubit extends Cubit<PlannerCubitState> {
     refresh();
   }
 
-  Future<void> remove(Recipe recipe, [DateTime? cooking_date]) async {
+  Future<void> remove(Recipe recipe, [DateTime? cookingDate]) async {
     await TransactionHandler.getInstance()
         .runTransaction(TransactionPlannerRemoveRecipe(
       household: household,
       recipe: recipe,
-      cooking_date: cooking_date,
+      cookingDate: cookingDate,
     ));
     await refresh();
   }
 
-  Future<void> add(Recipe recipe, [DateTime? cooking_date]) async {
+  Future<void> add(Recipe recipe, [DateTime? cookingDate]) async {
     await TransactionHandler.getInstance()
         .runTransaction(TransactionPlannerAddRecipe(
       household: household,
-      recipePlan: RecipePlan(recipe: recipe, cooking_date: cooking_date),
+      recipePlan: RecipePlan(recipe: recipe, cookingDate: cookingDate),
     ));
     await refresh();
   }
@@ -124,26 +124,28 @@ class LoadedPlannerCubitState extends PlannerCubitState {
 
   List<RecipePlan> getPlannedWithoutDay() {
     return recipePlans
-        .where((element) => element.cooking_date == null || (element.cooking_date != null && element.cooking_date!.millisecondsSinceEpoch < 0))
+        .where((element) =>
+            element.cookingDate == null ||
+            (element.cookingDate != null &&
+                element.cookingDate!.millisecondsSinceEpoch < 0))
         .toList();
   }
 
-
-  List<RecipePlan> getPlannedOfDate(DateTime cooking_date){
-    return recipePlans.where((element) => element.cooking_date?.day == cooking_date.day).toList();
+  List<RecipePlan> getPlannedOfDate(DateTime cookingDate) {
+    return recipePlans
+        .where((element) => element.cookingDate?.day == cookingDate.day)
+        .toList();
   }
 
-  
   List<DateTime> getUniqueCookingDays() {
     Set<DateTime> uniqueDays = {};
 
     for (var recipe in recipePlans) {
-      if (recipe.cooking_date != null && recipe.cooking_date!.millisecondsSinceEpoch > 0) {
-        uniqueDays.add(recipe.cooking_date!);
+      if (recipe.cookingDate != null &&
+          recipe.cookingDate!.millisecondsSinceEpoch > 0) {
+        uniqueDays.add(recipe.cookingDate!);
       }
     }
-    return uniqueDays.toList()..sort(); 
+    return uniqueDays.toList()..sort();
   }
-
-
 }

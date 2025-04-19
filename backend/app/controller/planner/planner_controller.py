@@ -120,6 +120,7 @@ def removePlannedRecipeById(args, household_id, id):
     recipe = Recipe.find_by_id(id)
     if not recipe:
         raise NotFoundRequest()
+
     cooking_date = (
         datetime.fromtimestamp(args["cooking_date"] / 1000, timezone.utc)
         if "cooking_date" in args

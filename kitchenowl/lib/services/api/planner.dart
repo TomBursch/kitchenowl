@@ -31,10 +31,11 @@ extension PlannerApi on ApiService {
   Future<bool> removePlannedRecipe(
     Household household,
     Recipe recipe,
-    DateTime? cooking_date,
+    DateTime? cookingDate,
   ) async {
     final body = {};
-    if (cooking_date != null) body['cooking_date'] = cooking_date.millisecondsSinceEpoch;
+    if (cookingDate != null)
+      body['cooking_date'] = cookingDate.millisecondsSinceEpoch;
     final res = await delete(
       '${householdPath(household)}$baseRoute/recipe/${recipe.id}',
       body: jsonEncode(body),

@@ -58,12 +58,14 @@ class Recipe extends Model {
 
     Set<DateTime> plannedCookingDates = {};
 
-    if (map.containsKey('planned_cooking_dates') && map['planned_cooking_dates'] is List) {
+    if (map.containsKey('planned_cooking_dates') &&
+        map['planned_cooking_dates'] is List) {
       for (var timestamp in map['planned_cooking_dates']) {
         // Check if the timestamp is not null
         if (timestamp != null) {
           // Convert milliseconds to DateTime and add to the Set
-          DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(timestamp, isUtc: true);
+          DateTime dateTime =
+              DateTime.fromMillisecondsSinceEpoch(timestamp, isUtc: true);
           plannedCookingDates.add(dateTime);
         }
       }
@@ -104,7 +106,7 @@ class Recipe extends Model {
     String? image,
     bool? public,
     List<RecipeItem>? items,
-    Set<Tag>? tags,    
+    Set<Tag>? tags,
     Set<DateTime>? plannedCookingDates,
     int? householdId,
   }) =>

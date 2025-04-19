@@ -20,6 +20,7 @@ import 'package:tuple/tuple.dart';
 DateTime toEndOfDay(DateTime dt) {
   return DateTime(dt.year, dt.month, dt.day, 23, 59, 59);
 }
+
 String formatDateAsWeekday(DateTime date, BuildContext context,
     {String default_format = 'EEEE'}) {
   DateTime today = DateTime.now();
@@ -35,9 +36,10 @@ String formatDateAsWeekday(DateTime date, BuildContext context,
       date.month == tomorrow.month &&
       date.day == tomorrow.day) {
     return AppLocalizations.of(context)!.tomorrow;
-  } else if (date.year == yesterday.year && date.month == yesterday.month && date.day == yesterday.day) {
+  } else if (date.year == yesterday.year &&
+      date.month == yesterday.month &&
+      date.day == yesterday.day) {
     return AppLocalizations.of(context)!.yesterday;
-      
   } else {
     // Return the weekday name
     return DateFormat(default_format).format(date);
@@ -53,11 +55,10 @@ String _formatDate(int daysToAdd, BuildContext context) {
   }
 }
 
-
 int daysBetween(DateTime from, DateTime to) {
   // otherwise it's rounded
-    from = DateTime(from.year, from.month, from.day);
-    to = DateTime(to.year, to.month, to.day);
+  from = DateTime(from.year, from.month, from.day);
+  to = DateTime(to.year, to.month, to.day);
   return (to.difference(from).inHours / 24).round();
 }
 
@@ -207,10 +208,10 @@ class _PlannerPageState extends State<PlannerPage> {
                                   ),
                                 ),
                               ),
-                            for (final cookingDate in state.getUniqueCookingDays())
-                              
-                              for (final plan in state.getPlannedOfDate(cookingDate))
-                                  
+                            for (final cookingDate
+                                in state.getUniqueCookingDays())
+                              for (final plan
+                                  in state.getPlannedOfDate(cookingDate))
                                 KitchenOwlFractionallySizedBox(
                                   widthFactor: (1 /
                                       DynamicStyling.itemCrossAxisCount(
@@ -226,12 +227,13 @@ class _PlannerPageState extends State<PlannerPage> {
                                         CrossAxisAlignment.stretch,
                                     children: [
                                       if (plan ==
-                                          state.getPlannedOfDate(cookingDate)[0])
+                                          state
+                                              .getPlannedOfDate(cookingDate)[0])
                                         Padding(
                                           padding:
                                               const EdgeInsets.only(top: 5),
                                           child: Text(
-                                            '${_formatDate(daysBetween(DateTime.now(),cookingDate), context)}',
+                                            '${_formatDate(daysBetween(DateTime.now(), cookingDate), context)}',
                                             style: Theme.of(context)
                                                 .textTheme
                                                 .bodyLarge,
@@ -249,7 +251,7 @@ class _PlannerPageState extends State<PlannerPage> {
                                           onPressed: () {
                                             cubit.remove(
                                               plan.recipe,
-                                              plan.cooking_date,
+                                              plan.cookingDate,
                                             );
                                           },
                                           onLongPressed: () => _openRecipePage(
@@ -440,16 +442,16 @@ class _PlannerPageState extends State<PlannerPage> {
     PlannerCubit cubit,
     Recipe recipe,
   ) async {
-    final DateTime? cooking_date = await showDatePicker(
+    final DateTime? cookingDate = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
       firstDate: DateTime(2000),
       lastDate: DateTime.now().add(const Duration(days: 400)),
     );
-    if (cooking_date != null) {
+    if (cookingDate != null) {
       await cubit.add(
         recipe,
-        cooking_date.millisecondsSinceEpoch > 0 ? toEndOfDay(cooking_date) : null,
+        cookingDate.millisecondsSinceEpoch > 0 ? toEndOfDay(cookingDate) : null,
       );
     }
   }

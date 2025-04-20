@@ -63,6 +63,22 @@ class User extends Model {
         oidcLinks,
       ];
 
+  User copyWith({
+    String? name,
+    String? image,
+  }) =>
+      User(
+        id: this.id,
+        name: name ?? this.name,
+        username: this.username,
+        email: this.email,
+        image: image ?? this.image,
+        emailVerified: this.emailVerified,
+        serverAdmin: this.serverAdmin,
+        tokens: this.tokens,
+        oidcLinks: this.oidcLinks,
+      );
+
   @override
   Map<String, dynamic> toJson() => {
         "name": name,

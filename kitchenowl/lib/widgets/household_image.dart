@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_blurhash/flutter_blurhash.dart';
 import 'package:kitchenowl/models/household.dart';
+import 'package:kitchenowl/widgets/avatar_list.dart';
 import 'package:kitchenowl/widgets/image_provider.dart';
 import 'package:transparent_image/transparent_image.dart';
 
@@ -15,15 +16,30 @@ class HouseholdImage extends StatelessWidget {
       borderRadius: BorderRadius.circular(14),
       child: SizedBox(
         height: 150,
-        child: FadeInImage(
-          fit: BoxFit.cover,
-          placeholder: household.imageHash != null
-              ? BlurHashImage(household.imageHash!)
-              : MemoryImage(kTransparentImage) as ImageProvider,
-          image: getImageProvider(
-            context,
-            household.image!,
-          ),
+        child: Stack(
+          alignment: Alignment.bottomLeft,
+          fit: StackFit.loose,
+          children: [
+            SizedBox.expand(
+              child: FadeInImage(
+                fit: BoxFit.cover,
+                placeholder: household.imageHash != null
+                    ? BlurHashImage(household.imageHash!)
+                    : MemoryImage(kTransparentImage) as ImageProvider,
+                image: getImageProvider(
+                  context,
+                  household.image!,
+                ),
+              ),
+            ),
+            if (household.member != null)
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: AvatarList(
+                  users: household.member!,
+                ),
+              ),
+          ],
         ),
       ),
     );

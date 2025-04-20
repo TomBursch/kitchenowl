@@ -7,6 +7,7 @@ import 'package:kitchenowl/cubits/auth_cubit.dart';
 import 'package:kitchenowl/cubits/household_list_cubit.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/household.dart';
+import 'package:kitchenowl/widgets/avatar_list.dart';
 import 'package:kitchenowl/widgets/household_image.dart';
 
 class HouseholdCard extends StatelessWidget {
@@ -59,30 +60,45 @@ class HouseholdCard extends StatelessWidget {
             ),
           ),
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (household.image?.isNotEmpty ?? false)
-              HouseholdImage(household: household),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 16, 16, 6),
-              child: Text(
-                household.name,
-                style: Theme.of(context).textTheme.titleLarge,
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  if (household.image?.isNotEmpty ?? false)
+                    HouseholdImage(household: household),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 16, 16, 6),
+                    child: Text(
+                      household.name,
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                  ),
+                  if (user != null &&
+                      member != null &&
+                      (household.featureExpenses ?? false) &&
+                      member.balance != 0)
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 6),
+                      child: Text(
+                        "${AppLocalizations.of(context)!.balances}: ${NumberFormat.simpleCurrency().format(member.balance)}",
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
+                    ),
+                  const SizedBox(height: 10),
+                ],
               ),
             ),
-            if (user != null &&
-                member != null &&
-                (household.featureExpenses ?? false) &&
-                member.balance != 0)
+            if (household.image?.isEmpty ?? true && household.member != null)
               Padding(
-                padding: const EdgeInsets.fromLTRB(16, 0, 16, 6),
-                child: Text(
-                  "${AppLocalizations.of(context)!.balances}: ${NumberFormat.simpleCurrency().format(member.balance)}",
-                  style: Theme.of(context).textTheme.bodySmall,
+                padding: const EdgeInsets.fromLTRB(0, 16, 16, 0),
+                child: AvatarList(
+                  users: household.member!,
+                  radius: 15,
                 ),
               ),
-            const SizedBox(height: 10),
           ],
         ),
       ),

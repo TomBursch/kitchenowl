@@ -9,6 +9,7 @@ class Member extends User {
     required super.id,
     required super.name,
     required super.username,
+    super.image,
     this.owner = false,
     super.serverAdmin = false,
     this.admin = true,
@@ -32,6 +33,7 @@ class Member extends User {
       id: map['id'],
       username: map['username'],
       name: map['name'],
+      image: map['photo'],
       owner: map['owner'] ?? false,
       admin: map['admin'] ?? true,
       balance:
@@ -58,9 +60,15 @@ class Member extends User {
         "expense_balance": balance,
       };
 
-  Member copyWith({bool? admin}) => Member(
+  Member copyWith({
+    String? name,
+    String? image,
+    bool? admin,
+  }) =>
+      Member(
         id: id,
-        name: name,
+        name: name ?? this.name,
+        image: image ?? this.image,
         username: username,
         admin: admin ?? this.admin,
         balance: balance,

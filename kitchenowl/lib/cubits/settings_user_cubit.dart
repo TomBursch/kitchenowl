@@ -57,7 +57,14 @@ class SettingsUserCubit extends Cubit<SettingsUserState> {
             image: image,
           );
     if (res) {
-      emit(state.copyWith(updateState: UpdateEnum.updated));
+      emit(SettingsUserState(
+        updateState: UpdateEnum.updated,
+        user: state.user?.copyWith(
+          name: state.name,
+          image: image,
+        ),
+        setAdmin: state.setAdmin,
+      ));
       if (userId == null) {
         BlocProvider.of<AuthCubit>(context).refreshUser();
       }

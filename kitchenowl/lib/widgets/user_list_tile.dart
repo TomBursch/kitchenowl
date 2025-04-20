@@ -28,15 +28,7 @@ class UserListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       contentPadding: contentPadding,
-      leading: CircleAvatar(
-        foregroundImage: user.image?.isEmpty ?? true
-            ? null
-            : getImageProvider(
-                context,
-                user.image!,
-              ),
-        child: user.name.isNotEmpty ? Text(user.name.substring(0, 1)) : null,
-      ),
+      leading: UserCircleAvatar(user: user),
       enabled: !disabled,
       title: Text(user.name +
           (markSelf &&

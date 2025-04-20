@@ -31,6 +31,13 @@ if (keystorePropertiesFile.exists()) {
 dependencies {
     implementation 'com.google.errorprone:error_prone_annotations:2.36.0' // required by flutter_secure_storage
     implementation 'com.github.spotbugs:spotbugs-annotations:4.8.6' // required by flutter_secure_storage
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.5' // required by local notifications
+    implementation 'androidx.window:window:1.0.0' // required by local notifications
+    implementation 'androidx.window:window-java:1.0.0' // required by local notifications
+}
+
+configurations.configureEach {
+    exclude group: 'com.google.crypto.tink', module: 'tink'
 }
 
 android {
@@ -39,6 +46,8 @@ android {
     ndkVersion flutter.ndkVersion
 
     compileOptions {
+        // Flag to enable support for the new language APIs (local notifications)
+        coreLibraryDesugaringEnabled true
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
     }

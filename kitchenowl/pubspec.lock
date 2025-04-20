@@ -371,6 +371,38 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.0.0"
+  flutter_local_notifications:
+    dependency: "direct main"
+    description:
+      name: flutter_local_notifications
+      sha256: edae0c34573233ab03f5ba1f07465e55c384743893042cb19e010b4ee8541c12
+      url: "https://pub.dev"
+    source: hosted
+    version: "19.3.0"
+  flutter_local_notifications_linux:
+    dependency: transitive
+    description:
+      name: flutter_local_notifications_linux
+      sha256: e3c277b2daab8e36ac5a6820536668d07e83851aeeb79c446e525a70710770a5
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.0.0"
+  flutter_local_notifications_platform_interface:
+    dependency: transitive
+    description:
+      name: flutter_local_notifications_platform_interface
+      sha256: "277d25d960c15674ce78ca97f57d0bae2ee401c844b6ac80fcd972a9c99d09fe"
+      url: "https://pub.dev"
+    source: hosted
+    version: "9.1.0"
+  flutter_local_notifications_windows:
+    dependency: transitive
+    description:
+      name: flutter_local_notifications_windows
+      sha256: f8fc0652a601f83419d623c85723a3e82ad81f92b33eaa9bcc21ea1b94773e6e
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0"
   flutter_localizations:
     dependency: "direct main"
     description: flutter
@@ -1185,6 +1217,38 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.4.0"
+  unifiedpush:
+    dependency: "direct main"
+    description:
+      name: unifiedpush
+      sha256: "1418375efb580af9640de4eaf4209cb6481f9a48792648ced3051f30e67d9568"
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.0.2"
+  unifiedpush_android:
+    dependency: transitive
+    description:
+      name: unifiedpush_android
+      sha256: "2f25db8eb2fc3183bf2e43db89fff20b2587adc1c361e1d1e06b223a0d45b50a"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.1.1"
+  unifiedpush_platform_interface:
+    dependency: transitive
+    description:
+      name: unifiedpush_platform_interface
+      sha256: bb49d2748211520e35e0374ab816faa8a2c635267e71909d334ad868d532eba5
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.1"
+  unifiedpush_ui:
+    dependency: "direct main"
+    description:
+      name: unifiedpush_ui
+      sha256: cf86f0214f37debd41f25c0425c8489df85e27f9f8784fed571eb7a86d39ba11
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.0"
   universal_html:
     dependency: "direct main"
     description:

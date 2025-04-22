@@ -68,7 +68,10 @@ class HouseholdCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   if (household.image?.isNotEmpty ?? false)
-                    HouseholdImage(household: household),
+                    HouseholdImage(
+                      household: household,
+                      enableMembersTap: false,
+                    ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(16, 16, 16, 6),
                     child: Text(

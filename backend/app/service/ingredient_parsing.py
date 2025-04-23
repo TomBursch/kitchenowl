@@ -36,7 +36,10 @@ def parseNLP(ingredients: list[str]) -> list[IngredientParsingResult]:
 
     def parseNLPSingle(ingredient: str) -> IngredientParsingResult:
         parsed = ingredient_parser.parse_ingredient(ingredient)
-        name = parsed.name[0].text if len(parsed.name) > 0 else None
+        if isinstance(parsed.name, list):
+            name = parsed.name[0].text if parsed.name else None
+        else:
+            name = parsed.name.text
         description = (
             nlpAmountToDescription(parsed.amount[0]) if len(parsed.amount) > 0 else ""
         )
@@ -113,5 +116,4 @@ def parseIngredients(
             return parseLLM(ingredients, targetLanguageCode) or parseNLP(ingredients)
         except Exception as e:
             print("Error parsing ingredients:", e)
-
     return parseNLP(ingredients)

@@ -1,5 +1,5 @@
-from datetime import datetime
-from typing import Optional, Self, List, TYPE_CHECKING, cast
+from datetime import datetime, timezone
+from typing import Any, Optional, Self, List, TYPE_CHECKING, cast
 from app import db
 from app.helpers import DbModelAuthorizeMixin
 from sqlalchemy.orm import Mapped
@@ -20,7 +20,7 @@ class Expense(Model, DbModelAuthorizeMixin):
     amount: Mapped[float] = db.Column(db.Float())
     description: Mapped[str] = db.Column(db.String)
     date: Mapped[datetime] = db.Column(
-        db.DateTime, default=datetime.utcnow, nullable=False
+        db.DateTime, default=lambda: datetime.now(timezone.utc), nullable=False
     )
     category_id: Mapped[int | None] = db.Column(
         db.Integer, db.ForeignKey("expense_category.id")
@@ -72,13 +72,13 @@ class Expense(Model, DbModelAuthorizeMixin):
         self,
         skip_columns: list[str] | None = None,
         include_columns: list[str] | None = None,
-    ) -> dict:
+    ) -> dict[str, Any]:
         res = super().obj_to_dict(skip_columns, include_columns)
         if self.photo_file:
             res["photo_hash"] = self.photo_file.blur_hash
         return res
 
-    def obj_to_full_dict(self) -> dict:
+    def obj_to_full_dict(self) -> dict[str, Any]:
         res = self.obj_to_dict()
         paidFor = (
             ExpensePaidFor.query.filter(ExpensePaidFor.expense_id == self.id)
@@ -91,8 +91,8 @@ class Expense(Model, DbModelAuthorizeMixin):
             res["category"] = self.category.obj_to_full_dict()
         return res
 
-    def obj_to_export_dict(self) -> dict:
-        res = {
+    def obj_to_export_dict(self) -> dict[str, Any]:
+        res: dict[str, Any] = {
             "name": self.name,
             "amount": self.amount,
             "date": self.date,
@@ -107,11 +107,11 @@ class Expense(Model, DbModelAuthorizeMixin):
         return res
 
     @classmethod
-    def find_by_name(cls, name) -> Self | None:
+    def find_by_name(cls, name: str) -> Self | None:
         return cls.query.filter(cls.name == name).first()
 
     @classmethod
-    def find_by_id(cls, id) -> Self | None:
+    def find_by_id(cls, id: int) -> Self | None:
         return (
             cls.query.filter(cls.id == id).join(Expense.category, isouter=True).first()
         )
@@ -143,7 +143,7 @@ class ExpensePaidFor(Model):
         ),
     )
 
-    def obj_to_user_dict(self):
+    def obj_to_user_dict(self) -> dict[str, Any]:
         res = self.user.obj_to_dict()
         res["factor"] = getattr(self, "factor")
         res["created_at"] = getattr(self, "created_at")
@@ -151,7 +151,7 @@ class ExpensePaidFor(Model):
         return res
 
     @classmethod
-    def find_by_ids(cls, expense_id, user_id) -> Self | None:
+    def find_by_ids(cls, expense_id: int, user_id: int) -> Self | None:
         return cls.query.filter(
             cls.expense_id == expense_id, cls.user_id == user_id
         ).first()

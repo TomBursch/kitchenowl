@@ -1,4 +1,5 @@
 import re
+from typing import Any
 from recipe_scrapers import scrape_html
 from recipe_scrapers._exceptions import SchemaOrgException
 import requests
@@ -9,7 +10,7 @@ from app.service.ingredient_parsing import parseIngredients
 from app.models import Recipe, Item, Household
 
 
-def scrapePublic(url: str, html: str, household: Household) -> dict | None:
+def scrapePublic(url: str, html: str, household: Household) -> dict[str, Any] | None:
     try:
         scraper = scrape_html(html, url, supported_only=False)
     except:
@@ -122,7 +123,7 @@ def scrapeLocal(recipe_id: int, household: Household):
     }
 
 
-def scrapeKitchenOwl(original_url: str, api_url: str, recipe_id: int) -> dict | None:
+def scrapeKitchenOwl(original_url: str, api_url: str, recipe_id: int) -> dict[str, Any] | None:
     res = requests.get(api_url + "/recipe/" + str(recipe_id))
     if res.status_code != requests.codes.ok:
         if res.status_code == requests.codes.unauthorized:
@@ -142,7 +143,7 @@ def scrapeKitchenOwl(original_url: str, api_url: str, recipe_id: int) -> dict | 
     return {"recipe": recipe, "items": items}
 
 
-def scrape(url: str, household: Household) -> dict | None:
+def scrape(url: str, household: Household) -> dict[str, Any] | None:
     localMatch = re.fullmatch(
         r"(kitchenowl:\/\/|"
         + re.escape((FRONT_URL or "").removesuffix("/"))

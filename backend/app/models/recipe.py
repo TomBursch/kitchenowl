@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Self, List, TYPE_CHECKING, cast
+from typing import Any, Self, List, TYPE_CHECKING, cast
 from app import db
 from app.helpers import DbModelAuthorizeMixin
 from .item import Item
@@ -111,7 +111,7 @@ class Recipe(Model, DbModelAuthorizeMixin):
         self,
         skip_columns: list[str] | None = None,
         include_columns: list[str] | None = None,
-    ) -> dict:
+    ) -> dict[str, Any]:
         res = super().obj_to_dict(skip_columns, include_columns)
         res["planned"] = len(self.plans) > 0
         res["planned_days"] = [
@@ -127,14 +127,14 @@ class Recipe(Model, DbModelAuthorizeMixin):
             res["photo_hash"] = self.photo_file.blur_hash
         return res
 
-    def obj_to_full_dict(self) -> dict:
+    def obj_to_full_dict(self) -> dict[str, Any]:
         res = self.obj_to_dict()
         res["items"] = [e.obj_to_item_dict() for e in self.items]
         res["tags"] = [e.obj_to_item_dict() for e in self.tags]
         res["household"] = self.household.obj_to_public_dict()
         return res
 
-    def obj_to_export_dict(self) -> dict:
+    def obj_to_export_dict(self) -> dict[str, Any]:
         res = {
             "name": self.name,
             "description": self.description,
@@ -274,7 +274,7 @@ class RecipeItems(Model):
         db.select(Item.name).where(Item.id == item_id).scalar_subquery()
     )
 
-    def obj_to_item_dict(self) -> dict:
+    def obj_to_item_dict(self) -> dict[str, Any]:
         res = self.item.obj_to_dict()
         res["description"] = getattr(self, "description")
         res["optional"] = getattr(self, "optional")
@@ -282,7 +282,7 @@ class RecipeItems(Model):
         res["updated_at"] = getattr(self, "updated_at")
         return res
 
-    def obj_to_recipe_dict(self) -> dict:
+    def obj_to_recipe_dict(self) -> dict[str, Any]:
         res = self.recipe.obj_to_dict()
         res["items"] = [
             {
@@ -330,7 +330,7 @@ class RecipeTags(Model):
         db.select(Tag.name).where(Tag.id == tag_id).scalar_subquery()
     )
 
-    def obj_to_item_dict(self) -> dict:
+    def obj_to_item_dict(self) -> dict[str, Any]:
         res = self.tag.obj_to_dict()
         res["created_at"] = getattr(self, "created_at")
         res["updated_at"] = getattr(self, "updated_at")

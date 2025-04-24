@@ -1,4 +1,4 @@
-from typing import Self, List, TYPE_CHECKING, cast
+from typing import Any, Self, List, TYPE_CHECKING, cast
 from app import db
 from app.helpers import DbModelAuthorizeMixin
 from sqlalchemy.orm import Mapped
@@ -37,7 +37,7 @@ class Tag(Model, DbModelAuthorizeMixin):
         ),
     )
 
-    def obj_to_full_dict(self) -> dict:
+    def obj_to_full_dict(self) -> dict[str, Any]:
         res = super().obj_to_dict()
         return res
 

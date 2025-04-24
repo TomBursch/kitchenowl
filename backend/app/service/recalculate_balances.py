@@ -3,7 +3,7 @@ from app.models import Expense, ExpensePaidFor, HouseholdMember
 from app import db
 
 
-def recalculateBalances(household_id):
+def recalculateBalances(household_id: int):
     for member in HouseholdMember.find_by_household(household_id):
         member.expense_balance = float(
             Expense.query.with_entities(func.sum(Expense.amount).label("balance"))

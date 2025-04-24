@@ -7,7 +7,7 @@ from app.errors import NotFoundRequest
 from app.models import Item, Category
 
 
-def importLanguage(household_id, lang, bulkSave=False):
+def importLanguage(household_id: int, lang: str, bulkSave: bool = False):
     with app.app_context():
         file_path = f"{APP_DIR}/../templates/l10n/{lang}.json"
         if lang not in SUPPORTED_LANGUAGES or not exists(file_path):

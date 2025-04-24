@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Self, List, TYPE_CHECKING, cast
+from typing import Any, Self, List, TYPE_CHECKING, cast
 from app import db
 from app.helpers import DbModelAuthorizeMixin
 from sqlalchemy.orm import Mapped
@@ -39,8 +39,8 @@ class Category(Model, DbModelAuthorizeMixin):
         ),
     )
 
-    def obj_to_full_dict(self) -> dict:
-        res = super().obj_to_dict()
+    def obj_to_full_dict(self) -> dict[str, Any]:
+        res = self.obj_to_dict()
         return res
 
     @classmethod
@@ -55,7 +55,7 @@ class Category(Model, DbModelAuthorizeMixin):
     def create_by_name(
         cls,
         household_id: int,
-        name,
+        name: str,
         default: bool = False,
         default_key: str | None = None,
     ) -> Self:

@@ -111,7 +111,7 @@ def updateHousehold(args, household_id):
 @household.route("/<int:household_id>", methods=["DELETE"])
 @jwt_required()
 @authorize_household(required=RequiredRights.ADMIN)
-def deleteHouseholdById(household_id):
+def deleteHouseholdById(household_id: int):
     hms = HouseholdMember.find_by_household(household_id)
     for hm in hms:
         db.session.delete(hm)
@@ -124,7 +124,7 @@ def deleteHouseholdById(household_id):
 @jwt_required()
 @authorize_household(required=RequiredRights.ADMIN)
 @validate_args(UpdateHouseholdMember)
-def putHouseholdMember(args, household_id, user_id):
+def putHouseholdMember(args, household_id: int, user_id: int):
     hm = HouseholdMember.find_by_ids(household_id, user_id)
     if not hm:
         household = Household.find_by_id(household_id)
@@ -145,7 +145,7 @@ def putHouseholdMember(args, household_id, user_id):
 @household.route("/<int:household_id>/member/<int:user_id>", methods=["DELETE"])
 @jwt_required()
 @authorize_household(required=RequiredRights.ADMIN_OR_SELF)
-def deleteHouseholdMember(household_id, user_id):
+def deleteHouseholdMember(household_id: int, user_id: int):
     hm = HouseholdMember.find_by_ids(household_id, user_id)
     if hm:
         hm.delete()

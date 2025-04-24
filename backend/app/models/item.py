@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Optional, Self, List, TYPE_CHECKING, cast
+from typing import Any, Optional, Self, List, TYPE_CHECKING, cast
 
 from sqlalchemy import func
 from app import db
@@ -87,14 +87,14 @@ class Item(Model, DbModelAuthorizeMixin):
         self,
         skip_columns: list[str] | None = None,
         include_columns: list[str] | None = None,
-    ) -> dict:
+    ) -> dict[str, Any]:
         res = super().obj_to_dict(skip_columns, include_columns)
         if self.category_id:
             category = cast(Category, Category.find_by_id(self.category_id))
             res["category"] = category.obj_to_dict()
         return res
 
-    def obj_to_export_dict(self) -> dict:
+    def obj_to_export_dict(self) -> dict[str, Any]:
         res = {
             "name": self.name,
         }
@@ -104,7 +104,7 @@ class Item(Model, DbModelAuthorizeMixin):
             res["category"] = self.category.name
         return res
 
-    def save(self, keepDefault=False) -> Self:
+    def save(self, keepDefault: bool = False) -> Self:
         if not keepDefault:
             self.default = False
         return super().save()
@@ -219,7 +219,7 @@ class Item(Model, DbModelAuthorizeMixin):
                 .all()
             )
 
-        found = []
+        found: list[Self] = []
 
         # name is a regex
         if "*" in name or "?" in name or "%" in name or "_" in name:
@@ -237,7 +237,7 @@ class Item(Model, DbModelAuthorizeMixin):
         # name is no regex
         starts_with = "{0}%".format(name)
         contains = "%{0}%".format(name)
-        one_error = []
+        one_error: List[str] = []
         for index in range(len(name)):
             name_one_error = name[:index] + "_" + name[index + 1 :]
             one_error.append("%{0}%".format(name_one_error))

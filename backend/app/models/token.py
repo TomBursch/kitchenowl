@@ -1,6 +1,6 @@
 from __future__ import annotations
 from datetime import datetime, timezone
-from typing import Optional, Self, Tuple, List, TYPE_CHECKING, cast
+from typing import Any, Optional, Self, Tuple, List, TYPE_CHECKING, cast
 
 from app import db
 from app.config import JWT_REFRESH_TOKEN_EXPIRES, JWT_ACCESS_TOKEN_EXPIRES
@@ -55,7 +55,11 @@ class Token(Model):
         ),
     )
 
-    def obj_to_dict(self, skip_columns=None, include_columns=None) -> dict:
+    def obj_to_dict(
+        self,
+        skip_columns: list[str] | None = None,
+        include_columns: list[str] | None = None,
+    ) -> dict[str, Any]:
         if skip_columns:
             skip_columns = skip_columns + ["jti"]
         else:
@@ -101,7 +105,7 @@ class Token(Model):
 
     # Delete oldest refresh token -> log out device
     # Used e.g. when a refresh token is used twice
-    def delete_token_familiy(self, commit=True):
+    def delete_token_familiy(self, commit: bool = True):
         if self.type not in ["refresh", "invalidated_refresh", "revoked_refresh"]:
             return
 
@@ -123,7 +127,7 @@ class Token(Model):
             > 0
         )
 
-    def delete_created_access_tokens(self, commit=True):
+    def delete_created_access_tokens(self, commit: bool = True):
         if self.type != "refresh":
             return
         Token.query.filter(

@@ -82,7 +82,9 @@ class File(Model, DbModelAuthorizeMixin):
             and not self.profile_picture
         )
 
-    def checkAuthorized(self, requires_admin=False, household_id: int | None = None):
+    def checkAuthorized(
+        self, requires_admin: bool = False, household_id: int | None = None
+    ):
         if self.created_by and current_user and self.created_by == current_user.id:
             pass  # created by user can access his pictures
         elif self.profile_picture:

@@ -1,4 +1,4 @@
-from typing import Self, List, TYPE_CHECKING, cast
+from typing import Any, Self, List, TYPE_CHECKING, cast
 from app import db
 from app.helpers.db_list_type import DbListType
 from sqlalchemy.orm import Mapped
@@ -35,7 +35,7 @@ class Household(Model):
         db.Boolean(), nullable=False, default=True
     )
 
-    view_ordering: Mapped[List] = db.Column(DbListType(), default=list())
+    view_ordering: Mapped[List[str]] = db.Column(DbListType(), default=list())
 
     items: Mapped[List["Item"]] = cast(
         Mapped[List["Item"]],
@@ -114,7 +114,7 @@ class Household(Model):
         self,
         skip_columns: list[str] | None = None,
         include_columns: list[str] | None = None,
-    ) -> dict:
+    ) -> dict[str, Any]:
         res = super().obj_to_dict(skip_columns, include_columns)
         res["member"] = [m.obj_to_user_dict() for m in getattr(self, "member")]
         res["default_shopping_list"] = self.shoppinglists[0].obj_to_dict()
@@ -122,13 +122,13 @@ class Household(Model):
             res["photo_hash"] = self.photo_file.blur_hash
         return res
 
-    def obj_to_public_dict(self) -> dict:
+    def obj_to_public_dict(self) -> dict[str, Any]:
         res = super().obj_to_dict(include_columns=["id", "name", "photo", "language"])
         if self.photo_file:
             res["photo_hash"] = self.photo_file.blur_hash
         return res
 
-    def obj_to_export_dict(self) -> dict:
+    def obj_to_export_dict(self) -> dict[str, Any]:
         return {
             "name": self.name,
             "language": self.language,
@@ -173,7 +173,7 @@ class HouseholdMember(Model):
         ),
     )
 
-    def obj_to_user_dict(self) -> dict:
+    def obj_to_user_dict(self) -> dict[str, Any]:
         res = self.user.obj_to_dict()
         res["owner"] = getattr(self, "owner")
         res["admin"] = getattr(self, "admin")

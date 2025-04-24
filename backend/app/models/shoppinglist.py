@@ -1,4 +1,4 @@
-from typing import Self, List, TYPE_CHECKING, cast
+from typing import Any, Self, List, TYPE_CHECKING, cast
 from app import db
 from app.helpers import DbModelAuthorizeMixin
 from sqlalchemy.orm import Mapped
@@ -93,7 +93,7 @@ class ShoppinglistItems(Model):
         ),
     )
 
-    def obj_to_item_dict(self) -> dict:
+    def obj_to_item_dict(self) -> dict[str, Any]:
         res = self.item.obj_to_dict()
         res["description"] = getattr(self, "description")
         res["created_at"] = getattr(self, "created_at")

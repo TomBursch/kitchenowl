@@ -41,7 +41,14 @@ class Association(Model):
     )
 
     @classmethod
-    def create(cls, antecedent_id, consequent_id, support, confidence, lift):
+    def create(
+        cls,
+        antecedent_id: int,
+        consequent_id: int,
+        support: float,
+        confidence: float,
+        lift: float,
+    ) -> Self:
         return cls(
             antecedent_id=antecedent_id,
             consequent_id=consequent_id,
@@ -51,7 +58,7 @@ class Association(Model):
         ).save()
 
     @classmethod
-    def find_by_antecedent(cls, antecedent_id):
+    def find_by_antecedent(cls, antecedent_id: int):
         return cls.query.filter(cls.antecedent_id == antecedent_id).order_by(
             cls.lift.desc()
         )

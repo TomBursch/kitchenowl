@@ -1,4 +1,4 @@
-from typing import Optional, Self, List, TYPE_CHECKING, cast
+from typing import Any, Optional, Self, List, TYPE_CHECKING, cast
 
 from flask_jwt_extended import current_user
 from app import db
@@ -143,7 +143,7 @@ class User(Model):
         skip_columns: list[str] | None = None,
         include_columns: list[str] | None = None,
         include_email: bool = False,
-    ) -> dict:
+    ) -> dict[str, Any]:
         if skip_columns:
             skip_columns = skip_columns + ["password"]
         else:
@@ -159,7 +159,7 @@ class User(Model):
             skip_columns=skip_columns, include_columns=include_columns
         )
 
-    def obj_to_full_dict(self) -> dict:
+    def obj_to_full_dict(self) -> dict[str, Any]:
         from .token import Token
 
         res = self.obj_to_dict(include_email=True)

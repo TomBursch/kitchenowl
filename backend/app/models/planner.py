@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Self, TYPE_CHECKING, cast
+from typing import Any, Self, TYPE_CHECKING, cast
 from app import db
 from app.helpers import DbModelAuthorizeMixin
 from sqlalchemy.orm import Mapped
@@ -41,7 +41,7 @@ class Planner(Model, DbModelAuthorizeMixin):
         ),
     )
 
-    def obj_to_full_dict(self) -> dict:
+    def obj_to_full_dict(self) -> dict[str, Any]:
         res = self.obj_to_dict()
         res["recipe"] = self.recipe.obj_to_full_dict()
         return res

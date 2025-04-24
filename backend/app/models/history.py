@@ -1,4 +1,4 @@
-from typing import Self, TYPE_CHECKING, cast
+from typing import Any, Self, TYPE_CHECKING, cast
 from app import db
 from .shoppinglist import ShoppinglistItems
 from sqlalchemy import func
@@ -50,7 +50,9 @@ class History(Model):
     description: Mapped[str] = db.Column("description", db.String())
 
     @classmethod
-    def create_added_without_save(cls, shoppinglist, item, description="") -> Self:
+    def create_added_without_save(
+        cls, shoppinglist, item, description: str = ""
+    ) -> Self:
         return cls(
             shoppinglist_id=shoppinglist.id,
             item_id=item.id,
@@ -59,12 +61,12 @@ class History(Model):
         )
 
     @classmethod
-    def create_added(cls, shoppinglist, item, description="") -> Self:
+    def create_added(cls, shoppinglist, item, description: str = "") -> Self:
         return cls.create_added_without_save(shoppinglist, item, description).save()
 
     @classmethod
     def create_dropped(
-        cls, shoppinglist, item, description="", created_at=None
+        cls, shoppinglist, item, description: str = "", created_at=None
     ) -> Self:
         return cls(
             shoppinglist_id=shoppinglist.id,
@@ -74,7 +76,7 @@ class History(Model):
             created_at=created_at,
         ).save()
 
-    def obj_to_item_dict(self) -> dict:
+    def obj_to_item_dict(self) -> dict[str, Any]:
         res = self.item.obj_to_dict()
         res["timestamp"] = getattr(self, "created_at")
         return res

@@ -95,11 +95,11 @@ class TransactionRecipeSearchRecipes extends Transaction<List<Recipe>> {
   Future<List<Recipe>> runLocal() async {
     final recipes = await MemStorage.getInstance().readRecipes(household) ?? [];
     return extractAllSorted<Recipe>(
-        query: query,
-        choices: recipes,
-        cutoff: 50,
-        getter: (recipe) => recipe.name,
-      ).map((e) => e.choice).toList().cast<Recipe>();
+      query: query,
+      choices: recipes,
+      cutoff: 50,
+      getter: (recipe) => recipe.name,
+    ).map((e) => e.choice).toList();
   }
 
   @override

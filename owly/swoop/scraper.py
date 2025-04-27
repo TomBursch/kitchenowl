@@ -1,58 +1,60 @@
-import os
-import psycopg2
-import requests
-from recipe_scrapers import scrape_html
-from bs4 import BeautifulSoup
-import openai
-from dotenv import load_dotenv
-import json
-import time
+import logging
+from recipe_scrapers import scrape_me
 
-load_dotenv('./.env')
-
-
-openai.api_key = os.getenv("OPENAI_API_KEY")
-
-DB_CONFIG = {
-    'host': os.getenv('DB_HOST'),
-    'dbname': os.getenv('DB_NAME'),
-    'user': os.getenv('DB_USER'),
-    'password': os.getenv("DB_PASSWORD")
-}
-
-def get_db_connection():
-    """Establish a connection to the PostgreSQL database."""
-    conn = psycopg2.connect(
-        host=DB_CONFIG['host'],
-        dbname=DB_CONFIG['dbname'],
-        user=DB_CONFIG['user'],
-        password=DB_CONFIG['password']
-    )
-    return conn
-
-
-
-def get_recipe_urls():
-    with open('recipe_urls.json', 'r') as file:
-        urls = json.load(file)
-    return urls
-
-def get_recipe_data(url):
-    """Scrape recipe data from a given URL."""
+def scrape_recipe(url: str) -> dict:
+    """
+    Scrape the recipe data from the given URL using recipe-scrapers.
+    Returns a dictionary with keys: title, ingredients, instructions, image_url,
+    total_time, prep_time, cook_time, yields. Returns None on failure.
+    """
     try:
-        scraper = scrape_html(url)
-        recipe = {
-            'title': scraper.title(),
-            'ingredients': scraper.ingredients(),
-            'instructions': scraper.instructions(),
-            'image_url': scraper.image(),
-            'source_url': url
-        }
-        return recipe
+        # Initialize the scraper for the URL (auto-detects site)
+        scraper = scrape_me(url)
     except Exception as e:
-        print(f"Error scraping {url}: {e}")
+        logging.error(f"Scraper initialization failed for {url}: {e}")
         return None
 
+    data = {}
+    try:
+        data["title"] = scraper.title()
+    except Exception:
+        data["title"] = None
+    try:
+        data["ingredients"] = scraper.ingredients()  # list of ingredient strings
+    except Exception:
+        data["ingredients"] = []
+    try:
+        data["instructions"] = scraper.instructions()  # full instructions as one string
+    except Exception:
+        data["instructions"] = ""
+    try:
+        data["image_url"] = scraper.image()
+    except Exception:
+        data["image_url"] = None
+    # Optional fields: handle missing data gracefully
+    try:
+        data["total_time"] = scraper.total_time() or 0
+    except Exception:
+        data["total_time"] = 0
+    try:
+        data["prep_time"] = scraper.prep_time() or 0
+    except Exception:
+        data["prep_time"] = 0
+    try:
+        data["cook_time"] = scraper.cook_time() or 0
+    except Exception:
+        data["cook_time"] = 0
+    try:
+        # Yields might be a string like "4 servings" – attempt to extract a number
+        raw_yields = scraper.yields()
+        if raw_yields:
+            # Extract leading number from yields (e.g., "4 servings" -> 4.0)
+            import re
+            match = re.match(r"^(\d+)", str(raw_yields))
+            data["yields"] = float(match.group(1)) if match else 0.0
+        else:
+            data["yields"] = 0.0
+    except Exception:
+        data["yields"] = 0.0
 
-
-
+    return data

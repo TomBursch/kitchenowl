@@ -1,36 +1,15 @@
-#
-# swoop_docker
-#
-FROM python:3.12-slim
-RUN apt-get update -y
-RUN apt-get upgrade -y
+# Use a lightweight Python image
+FROM python:3.11-slim
 
-RUN apt-get install -y --no-install-recommends \
-    apt-utils \
-    curl \
-    git \
-    wget \
-    python3 \
-    python3-pip \
-    python3-venv
+# Set working directory
+WORKDIR /app
 
-RUN apt-get autoremove -y
-WORKDIR /usr/src/app
-COPY  swoop_data /usr/src/app/swoop
-RUN chmod +x /usr/src/app/swoop/scraper.py
+# Install dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
-RUN adduser --system --no-create-home --shell /bin/bash swoop
+# Copy application code
+COPY . .
 
-RUN chown -Rh swoop:root /usr/src/app
-RUN python3 -m venv /usr/src/app/venv 
-RUN /usr/src/app/venv/bin/pip3 install --no-cache-dir pip setuptools wheel
-RUN /usr/src/app/venv/bin/pip3 install --no-cache-dir -r /usr/src/app/swoop/requirements.txt
-
-USER swoop
-WORKDIR /usr/src/app
-ENV PATH="/usr/src/app/venv/bin:$PATH"
-
-ENTRYPOINT [ "/bin/bash", "-c", "exec bash && source /usr/src/app/venv/bin/activate" ]
-
-
-
+# The service will run as a standalone script
+CMD ["python", "main.py"]

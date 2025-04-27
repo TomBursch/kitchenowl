@@ -200,8 +200,10 @@ class _RecipeCookingPageState extends State<RecipeCookingPage> {
                     ),
                     SliverCrossAxisConstrained(
                       maxCrossAxisExtent: 1600,
-                      child: SliverItemGridList(
+                      child: SliverItemGridList<RecipeItem>(
                         items: widget.recipe.items,
+                        onPressed: Nullable.empty(),
+                        onLongPressed: Nullable.empty(),
                         selected: (item) => stepItems[step].contains(item),
                       ),
                     ),

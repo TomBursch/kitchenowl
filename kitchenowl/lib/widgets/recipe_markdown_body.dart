@@ -1,10 +1,15 @@
+import 'dart:convert';
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:kitchenowl/cubits/recipe_cubit.dart';
 import 'package:kitchenowl/helpers/recipe_item_markdown_extension.dart';
+import 'package:kitchenowl/helpers/url_launcher.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/recipe.dart';
+import 'package:kitchenowl/widgets/kitchenowl_markdown_builder.dart';
 import 'package:markdown/markdown.dart' as md;
 
 class RecipeMarkdownBody extends StatelessWidget {
@@ -17,23 +22,141 @@ class RecipeMarkdownBody extends StatelessWidget {
     this.recipeItemBuilder,
   });
 
+  List<md.Node> _parseAndGroupMarkdown(md.ExtensionSet extensionSet) {
+    final md.Document document = md.Document(
+      extensionSet: extensionSet,
+      encodeHtml: false,
+    );
+
+    // Parse the source Markdown data into nodes of an Abstract Syntax Tree.
+    final List<String> lines = const LineSplitter().convert(recipe.description);
+    final List<md.Node> astNodes = document.parseLines(lines);
+
+    List<md.Node> result = [];
+    for (final md.Node node in astNodes) {
+      if (node is md.Element && node.tag == 'ol') {
+        node.children?.forEach((child) {
+          result.add(child);
+        });
+
+        continue;
+      }
+      result.add(node);
+    }
+
+    return result;
+  }
+
+  (md.Node, String?) _extractAndRemoveImage(md.Node step) {
+    if (step is md.Element && step.tag == 'li' && step.children != null) {
+      md.Node? first = step.children?.firstOrNull;
+      if (first != null && first is md.Element && first.tag == "p") {
+        md.Node? possibleImg = first.children?.firstOrNull;
+        if (possibleImg != null &&
+            possibleImg is md.Element &&
+            possibleImg.tag == "img") {
+          first.children?.removeAt(0);
+          return (step, possibleImg.attributes['src']);
+        }
+      }
+    }
+    return (step, null);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return KitchenOwlMarkdownBody(
-      data: recipe.description,
-      builders: <String, MarkdownElementBuilder>{
-        'recipeItem': recipeItemBuilder ??
-            RecipeCubitItemMarkdownBuilder(
-              cubit: BlocProvider.of<RecipeCubit>(context),
+    md.ExtensionSet extensionSet = md.ExtensionSet(
+      md.ExtensionSet.gitHubWeb.blockSyntaxes,
+      md.ExtensionSet.gitHubWeb.inlineSyntaxes +
+          [
+            RecipeItemMarkdownSyntax(recipe),
+          ],
+    );
+
+    List<md.Node> nodes = _parseAndGroupMarkdown(extensionSet);
+    int index = 1;
+    return Column(
+      children: nodes.map((node) {
+        String? stepImage;
+        (node, stepImage) = _extractAndRemoveImage(node);
+        final child = KitchenOwlMarkdownBuilder(
+          nodes: [node],
+          builders: <String, MarkdownElementBuilder>{
+            'recipeItem': recipeItemBuilder ??
+                RecipeCubitItemMarkdownBuilder(
+                  cubit: BlocProvider.of<RecipeCubit>(context),
+                ),
+          },
+          imageBuilder: (uri, title, alt) => CachedNetworkImage(
+            fit: BoxFit.fitWidth,
+            imageUrl: uri.toString(),
+            placeholder: (context, url) => const CircularProgressIndicator(),
+            errorWidget: (context, url, error) => const Icon(Icons.error),
+          ),
+          styleSheet: MarkdownStyleSheet.fromTheme(
+            Theme.of(context),
+          ).copyWith(
+            blockquoteDecoration: BoxDecoration(
+              color: Theme.of(context).cardTheme.color ??
+                  Theme.of(context).cardColor,
+              borderRadius: BorderRadius.circular(2.0),
             ),
-      },
-      extensionSet: md.ExtensionSet(
-        md.ExtensionSet.gitHubWeb.blockSyntaxes,
-        md.ExtensionSet.gitHubWeb.inlineSyntaxes +
-            [
-              RecipeItemMarkdownSyntax(recipe),
-            ],
-      ),
+          ),
+          onTapLink: (text, href, title) {
+            if (href != null && isValidUrl(href)) {
+              openUrl(context, href);
+            }
+          },
+          extensionSet: extensionSet,
+        );
+        if (node is md.Element && node.tag == 'li')
+          return Padding(
+            padding: const EdgeInsets.symmetric(vertical: 12),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  margin: const EdgeInsets.only(right: 12),
+                  child: Text(
+                    "${index++}.",
+                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                          color: Theme.of(context).colorScheme.onPrimary,
+                        ),
+                  ),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                ),
+                Expanded(
+                    child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Divider(),
+                    if (stepImage != null)
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 8),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(16),
+                          child: CachedNetworkImage(
+                            fit: BoxFit.cover,
+                            imageUrl: stepImage,
+                            placeholder: (context, url) =>
+                                const CircularProgressIndicator(),
+                            errorWidget: (context, url, error) =>
+                                const Icon(Icons.error),
+                          ),
+                        ),
+                      ),
+                    child,
+                  ],
+                )),
+              ],
+            ),
+          );
+        return child;
+      }).toList(),
     );
   }
 }

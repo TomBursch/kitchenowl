@@ -132,14 +132,15 @@ class RecipeMarkdownBody extends StatelessWidget {
                   child: Text(
                     "${index++}.",
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          color: Theme.of(context).colorScheme.onPrimary,
+                          color:
+                              Theme.of(context).colorScheme.onPrimaryContainer,
                         ),
                     textAlign: TextAlign.center,
                     maxLines: 1,
                   ),
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Theme.of(context).colorScheme.primary,
+                    color: Theme.of(context).colorScheme.primaryContainer,
                   ),
                 ),
                 Expanded(

@@ -294,6 +294,7 @@ class _PlannerPageState extends State<PlannerPage> {
                         child: ListView.builder(
                           padding: const EdgeInsets.symmetric(horizontal: 16),
                           itemBuilder: (context, i) => RecipeCard(
+                            key: ValueKey(state.recentRecipes[i].id),
                             recipe: state.recentRecipes[i],
                             onLongPressed: () =>
                                 cubit.add(state.recentRecipes[i]),
@@ -355,6 +356,7 @@ class _PlannerPageState extends State<PlannerPage> {
                           controller: suggestedRecipesScrollController,
                           padding: const EdgeInsets.symmetric(horizontal: 16),
                           itemBuilder: (context, i) => RecipeCard(
+                            key: ValueKey(state.recentRecipes[i].id),
                             recipe: state.suggestedRecipes[i],
                             onLongPressed: () =>
                                 cubit.add(state.suggestedRecipes[i]),

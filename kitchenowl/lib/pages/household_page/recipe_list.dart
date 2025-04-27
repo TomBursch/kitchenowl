@@ -237,32 +237,33 @@ class _RecipeListPageState extends State<RecipeListPage> {
                           ),
                         ],
                       ),
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: IndexBar(
-                          controller: scrollController,
-                          names: recipes.map((r) => r.name).toList(),
-                          indexHintDecoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Theme.of(context)
-                                .colorScheme
-                                .primary
-                                .withAlpha(0xFF),
-                            boxShadow: const [
-                              BoxShadow(
-                                color: Colors.black54,
-                                offset: Offset(1, 1),
-                                blurRadius: 6,
-                                spreadRadius: -2,
-                              ),
-                            ],
-                          ),
-                          indexHintTextStyle: TextStyle(
-                            fontSize: 20,
-                            color: Theme.of(context).colorScheme.onPrimary,
+                      if (state is! SearchRecipeListState)
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: IndexBar(
+                            controller: scrollController,
+                            names: recipes.map((r) => r.name).toList(),
+                            indexHintDecoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .primary
+                                  .withAlpha(0xFF),
+                              boxShadow: const [
+                                BoxShadow(
+                                  color: Colors.black54,
+                                  offset: Offset(1, 1),
+                                  blurRadius: 6,
+                                  spreadRadius: -2,
+                                ),
+                              ],
+                            ),
+                            indexHintTextStyle: TextStyle(
+                              fontSize: 20,
+                              color: Theme.of(context).colorScheme.onPrimary,
+                            ),
                           ),
                         ),
-                      ),
                     ],
                   ),
                 );

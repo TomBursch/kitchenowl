@@ -1,12 +1,11 @@
 import 'dart:convert';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:kitchenowl/cubits/recipe_cubit.dart';
 import 'package:kitchenowl/helpers/recipe_item_markdown_extension.dart';
-import 'package:kitchenowl/helpers/url_launcher.dart';
+import 'package:kitchenowl/helpers/short_image_markdown_extension.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/recipe.dart';
 import 'package:kitchenowl/widgets/kitchenowl_markdown_builder.dart';
@@ -69,7 +68,9 @@ class RecipeMarkdownBody extends StatelessWidget {
       md.ExtensionSet.gitHubWeb.blockSyntaxes,
       md.ExtensionSet.gitHubWeb.inlineSyntaxes +
           [
-            RecipeItemMarkdownSyntax(recipe),
+            ShortImageMarkdownSyntax(),
+            RecipeExplicitItemMarkdownSyntax(recipe),
+            RecipeImplicitItemMarkdownSyntax(recipe)
           ],
     );
 
@@ -87,42 +88,54 @@ class RecipeMarkdownBody extends StatelessWidget {
                   cubit: BlocProvider.of<RecipeCubit>(context),
                 ),
           },
-          imageBuilder: (uri, title, alt) => CachedNetworkImage(
-            fit: BoxFit.fitWidth,
-            imageUrl: uri.toString(),
-            placeholder: (context, url) => const CircularProgressIndicator(),
-            errorWidget: (context, url, error) => const Icon(Icons.error),
-          ),
-          styleSheet: MarkdownStyleSheet.fromTheme(
-            Theme.of(context),
-          ).copyWith(
-            blockquoteDecoration: BoxDecoration(
-              color: Theme.of(context).cardTheme.color ??
-                  Theme.of(context).cardColor,
-              borderRadius: BorderRadius.circular(2.0),
-            ),
-          ),
-          onTapLink: (text, href, title) {
-            if (href != null && isValidUrl(href)) {
-              openUrl(context, href);
-            }
-          },
           extensionSet: extensionSet,
+          imageBuilder: (uri, title, alt) => Image(
+            fit: BoxFit.cover,
+            frameBuilder: (context, child, frame, wasSynchronouslyLoaded) =>
+                Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(16),
+                child: child,
+              ),
+            ),
+            image: getImageProvider(
+              context,
+              int.tryParse(uri.toString()) == 0
+                  ? recipe.image ?? uri.toString()
+                  : uri.toString(),
+            ),
+            loadingBuilder: (context, child, progress) => progress == null
+                ? child
+                : Center(
+                    child: CircularProgressIndicator(
+                      value: (progress.expectedTotalBytes != null)
+                          ? (progress.cumulativeBytesLoaded /
+                              progress.expectedTotalBytes!)
+                          : null,
+                    ),
+                  ),
+            errorBuilder: (context, url, error) => const Icon(Icons.error),
+          ),
         );
         if (node is md.Element && node.tag == 'li')
           return Padding(
-            padding: const EdgeInsets.symmetric(vertical: 12),
+            padding: const EdgeInsets.symmetric(vertical: 8),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
                   padding: const EdgeInsets.all(12),
                   margin: const EdgeInsets.only(right: 12),
+                  width: 55,
+                  alignment: Alignment.center,
                   child: Text(
                     "${index++}.",
-                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
                           color: Theme.of(context).colorScheme.onPrimary,
                         ),
+                    textAlign: TextAlign.center,
+                    maxLines: 1,
                   ),
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
@@ -135,19 +148,36 @@ class RecipeMarkdownBody extends StatelessWidget {
                   children: [
                     Divider(),
                     if (stepImage != null)
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 8),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(16),
-                          child: CachedNetworkImage(
-                            fit: BoxFit.cover,
-                            imageUrl: stepImage,
-                            placeholder: (context, url) =>
-                                const CircularProgressIndicator(),
-                            errorWidget: (context, url, error) =>
-                                const Icon(Icons.error),
+                      Image(
+                        fit: BoxFit.cover,
+                        frameBuilder:
+                            (context, child, frame, wasSynchronouslyLoaded) =>
+                                Padding(
+                          padding: const EdgeInsets.only(bottom: 8),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(16),
+                            child: child,
                           ),
                         ),
+                        image: getImageProvider(
+                            context,
+                            int.tryParse(stepImage) == 0
+                                ? recipe.image ?? stepImage
+                                : stepImage),
+                        loadingBuilder: (context, child, progress) =>
+                            progress == null
+                                ? child
+                                : Center(
+                                    child: CircularProgressIndicator(
+                                      value: (progress.expectedTotalBytes !=
+                                              null)
+                                          ? (progress.cumulativeBytesLoaded /
+                                              progress.expectedTotalBytes!)
+                                          : null,
+                                    ),
+                                  ),
+                        errorBuilder: (context, url, error) =>
+                            const Icon(Icons.error),
                       ),
                     child,
                   ],

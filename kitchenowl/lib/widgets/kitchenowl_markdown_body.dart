@@ -34,10 +34,17 @@ class KitchenOwlMarkdownBody extends StatelessWidget {
             ),
           )
           .merge(styleSheet),
-      imageBuilder: (uri, title, alt) => CachedNetworkImage(
-        imageUrl: uri.toString(),
-        placeholder: (context, url) => const CircularProgressIndicator(),
-        errorWidget: (context, url, error) => const Icon(Icons.error),
+      imageBuilder: (uri, title, alt) => Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(16),
+          child: CachedNetworkImage(
+            imageUrl: uri.toString(),
+            placeholder: (context, url) =>
+                const Center(child: CircularProgressIndicator()),
+            errorWidget: (context, url, error) => const Icon(Icons.error),
+          ),
+        ),
       ),
       onTapLink: (text, href, title) {
         if (href != null && isValidUrl(href)) {

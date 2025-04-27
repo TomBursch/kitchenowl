@@ -1,4 +1,5 @@
 import 'dart:math' as math;
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
@@ -94,10 +95,10 @@ class RecipeCubitItemMarkdownBuilder extends MarkdownElementBuilder {
   }
 }
 
-class RecipeItemMarkdownSyntax extends md.InlineSyntax {
+class RecipeExplicitItemMarkdownSyntax extends md.InlineSyntax {
   final Recipe recipe;
 
-  RecipeItemMarkdownSyntax(this.recipe)
+  RecipeExplicitItemMarkdownSyntax(this.recipe)
       : super(
           _pattern,
           caseSensitive: false,
@@ -109,6 +110,34 @@ class RecipeItemMarkdownSyntax extends md.InlineSyntax {
   @override
   bool onMatch(md.InlineParser parser, Match match) {
     final name = match[1]!.replaceAll("_", " ").trim().toLowerCase();
+    if (!recipe.items.map((e) => e.name.toLowerCase()).contains(name)) {
+      parser.advanceBy(1);
+
+      return false;
+    }
+
+    parser.addNode(md.Element.text('recipeItem', name));
+
+    return true;
+  }
+}
+
+class RecipeImplicitItemMarkdownSyntax extends md.InlineSyntax {
+  final Recipe recipe;
+
+  RecipeImplicitItemMarkdownSyntax(this.recipe)
+      : super(
+          recipe.items
+              // sort long to short names
+              .sorted((a, b) => b.name.length.compareTo(a.name.length))
+              .map((e) => e.name)
+              .fold("", (a, b) => a.isEmpty ? "$b" : "$a|$b"),
+          caseSensitive: false,
+        );
+
+  @override
+  bool onMatch(md.InlineParser parser, Match match) {
+    final name = match[0]!.toLowerCase();
     if (!recipe.items.map((e) => e.name.toLowerCase()).contains(name)) {
       parser.advanceBy(1);
 

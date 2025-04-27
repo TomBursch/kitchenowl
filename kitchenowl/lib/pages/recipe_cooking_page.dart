@@ -1,12 +1,11 @@
 import 'dart:convert';
 
 import 'package:animations/animations.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:kitchenowl/helpers/recipe_item_markdown_extension.dart';
-import 'package:kitchenowl/helpers/url_launcher.dart';
+import 'package:kitchenowl/helpers/short_image_markdown_extension.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/models/recipe.dart';
@@ -58,16 +57,14 @@ class _RecipeCookingPageState extends State<RecipeCookingPage> {
     for (final md.Node node in astNodes) {
       if (node is md.Element && node.tag == 'ol') {
         node.children?.forEach((child) {
+          if (result.last.isNotEmpty) result.add([]);
           result.last.add(child);
-          result.add([]);
         });
 
         continue;
       }
       result.last.add(node);
     }
-
-    if (result.last.isEmpty) result.removeLast();
 
     return result;
   }
@@ -86,7 +83,9 @@ class _RecipeCookingPageState extends State<RecipeCookingPage> {
       md.ExtensionSet.gitHubWeb.blockSyntaxes,
       md.ExtensionSet.gitHubWeb.inlineSyntaxes +
           [
-            RecipeItemMarkdownSyntax(widget.recipe),
+            ShortImageMarkdownSyntax(),
+            RecipeExplicitItemMarkdownSyntax(widget.recipe),
+            RecipeImplicitItemMarkdownSyntax(widget.recipe),
           ],
     );
 
@@ -154,34 +153,44 @@ class _RecipeCookingPageState extends State<RecipeCookingPage> {
                               child: KitchenOwlMarkdownBuilder(
                                 key: ValueKey(step),
                                 nodes: nodes[step],
-                                imageBuilder: (uri, title, alt) =>
-                                    CachedNetworkImage(
-                                  imageUrl: uri.toString(),
-                                  placeholder: (context, url) =>
-                                      const CircularProgressIndicator(),
-                                  errorWidget: (context, url, error) =>
-                                      const Icon(Icons.error),
-                                ),
                                 builders: <String, MarkdownElementBuilder>{
                                   'recipeItem': RecipeItemMarkdownBuilder(
                                       items: widget.recipe.items)
                                 },
-                                styleSheet: MarkdownStyleSheet.fromTheme(
-                                  Theme.of(context),
-                                ).copyWith(
-                                  blockquoteDecoration: BoxDecoration(
-                                    color: Theme.of(context).cardTheme.color ??
-                                        Theme.of(context).cardColor,
-                                    borderRadius: BorderRadius.circular(2.0),
-                                  ),
-                                  textScaleFactor: textScaleFactor,
-                                ),
-                                onTapLink: (text, href, title) {
-                                  if (href != null && isValidUrl(href)) {
-                                    openUrl(context, href);
-                                  }
-                                },
                                 extensionSet: extensionSet,
+                                imageBuilder: (uri, title, alt) => Image(
+                                  fit: BoxFit.cover,
+                                  frameBuilder: (context, child, frame,
+                                          wasSynchronouslyLoaded) =>
+                                      Padding(
+                                    padding: const EdgeInsets.only(bottom: 8),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(16),
+                                      child: child,
+                                    ),
+                                  ),
+                                  image: getImageProvider(
+                                    context,
+                                    int.tryParse(uri.toString()) == 0
+                                        ? widget.recipe.image ?? uri.toString()
+                                        : uri.toString(),
+                                  ),
+                                  loadingBuilder: (context, child, progress) =>
+                                      progress == null
+                                          ? child
+                                          : Center(
+                                              child: CircularProgressIndicator(
+                                                value: (progress
+                                                            .expectedTotalBytes !=
+                                                        null)
+                                                    ? (progress
+                                                            .cumulativeBytesLoaded /
+                                                        progress
+                                                            .expectedTotalBytes!)
+                                                    : null,
+                                              ),
+                                            ),
+                                ),
                               ),
                             ),
                           ),
@@ -200,8 +209,10 @@ class _RecipeCookingPageState extends State<RecipeCookingPage> {
                     ),
                     SliverCrossAxisConstrained(
                       maxCrossAxisExtent: 1600,
-                      child: SliverItemGridList(
+                      child: SliverItemGridList<RecipeItem>(
                         items: widget.recipe.items,
+                        onPressed: Nullable.empty(),
+                        onLongPressed: Nullable.empty(),
                         selected: (item) => stepItems[step].contains(item),
                       ),
                     ),

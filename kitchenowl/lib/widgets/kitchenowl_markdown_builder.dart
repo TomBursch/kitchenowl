@@ -1,6 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:kitchenowl/helpers/url_launcher.dart';
 import 'package:markdown/markdown.dart' as md;
 
 class KitchenOwlMarkdownBuilder extends StatefulWidget {
@@ -172,9 +174,28 @@ class _KitchenOwlMarkdownBuilderState extends State<KitchenOwlMarkdownBuilder>
       styleSheet: widget.styleSheet ??
           MarkdownStyleSheet.fromTheme(
             Theme.of(context),
+          ).copyWith(
+            blockquoteDecoration: BoxDecoration(
+              color: Theme.of(context).cardTheme.color ??
+                  Theme.of(context).cardColor,
+              borderRadius: BorderRadius.circular(2.0),
+            ),
           ),
       imageDirectory: widget.imageDirectory,
-      imageBuilder: widget.imageBuilder,
+      imageBuilder: widget.imageBuilder ??
+          (uri, title, alt) => Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(16),
+                  child: CachedNetworkImage(
+                    imageUrl: uri.toString(),
+                    placeholder: (context, url) =>
+                        const Center(child: CircularProgressIndicator()),
+                    errorWidget: (context, url, error) =>
+                        const Icon(Icons.error),
+                  ),
+                ),
+              ),
       checkboxBuilder: widget.checkboxBuilder,
       bulletBuilder: widget.bulletBuilder,
       builders: widget.builders,
@@ -207,6 +228,10 @@ class _KitchenOwlMarkdownBuilderState extends State<KitchenOwlMarkdownBuilder>
       ..onTap = () {
         if (widget.onTapLink != null) {
           widget.onTapLink!(text, href, title);
+        } else {
+          if (href != null && isValidUrl(href)) {
+            openUrl(context, href);
+          }
         }
       };
     _recognizers.add(recognizer);

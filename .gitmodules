@@ -2,3 +2,6 @@
 	path = flutter
 	url = https://github.com/flutter/flutter.git
     branch = stable
+[submodule "swoop"]
+	path = swoop
+	url = git@github.com:nate-l-beckwith/swoop.git

@@ -1,22 +1,60 @@
-version: "3"
+
 services:
-  front:
-    image: tombursch/kitchenowl-web:latest
-    restart: unless-stopped
-    # environment:
-    #   - BACK_URL=back:5000 # Change this if you rename the containers
-    ports:
-      - "80:80"
-    depends_on:
-      - back
-  back:
-    image: tombursch/kitchenowl-backend:latest
+  db:
+    image: postgres:15
     restart: unless-stopped
     environment:
-      - JWT_SECRET_KEY=PLEASE_CHANGE_ME
-      # - FRONT_URL=http://localhost # Optional take a look at https://docs.kitchenowl.org/self-hosting/advanced/ for more info
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
-      - kitchenowl_data:/data
+      - kitchenowl_db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d $$POSTGRES_DB -U $$POSTGRES_USER"]
+      interval: 30s
+      timeout: 60s
+      retries: 5
+      start_period: 80s
+
+  back:
+    image: tombursch/kitchenowl:latest
+    restart: unless-stopped
+    ports:
+      - "80:8080"
+    environment:
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
+      DB_DRIVER: postgresql
+      DB_HOST: db
+      DB_NAME: ${POSTGRES_DB}
+      DB_USER: ${POSTGRES_USER}
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+    depends_on:
+      - db
+    volumes:
+      - kitchenowl_files:/data
+
+  swoop:
+    build:
+      context: ./swoop
+      args:
+        DB_HOST: db
+        DB_PORT: ${DB_PORT}
+        POSTGRES_DB: ${POSTGRES_DB}
+        POSTGRES_USER: ${POSTGRES_USER}
+        POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+        HOUSEHOLD_ID: ${HOUSEHOLD_ID}
+        OPENAI_API_KEY: ${OPENAI_API_KEY}
+        LLM_MODEL: ${LLM_MODEL}
+        URLS_FILE: ${URLS_FILE}
+    restart: "no"
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - kitchenowl_files:/data
 
 volumes:
-  kitchenowl_data:
+  kitchenowl_files:
+    driver: local
+  kitchenowl_db:
+    driver: local

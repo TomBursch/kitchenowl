@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:kitchenowl/app.dart';
 import 'package:kitchenowl/cubits/household_cubit.dart';
 import 'package:kitchenowl/cubits/planner_cubit.dart';
 import 'package:kitchenowl/cubits/settings_cubit.dart';
@@ -335,6 +336,21 @@ class _PlannerPageState extends State<PlannerPage> {
                                 AppLocalizations.of(context)!.recipesSuggested,
                             recipes: state.suggestedRecipes,
                           ),
+                        ),
+                      ),
+                    ),
+                  if (!App.isOffline)
+                    SliverPadding(
+                      padding: const EdgeInsets.all(16),
+                      sliver: SliverToBoxAdapter(
+                        child: ElevatedButton.icon(
+                          onPressed: () => context.go(
+                            "/household/${cubit.household.id}/recipes/find",
+                            extra: cubit.household,
+                          ),
+                          icon: const Icon(Icons.auto_awesome_rounded),
+                          label: Text(
+                              AppLocalizations.of(context)!.recipesSuggested),
                         ),
                       ),
                     ),

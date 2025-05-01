@@ -5,6 +5,7 @@ from recipe_scrapers._exceptions import SchemaOrgException
 import requests
 from app.config import FRONT_URL
 from app.errors import ForbiddenRequest
+from app.models.recipe import RecipeVisibility
 from app.service.ingredient_parsing import parseIngredients
 
 from app.models import Recipe, Item, Household
@@ -116,7 +117,7 @@ def scrapeLocal(recipe_id: int, household: Household):
         "recipe": recipe.obj_to_dict()
         | {
             "id": None,
-            "public": False,
+            "visibility": RecipeVisibility.PRIVATE,
             "source": "kitchenowl:///recipe/" + str(recipe.id),
         },
         "items": items,
@@ -134,7 +135,7 @@ def scrapeKitchenOwl(
 
     recipe = res.json()
     recipe["source"] = original_url
-    recipe["public"] = False
+    recipe["visibility"] = RecipeVisibility.PRIVATE
     if recipe["photo"] is not None:
         recipe["photo"] = api_url + "/upload/" + recipe["photo"]
     items = {}

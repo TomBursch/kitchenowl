@@ -28,7 +28,7 @@ class AddUpdateRecipeCubit extends ReplayCubit<AddUpdateRecipeState> {
           items: recipe.items,
           selectedTags: recipe.tags,
           tags: recipe.tags,
-          public: recipe.public,
+          visibility: recipe.visibility,
           hasChanges: hasChanges ?? false,
         )) {
     getTags();
@@ -64,7 +64,7 @@ class AddUpdateRecipeCubit extends ReplayCubit<AddUpdateRecipeState> {
             image: image ?? recipe.image,
             items: _state.items,
             tags: _state.selectedTags,
-            public: _state.public,
+            visibility: _state.visibility,
           ),
         );
       } else {
@@ -79,7 +79,7 @@ class AddUpdateRecipeCubit extends ReplayCubit<AddUpdateRecipeState> {
           image: image,
           items: _state.items,
           tags: _state.selectedTags,
-          public: _state.public,
+          visibility: _state.visibility,
         ));
       }
       emit(_state.copyWith(hasChanges: false));
@@ -136,8 +136,8 @@ class AddUpdateRecipeCubit extends ReplayCubit<AddUpdateRecipeState> {
     emit(state.copyWith(source: source, hasChanges: true));
   }
 
-  void setPublic(bool public) {
-    emit(state.copyWith(public: public, hasChanges: true));
+  void setVisibility(RecipeVisibility visibility) {
+    emit(state.copyWith(visibility: visibility, hasChanges: true));
   }
 
   void selectTag(Tag tag, bool selected) {
@@ -210,7 +210,7 @@ class AddUpdateRecipeState extends Equatable {
   final int yields;
   final String source;
   final NamedByteArray? image;
-  final bool public;
+  final RecipeVisibility visibility;
   final List<RecipeItem> items;
   final Set<Tag> tags;
   final Set<Tag> selectedTags;
@@ -225,7 +225,7 @@ class AddUpdateRecipeState extends Equatable {
     this.yields = 0,
     this.source = '',
     this.image,
-    this.public = false,
+    this.visibility = RecipeVisibility.private,
     this.items = const [],
     this.tags = const {},
     this.selectedTags = const {},
@@ -241,7 +241,7 @@ class AddUpdateRecipeState extends Equatable {
     int? yields,
     String? source,
     NamedByteArray? image,
-    bool? public,
+    RecipeVisibility? visibility,
     List<RecipeItem>? items,
     Set<Tag>? tags,
     Set<Tag>? selectedTags,
@@ -258,7 +258,7 @@ class AddUpdateRecipeState extends Equatable {
         image: image ?? this.image,
         items: items ?? this.items,
         tags: tags ?? this.tags,
-        public: public ?? this.public,
+        visibility: visibility ?? this.visibility,
         selectedTags: selectedTags ?? this.selectedTags,
         hasChanges: hasChanges ?? this.hasChanges,
       );
@@ -277,7 +277,7 @@ class AddUpdateRecipeState extends Equatable {
         image,
         items,
         tags,
-        public,
+        visibility,
         selectedTags,
         hasChanges,
       ];

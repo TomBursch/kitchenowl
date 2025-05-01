@@ -5,6 +5,8 @@ import 'package:kitchenowl/models/tag.dart';
 
 import 'household.dart';
 
+enum RecipeVisibility { private, link, public }
+
 class Recipe extends Model {
   final int? id;
   final String name;
@@ -20,7 +22,7 @@ class Recipe extends Model {
   final String? imageHash;
   final List<RecipeItem> items;
   final Set<Tag> tags;
-  final bool public;
+  final RecipeVisibility visibility;
   final int? householdId;
 
   /// The household this recipe belongs to, the contained field is not complete and should only be used for external recipes
@@ -41,7 +43,7 @@ class Recipe extends Model {
     this.items = const [],
     this.tags = const {},
     this.plannedCookingDates = const {},
-    this.public = false,
+    this.visibility = RecipeVisibility.private,
     this.householdId,
     this.household,
   });
@@ -83,7 +85,7 @@ class Recipe extends Model {
       source: map['source'] ?? '',
       image: map['photo'],
       imageHash: map['photo_hash'],
-      public: map['public'] ?? false,
+      visibility: RecipeVisibility.values[map['visibility']],
       householdId: map['household_id'],
       items: items,
       tags: tags,
@@ -104,7 +106,7 @@ class Recipe extends Model {
     int? yields,
     String? source,
     String? image,
-    bool? public,
+    RecipeVisibility? visibility,
     List<RecipeItem>? items,
     Set<Tag>? tags,
     Set<DateTime>? plannedCookingDates,
@@ -125,7 +127,7 @@ class Recipe extends Model {
         image: image ?? this.image,
         tags: tags ?? this.tags,
         plannedCookingDates: plannedCookingDates ?? this.plannedCookingDates,
-        public: public ?? this.public,
+        visibility: visibility ?? this.visibility,
         householdId: householdId ?? this.householdId,
         household: this.household,
       );
@@ -156,7 +158,7 @@ class Recipe extends Model {
         tags,
         items,
         plannedCookingDates,
-        public,
+        visibility,
         householdId,
         household,
       ];
@@ -170,7 +172,7 @@ class Recipe extends Model {
         "prep_time": prepTime,
         "yields": yields,
         "source": source,
-        "public": public,
+        "visibility": visibility.index,
         if (image != null) "photo": image,
         "items": items.map((e) => e.toJson()).toList(),
         "tags": tags.map((e) => e.toString()).toList(),

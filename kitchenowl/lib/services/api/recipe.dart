@@ -100,4 +100,16 @@ extension RecipeApi on ApiService {
 
     return (RecipeScrape.fromJson(body), 200);
   }
+
+  Future<(List<String>, List<Recipe>)?> suggestRecipes(String? language) async {
+    final res = await get("$baseRoute/suggestions?" +
+        (language != null ? "language=" + language : ""));
+    if (res.statusCode != 200) return null;
+
+    final body = jsonDecode(res.body);
+    return (
+      List<String>.from(body["popular_tags"]),
+      (body["newest"] as List<dynamic>).map((e) => Recipe.fromJson(e)).toList()
+    );
+  }
 }

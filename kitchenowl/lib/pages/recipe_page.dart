@@ -393,7 +393,7 @@ class _RecipePageState extends State<RecipePage> {
                       imageHash: state.recipe.imageHash,
                       popValue: () => cubit.state.updateState,
                       actions: (isCollapsed) => [
-                        if (state.recipe.public)
+                        if (state.recipe.visibility != RecipeVisibility.private)
                           Padding(
                             padding: const EdgeInsets.only(right: 8),
                             child: LoadingIconButton(

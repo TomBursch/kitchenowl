@@ -15,7 +15,7 @@ class AddRecipe(Schema):
     yields = fields.Integer(validate=lambda a: a >= 0)
     source = fields.String()
     photo = fields.String()
-    public = fields.Bool()
+    visibility = fields.Integer(validate=lambda a: a >= 0)
     items = fields.List(fields.Nested(RecipeItem()))
     tags = fields.List(fields.String())
 
@@ -34,7 +34,7 @@ class UpdateRecipe(Schema):
     yields = fields.Integer(validate=lambda a: a >= 0)
     source = fields.String()
     photo = fields.String()
-    public = fields.Bool()
+    visibility = fields.Integer(validate=lambda a: a >= 0)
     items = fields.List(fields.Nested(RecipeItem()))
     tags = fields.List(fields.String())
 
@@ -63,3 +63,7 @@ class RemoveItem(Schema):
 
 class ScrapeRecipe(Schema):
     url = fields.String(required=True, validate=lambda a: a and not a.isspace())
+
+
+class SuggestionsRecipe(Schema):
+    language = fields.String()

@@ -1,4 +1,5 @@
 from __future__ import annotations
+import enum
 from typing import Any, Self, List, TYPE_CHECKING, cast
 from app import db
 from app.helpers import DbModelAuthorizeMixin
@@ -34,6 +35,12 @@ def transform_cooking_date_to_day(cooking_date: datetime) -> int:
     return -1
 
 
+class RecipeVisibility(enum.Enum):
+    PRIVATE = 0
+    LINK = 1
+    PUBLIC = 2
+
+
 class Recipe(Model, DbModelAuthorizeMixin):
     __tablename__ = "recipe"
 
@@ -46,7 +53,9 @@ class Recipe(Model, DbModelAuthorizeMixin):
     prep_time: Mapped[int] = db.Column(db.Integer)
     yields: Mapped[int] = db.Column(db.Integer)
     source: Mapped[str] = db.Column(db.String())
-    public: Mapped[bool] = db.Column(db.Boolean(), nullable=False, default=False)
+    visibility: Mapped[RecipeVisibility] = db.Column(
+        db.Enum(RecipeVisibility), nullable=False, default=RecipeVisibility.PRIVATE
+    )
     suggestion_score: Mapped[int] = db.Column(db.Integer, server_default="0")
     suggestion_rank: Mapped[int] = db.Column(db.Integer, server_default="0")
     household_id: Mapped[int] = db.Column(

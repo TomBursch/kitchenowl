@@ -6,6 +6,7 @@ from app import db
 from app.config import UPLOAD_FOLDER
 from app.errors import ForbiddenRequest
 from app.helpers import DbModelAuthorizeMixin
+from app.models.recipe import RecipeVisibility
 from app.models.user import User
 import os
 from sqlalchemy.orm import Mapped
@@ -90,7 +91,7 @@ class File(Model, DbModelAuthorizeMixin):
         elif self.profile_picture:
             pass  # profile pictures are public
         elif self.recipe:
-            if not self.recipe.public:
+            if self.recipe.visibility == RecipeVisibility.PRIVATE:
                 super().checkAuthorized(
                     household_id=self.recipe.household_id, requires_admin=requires_admin
                 )

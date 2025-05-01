@@ -21,6 +21,7 @@ import 'package:kitchenowl/pages/onboarding_page.dart';
 import 'package:kitchenowl/pages/page_not_found.dart';
 import 'package:kitchenowl/pages/password_forgot_page.dart';
 import 'package:kitchenowl/pages/password_reset_page.dart';
+import 'package:kitchenowl/pages/recipe_find_page.dart';
 import 'package:kitchenowl/pages/recipe_page.dart';
 import 'package:kitchenowl/pages/recipe_scraper_page.dart';
 import 'package:kitchenowl/pages/settings_page.dart';
@@ -292,6 +293,19 @@ final router = GoRouter(
                     household: Household(
                       id: int.tryParse(state.pathParameters['id'] ?? '') ?? -1,
                     ),
+                  ),
+                ),
+                GoRoute(
+                  parentNavigatorKey: _rootNavigatorKey,
+                  path: 'find',
+                  builder: (context, state) => RecipeFindPage(
+                    household: ((state.extra is Household?)
+                            ? (state.extra as Household?)
+                            : null) ??
+                        Household(
+                          id: int.tryParse(state.pathParameters['id'] ?? '') ??
+                              -1,
+                        ),
                   ),
                 ),
               ],

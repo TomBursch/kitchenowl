@@ -31,3 +31,4 @@ export 'loading_elevated_button_icon.dart';
 export 'loading_filled_button.dart';
 export 'kitchenowl_search_anchor.dart';
 export 'kitchenowl_markdown_body.dart';
+export 'user_circle_avatar.dart';

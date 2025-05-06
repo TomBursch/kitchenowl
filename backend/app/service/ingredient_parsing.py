@@ -1,3 +1,4 @@
+from typing import cast
 import ingredient_parser
 import ingredient_parser.dataclasses
 from litellm import completion
@@ -25,15 +26,23 @@ class IngredientParsingResult:
 
 
 def parseNLP(ingredients: list[str]) -> list[IngredientParsingResult]:
-    def nlpAmountToDescription(amount: ingredient_parser.dataclasses.IngredientAmount | ingredient_parser.dataclasses.CompositeIngredientAmount) -> str:
+    def nlpAmountToDescription(
+        amount: ingredient_parser.dataclasses.IngredientAmount
+        | ingredient_parser.dataclasses.CompositeIngredientAmount,
+    ) -> str:
         if isinstance(amount, ingredient_parser.dataclasses.CompositeIngredientAmount):
             return amount.text
         return f"{amount.quantity} {amount.unit}"
-    
+
     def parseNLPSingle(ingredient: str) -> IngredientParsingResult:
         parsed = ingredient_parser.parse_ingredient(ingredient)
-        name = parsed.name[0].text if len(parsed.name) > 0 else None
-        description = nlpAmountToDescription(parsed.amount[0]) if len(parsed.amount) > 0 else ''
+        if isinstance(parsed.name, list):
+            name = parsed.name[0].text if parsed.name else None
+        else:
+            name = parsed.name.text
+        description = (
+            nlpAmountToDescription(parsed.amount[0]) if len(parsed.amount) > 0 else ""
+        )
         # description = description + (" " if description else "") + (parsed.comment.text if parsed.comment else "") # Usually cooking instructions
         return IngredientParsingResult(ingredient, name, description)
 
@@ -79,12 +88,11 @@ Return only JSON and nothing else.
     )
 
     response = completion(
-        model=LLM_MODEL,
+        model=cast(str, LLM_MODEL),
         api_base=LLM_API_URL,
         # response_format={"type": "json_object"},
         messages=messages,
     )
-
     llmResponse = json.loads(response.choices[0].message.content)
     if len(llmResponse) != len(ingredients):
         return None
@@ -108,5 +116,4 @@ def parseIngredients(
             return parseLLM(ingredients, targetLanguageCode) or parseNLP(ingredients)
         except Exception as e:
             print("Error parsing ingredients:", e)
-
     return parseNLP(ingredients)

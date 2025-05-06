@@ -1,30 +1,46 @@
 from __future__ import annotations
-from typing import Self, List, TYPE_CHECKING
+from typing import Any, Self, List, TYPE_CHECKING, cast
 from app import db
-from app.helpers import DbModelMixin, DbModelAuthorizeMixin
+from app.helpers import DbModelAuthorizeMixin
 from sqlalchemy.orm import Mapped
 
+Model = db.Model
 if TYPE_CHECKING:
-    from app.models import *
+    from app.models import Household, Item
+    from app.helpers.db_model_base import DbModelBase
+
+    Model = DbModelBase
 
 
-class Category(db.Model, DbModelMixin, DbModelAuthorizeMixin):
+class Category(Model, DbModelAuthorizeMixin):
     __tablename__ = "category"
 
     id: Mapped[int] = db.Column(db.Integer, primary_key=True)
     name: Mapped[str] = db.Column(db.String(128))
     default: Mapped[bool] = db.Column(db.Boolean, default=False)
-    default_key: Mapped[str] = db.Column(db.String(128))
+    default_key: Mapped[str | None] = db.Column(db.String(128))
     ordering: Mapped[int] = db.Column(db.Integer, default=0)
     household_id: Mapped[int] = db.Column(
         db.Integer, db.ForeignKey("household.id"), nullable=False, index=True
     )
 
-    household: Mapped["Household"] = db.relationship("Household", uselist=False)
-    items: Mapped[List["Item"]] = db.relationship("Item", back_populates="category")
+    household: Mapped["Household"] = cast(
+        Mapped["Household"],
+        db.relationship(
+            "Household",
+            uselist=False,
+        ),
+    )
+    items: Mapped[List["Item"]] = cast(
+        Mapped[List["Item"]],
+        db.relationship(
+            "Item",
+            back_populates="category",
+        ),
+    )
 
-    def obj_to_full_dict(self) -> dict:
-        res = super().obj_to_dict()
+    def obj_to_full_dict(self) -> dict[str, Any]:
+        res = self.obj_to_dict()
         return res
 
     @classmethod
@@ -37,7 +53,11 @@ class Category(db.Model, DbModelMixin, DbModelAuthorizeMixin):
 
     @classmethod
     def create_by_name(
-        cls, household_id: int, name, default=False, default_key=None
+        cls,
+        household_id: int,
+        name: str,
+        default: bool = False,
+        default_key: str | None = None,
     ) -> Self:
         return cls(
             name=name,
@@ -47,25 +67,21 @@ class Category(db.Model, DbModelMixin, DbModelAuthorizeMixin):
         ).save()
 
     @classmethod
-    def find_by_name(cls, household_id: int, name: str) -> Self:
+    def find_by_name(cls, household_id: int, name: str) -> Self | None:
         return cls.query.filter(
             cls.name == name, cls.household_id == household_id
         ).first()
 
     @classmethod
-    def find_by_default_key(cls, household_id: int, default_key: str) -> Self:
+    def find_by_default_key(cls, household_id: int, default_key: str) -> Self | None:
         return cls.query.filter(
             cls.default_key == default_key, cls.household_id == household_id
         ).first()
 
-    @classmethod
-    def find_by_id(cls, id: int) -> Self:
-        return cls.query.filter(cls.id == id).first()
-
     def reorder(self, newIndex: int):
         cls = self.__class__
 
-        l: list[cls] = (
+        l: list[Self] = (
             cls.query.filter(cls.household_id == self.household_id)
             .order_by(cls.ordering, cls.name)
             .all()

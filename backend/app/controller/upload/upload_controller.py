@@ -27,7 +27,7 @@ def upload_file():
     if file.filename == "":
         return jsonify({"msg": "missing filename"})
 
-    if file and allowed_file(file.filename):
+    if file and file.filename and allowed_file(file.filename):
         filename = secure_filename(
             str(uuid.uuid4()) + "." + file.filename.rsplit(".", 1)[1].lower()
         )
@@ -51,7 +51,7 @@ def upload_file():
 @jwt_required(optional=True)
 def download_file(filename):
     filename = secure_filename(filename)
-    f: File = File.query.filter(File.filename == filename).first()
+    f: File | None = File.query.filter(File.filename == filename).first()
 
     if not f:
         raise NotFoundRequest()

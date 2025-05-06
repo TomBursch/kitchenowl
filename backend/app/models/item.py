@@ -1,38 +1,65 @@
 from __future__ import annotations
-from typing import Self, List, TYPE_CHECKING
+from typing import Any, Optional, Self, List, TYPE_CHECKING, cast
 
 from sqlalchemy import func
 from app import db
-from app.helpers import DbModelMixin, DbModelAuthorizeMixin
+from app.helpers import DbModelAuthorizeMixin
 from app.models.category import Category
 from app.util import description_merger
 from sqlalchemy.orm import Mapped
 
+Model = db.Model
 if TYPE_CHECKING:
-    from app.models import *
+    from app.models import Household, RecipeItems, ShoppinglistItems
+    from app.helpers.db_model_base import DbModelBase
+
+    Model = DbModelBase
 
 
-class Item(db.Model, DbModelMixin, DbModelAuthorizeMixin):
+class Item(Model, DbModelAuthorizeMixin):
     __tablename__ = "item"
 
     id: Mapped[int] = db.Column(db.Integer, primary_key=True)
     name: Mapped[str] = db.Column(db.String(128))
-    icon: Mapped[str] = db.Column(db.String(128), nullable=True)
-    category_id: Mapped[int] = db.Column(db.Integer, db.ForeignKey("category.id"))
+    icon: Mapped[str | None] = db.Column(db.String(128), nullable=True)
+    category_id: Mapped[int | None] = db.Column(
+        db.Integer, db.ForeignKey("category.id")
+    )
     default: Mapped[bool] = db.Column(db.Boolean, default=False)
-    default_key: Mapped[str] = db.Column(db.String(128))
+    default_key: Mapped[str | None] = db.Column(db.String(128))
     household_id: Mapped[int] = db.Column(
         db.Integer, db.ForeignKey("household.id"), nullable=False, index=True
     )
 
-    household: Mapped["Household"] = db.relationship("Household", uselist=False)
-    category: Mapped["Category"] = db.relationship("Category")
-
-    recipes: Mapped[List["RecipeItems"]] = db.relationship(
-        "RecipeItems", back_populates="item", cascade="all, delete-orphan"
+    household: Mapped["Household"] = cast(
+        Mapped["Household"],
+        db.relationship(
+            "Household",
+            uselist=False,
+        ),
     )
-    shoppinglists: Mapped[List["ShoppinglistItems"]] = db.relationship(
-        "ShoppinglistItems", back_populates="item", cascade="all, delete-orphan"
+    category: Mapped[Optional["Category"]] = cast(
+        Mapped["Category"],
+        db.relationship(
+            "Category",
+        ),
+    )
+
+    recipes: Mapped[List["RecipeItems"]] = cast(
+        Mapped[List["RecipeItems"]],
+        db.relationship(
+            "RecipeItems",
+            back_populates="item",
+            cascade="all, delete-orphan",
+        ),
+    )
+    shoppinglists: Mapped[List["ShoppinglistItems"]] = cast(
+        Mapped[List["ShoppinglistItems"]],
+        db.relationship(
+            "ShoppinglistItems",
+            back_populates="item",
+            cascade="all, delete-orphan",
+        ),
     )
 
     # determines order of items in the shoppinglist
@@ -56,14 +83,18 @@ class Item(db.Model, DbModelMixin, DbModelAuthorizeMixin):
         cascade="all, delete-orphan",
     )
 
-    def obj_to_dict(self) -> dict:
-        res = super().obj_to_dict()
+    def obj_to_dict(
+        self,
+        skip_columns: list[str] | None = None,
+        include_columns: list[str] | None = None,
+    ) -> dict[str, Any]:
+        res = super().obj_to_dict(skip_columns, include_columns)
         if self.category_id:
-            category = Category.find_by_id(self.category_id)
+            category = cast(Category, Category.find_by_id(self.category_id))
             res["category"] = category.obj_to_dict()
         return res
 
-    def obj_to_export_dict(self) -> dict:
+    def obj_to_export_dict(self) -> dict[str, Any]:
         res = {
             "name": self.name,
         }
@@ -73,7 +104,7 @@ class Item(db.Model, DbModelMixin, DbModelAuthorizeMixin):
             res["category"] = self.category.name
         return res
 
-    def save(self, keepDefault=False) -> Self:
+    def save(self, keepDefault: bool = False) -> Self:
         if not keepDefault:
             self.default = False
         return super().save()
@@ -146,24 +177,20 @@ class Item(db.Model, DbModelMixin, DbModelAuthorizeMixin):
         ).save()
 
     @classmethod
-    def find_by_name(cls, household_id: int, name: str) -> Self:
+    def find_by_name(cls, household_id: int, name: str) -> Self | None:
         name = name.strip()
         return cls.query.filter(
             cls.household_id == household_id, func.lower(cls.name) == func.lower(name)
         ).first()
 
     @classmethod
-    def find_by_default_key(cls, household_id: int, default_key: str) -> Self:
+    def find_by_default_key(cls, household_id: int, default_key: str) -> Self | None:
         return cls.query.filter(
             cls.household_id == household_id, cls.default_key == default_key
         ).first()
 
     @classmethod
-    def find_by_id(cls, id) -> Self:
-        return cls.query.filter(cls.id == id).first()
-
-    @classmethod
-    def find_name_starts_with(cls, household_id: int, starts_with: str) -> Self:
+    def find_name_starts_with(cls, household_id: int, starts_with: str) -> Self | None:
         starts_with = starts_with.strip()
         return cls.query.filter(
             cls.household_id == household_id,
@@ -189,9 +216,10 @@ class Item(db.Model, DbModelMixin, DbModelAuthorizeMixin):
                     cls.support.desc(),
                 )
                 .limit(item_count)
+                .all()
             )
 
-        found = []
+        found: list[Self] = []
 
         # name is a regex
         if "*" in name or "?" in name or "%" in name or "_" in name:
@@ -209,9 +237,9 @@ class Item(db.Model, DbModelMixin, DbModelAuthorizeMixin):
         # name is no regex
         starts_with = "{0}%".format(name)
         contains = "%{0}%".format(name)
-        one_error = []
+        one_error: List[str] = []
         for index in range(len(name)):
-            name_one_error = name[:index] + "_" + name[index + 1:]
+            name_one_error = name[:index] + "_" + name[index + 1 :]
             one_error.append("%{0}%".format(name_one_error))
 
         for looking_for in [starts_with, contains] + one_error:

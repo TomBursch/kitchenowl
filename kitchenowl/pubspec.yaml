@@ -48,31 +48,32 @@ dependencies:
   diffutil_dart: ^4.0.0
 
   responsive_builder: ^0.7.0
-  dynamic_color: ^1.7.0
+
+  # TODO: Remove this once https://github.com/material-foundation/flutter-packages/pull/599 is merged
+  dynamic_system_colors: ^1.8.0
   flutter_localized_locales: ^2.0.5
 
-  azlistview_plus: ^3.0.0
   flutter_markdown: ^0.7.1
   markdown: ^7.1.1
   tuple: ^2.0.1
-  fl_chart: ^0.70.0
+  fl_chart: ^0.71.0
   cached_network_image: ^3.3.0
   flutter_svg: ^2.0.10+1
   image_picker: ^1.0.4
-  file_picker: ^9.0.0
+  file_picker: ^10.1.2
   photo_view: ^0.15.0
   share_handler: ^0.0.19
   share_plus: ^10.0.0
   reorderables: ^0.6.0
   flutter_colorpicker: ^1.1.0
   sliver_tools: ^0.2.12
-  go_router: ^14.1.1
+  go_router: ^15.0.0
   socket_io_client: ^3.0.0
   fraction: ^5.0.2
   flutter_blurhash: ^0.8.2
   transparent_image: ^2.0.1
   universal_html: ^2.2.4
-  sign_in_with_apple: ^6.0.0
+  sign_in_with_apple: ^7.0.1
   wakelock_plus: ^1.2.10
   fuzzywuzzy: ^1.2.0
 

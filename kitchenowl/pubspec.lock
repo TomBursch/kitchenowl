@@ -41,14 +41,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.12.0"
-  azlistview_plus:
-    dependency: "direct main"
-    description:
-      name: azlistview_plus
-      sha256: bbf08532db8ba2b9054100f68829e1841b23f3244e54712934f0f192651d8319
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.0.0"
   bloc:
     dependency: transitive
     description:
@@ -185,14 +177,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.0.1"
-  dynamic_color:
+  dynamic_system_colors:
     dependency: "direct main"
     description:
-      name: dynamic_color
-      sha256: eae98052fa6e2826bdac3dd2e921c6ce2903be15c6b7f8b6d8a5d49b5086298d
+      name: dynamic_system_colors
+      sha256: "43794e658fa88cbdec9f397dd1afd2eb69b6c9717e99b93b16ba37c3aa3b3a8c"
       url: "https://pub.dev"
     source: hosted
-    version: "1.7.0"
+    version: "1.8.0"
   equatable:
     dependency: "direct main"
     description:
@@ -229,10 +221,10 @@ packages:
     dependency: "direct main"
     description:
       name: file_picker
-      sha256: "09b474c0c8117484b80cbebc043801ff91e05cfbd2874d512825c899e1754694"
+      sha256: "8986dec4581b4bcd4b6df5d75a2ea0bede3db802f500635d05fa8be298f9467f"
       url: "https://pub.dev"
     source: hosted
-    version: "9.2.3"
+    version: "10.1.2"
   file_selector_linux:
     dependency: transitive
     description:
@@ -277,10 +269,10 @@ packages:
     dependency: "direct main"
     description:
       name: fl_chart
-      sha256: "5276944c6ffc975ae796569a826c38a62d2abcf264e26b88fa6f482e107f4237"
+      sha256: f2e9137f261d0f53a820f6b829c80ba570ac915284c8e32789d973834796eca0
       url: "https://pub.dev"
     source: hosted
-    version: "0.70.2"
+    version: "0.71.0"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -499,10 +491,10 @@ packages:
     dependency: "direct main"
     description:
       name: go_router
-      sha256: f02fd7d2a4dc512fec615529824fdd217fecb3a3d3de68360293a551f21634b3
+      sha256: "4cdfcc6a178632d1dbb7a728f8e84a1466211354704b9cdc03eee661d3277732"
       url: "https://pub.dev"
     source: hosted
-    version: "14.8.1"
+    version: "15.0.0"
   html:
     dependency: transitive
     description:
@@ -892,14 +884,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.28.0"
-  scrollable_positioned_list:
-    dependency: transitive
-    description:
-      name: scrollable_positioned_list
-      sha256: "1b54d5f1329a1e263269abc9e2543d90806131aa14fe7c6062a8054d57249287"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.3.8"
   share_handler:
     dependency: "direct main"
     description:
@@ -1016,26 +1000,26 @@ packages:
     dependency: "direct main"
     description:
       name: sign_in_with_apple
-      sha256: e84a62e17b7e463abf0a64ce826c2cd1f0b72dff07b7b275e32d5302d76fb4c5
+      sha256: "8bd875c8e8748272749eb6d25b896f768e7e9d60988446d543fe85a37a2392b8"
       url: "https://pub.dev"
     source: hosted
-    version: "6.1.4"
+    version: "7.0.1"
   sign_in_with_apple_platform_interface:
     dependency: transitive
     description:
       name: sign_in_with_apple_platform_interface
-      sha256: c2ef2ce6273fce0c61acd7e9ff5be7181e33d7aa2b66508b39418b786cca2119
+      sha256: "981bca52cf3bb9c3ad7ef44aace2d543e5c468bb713fd8dda4275ff76dfa6659"
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.0"
+    version: "2.0.0"
   sign_in_with_apple_web:
     dependency: transitive
     description:
       name: sign_in_with_apple_web
-      sha256: "2f7c38368f49e3f2043bca4b46a4a61aaae568c140a79aa0675dc59ad0ca49bc"
+      sha256: f316400827f52cafcf50d00e1a2e8a0abc534ca1264e856a81c5f06bd5b10fed
       url: "https://pub.dev"
     source: hosted
-    version: "2.1.1"
+    version: "3.0.0"
   sky_engine:
     dependency: transitive
     description: flutter

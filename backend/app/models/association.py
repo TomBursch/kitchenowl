@@ -1,13 +1,16 @@
-from typing import Self, TYPE_CHECKING
+from typing import Self, TYPE_CHECKING, cast
 from app import db
-from app.helpers import DbModelMixin
 from sqlalchemy.orm import Mapped
 
+Model = db.Model
 if TYPE_CHECKING:
-    from app.models import *
+    from app.models import Item
+    from app.helpers.db_model_base import DbModelBase
+
+    Model = DbModelBase
 
 
-class Association(db.Model, DbModelMixin):
+class Association(Model):
     __tablename__ = "association"
 
     id: Mapped[int] = db.Column(db.Integer, primary_key=True)
@@ -18,21 +21,34 @@ class Association(db.Model, DbModelMixin):
     confidence: Mapped[float] = db.Column(db.Float)
     lift: Mapped[float] = db.Column(db.Float)
 
-    antecedent: Mapped["Item"] = db.relationship(
-        "Item",
-        uselist=False,
-        foreign_keys=[antecedent_id],
-        back_populates="antecedents",
+    antecedent: Mapped["Item"] = cast(
+        Mapped["Item"],
+        db.relationship(
+            "Item",
+            uselist=False,
+            foreign_keys=[antecedent_id],
+            back_populates="antecedents",
+        ),
     )
-    consequent: Mapped["Item"] = db.relationship(
-        "Item",
-        uselist=False,
-        foreign_keys=[consequent_id],
-        back_populates="consequents",
+    consequent: Mapped["Item"] = cast(
+        Mapped["Item"],
+        db.relationship(
+            "Item",
+            uselist=False,
+            foreign_keys=[consequent_id],
+            back_populates="consequents",
+        ),
     )
 
     @classmethod
-    def create(cls, antecedent_id, consequent_id, support, confidence, lift):
+    def create(
+        cls,
+        antecedent_id: int,
+        consequent_id: int,
+        support: float,
+        confidence: float,
+        lift: float,
+    ) -> Self:
         return cls(
             antecedent_id=antecedent_id,
             consequent_id=consequent_id,
@@ -42,7 +58,7 @@ class Association(db.Model, DbModelMixin):
         ).save()
 
     @classmethod
-    def find_by_antecedent(cls, antecedent_id):
+    def find_by_antecedent(cls, antecedent_id: int):
         return cls.query.filter(cls.antecedent_id == antecedent_id).order_by(
             cls.lift.desc()
         )

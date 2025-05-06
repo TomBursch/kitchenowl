@@ -167,27 +167,29 @@ class _ExpensePageState extends State<ExpensePage> {
                   maxCrossAxisExtent: 1600,
                   child: SliverList(
                     delegate: SliverChildBuilderDelegate(
-                      (context, i) => ListTile(
-                        title: Text(
-                          state.household.member
-                                  ?.firstWhereOrNull(
-                                    (e) =>
-                                        e.id == state.expense.paidFor[i].userId,
-                                  )
-                                  ?.name ??
-                              AppLocalizations.of(context)!.other,
-                        ),
-                        subtitle: Text(NumberFormat.simpleCurrency().format(
-                          (state.expense.amount *
-                                  state.expense.paidFor[i].factor /
-                                  state.expense.paidFor
-                                      .fold(0, (p, v) => p + v.factor))
-                              .abs(),
-                        )),
-                        trailing: Text(
-                          state.expense.paidFor[i].factor.toString(),
-                        ),
-                      ),
+                      (context, i) {
+                        final member = state.household.member?.firstWhereOrNull(
+                          (e) => e.id == state.expense.paidFor[i].userId,
+                        );
+                        return ListTile(
+                          leading: member != null
+                              ? UserCircleAvatar(user: member)
+                              : null,
+                          title: Text(
+                            member?.name ?? AppLocalizations.of(context)!.other,
+                          ),
+                          subtitle: Text(NumberFormat.simpleCurrency().format(
+                            (state.expense.amount *
+                                    state.expense.paidFor[i].factor /
+                                    state.expense.paidFor
+                                        .fold(0, (p, v) => p + v.factor))
+                                .abs(),
+                          )),
+                          trailing: Text(
+                            state.expense.paidFor[i].factor.toString(),
+                          ),
+                        );
+                      },
                       childCount: state.expense.paidFor.length,
                     ),
                   ),

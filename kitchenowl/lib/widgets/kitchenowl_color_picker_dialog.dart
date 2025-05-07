@@ -19,6 +19,11 @@ class _KitchenOwlColorPickerDialogState
   @override
   void initState() {
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     selectedColor = widget.initialColor ?? Theme.of(context).primaryColor;
   }
 

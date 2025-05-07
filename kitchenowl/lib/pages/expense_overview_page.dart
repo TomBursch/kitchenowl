@@ -185,10 +185,10 @@ class _ExpenseOverviewPageState extends State<ExpenseOverviewPage> {
                                       .titleLarge
                                       ?.copyWith(
                                         color: totalForSelectedMonth < 0
-                                            ? Theme.of(context)
+                                            ? AppColors.green
+                                            : Theme.of(context)
                                                 .colorScheme
-                                                .error
-                                            : AppColors.green,
+                                                .error,
                                       ),
                                 ),
                                 if (state

@@ -114,6 +114,7 @@
   "@expenseEmpty": {},
   "@expenseFactor": {},
   "@expenseOverviewComparedToPreviousMonth": {},
+  "@expenseOverviewExpenses": {},
   "@expenseOverviewTotalTitle": {
     "placeholders": {
       "month": {
@@ -380,6 +381,7 @@
     }
   },
   "@shoppingListEdit": {},
+  "@shoppingListEmpty": {},
   "@shoppingListStyle": {},
   "@shoppingLists": {},
   "@signInWith": {
@@ -467,6 +469,7 @@
   "@wrongUsernameOrPassword": {},
   "@yearly": {},
   "@yes": {},
+  "@yesterday": {},
   "@yields": {},
   "@you": {},
   "about": "À propos",
@@ -540,7 +543,8 @@
   "expenseEmpty": "Aucune dépense. Créez-en une !",
   "expenseFactor": "Facteur",
   "expenseOverviewComparedToPreviousMonth": "Par rapport aux mois précédents",
-  "expenseOverviewTotalTitle": "Total des dépenses pour {month} :",
+  "expenseOverviewExpenses": "Dépenses",
+  "expenseOverviewTotalTitle": "Total pour {month} :",
   "expensePaidBy": "Payé par",
   "expensePaidFor": "Payé pour",
   "expenseReceivedBy": "Reçu par",
@@ -685,6 +689,7 @@
   "shoppingListDelete": "Supprimer la liste de courses",
   "shoppingListDeleteConfirmation": "Êtes-vous sûr·e de vouloir supprimer {shoppingList} ?",
   "shoppingListEdit": "Modifier la liste de courses",
+  "shoppingListEmpty": "La liste d'achat est vide. Ajoute un article à l'aide de la function de recherche ci-dessus.",
   "shoppingListStyle": "Style de liste de courses",
   "shoppingLists": "Listes de courses",
   "signInWith": "Se connecter avec {provider}",
@@ -742,6 +747,7 @@
   "wrongUsernameOrPassword": "Nom d'utilisateur ou mot de passe erroné",
   "yearly": "Annuel",
   "yes": "Oui",
+  "yesterday": "Hier",
   "yields": "Portions",
   "you": "vous"
 }

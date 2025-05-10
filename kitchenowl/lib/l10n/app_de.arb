@@ -114,6 +114,7 @@
   "@expenseEmpty": {},
   "@expenseFactor": {},
   "@expenseOverviewComparedToPreviousMonth": {},
+  "@expenseOverviewExpenses": {},
   "@expenseOverviewTotalTitle": {
     "placeholders": {
       "month": {
@@ -468,6 +469,7 @@
   "@wrongUsernameOrPassword": {},
   "@yearly": {},
   "@yes": {},
+  "@yesterday": {},
   "@yields": {},
   "@you": {},
   "about": "Über",
@@ -541,6 +543,7 @@
   "expenseEmpty": "Keine Ausgaben, fange an welche zu erstellen!",
   "expenseFactor": "Faktor",
   "expenseOverviewComparedToPreviousMonth": "Im Vergleich zu den letzten Monaten",
+  "expenseOverviewExpenses": "Ausgaben",
   "expenseOverviewTotalTitle": "Gesamte Ausgaben für {month}:",
   "expensePaidBy": "Bezahlt von",
   "expensePaidFor": "Bezahlt für",

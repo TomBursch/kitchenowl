@@ -116,6 +116,7 @@
   "@expenseEmpty": {},
   "@expenseFactor": {},
   "@expenseOverviewComparedToPreviousMonth": {},
+  "@expenseOverviewExpenses": {},
   "@expenseOverviewTotalTitle": {
     "placeholders": {
       "month": {
@@ -382,6 +383,7 @@
     }
   },
   "@shoppingListEdit": {},
+  "@shoppingListEmpty": {},
   "@shoppingListStyle": {},
   "@shoppingLists": {},
   "@signInWith": {
@@ -469,6 +471,7 @@
   "@wrongUsernameOrPassword": {},
   "@yearly": {},
   "@yes": {},
+  "@yesterday": {},
   "@yields": {},
   "@you": {},
   "about": "O",
@@ -534,7 +537,7 @@
   "emailUsed": "Tento email už používa iný účet",
   "error": "Nastala chyba",
   "excludeFromStatistics": "Vynechať zo štatistík",
-  "expense": "Výdaje",
+  "expense": "Výdaj",
   "expenseAdd": "Pridať výdaj",
   "expenseAmount": "Množstvo",
   "expenseCategories": "Kategória výdajov",
@@ -542,9 +545,10 @@
   "expenseEmpty": "Žiadne výdaje, začnite vytvorením prvého!",
   "expenseFactor": "Faktor",
   "expenseOverviewComparedToPreviousMonth": "Porovnanie s predchádzajúcimi mesiacmi",
-  "expenseOverviewTotalTitle": "Celkové výdaje za {month}:",
+  "expenseOverviewExpenses": "Výdaje",
+  "expenseOverviewTotalTitle": "Celkovo za {month}:",
   "expensePaidBy": "Zaplatené",
-  "expensePaidFor": "Zaplatené",
+  "expensePaidFor": "Zaplatené pre",
   "expenseReceivedBy": "Prijaté",
   "expenseReceivedFor": "Prijaté od",
   "export": "Exportovať",
@@ -683,10 +687,11 @@
   "setupTitle": "Ahoj! Pripravený nakupovať?",
   "share": "Zdieľať",
   "shoppingList": "Nákupný zoznam",
-  "shoppingListContainsEntries": "{entriesCount, plural, =0{Nákupný zoznam je prázdny.} =1{Nákupný zoznam obsabuje 1 položku.} other{Nákupný zoznam obsahuje {entriesCount} položiek.}}",
+  "shoppingListContainsEntries": "{entriesCount, plural, =0{Nákupný zoznam je prázdny.} =1{Nákupný zoznam obsahuje 1 položku.} other{Nákupný zoznam obsahuje {entriesCount} položiek.}}",
   "shoppingListDelete": "Zmazať nákupný zoznam",
   "shoppingListDeleteConfirmation": "Ste si istý, že chcete zmazať {shoppingList}?",
   "shoppingListEdit": "Upraviť nákupný zoznam",
+  "shoppingListEmpty": "Nákupný zoznam je prázdny. Pridaj položku s využitím funkcie hľadania vyššie.",
   "shoppingListStyle": "Štýl nákupného zoznamu",
   "shoppingLists": "Nákupné zoznamy",
   "signInWith": "Prihlásiť sa pomocou {provider}",
@@ -744,6 +749,7 @@
   "wrongUsernameOrPassword": "Nesprávne užívateľské meno alebo heslo",
   "yearly": "Ročne",
   "yes": "Áno",
+  "yesterday": "Včera",
   "yields": "Výnosy",
   "you": "Vy"
 }

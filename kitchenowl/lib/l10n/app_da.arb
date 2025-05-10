@@ -114,6 +114,7 @@
   "@expenseEmpty": {},
   "@expenseFactor": {},
   "@expenseOverviewComparedToPreviousMonth": {},
+  "@expenseOverviewExpenses": {},
   "@expenseOverviewTotalTitle": {
     "placeholders": {
       "month": {
@@ -273,6 +274,7 @@
   "@onboardingTitle": {},
   "@optional": {},
   "@or": {},
+  "@ordering": {},
   "@other": {},
   "@overview": {},
   "@owesAB": {
@@ -379,6 +381,7 @@
     }
   },
   "@shoppingListEdit": {},
+  "@shoppingListEmpty": {},
   "@shoppingListStyle": {},
   "@shoppingLists": {},
   "@signInWith": {
@@ -466,6 +469,7 @@
   "@wrongUsernameOrPassword": {},
   "@yearly": {},
   "@yes": {},
+  "@yesterday": {},
   "@yields": {},
   "@you": {},
   "about": "Om",
@@ -539,7 +543,8 @@
   "expenseEmpty": "Ingen udgifter. Start ved at oprette en!",
   "expenseFactor": "Faktor",
   "expenseOverviewComparedToPreviousMonth": "Sammenlignet med tidligere måneder",
-  "expenseOverviewTotalTitle": "Samlede udgifter for {month}:",
+  "expenseOverviewExpenses": "Udgifter",
+  "expenseOverviewTotalTitle": "Samlet for {month}:",
   "expensePaidBy": "Betalt af",
   "expensePaidFor": "Betalt til",
   "expenseReceivedBy": "Modtaget af",
@@ -622,6 +627,7 @@
   "onboardingTitle": "Lad os oprette en bruger",
   "optional": "Valgfrit",
   "or": "eller",
+  "ordering": "Bestiller",
   "other": "Andet",
   "overview": "Oversigt",
   "owesAB": "{nameA} skylder {nameB}",
@@ -683,6 +689,7 @@
   "shoppingListDelete": "Slet indkøbsliste",
   "shoppingListDeleteConfirmation": "Er du sikker på, du vil slette {shoppingList}?",
   "shoppingListEdit": "Rediger indkøbsliste",
+  "shoppingListEmpty": "Indkøbslisten er tom. Tilføj et element ved hjælp af søgefunktionen ovenfor.",
   "shoppingListStyle": "Indkøbslistestil",
   "shoppingLists": "Indkøbslister",
   "signInWith": "Log ind med {provider}",
@@ -740,6 +747,7 @@
   "wrongUsernameOrPassword": "Forkert brugernavn eller adgangskode",
   "yearly": "Årlig",
   "yes": "Ja",
+  "yesterday": "I går",
   "yields": "Portioner",
   "you": "du"
 }

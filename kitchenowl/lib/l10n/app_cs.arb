@@ -1,6 +1,7 @@
 {
   "@about": {},
   "@accountCreate": {},
+  "@accountCreateHint": {},
   "@accountCreateTitle": {},
   "@accountDelete": {},
   "@accountDeleteConfirmation": {},
@@ -48,12 +49,15 @@
   },
   "@address": {},
   "@admin": {},
+  "@analysingWebsite": {},
   "@appDescription": {},
   "@appTitle": {
     "description": "The title of the app"
   },
   "@back": {},
   "@balances": {},
+  "@budget": {},
+  "@budgetSet": {},
   "@camera": {},
   "@cancel": {},
   "@categories": {},
@@ -78,6 +82,7 @@
     }
   },
   "@changeIcon": {},
+  "@clear": {},
   "@colorSelect": {},
   "@confirm": {},
   "@cookingTime": {},
@@ -109,6 +114,7 @@
   "@expenseEmpty": {},
   "@expenseFactor": {},
   "@expenseOverviewComparedToPreviousMonth": {},
+  "@expenseOverviewExpenses": {},
   "@expenseOverviewTotalTitle": {
     "placeholders": {
       "month": {
@@ -137,6 +143,14 @@
   "@go": {},
   "@grid": {},
   "@helpTranslate": {},
+  "@hi": {
+    "placeholders": {
+      "name": {
+        "example": "Tom",
+        "type": "String"
+      }
+    }
+  },
   "@household": {},
   "@householdDelete": {},
   "@householdDeleteConfirmation": {
@@ -229,6 +243,7 @@
     }
   },
   "@longPressToReorder": {},
+  "@longerThanExpected": {},
   "@markAsPaid": {},
   "@mealPlanner": {},
   "@member": {},
@@ -296,9 +311,21 @@
       }
     }
   },
+  "@private": {},
+  "@privateRecipeDescription": {},
   "@profile": {},
+  "@public": {},
+  "@publicRecipeDescription": {},
   "@recentItemsCategorize": {},
   "@recipeAdd": {},
+  "@recipeAddToHousehold": {
+    "placeholders": {
+      "householdName": {
+        "example": "Home",
+        "type": "String"
+      }
+    }
+  },
   "@recipeAddUrl": {},
   "@recipeDelete": {},
   "@recipeDeleteConfirmation": {
@@ -322,6 +349,7 @@
   "@recipesSuggested": {},
   "@redo": {},
   "@refresh": {},
+  "@rememberLastShoppingList": {},
   "@remove": {},
   "@rename": {},
   "@reportIssue": {},
@@ -334,7 +362,15 @@
   "@set": {},
   "@settings": {},
   "@setupTitle": {},
+  "@share": {},
   "@shoppingList": {},
+  "@shoppingListContainsEntries": {
+    "placeholders": {
+      "entriesCount": {
+        "type": "num"
+      }
+    }
+  },
   "@shoppingListDelete": {},
   "@shoppingListDeleteConfirmation": {
     "placeholders": {
@@ -345,6 +381,7 @@
     }
   },
   "@shoppingListEdit": {},
+  "@shoppingListEmpty": {},
   "@shoppingListStyle": {},
   "@shoppingLists": {},
   "@signInWith": {
@@ -356,6 +393,7 @@
     }
   },
   "@signup": {},
+  "@skip": {},
   "@smaller": {},
   "@sortingAlgorithmic": {},
   "@sortingAlphabetical": {},
@@ -380,8 +418,21 @@
   "@themeLight": {},
   "@themeMode": {},
   "@themeSystem": {},
+  "@today": {},
+  "@tomorrow": {},
   "@total": {},
   "@totalTime": {},
+  "@tutorialItemDescription1": {},
+  "@tutorialItemDescription2": {},
+  "@tutorialRecipeDescription": {},
+  "@tutorialRecipeMore": {
+    "placeholders": {
+      "url": {
+        "example": "https://...",
+        "type": "String"
+      }
+    }
+  },
   "@uncategorized": {},
   "@underConstruction": {},
   "@undo": {},
@@ -413,14 +464,17 @@
   "@usernameUnavailable": {},
   "@users": {},
   "@weekly": {},
+  "@welcomeBack": {},
   "@writeMarkdownHere": {},
   "@wrongUsernameOrPassword": {},
   "@yearly": {},
   "@yes": {},
+  "@yesterday": {},
   "@yields": {},
   "@you": {},
   "about": "O",
   "accountCreate": "Vytvořit účet",
+  "accountCreateHint": "Vaše uživatelské jméno a jméno jsou veřejné, proto je zvolte tak, že vám nebude vadit, když je druzí uvidí.",
   "accountCreateTitle": "Vytvořit KitchenOwl účet",
   "accountDelete": "Smazat účet",
   "accountDeleteConfirmation": "Jste si jistí, že chcete smazat svůj účet?",
@@ -440,10 +494,13 @@
   "addedBy": "Přidáno {name}",
   "address": "Adresa",
   "admin": "Admin",
+  "analysingWebsite": "Analyzuji webovou stránku...",
   "appDescription": "KitchenOwl vám pomůže uspořádat vaše nakupování.",
   "appTitle": "KitchenOwl",
   "back": "Zpět",
   "balances": "Zůstatek",
+  "budget": "Rozpočet",
+  "budgetSet": "Nastavit rozpočet",
   "camera": "Kamera",
   "cancel": "Zrušit",
   "categories": "Kategorie",
@@ -454,6 +511,7 @@
   "categoryEdit": "Upravit Kategorii",
   "categoryExpenseDeleteConfirmation": "Jste si jistí že chcete smazat {category}? Tato akce odebere kategorii ze všech výdajů.",
   "changeIcon": "Změnit Ikonu",
+  "clear": "Vyčistit",
   "colorSelect": "Zvolit barvu",
   "confirm": "Potvrdit",
   "cookingTime": "Délka přípravy",
@@ -477,15 +535,16 @@
   "emailUsed": "Tento email je již používán jiným účtem",
   "error": "Nastala chyba",
   "excludeFromStatistics": "Vynechat ze statistik",
-  "expense": "Výdaje",
-  "expenseAdd": "Pridat Výdaj",
+  "expense": "Výdaj",
+  "expenseAdd": "Přidat výdaj",
   "expenseAmount": "Množství",
   "expenseCategories": "Kategorie Výdajů",
   "expenseEdit": "Upravit Výdaj",
   "expenseEmpty": "Žádné výdaje, začněte vytvořením prvního!",
   "expenseFactor": "Faktor",
   "expenseOverviewComparedToPreviousMonth": "V porovnáním s minulými měsíci",
-  "expenseOverviewTotalTitle": "Celkové výdaje za {month}:",
+  "expenseOverviewExpenses": "Výdaje",
+  "expenseOverviewTotalTitle": "Celkem za {month}:",
   "expensePaidBy": "Zaplaceno",
   "expensePaidFor": "Zaplaceno",
   "expenseReceivedBy": "Přijato",
@@ -499,6 +558,7 @@
   "go": "Jít",
   "grid": "Mřížka",
   "helpTranslate": "Pomoct s překladem",
+  "hi": "Ahoj {name}!",
   "household": "Domácnost",
   "householdDelete": "Smazat Domácnost",
   "householdDeleteConfirmation": "Jste si jistí že chcete smazat {household}? Odeberete tím všechny související položky, recepty, a výdaje.",
@@ -543,6 +603,7 @@
   "logout": "Odhlásit",
   "logoutName": "Odhlásit {name}",
   "longPressToReorder": "Dlouhým stiskem změníte pořadí",
+  "longerThanExpected": "Trvá to déle, než se čekalo",
   "markAsPaid": "Označit jako zaplacené",
   "mealPlanner": "Plánovač jídel",
   "member": "Člen",
@@ -585,9 +646,14 @@
   "preparationTime": "Čas přípravy",
   "privacyPolicy": "Zásady ochrany osobních údajů",
   "privacyPolicyAgree": "Vytvořením účtu souhlasíte s naší {privacyPolicy}",
+  "private": "Soukromé",
+  "privateRecipeDescription": "Jen členové domácnosti mohou zobrazit tento recept.",
   "profile": "Profil",
+  "public": "Veřejné",
+  "publicRecipeDescription": "Kdokoliv s odkazem na tento recept jej může zobrazit.",
   "recentItemsCategorize": "Kategorizovat nedávné položky",
   "recipeAdd": "Přidat recept",
+  "recipeAddToHousehold": "Přidat do {householdName}",
   "recipeAddUrl": "Přidat recept z URL",
   "recipeDelete": "Smazat recept",
   "recipeDeleteConfirmation": "Jste si jistí, že chcete odstranit {recipe}?",
@@ -604,26 +670,31 @@
   "recipesSuggested": "Navrhované",
   "redo": "Znovu",
   "refresh": "Obnovit",
+  "rememberLastShoppingList": "Zapamatovat si poslední použitý nákupní seznam",
   "remove": "Odstranit",
   "rename": "Přejmenovat",
   "reportIssue": "Nahlásit problém",
   "reset": "Resetovat",
   "save": "Uložit",
-  "searchHint": "Hledátě něco?",
+  "searchHint": "Hledáte něco?",
   "server": "Server",
   "serverChange": "Změnit server",
   "sessions": "Relace",
   "set": "Nastavit",
   "settings": "Nastavení",
   "setupTitle": "Ahoj! Připraven nakupovat?",
+  "share": "Sdílet",
   "shoppingList": "Nákupní seznam",
+  "shoppingListContainsEntries": "{entriesCount, plural, =0{Nákupní seznam neobsahuje žádné položky.} =1{Nákupní seznam obsahuje 1 položku.}=2{Nákupní seznam obsahuje 2 položky.}other{Nákupní seznam obsahuje {entriesCount} položek.}}",
   "shoppingListDelete": "Smazat nákupní seznam",
   "shoppingListDeleteConfirmation": "Jste si jistí že chcete smazat {shoppingList}?",
   "shoppingListEdit": "Upravit nákupní seznam",
+  "shoppingListEmpty": "Nákupní seznam je prázdný. Přidejte položku pomocí funkce vyhledávání výše.",
   "shoppingListStyle": "Styl nákupního seznamu",
   "shoppingLists": "Nákupní seznamy",
   "signInWith": "Příhlásit se pomocí {provider}",
   "signup": "Zaregistrovat se",
+  "skip": "Přeskočit",
   "smaller": "Menší",
   "sortingAlgorithmic": "Algoritmické",
   "sortingAlphabetical": "Abecedně",
@@ -641,8 +712,14 @@
   "themeLight": "Světlý",
   "themeMode": "Motiv",
   "themeSystem": "Systém",
+  "today": "Dnes",
+  "tomorrow": "Zítra",
   "total": "Celkem",
   "totalTime": "Celkový čas",
+  "tutorialItemDescription1": "Když vyhledáváte položky, můžete před název přidat množství a ono se uloží jako popisek.",
+  "tutorialItemDescription2": "Pokud samotné množství nestačí, čárkou oddělte název položky a popisek.",
+  "tutorialRecipeDescription": "V receptech můžete používat Markdown. Mezi základní funkce patří nadpisy pomocí dvojkřížků, číslované seznamy pro popis kroků receptu a odkazy na ingredience pomocí zavináče, za nějž napíšete název ingredience.",
+  "tutorialRecipeMore": "Pro více informací navštivte [dokumentaci]({url}).",
   "uncategorized": "Bez kategorie",
   "underConstruction": "Ve vývoji",
   "undo": "Zpět",
@@ -652,7 +729,7 @@
   "unsavedChangesTitle": "Máte neuložené změny",
   "unsupportedBackendMessage": "Tato verze serveru není podporvána, aktualizujte prosím backend",
   "unsupportedFrontendMessage": "Tato verze aplikace není podporována, prosím aktualizujte aplikaci",
-  "unsupportedScrapeMessage": "Adresu URL se nepodařilo zpracovat",
+  "unsupportedScrapeMessage": "Tato webová stránka není podporována",
   "usedIn": "Použito v",
   "user": "Uživatel",
   "userAdd": "Přidat uživatele",
@@ -665,10 +742,12 @@
   "usernameUnavailable": "Toto uživatelské jméno není k dispozici",
   "users": "Uživatelé",
   "weekly": "Týdně",
+  "welcomeBack": "Vítejte zpět",
   "writeMarkdownHere": "Zde můžete použít markdown!",
   "wrongUsernameOrPassword": "Špatné uživatelské jméno nebo heslo",
   "yearly": "Ročně",
   "yes": "Ano",
+  "yesterday": "Včera",
   "yields": "Výnosy",
   "you": "vy"
 }

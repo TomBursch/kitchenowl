@@ -114,6 +114,7 @@
   "@expenseEmpty": {},
   "@expenseFactor": {},
   "@expenseOverviewComparedToPreviousMonth": {},
+  "@expenseOverviewExpenses": {},
   "@expenseOverviewTotalTitle": {
     "placeholders": {
       "month": {
@@ -380,6 +381,7 @@
     }
   },
   "@shoppingListEdit": {},
+  "@shoppingListEmpty": {},
   "@shoppingListStyle": {},
   "@shoppingLists": {},
   "@signInWith": {
@@ -467,6 +469,7 @@
   "@wrongUsernameOrPassword": {},
   "@yearly": {},
   "@yes": {},
+  "@yesterday": {},
   "@yields": {},
   "@you": {},
   "about": "O",
@@ -540,7 +543,8 @@
   "expenseEmpty": "Brak wydatków, utwórz nowy!",
   "expenseFactor": "Faktor",
   "expenseOverviewComparedToPreviousMonth": "W porównaniu z poprzednimi miesiącami",
-  "expenseOverviewTotalTitle": "Lączne wydatki za {month}:",
+  "expenseOverviewExpenses": "Wydatki",
+  "expenseOverviewTotalTitle": "Łączne wydatki za {month}:",
   "expensePaidBy": "Zapłacone przez",
   "expensePaidFor": "Zapłacone za",
   "expenseReceivedBy": "Otrzymane przez",
@@ -685,6 +689,7 @@
   "shoppingListDelete": "Usuń listę zakupów",
   "shoppingListDeleteConfirmation": "Czy jesteś pewien, że chcesz usunąć {shoppingList}?",
   "shoppingListEdit": "Edytuj listę zakupów",
+  "shoppingListEmpty": "Lista zakupów jest pusta. Dodaj produkt używając wyszukiwarki dostępnej powyżej.",
   "shoppingListStyle": "Styl listy zakupów",
   "shoppingLists": "Listy zakupów",
   "signInWith": "Zaloguj się za pomocą {provider}",
@@ -742,6 +747,7 @@
   "wrongUsernameOrPassword": "Nieprawidłowa nazwa użytkownika lub hasło",
   "yearly": "Roczny",
   "yes": "Tak",
+  "yesterday": "Wczoraj",
   "yields": "Porcje",
   "you": "Ty"
 }

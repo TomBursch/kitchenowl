@@ -114,6 +114,7 @@
   "@expenseEmpty": {},
   "@expenseFactor": {},
   "@expenseOverviewComparedToPreviousMonth": {},
+  "@expenseOverviewExpenses": {},
   "@expenseOverviewTotalTitle": {
     "placeholders": {
       "month": {
@@ -380,6 +381,7 @@
     }
   },
   "@shoppingListEdit": {},
+  "@shoppingListEmpty": {},
   "@shoppingListStyle": {},
   "@shoppingLists": {},
   "@signInWith": {
@@ -467,6 +469,7 @@
   "@wrongUsernameOrPassword": {},
   "@yearly": {},
   "@yes": {},
+  "@yesterday": {},
   "@yields": {},
   "@you": {},
   "about": "Om",
@@ -540,7 +543,8 @@
   "expenseEmpty": "Inga utgifter, börja med att skapa en!",
   "expenseFactor": "Faktor",
   "expenseOverviewComparedToPreviousMonth": "Jämfört med tidigare månader",
-  "expenseOverviewTotalTitle": "Totala utgifter för {month}:",
+  "expenseOverviewExpenses": "Utgifter",
+  "expenseOverviewTotalTitle": "Totalt för {month}:",
   "expensePaidBy": "Betald av",
   "expensePaidFor": "Betald för",
   "expenseReceivedBy": "Mottagen av",
@@ -685,6 +689,7 @@
   "shoppingListDelete": "Ta bort Handlingslista",
   "shoppingListDeleteConfirmation": "Är du säker på att du vill ta bort {shoppingList}?",
   "shoppingListEdit": "Ändra Handlingslista",
+  "shoppingListEmpty": "Shoppinglistan är tom. Lägg till en vara med hjälp av sökfunktionen ovan.",
   "shoppingListStyle": "Handlingslista stil",
   "shoppingLists": "Handlingslistor",
   "signInWith": "Logga in med {provider}",
@@ -742,6 +747,7 @@
   "wrongUsernameOrPassword": "Fel användarnamn eller lösenord",
   "yearly": "Årligen",
   "yes": "Ja",
+  "yesterday": "Igår",
   "yields": "Avkastning",
   "you": "du"
 }

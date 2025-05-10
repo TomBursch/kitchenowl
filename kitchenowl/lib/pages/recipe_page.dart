@@ -128,6 +128,16 @@ class _RecipePageState extends State<RecipePage> {
                         ),
                       if (state.recipe.prepTime + state.recipe.cookTime > 0)
                         const SizedBox(height: 16),
+                      if (!state.isOwningHousehold(state) &&
+                          state.recipe.household != null)
+                        Row(
+                          children: [
+                            HouseholdCircleAvatar(
+                                household: state.recipe.household!),
+                            const SizedBox(width: 8),
+                            Text(state.recipe.household!.name),
+                          ],
+                        ),
                       RecipeMarkdownBody(
                         recipe: state.recipe,
                       ),
@@ -450,6 +460,40 @@ class _RecipePageState extends State<RecipePage> {
                                 }
                               },
                               icon: const Icon(Icons.edit),
+                            ),
+                          ),
+                        if (!state.isOwningHousehold(state))
+                          Padding(
+                            padding: const EdgeInsets.only(right: 8),
+                            child: MenuAnchor(
+                              menuChildren: [
+                                MenuItemButton(
+                                  child: Text(AppLocalizations.of(context)!
+                                      .reportIssue),
+                                  onPressed: () {},
+                                  leadingIcon: Icon(Icons.report_rounded),
+                                ),
+                              ],
+                              builder: (context, controller, child) => Padding(
+                                padding: const EdgeInsets.only(right: 8),
+                                child: LoadingIconButton(
+                                  tooltip:
+                                      AppLocalizations.of(context)!.recipeEdit,
+                                  variant: state.recipe.image == null ||
+                                          state.recipe.image!.isEmpty ||
+                                          isCollapsed
+                                      ? LoadingIconButtonVariant.standard
+                                      : LoadingIconButtonVariant.filledTonal,
+                                  onPressed: () async {
+                                    if (controller.isOpen) {
+                                      controller.close();
+                                    } else {
+                                      controller.open();
+                                    }
+                                  },
+                                  icon: Icon(Icons.adaptive.more_rounded),
+                                ),
+                              ),
                             ),
                           ),
                       ],

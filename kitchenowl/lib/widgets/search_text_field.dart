@@ -13,6 +13,7 @@ class SearchTextField extends StatefulWidget {
   final bool alwaysExpanded;
   final Nullable<String>? labelText;
   final String? hintText;
+  final Widget? suffix;
 
   /// Search dealy in milliseconds.
   /// Set it to 0 to remove the debouncer
@@ -30,6 +31,7 @@ class SearchTextField extends StatefulWidget {
     this.alwaysExpanded = false,
     this.labelText,
     this.hintText,
+    this.suffix,
   });
 
   @override
@@ -142,7 +144,7 @@ class _SearchTextFieldState extends State<SearchTextField> {
                       color: Colors.grey,
                     ),
                   )
-                : null,
+                : widget.suffix,
             labelText: (widget.labelText ??
                     Nullable(AppLocalizations.of(context)!.searchHint))
                 .value,

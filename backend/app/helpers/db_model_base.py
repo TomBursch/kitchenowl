@@ -55,7 +55,8 @@ class DbModelBase(DeclarativeBase, DbModelTimestampMixin):
             d[column.name] = getattr(self, column.name)
 
         for column_name in skip_columns or []:
-            del d[column_name]
+            if column_name in d:
+                del d[column_name]
 
         for column in self.__table__.columns:
             if not include_columns:

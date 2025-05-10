@@ -35,7 +35,12 @@ def getRecipeById(id):
         raise NotFoundRequest()
     if not recipe.public:
         recipe.checkAuthorized()
-    return jsonify(recipe.obj_to_full_dict())
+        return jsonify(recipe.obj_to_full_dict())
+
+    if recipe.isAuthorized():
+        return jsonify(recipe.obj_to_full_dict())
+
+    return jsonify(recipe.obj_to_public_dict())
 
 
 @recipeHousehold.route("", methods=["POST"])
@@ -168,7 +173,7 @@ def deleteRecipeById(id):
 @jwt_required()
 @authorize_household()
 @validate_args(SearchByNameRequest)
-def searchRecipeByName(args, household_id):
+def searchRecipeInHouseholdByName(args, household_id):
     if "only_ids" in args and args["only_ids"]:
         return jsonify([e.id for e in Recipe.search_name(household_id, args["query"])])
     return jsonify(

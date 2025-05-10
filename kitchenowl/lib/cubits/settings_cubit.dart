@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/config.dart';
 import 'package:kitchenowl/kitchenowl.dart';
+import 'package:kitchenowl/services/notification_service.dart';
 import 'package:kitchenowl/services/storage/storage.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
@@ -52,7 +53,17 @@ class SettingsCubit extends Cubit<SettingsState> {
       shoppingListTapToRemove: await shoppingListTapToRemove ?? true,
       recentItemsCategorize: await recentItemsCategorize ?? false,
       restoreLastShoppingList: await restoreLastShoppingList ?? false,
+      notificationDistributor:
+          await NotificationService.getInstance().getDistributor(),
     ));
+  }
+
+  Future<void> refreshNotificationDistributor() async {
+    await Future.delayed(const Duration(seconds: 1));
+    String? distributor =
+        await NotificationService.getInstance().getDistributor();
+    print("Refresh: ${distributor}");
+    emit(state.copyWith(notificationDistributor: Nullable(distributor)));
   }
 
   void setTheme(ThemeMode themeMode) {
@@ -133,6 +144,7 @@ class SettingsState extends Equatable {
   final bool shoppingListTapToRemove;
   final bool recentItemsCategorize;
   final bool restoreLastShoppingList;
+  final String? notificationDistributor;
 
   const SettingsState({
     this.themeMode = ThemeMode.system,
@@ -144,6 +156,7 @@ class SettingsState extends Equatable {
     this.shoppingListTapToRemove = true,
     this.recentItemsCategorize = false,
     this.restoreLastShoppingList = false,
+    this.notificationDistributor,
   });
 
   SettingsState copyWith({
@@ -156,6 +169,7 @@ class SettingsState extends Equatable {
     bool? shoppingListTapToRemove,
     bool? recentItemsCategorize,
     bool? restoreLastShoppingList,
+    Nullable<String>? notificationDistributor,
   }) =>
       SettingsState(
         themeMode: themeMode ?? this.themeMode,
@@ -170,6 +184,9 @@ class SettingsState extends Equatable {
             recentItemsCategorize ?? this.recentItemsCategorize,
         restoreLastShoppingList:
             restoreLastShoppingList ?? this.restoreLastShoppingList,
+        notificationDistributor:
+            (notificationDistributor ?? Nullable(this.notificationDistributor))
+                .value,
       );
 
   @override
@@ -183,5 +200,6 @@ class SettingsState extends Equatable {
         shoppingListTapToRemove,
         recentItemsCategorize,
         restoreLastShoppingList,
+        notificationDistributor
       ];
 }

@@ -13,6 +13,7 @@ import 'package:tuple/tuple.dart';
 
 class RecipeCard extends StatelessWidget {
   final Recipe recipe;
+  final bool showHousehold;
   final void Function()? onUpdated;
   final void Function()? onPressed;
   final Future<void> Function()? onLongPressed;
@@ -25,6 +26,7 @@ class RecipeCard extends StatelessWidget {
     this.onPressed,
     this.onLongPressed,
     this.onAddToDate,
+    this.showHousehold = false,
   });
 
   @override
@@ -162,6 +164,17 @@ class RecipeCard extends StatelessWidget {
                         style: Theme.of(context).textTheme.bodyLarge,
                       ),
                       const Spacer(),
+                      if (showHousehold && recipe.household != null)
+                        Row(
+                          children: [
+                            HouseholdCircleAvatar(
+                              household: recipe.household!,
+                              radius: 15,
+                            ),
+                            const SizedBox(width: 8),
+                            Text(recipe.household!.name),
+                          ],
+                        ),
                       if (onLongPressed != null) const Divider(),
                       if (onLongPressed != null)
                         Row(

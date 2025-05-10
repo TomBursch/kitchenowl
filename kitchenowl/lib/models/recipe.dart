@@ -184,7 +184,8 @@ class Recipe extends Model {
       "items": items.map((e) => e.toJsonWithId()).toList(),
       "tags": tags.map((e) => e.toJsonWithId()).toList(),
       if (imageHash != null) "photo_hash": imageHash,
-      "planned_cooking_dates": plannedCookingDates.toList(),
+      "planned_cooking_dates":
+          plannedCookingDates.map((e) => e.millisecondsSinceEpoch).toList(),
       "household_id": householdId,
     });
 

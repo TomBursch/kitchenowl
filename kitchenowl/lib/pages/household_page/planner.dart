@@ -13,8 +13,8 @@ import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/models/recipe.dart';
 import 'package:kitchenowl/models/shoppinglist.dart';
 import 'package:kitchenowl/pages/item_selection_page.dart';
-import 'package:kitchenowl/widgets/recipe_card.dart';
-import 'package:responsive_builder/responsive_builder.dart';
+import 'package:kitchenowl/pages/recipe_list_display_page.dart';
+import 'package:kitchenowl/widgets/sliver_recipe_carousel.dart';
 import 'package:tuple/tuple.dart';
 
 DateTime toEndOfDay(DateTime dt) {
@@ -273,106 +273,68 @@ class _PlannerPageState extends State<PlannerPage> {
                       ),
                     ),
                   ),
-                  if (state.recentRecipes.isNotEmpty) ...[
-                    SliverPadding(
-                      padding: const EdgeInsets.all(16),
-                      sliver: SliverToBoxAdapter(
-                        child: Text(
-                          '${AppLocalizations.of(context)!.recipesRecent}:',
-                          style: Theme.of(context).textTheme.titleLarge,
-                        ),
+                  if (state.recentRecipes.isNotEmpty)
+                    SliverRecipeCarousel(
+                      recipes: state.recentRecipes,
+                      title: "${AppLocalizations.of(context)!.recipesRecent}:",
+                      onLongPressed: (r) => cubit.add(r),
+                      onAddToDate: (r) =>
+                          _addRecipeToSpecificDay(context, cubit, r),
+                      onPressed: (r) => _openRecipePage(
+                        context,
+                        cubit,
+                        r,
                       ),
-                    ),
-                    SliverToBoxAdapter(
-                      child: SizedBox(
-                        height: getValueForScreenType(
-                          context: context,
-                          mobile: 365,
-                          tablet: 405,
-                          desktop: 405,
-                        ),
-                        child: ListView.builder(
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                          itemBuilder: (context, i) => RecipeCard(
-                            key: ValueKey(state.recentRecipes[i].id),
-                            recipe: state.recentRecipes[i],
-                            onLongPressed: () =>
-                                cubit.add(state.recentRecipes[i]),
-                            onAddToDate: () => _addRecipeToSpecificDay(
-                              context,
-                              cubit,
-                              state.recentRecipes[i],
-                            ),
-                            onPressed: () => _openRecipePage(
-                              context,
-                              cubit,
-                              state.recentRecipes[i],
-                            ),
+                      showMore: () =>
+                          Navigator.of(context, rootNavigator: true).push(
+                        MaterialPageRoute(
+                          builder: (context) => RecipeListDisplayPage(
+                            title: AppLocalizations.of(context)!.recipesRecent,
+                            recipes: state.recentRecipes,
                           ),
-                          itemCount: state.recentRecipes.length,
-                          scrollDirection: Axis.horizontal,
-                        ),
-                      ),
-                    ),
-                  ],
-                  if (state.suggestedRecipes.isNotEmpty)
-                    SliverPadding(
-                      padding: const EdgeInsets.fromLTRB(16, 12, 8, 12),
-                      sliver: SliverToBoxAdapter(
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: Text(
-                                '${AppLocalizations.of(context)!.recipesSuggested}:',
-                                style: Theme.of(context).textTheme.titleLarge,
-                              ),
-                            ),
-                            LoadingIconButton(
-                              onPressed: () async {
-                                await cubit.refreshSuggestions();
-                                suggestedRecipesScrollController.animateTo(
-                                  0,
-                                  duration: const Duration(milliseconds: 400),
-                                  curve: Curves.easeIn,
-                                );
-                              },
-                              icon: const Icon(Icons.shuffle_rounded),
-                              tooltip: AppLocalizations.of(context)!.refresh,
-                            ),
-                          ],
                         ),
                       ),
                     ),
                   if (state.suggestedRecipes.isNotEmpty)
-                    SliverToBoxAdapter(
-                      child: SizedBox(
-                        height: getValueForScreenType(
-                          context: context,
-                          mobile: 365,
-                          tablet: 405,
-                          desktop: 405,
+                    SliverRecipeCarousel(
+                      //padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
+                      recipes: state.suggestedRecipes,
+                      scrollController: suggestedRecipesScrollController,
+                      title:
+                          "${AppLocalizations.of(context)!.recipesSuggested}:",
+                      actions: [
+                        LoadingIconButton(
+                          onPressed: () async {
+                            await cubit.refreshSuggestions();
+                            suggestedRecipesScrollController.animateTo(
+                              0,
+                              duration: const Duration(milliseconds: 400),
+                              curve: Curves.easeIn,
+                            );
+                          },
+                          icon: const Icon(Icons.shuffle_rounded),
+                          tooltip: AppLocalizations.of(context)!.refresh,
                         ),
-                        child: ListView.builder(
-                          controller: suggestedRecipesScrollController,
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                          itemBuilder: (context, i) => RecipeCard(
-                            key: ValueKey(state.recentRecipes[i].id),
-                            recipe: state.suggestedRecipes[i],
-                            onLongPressed: () =>
-                                cubit.add(state.suggestedRecipes[i]),
-                            onAddToDate: () => _addRecipeToSpecificDay(
-                              context,
-                              cubit,
-                              state.suggestedRecipes[i],
-                            ),
-                            onPressed: () => _openRecipePage(
-                              context,
-                              cubit,
-                              state.suggestedRecipes[i],
-                            ),
+                      ],
+                      onLongPressed: (r) => cubit.add(r),
+                      onAddToDate: (r) => _addRecipeToSpecificDay(
+                        context,
+                        cubit,
+                        r,
+                      ),
+                      onPressed: (r) => _openRecipePage(
+                        context,
+                        cubit,
+                        r,
+                      ),
+                      showMore: () =>
+                          Navigator.of(context, rootNavigator: true).push(
+                        MaterialPageRoute(
+                          builder: (context) => RecipeListDisplayPage(
+                            title:
+                                AppLocalizations.of(context)!.recipesSuggested,
+                            recipes: state.suggestedRecipes,
                           ),
-                          itemCount: state.suggestedRecipes.length,
-                          scrollDirection: Axis.horizontal,
                         ),
                       ),
                     ),

@@ -13,7 +13,7 @@ from app.models import Recipe, Item, Household
 def scrapePublic(url: str, html: str, household: Household) -> dict[str, Any] | None:
     try:
         scraper = scrape_html(html, url, supported_only=False)
-    except:
+    except Exception:
         return None
     recipe = Recipe()
     recipe.name = scraper.title()
@@ -123,7 +123,9 @@ def scrapeLocal(recipe_id: int, household: Household):
     }
 
 
-def scrapeKitchenOwl(original_url: str, api_url: str, recipe_id: int) -> dict[str, Any] | None:
+def scrapeKitchenOwl(
+    original_url: str, api_url: str, recipe_id: int
+) -> dict[str, Any] | None:
     res = requests.get(api_url + "/recipe/" + str(recipe_id))
     if res.status_code != requests.codes.ok:
         if res.status_code == requests.codes.unauthorized:
@@ -165,7 +167,7 @@ def scrape(url: str, household: Household) -> dict[str, Any] | None:
 
     try:
         res = requests.get(url=url)
-    except:
+    except Exception:
         return None
     if res.status_code != requests.codes.ok:
         return None

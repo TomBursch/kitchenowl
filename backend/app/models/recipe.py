@@ -125,13 +125,35 @@ class Recipe(Model, DbModelAuthorizeMixin):
         ]
         if self.photo_file:
             res["photo_hash"] = self.photo_file.blur_hash
+
+        for column_name in skip_columns or []:
+            if column_name in res:
+                del res[column_name]
         return res
 
-    def obj_to_full_dict(self) -> dict[str, Any]:
-        res = self.obj_to_dict()
+    def obj_to_full_dict(
+        self,
+        skip_columns: list[str] | None = None,
+        include_columns: list[str] | None = None,
+    ) -> dict[str, Any]:
+        res = self.obj_to_dict(skip_columns, include_columns)
         res["items"] = [e.obj_to_item_dict() for e in self.items]
         res["tags"] = [e.obj_to_item_dict() for e in self.tags]
         res["household"] = self.household.obj_to_public_dict()
+
+        for column_name in skip_columns or []:
+            if column_name in res:
+                del res[column_name]
+        return res
+
+    def obj_to_public_dict(self) -> dict[str, Any]:
+        res = self.obj_to_full_dict(
+            skip_columns=[
+                "planned_days",
+                "planned_cooking_dates",
+                "planned",
+            ]
+        )
         return res
 
     def obj_to_export_dict(self) -> dict[str, Any]:

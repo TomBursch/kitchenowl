@@ -4,9 +4,11 @@ import app
 
 
 class DbModelAuthorizeMixin(object):
-    def checkAuthorized(self, requires_admin=False, household_id: int | None = None):
+    def isAuthorized(
+        self, requires_admin=False, household_id: int | None = None
+    ) -> bool:
         """
-        Checks if current user ist authorized to access this model. Throws and unauthorized exception if not
+        Returns true if current user ist authorized to access this model.
         IMPORTANT: requires household_id
         """
         if not household_id and not hasattr(self, "household_id"):
@@ -18,4 +20,14 @@ class DbModelAuthorizeMixin(object):
         )
         if not current_user.admin:
             if not member or requires_admin and not (member.admin or member.owner):
-                raise ForbiddenRequest()
+                return False
+
+        return True
+
+    def checkAuthorized(self, requires_admin=False, household_id: int | None = None):
+        """
+        Checks if current user ist authorized to access this model. Throws and unauthorized exception if not
+        IMPORTANT: requires household_id
+        """
+        if not self.isAuthorized(requires_admin, household_id):
+            raise ForbiddenRequest()

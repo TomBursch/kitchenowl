@@ -114,6 +114,7 @@
   "@expenseEmpty": {},
   "@expenseFactor": {},
   "@expenseOverviewComparedToPreviousMonth": {},
+  "@expenseOverviewExpenses": {},
   "@expenseOverviewTotalTitle": {
     "placeholders": {
       "month": {
@@ -468,6 +469,7 @@
   "@wrongUsernameOrPassword": {},
   "@yearly": {},
   "@yes": {},
+  "@yesterday": {},
   "@yields": {},
   "@you": {},
   "about": "Информация",
@@ -541,7 +543,8 @@
   "expenseEmpty": "Расходов нет. Начните с добавления одного!",
   "expenseFactor": "Фактор",
   "expenseOverviewComparedToPreviousMonth": "В сравнении с прошлым месяцем",
-  "expenseOverviewTotalTitle": "Общие расходы за {month}:",
+  "expenseOverviewExpenses": "Расходы",
+  "expenseOverviewTotalTitle": "В сумме за {month}:",
   "expensePaidBy": "Оплачено",
   "expensePaidFor": "За что заплачено",
   "expenseReceivedBy": "Получено",
@@ -744,6 +747,7 @@
   "wrongUsernameOrPassword": "Неправильное имя пользователя или пароль",
   "yearly": "Ежегодно",
   "yes": "Да",
+  "yesterday": "Вчера",
   "yields": "Количество порций",
   "you": "Вы"
 }

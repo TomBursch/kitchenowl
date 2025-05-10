@@ -1,0 +1,5 @@
+- You can now plan recipes for specific dates
+- New recipe cooking mode
+- You can now set a profile picture
+- New and updated translations
+- Bug fixes and other minor improvements

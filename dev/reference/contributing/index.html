@@ -959,15 +959,15 @@
 </div>
 <div class="tabbed-block">
 <ul>
-<li>Install Python 3.12+ and <a href="https://docs.astral.sh/uv/getting-started/">UV</a></li>
-<li>Go to <code>./backend</code></li>
-<li>Install dependencies <code>uv sync</code></li>
-<li>Install the pre-commit hooks <code>uv pre-commit install</code></li>
+<li>If you haven't already, switch to the backend folder <code>cd backend</code></li>
+<li>Install dependencies with <code>uv sync</code></li>
+<li>Install the pre-commit hooks <code>uv run pre-commit install</code></li>
 <li>Optionally: Activate your python environment <code>source .venv/bin/activate</code> (allows you to omit <code>uv run</code> in the following steps, environment can be deactivated with <code>deactivate</code>)</li>
-<li>Initialize/Upgrade requirements for the recipe scraper <code>uv run python -c "import nltk; nltk.download('averaged_perceptron_tagger_eng', download_dir='./venv/nltk_data')"</code></li>
+<li>Initialize/Upgrade requirements for the recipe scraper <code>uv run python -c "import nltk; nltk.download('averaged_perceptron_tagger_eng', download_dir='.venv/nltk_data')"</code></li>
 <li>Initialize/Upgrade the SQLite database with <code>uv run flask db upgrade</code></li>
 <li>Run debug server with <code>uv run wsgi.py</code></li>
 <li>The backend should be reachable at <code>localhost:5000</code></li>
+<li>For some simple interactions with the backend (like adding a user), you can use <code>uv run manage.py</code></li>
 </ul>
 <div class="admonition danger known warnings">
 <p class="admonition-title">Danger</p>

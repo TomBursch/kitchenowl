@@ -88,7 +88,7 @@ class _ChartLineCurrentMonthState extends State<ChartLineCurrentMonth> {
             getTooltipColor: (group) =>
                 Theme.of(context).cardTheme.color ??
                 Theme.of(context).colorScheme.surface,
-            tooltipRoundedRadius: 14,
+            tooltipBorderRadius: BorderRadius.circular(14),
             getTooltipItems: (touchedSpots) =>
                 touchedSpots.map((LineBarSpot touchedSpot) {
               return LineTooltipItem(

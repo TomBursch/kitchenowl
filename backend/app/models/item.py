@@ -171,7 +171,7 @@ class Item(Model, DbModelAuthorizeMixin):
         cls, household_id: int, name: str, default: bool = False
     ) -> Self:
         return cls(
-            name=name.strip(),
+            name=name.strip()[:128],
             default=default,
             household_id=household_id,
         ).save()
@@ -205,13 +205,15 @@ class Item(Model, DbModelAuthorizeMixin):
                 cls.query.filter(
                     cls.household_id == household_id,
                     func.levenshtein(
-                        func.lower(func.substring(cls.name, 1, len(name))), name.lower()
+                        func.lower(func.substring(cls.name, 1, len(name))),
+                        name[:128].lower(),
                     )
                     < 4,
                 )
                 .order_by(
                     func.levenshtein(
-                        func.lower(func.substring(cls.name, 1, len(name))), name.lower()
+                        func.lower(func.substring(cls.name, 1, len(name))),
+                        name[:128].lower(),
                     ),
                     cls.support.desc(),
                 )

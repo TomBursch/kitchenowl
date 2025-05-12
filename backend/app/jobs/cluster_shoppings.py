@@ -24,7 +24,7 @@ def clusterShoppings(shoppinglist_id: int) -> list | None:
     dbs = DBSCAN1D(eps=eps, min_samples=min_samples)
     labels = dbs.fit_predict(timestamps)
 
-    if not labels:
+    if labels is None or len(labels) == 0:
         app.logger.info("no shopping instances identified")
         return None
 

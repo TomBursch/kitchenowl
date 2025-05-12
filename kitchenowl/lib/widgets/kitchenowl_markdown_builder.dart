@@ -32,6 +32,7 @@ class KitchenOwlMarkdownBuilder extends StatefulWidget {
     this.listItemCrossAxisAlignment =
         MarkdownListItemCrossAxisAlignment.baseline,
     this.softLineBreak = false,
+    this.textScaler,
   });
 
   /// The Markdown to display.
@@ -132,6 +133,8 @@ class KitchenOwlMarkdownBuilder extends StatefulWidget {
   /// specification on soft line breaks when lines of text are joined.
   final bool softLineBreak;
 
+  final TextScaler? textScaler;
+
   @override
   State<KitchenOwlMarkdownBuilder> createState() =>
       _KitchenOwlMarkdownBuilderState();
@@ -180,6 +183,7 @@ class _KitchenOwlMarkdownBuilderState extends State<KitchenOwlMarkdownBuilder>
                   Theme.of(context).cardColor,
               borderRadius: BorderRadius.circular(2.0),
             ),
+            textScaler: widget.textScaler,
           ),
       imageDirectory: widget.imageDirectory,
       imageBuilder: widget.imageBuilder ??

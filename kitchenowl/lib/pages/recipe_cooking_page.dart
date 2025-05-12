@@ -113,15 +113,19 @@ class _RecipeCookingPageState extends State<RecipeCookingPage> {
                 ),
                 actions: [
                   IconButton(
-                    onPressed: () => setState(() {
-                      textScaleFactor += 0.1;
-                    }),
+                    onPressed: (textScaleFactor < 4)
+                        ? () => setState(() {
+                              textScaleFactor += 0.1;
+                            })
+                        : null,
                     icon: Icon(Icons.text_increase_rounded),
                   ),
                   IconButton(
-                    onPressed: () => setState(() {
-                      textScaleFactor -= 0.1;
-                    }),
+                    onPressed: (textScaleFactor > 0.8)
+                        ? () => setState(() {
+                              textScaleFactor -= 0.1;
+                            })
+                        : null,
                     icon: Icon(Icons.text_decrease_rounded),
                   ),
                 ],
@@ -157,6 +161,7 @@ class _RecipeCookingPageState extends State<RecipeCookingPage> {
                                   'recipeItem': RecipeItemMarkdownBuilder(
                                       items: widget.recipe.items)
                                 },
+                                textScaler: TextScaler.linear(textScaleFactor),
                                 extensionSet: extensionSet,
                                 imageBuilder: (uri, title, alt) => Image(
                                   fit: BoxFit.cover,

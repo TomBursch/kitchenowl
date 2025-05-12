@@ -75,7 +75,7 @@ def searchItemByName(args, household_id):
 @authorize_household()
 @validate_args(AddItem)
 def addItem(args, household_id):
-    name: str = args["name"].strip()
+    name: str = args["name"].strip()[:128]
     if Item.find_by_name(household_id, name):
         raise InvalidUsage()
 
@@ -113,7 +113,7 @@ def updateItem(args, id):
     if "icon" in args:
         item.icon = args["icon"]
     if "name" in args and args["name"] != item.name:
-        newName: str = args["name"].strip()
+        newName: str = args["name"].strip()[:128]
         if not Item.find_by_name(item.household_id, newName):
             item.name = newName
     item.save()

@@ -116,6 +116,7 @@
   "@expenseEmpty": {},
   "@expenseFactor": {},
   "@expenseOverviewComparedToPreviousMonth": {},
+  "@expenseOverviewExpenses": {},
   "@expenseOverviewTotalTitle": {
     "placeholders": {
       "month": {
@@ -382,6 +383,7 @@
     }
   },
   "@shoppingListEdit": {},
+  "@shoppingListEmpty": {},
   "@shoppingListStyle": {},
   "@shoppingLists": {},
   "@signInWith": {
@@ -469,6 +471,7 @@
   "@wrongUsernameOrPassword": {},
   "@yearly": {},
   "@yes": {},
+  "@yesterday": {},
   "@yields": {},
   "@you": {},
   "about": "Sobre",
@@ -542,6 +545,7 @@
   "expenseEmpty": "Nenhuma despesa, comece criando uma!",
   "expenseFactor": "Fator",
   "expenseOverviewComparedToPreviousMonth": "Comparado aos meses anteriores",
+  "expenseOverviewExpenses": "Despesas",
   "expenseOverviewTotalTitle": "Despesas totais em {month}:",
   "expensePaidBy": "Paga por",
   "expensePaidFor": "Pago",
@@ -687,6 +691,7 @@
   "shoppingListDelete": "Apagar lista de compras",
   "shoppingListDeleteConfirmation": "Tem a certeza de que deseja apagar {shoppingList}?",
   "shoppingListEdit": "Editar lista de compras",
+  "shoppingListEmpty": "A lista de compras está vazia. Adiciona um item usando a barra de pesquisa no topo.",
   "shoppingListStyle": "Estilo da lista de compras",
   "shoppingLists": "Listas de compras",
   "signInWith": "Entrar com {provider}",
@@ -744,6 +749,7 @@
   "wrongUsernameOrPassword": "Nome de utilizador ou palavra-passe incorretos",
   "yearly": "Anualmente",
   "yes": "Sim",
+  "yesterday": "Ontem",
   "yields": "Porções",
   "you": "você"
 }

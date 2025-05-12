@@ -16,7 +16,16 @@ def scrapePublic(url: str, html: str, household: Household) -> dict[str, Any] | 
     except Exception:
         return None
     recipe = Recipe()
-    recipe.name = scraper.title()
+    try:
+        recipe.name = scraper.title()
+    except (
+        NotImplementedError,
+        ValueError,
+        TypeError,
+        AttributeError,
+        SchemaOrgException,
+    ):
+        return None  # Unsupported if title cannot be scraped
     try:
         recipe.time = int(scraper.total_time())
     except (

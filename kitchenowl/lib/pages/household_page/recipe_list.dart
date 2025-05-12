@@ -24,7 +24,7 @@ class _RecipeListPageState extends State<RecipeListPage> {
     if (!mounted) return 1;
     if (BlocProvider.of<RecipeListCubit>(context).state.listView) return 56;
     return ((headerKey.currentContext!.size!.width - 16 - 32) / getRowCount()) /
-        0.8;
+        0.67;
   }
 
   double getHeaderHeight() {
@@ -35,7 +35,7 @@ class _RecipeListPageState extends State<RecipeListPage> {
     if (!mounted) return 1;
     if (BlocProvider.of<RecipeListCubit>(context).state.listView) return 1;
     // header width - list padding
-    return ((headerKey.currentContext!.size!.width - 16 - 32) / 350).ceil();
+    return ((headerKey.currentContext!.size!.width - 16 - 32) / 328).ceil();
   }
 
   @override
@@ -225,8 +225,8 @@ class _RecipeListPageState extends State<RecipeListPage> {
                                     itemCount: recipes.length,
                                     gridDelegate:
                                         const SliverGridDelegateWithMaxCrossAxisExtent(
-                                      maxCrossAxisExtent: 350,
-                                      childAspectRatio: 0.8,
+                                      maxCrossAxisExtent: 328,
+                                      childAspectRatio: 0.67,
                                     ),
                                     itemBuilder: (context, i) => RecipeCard(
                                       key: Key(recipes[i].name),

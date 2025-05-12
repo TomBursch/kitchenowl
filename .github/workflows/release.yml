@@ -81,7 +81,7 @@ jobs:
             asset_content_type: application/vnd.debian.binary-package
           - os: ubuntu-latest
             container:
-              image: fedora:latest
+              image: fedora:41
               options: --group-add 135
             target: Fedora
             build_target: linux

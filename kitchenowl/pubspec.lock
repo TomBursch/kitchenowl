@@ -363,6 +363,38 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.0.0"
+  flutter_local_notifications:
+    dependency: "direct main"
+    description:
+      name: flutter_local_notifications
+      sha256: "33b3e0269ae9d51669957a923f2376bee96299b09915d856395af8c4238aebfa"
+      url: "https://pub.dev"
+    source: hosted
+    version: "19.1.0"
+  flutter_local_notifications_linux:
+    dependency: transitive
+    description:
+      name: flutter_local_notifications_linux
+      sha256: e3c277b2daab8e36ac5a6820536668d07e83851aeeb79c446e525a70710770a5
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.0.0"
+  flutter_local_notifications_platform_interface:
+    dependency: transitive
+    description:
+      name: flutter_local_notifications_platform_interface
+      sha256: "2569b973fc9d1f63a37410a9f7c1c552081226c597190cb359ef5d5762d1631c"
+      url: "https://pub.dev"
+    source: hosted
+    version: "9.0.0"
+  flutter_local_notifications_windows:
+    dependency: transitive
+    description:
+      name: flutter_local_notifications_windows
+      sha256: f8fc0652a601f83419d623c85723a3e82ad81f92b33eaa9bcc21ea1b94773e6e
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0"
   flutter_localizations:
     dependency: "direct main"
     description: flutter
@@ -1161,6 +1193,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.7.4"
+  timezone:
+    dependency: transitive
+    description:
+      name: timezone
+      sha256: ffc9d5f4d1193534ef051f9254063fa53d588609418c84299956c3db9383587d
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.10.0"
   transparent_image:
     dependency: "direct main"
     description:
@@ -1185,6 +1225,46 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.4.0"
+  unifiedpush:
+    dependency: "direct main"
+    description:
+      name: unifiedpush
+      sha256: "7bf123748e1416c9d9c1489ee39a34725b6b99466e25fb8d31685392c536671b"
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.0.0-rc3"
+  unifiedpush_android:
+    dependency: transitive
+    description:
+      name: unifiedpush_android
+      sha256: "557789af83ec0ab97c995c51e62a696037cb156ede52897249b7edc39d2da1ff"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.0-rc3"
+  unifiedpush_linux:
+    dependency: "direct main"
+    description:
+      name: unifiedpush_linux
+      sha256: "492667c5f9e64e24194b1ed752b8f5e6ef702974261b81cd94b09c76097213f1"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.2"
+  unifiedpush_platform_interface:
+    dependency: transitive
+    description:
+      name: unifiedpush_platform_interface
+      sha256: "31e832a5a3b05bedbecdb6036c7a7e9127db937b02d19d26fddfbe39597a43b0"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.0-rc3"
+  unifiedpush_ui:
+    dependency: "direct main"
+    description:
+      name: unifiedpush_ui
+      sha256: cf86f0214f37debd41f25c0425c8489df85e27f9f8784fed571eb7a86d39ba11
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.0"
   universal_html:
     dependency: "direct main"
     description:

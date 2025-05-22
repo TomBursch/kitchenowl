@@ -60,7 +60,7 @@ abstract class AppThemes {
         backgroundColor: colorScheme.surface,
         height: 70,
       ),
-      cardTheme: CardTheme(
+      cardTheme: CardThemeData(
         clipBehavior: Clip.antiAlias,
         color: colorScheme.surface,
         surfaceTintColor: colorScheme.surfaceTint,
@@ -89,7 +89,7 @@ abstract class AppThemes {
       colorScheme: colorScheme,
       useMaterial3: true,
     ).copyWith(
-      cardTheme: CardTheme(
+      cardTheme: CardThemeData(
         clipBehavior: Clip.antiAlias,
         elevation: 0,
         color: colorScheme.surfaceBright,

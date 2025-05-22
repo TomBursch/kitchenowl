@@ -82,7 +82,7 @@ class KitchenOwlMarkdownBuilder extends StatefulWidget {
   final md.ExtensionSet? extensionSet;
 
   /// Call when build an image widget.
-  final MarkdownImageBuilder? imageBuilder;
+  final MarkdownSizedImageBuilder? imageBuilder;
 
   /// Call when build a checkbox widget.
   final MarkdownCheckboxBuilder? checkboxBuilder;
@@ -186,13 +186,13 @@ class _KitchenOwlMarkdownBuilderState extends State<KitchenOwlMarkdownBuilder>
             textScaler: widget.textScaler,
           ),
       imageDirectory: widget.imageDirectory,
-      imageBuilder: widget.imageBuilder ??
-          (uri, title, alt) => Padding(
+      sizedImageBuilder: widget.imageBuilder ??
+          (config) => Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(16),
                   child: CachedNetworkImage(
-                    imageUrl: uri.toString(),
+                    imageUrl: config.uri.toString(),
                     placeholder: (context, url) =>
                         const Center(child: CircularProgressIndicator()),
                     errorWidget: (context, url, error) =>

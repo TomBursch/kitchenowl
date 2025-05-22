@@ -89,7 +89,7 @@ class RecipeMarkdownBody extends StatelessWidget {
                 ),
           },
           extensionSet: extensionSet,
-          imageBuilder: (uri, title, alt) => Image(
+          imageBuilder: (config) => Image(
             fit: BoxFit.cover,
             frameBuilder: (context, child, frame, wasSynchronouslyLoaded) =>
                 Padding(
@@ -101,9 +101,9 @@ class RecipeMarkdownBody extends StatelessWidget {
             ),
             image: getImageProvider(
               context,
-              int.tryParse(uri.toString()) == 0
-                  ? recipe.image ?? uri.toString()
-                  : uri.toString(),
+              int.tryParse(config.uri.toString()) == 0
+                  ? recipe.image ?? config.uri.toString()
+                  : config.uri.toString(),
             ),
             loadingBuilder: (context, child, progress) => progress == null
                 ? child

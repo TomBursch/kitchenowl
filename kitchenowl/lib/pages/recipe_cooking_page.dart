@@ -163,7 +163,7 @@ class _RecipeCookingPageState extends State<RecipeCookingPage> {
                                 },
                                 textScaler: TextScaler.linear(textScaleFactor),
                                 extensionSet: extensionSet,
-                                imageBuilder: (uri, title, alt) => Image(
+                                imageBuilder: (config) => Image(
                                   fit: BoxFit.cover,
                                   frameBuilder: (context, child, frame,
                                           wasSynchronouslyLoaded) =>
@@ -176,9 +176,10 @@ class _RecipeCookingPageState extends State<RecipeCookingPage> {
                                   ),
                                   image: getImageProvider(
                                     context,
-                                    int.tryParse(uri.toString()) == 0
-                                        ? widget.recipe.image ?? uri.toString()
-                                        : uri.toString(),
+                                    int.tryParse(config.uri.toString()) == 0
+                                        ? widget.recipe.image ??
+                                            config.uri.toString()
+                                        : config.uri.toString(),
                                   ),
                                   loadingBuilder: (context, child, progress) =>
                                       progress == null

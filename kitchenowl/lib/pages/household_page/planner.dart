@@ -15,6 +15,8 @@ import 'package:kitchenowl/models/recipe.dart';
 import 'package:kitchenowl/models/shoppinglist.dart';
 import 'package:kitchenowl/pages/item_selection_page.dart';
 import 'package:kitchenowl/pages/recipe_list_display_page.dart';
+import 'package:kitchenowl/services/transaction_handler.dart';
+import 'package:kitchenowl/services/transactions/planner.dart';
 import 'package:kitchenowl/widgets/sliver_recipe_carousel.dart';
 import 'package:tuple/tuple.dart';
 
@@ -292,6 +294,13 @@ class _PlannerPageState extends State<PlannerPage> {
                           builder: (context) => RecipeListDisplayPage(
                             title: AppLocalizations.of(context)!.recipesRecent,
                             recipes: state.recentRecipes,
+                            moreRecipes: (page) =>
+                                TransactionHandler.getInstance().runTransaction(
+                              TransactionPlannerGetRecentPlannedRecipes(
+                                household: cubit.household,
+                                page: page,
+                              ),
+                            ),
                           ),
                         ),
                       ),
@@ -335,6 +344,28 @@ class _PlannerPageState extends State<PlannerPage> {
                             title:
                                 AppLocalizations.of(context)!.recipesSuggested,
                             recipes: state.suggestedRecipes,
+                            actions: (oCubit, controller) => [
+                              LoadingIconButton(
+                                onPressed: () async {
+                                  await cubit.refreshSuggestions();
+                                  await oCubit.refresh();
+                                  controller.animateTo(
+                                    0,
+                                    duration: const Duration(milliseconds: 400),
+                                    curve: Curves.easeIn,
+                                  );
+                                },
+                                icon: const Icon(Icons.shuffle_rounded),
+                                tooltip: AppLocalizations.of(context)!.refresh,
+                              ),
+                            ],
+                            moreRecipes: (page) =>
+                                TransactionHandler.getInstance().runTransaction(
+                              TransactionPlannerGetSuggestedRecipes(
+                                household: cubit.household,
+                                page: page,
+                              ),
+                            ),
                           ),
                         ),
                       ),

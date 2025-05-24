@@ -166,7 +166,7 @@ class _ExpenseOverviewPageState extends State<ExpenseOverviewPage> {
                               ),
                               style: Theme.of(context).textTheme.titleMedium,
                             ),
-                            trailing: Row(
+                            subtitle: Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisSize: MainAxisSize.min,
                               children: [

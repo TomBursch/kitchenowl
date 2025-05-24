@@ -210,7 +210,9 @@ class _RecipeListPageState extends State<RecipeListPage> {
                         slivers: [
                           SliverToBoxAdapter(child: header),
                           SliverPadding(
-                            padding: const EdgeInsets.only(left: 32, right: 16),
+                            padding: EdgeInsets.only(
+                                left: state is SearchRecipeListState ? 16 : 32,
+                                right: 16),
                             sliver: state.listView
                                 ? SliverList(
                                     delegate: SliverChildBuilderDelegate(

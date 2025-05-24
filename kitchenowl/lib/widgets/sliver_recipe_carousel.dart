@@ -74,7 +74,7 @@ class SliverRecipeCarousel extends StatelessWidget {
         child: SizedBox(
           height: getValueForScreenType(
             context: context,
-            mobile: 365,
+            mobile: 370,
             tablet: 405,
             desktop: 405,
           ),

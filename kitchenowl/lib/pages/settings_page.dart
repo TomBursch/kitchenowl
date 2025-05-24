@@ -327,6 +327,24 @@ class _SettingsPageState extends State<SettingsPage> {
                             .setRecentItemsCategorize(value),
                   ),
                 ),
+                ListTile(
+                  title: Text(
+                    AppLocalizations.of(context)!.automaticIngredientDetection,
+                  ),
+                  leading: const Icon(Icons.find_in_page_rounded),
+                  onTap: () => BlocProvider.of<SettingsCubit>(context)
+                      .setAutomaticIngredientDetection(
+                    !BlocProvider.of<SettingsCubit>(context)
+                        .state
+                        .automaticIngredientDetection,
+                  ),
+                  trailing: KitchenOwlSwitch(
+                    value: state.automaticIngredientDetection,
+                    onChanged: (value) =>
+                        BlocProvider.of<SettingsCubit>(context)
+                            .setAutomaticIngredientDetection(value),
+                  ),
+                ),
                 if (!kIsWeb)
                   ListTile(
                     title: Text(

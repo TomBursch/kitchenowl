@@ -47,7 +47,7 @@ class _KitchenowlSearchAnchorState extends State<KitchenowlSearchAnchor> {
 
   void _onChanged() {
     final String s = controller.text;
-    if (s.isEmpty && controller.isOpen) controller.closeView(null);
+    if (search.isNotEmpty && s.isEmpty) controller.closeView(null);
     if (_debouncer != null) {
       _debouncer?.run(() {
         setState(() {

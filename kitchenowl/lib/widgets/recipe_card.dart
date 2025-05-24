@@ -55,7 +55,7 @@ class RecipeCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Expanded(
-                flex: 3,
+                flex: 5,
                 child: Stack(
                   fit: StackFit.passthrough,
                   children: [
@@ -113,7 +113,7 @@ class RecipeCard extends StatelessWidget {
                 ),
               ),
               Expanded(
-                flex: 2,
+                flex: 4,
                 child: Padding(
                   padding: const EdgeInsets.all(8),
                   child: Column(

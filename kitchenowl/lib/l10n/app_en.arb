@@ -56,6 +56,7 @@
   "@appTitle": {
     "description": "The title of the app"
   },
+  "@automaticIngredientDetection": {},
   "@back": {},
   "@balances": {},
   "@budget": {},
@@ -499,6 +500,7 @@
   "analysingWebsite": "Analysing website...",
   "appDescription": "KitchenOwl helps you organize your grocery life.",
   "appTitle": "KitchenOwl",
+  "automaticIngredientDetection": "Automatically detect ingredients in the recipe description",
   "back": "Back",
   "balances": "Balances",
   "budget": "Budget",

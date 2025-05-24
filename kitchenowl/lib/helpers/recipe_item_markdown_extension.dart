@@ -15,7 +15,14 @@ class RecipeItemMarkdownBuilder extends MarkdownElementBuilder {
   RecipeItemMarkdownBuilder({required this.items});
 
   @override
-  Widget? visitElementAfter(md.Element element, TextStyle? preferredStyle) {
+  Widget? visitElementAfterWithContext(
+    BuildContext context,
+    md.Element element,
+    TextStyle? preferredStyle,
+    TextStyle? parentStyle,
+  ) {
+    if ((parentStyle?.fontSize ?? 0) > 14) return null;
+
     RecipeItem item = items.firstWhere(
       (e) => e.name.toLowerCase() == element.textContent,
     );
@@ -51,7 +58,14 @@ class RecipeCubitItemMarkdownBuilder extends MarkdownElementBuilder {
   RecipeCubitItemMarkdownBuilder({required this.cubit});
 
   @override
-  Widget? visitElementAfter(md.Element element, TextStyle? preferredStyle) {
+  Widget? visitElementAfterWithContext(
+    BuildContext context,
+    md.Element element,
+    TextStyle? preferredStyle,
+    TextStyle? parentStyle,
+  ) {
+    if ((parentStyle?.fontSize ?? 0) > 14) return null;
+
     return RichText(
       text: TextSpan(children: [
         WidgetSpan(
@@ -127,17 +141,19 @@ class RecipeImplicitItemMarkdownSyntax extends md.InlineSyntax {
 
   RecipeImplicitItemMarkdownSyntax(this.recipe)
       : super(
-          recipe.items
-              // sort long to short names
-              .sorted((a, b) => b.name.length.compareTo(a.name.length))
-              .map((e) => e.name)
-              .fold("", (a, b) => a.isEmpty ? "$b" : "$a|$b"),
+          "\\b(" +
+              recipe.items
+                  // sort long to short names
+                  .sorted((a, b) => b.name.length.compareTo(a.name.length))
+                  .map((e) => e.name)
+                  .fold("", (a, b) => a.isEmpty ? "$b" : "$a|$b") +
+              ")\\b",
           caseSensitive: false,
         );
 
   @override
   bool onMatch(md.InlineParser parser, Match match) {
-    final name = match[0]!.toLowerCase();
+    final name = match[1]!.toLowerCase();
     if (!recipe.items.map((e) => e.name.toLowerCase()).contains(name)) {
       parser.advanceBy(1);
 

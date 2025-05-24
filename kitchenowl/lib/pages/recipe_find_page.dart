@@ -4,6 +4,8 @@ import 'package:kitchenowl/cubits/household_cubit.dart';
 import 'package:kitchenowl/cubits/reciep_find_cubit.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/household.dart';
+import 'package:kitchenowl/pages/recipe_list_display_page.dart';
+import 'package:kitchenowl/services/api/api_service.dart';
 import 'package:kitchenowl/widgets/sliver_recipe_carousel.dart';
 
 class RecipeFindPage extends StatefulWidget {
@@ -59,6 +61,16 @@ class _RecipeFindPageState extends State<RecipeFindPage> {
                     SliverAppBar(
                       title: Text("Find Recipes"), // TODO l10n
                       pinned: true,
+                      actions: [
+                        KitchenowlSearchAnchor(
+                          onSearch: (s) {},
+                          suggestionsBuilder: (
+                            BuildContext context,
+                            SearchController controller,
+                          ) =>
+                              List.generate(5, (int index) => 'item $index'),
+                        ),
+                      ],
                     ),
                     if (state.tags.isNotEmpty)
                       SliverPadding(
@@ -76,10 +88,14 @@ class _RecipeFindPageState extends State<RecipeFindPage> {
                         child: ListView.builder(
                           scrollDirection: Axis.horizontal,
                           itemBuilder: (context, i) => i == 0
-                              ? const SizedBox(width: 16)
-                              : ActionChip(
-                                  label: Text(state.tags[i - 1]),
-                                  onPressed: () {},
+                              ? const SizedBox(width: 8)
+                              : Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 4),
+                                  child: ActionChip(
+                                    label: Text(state.tags[i - 1]),
+                                    onPressed: () {},
+                                  ),
                                 ),
                           itemCount: state.tags.length + 1,
                         ),
@@ -90,6 +106,20 @@ class _RecipeFindPageState extends State<RecipeFindPage> {
                       title: "Newest Community Recipes:", // TODO l10n
                       showHousehold: true,
                       isLoading: state is RecipeFindLoadingState,
+                      limit: 5, // TODO adapt to screen size
+                      showMore: () =>
+                          Navigator.of(context, rootNavigator: true).push(
+                        MaterialPageRoute(
+                          builder: (context) => RecipeListDisplayPage(
+                            title: "Newest Community Recipes:",
+                            recipes: state.communityNewest,
+                            showHousehold: true,
+                            moreRecipes: (page) => ApiService.getInstance()
+                                .suggestRecipesNewest(
+                                    cubit.household?.language, page),
+                          ),
+                        ),
+                      ),
                     )
                   ],
                 );

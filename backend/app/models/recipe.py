@@ -222,6 +222,7 @@ class Recipe(Model, DbModelAuthorizeMixin):
     def find_suggestions(
         cls,
         household_id: int,
+        page: int = 0,
     ) -> list[Self]:
         sq = (
             db.session.query(Planner.recipe_id)
@@ -232,6 +233,8 @@ class Recipe(Model, DbModelAuthorizeMixin):
             cls.query.filter(cls.household_id == household_id, cls.id.notin_(sq))
             .filter(cls.suggestion_rank > 0)  # noqa
             .order_by(cls.suggestion_rank)
+            .offset(page * 10)
+            .limit(10)
             .all()
         )
 

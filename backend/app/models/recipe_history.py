@@ -81,7 +81,7 @@ class RecipeHistory(Model):
         return cls.query.filter(cls.household_id == household_id).all()
 
     @classmethod
-    def get_recent(cls, household_id: int) -> list[Self]:
+    def get_recent(cls, household_id: int, page: int = 0) -> list[Self]:
         sq = (
             db.session.query(Planner.recipe_id)
             .group_by(Planner.recipe_id)
@@ -98,4 +98,10 @@ class RecipeHistory(Model):
             .subquery()
             .select()
         )
-        return cls.query.filter(cls.id.in_(sq2)).order_by(cls.id.desc()).limit(9).all()
+        return (
+            cls.query.filter(cls.id.in_(sq2))
+            .order_by(cls.id.desc())
+            .offset(page * 10)
+            .limit(10)
+            .all()
+        )

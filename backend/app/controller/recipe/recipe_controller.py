@@ -240,8 +240,31 @@ def suggestedRecipes(args):
                 e.obj_to_public_dict()
                 for e in Recipe.query.join(Recipe.household)
                 .filter(*queryFilter)
-                .limit(30)
+                .order_by(desc(Recipe.id))
+                .limit(10)
                 .all()
             ],
         }
+    )
+
+
+@recipe.route("/suggestions/newest/<int:page>", methods=["GET"])
+@jwt_required()
+@validate_args(SuggestionsRecipe)
+def newestRecipes(args, page):
+    queryFilter = [Recipe.visibility == RecipeVisibility.PUBLIC]
+
+    if "language" in args:
+        queryFilter.append(Household.language == args["language"])
+
+    return jsonify(
+        [
+            e.obj_to_public_dict()
+            for e in Recipe.query.join(Recipe.household)
+            .filter(*queryFilter)
+            .order_by(desc(Recipe.id))
+            .offset(page * 10)
+            .limit(10)
+            .all()
+        ]
     )

@@ -112,4 +112,13 @@ extension RecipeApi on ApiService {
       (body["newest"] as List<dynamic>).map((e) => Recipe.fromJson(e)).toList()
     );
   }
+
+  Future<List<Recipe>?> suggestRecipesNewest(String? language, int page) async {
+    final res = await get("$baseRoute/suggestions/newest/$page?" +
+        (language != null ? "language=" + language : ""));
+    if (res.statusCode != 200) return null;
+
+    final body = jsonDecode(res.body);
+    return (body as List<dynamic>).map((e) => Recipe.fromJson(e)).toList();
+  }
 }

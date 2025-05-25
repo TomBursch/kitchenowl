@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:kitchenowl/app.dart';
 import 'package:kitchenowl/cubits/household_cubit.dart';
 import 'package:kitchenowl/cubits/planner_cubit.dart';
 import 'package:kitchenowl/cubits/settings_cubit.dart';
@@ -14,6 +15,8 @@ import 'package:kitchenowl/models/recipe.dart';
 import 'package:kitchenowl/models/shoppinglist.dart';
 import 'package:kitchenowl/pages/item_selection_page.dart';
 import 'package:kitchenowl/pages/recipe_list_display_page.dart';
+import 'package:kitchenowl/services/transaction_handler.dart';
+import 'package:kitchenowl/services/transactions/planner.dart';
 import 'package:kitchenowl/widgets/sliver_recipe_carousel.dart';
 import 'package:tuple/tuple.dart';
 
@@ -290,7 +293,15 @@ class _PlannerPageState extends State<PlannerPage> {
                         MaterialPageRoute(
                           builder: (context) => RecipeListDisplayPage(
                             title: AppLocalizations.of(context)!.recipesRecent,
+                            household: cubit.household,
                             recipes: state.recentRecipes,
+                            moreRecipes: (page) =>
+                                TransactionHandler.getInstance().runTransaction(
+                              TransactionPlannerGetRecentPlannedRecipes(
+                                household: cubit.household,
+                                page: page,
+                              ),
+                            ),
                           ),
                         ),
                       ),
@@ -333,8 +344,46 @@ class _PlannerPageState extends State<PlannerPage> {
                           builder: (context) => RecipeListDisplayPage(
                             title:
                                 AppLocalizations.of(context)!.recipesSuggested,
+                            household: cubit.household,
                             recipes: state.suggestedRecipes,
+                            actions: (oCubit, controller) => [
+                              LoadingIconButton(
+                                onPressed: () async {
+                                  await cubit.refreshSuggestions();
+                                  await oCubit.refresh();
+                                  controller.animateTo(
+                                    0,
+                                    duration: const Duration(milliseconds: 400),
+                                    curve: Curves.easeIn,
+                                  );
+                                },
+                                icon: const Icon(Icons.shuffle_rounded),
+                                tooltip: AppLocalizations.of(context)!.refresh,
+                              ),
+                            ],
+                            moreRecipes: (page) =>
+                                TransactionHandler.getInstance().runTransaction(
+                              TransactionPlannerGetSuggestedRecipes(
+                                household: cubit.household,
+                                page: page,
+                              ),
+                            ),
                           ),
+                        ),
+                      ),
+                    ),
+                  if (!App.isOffline)
+                    SliverPadding(
+                      padding: const EdgeInsets.all(16),
+                      sliver: SliverToBoxAdapter(
+                        child: ElevatedButton.icon(
+                          onPressed: () => context.push(
+                            "/household/${cubit.household.id}/recipes/discover",
+                            extra: cubit.household,
+                          ),
+                          icon: const Icon(Icons.auto_awesome_rounded),
+                          label: Text(
+                              AppLocalizations.of(context)!.recipesDiscover),
                         ),
                       ),
                     ),

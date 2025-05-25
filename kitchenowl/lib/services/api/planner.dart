@@ -44,9 +44,13 @@ extension PlannerApi on ApiService {
     return res.statusCode == 200;
   }
 
-  Future<List<Recipe>?> getRecentPlannedRecipes(Household household) async {
-    final res =
-        await get('${householdPath(household)}$baseRoute/recent-recipes');
+  Future<List<Recipe>?> getRecentPlannedRecipes(
+    Household household,
+    int? page,
+  ) async {
+    final res = await get(
+        '${householdPath(household)}$baseRoute/recent-recipes' +
+            (page == null ? '' : '/${page}'));
     if (res.statusCode != 200) return null;
 
     final body = List.from(jsonDecode(res.body));
@@ -54,9 +58,13 @@ extension PlannerApi on ApiService {
     return body.map((e) => Recipe.fromJson(e)).toList();
   }
 
-  Future<List<Recipe>?> getSuggestedRecipes(Household household) async {
-    final res =
-        await get('${householdPath(household)}$baseRoute/suggested-recipes');
+  Future<List<Recipe>?> getSuggestedRecipes(
+    Household household,
+    int? page,
+  ) async {
+    final res = await get(
+        '${householdPath(household)}$baseRoute/suggested-recipes' +
+            (page == null ? '' : '/${page}'));
     if (res.statusCode != 200) return null;
 
     final body = List.from(jsonDecode(res.body));

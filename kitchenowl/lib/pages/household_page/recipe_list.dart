@@ -1,6 +1,8 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import 'package:kitchenowl/app.dart';
 import 'package:kitchenowl/cubits/recipe_list_cubit.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/widgets/index_bar.dart';
@@ -81,6 +83,19 @@ class _RecipeListPageState extends State<RecipeListPage> {
                   clearOnSubmit: false,
                   onSearch: (s) => cubit.search(s),
                   textInputAction: TextInputAction.search,
+                  suffix: !App.isOffline
+                      ? IconButton(
+                          onPressed: () => context.go(
+                            "/household/${cubit.household.id}/recipes/discover",
+                            extra: cubit.household,
+                          ),
+                          tooltip: AppLocalizations.of(context)!.discover,
+                          icon: const Icon(
+                            Icons.auto_awesome_rounded,
+                            color: Colors.grey,
+                          ),
+                        )
+                      : null,
                 ),
               ),
             ),

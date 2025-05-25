@@ -117,7 +117,7 @@ class RecipeCubit extends Cubit<RecipeState> {
         state.household!,
         state.recipe.copyWith(
           source: "kitchenowl:///recipe/${state.recipe.id}",
-          public: false,
+          visibility: RecipeVisibility.private,
         ),
       );
       if (res != null) setUpdateState(UpdateEnum.updated);

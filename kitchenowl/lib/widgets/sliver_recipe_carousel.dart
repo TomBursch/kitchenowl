@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/recipe.dart';
@@ -13,9 +15,11 @@ class SliverRecipeCarousel extends StatelessWidget {
   final void Function(Recipe recipe)? onPressed;
   final String title;
   final void Function()? showMore;
+  final bool alwaysShowMoreAction;
   final ScrollController? scrollController;
   final bool showHousehold;
   final bool isLoading;
+  final int? limit;
 
   const SliverRecipeCarousel({
     super.key,
@@ -27,8 +31,10 @@ class SliverRecipeCarousel extends StatelessWidget {
     required this.title,
     this.scrollController,
     this.showMore,
+    this.alwaysShowMoreAction = false,
     this.showHousehold = false,
     this.isLoading = false,
+    this.limit,
   });
 
   @override
@@ -49,12 +55,13 @@ class SliverRecipeCarousel extends StatelessWidget {
                 ),
                 ...actions,
                 if (showMore != null &&
-                    getValueForScreenType(
-                      context: context,
-                      mobile: false,
-                      tablet: true,
-                      desktop: true,
-                    ))
+                    (alwaysShowMoreAction ||
+                        getValueForScreenType(
+                          context: context,
+                          mobile: false,
+                          tablet: true,
+                          desktop: true,
+                        )))
                   FilledButton.tonalIcon(
                     onPressed: showMore,
                     icon: Icon(Icons.keyboard_arrow_right_rounded),
@@ -82,7 +89,9 @@ class SliverRecipeCarousel extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 16),
             controller: scrollController,
             itemBuilder: (context, i) {
-              if (i == recipes.length + (isLoading ? 1 : 0))
+              if (i ==
+                  math.min(limit ?? recipes.length, recipes.length) +
+                      (isLoading ? 1 : 0))
                 return Padding(
                   padding: const EdgeInsets.all(16),
                   child: Center(
@@ -128,7 +137,7 @@ class SliverRecipeCarousel extends StatelessWidget {
                 showHousehold: showHousehold,
               );
             },
-            itemCount: recipes.length +
+            itemCount: math.min(limit ?? recipes.length, recipes.length) +
                 (showMore != null ? 1 : 0) +
                 (isLoading ? 1 : 0),
             scrollDirection: Axis.horizontal,

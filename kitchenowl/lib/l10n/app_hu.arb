@@ -10,6 +10,14 @@
   "@add": {},
   "@addCategory": {},
   "@addDescriptionFromSource": {},
+  "@addedBy": {
+    "placeholders": {
+      "name": {
+        "example": "Tom",
+        "type": "String"
+      }
+    }
+  },
   "@addItemTitle": {},
   "@addLanguage": {},
   "@addLanguageConfirm": {
@@ -37,17 +45,9 @@
     }
   },
   "@addRecipeToPlannerShort": {},
+  "@address": {},
   "@addShoppingList": {},
   "@addTag": {},
-  "@addedBy": {
-    "placeholders": {
-      "name": {
-        "example": "Tom",
-        "type": "String"
-      }
-    }
-  },
-  "@address": {},
   "@admin": {},
   "@analysingWebsite": {},
   "@appDescription": {},
@@ -171,8 +171,8 @@
     }
   },
   "@householdNew": {},
-  "@householdSwitch": {},
   "@households": {},
+  "@householdSwitch": {},
   "@icon": {},
   "@imageSelect": {},
   "@import": {},
@@ -190,9 +190,9 @@
     }
   },
   "@itemRemoveInteraction": {},
-  "@itemSize": {},
   "@items": {},
   "@itemsAdd": {},
+  "@itemSize": {},
   "@itemsMerge": {},
   "@itemsMergeConfirmation": {
     "placeholders": {
@@ -215,6 +215,7 @@
   "@link": {
     "description": "As in link social account (e.g. Google)"
   },
+  "@linkRecipeDescription": {},
   "@list": {},
   "@lltCreate": {},
   "@lltDelete": {},
@@ -227,9 +228,9 @@
     }
   },
   "@lltNotShownAgain": {},
+  "@llts": {},
   "@lltWarningContent": {},
   "@lltWarningTitle": {},
-  "@llts": {},
   "@login": {},
   "@loginTo": {},
   "@logout": {},
@@ -241,8 +242,8 @@
       }
     }
   },
-  "@longPressToReorder": {},
   "@longerThanExpected": {},
+  "@longPressToReorder": {},
   "@markAsPaid": {},
   "@mealPlanner": {},
   "@member": {},
@@ -256,8 +257,8 @@
   "@more": {},
   "@name": {},
   "@next": {},
-  "@noTags": {},
   "@none": {},
+  "@noTags": {},
   "@now": {},
   "@offlineMessage": {},
   "@okay": {},
@@ -314,7 +315,6 @@
   "@privateRecipeDescription": {},
   "@profile": {},
   "@public": {},
-  "@publicRecipeDescription": {},
   "@recentItemsCategorize": {},
   "@recipeAdd": {},
   "@recipeAddToHousehold": {
@@ -340,8 +340,8 @@
   "@recipeEmptySearch": {},
   "@recipeImageSelect": {},
   "@recipeNew": {},
-  "@recipeSource": {},
   "@recipes": {},
+  "@recipeSource": {},
   "@recipesOverwrite": {},
   "@recipesOverwriteDescription": {},
   "@recipesRecent": {},
@@ -380,8 +380,8 @@
     }
   },
   "@shoppingListEdit": {},
-  "@shoppingListStyle": {},
   "@shoppingLists": {},
+  "@shoppingListStyle": {},
   "@signInWith": {
     "placeholders": {
       "provider": {
@@ -453,12 +453,12 @@
       }
     }
   },
-  "@userNotSignedIn": {},
-  "@userSearchHint": {},
   "@username": {},
   "@usernameInvalid": {},
   "@usernameUnavailable": {},
+  "@userNotSignedIn": {},
   "@users": {},
+  "@userSearchHint": {},
   "@weekly": {},
   "@welcomeBack": {},
   "@writeMarkdownHere": {},
@@ -478,16 +478,16 @@
   "add": "Hozzáadás",
   "addCategory": "Kategória hozzáadása",
   "addDescriptionFromSource": "Leírás hozzáadása a forrásból",
+  "addedBy": "Általa létrehozva: {name}",
   "addItemTitle": "Elemek hozzáadása",
   "addLanguage": "Nyelv hozzáadása",
   "addLanguageConfirm": "Biztosan '{lang}'-ra akarod állítani a nyelvet? Ez nem vonható vissza, új elemeket és kategóriákat fog hozzáadni a lakásodhoz.",
   "addNumberIngredients": "Adjon hozzá {number} összetevőt",
   "addRecipeToPlanner": "Hozzáadás az étkezési tervhez ({number})",
   "addRecipeToPlannerShort": "Hozzáadás az étkezési tervhez",
+  "address": "Cím",
   "addShoppingList": "Bevásárló listához adás",
   "addTag": "Címke hozzáadása",
-  "addedBy": "Általa létrehozva: {name}",
-  "address": "Cím",
   "admin": "Admin",
   "analysingWebsite": "Weboldal elemzése...",
   "appDescription": "A KitchenOwl segít megszervezni élelmiszerboltos életét.",
@@ -560,8 +560,8 @@
   "householdLeave": "Háztartás Elhagyása",
   "householdLeaveConfirmation": "Biztosan ki akarsz lépni a {household}-ból?",
   "householdNew": "Új Háztartás",
-  "householdSwitch": "Háztartás Váltás",
   "households": "Háztartások",
+  "householdSwitch": "Háztartás Váltás",
   "icon": "Ikon",
   "imageSelect": "Válassz ki egy képet",
   "import": "Importálás",
@@ -572,9 +572,9 @@
   "itemDelete": "Elem Törlése",
   "itemDeleteConfirmation": "Biztosan ki akarod törölni a(z) {item}-et? Törlődni fog minden receptből is, ami tartalmazza.",
   "itemRemoveInteraction": "Elem törlés interakció",
-  "itemSize": "Elem méret",
   "items": "Elemek",
   "itemsAdd": "Elemek Hozzáadása",
+  "itemSize": "Elem méret",
   "itemsMerge": "Elemek összevonása",
   "itemsMergeConfirmation": "Biztos benne hogy össze akarja vonni a(z) {item} a(z) {other} ? Ezt nem lehet utána visszafordítani.",
   "itemsOptional": "Választható Elemek",
@@ -584,20 +584,21 @@
   "larger": "Nagyobb",
   "lastUsed": "Utoljára használt",
   "link": "Link",
+  "linkRecipeDescription": "Bárki, aki össze van kapcsolva ezzel a recepttel, az láthatja azt.",
   "list": "Lista",
   "lltCreate": "Hosszú-élettartamú token létrehozása",
   "lltDelete": "Hosszú élettartamú token törlése",
   "lltDeleteConfirmation": "Biztos törölni akarja a tokent '{token}'? Ezt nem lehet visszaforditani.",
   "lltNotShownAgain": "Mentse el a tokent, ezután nem fogja tudni újra látni",
+  "llts": "Hossz-élettartamú tokenek",
   "lltWarningContent": "Biztos létre akarja hozni a hosszú élettartamú token-t? Ez potenciálisan egy biztonsági kockázat. A token éllettartama nem jár le és teljes hozzáférést biztosít a fiókjához.",
   "lltWarningTitle": "Tudja hogy mit csinál?",
-  "llts": "Hossz-élettartamú tokenek",
   "login": "Bejelentkezés",
   "loginTo": "Bejelentkezés a(z)",
   "logout": "Kijelentkezés",
   "logoutName": "Kijelentkezés {name}",
-  "longPressToReorder": "Tartsa hosszan lenyomva az újrarendeléshez",
   "longerThanExpected": "Ez tovább tart, mint ami várható",
+  "longPressToReorder": "Tartsa hosszan lenyomva az újrarendeléshez",
   "markAsPaid": "Megjelölés fizetettként",
   "mealPlanner": "Étkezés tervező",
   "member": "Tag",
@@ -611,8 +612,8 @@
   "more": "Több",
   "name": "Név",
   "next": "Következő",
-  "noTags": "Nincs jelölés",
   "none": "Egyik sem",
+  "noTags": "Nincs jelölés",
   "now": "Most",
   "offlineMessage": "Offline állapotban van",
   "okay": "Rendben",
@@ -644,7 +645,6 @@
   "privateRecipeDescription": "Csak a háztartás tagjai láthatják a receptet.",
   "profile": "Profil",
   "public": "Publikus",
-  "publicRecipeDescription": "Bárki, aki össze van kapcsolva ezzel a recepttel, az láthatja azt.",
   "recentItemsCategorize": "Legutóbbi elemek kategorizálása",
   "recipeAdd": "Recept hozzáadása",
   "recipeAddToHousehold": "Hozzáadás a {householdName}",
@@ -656,8 +656,8 @@
   "recipeEmptySearch": "Recept nem található :(",
   "recipeImageSelect": "Vállasz ki egy képet a recepthez",
   "recipeNew": "Új recept",
-  "recipeSource": "Recept forrása",
   "recipes": "Receptek",
+  "recipeSource": "Recept forrása",
   "recipesOverwrite": "receptek felülírása",
   "recipesOverwriteDescription": "Ha aktiválja ezt, akkor a már létező receptek ugyanazon névvel felül lesznek írva",
   "recipesRecent": "Mostanában",
@@ -683,8 +683,8 @@
   "shoppingListDelete": "Bevásárló lista törlése",
   "shoppingListDeleteConfirmation": "Biztos törölni szeretnéd a {shoppingList}?",
   "shoppingListEdit": "Bevásárló lista szerkesztése",
-  "shoppingListStyle": "Bevásárló lista stílusa",
   "shoppingLists": "Bevásárló listák",
+  "shoppingListStyle": "Bevásárló lista stílusa",
   "signInWith": "Bejelentkezés szolgáltatással {provider}",
   "signup": "Regisztrálás",
   "skip": "Átugrás",
@@ -726,12 +726,12 @@
   "userAdd": "Felhasználó hozzáadása",
   "userDelete": "Felhasználó törlése",
   "userDeleteConfirmation": "Biztos törölni akarod a(z) {user}?",
-  "userNotSignedIn": "Bejelentkezve kell lennie a fiók összekapcsolásához",
-  "userSearchHint": "Irj egy nevet",
   "username": "Felhasználó név",
   "usernameInvalid": "Felhasználónév nem tartalmazhat '@'",
   "usernameUnavailable": "A felhasználónév nem elérhető",
+  "userNotSignedIn": "Bejelentkezve kell lennie a fiók összekapcsolásához",
   "users": "Felhasználók",
+  "userSearchHint": "Irj egy nevet",
   "weekly": "Heti",
   "welcomeBack": "Üdv újra",
   "writeMarkdownHere": "Itt tudsz jegyzetelni!",

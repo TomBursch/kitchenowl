@@ -129,15 +129,20 @@ class _RecipePageState extends State<RecipePage> {
                       if (state.recipe.prepTime + state.recipe.cookTime > 0)
                         const SizedBox(height: 16),
                       if (!state.isOwningHousehold(state) &&
-                          state.recipe.household != null)
+                          state.recipe.household != null) ...[
                         Row(
                           children: [
                             HouseholdCircleAvatar(
-                                household: state.recipe.household!),
+                              household: state.recipe.household!,
+                              radius: 16,
+                            ),
                             const SizedBox(width: 8),
                             Text(state.recipe.household!.name),
                           ],
                         ),
+                        Divider(),
+                        const SizedBox(height: 16),
+                      ],
                       RecipeMarkdownBody(
                         recipe: state.recipe,
                       ),
@@ -393,7 +398,7 @@ class _RecipePageState extends State<RecipePage> {
                       imageHash: state.recipe.imageHash,
                       popValue: () => cubit.state.updateState,
                       actions: (isCollapsed) => [
-                        if (state.recipe.public)
+                        if (state.recipe.visibility != RecipeVisibility.private)
                           Padding(
                             padding: const EdgeInsets.only(right: 8),
                             child: LoadingIconButton(
@@ -477,8 +482,7 @@ class _RecipePageState extends State<RecipePage> {
                               builder: (context, controller, child) => Padding(
                                 padding: const EdgeInsets.only(right: 8),
                                 child: LoadingIconButton(
-                                  tooltip:
-                                      AppLocalizations.of(context)!.recipeEdit,
+                                  tooltip: AppLocalizations.of(context)!.more,
                                   variant: state.recipe.image == null ||
                                           state.recipe.image!.isEmpty ||
                                           isCollapsed

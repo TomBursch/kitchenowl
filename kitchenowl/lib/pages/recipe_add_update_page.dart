@@ -270,7 +270,7 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                                 AddUpdateRecipeState>(
                               bloc: cubit,
                               buildWhen: (previous, current) =>
-                                  previous.public != current.public,
+                                  previous.visibility != current.visibility,
                               builder: (context, state) => Padding(
                                 padding:
                                     const EdgeInsets.fromLTRB(16, 0, 16, 16),
@@ -278,10 +278,10 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                                   children: [
                                     Expanded(
                                       child: SegmentedButton(
-                                        selected: {state.public},
+                                        selected: {state.visibility},
                                         segments: [
                                           ButtonSegment(
-                                            value: false,
+                                            value: RecipeVisibility.private,
                                             icon:
                                                 const Icon(Icons.lock_rounded),
                                             label: Text(
@@ -289,7 +289,15 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                                                     .private),
                                           ),
                                           ButtonSegment(
-                                            value: true,
+                                            value: RecipeVisibility.link,
+                                            icon:
+                                                const Icon(Icons.link_rounded),
+                                            label: Text(
+                                                AppLocalizations.of(context)!
+                                                    .linkNoun),
+                                          ),
+                                          ButtonSegment(
+                                            value: RecipeVisibility.public,
                                             icon: const Icon(
                                                 Icons.public_rounded),
                                             label: Text(
@@ -297,8 +305,9 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                                                     .public),
                                           ),
                                         ],
-                                        onSelectionChanged: (Set<bool> value) {
-                                          cubit.setPublic(value.first);
+                                        onSelectionChanged:
+                                            (Set<RecipeVisibility> value) {
+                                          cubit.setVisibility(value.first);
                                         },
                                       ),
                                     ),
@@ -329,6 +338,32 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                                                 text: AppLocalizations.of(
                                                             context)!
                                                         .privateRecipeDescription +
+                                                    "\n\n",
+                                                style: TextStyle(
+                                                  color: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyMedium
+                                                      ?.color
+                                                      ?.withAlpha(204),
+                                                ),
+                                              ),
+                                              TextSpan(
+                                                text: AppLocalizations.of(
+                                                            context)!
+                                                        .linkNoun +
+                                                    " ",
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyMedium
+                                                    ?.copyWith(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                              ),
+                                              TextSpan(
+                                                text: AppLocalizations.of(
+                                                            context)!
+                                                        .linkRecipeDescription +
                                                     "\n\n",
                                                 style: TextStyle(
                                                   color: Theme.of(context)

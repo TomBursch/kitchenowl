@@ -10,6 +10,14 @@
   "@add": {},
   "@addCategory": {},
   "@addDescriptionFromSource": {},
+  "@addedBy": {
+    "placeholders": {
+      "name": {
+        "example": "Tom",
+        "type": "String"
+      }
+    }
+  },
   "@addItemTitle": {},
   "@addLanguage": {},
   "@addLanguageConfirm": {
@@ -39,17 +47,9 @@
   "@addRecipeToPlannerShort": {
     "description": "A shorter title/button text used wherever the space is limited. Excludes the number of yields."
   },
+  "@address": {},
   "@addShoppingList": {},
   "@addTag": {},
-  "@addedBy": {
-    "placeholders": {
-      "name": {
-        "example": "Tom",
-        "type": "String"
-      }
-    }
-  },
-  "@address": {},
   "@admin": {},
   "@analysingWebsite": {},
   "@appDescription": {},
@@ -173,8 +173,8 @@
     }
   },
   "@householdNew": {},
-  "@householdSwitch": {},
   "@households": {},
+  "@householdSwitch": {},
   "@icon": {},
   "@imageSelect": {},
   "@import": {},
@@ -192,9 +192,9 @@
     }
   },
   "@itemRemoveInteraction": {},
-  "@itemSize": {},
   "@items": {},
   "@itemsAdd": {},
+  "@itemSize": {},
   "@itemsMerge": {},
   "@itemsMergeConfirmation": {
     "placeholders": {
@@ -217,6 +217,7 @@
   "@link": {
     "description": "As in link social account (e.g. Google)"
   },
+  "@linkRecipeDescription": {},
   "@list": {},
   "@lltCreate": {},
   "@lltDelete": {},
@@ -229,9 +230,9 @@
     }
   },
   "@lltNotShownAgain": {},
+  "@llts": {},
   "@lltWarningContent": {},
   "@lltWarningTitle": {},
-  "@llts": {},
   "@login": {},
   "@loginTo": {},
   "@logout": {},
@@ -243,8 +244,8 @@
       }
     }
   },
-  "@longPressToReorder": {},
   "@longerThanExpected": {},
+  "@longPressToReorder": {},
   "@markAsPaid": {},
   "@mealPlanner": {},
   "@member": {},
@@ -258,8 +259,8 @@
   "@more": {},
   "@name": {},
   "@next": {},
-  "@noTags": {},
   "@none": {},
+  "@noTags": {},
   "@now": {},
   "@offlineMessage": {},
   "@okay": {},
@@ -316,7 +317,6 @@
   "@privateRecipeDescription": {},
   "@profile": {},
   "@public": {},
-  "@publicRecipeDescription": {},
   "@recentItemsCategorize": {},
   "@recipeAdd": {},
   "@recipeAddToHousehold": {
@@ -342,8 +342,8 @@
   "@recipeEmptySearch": {},
   "@recipeImageSelect": {},
   "@recipeNew": {},
-  "@recipeSource": {},
   "@recipes": {},
+  "@recipeSource": {},
   "@recipesOverwrite": {},
   "@recipesOverwriteDescription": {},
   "@recipesRecent": {},
@@ -382,8 +382,8 @@
     }
   },
   "@shoppingListEdit": {},
-  "@shoppingListStyle": {},
   "@shoppingLists": {},
+  "@shoppingListStyle": {},
   "@signInWith": {
     "placeholders": {
       "provider": {
@@ -455,12 +455,12 @@
       }
     }
   },
-  "@userNotSignedIn": {},
-  "@userSearchHint": {},
   "@username": {},
   "@usernameInvalid": {},
   "@usernameUnavailable": {},
+  "@userNotSignedIn": {},
   "@users": {},
+  "@userSearchHint": {},
   "@weekly": {},
   "@welcomeBack": {},
   "@writeMarkdownHere": {},
@@ -480,16 +480,16 @@
   "add": "சேர்க்க",
   "addCategory": "புதிய வகை சேர்க்க",
   "addDescriptionFromSource": "மூலத்திலிருந்து விளக்கத்தைச் சேர்க்கவும்",
+  "addedBy": "{name} ஆல் சேர்க்கப்பட்டது",
   "addItemTitle": "உருப்படிகளைச் சேர்க்கவும்",
   "addLanguage": "புதிய மொழியை சேர்க்க",
   "addLanguageConfirm": "மொழியை '{lang}' என அமைக்க விரும்புகிறீர்களா? இது செயல்தவிர்க்க முடியாது, மேலும் உங்கள் வீட்டுக்கு உருப்படிகளையும் வகைகளையும் சேர்க்கும்.",
   "addNumberIngredients": "{number} பொருட்களைச் சேர்க்கவும்",
   "addRecipeToPlanner": "உணவுத் திட்டத்தில் சேர்க்கவும் ({number} பணி செய்கிறது)",
   "addRecipeToPlannerShort": "உணவு திட்டத்தில் சேர்க்கவும்",
+  "address": "முகவரி",
   "addShoppingList": "புதிய ஷாப்பிங் பட்டியல்",
   "addTag": "குறிச்சொல்லைச் சேர்க்கவும்",
-  "addedBy": "{name} ஆல் சேர்க்கப்பட்டது",
-  "address": "முகவரி",
   "admin": "நிர்வாகி",
   "analysingWebsite": "வலைத்தளத்தை பகுப்பாய்வு செய்தல் ...",
   "appDescription": "கிச்சன்அவுல் உங்கள் மளிகை பொருள் விவரங்களை ஒழுங்குபடுத்த உதவுகிறது.",
@@ -562,8 +562,8 @@
   "householdLeave": "வீட்டை விட்டு வெளியேறு",
   "householdLeaveConfirmation": "{household} விட்டு வெளியேற சம்மதமா?",
   "householdNew": "புதிய வீடு",
-  "householdSwitch": "வீட்டை மாற்ற",
   "households": "வீடுகள்",
+  "householdSwitch": "வீட்டை மாற்ற",
   "icon": "படவுரு",
   "imageSelect": "ஒரு படத்தைத் தேர்ந்தெடுக்கவும்",
   "import": "இறக்குமதி",
@@ -574,9 +574,9 @@
   "itemDelete": "பொருளை நீக்கு",
   "itemDeleteConfirmation": "{item} நீக்க விரும்புகிறீர்களா? இது உருப்படியைக் கொண்ட எந்த செய்முறையிலிருந்தும் அகற்றும்.",
   "itemRemoveInteraction": "உருப்படி தொடர்புகளை அகற்று",
-  "itemSize": "உருப்படி அளவு",
   "items": "உருப்படிகள்",
   "itemsAdd": "உருப்படிகளைச் சேர்க்கவும்",
+  "itemSize": "உருப்படி அளவு",
   "itemsMerge": "உருப்படிகளை ஒன்றிணைக்கவும்",
   "itemsMergeConfirmation": "நீங்கள் நிச்சயமாக {item} மற்றும் {other} ஒன்றிணைக்க விரும்புகிறீர்களா? இதை செயல்தவிர்க்க முடியாது.",
   "itemsOptional": "விருப்ப உருப்படிகள்",
@@ -586,20 +586,21 @@
   "larger": "பெரியது",
   "lastUsed": "கடைசியாக பயன்படுத்தப்பட்டது",
   "link": "இணைப்பு",
+  "linkRecipeDescription": "இந்த செய்முறைக்கான இணைப்பு உள்ள எவரும் இதைக் காணலாம்.",
   "list": "பட்டியல்",
   "lltCreate": "நீண்ட கால கிள்ளாக்கை உருவாக்கவும்",
   "lltDelete": "நீண்ட கால கிள்ளாக்கை நீக்கு",
   "lltDeleteConfirmation": "நீண்ட கால கிள்ளாக்கு '{token}' ஐ நீக்க விரும்புகிறீர்களா? இதை செயல்தவிர்க்க முடியாது.",
   "lltNotShownAgain": "கிள்ளாக்கை சேமிக்கவும்; நீங்கள் அதை மீண்டும் பார்க்க முடியாது",
+  "llts": "நீண்ட கால டோக்கன்கள்",
   "lltWarningContent": "நீங்கள் நீண்ட கால கிள்ளாக்கை உருவாக்க விரும்புகிறீர்களா? இது பாதுகாப்பு அபாயமாக இருக்கலாம். கிள்ளாக்கு காலாவதியாகாது மற்றும் உங்கள் கணக்கிற்கு முழு அணுகலை வழங்குகிறது.",
   "lltWarningTitle": "நீங்கள் என்ன செய்கிறீர்கள் என்று உங்களுக்குத் தெரியுமா?",
-  "llts": "நீண்ட கால டோக்கன்கள்",
   "login": "புகுபதிவு",
   "loginTo": "உள்நுழைவு",
   "logout": "வெளியேற்றம்",
   "logoutName": "வெளியேறு {name}",
-  "longPressToReorder": "மறுவரிசைப்படுத்த நீண்ட அழுத்தவும்",
   "longerThanExpected": "இது எதிர்பார்த்ததை விட அதிக நேரம் எடுக்கும்",
+  "longPressToReorder": "மறுவரிசைப்படுத்த நீண்ட அழுத்தவும்",
   "markAsPaid": "பணம் செலுத்தியதாக குறிக்கவும்",
   "mealPlanner": "உணவு திட்டமிடுபவர்",
   "member": "உறுப்பினர்",
@@ -613,8 +614,8 @@
   "more": "மேலும்",
   "name": "பெயர்",
   "next": "அடுத்தது",
-  "noTags": "குறிச்சொற்கள் இல்லை",
   "none": "எதுவுமில்லை",
+  "noTags": "குறிச்சொற்கள் இல்லை",
   "now": "இப்போது",
   "offlineMessage": "நீங்கள் இணைப்பில்லாத",
   "okay": "சரி",
@@ -646,7 +647,6 @@
   "privateRecipeDescription": "வீட்டு உறுப்பினர்கள் மட்டுமே செய்முறையைப் பார்க்க முடியும்.",
   "profile": "சுயவிவரம்",
   "public": "பொது",
-  "publicRecipeDescription": "இந்த செய்முறைக்கான இணைப்பு உள்ள எவரும் இதைக் காணலாம்.",
   "recentItemsCategorize": "அண்மைக் கால உருப்படிகளை வகைப்படுத்தவும்",
   "recipeAdd": "செய்முறையைச் சேர்க்கவும்",
   "recipeAddToHousehold": "{householdName} இல் சேர்க்கவும்",
@@ -658,8 +658,8 @@
   "recipeEmptySearch": "சமையல் எதுவும் கிடைக்கவில்லை :(",
   "recipeImageSelect": "செய்முறை படத்தைத் தேர்ந்தெடுக்கவும்",
   "recipeNew": "புதிய செய்முறை",
-  "recipeSource": "செய்முறை மூல",
   "recipes": "சமையல்",
+  "recipeSource": "செய்முறை மூல",
   "recipesOverwrite": "ஓவர்ரைட் ரெசிபிகளை",
   "recipesOverwriteDescription": "செயல்படுத்தப்பட்டால், அதே பெயருடன் இருக்கும் சமையல் குறிப்புகள் மேலெழுதப்படும்",
   "recipesRecent": "அண்மைக் கால",
@@ -685,8 +685,8 @@
   "shoppingListDelete": "சாப்பிங் பட்டியலை நீக்கு",
   "shoppingListDeleteConfirmation": "{shoppingList} நீக்க விரும்புகிறீர்களா?",
   "shoppingListEdit": "சாப்பிங் பட்டியலைத் திருத்தவும்",
-  "shoppingListStyle": "சாப்பிங் பட்டியல் பாணி",
   "shoppingLists": "சாப்பிங் பட்டியல்கள்",
+  "shoppingListStyle": "சாப்பிங் பட்டியல் பாணி",
   "signInWith": "{provider} உடன் உள்நுழைக",
   "signup": "பதிவு செய்க",
   "skip": "தவிர்",
@@ -728,12 +728,12 @@
   "userAdd": "பயனரைச் சேர்க்கவும்",
   "userDelete": "பயனரை நீக்கு",
   "userDeleteConfirmation": "{user} ஐ அகற்ற விரும்புகிறீர்களா?",
-  "userNotSignedIn": "ஒரு கணக்கை இணைக்க நீங்கள் உள்நுழைய வேண்டும்",
-  "userSearchHint": "ஒரு பெயரைத் தட்டச்சு செய்க",
   "username": "பயனர்பெயர்",
   "usernameInvalid": "பயனர்பெயர் '@' ஐக் கொண்டிருக்க முடியாது",
   "usernameUnavailable": "பயனர்பெயர் கிடைக்கவில்லை",
+  "userNotSignedIn": "ஒரு கணக்கை இணைக்க நீங்கள் உள்நுழைய வேண்டும்",
   "users": "பயனர்கள்",
+  "userSearchHint": "ஒரு பெயரைத் தட்டச்சு செய்க",
   "weekly": "வாராந்திர",
   "welcomeBack": "மீண்டும் வருக",
   "writeMarkdownHere": "நீங்கள் இங்கே மார்க் டவுனைப் பயன்படுத்தலாம்!",

@@ -43,7 +43,12 @@ class RecipeCard extends StatelessWidget {
           onTap: onPressed ??
               () async {
                 final household =
-                    BlocProvider.of<HouseholdCubit>(context).state.household;
+                    context.read<HouseholdCubit?>()?.state.household;
+                if (household == null) {
+                  debugPrint(
+                      "RecipeCard onTap called without a Household context");
+                  return;
+                }
                 final res = await context.push<UpdateEnum>(
                   "/household/${household.id}/recipes/details/${recipe.id}",
                   extra: Tuple2<Household, Recipe>(household, recipe),

@@ -10,6 +10,14 @@
   "@add": {},
   "@addCategory": {},
   "@addDescriptionFromSource": {},
+  "@addedBy": {
+    "placeholders": {
+      "name": {
+        "example": "Tom",
+        "type": "String"
+      }
+    }
+  },
   "@addItemTitle": {},
   "@addLanguage": {},
   "@addLanguageConfirm": {
@@ -39,17 +47,9 @@
   "@addRecipeToPlannerShort": {
     "description": "A shorter title/button text used wherever the space is limited. Excludes the number of yields."
   },
+  "@address": {},
   "@addShoppingList": {},
   "@addTag": {},
-  "@addedBy": {
-    "placeholders": {
-      "name": {
-        "example": "Tom",
-        "type": "String"
-      }
-    }
-  },
-  "@address": {},
   "@admin": {},
   "@analysingWebsite": {},
   "@appDescription": {},
@@ -174,8 +174,8 @@
     }
   },
   "@householdNew": {},
-  "@householdSwitch": {},
   "@households": {},
+  "@householdSwitch": {},
   "@icon": {},
   "@imageSelect": {},
   "@import": {},
@@ -193,9 +193,9 @@
     }
   },
   "@itemRemoveInteraction": {},
-  "@itemSize": {},
   "@items": {},
   "@itemsAdd": {},
+  "@itemSize": {},
   "@itemsMerge": {},
   "@itemsMergeConfirmation": {
     "placeholders": {
@@ -218,6 +218,7 @@
   "@link": {
     "description": "As in link social account (e.g. Google)"
   },
+  "@linkRecipeDescription": {},
   "@list": {},
   "@lltCreate": {},
   "@lltDelete": {},
@@ -230,9 +231,9 @@
     }
   },
   "@lltNotShownAgain": {},
+  "@llts": {},
   "@lltWarningContent": {},
   "@lltWarningTitle": {},
-  "@llts": {},
   "@login": {},
   "@loginTo": {},
   "@logout": {},
@@ -244,8 +245,8 @@
       }
     }
   },
-  "@longPressToReorder": {},
   "@longerThanExpected": {},
+  "@longPressToReorder": {},
   "@markAsPaid": {},
   "@mealPlanner": {},
   "@member": {},
@@ -259,8 +260,8 @@
   "@more": {},
   "@name": {},
   "@next": {},
-  "@noTags": {},
   "@none": {},
+  "@noTags": {},
   "@now": {},
   "@offlineMessage": {},
   "@okay": {},
@@ -317,7 +318,6 @@
   "@privateRecipeDescription": {},
   "@profile": {},
   "@public": {},
-  "@publicRecipeDescription": {},
   "@recentItemsCategorize": {},
   "@recipeAdd": {},
   "@recipeAddToHousehold": {
@@ -343,8 +343,8 @@
   "@recipeEmptySearch": {},
   "@recipeImageSelect": {},
   "@recipeNew": {},
-  "@recipeSource": {},
   "@recipes": {},
+  "@recipeSource": {},
   "@recipesOverwrite": {},
   "@recipesOverwriteDescription": {},
   "@recipesRecent": {},
@@ -386,6 +386,7 @@
   "@shoppingListEmpty": {},
   "@shoppingListStyle": {},
   "@shoppingLists": {},
+  "@shoppingListStyle": {},
   "@signInWith": {
     "placeholders": {
       "provider": {
@@ -459,12 +460,12 @@
       }
     }
   },
-  "@userNotSignedIn": {},
-  "@userSearchHint": {},
   "@username": {},
   "@usernameInvalid": {},
   "@usernameUnavailable": {},
+  "@userNotSignedIn": {},
   "@users": {},
+  "@userSearchHint": {},
   "@weekly": {},
   "@welcomeBack": {},
   "@writeMarkdownHere": {},
@@ -485,16 +486,16 @@
   "add": "Adaugă",
   "addCategory": "Adaugă categorie",
   "addDescriptionFromSource": "Adaugă descriere de la sursă",
+  "addedBy": "Adăugat de {name}",
   "addItemTitle": "Adaugă articole",
   "addLanguage": "Adaugă limba",
   "addLanguageConfirm": "Ești sigur că vrei să schimbi limba la '{lang}'? Această acțiune nu poate fi anulată și va adăuga articole și categorii în gospodăria ta.",
   "addNumberIngredients": "Adaugă {number} ingrediente",
   "addRecipeToPlanner": "Adăugați la planul de masă ({number}servers)",
   "addRecipeToPlannerShort": "Adaugă un plan de mese",
+  "address": "Adresă",
   "addShoppingList": "Adaugă listă de cumpărături",
   "addTag": "Adaugă etichetă",
-  "addedBy": "Adăugat de {name}",
-  "address": "Adresă",
   "admin": "Administrator",
   "analysingWebsite": "Se analizează site-ul web...",
   "appDescription": "KitchenOwl te ajută să organizezi lista de cumpărături.",
@@ -568,8 +569,8 @@
   "householdLeave": "Părăsiți gospodăria",
   "householdLeaveConfirmation": "Sigur doriți să părăsiți {household}?",
   "householdNew": "Gospodărie nouă",
-  "householdSwitch": "Schimbați gospodăria",
   "households": "Gospodăriile",
+  "householdSwitch": "Schimbați gospodăria",
   "icon": "Pictogramă",
   "imageSelect": "Selectați o imagine",
   "import": "Importă",
@@ -580,9 +581,9 @@
   "itemDelete": "Ștergeți articolul",
   "itemDeleteConfirmation": "Sigur doriți să ștergeți {item}? Acest lucru va elimina articolul din orice rețetă care îl conține.",
   "itemRemoveInteraction": "Eliminați interacțiunea cu elementul",
-  "itemSize": "Mărimea articolului",
   "items": "Articole",
   "itemsAdd": "Adaugă articole",
+  "itemSize": "Mărimea articolului",
   "itemsMerge": "Combină articolele",
   "itemsMergeConfirmation": "Ești sigur că dorești să combini{item} și {other}? Acest lucru nu poate fi anulat.",
   "itemsOptional": "Articole opționale",
@@ -592,20 +593,21 @@
   "larger": "Mai mare",
   "lastUsed": "Folosit ultima dată",
   "link": "Leagă",
+  "linkRecipeDescription": "Oricine are linkul către această rețetă o poate vizualiza.",
   "list": "Listă",
   "lltCreate": "Creați un token cu viață lungă",
   "lltDelete": "Stergeți un token cu viață lungă",
   "lltDeleteConfirmation": "Sigur doriți să ștergeți indicativul cu durată lungă de viață '{token}'? Acest lucru nu poate fi anulat.",
   "lltNotShownAgain": "Salvați token-ul; nu îl vei putea vedea din nou",
+  "llts": "Tokenuri cu viață lungă",
   "lltWarningContent": "Sigur doriți să creați un token cu viață lungă? Acesta ar putea fi un risc de securitate. Tokenul nu expiră și oferă acces deplin la contul tău.",
   "lltWarningTitle": "Știi ce faci?",
-  "llts": "Tokenuri cu viață lungă",
   "login": "Conectare",
   "loginTo": "Conectare la",
   "logout": "Deconectare",
   "logoutName": "Deconecteaza {name}",
-  "longPressToReorder": "Apasă lung pentru a rearanja",
   "longerThanExpected": "Acest lucru durează mai mult decât se aștepta",
+  "longPressToReorder": "Apasă lung pentru a rearanja",
   "markAsPaid": "Marchează ca și plătit",
   "mealPlanner": "Planificatorul meselor",
   "member": "Membru",
@@ -619,8 +621,8 @@
   "more": "Mai mult",
   "name": "Nume",
   "next": "Mai departe",
-  "noTags": "Fără etichetă",
   "none": "Nici unul",
+  "noTags": "Fără etichetă",
   "now": "Acum",
   "offlineMessage": "Ești offline",
   "okay": "În ordine",
@@ -652,7 +654,6 @@
   "privateRecipeDescription": "Numai membrii gospodăriei pot vizualiza rețeta.",
   "profile": "Profil",
   "public": "Public",
-  "publicRecipeDescription": "Oricine are linkul către această rețetă o poate vizualiza.",
   "recentItemsCategorize": "Clasificați articolele recente",
   "recipeAdd": "Adaugă rețetă",
   "recipeAddToHousehold": "Adăugați la {householdName}",
@@ -664,8 +665,8 @@
   "recipeEmptySearch": "Nu am gasit retete :(",
   "recipeImageSelect": "Selectați o imagine de rețetă",
   "recipeNew": "Rețeta nouă",
-  "recipeSource": "Sursa rețetei",
   "recipes": "Rețete",
+  "recipeSource": "Sursa rețetei",
   "recipesOverwrite": "Suprascrieți rețetele",
   "recipesOverwriteDescription": "Dacă este activată, rețetele existente cu același nume vor fi suprascrise",
   "recipesRecent": "Recent",
@@ -694,6 +695,7 @@
   "shoppingListEmpty": "Lista de cumpărături este goala. Adaugați un articol folosind funcția de căutare de mai sus.",
   "shoppingListStyle": "Stilul listei de cumpărături",
   "shoppingLists": "Liste de cumpărături",
+  "shoppingListStyle": "Stilul listei de cumpărături",
   "signInWith": "Conectați-vă cu {provider}",
   "signup": "Crează cont nou",
   "skip": "Sari peste",
@@ -737,12 +739,12 @@
   "userAdd": "Adăugați utilizator",
   "userDelete": "Ștergeți utilizator",
   "userDeleteConfirmation": "Sigur doriți să eliminați {user}?",
-  "userNotSignedIn": "Trebuie să fiți conectat pentru a conecta un cont",
-  "userSearchHint": "Introduceți un nume",
   "username": "Nume de utilizator",
   "usernameInvalid": "Numele de utilizator nu poate conține „@”",
   "usernameUnavailable": "Numele de utilizator este indisponibil",
+  "userNotSignedIn": "Trebuie să fiți conectat pentru a conecta un cont",
   "users": "Utilizatori",
+  "userSearchHint": "Introduceți un nume",
   "weekly": "Săptămânal",
   "welcomeBack": "Bine ai revenit",
   "writeMarkdownHere": "Puteți folosi markdown aici!",

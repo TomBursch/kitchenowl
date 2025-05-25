@@ -10,6 +10,14 @@
   "@add": {},
   "@addCategory": {},
   "@addDescriptionFromSource": {},
+  "@addedBy": {
+    "placeholders": {
+      "name": {
+        "example": "Tom",
+        "type": "String"
+      }
+    }
+  },
   "@addItemTitle": {},
   "@addLanguage": {},
   "@addLanguageConfirm": {
@@ -39,17 +47,9 @@
   "@addRecipeToPlannerShort": {
     "description": "A shorter title/button text used wherever the space is limited. Excludes the number of yields."
   },
+  "@address": {},
   "@addShoppingList": {},
   "@addTag": {},
-  "@addedBy": {
-    "placeholders": {
-      "name": {
-        "example": "Tom",
-        "type": "String"
-      }
-    }
-  },
-  "@address": {},
   "@admin": {},
   "@analysingWebsite": {},
   "@appDescription": {},
@@ -173,8 +173,8 @@
     }
   },
   "@householdNew": {},
-  "@householdSwitch": {},
   "@households": {},
+  "@householdSwitch": {},
   "@icon": {},
   "@imageSelect": {},
   "@import": {},
@@ -192,9 +192,9 @@
     }
   },
   "@itemRemoveInteraction": {},
-  "@itemSize": {},
   "@items": {},
   "@itemsAdd": {},
+  "@itemSize": {},
   "@itemsMerge": {},
   "@itemsMergeConfirmation": {
     "placeholders": {
@@ -217,6 +217,7 @@
   "@link": {
     "description": "As in link social account (e.g. Google)"
   },
+  "@linkRecipeDescription": {},
   "@list": {},
   "@lltCreate": {},
   "@lltDelete": {},
@@ -229,9 +230,9 @@
     }
   },
   "@lltNotShownAgain": {},
+  "@llts": {},
   "@lltWarningContent": {},
   "@lltWarningTitle": {},
-  "@llts": {},
   "@login": {},
   "@loginTo": {},
   "@logout": {},
@@ -243,8 +244,8 @@
       }
     }
   },
-  "@longPressToReorder": {},
   "@longerThanExpected": {},
+  "@longPressToReorder": {},
   "@markAsPaid": {},
   "@mealPlanner": {},
   "@member": {},
@@ -258,8 +259,8 @@
   "@more": {},
   "@name": {},
   "@next": {},
-  "@noTags": {},
   "@none": {},
+  "@noTags": {},
   "@now": {},
   "@offlineMessage": {},
   "@okay": {},
@@ -316,7 +317,6 @@
   "@privateRecipeDescription": {},
   "@profile": {},
   "@public": {},
-  "@publicRecipeDescription": {},
   "@recentItemsCategorize": {},
   "@recipeAdd": {},
   "@recipeAddToHousehold": {
@@ -342,8 +342,8 @@
   "@recipeEmptySearch": {},
   "@recipeImageSelect": {},
   "@recipeNew": {},
-  "@recipeSource": {},
   "@recipes": {},
+  "@recipeSource": {},
   "@recipesOverwrite": {},
   "@recipesOverwriteDescription": {},
   "@recipesRecent": {},
@@ -382,8 +382,8 @@
     }
   },
   "@shoppingListEdit": {},
-  "@shoppingListStyle": {},
   "@shoppingLists": {},
+  "@shoppingListStyle": {},
   "@signInWith": {
     "placeholders": {
       "provider": {
@@ -457,12 +457,12 @@
       }
     }
   },
-  "@userNotSignedIn": {},
-  "@userSearchHint": {},
   "@username": {},
   "@usernameInvalid": {},
   "@usernameUnavailable": {},
+  "@userNotSignedIn": {},
   "@users": {},
+  "@userSearchHint": {},
   "@weekly": {},
   "@welcomeBack": {},
   "@writeMarkdownHere": {},
@@ -482,16 +482,16 @@
   "add": "Dodaj",
   "addCategory": "Dodaj kategorijo",
   "addDescriptionFromSource": "Dodaj opis iz vira",
+  "addedBy": "Dodano od {name}",
   "addItemTitle": "Dodaj stvari",
   "addLanguage": "Dodaj jezik",
   "addLanguageConfirm": "Ali si prepričan, da želiš spremenit jezik v '{lang}'? Tega ni mogoče razveljaviti in vašemu gospodinjstvu bodo dodani stvari in kategorije.",
   "addNumberIngredients": "Dodaj {number} sestavin",
   "addRecipeToPlanner": "Dodaj v plan obrokov ({number} porcij)",
   "addRecipeToPlannerShort": "Dodaj v plan obrokov",
+  "address": "Naslov",
   "addShoppingList": "Dodaj na nakupovalni list",
   "addTag": "Dodaj oznako",
-  "addedBy": "Dodano od {name}",
-  "address": "Naslov",
   "admin": "Administrator",
   "analysingWebsite": "Analiziranje spletne strani...",
   "appDescription": "KitchenOwl pomaga organizirati vaše potrošniško življenje.",
@@ -564,8 +564,8 @@
   "householdLeave": "Zapusti gospodinjstvo",
   "householdLeaveConfirmation": "Ali si prepričan, da želiš zapustiti {household}?",
   "householdNew": "Novo gospodinjstvo",
-  "householdSwitch": "Zamenjaj gospodinjstvo",
   "households": "Gospodinjstva",
+  "householdSwitch": "Zamenjaj gospodinjstvo",
   "icon": "Ikona",
   "imageSelect": "Izberi sliko",
   "import": "Uvozi",
@@ -576,9 +576,9 @@
   "itemDelete": "Izbriši izdelek",
   "itemDeleteConfirmation": "Si prepričan, da želiš izbrisati {item}? To bo odstanilo izdelek iz vseh receptov.",
   "itemRemoveInteraction": "Odstrani interakcijo izdelka",
-  "itemSize": "Velikost izdelka",
   "items": "Izdelki",
   "itemsAdd": "Dodaj izdelke",
+  "itemSize": "Velikost izdelka",
   "itemsMerge": "Združi izdelke",
   "itemsMergeConfirmation": "Ali ste prepričani, da želite združiti {item} in {other}? Tega ni mogoče razveljaviti.",
   "itemsOptional": "Neobvezni izdelki",
@@ -588,20 +588,21 @@
   "larger": "Večje",
   "lastUsed": "Nazadnje uporabljeno",
   "link": "Poveži",
+  "linkRecipeDescription": "Vsak, ki ima povezavo do tega recepta, si ga lahko ogleda.",
   "list": "Seznam",
   "lltCreate": "Ustvari dolgoživ žeton",
   "lltDelete": "Izbriši dolgoživ žeton",
   "lltDeleteConfirmation": "Ali ste prepričani, da želite izbrisati dolgoživ žeton '{token}'? Tega ni mogoče razveljaviti.",
   "lltNotShownAgain": "Shranite žeton; ne boste ga mogli več videti",
+  "llts": "Dolgoživi žetoni",
   "lltWarningContent": "Ali ste prepričani, da želite ustvariti dolgoživ žeton? To bi lahko predstavljalo varnostno tveganje. Žeton ne poteče in omogoča popoln dostop do vašega računa.",
   "lltWarningTitle": "Veš kaj delaš?",
-  "llts": "Dolgoživi žetoni",
   "login": "Prijava",
   "loginTo": "Prijavite se v",
   "logout": "Odjava",
   "logoutName": "Odjavi {name}",
-  "longPressToReorder": "Dolgo pritisnite za prerazporeditev",
   "longerThanExpected": "To traja dlje, kot pričakovano",
+  "longPressToReorder": "Dolgo pritisnite za prerazporeditev",
   "markAsPaid": "Označi kot plačano",
   "mealPlanner": "Planer obrokov",
   "member": "Član",
@@ -615,8 +616,8 @@
   "more": "Več",
   "name": "Ime",
   "next": "Naprej",
-  "noTags": "Brez oznak",
   "none": "Noben",
+  "noTags": "Brez oznak",
   "now": "Zdaj",
   "offlineMessage": "Nisi povezan",
   "okay": "Ok",
@@ -648,7 +649,6 @@
   "privateRecipeDescription": "Samo člani gospodinjstva lahko vidijo ta recept.",
   "profile": "Profil",
   "public": "Javno",
-  "publicRecipeDescription": "Vsak, ki ima povezavo do tega recepta, si ga lahko ogleda.",
   "recentItemsCategorize": "Kategorizirajte nedavne idelke",
   "recipeAdd": "Dodaj recept",
   "recipeAddToHousehold": "Dodaj v gospodinjstvo {householdName}",
@@ -660,8 +660,8 @@
   "recipeEmptySearch": "Ni najdenih receptov :(",
   "recipeImageSelect": "Izberi sliko recepta",
   "recipeNew": "Nov recept",
-  "recipeSource": "Vir recepta",
   "recipes": "Recepti",
+  "recipeSource": "Vir recepta",
   "recipesOverwrite": "Prepiši recepte",
   "recipesOverwriteDescription": "Če je aktivirano, bodo obstoječi recepti z istim imenom prepisani",
   "recipesRecent": "Nedavno",
@@ -687,8 +687,8 @@
   "shoppingListDelete": "Izbriši nakupovalni seznam",
   "shoppingListDeleteConfirmation": "Ali si prepričan, da želiš izbrisati {shoppingList}?",
   "shoppingListEdit": "Uredi nakupovalni seznam",
-  "shoppingListStyle": "Stil nakupovalnega seznama",
   "shoppingLists": "Nakupovalni seznami",
+  "shoppingListStyle": "Stil nakupovalnega seznama",
   "signInWith": "Prijavi se z {provider}",
   "signup": "Prijavi se",
   "skip": "Preskoči",
@@ -732,12 +732,12 @@
   "userAdd": "Dodaj uporabnika",
   "userDelete": "Izbriši uporabnika",
   "userDeleteConfirmation": "Ali si prepričan, da želiš izbrisati {user}?",
-  "userNotSignedIn": "Da povežeš račun moraš biti vpisan",
-  "userSearchHint": "Napiši ime",
   "username": "Uporabniško ime",
   "usernameInvalid": "Uporabniško ime ne sme vsebovati '@'",
   "usernameUnavailable": "To uporabniško ime ni na voljo",
+  "userNotSignedIn": "Da povežeš račun moraš biti vpisan",
   "users": "Uporabniki",
+  "userSearchHint": "Napiši ime",
   "weekly": "Tedensko",
   "welcomeBack": "Pozdravljen nazaj",
   "writeMarkdownHere": "Tukaj lahko uporabljaš markdown!",

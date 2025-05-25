@@ -88,17 +88,15 @@ class File(Model, DbModelAuthorizeMixin):
     ):
         if self.created_by and current_user and self.created_by == current_user.id:
             pass  # created by user can access his pictures
-        elif self.profile_picture:
-            pass  # profile pictures are public
+        elif self.profile_picture and current_user:
+            pass  # profile pictures are public for logged in users
         elif self.recipe:
             if self.recipe.visibility == RecipeVisibility.PRIVATE:
                 super().checkAuthorized(
                     household_id=self.recipe.household_id, requires_admin=requires_admin
                 )
-        elif self.household:
-            super().checkAuthorized(
-                household_id=self.household.id, requires_admin=requires_admin
-            )
+        elif self.household and current_user:
+            pass  # profile pictures are public for logged in users
         elif self.expense:
             super().checkAuthorized(
                 household_id=self.expense.household_id, requires_admin=requires_admin

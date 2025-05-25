@@ -1,5 +1,8 @@
 from __future__ import annotations
+import enum
 from typing import Any, Self, List, TYPE_CHECKING, cast
+
+from sqlalchemy import func
 from app import db
 from app.helpers import DbModelAuthorizeMixin
 from .item import Item
@@ -34,6 +37,12 @@ def transform_cooking_date_to_day(cooking_date: datetime) -> int:
     return -1
 
 
+class RecipeVisibility(enum.Enum):
+    PRIVATE = 0
+    LINK = 1
+    PUBLIC = 2
+
+
 class Recipe(Model, DbModelAuthorizeMixin):
     __tablename__ = "recipe"
 
@@ -46,7 +55,9 @@ class Recipe(Model, DbModelAuthorizeMixin):
     prep_time: Mapped[int] = db.Column(db.Integer)
     yields: Mapped[int] = db.Column(db.Integer)
     source: Mapped[str] = db.Column(db.String())
-    public: Mapped[bool] = db.Column(db.Boolean(), nullable=False, default=False)
+    visibility: Mapped[RecipeVisibility] = db.Column(
+        db.Enum(RecipeVisibility), nullable=False, default=RecipeVisibility.PRIVATE
+    )
     suggestion_score: Mapped[int] = db.Column(db.Integer, server_default="0")
     suggestion_rank: Mapped[int] = db.Column(db.Integer, server_default="0")
     household_id: Mapped[int] = db.Column(
@@ -213,6 +224,7 @@ class Recipe(Model, DbModelAuthorizeMixin):
     def find_suggestions(
         cls,
         household_id: int,
+        page: int = 0,
     ) -> list[Self]:
         sq = (
             db.session.query(Planner.recipe_id)
@@ -223,6 +235,8 @@ class Recipe(Model, DbModelAuthorizeMixin):
             cls.query.filter(cls.household_id == household_id, cls.id.notin_(sq))
             .filter(cls.suggestion_rank > 0)  # noqa
             .order_by(cls.suggestion_rank)
+            .offset(page * 10)
+            .limit(10)
             .all()
         )
 
@@ -233,18 +247,80 @@ class Recipe(Model, DbModelAuthorizeMixin):
         ).first()
 
     @classmethod
-    def search_name(cls, household_id: int, name: str) -> list[Self]:
-        if "*" in name or "_" in name:
-            looking_for = name.replace("_", "__").replace("*", "%").replace("?", "_")
-        else:
-            looking_for = "%{0}%".format(name)
-        return (
-            cls.query.filter(
-                cls.household_id == household_id, cls.name.ilike(looking_for)
+    def search_name(
+        cls,
+        name: str,
+        household_id: int | None = None,
+        page: int = 0,
+        language: str | None = None,
+    ) -> list[Self]:
+        query = cls.query
+
+        from app.models import Household
+
+        if household_id is not None:
+            query.filter(
+                cls.household_id == household_id,
             )
-            .order_by(cls.name)
-            .all()
-        )
+        else:
+            query = query.filter(cls.visibility == RecipeVisibility.PUBLIC)
+        if language is not None:
+            query = query.join(cls.household).filter(Household.language == language)
+
+        item_count = 10
+        offset = page * item_count
+        if "postgresql" in db.engine.name:
+            return (
+                query.filter(
+                    func.levenshtein(
+                        func.lower(func.substring(cls.name, 1, len(name))),
+                        name[:128].lower(),
+                    )
+                    < 4,
+                )
+                .order_by(
+                    func.levenshtein(
+                        func.lower(func.substring(cls.name, 1, len(name))),
+                        name[:128].lower(),
+                    ),
+                    cls.name,
+                )
+                .offset(offset)
+                .limit(item_count)
+                .all()
+            )
+
+        found: list[Self] = []
+
+        # name is a regex
+        if "*" in name or "?" in name or "%" in name or "_" in name:
+            looking_for = name.replace("*", "%").replace("?", "_")
+            found = (
+                query.filter(cls.name.ilike(looking_for))
+                .order_by(cls.name)
+                .offset(offset)
+                .limit(item_count)
+                .all()
+            )
+            return found
+
+        # name is no regex
+        starts_with = "{0}%".format(name)
+        contains = "%{0}%".format(name)
+        one_error: List[str] = []
+        for index in range(len(name)):
+            name_one_error = name[:index] + "_" + name[index + 1 :]
+            one_error.append("%{0}%".format(name_one_error))
+
+        for looking_for in [starts_with, contains] + one_error:
+            res = query.filter(cls.name.ilike(looking_for)).order_by(cls.name).all()
+            for r in res:
+                if r not in found:
+                    found.append(r)
+                    item_count -= 1
+                    if item_count + offset <= 0:
+                        return found[offset:]
+        return found[offset:]
 
     @classmethod
     def all_by_name_with_filter(

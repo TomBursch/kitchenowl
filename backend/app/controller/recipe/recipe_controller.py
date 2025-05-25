@@ -1,17 +1,22 @@
+from sqlalchemy import desc, func
 from app.errors import NotFoundRequest
 from app.models import Household, RecipeItems, RecipeTags
 from flask import jsonify, Blueprint
 from flask_jwt_extended import jwt_required
+from app import db
 from app.helpers import validate_args, authorize_household
 from app.models import Recipe, Item, Tag
+from app.models.recipe import RecipeVisibility
 from app.service.file_has_access_or_download import file_has_access_or_download
 from app.service.recipe_scraping import scrape
 from .schemas import (
     SearchByNameRequest,
     AddRecipe,
+    SearchByTagRequest,
     UpdateRecipe,
     GetAllFilterRequest,
     ScrapeRecipe,
+    SuggestionsRecipe,
 )
 
 recipe = Blueprint("recipe", __name__)
@@ -33,7 +38,7 @@ def getRecipeById(id):
     recipe = Recipe.find_by_id(id)
     if not recipe:
         raise NotFoundRequest()
-    if not recipe.public:
+    if recipe.visibility == RecipeVisibility.PRIVATE:
         recipe.checkAuthorized()
         return jsonify(recipe.obj_to_full_dict())
 
@@ -62,8 +67,8 @@ def addRecipe(args, household_id):
         recipe.yields = args["yields"]
     if "source" in args:
         recipe.source = args["source"]
-    if "public" in args:
-        recipe.public = args["public"]
+    if "visibility" in args:
+        recipe.visibility = RecipeVisibility(args["visibility"])
     if "photo" in args and args["photo"] != recipe.photo:
         recipe.photo = file_has_access_or_download(args["photo"], recipe.photo)
     recipe.save()
@@ -113,8 +118,8 @@ def updateRecipe(args, id):  # noqa: C901
         recipe.yields = args["yields"]
     if "source" in args:
         recipe.source = args["source"]
-    if "public" in args:
-        recipe.public = args["public"]
+    if "visibility" in args:
+        recipe.visibility = RecipeVisibility(args["visibility"])
     if "photo" in args and args["photo"] != recipe.photo:
         recipe.photo = file_has_access_or_download(args["photo"], recipe.photo)
     recipe.save()
@@ -175,9 +180,9 @@ def deleteRecipeById(id):
 @validate_args(SearchByNameRequest)
 def searchRecipeInHouseholdByName(args, household_id):
     if "only_ids" in args and args["only_ids"]:
-        return jsonify([e.id for e in Recipe.search_name(household_id, args["query"])])
+        return jsonify([e.id for e in Recipe.search_name(args["query"], household_id)])
     return jsonify(
-        [e.obj_to_full_dict() for e in Recipe.search_name(household_id, args["query"])]
+        [e.obj_to_full_dict() for e in Recipe.search_name(args["query"], household_id)]
     )
 
 
@@ -207,3 +212,118 @@ def scrapeRecipe(args, household_id):
     if res:
         return jsonify(res)
     return "Unsupported website", 400
+
+
+@recipe.route("/suggestions", methods=["GET"])
+@jwt_required()
+@validate_args(SuggestionsRecipe)
+def suggestedRecipes(args):
+    queryFilter = [Recipe.visibility == RecipeVisibility.PUBLIC]
+
+    if "language" in args:
+        queryFilter.append(Household.language == args["language"])
+
+    tags = (
+        RecipeTags.query.join(RecipeTags.tag)
+        .join(RecipeTags.recipe)
+        .join(Recipe.household)
+        .with_entities(Tag.name, func.count().label("count"))
+        .filter(*queryFilter)
+        .group_by(Tag.name)
+        .order_by(desc("count"))
+        .limit(10)
+        .all()
+    )
+
+    return jsonify(
+        {
+            "popular_tags": [e.name for e in tags],
+            "newest": [
+                e.obj_to_public_dict()
+                for e in Recipe.query.join(Recipe.household)
+                .filter(*queryFilter)
+                .order_by(desc(Recipe.id))
+                .limit(10)
+                .all()
+            ],
+        }
+    )
+
+
+@recipe.route("/suggestions/newest/<int:page>", methods=["GET"])
+@jwt_required()
+@validate_args(SuggestionsRecipe)
+def newestRecipes(args, page):
+    queryFilter = [Recipe.visibility == RecipeVisibility.PUBLIC]
+
+    if "language" in args:
+        queryFilter.append(Household.language == args["language"])
+
+    return jsonify(
+        [
+            e.obj_to_public_dict()
+            for e in Recipe.query.join(Recipe.household)
+            .filter(*queryFilter)
+            .order_by(desc(Recipe.id))
+            .offset(page * 10)
+            .limit(10)
+            .all()
+        ]
+    )
+
+
+@recipe.route("/search", methods=["GET"])
+@jwt_required()
+@validate_args(SearchByNameRequest)
+def searchAllRecipeByName(args):
+    if "only_ids" in args and args["only_ids"]:
+        return jsonify(
+            [
+                e.id
+                for e in Recipe.search_name(
+                    args["query"],
+                    page=args["page"],
+                    language=args["language"] if "language" in args else None,
+                )
+            ]
+        )
+    return jsonify(
+        [
+            e.obj_to_full_dict()
+            for e in Recipe.search_name(
+                args["query"],
+                page=args["page"],
+                language=args["language"] if "language" in args else None,
+            )
+        ]
+    )
+
+
+@recipe.route("/search-tag", methods=["GET"])
+@jwt_required()
+@validate_args(SearchByTagRequest)
+def searchAllRecipeByTag(args):
+    query = Recipe.query.filter(
+        Recipe.visibility == RecipeVisibility.PUBLIC,
+        Recipe.tags.any(
+            RecipeTags.tag_id.in_(
+                db.session.query(Tag.id)
+                .filter(Tag.name == args["tag"])
+                .scalar_subquery()
+            )
+        ),
+    )
+    if "language" in args:
+        query = query.join(Recipe.household).filter(
+            Household.language == args["language"]
+        )
+
+    return jsonify(
+        [
+            e.obj_to_full_dict()
+            for e in query.order_by(Recipe.name)
+            .offset(args["page"] * 10)
+            .limit(10)
+            .all()
+        ]
+    )

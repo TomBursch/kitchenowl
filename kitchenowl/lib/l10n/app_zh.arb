@@ -10,6 +10,14 @@
   "@add": {},
   "@addCategory": {},
   "@addDescriptionFromSource": {},
+  "@addedBy": {
+    "placeholders": {
+      "name": {
+        "example": "Tom",
+        "type": "String"
+      }
+    }
+  },
   "@addItemTitle": {},
   "@addLanguage": {},
   "@addLanguageConfirm": {
@@ -39,17 +47,9 @@
   "@addRecipeToPlannerShort": {
     "description": "A shorter title/button text used wherever the space is limited. Excludes the number of yields."
   },
+  "@address": {},
   "@addShoppingList": {},
   "@addTag": {},
-  "@addedBy": {
-    "placeholders": {
-      "name": {
-        "example": "Tom",
-        "type": "String"
-      }
-    }
-  },
-  "@address": {},
   "@admin": {},
   "@analysingWebsite": {},
   "@appDescription": {},
@@ -173,8 +173,8 @@
     }
   },
   "@householdNew": {},
-  "@householdSwitch": {},
   "@households": {},
+  "@householdSwitch": {},
   "@icon": {},
   "@imageSelect": {},
   "@import": {},
@@ -192,9 +192,9 @@
     }
   },
   "@itemRemoveInteraction": {},
-  "@itemSize": {},
   "@items": {},
   "@itemsAdd": {},
+  "@itemSize": {},
   "@itemsMerge": {},
   "@itemsMergeConfirmation": {
     "placeholders": {
@@ -217,6 +217,7 @@
   "@link": {
     "description": "As in link social account (e.g. Google)"
   },
+  "@linkRecipeDescription": {},
   "@list": {},
   "@lltCreate": {},
   "@lltDelete": {},
@@ -229,9 +230,9 @@
     }
   },
   "@lltNotShownAgain": {},
+  "@llts": {},
   "@lltWarningContent": {},
   "@lltWarningTitle": {},
-  "@llts": {},
   "@login": {},
   "@loginTo": {},
   "@logout": {},
@@ -243,8 +244,8 @@
       }
     }
   },
-  "@longPressToReorder": {},
   "@longerThanExpected": {},
+  "@longPressToReorder": {},
   "@markAsPaid": {},
   "@mealPlanner": {},
   "@member": {},
@@ -258,8 +259,8 @@
   "@more": {},
   "@name": {},
   "@next": {},
-  "@noTags": {},
   "@none": {},
+  "@noTags": {},
   "@now": {},
   "@offlineMessage": {},
   "@okay": {},
@@ -316,7 +317,6 @@
   "@privateRecipeDescription": {},
   "@profile": {},
   "@public": {},
-  "@publicRecipeDescription": {},
   "@recentItemsCategorize": {},
   "@recipeAdd": {},
   "@recipeAddToHousehold": {
@@ -342,8 +342,8 @@
   "@recipeEmptySearch": {},
   "@recipeImageSelect": {},
   "@recipeNew": {},
-  "@recipeSource": {},
   "@recipes": {},
+  "@recipeSource": {},
   "@recipesOverwrite": {},
   "@recipesOverwriteDescription": {},
   "@recipesRecent": {},
@@ -382,8 +382,8 @@
     }
   },
   "@shoppingListEdit": {},
-  "@shoppingListStyle": {},
   "@shoppingLists": {},
+  "@shoppingListStyle": {},
   "@signInWith": {
     "placeholders": {
       "provider": {
@@ -457,12 +457,12 @@
       }
     }
   },
-  "@userNotSignedIn": {},
-  "@userSearchHint": {},
   "@username": {},
   "@usernameInvalid": {},
   "@usernameUnavailable": {},
+  "@userNotSignedIn": {},
   "@users": {},
+  "@userSearchHint": {},
   "@weekly": {},
   "@welcomeBack": {},
   "@writeMarkdownHere": {},
@@ -482,16 +482,16 @@
   "add": "新增",
   "addCategory": "新增分类",
   "addDescriptionFromSource": "新增来自来源处的描述",
+  "addedBy": "由 {name} 添加",
   "addItemTitle": "新增物品",
   "addLanguage": "新增语言",
   "addLanguageConfirm": "确定要将语言设置为 '{lang}' 吗？这个操作不能被撤销，并且会在你的房屋中新增物品和分类。",
   "addNumberIngredients": "新增 {number} 个原料",
   "addRecipeToPlanner": "添加到膳食计划（{number}份）",
   "addRecipeToPlannerShort": "添加到膳食计划",
+  "address": "地址",
   "addShoppingList": "新增购物清单",
   "addTag": "新增标签",
-  "addedBy": "由 {name} 添加",
-  "address": "地址",
   "admin": "管理员",
   "analysingWebsite": "正在分析网站...",
   "appDescription": "KitchenOwl 助你管理杂货",
@@ -564,8 +564,8 @@
   "householdLeave": "离开家庭",
   "householdLeaveConfirmation": "您确定要离开{household}吗？",
   "householdNew": "新建家庭",
-  "householdSwitch": "切换家庭",
   "households": "家庭",
+  "householdSwitch": "切换家庭",
   "icon": "图标",
   "imageSelect": "选择图像",
   "import": "导入",
@@ -576,9 +576,9 @@
   "itemDelete": "删除条目",
   "itemDeleteConfirmation": "您确定要删除 {item} 吗？这将从包含该项目的所有菜谱中删除该项目。",
   "itemRemoveInteraction": "删除项目交互",
-  "itemSize": "条目尺寸",
   "items": "条目",
   "itemsAdd": "添加条目",
+  "itemSize": "条目尺寸",
   "itemsMerge": "合并条目",
   "itemsMergeConfirmation": "您确定要合并 {item} 和 {other} 吗？此操作无法撤消。",
   "itemsOptional": "可选条目",
@@ -588,20 +588,21 @@
   "larger": "更大",
   "lastUsed": "最后使用",
   "link": "链接",
+  "linkRecipeDescription": "所有人均可通过链接查看此菜谱。",
   "list": "列表",
   "lltCreate": "创建长期令牌",
   "lltDelete": "删除长期令牌",
   "lltDeleteConfirmation": "您确定要删除长期令牌'{token}'吗？此操作无法撤消。",
   "lltNotShownAgain": "保存令牌；你将无法再看到它",
+  "llts": "长期令牌",
   "lltWarningContent": "您确定要创建长期有效的令牌吗？这可能存在安全风险。该令牌不会过期，并可让您完全访问您的帐户。",
   "lltWarningTitle": "你知道你在做什么吗？",
-  "llts": "长期令牌",
   "login": "登录",
   "loginTo": "登录到",
   "logout": "登出",
   "logoutName": "登出{name}",
-  "longPressToReorder": "长按重新排序",
   "longerThanExpected": "这比预期花费的时间更长",
+  "longPressToReorder": "长按重新排序",
   "markAsPaid": "标记为已付款",
   "mealPlanner": "膳食计划",
   "member": "成员",
@@ -615,8 +616,8 @@
   "more": "更多",
   "name": "名称",
   "next": "下一个",
-  "noTags": "无标签",
   "none": "无",
+  "noTags": "无标签",
   "now": "现在",
   "offlineMessage": "已离线",
   "okay": "好",
@@ -648,7 +649,6 @@
   "privateRecipeDescription": "只有家庭成员才可以查看菜谱。",
   "profile": "概况",
   "public": "公开",
-  "publicRecipeDescription": "所有人均可通过链接查看此菜谱。",
   "recentItemsCategorize": "对最近的项目进行分类",
   "recipeAdd": "添加菜谱",
   "recipeAddToHousehold": "添加到{householdName}",
@@ -660,8 +660,8 @@
   "recipeEmptySearch": "没有菜谱",
   "recipeImageSelect": "为菜谱选择图片",
   "recipeNew": "新增菜谱",
-  "recipeSource": "菜谱材料",
   "recipes": "菜谱",
+  "recipeSource": "菜谱材料",
   "recipesOverwrite": "覆写菜谱",
   "recipesOverwriteDescription": "如果激活，现有的同名菜谱将被覆盖",
   "recipesRecent": "最近",
@@ -687,8 +687,8 @@
   "shoppingListDelete": "删除购物清单",
   "shoppingListDeleteConfirmation": "确定要删除 {shoppingList} ？",
   "shoppingListEdit": "编辑购物清单",
-  "shoppingListStyle": "购物清单样式",
   "shoppingLists": "购物清单",
+  "shoppingListStyle": "购物清单样式",
   "signInWith": "使用 {provider} 登录",
   "signup": "注册",
   "skip": "跳过",
@@ -732,12 +732,12 @@
   "userAdd": "添加用户",
   "userDelete": "删除用户",
   "userDeleteConfirmation": "确定要删除{user}？",
-  "userNotSignedIn": "需要登录才能关联账户",
-  "userSearchHint": "输入用户名",
   "username": "用户名",
   "usernameInvalid": "用户名不能包含'@'",
   "usernameUnavailable": "用户名不可用",
+  "userNotSignedIn": "需要登录才能关联账户",
   "users": "用户",
+  "userSearchHint": "输入用户名",
   "weekly": "周",
   "welcomeBack": "欢迎回来",
   "writeMarkdownHere": "可以在这里使用 markdown！",

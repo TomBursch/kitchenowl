@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/models/recipe.dart';
 import 'package:kitchenowl/models/recipe_scrape.dart';
+import 'package:kitchenowl/models/recipe_suggestions.dart';
 import 'package:kitchenowl/models/tag.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
 
@@ -99,5 +100,49 @@ extension RecipeApi on ApiService {
     final body = jsonDecode(res.body);
 
     return (RecipeScrape.fromJson(body), 200);
+  }
+
+  Future<List<Recipe>?> searchAllRecipes(String query,
+      [int page = 0, String? language]) async {
+    final res = await get(
+      '$baseRoute/search?query=$query&page=$page' +
+          (language != null ? "&language=" + language : ""),
+    );
+    if (res.statusCode != 200) return null;
+
+    final body = List.from(jsonDecode(res.body));
+
+    return body.map((e) => Recipe.fromJson(e)).toList();
+  }
+
+  Future<List<Recipe>?> searchAllRecipesByTag(String tag,
+      [int page = 0, String? language]) async {
+    final res = await get(
+      '$baseRoute/search-tag?tag=$tag&page=$page' +
+          (language != null ? "&language=" + language : ""),
+    );
+    if (res.statusCode != 200) return null;
+
+    final body = List.from(jsonDecode(res.body));
+
+    return body.map((e) => Recipe.fromJson(e)).toList();
+  }
+
+  Future<RecipeSuggestions?> suggestRecipes(String? language) async {
+    final res = await get("$baseRoute/suggestions?" +
+        (language != null ? "language=" + language : ""));
+    if (res.statusCode != 200) return null;
+
+    final body = jsonDecode(res.body);
+    return RecipeSuggestions.fromJson(body);
+  }
+
+  Future<List<Recipe>?> suggestRecipesNewest(String? language, int page) async {
+    final res = await get("$baseRoute/suggestions/newest/$page?" +
+        (language != null ? "language=" + language : ""));
+    if (res.statusCode != 200) return null;
+
+    final body = jsonDecode(res.body);
+    return (body as List<dynamic>).map((e) => Recipe.fromJson(e)).toList();
   }
 }

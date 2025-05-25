@@ -51,7 +51,7 @@ class _ExpensePageState extends State<ExpenseListPage> {
           ]),
           child: BlocBuilder<HouseholdCubit, HouseholdState>(
             builder: (context, householdState) {
-              final searchAnchor = KitchenowlSearchAnchor(
+              final searchAnchor = KitchenowlPersistentSearchAnchor(
                 onSearch: (search) => cubit.setSearch(search),
                 suggestionsBuilder: (context, controller) => (cubit
                         .state.expenses

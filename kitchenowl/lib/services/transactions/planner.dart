@@ -41,10 +41,12 @@ class TransactionPlannerGetPlannedRecipes
 class TransactionPlannerGetRecentPlannedRecipes
     extends Transaction<List<Recipe>> {
   final Household household;
+  final int? page;
 
   TransactionPlannerGetRecentPlannedRecipes({
     DateTime? timestamp,
     required this.household,
+    this.page,
   }) : super.internal(
           timestamp ?? DateTime.now(),
           "TransactionPlannerGetRecentPlannedRecipes",
@@ -57,16 +59,19 @@ class TransactionPlannerGetRecentPlannedRecipes
 
   @override
   Future<List<Recipe>?> runOnline() async {
-    return await ApiService.getInstance().getRecentPlannedRecipes(household);
+    return await ApiService.getInstance()
+        .getRecentPlannedRecipes(household, page);
   }
 }
 
 class TransactionPlannerGetSuggestedRecipes extends Transaction<List<Recipe>> {
   final Household household;
+  final int? page;
 
   TransactionPlannerGetSuggestedRecipes({
     DateTime? timestamp,
     required this.household,
+    this.page,
   }) : super.internal(
           timestamp ?? DateTime.now(),
           "TransactionPlannerGetSuggestedRecipes",
@@ -79,7 +84,7 @@ class TransactionPlannerGetSuggestedRecipes extends Transaction<List<Recipe>> {
 
   @override
   Future<List<Recipe>?> runOnline() async {
-    return await ApiService.getInstance().getSuggestedRecipes(household);
+    return await ApiService.getInstance().getSuggestedRecipes(household, page);
   }
 }
 

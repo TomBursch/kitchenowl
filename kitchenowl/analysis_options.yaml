@@ -1,3 +1,6 @@
 analyzer:
   errors:
     deprecated_member_use: ignore # Until https://github.com/flutter/flutter/issues/160184 is fixed
+
+formatter:  
+  page_width: 80

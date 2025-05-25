@@ -140,26 +140,25 @@ def removePlannedRecipeById(args, household_id, id):
     return jsonify(recipe.obj_to_dict())
 
 
-@plannerHousehold.route("/recent-recipes", methods=["GET"])
+@plannerHousehold.route("/recent-recipes", methods=["GET"], defaults={"page": 0})
+@plannerHousehold.route("/recent-recipes/<int:page>", methods=["GET"])
 @jwt_required()
 @authorize_household()
-def getRecentRecipes(household_id):
-    recipes = RecipeHistory.get_recent(household_id)
+def getRecentRecipes(household_id, page):
+    recipes = RecipeHistory.get_recent(household_id, page)
     return jsonify([e.recipe.obj_to_full_dict() for e in recipes])
 
 
-@plannerHousehold.route("/suggested-recipes", methods=["GET"])
+@plannerHousehold.route("/suggested-recipes", methods=["GET"], defaults={"page": 0})
+@plannerHousehold.route("/suggested-recipes/<int:page>", methods=["GET"])
 @jwt_required()
 @authorize_household()
-def getSuggestedRecipes(household_id):
+def getSuggestedRecipes(household_id, page):
     # all suggestions
-    suggested_recipes = Recipe.find_suggestions(household_id)
+    suggested_recipes = Recipe.find_suggestions(household_id, page)
     # remove recipes on recent list
-    recents = [e.recipe.id for e in RecipeHistory.get_recent(household_id)]
-    suggested_recipes = [s for s in suggested_recipes if s.id not in recents]
-    # limit suggestions number to maximally 9
-    if len(suggested_recipes) > 9:
-        suggested_recipes = suggested_recipes[:9]
+    # recents = [e.recipe.id for e in RecipeHistory.get_recent(household_id)]
+    # suggested_recipes = [s for s in suggested_recipes if s.id not in recents]
     return jsonify([r.obj_to_full_dict() for r in suggested_recipes])
 
 
@@ -170,4 +169,4 @@ def getRefreshedSuggestedRecipes(household_id):
     # re-compute suggestion ranking
     Recipe.compute_suggestion_ranking(household_id)
     # return suggested recipes
-    return getSuggestedRecipes(household_id=household_id)
+    return getSuggestedRecipes(household_id=household_id, page=0)

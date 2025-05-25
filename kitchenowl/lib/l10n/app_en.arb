@@ -10,6 +10,14 @@
   "@add": {},
   "@addCategory": {},
   "@addDescriptionFromSource": {},
+  "@addedBy": {
+    "placeholders": {
+      "name": {
+        "example": "Tom",
+        "type": "String"
+      }
+    }
+  },
   "@addItemTitle": {},
   "@addLanguage": {},
   "@addLanguageConfirm": {
@@ -39,17 +47,9 @@
   "@addRecipeToPlannerShort": {
     "description": "A shorter title/button text used wherever the space is limited. Excludes the number of yields."
   },
+  "@address": {},
   "@addShoppingList": {},
   "@addTag": {},
-  "@addedBy": {
-    "placeholders": {
-      "name": {
-        "example": "Tom",
-        "type": "String"
-      }
-    }
-  },
-  "@address": {},
   "@admin": {},
   "@analysingWebsite": {},
   "@appDescription": {},
@@ -98,6 +98,7 @@
   "@defaultWord": {},
   "@delete": {},
   "@description": {},
+  "@discover": {},
   "@done": {},
   "@dynamicAccentColor": {},
   "@email": {},
@@ -117,6 +118,7 @@
   "@expenseEmpty": {},
   "@expenseFactor": {},
   "@expenseOverviewComparedToPreviousMonth": {},
+  "@expenseOverviewExpenses": {},
   "@expenseOverviewTotalTitle": {
     "placeholders": {
       "month": {
@@ -125,7 +127,6 @@
       }
     }
   },
-  "@expenseOverviewExpenses": {},
   "@expensePaidBy": {},
   "@expensePaidFor": {},
   "@expenseReceivedBy": {},
@@ -175,8 +176,8 @@
     }
   },
   "@householdNew": {},
-  "@householdSwitch": {},
   "@households": {},
+  "@householdSwitch": {},
   "@icon": {},
   "@imageSelect": {},
   "@import": {},
@@ -194,9 +195,9 @@
     }
   },
   "@itemRemoveInteraction": {},
-  "@itemSize": {},
   "@items": {},
   "@itemsAdd": {},
+  "@itemSize": {},
   "@itemsMerge": {},
   "@itemsMergeConfirmation": {
     "placeholders": {
@@ -217,8 +218,12 @@
   "@larger": {},
   "@lastUsed": {},
   "@link": {
-    "description": "As in link social account (e.g. Google)"
+    "description": "The verb, as in link social account (e.g. Google)"
   },
+  "@linkNoun": {
+    "description": "The noun, as share using a link (URL)"
+  },
+  "@linkRecipeDescription": {},
   "@list": {},
   "@lltCreate": {},
   "@lltDelete": {},
@@ -231,9 +236,9 @@
     }
   },
   "@lltNotShownAgain": {},
+  "@llts": {},
   "@lltWarningContent": {},
   "@lltWarningTitle": {},
-  "@llts": {},
   "@login": {},
   "@loginTo": {},
   "@logout": {},
@@ -245,8 +250,8 @@
       }
     }
   },
-  "@longPressToReorder": {},
   "@longerThanExpected": {},
+  "@longPressToReorder": {},
   "@markAsPaid": {},
   "@mealPlanner": {},
   "@member": {},
@@ -260,8 +265,8 @@
   "@more": {},
   "@name": {},
   "@next": {},
-  "@noTags": {},
   "@none": {},
+  "@noTags": {},
   "@now": {},
   "@offlineMessage": {},
   "@okay": {},
@@ -344,8 +349,10 @@
   "@recipeEmptySearch": {},
   "@recipeImageSelect": {},
   "@recipeNew": {},
-  "@recipeSource": {},
   "@recipes": {},
+  "@recipesDiscover": {},
+  "@recipesNewestCommunity": {},
+  "@recipeSource": {},
   "@recipesOverwrite": {},
   "@recipesOverwriteDescription": {},
   "@recipesRecent": {},
@@ -358,6 +365,7 @@
   "@reportIssue": {},
   "@reset": {},
   "@save": {},
+  "@search": {},
   "@searchHint": {},
   "@server": {},
   "@serverChange": {},
@@ -385,8 +393,8 @@
   },
   "@shoppingListEdit": {},
   "@shoppingListEmpty": {},
-  "@shoppingListStyle": {},
   "@shoppingLists": {},
+  "@shoppingListStyle": {},
   "@signInWith": {
     "placeholders": {
       "provider": {
@@ -416,6 +424,7 @@
   },
   "@tagEdit": {},
   "@tags": {},
+  "@tagsPopular": {},
   "@tap": {},
   "@themeDark": {},
   "@themeLight": {},
@@ -460,12 +469,12 @@
       }
     }
   },
-  "@userNotSignedIn": {},
-  "@userSearchHint": {},
   "@username": {},
   "@usernameInvalid": {},
   "@usernameUnavailable": {},
+  "@userNotSignedIn": {},
   "@users": {},
+  "@userSearchHint": {},
   "@weekly": {},
   "@welcomeBack": {},
   "@writeMarkdownHere": {},
@@ -486,16 +495,16 @@
   "add": "Add",
   "addCategory": "Add category",
   "addDescriptionFromSource": "Add description from source",
+  "addedBy": "Added by {name}",
   "addItemTitle": "Add items",
   "addLanguage": "Add language",
   "addLanguageConfirm": "Are you sure you want to set the language to '{lang}'? This cannot be undone and will add items and categories to your household.",
   "addNumberIngredients": "Add {number} ingredients",
   "addRecipeToPlanner": "Add to meal plan ({number} serves)",
   "addRecipeToPlannerShort": "Add to meal plan",
+  "address": "Address",
   "addShoppingList": "Add shopping list",
   "addTag": "Add tag",
-  "addedBy": "Added by {name}",
-  "address": "Address",
   "admin": "Admin",
   "analysingWebsite": "Analysing website...",
   "appDescription": "KitchenOwl helps you organize your grocery life.",
@@ -528,6 +537,7 @@
   "defaultWord": "Default",
   "delete": "Delete",
   "description": "Description",
+  "discover": "Discover",
   "done": "Done",
   "dynamicAccentColor": "Dynamic accent color",
   "email": "Email",
@@ -547,8 +557,8 @@
   "expenseEmpty": "No expenses, start by creating one!",
   "expenseFactor": "Factor",
   "expenseOverviewComparedToPreviousMonth": "Compared to previous months",
-  "expenseOverviewTotalTitle": "Total for {month}:",
   "expenseOverviewExpenses": "Expenses",
+  "expenseOverviewTotalTitle": "Total for {month}:",
   "expensePaidBy": "Paid by",
   "expensePaidFor": "Paid for",
   "expenseReceivedBy": "Received by",
@@ -570,8 +580,8 @@
   "householdLeave": "Leave household",
   "householdLeaveConfirmation": "Are you sure you want to leave {household}?",
   "householdNew": "New household",
-  "householdSwitch": "Switch household",
   "households": "Households",
+  "householdSwitch": "Switch household",
   "icon": "Icon",
   "imageSelect": "Select an image",
   "import": "Import",
@@ -582,9 +592,9 @@
   "itemDelete": "Delete item",
   "itemDeleteConfirmation": "Are you sure you want to delete {item}? This will remove the item from any recipe containing it.",
   "itemRemoveInteraction": "Remove item interaction",
-  "itemSize": "Item size",
   "items": "Items",
   "itemsAdd": "Add items",
+  "itemSize": "Item size",
   "itemsMerge": "Merge items",
   "itemsMergeConfirmation": "Are you sure you want to merge {item} and {other}? This cannot be undone.",
   "itemsOptional": "Optional items",
@@ -594,20 +604,22 @@
   "larger": "Larger",
   "lastUsed": "Last used",
   "link": "Link",
+  "linkNoun": "Link",
+  "linkRecipeDescription": "Anyone with the link to this recipe can view it.",
   "list": "List",
   "lltCreate": "Create long-lived token",
   "lltDelete": "Delete long-lived token",
   "lltDeleteConfirmation": "Are you sure you want to delete long-lived token '{token}'? This cannot be undone.",
   "lltNotShownAgain": "Save the token; you won't be able to see it again",
+  "llts": "Long-lived tokens",
   "lltWarningContent": "Are you sure you want to create a long-lived token? This could potentially be a security risk. The token does not expire and gives full access to your account.",
   "lltWarningTitle": "Do you know what you're doing?",
-  "llts": "Long-lived tokens",
   "login": "Login",
   "loginTo": "Login to",
   "logout": "Logout",
   "logoutName": "Logout {name}",
-  "longPressToReorder": "Long press to reorder",
   "longerThanExpected": "This is taking longer than expected",
+  "longPressToReorder": "Long press to reorder",
   "markAsPaid": "Mark as paid",
   "mealPlanner": "Meal planner",
   "member": "Member",
@@ -621,8 +633,8 @@
   "more": "More",
   "name": "Name",
   "next": "Next",
-  "noTags": "No tags",
   "none": "None",
+  "noTags": "No tags",
   "now": "Now",
   "offlineMessage": "You're offline",
   "okay": "Okay",
@@ -654,7 +666,7 @@
   "privateRecipeDescription": "Only members of the household can view the recipe.",
   "profile": "Profile",
   "public": "Public",
-  "publicRecipeDescription": "Anyone with the link to this recipe can view it.",
+  "publicRecipeDescription": "The recipe is public and might be suggested to others.",
   "recentItemsCategorize": "Categorize recent items",
   "recipeAdd": "Add recipe",
   "recipeAddToHousehold": "Add to {householdName}",
@@ -666,8 +678,10 @@
   "recipeEmptySearch": "No recipes found :(",
   "recipeImageSelect": "Select a recipe image",
   "recipeNew": "New recipe",
-  "recipeSource": "Recipe source",
   "recipes": "Recipes",
+  "recipesDiscover": "Discover recipes",
+  "recipesNewestCommunity": "Newest community recipes",
+  "recipeSource": "Recipe source",
   "recipesOverwrite": "Overwrite recipes",
   "recipesOverwriteDescription": "If activated, existing recipes with the same name will be overwritten",
   "recipesRecent": "Recent",
@@ -680,6 +694,7 @@
   "reportIssue": "Report an issue",
   "reset": "Reset",
   "save": "Save",
+  "search": "Search",
   "searchHint": "Looking for something?",
   "server": "Server",
   "serverChange": "Switch server",
@@ -694,8 +709,8 @@
   "shoppingListDeleteConfirmation": "Are you sure you want to delete {shoppingList}?",
   "shoppingListEdit": "Edit shopping list",
   "shoppingListEmpty": "The shopping list is empty. Add an item using the search function above.",
-  "shoppingListStyle": "Shopping list style",
   "shoppingLists": "Shopping lists",
+  "shoppingListStyle": "Shopping list style",
   "signInWith": "Sign in with {provider}",
   "signup": "Sign up",
   "skip": "Skip",
@@ -711,6 +726,7 @@
   "tagDeleteConfirmation": "Are you sure you want to delete {tag}? This will remove the tag from any recipe containing it.",
   "tagEdit": "Edit tag",
   "tags": "Tags",
+  "tagsPopular": "Popular tags",
   "tap": "Tap",
   "themeDark": "Dark",
   "themeLight": "Light",
@@ -739,12 +755,12 @@
   "userAdd": "Add user",
   "userDelete": "Delete user",
   "userDeleteConfirmation": "Are you sure you want to remove {user}?",
-  "userNotSignedIn": "You need to be signed in to link an account",
-  "userSearchHint": "Type a name",
   "username": "Username",
   "usernameInvalid": "Username cannot contain '@'",
   "usernameUnavailable": "The username is unavailable",
+  "userNotSignedIn": "You need to be signed in to link an account",
   "users": "Users",
+  "userSearchHint": "Type a name",
   "weekly": "Weekly",
   "welcomeBack": "Welcome back",
   "writeMarkdownHere": "You can use markdown here!",

@@ -10,6 +10,14 @@
   "@add": {},
   "@addCategory": {},
   "@addDescriptionFromSource": {},
+  "@addedBy": {
+    "placeholders": {
+      "name": {
+        "example": "Tom",
+        "type": "String"
+      }
+    }
+  },
   "@addItemTitle": {},
   "@addLanguage": {},
   "@addLanguageConfirm": {
@@ -39,17 +47,9 @@
   "@addRecipeToPlannerShort": {
     "description": "A shorter title/button text used wherever the space is limited. Excludes the number of yields."
   },
+  "@address": {},
   "@addShoppingList": {},
   "@addTag": {},
-  "@addedBy": {
-    "placeholders": {
-      "name": {
-        "example": "Tom",
-        "type": "String"
-      }
-    }
-  },
-  "@address": {},
   "@admin": {},
   "@analysingWebsite": {},
   "@appDescription": {},
@@ -174,8 +174,8 @@
     }
   },
   "@householdNew": {},
-  "@householdSwitch": {},
   "@households": {},
+  "@householdSwitch": {},
   "@icon": {},
   "@imageSelect": {},
   "@import": {},
@@ -193,9 +193,9 @@
     }
   },
   "@itemRemoveInteraction": {},
-  "@itemSize": {},
   "@items": {},
   "@itemsAdd": {},
+  "@itemSize": {},
   "@itemsMerge": {},
   "@itemsMergeConfirmation": {
     "placeholders": {
@@ -218,6 +218,7 @@
   "@link": {
     "description": "As in link social account (e.g. Google)"
   },
+  "@linkRecipeDescription": {},
   "@list": {},
   "@lltCreate": {},
   "@lltDelete": {},
@@ -230,9 +231,9 @@
     }
   },
   "@lltNotShownAgain": {},
+  "@llts": {},
   "@lltWarningContent": {},
   "@lltWarningTitle": {},
-  "@llts": {},
   "@login": {},
   "@loginTo": {},
   "@logout": {},
@@ -244,8 +245,8 @@
       }
     }
   },
-  "@longPressToReorder": {},
   "@longerThanExpected": {},
+  "@longPressToReorder": {},
   "@markAsPaid": {},
   "@mealPlanner": {},
   "@member": {},
@@ -259,8 +260,8 @@
   "@more": {},
   "@name": {},
   "@next": {},
-  "@noTags": {},
   "@none": {},
+  "@noTags": {},
   "@now": {},
   "@offlineMessage": {},
   "@okay": {},
@@ -317,7 +318,6 @@
   "@privateRecipeDescription": {},
   "@profile": {},
   "@public": {},
-  "@publicRecipeDescription": {},
   "@recentItemsCategorize": {},
   "@recipeAdd": {},
   "@recipeAddToHousehold": {
@@ -343,8 +343,8 @@
   "@recipeEmptySearch": {},
   "@recipeImageSelect": {},
   "@recipeNew": {},
-  "@recipeSource": {},
   "@recipes": {},
+  "@recipeSource": {},
   "@recipesOverwrite": {},
   "@recipesOverwriteDescription": {},
   "@recipesRecent": {},
@@ -384,8 +384,8 @@
   },
   "@shoppingListEdit": {},
   "@shoppingListEmpty": {},
-  "@shoppingListStyle": {},
   "@shoppingLists": {},
+  "@shoppingListStyle": {},
   "@signInWith": {
     "placeholders": {
       "provider": {
@@ -459,12 +459,12 @@
       }
     }
   },
-  "@userNotSignedIn": {},
-  "@userSearchHint": {},
   "@username": {},
   "@usernameInvalid": {},
   "@usernameUnavailable": {},
+  "@userNotSignedIn": {},
   "@users": {},
+  "@userSearchHint": {},
   "@weekly": {},
   "@welcomeBack": {},
   "@writeMarkdownHere": {},
@@ -485,16 +485,16 @@
   "add": "Pridať",
   "addCategory": "Pridať kategóriu",
   "addDescriptionFromSource": "Pridať opis zo zdroja",
+  "addedBy": "Pridané {name}",
   "addItemTitle": "Pridať položky",
   "addLanguage": "Pridať jazyk",
   "addLanguageConfirm": "Ste si istí, že chcete prepnúť do jazyka '{lang}'? Túto zmenu nejde zvrátiť a pridá položky a kategórie do Vašej domácnosti.",
   "addNumberIngredients": "Pridať {number} ingrediencií",
   "addRecipeToPlanner": "Pridať do menu ({number} porcií)",
   "addRecipeToPlannerShort": "Pridať jedlo do plánu",
+  "address": "Adresa",
   "addShoppingList": "Pridať nákupný zoznam",
   "addTag": "Pridať tag",
-  "addedBy": "Pridané {name}",
-  "address": "Adresa",
   "admin": "Admin",
   "analysingWebsite": "Analyzujem webovú stránku...",
   "appDescription": "KitchenOwl Vám pomôže zorganizovať vaše nakupovanie.",
@@ -568,8 +568,8 @@
   "householdLeave": "Opustiť domácnosť",
   "householdLeaveConfirmation": "Ste si istý, že chcete opustiť {household}?",
   "householdNew": "Nová domácnosť",
-  "householdSwitch": "Prepnúť domácnosť",
   "households": "Domácnosti",
+  "householdSwitch": "Prepnúť domácnosť",
   "icon": "Ikona",
   "imageSelect": "Zvoliť obrázok",
   "import": "Importovať",
@@ -580,9 +580,9 @@
   "itemDelete": "Zmazať položku",
   "itemDeleteConfirmation": "Ste si istý, že chcete zmazať {item}? Odoberiete tým všetky položky zo všetkých receptov, ktoré ich obsahujú.",
   "itemRemoveInteraction": "Odstrániť interakciu medzi položkami",
-  "itemSize": "Veľkosť položky",
   "items": "Položky",
   "itemsAdd": "Pridať položky",
+  "itemSize": "Veľkosť položky",
   "itemsMerge": "Zlúčiť položky",
   "itemsMergeConfirmation": "Ste si istý, že chcete zlúčiť {item} a {other}? Túto akciu nejde zvrátiť.",
   "itemsOptional": "Voliteľné položky",
@@ -592,20 +592,21 @@
   "larger": "Väčší",
   "lastUsed": "Naposledy použité",
   "link": "Prepojiť",
+  "linkRecipeDescription": "Každý s linkom na tento recept ho môže vidieť.",
   "list": "Zoznam",
   "lltCreate": "Vytvoriť dlhodobý token",
   "lltDelete": "Zmazať dlhodobý token",
   "lltDeleteConfirmation": "Ste si istý, že chcete zmazať dlhodobý token '{token}'? Túto akciu nejde zvrátiť.",
   "lltNotShownAgain": "Skopíruj token; nebudeš môcť si ho znova pozrieť",
+  "llts": "Dlhodobé tokeny",
   "lltWarningContent": "Ste si istý, že chcete vytvoriť token s dlhodobou životnosťou? Mohlo by to byť potenciálne bezpečnostné riziko. Tento token nemá konečnú platnosť a dáva plný prístup k Vášmu účtu.",
   "lltWarningTitle": "Ste si istý, že viete čo robíte?",
-  "llts": "Dlhodobé tokeny",
   "login": "Prihlásenie",
   "loginTo": "Prihlásiť sa do",
   "logout": "Odhlásiť",
   "logoutName": "Odhlásiť {name}",
-  "longPressToReorder": "Dlhým podržaním zmeníte pozadie",
   "longerThanExpected": "Trvá to dlhšie než sa čakalo",
+  "longPressToReorder": "Dlhým podržaním zmeníte pozadie",
   "markAsPaid": "Označiť ako zaplatené",
   "mealPlanner": "Plánovač jedál",
   "member": "Člen",
@@ -619,8 +620,8 @@
   "more": "Viac",
   "name": "Meno",
   "next": "Ďalej",
-  "noTags": "Žiadne štítky",
   "none": "Nič",
+  "noTags": "Žiadne štítky",
   "now": "Teraz",
   "offlineMessage": "Ste offline",
   "okay": "Dobre",
@@ -652,7 +653,6 @@
   "privateRecipeDescription": "Iba členovia domácnosti môžu vidieť recept.",
   "profile": "Profil",
   "public": "Verejné",
-  "publicRecipeDescription": "Každý s linkom na tento recept ho môže vidieť.",
   "recentItemsCategorize": "Kategorizovať nedávne položky",
   "recipeAdd": "Pridať recept",
   "recipeAddToHousehold": "Pridať do {householdName}",
@@ -664,8 +664,8 @@
   "recipeEmptySearch": "Nenašli sme žiadne recepty :(",
   "recipeImageSelect": "Vyberte obrázok receptu",
   "recipeNew": "Nový recept",
-  "recipeSource": "Zdroj receptu",
   "recipes": "Recepty",
+  "recipeSource": "Zdroj receptu",
   "recipesOverwrite": "Prepísať prísady",
   "recipesOverwriteDescription": "Pri aktivácii budú existujúce recepty s rovnakým názvom prepísané",
   "recipesRecent": "Nedávne",
@@ -692,8 +692,8 @@
   "shoppingListDeleteConfirmation": "Ste si istý, že chcete zmazať {shoppingList}?",
   "shoppingListEdit": "Upraviť nákupný zoznam",
   "shoppingListEmpty": "Nákupný zoznam je prázdny. Pridaj položku s využitím funkcie hľadania vyššie.",
-  "shoppingListStyle": "Štýl nákupného zoznamu",
   "shoppingLists": "Nákupné zoznamy",
+  "shoppingListStyle": "Štýl nákupného zoznamu",
   "signInWith": "Prihlásiť sa pomocou {provider}",
   "signup": "Zaregistrovať sa",
   "skip": "Preskočiť",
@@ -737,12 +737,12 @@
   "userAdd": "Pridať užívateľa",
   "userDelete": "Zmazať užívateľa",
   "userDeleteConfirmation": "Ste si istý, že chcete odstrániť {user}?",
-  "userNotSignedIn": "Pre pripojenie účtu musíte byť prihlásený",
-  "userSearchHint": "Napíšte meno",
   "username": "Užívateľské meno",
   "usernameInvalid": "Užívateľské meno nesmie obsahovať '@'",
   "usernameUnavailable": "Toto užívateľské meno nie je k dispozícii",
+  "userNotSignedIn": "Pre pripojenie účtu musíte byť prihlásený",
   "users": "Používatelia",
+  "userSearchHint": "Napíšte meno",
   "weekly": "Týždenne",
   "welcomeBack": "Vitajte späť",
   "writeMarkdownHere": "Tu môžete používať markdown!",

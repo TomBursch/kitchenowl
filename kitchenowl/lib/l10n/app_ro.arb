@@ -116,6 +116,7 @@
   "@expenseEmpty": {},
   "@expenseFactor": {},
   "@expenseOverviewComparedToPreviousMonth": {},
+  "@expenseOverviewExpenses": {},
   "@expenseOverviewTotalTitle": {
     "placeholders": {
       "month": {
@@ -382,6 +383,7 @@
     }
   },
   "@shoppingListEdit": {},
+  "@shoppingListEmpty": {},
   "@shoppingListStyle": {},
   "@shoppingLists": {},
   "@signInWith": {
@@ -469,6 +471,7 @@
   "@wrongUsernameOrPassword": {},
   "@yearly": {},
   "@yes": {},
+  "@yesterday": {},
   "@yields": {},
   "@you": {},
   "about": "Despre",
@@ -542,7 +545,8 @@
   "expenseEmpty": "Nici o cheltuială, incepeți prin a adăuga una!",
   "expenseFactor": "Factor",
   "expenseOverviewComparedToPreviousMonth": "În comparație cu luna trecută",
-  "expenseOverviewTotalTitle": "Total cheltuieli pentru {month}:",
+  "expenseOverviewExpenses": "Cheltuieli",
+  "expenseOverviewTotalTitle": "Total pentru {month}:",
   "expensePaidBy": "Plătit de",
   "expensePaidFor": "Plătit pentru",
   "expenseReceivedBy": "Primit de",
@@ -687,6 +691,7 @@
   "shoppingListDelete": "Șterge lista de cumpărături",
   "shoppingListDeleteConfirmation": "Ești sigur că vrei să ștergi {shoppingList}?",
   "shoppingListEdit": "Editeză lista de cumpărături",
+  "shoppingListEmpty": "Lista de cumpărături este goala. Adaugați un articol folosind funcția de căutare de mai sus.",
   "shoppingListStyle": "Stilul listei de cumpărături",
   "shoppingLists": "Liste de cumpărături",
   "signInWith": "Conectați-vă cu {provider}",
@@ -744,6 +749,7 @@
   "wrongUsernameOrPassword": "Nume de utilizator sau parolă greșite",
   "yearly": "Anual",
   "yes": "Da",
+  "yesterday": "Ieri",
   "yields": "Randamente",
   "you": "tu"
 }

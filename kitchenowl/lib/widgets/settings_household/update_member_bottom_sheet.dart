@@ -49,7 +49,8 @@ class _UpdateMemberBottomSheetState extends State<UpdateMemberBottomSheet> {
           ),
           if (widget.allowEdit) ...[
             ListTile(
-              title: Text(AppLocalizations.of(context)!.admin),
+              title: Text(AppLocalizations.of(context)!.parent),
+              subtitle: Text(AppLocalizations.of(context)!.parentRights),
               leading: const Icon(
                 Icons.admin_panel_settings_rounded,
               ),

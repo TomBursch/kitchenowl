@@ -298,6 +298,8 @@
     }
   },
   "@pageNotFound": {},
+  "@parent": {},
+  "@parentRights": {},
   "@password": {},
   "@passwordFieldTooShort": {},
   "@passwordForgot": {},
@@ -648,6 +650,8 @@
   "overview": "Overview",
   "owesAB": "{nameA} owes {nameB}",
   "pageNotFound": "Couldn't find this page",
+  "parent": "Parent",
+  "parentRights": "Can change household settings",
   "password": "Password",
   "passwordFieldTooShort": "Password too short",
   "passwordForgot": "Forgot password?",

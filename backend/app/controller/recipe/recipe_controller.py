@@ -3,6 +3,7 @@ from app.errors import NotFoundRequest
 from app.models import Household, RecipeItems, RecipeTags
 from flask import jsonify, Blueprint
 from flask_jwt_extended import jwt_required
+from app import db
 from app.helpers import validate_args, authorize_household
 from app.models import Recipe, Item, Tag
 from app.models.recipe import RecipeVisibility
@@ -11,6 +12,7 @@ from app.service.recipe_scraping import scrape
 from .schemas import (
     SearchByNameRequest,
     AddRecipe,
+    SearchByTagRequest,
     UpdateRecipe,
     GetAllFilterRequest,
     ScrapeRecipe,
@@ -178,9 +180,9 @@ def deleteRecipeById(id):
 @validate_args(SearchByNameRequest)
 def searchRecipeInHouseholdByName(args, household_id):
     if "only_ids" in args and args["only_ids"]:
-        return jsonify([e.id for e in Recipe.search_name(household_id, args["query"])])
+        return jsonify([e.id for e in Recipe.search_name(args["query"], household_id)])
     return jsonify(
-        [e.obj_to_full_dict() for e in Recipe.search_name(household_id, args["query"])]
+        [e.obj_to_full_dict() for e in Recipe.search_name(args["query"], household_id)]
     )
 
 
@@ -264,6 +266,63 @@ def newestRecipes(args, page):
             .filter(*queryFilter)
             .order_by(desc(Recipe.id))
             .offset(page * 10)
+            .limit(10)
+            .all()
+        ]
+    )
+
+
+@recipe.route("/search", methods=["GET"])
+@jwt_required()
+@validate_args(SearchByNameRequest)
+def searchAllRecipeByName(args):
+    if "only_ids" in args and args["only_ids"]:
+        return jsonify(
+            [
+                e.id
+                for e in Recipe.search_name(
+                    args["query"],
+                    page=args["page"],
+                    language=args["language"] if "language" in args else None,
+                )
+            ]
+        )
+    return jsonify(
+        [
+            e.obj_to_full_dict()
+            for e in Recipe.search_name(
+                args["query"],
+                page=args["page"],
+                language=args["language"] if "language" in args else None,
+            )
+        ]
+    )
+
+
+@recipe.route("/search-tag", methods=["GET"])
+@jwt_required()
+@validate_args(SearchByTagRequest)
+def searchAllRecipeByTag(args):
+    query = Recipe.query.filter(
+        Recipe.visibility == RecipeVisibility.PUBLIC,
+        Recipe.tags.any(
+            RecipeTags.tag_id.in_(
+                db.session.query(Tag.id)
+                .filter(Tag.name == args["tag"])
+                .scalar_subquery()
+            )
+        ),
+    )
+    if "language" in args:
+        query = query.join(Recipe.household).filter(
+            Household.language == args["language"]
+        )
+
+    return jsonify(
+        [
+            e.obj_to_full_dict()
+            for e in query.order_by(Recipe.name)
+            .offset(args["page"] * 10)
             .limit(10)
             .all()
         ]

@@ -6,11 +6,11 @@ import 'package:kitchenowl/services/api/api_service.dart';
 import 'package:kitchenowl/services/transaction_handler.dart';
 import 'package:kitchenowl/services/transactions/household.dart';
 
-class RecipeFindCubit extends Cubit<RecipeFindState> {
+class RecipeDiscoverCubit extends Cubit<RecipeDiscoverState> {
   final Household? household;
 
-  RecipeFindCubit(this.household)
-      : super(RecipeFindLoadingState(household: household)) {
+  RecipeDiscoverCubit(this.household)
+      : super(RecipeDiscoverLoadingState(household: household)) {
     refresh();
   }
 
@@ -24,23 +24,23 @@ class RecipeFindCubit extends Cubit<RecipeFindState> {
         .suggestRecipes(loadedHousehold?.language);
 
     if (suggestions != null) {
-      emit(RecipeFindState(
-        tags: suggestions.$1,
-        communityNewest: suggestions.$2,
+      emit(RecipeDiscoverState(
+        tags: suggestions.popularTags,
+        communityNewest: suggestions.communityNewest,
         household: loadedHousehold,
       ));
     } else {
-      emit(RecipeFindErrorState(household: loadedHousehold));
+      emit(RecipeDiscoverErrorState(household: loadedHousehold));
     }
   }
 }
 
-class RecipeFindState extends Equatable {
+class RecipeDiscoverState extends Equatable {
   final List<String> tags;
   final List<Recipe> communityNewest;
   final Household? household;
 
-  RecipeFindState({
+  RecipeDiscoverState({
     this.household,
     required this.tags,
     required this.communityNewest,
@@ -50,12 +50,12 @@ class RecipeFindState extends Equatable {
   List<Object?> get props => [tags, communityNewest, household];
 }
 
-class RecipeFindLoadingState extends RecipeFindState {
-  RecipeFindLoadingState({super.household})
+class RecipeDiscoverLoadingState extends RecipeDiscoverState {
+  RecipeDiscoverLoadingState({super.household})
       : super(communityNewest: const [], tags: const []);
 }
 
-class RecipeFindErrorState extends RecipeFindState {
-  RecipeFindErrorState({super.household})
+class RecipeDiscoverErrorState extends RecipeDiscoverState {
+  RecipeDiscoverErrorState({super.household})
       : super(communityNewest: const [], tags: const []);
 }

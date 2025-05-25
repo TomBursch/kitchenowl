@@ -41,9 +41,17 @@ class UpdateRecipe(Schema):
 
 class SearchByNameRequest(Schema):
     query = fields.String(required=True, validate=lambda a: a and not a.isspace())
+    page = fields.Integer(validate=lambda a: a >= 0, load_default=0)
+    language = fields.String()
     only_ids = fields.Boolean(
         load_default=False,
     )
+
+
+class SearchByTagRequest(Schema):
+    tag = fields.String(required=True, validate=lambda a: a and not a.isspace())
+    page = fields.Integer(validate=lambda a: a >= 0, load_default=0)
+    language = fields.String()
 
 
 class GetAllFilterRequest(Schema):

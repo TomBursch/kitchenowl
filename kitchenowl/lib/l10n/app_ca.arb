@@ -10,6 +10,14 @@
   "@add": {},
   "@addCategory": {},
   "@addDescriptionFromSource": {},
+  "@addedBy": {
+    "placeholders": {
+      "name": {
+        "example": "Tom",
+        "type": "String"
+      }
+    }
+  },
   "@addItemTitle": {},
   "@addLanguage": {},
   "@addLanguageConfirm": {
@@ -39,17 +47,9 @@
   "@addRecipeToPlannerShort": {
     "description": "A shorter title/button text used wherever the space is limited. Excludes the number of yields."
   },
+  "@address": {},
   "@addShoppingList": {},
   "@addTag": {},
-  "@addedBy": {
-    "placeholders": {
-      "name": {
-        "example": "Tom",
-        "type": "String"
-      }
-    }
-  },
-  "@address": {},
   "@admin": {},
   "@analysingWebsite": {},
   "@appDescription": {},
@@ -173,8 +173,8 @@
     }
   },
   "@householdNew": {},
-  "@householdSwitch": {},
   "@households": {},
+  "@householdSwitch": {},
   "@icon": {},
   "@imageSelect": {},
   "@import": {},
@@ -192,9 +192,9 @@
     }
   },
   "@itemRemoveInteraction": {},
-  "@itemSize": {},
   "@items": {},
   "@itemsAdd": {},
+  "@itemSize": {},
   "@itemsMerge": {},
   "@itemsMergeConfirmation": {
     "placeholders": {
@@ -217,6 +217,7 @@
   "@link": {
     "description": "As in link social account (e.g. Google)"
   },
+  "@linkRecipeDescription": {},
   "@list": {},
   "@lltCreate": {},
   "@lltDelete": {},
@@ -229,9 +230,9 @@
     }
   },
   "@lltNotShownAgain": {},
+  "@llts": {},
   "@lltWarningContent": {},
   "@lltWarningTitle": {},
-  "@llts": {},
   "@login": {},
   "@loginTo": {},
   "@logout": {},
@@ -243,8 +244,8 @@
       }
     }
   },
-  "@longPressToReorder": {},
   "@longerThanExpected": {},
+  "@longPressToReorder": {},
   "@markAsPaid": {},
   "@mealPlanner": {},
   "@member": {},
@@ -258,8 +259,8 @@
   "@more": {},
   "@name": {},
   "@next": {},
-  "@noTags": {},
   "@none": {},
+  "@noTags": {},
   "@now": {},
   "@offlineMessage": {},
   "@okay": {},
@@ -316,7 +317,6 @@
   "@privateRecipeDescription": {},
   "@profile": {},
   "@public": {},
-  "@publicRecipeDescription": {},
   "@recentItemsCategorize": {},
   "@recipeAdd": {},
   "@recipeAddToHousehold": {
@@ -342,8 +342,8 @@
   "@recipeEmptySearch": {},
   "@recipeImageSelect": {},
   "@recipeNew": {},
-  "@recipeSource": {},
   "@recipes": {},
+  "@recipeSource": {},
   "@recipesOverwrite": {},
   "@recipesOverwriteDescription": {},
   "@recipesRecent": {},
@@ -382,8 +382,8 @@
     }
   },
   "@shoppingListEdit": {},
-  "@shoppingListStyle": {},
   "@shoppingLists": {},
+  "@shoppingListStyle": {},
   "@signInWith": {
     "placeholders": {
       "provider": {
@@ -457,12 +457,12 @@
       }
     }
   },
-  "@userNotSignedIn": {},
-  "@userSearchHint": {},
   "@username": {},
   "@usernameInvalid": {},
   "@usernameUnavailable": {},
+  "@userNotSignedIn": {},
   "@users": {},
+  "@userSearchHint": {},
   "@weekly": {},
   "@welcomeBack": {},
   "@writeMarkdownHere": {},
@@ -482,16 +482,16 @@
   "add": "Afegir",
   "addCategory": "Afegir categoria",
   "addDescriptionFromSource": "Afegir descripció de la font",
+  "addedBy": "Afegit per {name}",
   "addItemTitle": "Afegir ítems",
   "addLanguage": "Afegir llengua",
   "addLanguageConfirm": "Estàs segur que vols establir '{lang}' com a llengua predeterminada? Aquesta acció no es pot desfer, ja que afegirà ítems i categories noves a la teua llar.",
   "addNumberIngredients": "Afegir {number} ingredients",
   "addRecipeToPlanner": "Afegir a la planificació de menjades ({number} porcions)",
   "addRecipeToPlannerShort": "Afegir a la planificació de menjades",
+  "address": "Adreça",
   "addShoppingList": "Afegir llista d'anar a comprar",
   "addTag": "Afegir etiqueta",
-  "addedBy": "Afegit per {name}",
-  "address": "Adreça",
   "admin": "Admin",
   "analysingWebsite": "Analitzant la pàgina web...",
   "appDescription": "KitchenOwl t'ajuda a organitzar les teues compres al mercat.",
@@ -564,8 +564,8 @@
   "householdLeave": "Abandonar Llar",
   "householdLeaveConfirmation": "Estàs segur que vols abandonar {household}?",
   "householdNew": "Nova Llar",
-  "householdSwitch": "Canviar de Llar",
   "households": "Llars",
+  "householdSwitch": "Canviar de Llar",
   "icon": "Icona",
   "imageSelect": "Selecciona una imatge",
   "import": "Importa",
@@ -576,9 +576,9 @@
   "itemDelete": "Eliminar Ítem",
   "itemDeleteConfirmation": "Estàs segur que vols eliminar {item}? Aquesta acció eliminarà l'ítem de qualsevol recepta que el continga.",
   "itemRemoveInteraction": "Interacció d'eliminar ítems",
-  "itemSize": "Mida d'ítem",
   "items": "Ítems",
   "itemsAdd": "Afegir Ítems",
+  "itemSize": "Mida d'ítem",
   "itemsMerge": "Fusionar Ítems",
   "itemsMergeConfirmation": "Estàs segur que vols fusionar {item} i {other}? Aquesta acció no es pot desfer.",
   "itemsOptional": "Ítems opcionals",
@@ -588,20 +588,21 @@
   "larger": "Més gran",
   "lastUsed": "Últim utilitzat",
   "link": "Enllaç",
+  "linkRecipeDescription": "Tothom amb l'enllaç a aquesta recepta podrà veure-la.",
   "list": "Llista",
   "lltCreate": "Crea un token durader",
   "lltDelete": "Eliminar token durader",
   "lltDeleteConfirmation": "Estàs segur que vols eliminar el token durader {token}? Aquesta acció no es pot desfer.",
   "lltNotShownAgain": "Guardar el token, no podràs veure'l de nou",
+  "llts": "Tokens duraders",
   "lltWarningContent": "Estàs segur que vols crear un token durader? Aquesta acció podria suposar un potencial risc de seguretat. El token no caduca i dona accés complet a la teua compta.",
   "lltWarningTitle": "Entens el que estàs fent?",
-  "llts": "Tokens duraders",
   "login": "Iniciar sessió",
   "loginTo": "Iniciar sessió en",
   "logout": "Tancar sessió",
   "logoutName": "Tancar sessió de {name}",
-  "longPressToReorder": "Mantén apretat per reordenar",
   "longerThanExpected": "El procés s'està endarrerint més del previst",
+  "longPressToReorder": "Mantén apretat per reordenar",
   "markAsPaid": "Marca com a pagat",
   "mealPlanner": "Planificador d'àpats",
   "member": "Membre",
@@ -615,8 +616,8 @@
   "more": "Més",
   "name": "Nom",
   "next": "Següent",
-  "noTags": "Sense etiquetes",
   "none": "Cap",
+  "noTags": "Sense etiquetes",
   "now": "Ara",
   "offlineMessage": "Estàs offline",
   "okay": "Ok",
@@ -648,7 +649,6 @@
   "privateRecipeDescription": "Només els membres de la família poden veure la recepta.",
   "profile": "Perfil",
   "public": "Públic",
-  "publicRecipeDescription": "Tothom amb l'enllaç a aquesta recepta podrà veure-la.",
   "recentItemsCategorize": "Categoritzar articles recents",
   "recipeAdd": "Afegeix recepta",
   "recipeAddToHousehold": "Afegeix a {householdName}",
@@ -660,8 +660,8 @@
   "recipeEmptySearch": "No s'ha trobat cap recepta :(",
   "recipeImageSelect": "Selecciona una foto per la recepta",
   "recipeNew": "Nova recepta",
-  "recipeSource": "Font de la recepta",
   "recipes": "Receptes",
+  "recipeSource": "Font de la recepta",
   "recipesOverwrite": "Sobrescriu receptes",
   "recipesOverwriteDescription": "Si s'activa, les receptes existents amb el mateix nom se sobrescriuran",
   "recipesRecent": "Recents",
@@ -687,8 +687,8 @@
   "shoppingListDelete": "Esborra la llista d'anar a comprar",
   "shoppingListDeleteConfirmation": "Segur que vols eliminar {shoppingList}?",
   "shoppingListEdit": "Modifica la llista d'anar a comprar",
-  "shoppingListStyle": "Estil de la llista d'anar a comprar",
   "shoppingLists": "Llistes d'anar a comprar",
+  "shoppingListStyle": "Estil de la llista d'anar a comprar",
   "signInWith": "Inicia sessió amb {provider}",
   "signup": "Registra't",
   "skip": "Saltar",
@@ -732,12 +732,12 @@
   "userAdd": "Afegeix usuari",
   "userDelete": "Elimina usuari",
   "userDeleteConfirmation": "Segur que vols eliminar {user}?",
-  "userNotSignedIn": "Has d'haver iniciat sessió per vincular un compte",
-  "userSearchHint": "Escriu un nom",
   "username": "Nom d'usuari",
   "usernameInvalid": "El nom d'usuari no pot contenir '@'",
   "usernameUnavailable": "El nom d'usuari no està disponible",
+  "userNotSignedIn": "Has d'haver iniciat sessió per vincular un compte",
   "users": "Usuaris",
+  "userSearchHint": "Escriu un nom",
   "weekly": "Setmanalment",
   "welcomeBack": "Bentornat",
   "writeMarkdownHere": "Aquí pots fer servir markdown!",

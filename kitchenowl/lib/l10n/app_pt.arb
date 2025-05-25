@@ -10,6 +10,14 @@
   "@add": {},
   "@addCategory": {},
   "@addDescriptionFromSource": {},
+  "@addedBy": {
+    "placeholders": {
+      "name": {
+        "example": "Tom",
+        "type": "String"
+      }
+    }
+  },
   "@addItemTitle": {},
   "@addLanguage": {},
   "@addLanguageConfirm": {
@@ -39,17 +47,9 @@
   "@addRecipeToPlannerShort": {
     "description": "A shorter title/button text used wherever the space is limited. Excludes the number of yields."
   },
+  "@address": {},
   "@addShoppingList": {},
   "@addTag": {},
-  "@addedBy": {
-    "placeholders": {
-      "name": {
-        "example": "Tom",
-        "type": "String"
-      }
-    }
-  },
-  "@address": {},
   "@admin": {},
   "@analysingWebsite": {},
   "@appDescription": {},
@@ -174,8 +174,8 @@
     }
   },
   "@householdNew": {},
-  "@householdSwitch": {},
   "@households": {},
+  "@householdSwitch": {},
   "@icon": {},
   "@imageSelect": {},
   "@import": {},
@@ -193,9 +193,9 @@
     }
   },
   "@itemRemoveInteraction": {},
-  "@itemSize": {},
   "@items": {},
   "@itemsAdd": {},
+  "@itemSize": {},
   "@itemsMerge": {},
   "@itemsMergeConfirmation": {
     "placeholders": {
@@ -218,6 +218,7 @@
   "@link": {
     "description": "As in link social account (e.g. Google)"
   },
+  "@linkRecipeDescription": {},
   "@list": {},
   "@lltCreate": {},
   "@lltDelete": {},
@@ -230,9 +231,9 @@
     }
   },
   "@lltNotShownAgain": {},
+  "@llts": {},
   "@lltWarningContent": {},
   "@lltWarningTitle": {},
-  "@llts": {},
   "@login": {},
   "@loginTo": {},
   "@logout": {},
@@ -244,8 +245,8 @@
       }
     }
   },
-  "@longPressToReorder": {},
   "@longerThanExpected": {},
+  "@longPressToReorder": {},
   "@markAsPaid": {},
   "@mealPlanner": {},
   "@member": {},
@@ -259,8 +260,8 @@
   "@more": {},
   "@name": {},
   "@next": {},
-  "@noTags": {},
   "@none": {},
+  "@noTags": {},
   "@now": {},
   "@offlineMessage": {},
   "@okay": {},
@@ -317,7 +318,6 @@
   "@privateRecipeDescription": {},
   "@profile": {},
   "@public": {},
-  "@publicRecipeDescription": {},
   "@recentItemsCategorize": {},
   "@recipeAdd": {},
   "@recipeAddToHousehold": {
@@ -343,8 +343,8 @@
   "@recipeEmptySearch": {},
   "@recipeImageSelect": {},
   "@recipeNew": {},
-  "@recipeSource": {},
   "@recipes": {},
+  "@recipeSource": {},
   "@recipesOverwrite": {},
   "@recipesOverwriteDescription": {},
   "@recipesRecent": {},
@@ -384,8 +384,8 @@
   },
   "@shoppingListEdit": {},
   "@shoppingListEmpty": {},
-  "@shoppingListStyle": {},
   "@shoppingLists": {},
+  "@shoppingListStyle": {},
   "@signInWith": {
     "placeholders": {
       "provider": {
@@ -459,12 +459,12 @@
       }
     }
   },
-  "@userNotSignedIn": {},
-  "@userSearchHint": {},
   "@username": {},
   "@usernameInvalid": {},
   "@usernameUnavailable": {},
+  "@userNotSignedIn": {},
   "@users": {},
+  "@userSearchHint": {},
   "@weekly": {},
   "@welcomeBack": {},
   "@writeMarkdownHere": {},
@@ -485,16 +485,16 @@
   "add": "Adicionar",
   "addCategory": "Adicionar categoria",
   "addDescriptionFromSource": "Insira a origem",
+  "addedBy": "Inserido por {name}",
   "addItemTitle": "Adicionar itens",
   "addLanguage": "Adicionar idioma",
   "addLanguageConfirm": "Tem a certeza de que deseja definir o idioma para '{lang}'? Isto não pode ser desfeito e adicionará itens e categorias à sua residência.",
   "addNumberIngredients": "Inserir {number} ingredientes",
   "addRecipeToPlanner": "Adicionar ao plano de refeições ({number} de receitas)",
   "addRecipeToPlannerShort": "Adicionar ao plano de refeição",
+  "address": "Endereço",
   "addShoppingList": "Adicionar à lista de compras",
   "addTag": "Adicionar etiqueta",
-  "addedBy": "Inserido por {name}",
-  "address": "Endereço",
   "admin": "Administrador",
   "analysingWebsite": "A analisar website...",
   "appDescription": "O KitchenOwl ajuda-te a organizar as tuas compras.",
@@ -568,8 +568,8 @@
   "householdLeave": "Sair da residência",
   "householdLeaveConfirmation": "Tem a certeza de que deseja sair de {household}?",
   "householdNew": "Nova residência",
-  "householdSwitch": "Trocar de residência",
   "households": "Residências",
+  "householdSwitch": "Trocar de residência",
   "icon": "Ícone",
   "imageSelect": "Selecione uma imagem",
   "import": "Importar",
@@ -580,9 +580,9 @@
   "itemDelete": "Apagar elemento",
   "itemDeleteConfirmation": "Tem a certeza de que deseja apagar {item}? Isto removerá o item de qualquer receita que o contenha.",
   "itemRemoveInteraction": "Interação para remover elementos",
-  "itemSize": "Tamanho do elementos",
   "items": "Elementos",
   "itemsAdd": "Adicionar elementos",
+  "itemSize": "Tamanho do elementos",
   "itemsMerge": "Combinar elementos",
   "itemsMergeConfirmation": "Tem a certeza de que deseja combinar {item} e {other}? Isto não pode ser desfeito.",
   "itemsOptional": "Elementos opcionais",
@@ -592,20 +592,21 @@
   "larger": "Maior",
   "lastUsed": "Última utilização",
   "link": "Ligação",
+  "linkRecipeDescription": "Qualquer pessoa com um link para esta receita pode vê-la.",
   "list": "Lista",
   "lltCreate": "Criar token de longa duração",
   "lltDelete": "Apagar token de longa duração",
   "lltDeleteConfirmation": "Tem a certeza de que deseja apagar o token de longa duração '{token}'? Isto não pode ser desfeito.",
   "lltNotShownAgain": "Guarde o token; não poderá visualizá-lo novamente",
+  "llts": "Tokens de longa duração",
   "lltWarningContent": "Tem a certeza de que deseja criar um token de longa duração? Isto pode ser um risco de segurança. O token não expira e dá acesso total à sua conta.",
   "lltWarningTitle": "Sabe o que está a fazer?",
-  "llts": "Tokens de longa duração",
   "login": "Login",
   "loginTo": "Fazer login em",
   "logout": "Sair",
   "logoutName": "Sair {name}",
-  "longPressToReorder": "Toque longo para reordenar",
   "longerThanExpected": "Está a levar mais tempo do que o esperado",
+  "longPressToReorder": "Toque longo para reordenar",
   "markAsPaid": "Marcar como pago",
   "mealPlanner": "Planeador de refeições",
   "member": "Membro",
@@ -619,8 +620,8 @@
   "more": "Mais",
   "name": "Nome",
   "next": "Próximo",
-  "noTags": "Sem etiquetas",
   "none": "Nenhum",
+  "noTags": "Sem etiquetas",
   "now": "Agora",
   "offlineMessage": "Está off-line",
   "okay": "Ok",
@@ -652,7 +653,6 @@
   "privateRecipeDescription": "Apenas membros da residência podem ver esta receita.",
   "profile": "Perfil",
   "public": "Público",
-  "publicRecipeDescription": "Qualquer pessoa com um link para esta receita pode vê-la.",
   "recentItemsCategorize": "Categorizar elementos recentes",
   "recipeAdd": "Adicionar receita",
   "recipeAddToHousehold": "Adicionar a {householdName}",
@@ -664,8 +664,8 @@
   "recipeEmptySearch": "Não foram encontradas receitas :(",
   "recipeImageSelect": "Selecione uma imagem da receita",
   "recipeNew": "Nova receita",
-  "recipeSource": "Origem da receita",
   "recipes": "Receitas",
+  "recipeSource": "Origem da receita",
   "recipesOverwrite": "Sobrescrever receitas",
   "recipesOverwriteDescription": "Se ativado, as receitas existentes com o mesmo nome serão substituídas",
   "recipesRecent": "Recentes",
@@ -692,8 +692,8 @@
   "shoppingListDeleteConfirmation": "Tem a certeza de que deseja apagar {shoppingList}?",
   "shoppingListEdit": "Editar lista de compras",
   "shoppingListEmpty": "A lista de compras está vazia. Adiciona um item usando a barra de pesquisa no topo.",
-  "shoppingListStyle": "Estilo da lista de compras",
   "shoppingLists": "Listas de compras",
+  "shoppingListStyle": "Estilo da lista de compras",
   "signInWith": "Entrar com {provider}",
   "signup": "Registar-se",
   "skip": "Saltar",
@@ -737,12 +737,12 @@
   "userAdd": "Adicionar utilizador",
   "userDelete": "Apagar utilizador",
   "userDeleteConfirmation": "Tem a certeza de que deseja remover {user}?",
-  "userNotSignedIn": "Precisa de estar autenticado para vincular uma conta",
-  "userSearchHint": "Digite um nome",
   "username": "Nome de utilizador",
   "usernameInvalid": "O nome de utilizador não pode conter '@'",
   "usernameUnavailable": "O nome de utilizador não está disponível",
+  "userNotSignedIn": "Precisa de estar autenticado para vincular uma conta",
   "users": "Utilizadores",
+  "userSearchHint": "Digite um nome",
   "weekly": "Semanal",
   "welcomeBack": "Bem-vindo de volta",
   "writeMarkdownHere": "Pode usar markdown aqui!",

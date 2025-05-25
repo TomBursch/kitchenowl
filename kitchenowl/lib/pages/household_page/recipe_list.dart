@@ -86,11 +86,10 @@ class _RecipeListPageState extends State<RecipeListPage> {
                   suffix: !App.isOffline
                       ? IconButton(
                           onPressed: () => context.go(
-                            "/household/${cubit.household.id}/recipes/find",
+                            "/household/${cubit.household.id}/recipes/discover",
                             extra: cubit.household,
                           ),
-                          tooltip:
-                              AppLocalizations.of(context)!.recipesSuggested,
+                          tooltip: AppLocalizations.of(context)!.discover,
                           icon: const Icon(
                             Icons.auto_awesome_rounded,
                             color: Colors.grey,

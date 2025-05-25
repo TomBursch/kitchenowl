@@ -294,7 +294,7 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                                                 const Icon(Icons.link_rounded),
                                             label: Text(
                                                 AppLocalizations.of(context)!
-                                                    .link), // TODO Localization
+                                                    .linkNoun),
                                           ),
                                           ButtonSegment(
                                             value: RecipeVisibility.public,
@@ -350,7 +350,7 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                                               TextSpan(
                                                 text: AppLocalizations.of(
                                                             context)!
-                                                        .link + // TODO Localization
+                                                        .linkNoun +
                                                     " ",
                                                 style: Theme.of(context)
                                                     .textTheme
@@ -363,7 +363,7 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                                               TextSpan(
                                                 text: AppLocalizations.of(
                                                             context)!
-                                                        .publicRecipeDescription + // TODO Localization
+                                                        .linkRecipeDescription +
                                                     "\n\n",
                                                 style: TextStyle(
                                                   color: Theme.of(context)

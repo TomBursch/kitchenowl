@@ -15,6 +15,7 @@ class SliverRecipeCarousel extends StatelessWidget {
   final void Function(Recipe recipe)? onPressed;
   final String title;
   final void Function()? showMore;
+  final bool alwaysShowMoreAction;
   final ScrollController? scrollController;
   final bool showHousehold;
   final bool isLoading;
@@ -30,6 +31,7 @@ class SliverRecipeCarousel extends StatelessWidget {
     required this.title,
     this.scrollController,
     this.showMore,
+    this.alwaysShowMoreAction = false,
     this.showHousehold = false,
     this.isLoading = false,
     this.limit,
@@ -53,12 +55,13 @@ class SliverRecipeCarousel extends StatelessWidget {
                 ),
                 ...actions,
                 if (showMore != null &&
-                    getValueForScreenType(
-                      context: context,
-                      mobile: false,
-                      tablet: true,
-                      desktop: true,
-                    ))
+                    (alwaysShowMoreAction ||
+                        getValueForScreenType(
+                          context: context,
+                          mobile: false,
+                          tablet: true,
+                          desktop: true,
+                        )))
                   FilledButton.tonalIcon(
                     onPressed: showMore,
                     icon: Icon(Icons.keyboard_arrow_right_rounded),

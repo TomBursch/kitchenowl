@@ -293,6 +293,7 @@ class _PlannerPageState extends State<PlannerPage> {
                         MaterialPageRoute(
                           builder: (context) => RecipeListDisplayPage(
                             title: AppLocalizations.of(context)!.recipesRecent,
+                            household: cubit.household,
                             recipes: state.recentRecipes,
                             moreRecipes: (page) =>
                                 TransactionHandler.getInstance().runTransaction(
@@ -343,6 +344,7 @@ class _PlannerPageState extends State<PlannerPage> {
                           builder: (context) => RecipeListDisplayPage(
                             title:
                                 AppLocalizations.of(context)!.recipesSuggested,
+                            household: cubit.household,
                             recipes: state.suggestedRecipes,
                             actions: (oCubit, controller) => [
                               LoadingIconButton(
@@ -375,13 +377,13 @@ class _PlannerPageState extends State<PlannerPage> {
                       padding: const EdgeInsets.all(16),
                       sliver: SliverToBoxAdapter(
                         child: ElevatedButton.icon(
-                          onPressed: () => context.go(
-                            "/household/${cubit.household.id}/recipes/find",
+                          onPressed: () => context.push(
+                            "/household/${cubit.household.id}/recipes/discover",
                             extra: cubit.household,
                           ),
                           icon: const Icon(Icons.auto_awesome_rounded),
                           label: Text(
-                              AppLocalizations.of(context)!.recipesSuggested),
+                              AppLocalizations.of(context)!.recipesDiscover),
                         ),
                       ),
                     ),

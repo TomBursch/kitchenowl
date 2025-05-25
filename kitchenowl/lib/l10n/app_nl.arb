@@ -10,6 +10,14 @@
   "@add": {},
   "@addCategory": {},
   "@addDescriptionFromSource": {},
+  "@addedBy": {
+    "placeholders": {
+      "name": {
+        "example": "Tom",
+        "type": "String"
+      }
+    }
+  },
   "@addItemTitle": {},
   "@addLanguage": {},
   "@addLanguageConfirm": {
@@ -37,17 +45,9 @@
     }
   },
   "@addRecipeToPlannerShort": {},
+  "@address": {},
   "@addShoppingList": {},
   "@addTag": {},
-  "@addedBy": {
-    "placeholders": {
-      "name": {
-        "example": "Tom",
-        "type": "String"
-      }
-    }
-  },
-  "@address": {},
   "@admin": {},
   "@analysingWebsite": {},
   "@appDescription": {},
@@ -171,8 +171,8 @@
     }
   },
   "@householdNew": {},
-  "@householdSwitch": {},
   "@households": {},
+  "@householdSwitch": {},
   "@icon": {},
   "@imageSelect": {},
   "@import": {},
@@ -190,9 +190,9 @@
     }
   },
   "@itemRemoveInteraction": {},
-  "@itemSize": {},
   "@items": {},
   "@itemsAdd": {},
+  "@itemSize": {},
   "@itemsMerge": {},
   "@itemsMergeConfirmation": {
     "placeholders": {
@@ -215,6 +215,7 @@
   "@link": {
     "description": "As in link social account (e.g. Google)"
   },
+  "@linkRecipeDescription": {},
   "@list": {},
   "@lltCreate": {},
   "@lltDelete": {},
@@ -227,9 +228,9 @@
     }
   },
   "@lltNotShownAgain": {},
+  "@llts": {},
   "@lltWarningContent": {},
   "@lltWarningTitle": {},
-  "@llts": {},
   "@login": {},
   "@loginTo": {},
   "@logout": {},
@@ -241,8 +242,8 @@
       }
     }
   },
-  "@longPressToReorder": {},
   "@longerThanExpected": {},
+  "@longPressToReorder": {},
   "@markAsPaid": {},
   "@mealPlanner": {},
   "@member": {},
@@ -256,8 +257,8 @@
   "@more": {},
   "@name": {},
   "@next": {},
-  "@noTags": {},
   "@none": {},
+  "@noTags": {},
   "@now": {},
   "@offlineMessage": {},
   "@okay": {},
@@ -314,7 +315,6 @@
   "@privateRecipeDescription": {},
   "@profile": {},
   "@public": {},
-  "@publicRecipeDescription": {},
   "@recentItemsCategorize": {},
   "@recipeAdd": {},
   "@recipeAddToHousehold": {
@@ -340,8 +340,8 @@
   "@recipeEmptySearch": {},
   "@recipeImageSelect": {},
   "@recipeNew": {},
-  "@recipeSource": {},
   "@recipes": {},
+  "@recipeSource": {},
   "@recipesOverwrite": {},
   "@recipesOverwriteDescription": {},
   "@recipesRecent": {},
@@ -380,8 +380,8 @@
     }
   },
   "@shoppingListEdit": {},
-  "@shoppingListStyle": {},
   "@shoppingLists": {},
+  "@shoppingListStyle": {},
   "@signInWith": {
     "placeholders": {
       "provider": {
@@ -455,12 +455,12 @@
       }
     }
   },
-  "@userNotSignedIn": {},
-  "@userSearchHint": {},
   "@username": {},
   "@usernameInvalid": {},
   "@usernameUnavailable": {},
+  "@userNotSignedIn": {},
   "@users": {},
+  "@userSearchHint": {},
   "@weekly": {},
   "@welcomeBack": {},
   "@writeMarkdownHere": {},
@@ -480,16 +480,16 @@
   "add": "Toevoegen",
   "addCategory": "Categorie toevoegen",
   "addDescriptionFromSource": "Beschrijving van bron toevoegen",
+  "addedBy": "Toegevoegd door {name}",
   "addItemTitle": "Artikelen toevoegen",
   "addLanguage": "Taal toevoegen",
   "addLanguageConfirm": "Weet u zeker dat u taal '{lang}' wil instellen? Dit kan niet ongedaan worden gemaakt en voegt artikelen en categorieën toe aan uw huishouden.",
   "addNumberIngredients": "Voeg {number} ingrediënten toe",
   "addRecipeToPlanner": "Toevoegen aan maaltijdplan ({number} porties)",
   "addRecipeToPlannerShort": "Toevoegen aan maaltijdplan",
+  "address": "Adres",
   "addShoppingList": "Boodschappenlijst toevoegen",
   "addTag": "Tag toevoegen",
-  "addedBy": "Toegevoegd door {name}",
-  "address": "Adres",
   "admin": "Beheerder",
   "analysingWebsite": "Website analyseren...",
   "appDescription": "KitchenOwl helpt u uw boodschappenleven te organiseren.",
@@ -562,8 +562,8 @@
   "householdLeave": "Verlaat huishouden",
   "householdLeaveConfirmation": "Weet je zeker dat je {household} wilt verlaten?",
   "householdNew": "Nieuw huishouden",
-  "householdSwitch": "Wissel van huishouden",
   "households": "Huishoudens",
+  "householdSwitch": "Wissel van huishouden",
   "icon": "Pictogram",
   "imageSelect": "Selecteer een foto",
   "import": "importeren",
@@ -574,9 +574,9 @@
   "itemDelete": "Verwijder item",
   "itemDeleteConfirmation": "Weet u zeker dat u {item} wilt verwijderen? Dit verwijdert het item uit elk recept dat het bevat.",
   "itemRemoveInteraction": "Artikel verwijderactie",
-  "itemSize": "Artikel grootte",
   "items": "Items",
   "itemsAdd": "Items toevoegen",
+  "itemSize": "Artikel grootte",
   "itemsMerge": "Artikelen samenvoegen",
   "itemsMergeConfirmation": "Weet je zeker dat je {item} en {other} wilt samenvoegen? Dit kan niet ongedaan gemaakt worden.",
   "itemsOptional": "Optionele artikelen",
@@ -586,20 +586,21 @@
   "larger": "Groter",
   "lastUsed": "Laatst gebruikt",
   "link": "Koppelen",
+  "linkRecipeDescription": "Iedereen met de link naar dit recept kunnen het bekijken.",
   "list": "Lijst",
   "lltCreate": "Een token met lange levensduur creëren",
   "lltDelete": "Verwijder langlevend token",
   "lltDeleteConfirmation": "Weet u zeker dat u langlevend token '{token}' wilt verwijderen? Dit kan niet ongedaan worden gemaakt.",
   "lltNotShownAgain": "Sla het token op, je zult het niet meer kunnen zien",
+  "llts": "Punten met een lange levensduur",
   "lltWarningContent": "Weet u zeker dat u een langlevend token wilt aanmaken? Dit kan een veiligheidsrisico zijn. Het token verloopt niet en geeft volledige toegang tot uw account.",
   "lltWarningTitle": "Weet je wat je doet?",
-  "llts": "Punten met een lange levensduur",
   "login": "Inloggen",
   "loginTo": "Inloggen op",
   "logout": "Uitloggen",
   "logoutName": "{name} uitloggen",
-  "longPressToReorder": "Lang drukken om opnieuw te rangschikken",
   "longerThanExpected": "Dit duurt iets langer dan verwacht",
+  "longPressToReorder": "Lang drukken om opnieuw te rangschikken",
   "markAsPaid": "Markeer als betaald",
   "mealPlanner": "Maaltijdplanner",
   "member": "Lid",
@@ -613,8 +614,8 @@
   "more": "Meer",
   "name": "Naam",
   "next": "Volgende",
-  "noTags": "Geen markeringen",
   "none": "Geen",
+  "noTags": "Geen markeringen",
   "now": "Nu",
   "offlineMessage": "Je bent offline",
   "okay": "Goed",
@@ -646,7 +647,6 @@
   "privateRecipeDescription": "Enkel leden van het huishouden kunnen het recept zien.",
   "profile": "Profiel",
   "public": "Openbaar",
-  "publicRecipeDescription": "Iedereen met de link naar dit recept kunnen het bekijken.",
   "recentItemsCategorize": "Recente artikelen categoriseren",
   "recipeAdd": "Recept toevoegen",
   "recipeAddToHousehold": "Toevoegen aan {householdName}",
@@ -658,8 +658,8 @@
   "recipeEmptySearch": "Geen recepten gevonden :(",
   "recipeImageSelect": "Selecteer een receptafbeelding",
   "recipeNew": "Nieuw recept",
-  "recipeSource": "Recept Bron",
   "recipes": "Recepten",
+  "recipeSource": "Recept Bron",
   "recipesOverwrite": "Recepten overschrijven",
   "recipesOverwriteDescription": "Als deze optie is geactiveerd, worden bestaande recepten met dezelfde naam overschreven",
   "recipesRecent": "Recente",
@@ -685,8 +685,8 @@
   "shoppingListDelete": "Verwijder boodschappenlijst",
   "shoppingListDeleteConfirmation": "Weet u zeker dat je {shoppingList} wilt verwijderen?",
   "shoppingListEdit": "Boodschappenlijst aanpassen",
-  "shoppingListStyle": "Boodschappenlijst stijl",
   "shoppingLists": "Boodschappenlijstjes",
+  "shoppingListStyle": "Boodschappenlijst stijl",
   "signInWith": "Inloggen met {provider}",
   "signup": "Registreren",
   "skip": "Overslaan",
@@ -730,12 +730,12 @@
   "userAdd": "Gebruiker toevoegen",
   "userDelete": "Gebruiker verwijderen",
   "userDeleteConfirmation": "Weet u zeker dat u {user} wilt verwijderen?",
-  "userNotSignedIn": "U moet ingelogd zijn om een account te linken",
-  "userSearchHint": "Typ een naam",
   "username": "Gebruikersnaam",
   "usernameInvalid": "Gebruikersnaam kan geen '@' bevatten",
   "usernameUnavailable": "Deze gebruikersnaam is niet beschikbaar",
+  "userNotSignedIn": "U moet ingelogd zijn om een account te linken",
   "users": "Gebruikers",
+  "userSearchHint": "Typ een naam",
   "weekly": "Wekelijks",
   "welcomeBack": "Welkom terug",
   "writeMarkdownHere": "Je kunt hier markdown gebruiken!",

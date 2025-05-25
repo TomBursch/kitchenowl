@@ -10,6 +10,14 @@
   "@add": {},
   "@addCategory": {},
   "@addDescriptionFromSource": {},
+  "@addedBy": {
+    "placeholders": {
+      "name": {
+        "example": "Tom",
+        "type": "String"
+      }
+    }
+  },
   "@addItemTitle": {},
   "@addLanguage": {},
   "@addLanguageConfirm": {
@@ -37,17 +45,9 @@
     }
   },
   "@addRecipeToPlannerShort": {},
+  "@address": {},
   "@addShoppingList": {},
   "@addTag": {},
-  "@addedBy": {
-    "placeholders": {
-      "name": {
-        "example": "Tom",
-        "type": "String"
-      }
-    }
-  },
-  "@address": {},
   "@admin": {},
   "@analysingWebsite": {},
   "@appDescription": {},
@@ -171,8 +171,8 @@
     }
   },
   "@householdNew": {},
-  "@householdSwitch": {},
   "@households": {},
+  "@householdSwitch": {},
   "@icon": {},
   "@imageSelect": {},
   "@import": {},
@@ -190,9 +190,9 @@
     }
   },
   "@itemRemoveInteraction": {},
-  "@itemSize": {},
   "@items": {},
   "@itemsAdd": {},
+  "@itemSize": {},
   "@itemsMerge": {},
   "@itemsMergeConfirmation": {
     "placeholders": {
@@ -215,6 +215,7 @@
   "@link": {
     "description": "As in link social account (e.g. Google)"
   },
+  "@linkRecipeDescription": {},
   "@list": {},
   "@lltCreate": {},
   "@lltDelete": {},
@@ -227,9 +228,9 @@
     }
   },
   "@lltNotShownAgain": {},
+  "@llts": {},
   "@lltWarningContent": {},
   "@lltWarningTitle": {},
-  "@llts": {},
   "@login": {},
   "@loginTo": {},
   "@logout": {},
@@ -241,8 +242,8 @@
       }
     }
   },
-  "@longPressToReorder": {},
   "@longerThanExpected": {},
+  "@longPressToReorder": {},
   "@markAsPaid": {},
   "@mealPlanner": {},
   "@member": {},
@@ -256,8 +257,8 @@
   "@more": {},
   "@name": {},
   "@next": {},
-  "@noTags": {},
   "@none": {},
+  "@noTags": {},
   "@now": {},
   "@offlineMessage": {},
   "@okay": {},
@@ -314,7 +315,6 @@
   "@privateRecipeDescription": {},
   "@profile": {},
   "@public": {},
-  "@publicRecipeDescription": {},
   "@recentItemsCategorize": {},
   "@recipeAdd": {},
   "@recipeAddToHousehold": {
@@ -340,8 +340,8 @@
   "@recipeEmptySearch": {},
   "@recipeImageSelect": {},
   "@recipeNew": {},
-  "@recipeSource": {},
   "@recipes": {},
+  "@recipeSource": {},
   "@recipesOverwrite": {},
   "@recipesOverwriteDescription": {},
   "@recipesRecent": {},
@@ -380,8 +380,8 @@
     }
   },
   "@shoppingListEdit": {},
-  "@shoppingListStyle": {},
   "@shoppingLists": {},
+  "@shoppingListStyle": {},
   "@signInWith": {
     "placeholders": {
       "provider": {
@@ -455,12 +455,12 @@
       }
     }
   },
-  "@userNotSignedIn": {},
-  "@userSearchHint": {},
   "@username": {},
   "@usernameInvalid": {},
   "@usernameUnavailable": {},
+  "@userNotSignedIn": {},
   "@users": {},
+  "@userSearchHint": {},
   "@weekly": {},
   "@welcomeBack": {},
   "@writeMarkdownHere": {},
@@ -480,16 +480,16 @@
   "add": "Lisää",
   "addCategory": "Lisää kategoria",
   "addDescriptionFromSource": "Lisää kuvaus lähteestä",
+  "addedBy": "{name} lisäsi",
   "addItemTitle": "Lisää kohteita",
   "addLanguage": "Lisää kieli",
   "addLanguageConfirm": "Oletko varma, että haluat asettaa kieleksi '{lang}'? Tätä ei voi perua, ja se lisää kohteita ja kategorioita kotitalouteesi.",
   "addNumberIngredients": "Lisää {number} ainesosaa",
   "addRecipeToPlanner": "Lisää ateriasuunnitelmaan ({number})",
   "addRecipeToPlannerShort": "Lisää ateriasuunnitelmaan",
+  "address": "Osoite",
   "addShoppingList": "Lisää ostoslista",
   "addTag": "Lisää avainsana",
-  "addedBy": "{name} lisäsi",
-  "address": "Osoite",
   "admin": "Ylläpitäjä",
   "analysingWebsite": "Analysoi verkkosivustoa..",
   "appDescription": "KitchenOwl auttaa sinua järjestämään päivittäistavaraelämäsi.",
@@ -562,8 +562,8 @@
   "householdLeave": "Poistu kotitaloudesta",
   "householdLeaveConfirmation": "Haluatko varmasti poistua kotitaloudesta {household}?",
   "householdNew": "Uusi kotitalous",
-  "householdSwitch": "Vaihda kotitaloutta",
   "households": "Kotitaloudet",
+  "householdSwitch": "Vaihda kotitaloutta",
   "icon": "Kuvake",
   "imageSelect": "Valitse kuva",
   "import": "Tuo",
@@ -574,9 +574,9 @@
   "itemDelete": "Poista kohde",
   "itemDeleteConfirmation": "Haluatko varmasti poistaa kohteen {item}? Tämä poistaa sen myös kaikista resepteistä.",
   "itemRemoveInteraction": "Kohteen poiston toiminto",
-  "itemSize": "Kohteen koko",
   "items": "Kohteet",
   "itemsAdd": "Lisää kohteita",
+  "itemSize": "Kohteen koko",
   "itemsMerge": "Yhdistä kohteet",
   "itemsMergeConfirmation": "Oletko varma, että haluat yhdistää {item} ja {other}? Toimintoa ei voi perua.",
   "itemsOptional": "Valinnaiset kohteet",
@@ -586,20 +586,21 @@
   "larger": "Suurempi",
   "lastUsed": "Viimeksi käytetty",
   "link": "Linkki",
+  "linkRecipeDescription": "Kaikki joilla on linkki, voivat nähdä reseptin.",
   "list": "Lista",
   "lltCreate": "Luo pitkäikäinen merkki",
   "lltDelete": "Poista pitkäaikainen tunnus",
   "lltDeleteConfirmation": "Haluatko varmasti poistaa pitkäikäisen tunnuksen '{token}'? Tätä ei voi perua.",
   "lltNotShownAgain": "Tallenna tunnus, et näe sitä uudelleen",
+  "llts": "Pitkäaikaiset tunnukset",
   "lltWarningContent": "Oletko varma, että haluat luoda pitkäaikaisen tunnuksen? Tämä voi olla mahdollinen tietoturvariski. Tunnus ei eräänny ja antaa tilille täyden käyttöoikeuden.",
   "lltWarningTitle": "Tiedätkö varmasti mitä olet tekemssä?",
-  "llts": "Pitkäaikaiset tunnukset",
   "login": "Kirjaudu sisään",
   "loginTo": "Kirjaudu kohteeseen",
   "logout": "Kirjaudu ulos",
   "logoutName": "Kirjaa ulos {name}",
-  "longPressToReorder": "Paina pitkään muokataksesi järjestystä",
   "longerThanExpected": "Tämä kestää odotettua kauemmin",
+  "longPressToReorder": "Paina pitkään muokataksesi järjestystä",
   "markAsPaid": "Merkitse maksetuksi",
   "mealPlanner": "Ateriasuunnittelu",
   "member": "Jäsen",
@@ -613,8 +614,8 @@
   "more": "Lisää",
   "name": "Nimi",
   "next": "Seuraava",
-  "noTags": "Ei avainsanoja",
   "none": "Ei mitään",
+  "noTags": "Ei avainsanoja",
   "now": "Nyt",
   "offlineMessage": "Olet offline",
   "okay": "Hyvä on",
@@ -646,7 +647,6 @@
   "privateRecipeDescription": "Vain kotitalouden jäsenet voivat nähdä reseptin.",
   "profile": "Profiili",
   "public": "Julkinen",
-  "publicRecipeDescription": "Kaikki joilla on linkki, voivat nähdä reseptin.",
   "recentItemsCategorize": "Luokittele viimeisimmät kohteet",
   "recipeAdd": "Lisää resepti",
   "recipeAddToHousehold": "Lisää kotitalouteen {householdName}",
@@ -658,8 +658,8 @@
   "recipeEmptySearch": "Reseptejä ei löytynyt :(",
   "recipeImageSelect": "Valitse reseptin kuva",
   "recipeNew": "Uusi resepti",
-  "recipeSource": "Reseptin lähde",
   "recipes": "Reseptit",
+  "recipeSource": "Reseptin lähde",
   "recipesOverwrite": "Korvaa reseptit",
   "recipesOverwriteDescription": "Toiminto korvaa samannimiset reseptit",
   "recipesRecent": "Viimeisimmät",
@@ -685,8 +685,8 @@
   "shoppingListDelete": "Poista ostoslista",
   "shoppingListDeleteConfirmation": "Haluatko varmasti poistaa {shoppingList}?",
   "shoppingListEdit": "Muokkaa ostoslistaa",
-  "shoppingListStyle": "Ostoslistan tyyli",
   "shoppingLists": "Ostoslistat",
+  "shoppingListStyle": "Ostoslistan tyyli",
   "signInWith": "Kirjaudu {provider} avulla",
   "signup": "Rekisteröidy",
   "skip": "Ohita",
@@ -730,12 +730,12 @@
   "userAdd": "Lisää käyttäjä",
   "userDelete": "Poista käyttäjä",
   "userDeleteConfirmation": "Haluatko varmasti poistaa käyttäjän {user}?",
-  "userNotSignedIn": "Sinun pitää olla kirjautuneena sisään voidaksesi yhdistää tilin",
-  "userSearchHint": "Syötä nimi",
   "username": "Käyttäjänimi",
   "usernameInvalid": "Käyttäjänimi ei voi sisältää merkkiä '@'",
   "usernameUnavailable": "Käyttäjänimi ei ole käytettävissä",
+  "userNotSignedIn": "Sinun pitää olla kirjautuneena sisään voidaksesi yhdistää tilin",
   "users": "Käyttäjät",
+  "userSearchHint": "Syötä nimi",
   "weekly": "Viikottain",
   "welcomeBack": "Tervetuloa takaisin",
   "writeMarkdownHere": "Voit käyttää markdownia täällä!",

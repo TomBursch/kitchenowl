@@ -10,17 +10,23 @@ class RecipeListDisplayCubit extends Cubit<RecipeListDisplayState> {
 
   RecipeListDisplayCubit({
     this.moreRecipes,
-    List<Recipe> initialRecipes = const [],
+    List<Recipe>? initialRecipes = const [],
     this.pageSize = 10,
   }) : super(RecipeListDisplayState(
-          recipes: initialRecipes,
-          loadedPages: (initialRecipes.length / pageSize).floor(),
-        ));
+          recipes: initialRecipes ?? const [],
+          loadedPages: initialRecipes == null
+              ? 0
+              : (initialRecipes.length / pageSize).floor(),
+        )) {
+    if (initialRecipes == null) {
+      loadMore();
+    }
+  }
 
   Future<void> loadMore() async {
     if (state.allLoaded || moreRecipes == null) return;
 
-    final newRecipes = moreRecipes!(state.loadedPages + 1);
+    final newRecipes = moreRecipes!(state.loadedPages);
 
     emit(RecipeListDisplayState(
       recipes: List.from(state.recipes + (await newRecipes ?? [])),
@@ -32,13 +38,9 @@ class RecipeListDisplayCubit extends Cubit<RecipeListDisplayState> {
   Future<void> refresh() async {
     if (moreRecipes == null) return;
 
-    final recipes = moreRecipes!(0);
+    emit(RecipeListDisplayState());
 
-    emit(RecipeListDisplayState(
-      recipes: List.from(await recipes ?? []),
-      allLoaded: (await recipes ?? []).length < pageSize,
-      loadedPages: 0,
-    ));
+    loadMore();
   }
 }
 

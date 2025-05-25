@@ -221,7 +221,7 @@
     "description": "The verb, as in link social account (e.g. Google)"
   },
   "@linkNoun": {
-    "description": "The noun, as share using a link (URL)"
+    "description": "The noun, as in share using a link (URL)"
   },
   "@linkRecipeDescription": {},
   "@list": {},

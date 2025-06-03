@@ -368,7 +368,10 @@ class _RecipePageState extends State<RecipePage> {
                                   await cubit.addRecipeToPlanner(
                                     cookingDate:
                                         cookingDate.millisecondsSinceEpoch > 0
-                                            ? cookingDate
+                                            ? DateTime.utc(
+                                                cookingDate.year,
+                                                cookingDate.month,
+                                                cookingDate.day)
                                             : null,
                                     updateOnAdd: widget.updateOnPlanningEdit,
                                   );

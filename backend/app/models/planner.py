@@ -4,7 +4,7 @@ from app import db
 from app.helpers import DbModelAuthorizeMixin
 from sqlalchemy.orm import Mapped
 from sqlalchemy import func
-from datetime import datetime
+from datetime import datetime, date
 
 Model = db.Model
 if TYPE_CHECKING:
@@ -60,10 +60,10 @@ class Planner(Model, DbModelAuthorizeMixin):
 
     @classmethod
     def find_by_datetime(
-        cls, household_id: int, recipe_id: int, cooking_date: datetime
+        cls, household_id: int, recipe_id: int, cooking_date: date
     ) -> Self | None:
         return cls.query.filter(
             cls.household_id == household_id,
             cls.recipe_id == recipe_id,
-            func.date(cls.cooking_date) == cooking_date.date(),
+            func.date(cls.cooking_date) == cooking_date,
         ).first()

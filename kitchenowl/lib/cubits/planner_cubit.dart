@@ -133,7 +133,10 @@ class LoadedPlannerCubitState extends PlannerCubitState {
 
   List<RecipePlan> getPlannedOfDate(DateTime cookingDate) {
     return recipePlans
-        .where((element) => element.cookingDate?.day == cookingDate.day)
+        .where((element) =>
+            element.cookingDate?.year == cookingDate.year &&
+            element.cookingDate?.month == cookingDate.month &&
+            element.cookingDate?.day == cookingDate.day)
         .toList();
   }
 

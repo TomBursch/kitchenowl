@@ -13,10 +13,11 @@ class RecipePlan extends Model {
   });
 
   factory RecipePlan.fromJson(Map<String, dynamic> map) {
+    final date =
+        DateTime.fromMillisecondsSinceEpoch(map["cooking_date"], isUtc: true);
     return RecipePlan(
       recipe: Recipe.fromJson(map['recipe']),
-      cookingDate:
-          DateTime.fromMillisecondsSinceEpoch(map["cooking_date"], isUtc: true),
+      cookingDate: DateTime.utc(date.year, date.month, date.day),
       yields: map['yields'],
     );
   }

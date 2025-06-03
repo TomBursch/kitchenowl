@@ -20,10 +20,6 @@ import 'package:kitchenowl/services/transactions/planner.dart';
 import 'package:kitchenowl/widgets/sliver_recipe_carousel.dart';
 import 'package:tuple/tuple.dart';
 
-DateTime toEndOfDay(DateTime dt) {
-  return DateTime(dt.year, dt.month, dt.day, 23, 59, 59);
-}
-
 String formatDateAsWeekday(
   BuildContext context,
   DateTime date, {
@@ -467,7 +463,9 @@ class _PlannerPageState extends State<PlannerPage> {
     if (cookingDate != null) {
       await cubit.add(
         recipe,
-        cookingDate.millisecondsSinceEpoch > 0 ? toEndOfDay(cookingDate) : null,
+        cookingDate.millisecondsSinceEpoch > 0
+            ? DateTime.utc(cookingDate.year, cookingDate.month, cookingDate.day)
+            : null,
       );
     }
   }

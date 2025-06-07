@@ -538,4 +538,49 @@ class ApiService {
 
     return (null, null, null);
   }
+  
+   // Add method to update shopping list order (excluding standard lists)
+  Future<bool> updateShoppingListOrder(int householdId, List<int> orderedIds) async {
+    try {
+      final response = await _dio.patch(
+        '/api/households/$householdId/shoppinglists/reorder',
+        data: {'ordered_ids': orderedIds},
+      );
+      return response.statusCode == 200;
+    } catch (e) {
+      debugPrint('Error updating shopping list order: $e');
+      return false;
+    }
+  }
+
+    // Update individual shopping list (for standard list changes, renames, etc.)
+  Future<ShoppingList?> updateShoppingList(ShoppingList shoppingList) async {
+    try {
+      final response = await _dio.patch(
+        '/api/shoppinglists/${shoppingList.id}',
+        data: shoppingList.toJson(),
+      );
+      if (response.statusCode == 200) {
+        return ShoppingList.fromJson(response.data);
+      }
+    } catch (e) {
+      debugPrint('Error updating shopping list: $e');
+    }
+    return null;
+  }
+
+  // Make a shopping list the standard list
+  Future<ShoppingList?> makeStandardList(int shoppingListId) async {
+    try {
+      final response = await _dio.patch(
+        '/api/shoppinglists/$shoppingListId/make-standard',
+      );
+      if (response.statusCode == 200) {
+        return ShoppingList.fromJson(response.data);
+      }
+    } catch (e) {
+      debugPrint('Error making shopping list standard: $e');
+    }
+    return null;
+  }
 }

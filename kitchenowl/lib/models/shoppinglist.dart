@@ -6,12 +6,16 @@ class ShoppingList extends Model {
   final String name;
   final List<ShoppinglistItem> items;
   final List<ItemWithDescription> recentItems;
+  final int order; // Add order field
+  final bool isStandard; // Add standard list flag
 
   const ShoppingList({
     this.id,
     required this.name,
     this.items = const [],
     this.recentItems = const [],
+    this.order = 0, // Default order
+    this.isStandard = false, // Default not standard
   });
 
   factory ShoppingList.fromJson(Map<String, dynamic> map) {
@@ -25,24 +29,32 @@ class ShoppingList extends Model {
           map['recentItems'].map((e) => ItemWithDescription.fromJson(e)));
     }
 
+    // Update fromJson to include order and isStandard
     return ShoppingList(
       id: map['id'],
       name: map['name'],
       items: items,
       recentItems: recentItems,
+      order: json['order'] ?? 0, // Handle legacy data
+      isStandard: json['is_standard'] ?? false,
     );
   }
 
+  // Add copyWith method for reordering and standard list changes
   ShoppingList copyWith({
     String? name,
     List<ShoppinglistItem>? items,
     List<ItemWithDescription>? recentItems,
+    int? order,
+    bool? isStandard,
   }) =>
       ShoppingList(
         id: id,
         name: name ?? this.name,
         items: items ?? this.items,
         recentItems: recentItems ?? this.recentItems,
+        order: order ?? this.order,
+        isStandard: isStandard ?? this.isStandard,
       );
 
   @override

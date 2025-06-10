@@ -24,9 +24,10 @@ class RecipeCubit extends Cubit<RecipeState> {
       Household? household, Recipe recipe, int? selectedYields)
       : _transactionHandler = transactionHandler,
         super(RecipeState(
-            recipe: recipe,
-            selectedYields: selectedYields,
-            household: household)) {
+          recipe: recipe,
+          selectedYields: selectedYields,
+          household: household,
+        )) {
     refresh();
   }
 
@@ -151,8 +152,8 @@ final class RecipeState extends Equatable {
     int? selectedYields,
     this.shoppingLists = const [],
     this.household,
-  })  : selectedYields = selectedYields ?? recipe.yields,
-        dynamicRecipe = recipe.withYields(selectedYields ?? recipe.yields),
+  })  : selectedYields = selectedYields,
+        dynamicRecipe = recipe.withYields(selectedYields),
         selectedItems =
             recipe.items.where((e) => !e.optional).map((e) => e.name).toSet();
 

@@ -14,7 +14,7 @@ class DbModelAuthorizeMixin(object):
         if not household_id and not hasattr(self, "household_id"):
             raise Exception("Wrong usage of authorize_household")
         if not current_user:
-            raise UnauthorizedRequest()
+            return False
         member = app.models.household.HouseholdMember.find_by_ids(
             household_id or self.household_id, current_user.id
         )
@@ -29,5 +29,7 @@ class DbModelAuthorizeMixin(object):
         Checks if current user ist authorized to access this model. Throws and unauthorized exception if not
         IMPORTANT: requires household_id
         """
+        if not current_user:
+            raise UnauthorizedRequest()
         if not self.isAuthorized(requires_admin, household_id):
             raise ForbiddenRequest()

@@ -197,3 +197,51 @@ Manage KitchenOwl\n---\nWhat do you want to do?
             print("Done!")
         else:
             exit()
+
+@app.route('/api/households/<int:household_id>/shoppinglists/reorder', methods=['PATCH'])
+@jwt_required()
+def reorder_shopping_lists(household_id):
+    try:
+        data = request.get_json()
+        ordered_ids = data.get('ordered_ids', [])
+        
+        # Update order for each non-standard shopping list only
+        for index, list_id in enumerate(ordered_ids):
+            shopping_list = ShoppingList.query.filter_by(
+                id=list_id, 
+                household_id=household_id,
+                is_standard=False  # Only reorder non-standard lists
+            ).first()
+            if shopping_list:
+                shopping_list.order = index
+        
+        db.session.commit()
+        return jsonify({'success': True}), 200
+        
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/shoppinglists/<int:list_id>/make-standard', methods=['PATCH'])
+@jwt_required()
+def make_standard_list(list_id):
+    try:
+        # Get the shopping list
+        shopping_list = ShoppingList.query.get_or_404(list_id)
+        
+        # Remove standard flag from all other lists in the same household
+        ShoppingList.query.filter_by(
+            household_id=shopping_list.household_id,
+            is_standard=True
+        ).update({'is_standard': False})
+        
+        # Make this list the standard list
+        shopping_list.is_standard = True
+        
+        db.session.commit()
+        
+        return jsonify(shopping_list.to_dict()), 200
+        
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': str(e)}), 500

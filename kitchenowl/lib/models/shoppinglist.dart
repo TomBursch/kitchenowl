@@ -19,24 +19,17 @@ class ShoppingList extends Model { // extends Equatable?
   });
 
   factory ShoppingList.fromJson(Map<String, dynamic> map) {
-    List<ShoppinglistItem> items = const [];
-    if (map.containsKey('items')) {
-      items = List.from(map['items'].map((e) => ShoppinglistItem.fromJson(e)));
-    }
-    List<ItemWithDescription> recentItems = const [];
-    if (map.containsKey('recentItems')) {
-      recentItems = List.from(
-          map['recentItems'].map((e) => ItemWithDescription.fromJson(e)));
-    }
-
-    // Update fromJson to include order and isStandard
     return ShoppingList(
       id: map['id'],
       name: map['name'],
-      items: items,
-      recentItems: recentItems,
-      order: json['order'] ?? 0, // Handle legacy data
-      isStandard: json['is_standard'] ?? false,
+      items: map.containsKey('items') 
+        ? List<ShoppinglistItem>.from(map['items'].map((e) => ShoppinglistItem.fromJson(e)))
+        : const [],
+      recentItems: map.containsKey('recentItems')
+        ? List<ItemWithDescription>.from(map['recentItems'].map((e) => ItemWithDescription.fromJson(e)))
+        : const [],
+      order: map['order'] ?? 0,
+      isStandard: map['is_standard'] ?? false,
     );
   }
 
@@ -72,5 +65,7 @@ class ShoppingList extends Model { // extends Equatable?
       "items": items.map((e) => e.toJsonWithId()).toList(),
       "recentItems": recentItems.map((e) => e.toJsonWithId()).toList(),
     });
-  bool get isStandard => household?.standardShoppingListId == id; // Is this correct?
+  bool get isStandard => household?.standardShoppingListId == id;
+  @override
+  List<Object?> get props => [id, name, items, recentItems, order, isStandard];
 }

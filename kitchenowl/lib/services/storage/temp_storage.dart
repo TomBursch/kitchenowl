@@ -145,6 +145,17 @@ class TempStorage {
     }
   }
 
+  Future<void> saveReorderedShoppingLists(int householdId, List<int> orderedIds) async {
+    final lists = await getShoppingLists(householdId);
+    final reorderedMap = {for (var i = 0; i < orderedIds.length; i++) orderedIds[i]: i};
+    
+    final updatedLists = lists.map((list) => 
+        list.copyWith(order: reorderedMap[list.id] ?? list.order)
+    ).toList();
+    
+    await saveShoppingLists(householdId, updatedLists);
+  }
+
   Future<List<Recipe>?> readRecipes(Household household) async {
     if (!foundation.kIsWeb) {
       try {

@@ -313,4 +313,20 @@ class TempStorage {
       } catch (_) {}
     }
   }
+
+  Future<List<Map<String, dynamic>>> getPendingReorderOperations() async {
+    final dir = await _localPath;
+    final directory = Directory(dir);
+    final files = directory.listSync()
+      .where((f) => f.path.endsWith('-reorder-queue.json'));
+    
+    final operations = <Map<String, dynamic>>[];
+    for (final file in files) {
+      try {
+        operations.add(json.decode(await file.readAsString()));
+      } catch (_) {}
+    }
+    
+    return operations;
+  }
 }

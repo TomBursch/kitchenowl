@@ -1,7 +1,7 @@
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/models/model.dart';
 
-class ShoppingList extends Model {
+class ShoppingList extends Model { // extends Equatable?
   final int? id;
   final String name;
   final List<ShoppinglistItem> items;
@@ -72,4 +72,5 @@ class ShoppingList extends Model {
       "items": items.map((e) => e.toJsonWithId()).toList(),
       "recentItems": recentItems.map((e) => e.toJsonWithId()).toList(),
     });
+  bool get isStandard => household?.standardShoppingListId == id; // Is this correct?
 }

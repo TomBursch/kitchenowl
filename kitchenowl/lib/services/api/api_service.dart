@@ -587,3 +587,8 @@ class ApiService {
     }
     return null;
   }
+  
+  Future<void> syncPendingOperations() async {
+    // Implementation to sync any pending reorder operations
+    // Should check TempStorage for queued operations
+  }

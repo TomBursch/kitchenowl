@@ -70,34 +70,34 @@ class _HouseholdSettingsShoppinglistPageState
     return lists.where((list) => list.isStandard).toList();
   }
 
+  // 1. Update the _onReorder method with optimized logic:
   void _onReorder(List<ShoppingList> allLists, int oldIndex, int newIndex) {
     final reorderableLists = _getReorderableLists(allLists);
-    
-    setState(() {
-      if (newIndex > oldIndex) newIndex--;
-      final item = reorderableLists.removeAt(oldIndex);
-      reorderableLists.insert(newIndex, item);
-      
-      // Update order values for non-standard lists only
-      final updatedLists = <ShoppingList>[];
-      for (int i = 0; i < reorderableLists.length; i++) {
-        updatedLists.add(reorderableLists[i].copyWith(order: i));
-      }
-      
-      // Save the reordered lists back to the cubit
-      BlocProvider.of<HouseholdUpdateCubit>(context)
-          .reorderShoppingLists(updatedLists);
-    });
+  
+    if (newIndex > oldIndex) newIndex--;
+    final item = reorderableLists.removeAt(oldIndex);
+    reorderableLists.insert(newIndex, item);
+  
+    // Optimized order update using map
+    final updatedLists = [
+      ..._getStandardLists(allLists),
+      for (var i = 0; i < reorderableLists.length; i++)
+        reorderableLists[i].copyWith(order: i)
+    ];
+  
+    BlocProvider.of<HouseholdUpdateCubit>(context)
+        .reorderShoppingLists(updatedLists);
   }
 
+  // 2. Enhance _saveOrder with better feedback:
   Future<void> _saveOrder() async {
-    // The actual saving would be handled by the cubit
-    // Show success message
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(AppLocalizations.of(context)!.saved ?? 'Order saved'),
-          backgroundColor: Colors.green,
+          content: Text(AppLocalizations.of(context)!.orderSaved),
+          backgroundColor: Theme.of(context).primaryColor,
+         behavior: SnackBarBehavior.floating,
+          duration: const Duration(seconds: 2),
         ),
       );
     }
@@ -119,18 +119,25 @@ class _HouseholdSettingsShoppinglistPageState
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       // Only show reorder button if there are multiple non-standard lists
+                      // 3. Update the reorder button in build():
                       if (reorderableLists.length > 1)
                         IconButton(
                           icon: Icon(_isReordering ? Icons.check : Icons.sort),
                           tooltip: _isReordering 
-                              ? AppLocalizations.of(context)!.save ?? 'Save Order'
-                              : 'Reorder Lists',
+                            ? AppLocalizations.of(context)!.saveOrder
+                            : AppLocalizations.of(context)!.reorderLists,
                           onPressed: () {
-                            setState(() {
-                              _isReordering = !_isReordering;
-                            });
-                            if (!_isReordering) {
-                              _saveOrder();
+                            setState(() => _isReordering = !_isReordering);
+                            if (!_isReordering) _saveOrder();
+      
+                            // Show help when starting reorder
+                            if (_isReordering) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(AppLocalizations.of(context)!.reorderHelpMessage),
+                                  duration: const Duration(seconds: 3),
+                                ),
+                              );
                             }
                           },
                         ),
@@ -227,30 +234,36 @@ class _HouseholdSettingsShoppinglistPageState
                   }
                   
                   return SliverToBoxAdapter(
+                    // 4. Enhance the ReorderableListView builder:
                     child: ReorderableListView.builder(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
                       itemCount: reorderableLists.length,
                       onReorder: (oldIndex, newIndex) => 
-                          _onReorder(state.shoppingLists, oldIndex, newIndex),
+                        _onReorder(state.shoppingLists, oldIndex, newIndex),
+                      proxyDecorator: (child, index, animation) => Material(
+                        elevation: 8,
+                        shadowColor: Theme.of(context).colorScheme.shadow,
+                        borderRadius: BorderRadius.circular(8),
+                        child: child,
+                      ),
                       itemBuilder: (context, index) {
                         final shoppingList = reorderableLists[index];
-                        return ReorderableDragStartListener(
-                          key: ValueKey<int>(shoppingList.id ?? shoppingList.hashCode),
-                          index: index,
-                          child: Card(
-                            margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-                            child: ListTile(
-                              leading: const Icon(Icons.drag_handle),
-                              title: Row(
-                                children: [
-                                  Expanded(child: Text(shoppingList.name)),
-                                ],
+                          return ReorderableDragStartListener(
+                            key: ValueKey<int>(shoppingList.id ?? shoppingList.hashCode),
+                            index: index,
+                            child: Card(
+                              margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                              elevation: 4,
+                              child: ListTile(
+                                leading: const Icon(Icons.drag_handle),
+                                title: Text(shoppingList.name),
+                                trailing: const Icon(Icons.drag_indicator),
                               ),
                             ),
-                          ),
-                        );
-                      },
+                          );
+                        },
+                      ),
                     ),
                   );
                 },
@@ -297,17 +310,20 @@ class _HouseholdSettingsShoppinglistPageState
               decoration: BoxDecoration(
                 color: Theme.of(context).primaryColor.withOpacity(0.1),
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(
-                  color: Theme.of(context).primaryColor.withOpacity(0.3),
-                ),
               ),
-              child: Text(
-                AppLocalizations.of(context)!.defaultWord ?? 'Standard',
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Theme.of(context).primaryColor,
-                  fontWeight: FontWeight.w500,
-                ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(Icons.star, size: 16),
+                  const SizedBox(width: 4),
+                  Text(
+                    AppLocalizations.of(context)!.standardShoppingList,
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Theme.of(context).primaryColor,
+                    ),
+                  ),
+                ],
               ),
             ),
         ],

@@ -647,6 +647,7 @@
   "or": "or",
   "ordering": "Ordering",
   "other": "Other",
+  "orderSaved": "Order saved successfully",
   "overview": "Overview",
   "owesAB": "{nameA} owes {nameB}",
   "pageNotFound": "Couldn't find this page",
@@ -695,6 +696,7 @@
   "rememberLastShoppingList": "Remember the last used shopping list",
   "remove": "Remove",
   "rename": "Rename",
+  "reorderHelpMessage": "Drag lists to reorder them",
   "reportIssue": "Report an issue",
   "reset": "Reset",
   "save": "Save",
@@ -721,6 +723,7 @@
   "smaller": "Smaller",
   "sortingAlgorithmic": "Algorithmic",
   "sortingAlphabetical": "Alphabetical",
+  "standardShoppingList": "Standard List"
   "start": "Start",
   "supportDevelopment": "Support the development",
   "swipeToDelete": "Swipe to delete",

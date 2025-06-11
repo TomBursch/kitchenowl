@@ -145,15 +145,35 @@ class TempStorage {
     }
   }
 
-  Future<void> saveReorderedShoppingLists(int householdId, List<int> orderedIds) async {
-    final lists = await getShoppingLists(householdId);
+  Future<void> saveReorderedShoppingLists(
+    Household household, 
+    List<int> orderedIds
+  ) async {
+    final lists = await readShoppingLists(household) ?? [];
     final reorderedMap = {for (var i = 0; i < orderedIds.length; i++) orderedIds[i]: i};
-    
+  
     final updatedLists = lists.map((list) => 
         list.copyWith(order: reorderedMap[list.id] ?? list.order)
     ).toList();
-    
-    await saveShoppingLists(householdId, updatedLists);
+  
+    await writeShoppingLists(household, updatedLists);
+  }
+
+  // Add queuing support:
+  Future<void> queueReorderOperation(
+    Household household,
+    List<int> orderedIds
+  ) async {
+    final file = await _localReorderQueueFile(household);
+    await file.writeAsString(json.encode({
+      'timestamp': DateTime.now().toIso8601String(),
+      'ordered_ids': orderedIds,
+    }));
+  }
+
+  Future<File> _localReorderQueueFile(Household household) async {
+    final path = await _localPath;
+    return File('$path/${household.id}-reorder-queue.json');
   }
 
   Future<List<Recipe>?> readRecipes(Household household) async {

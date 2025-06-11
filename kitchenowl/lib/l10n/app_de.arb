@@ -630,6 +630,7 @@
   "or": "oder",
   "ordering": "Ordnung",
   "other": "Sonstige",
+  "orderSaved": "Reihenfolge gespeichert",
   "overview": "Übersicht",
   "owesAB": "{nameA} schuldet {nameB}",
   "pageNotFound": "Diese Seite konnte nicht gefunden werden",
@@ -673,6 +674,7 @@
   "rememberLastShoppingList": "An die zuletzt benutzte Einkaufsliste erinnern",
   "remove": "Entfernen",
   "rename": "Umbennenen",
+  "reorderHelpMessage": "Listen zum Neuordnen ziehen",
   "reportIssue": "Ein Problem melden",
   "reset": "Zurücksetzen",
   "save": "Speichern",
@@ -698,6 +700,7 @@
   "smaller": "Kleiner",
   "sortingAlgorithmic": "Algorithmisch",
   "sortingAlphabetical": "Alphabetisch",
+  "standardShoppingList": "Standardliste"
   "start": "Start",
   "supportDevelopment": "Unterstütze die Entwicklung",
   "swipeToDelete": "Wische zum Löschen",

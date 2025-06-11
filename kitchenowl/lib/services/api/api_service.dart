@@ -539,32 +539,35 @@ class ApiService {
     return (null, null, null);
   }
   
-   // Add method to update shopping list order (excluding standard lists)
-  Future<bool> updateShoppingListOrder(int householdId, List<int> orderedIds) async {
+  // Add method to update shopping list order (excluding standard lists)
+  Future<bool> updateShoppingListOrder(
+    int householdId, 
+    List<int> orderedIds
+  ) async {
     try {
-      final response = await _dio.patch(
-        '/api/households/$householdId/shoppinglists/reorder',
-        data: {'ordered_ids': orderedIds},
+      final response = await put(
+        '/household/$householdId/shoppinglist/reorder',
+        json.encode({'ordered_ids': orderedIds}),
       );
       return response.statusCode == 200;
     } catch (e) {
-      debugPrint('Error updating shopping list order: $e');
+      debugPrint('Error updating order: $e');
       return false;
     }
   }
 
-    // Update individual shopping list (for standard list changes, renames, etc.)
+  // Update individual shopping list (for standard list changes, renames, etc.)
   Future<ShoppingList?> updateShoppingList(ShoppingList shoppingList) async {
     try {
-      final response = await _dio.patch(
-        '/api/shoppinglists/${shoppingList.id}',
-        data: shoppingList.toJson(),
+      final response = await patch(
+        '/shoppinglist/${shoppingList.id}',
+        json.encode(shoppingList.toJson()),
       );
       if (response.statusCode == 200) {
-        return ShoppingList.fromJson(response.data);
+        return ShoppingList.fromJson(json.decode(response.body));
       }
     } catch (e) {
-      debugPrint('Error updating shopping list: $e');
+      debugPrint('Error updating list: $e');
     }
     return null;
   }
@@ -572,15 +575,15 @@ class ApiService {
   // Make a shopping list the standard list
   Future<ShoppingList?> makeStandardList(int shoppingListId) async {
     try {
-      final response = await _dio.patch(
-        '/api/shoppinglists/$shoppingListId/make-standard',
+      final response = await patch(
+        '/shoppinglist/$shoppingListId/make-standard',
+        '{}',  // Empty body
       );
       if (response.statusCode == 200) {
-        return ShoppingList.fromJson(response.data);
+        return ShoppingList.fromJson(json.decode(response.body));
       }
     } catch (e) {
-      debugPrint('Error making shopping list standard: $e');
+      debugPrint('Error making standard: $e');
     }
     return null;
   }
-}

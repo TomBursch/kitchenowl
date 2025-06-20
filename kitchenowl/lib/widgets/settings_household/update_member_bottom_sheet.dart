@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kitchenowl/app.dart';
+import 'package:kitchenowl/cubits/auth_cubit.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/member.dart';
+import 'package:kitchenowl/widgets/report_dialog.dart';
 import 'package:kitchenowl/widgets/user_list_tile.dart';
 
 class UpdateMemberBottomSheet extends StatefulWidget {
@@ -42,10 +46,20 @@ class _UpdateMemberBottomSheetState extends State<UpdateMemberBottomSheet> {
           ),
           const Divider(),
           ListTile(
-            title: Text(AppLocalizations.of(context)!.reportIssue),
+            title: Text(AppLocalizations.of(context)!.reportUser),
             leading: const Icon(Icons.report_rounded),
             trailing: const Icon(Icons.arrow_forward_ios_rounded),
-            enabled: false,
+            enabled:
+                widget.member.id != context.read<AuthCubit>().getUser()?.id &&
+                    !App.isOffline,
+            onTap: () {
+              showDialog(
+                context: context,
+                builder: (context) => ReportDialog(
+                  user: widget.member,
+                ),
+              );
+            },
           ),
           if (widget.allowEdit) ...[
             ListTile(

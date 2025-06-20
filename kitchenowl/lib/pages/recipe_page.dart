@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kitchenowl/app.dart';
+import 'package:kitchenowl/cubits/auth_cubit.dart';
 import 'package:kitchenowl/cubits/recipe_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/helpers/share.dart';
@@ -12,8 +13,10 @@ import 'package:kitchenowl/models/shoppinglist.dart';
 import 'package:kitchenowl/pages/recipe_add_update_page.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/pages/recipe_cooking_page.dart';
+import 'package:kitchenowl/services/api/api_service.dart';
 import 'package:kitchenowl/widgets/recipe_markdown_body.dart';
 import 'package:kitchenowl/widgets/recipe_source_chip.dart';
+import 'package:kitchenowl/widgets/report_dialog.dart';
 import 'package:kitchenowl/widgets/sliver_with_pinned_footer.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:sliver_tools/sliver_tools.dart';
@@ -470,17 +473,57 @@ class _RecipePageState extends State<RecipePage> {
                               icon: const Icon(Icons.edit),
                             ),
                           ),
-                        if (!state.isOwningHousehold(state))
+                        if (!state.isOwningHousehold(state) && !App.isOffline)
                           Padding(
                             padding: const EdgeInsets.only(right: 8),
                             child: MenuAnchor(
                               menuChildren: [
                                 MenuItemButton(
                                   child: Text(AppLocalizations.of(context)!
-                                      .reportIssue),
-                                  onPressed: () {},
+                                      .reportRecipe),
                                   leadingIcon: Icon(Icons.report_rounded),
+                                  onPressed: () {
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) => ReportDialog(
+                                        recipe: state.recipe,
+                                      ),
+                                    );
+                                  },
                                 ),
+                                if (context
+                                        .read<AuthCubit>()
+                                        .getUser()
+                                        ?.hasServerAdminRights() ??
+                                    false)
+                                  MenuItemButton(
+                                    child: Text(AppLocalizations.of(context)!
+                                        .recipeDelete),
+                                    leadingIcon:
+                                        Icon(Icons.delete_forever_rounded),
+                                    onPressed: () async {
+                                      final confirmed =
+                                          await askForConfirmation(
+                                        context: context,
+                                        title: Text(
+                                          AppLocalizations.of(context)!
+                                              .recipeDelete,
+                                        ),
+                                        content: Text(
+                                          AppLocalizations.of(context)!
+                                              .recipeDeleteConfirmation(
+                                                  state.recipe.name),
+                                        ),
+                                      );
+                                      if (confirmed) {
+                                        ApiService.getInstance()
+                                            .deleteRecipe(state.recipe);
+                                        if (!mounted) return;
+                                        Navigator.of(context)
+                                            .pop(UpdateEnum.deleted);
+                                      }
+                                    },
+                                  ),
                               ],
                               builder: (context, controller, child) => Padding(
                                 padding: const EdgeInsets.only(right: 8),

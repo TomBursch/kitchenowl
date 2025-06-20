@@ -1,48 +1,53 @@
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/models/model.dart';
 
-class ShoppingList extends Model {
+class ShoppingList extends Model { // extends Equatable?
   final int? id;
   final String name;
   final List<ShoppinglistItem> items;
   final List<ItemWithDescription> recentItems;
+  final int order; // Add order field
+  final bool isStandard; // Add standard list flag
 
   const ShoppingList({
     this.id,
     required this.name,
     this.items = const [],
     this.recentItems = const [],
+    this.order = 0, // Default order
+    this.isStandard = false, // Default not standard
   });
 
   factory ShoppingList.fromJson(Map<String, dynamic> map) {
-    List<ShoppinglistItem> items = const [];
-    if (map.containsKey('items')) {
-      items = List.from(map['items'].map((e) => ShoppinglistItem.fromJson(e)));
-    }
-    List<ItemWithDescription> recentItems = const [];
-    if (map.containsKey('recentItems')) {
-      recentItems = List.from(
-          map['recentItems'].map((e) => ItemWithDescription.fromJson(e)));
-    }
-
     return ShoppingList(
       id: map['id'],
       name: map['name'],
-      items: items,
-      recentItems: recentItems,
+      items: map.containsKey('items') 
+        ? List<ShoppinglistItem>.from(map['items'].map((e) => ShoppinglistItem.fromJson(e)))
+        : const [],
+      recentItems: map.containsKey('recentItems')
+        ? List<ItemWithDescription>.from(map['recentItems'].map((e) => ItemWithDescription.fromJson(e)))
+        : const [],
+      order: map['order'] ?? 0,
+      isStandard: map['is_standard'] ?? false,
     );
   }
 
+  // Add copyWith method for reordering and standard list changes
   ShoppingList copyWith({
     String? name,
     List<ShoppinglistItem>? items,
     List<ItemWithDescription>? recentItems,
+    int? order,
+    bool? isStandard,
   }) =>
       ShoppingList(
         id: id,
         name: name ?? this.name,
         items: items ?? this.items,
         recentItems: recentItems ?? this.recentItems,
+        order: order ?? this.order,
+        isStandard: isStandard ?? this.isStandard,
       );
 
   @override
@@ -60,4 +65,7 @@ class ShoppingList extends Model {
       "items": items.map((e) => e.toJsonWithId()).toList(),
       "recentItems": recentItems.map((e) => e.toJsonWithId()).toList(),
     });
+  bool get isStandard => household?.standardShoppingListId == id;
+  @override
+  List<Object?> get props => [id, name, items, recentItems, order, isStandard];
 }

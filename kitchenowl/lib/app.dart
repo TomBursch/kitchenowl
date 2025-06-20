@@ -29,8 +29,7 @@ class App extends StatefulWidget {
   final AuthCubit _authCubit = AuthCubit();
   final ServerInfoCubit _serverInfoCubit = ServerInfoCubit();
 
-  static bool get isOffline =>
-      _instance!._authCubit.state is AuthenticatedOffline || isForcedOffline;
+  static bool get isOffline => _instance!._authCubit.state.isOffline;
 
   static bool get isForcedOffline =>
       _instance!._authCubit.state.forcedOfflineMode;

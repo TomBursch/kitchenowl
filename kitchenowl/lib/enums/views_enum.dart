@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/app.dart';
+import 'package:kitchenowl/cubits/auth_cubit.dart';
 import 'package:kitchenowl/cubits/household_cubit.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/household.dart';
@@ -87,9 +88,17 @@ enum ViewsEnum {
   Widget? floatingActionButton(BuildContext context) {
     switch (this) {
       case ViewsEnum.recipes:
-        return !App.isOffline ? RecipeCreateFab() : null;
+        return !BlocProvider.of<AuthCubit>(context, listen: true)
+                .state
+                .isOffline
+            ? RecipeCreateFab()
+            : null;
       case ViewsEnum.balances:
-        return !App.isOffline ? const ExpenseCreateFab() : null;
+        return !BlocProvider.of<AuthCubit>(context, listen: true)
+                .state
+                .isOffline
+            ? const ExpenseCreateFab()
+            : null;
       case ViewsEnum.items:
         return App.settings.shoppingListTapToRemove
             ? null

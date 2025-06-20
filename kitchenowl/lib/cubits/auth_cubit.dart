@@ -285,12 +285,15 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   Future<void> _loadForcedOfflineMode() async {
-    _forcedOfflineMode = await PreferenceStorage.getInstance().readBool(key: 'forcedOfflineMode') ?? false;
+    _forcedOfflineMode = await PreferenceStorage.getInstance()
+            .readBool(key: 'forcedOfflineMode') ??
+        false;
   }
 
   void setForcedOfflineMode(bool forcedOfflineMode) async {
     _forcedOfflineMode = forcedOfflineMode;
-    await PreferenceStorage.getInstance().writeBool(key: 'forcedOfflineMode', value: forcedOfflineMode);
+    await PreferenceStorage.getInstance()
+        .writeBool(key: 'forcedOfflineMode', value: forcedOfflineMode);
     // Always update state to reflect the change immediately
     updateState();
     if (!forcedOfflineMode) {
@@ -304,6 +307,8 @@ abstract class AuthState extends Equatable {
   const AuthState();
 
   bool get forcedOfflineMode => false;
+
+  bool get isOffline => forcedOfflineMode;
 }
 
 class Authenticated extends AuthState {
@@ -325,6 +330,9 @@ class AuthenticatedOffline extends Authenticated {
 
   @override
   bool get forcedOfflineMode => _forcedOfflineMode;
+
+  @override
+  bool get isOffline => true;
 }
 
 class Onboarding extends AuthState {

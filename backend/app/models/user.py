@@ -19,6 +19,7 @@ if TYPE_CHECKING:
         File,
         OIDCLink,
         OIDCRequest,
+        Report,
     )
     from app.helpers.db_model_base import DbModelBase
 
@@ -127,6 +128,23 @@ class User(Model):
             "OIDCRequest",
             back_populates="user",
             cascade="all, delete-orphan",
+        ),
+    )
+
+    created_reports: Mapped[List["Report"]] = cast(
+        Mapped[List["Report"]],
+        db.relationship(
+            "Report",
+            foreign_keys="[Report.created_by_id]",
+            back_populates="created_by",
+        ),
+    )
+    reports: Mapped[List["Report"]] = cast(
+        Mapped[List["Report"]],
+        db.relationship(
+            "Report",
+            foreign_keys="[Report.user_id]",
+            back_populates="user",
         ),
     )
 

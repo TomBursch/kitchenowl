@@ -17,6 +17,7 @@ import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/pages/analytics_page.dart';
 import 'package:kitchenowl/pages/household_member_page.dart';
 import 'package:kitchenowl/pages/household_update_page.dart';
+import 'package:kitchenowl/pages/reports_list_page.dart';
 import 'package:kitchenowl/pages/settings_server_user_page.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
 import 'package:kitchenowl/styles/colors.dart';
@@ -485,6 +486,15 @@ class _SettingsPageState extends State<SettingsPage> {
                   onTap: () => Navigator.of(context, rootNavigator: true).push(
                     MaterialPageRoute(
                       builder: (context) => const AnalyticsPage(),
+                    ),
+                  ),
+                ),
+                ListTile(
+                  title: const Text("Reports"),
+                  leading: const Icon(Icons.report_rounded),
+                  onTap: () => Navigator.of(context, rootNavigator: true).push(
+                    MaterialPageRoute(
+                      builder: (context) => const ReportsListPage(),
                     ),
                   ),
                 ),

@@ -14,7 +14,7 @@ from datetime import datetime, timedelta
 
 Model = db.Model
 if TYPE_CHECKING:
-    from app.models import Household, RecipeHistory, File
+    from app.models import Household, RecipeHistory, File, Report
     from app.helpers.db_model_base import DbModelBase
 
     Model = DbModelBase
@@ -115,6 +115,14 @@ class Recipe(Model, DbModelAuthorizeMixin):
             back_populates="recipe",
             uselist=False,
             lazy="selectin",
+        ),
+    )
+
+    reports: Mapped[List["Report"]] = cast(
+        Mapped[List["Report"]],
+        db.relationship(
+            "Report",
+            back_populates="recipe",
         ),
     )
 

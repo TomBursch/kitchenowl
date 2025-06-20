@@ -150,5 +150,7 @@ class SettingsUserState extends Equatable {
       );
 
   bool hasChanges() =>
-      name != null && (user == null || user!.name != name) || image != null;
+      name != null && (user == null || user!.name != name) ||
+      image != null ||
+      user?.serverAdmin != setAdmin;
 }

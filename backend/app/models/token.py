@@ -11,7 +11,6 @@ from sqlalchemy.orm import Mapped
 
 Model = db.Model
 if TYPE_CHECKING:
-    from app.models import User
     from app.helpers.db_model_base import DbModelBase
 
     Model = DbModelBase

@@ -43,5 +43,6 @@ apiv1.register_blueprint(api.tag, url_prefix="/tag")
 apiv1.register_blueprint(api.user, url_prefix="/user")
 apiv1.register_blueprint(api.upload, url_prefix="/upload")
 apiv1.register_blueprint(api.analytics, url_prefix="/analytics")
+apiv1.register_blueprint(api.reportBlueprint, url_prefix="/report")
 
 app.register_blueprint(apiv1, url_prefix="/api")

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 set -e
 
 # if ipv6 is unavailable, remove it from the wsgi config

@@ -241,6 +241,7 @@
   "@lltWarningTitle": {},
   "@login": {},
   "@loginTo": {},
+  "@loginToAddToShoppingList": {},
   "@logout": {},
   "@logoutName": {
     "placeholders": {
@@ -622,6 +623,7 @@
   "lltWarningTitle": "Do you know what you're doing?",
   "login": "Login",
   "loginTo": "Login to",
+  "loginToAddToShoppingList": "Log in to add this recipe to your shopping list",
   "logout": "Logout",
   "logoutName": "Logout {name}",
   "longerThanExpected": "This is taking longer than expected",

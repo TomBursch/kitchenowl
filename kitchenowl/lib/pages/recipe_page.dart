@@ -384,6 +384,24 @@ class _RecipePageState extends State<RecipePage> {
                           ],
                         ),
                       ),
+                    if (!state.isOwningHousehold(state) &&
+                        state.household == null &&
+                        BlocProvider.of<AuthCubit>(context).getUser() == null)
+                      Container(
+                        padding: const EdgeInsets.all(16),
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 4),
+                            child: Text(
+                              AppLocalizations.of(context)!
+                                  .loginToAddToShoppingList,
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                          onPressed: () => context.go("/signin"),
+                        ),
+                      ),
                     SizedBox(
                       height: MediaQuery.paddingOf(context).bottom,
                     ),

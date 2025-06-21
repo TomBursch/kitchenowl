@@ -1,0 +1,12 @@
+{
+  "@accountCreate": {},
+  "@accountCreateHint": {},
+  "@accountCreateTitle": {},
+  "@accountDelete": {},
+  "@accountDeleteConfirmation": {},
+  "accountCreate": "Napravi račun",
+  "accountCreateHint": "Vaše korisničko ime i račun su javni, stoga odaberite nešto što vam je ugodno dijeliti s drugima.",
+  "accountCreateTitle": "Napravi svoj KitchenOwl račun",
+  "accountDelete": "Uništi račun",
+  "accountDeleteConfirmation": "Jeste li sigurni da želite uniši svoj račun?"
+}

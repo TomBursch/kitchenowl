@@ -145,6 +145,7 @@ class RecipeImplicitItemMarkdownSyntax extends md.InlineSyntax {
               recipe.items
                   // sort long to short names
                   .sorted((a, b) => b.name.length.compareTo(a.name.length))
+                  .where((e) => e.name.isNotEmpty)
                   .map((e) => e.name)
                   .fold("", (a, b) => a.isEmpty ? "$b" : "$a|$b") +
               ")\\b",
@@ -154,7 +155,8 @@ class RecipeImplicitItemMarkdownSyntax extends md.InlineSyntax {
   @override
   bool onMatch(md.InlineParser parser, Match match) {
     final name = match[1]!.toLowerCase();
-    if (!recipe.items.map((e) => e.name.toLowerCase()).contains(name)) {
+    if (name.isEmpty ||
+        !recipe.items.map((e) => e.name.toLowerCase()).contains(name)) {
       parser.advanceBy(1);
 
       return false;

@@ -318,61 +318,58 @@ class _ItemPageState<T extends Item> extends State<ItemPage<T>> {
                     ),
                   if (widget.item is! RecipeItem &&
                       context.readOrNull<HouseholdCubit>() != null)
-                    BlocProvider.value(
-                      value: context.read<HouseholdCubit>(),
-                      child: BlocBuilder<ItemEditCubit, ItemEditState>(
-                        bloc: cubit,
-                        builder: (context, state) {
-                          return SliverPadding(
-                            padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-                            sliver: SliverList(
-                              delegate: SliverChildBuilderDelegate(
-                                (context, i) {
-                                  if (i == 0) {
-                                    return Padding(
-                                      padding: const EdgeInsets.only(bottom: 8),
-                                      child: Text(
-                                        '${AppLocalizations.of(context)!.usedIn}:',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .titleLarge,
-                                      ),
-                                    );
-                                  }
-                                  i = i - 1;
-
-                                  return RecipeItemWidget(
-                                    recipe: state.recipes[i],
-                                    onUpdated: cubit.refresh,
-                                    description: state.recipes[i].isPlanned &&
-                                            state.recipes[i].items.isNotEmpty &&
-                                            state.recipes[i].items.first
-                                                .description.isNotEmpty
-                                        ? Text(
-                                            "${state.recipes[i].items.first.description}${state.recipes[i].items.first.optional ? " (${AppLocalizations.of(context)!.optional})" : ""}",
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodySmall,
-                                          )
-                                        : state.recipes[i].items.first.optional
-                                            ? Text(
-                                                AppLocalizations.of(context)!
-                                                    .optional,
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .bodySmall,
-                                              )
-                                            : null,
+                    BlocBuilder<ItemEditCubit, ItemEditState>(
+                      bloc: cubit,
+                      builder: (context, state) {
+                        return SliverPadding(
+                          padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                          sliver: SliverList(
+                            delegate: SliverChildBuilderDelegate(
+                              (context, i) {
+                                if (i == 0) {
+                                  return Padding(
+                                    padding: const EdgeInsets.only(bottom: 8),
+                                    child: Text(
+                                      '${AppLocalizations.of(context)!.usedIn}:',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleLarge,
+                                    ),
                                   );
-                                },
-                                childCount: state.recipes.isEmpty
-                                    ? 0
-                                    : state.recipes.length + 1,
-                              ),
+                                }
+                                i = i - 1;
+
+                                return RecipeItemWidget(
+                                  recipe: state.recipes[i],
+                                  onUpdated: cubit.refresh,
+                                  description: state.recipes[i].isPlanned &&
+                                          state.recipes[i].items.isNotEmpty &&
+                                          state.recipes[i].items.first
+                                              .description.isNotEmpty
+                                      ? Text(
+                                          "${state.recipes[i].items.first.description}${state.recipes[i].items.first.optional ? " (${AppLocalizations.of(context)!.optional})" : ""}",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodySmall,
+                                        )
+                                      : state.recipes[i].items.first.optional
+                                          ? Text(
+                                              AppLocalizations.of(context)!
+                                                  .optional,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodySmall,
+                                            )
+                                          : null,
+                                );
+                              },
+                              childCount: state.recipes.isEmpty
+                                  ? 0
+                                  : state.recipes.length + 1,
                             ),
-                          );
-                        },
-                      ),
+                          ),
+                        );
+                      },
                     ),
                   SliverToBoxAdapter(
                     child:

@@ -4,7 +4,7 @@ from flask_jwt_extended import current_user
 from app import db
 from app.config import bcrypt
 from sqlalchemy.orm import Mapped
-from sqlalchemy import DateTime
+from sqlalchemy import DateTime, func
 from datetime import datetime, timezone
 
 Model = db.Model
@@ -238,15 +238,14 @@ class User(Model):
 
     @classmethod
     def search_name(cls, name: str) -> list[Self]:
-        if "*" in name or "_" in name:
-            looking_for = name.replace("_", "__").replace("*", "%").replace("?", "_")
-        else:
-            looking_for = "%{0}%".format(name)
+        looking_for = f"%{
+            name.replace('*', '*' * 2).replace('%', '*' + '%').replace('_', '*' + '_')
+        }%"
         return (
             cls.query.filter(
                 cls.name.ilike(looking_for) | cls.username.ilike(looking_for)
             )
-            .order_by(cls.name)
+            .order_by(func.char_length(cls.username))
             .limit(15)
             .all()
         )

@@ -4,7 +4,7 @@ repo_url: https://github.com/tombursch/kitchenowl
 repo_name: tombursch/kitchenowl
 edit_uri: edit/main/docs/docs/
 copyright: >
-  &copy; 2023 KitchenOwl - <a href="https://kitchenowl.org/imprint">Imprint</a>
+  &copy; 2025 KitchenOwl - <a href="https://kitchenowl.org/imprint">Imprint</a>
 theme:
   name: material
   logo: img/icon.png

@@ -1,50 +1,129 @@
 ---
+title: Home
 hide:
   - navigation
 ---
 
-# Home
-!!! note "Please keep in mind that this project is still in development."
+# Welcome
 
-Welcome to the developer documentation of [KitchenOwl](https://kitchenowl.org). If you want to contribute or set up a self-hosted instance of KitchenOwl you're at the right place. Otherwise, you can find general information on the main website.
+Welcome to the documentation of [KitchenOwl](https://kitchenowl.org). 
+If you want to contribute or set up a self-hosted instance of KitchenOwl you're at the right place. 
+Otherwise, you can find general information and features on the [main website](https://kitchenowl.org).
 
-[Main Website](https://kitchenowl.org){ .md-button }
-[Get Started with Self Hosting](./self-hosting/index.md){ .md-button }
+<div class="grid cards" markdown>
 
-## :robot: App Install
+-   :material-rocket-launch: &nbsp;
+    __Getting Started__
 
-Get it on your favorite app store or find the current release for your operating system on the [releases page](https://github.com/TomBursch/kitchenowl/releases).
-Please take a quick look at [Tips & Tricks](./Tips-&-Tricks/index.md) to get the best experience in the app.
+    ---
 
-<a href='https://play.google.com/store/apps/details?id=com.tombursch.kitchenowl'>
-    <img alt='Get it on Google Play' src='./img/badges/playstore.png' style="height:50px" />
-</a>
-<a href='https://f-droid.org/packages/com.tombursch.kitchenowl/'>
-    <img alt='Get it on F-Droid' src='./img/badges/f-droid.png' style="height:50px" />
-</a>
-<a href='https://apps.apple.com/app/kitchenowl/id1557453670'>
-    <img alt='Get it on the AppStore' src='./img/badges/appstore.png' style="height:50px" />
-</a>
-<a href='https://my.home-assistant.io/redirect/hacs_repository/?owner=TomBursch&repository=kitchenowl-ha&category=integration'>
-    <img alt='Get it on the Home Assistant Community Store' src='./img/badges/hacs_repository.svg' height="50" />
-</a>
+    Looking to set up your own a KitchenOwl instance?
+    
+    ---
 
-## Features
+    [:octicons-arrow-right-24: Self hosting guide](./self-hosting/index.md)
 
-- Native Mobile/Web/Desktop apps with a great design
-- Add items to your shopping list and sync them in real-time with multiple users
-- Partial offline support, so you don't lose track of what to buy even when there is no signal
-- Manage recipes and add them to your shopping list
-- Share recipes with friends and family
-- Create a meal plan to always know what you'll be eating
-- Manage balances and track expenses of your household
+-   :material-chat-question: &nbsp;
+    __FAQ__
+
+    ---
+
+    Get answers to frequently asked questions.
+
+    ---
+
+    [:octicons-arrow-right-24: Read more](./Tips-&-Tricks/index.md)
+
+-   :material-folder: &nbsp;
+    __Reference__
+
+    ---
+
+    Learn more about the API and how to manage your instance<br/><br/>
+
+    ---
+
+    [:octicons-arrow-right-24: Read more](./reference/API.md)
+
+-   :material-license: &nbsp;
+    __AGPL-3.0 License__
+
+    ---
+
+    KitchenOwl is Free Software: You can use, study share and improve it at your will.
+
+    ---
+
+    [:octicons-arrow-right-24: Read the License](https://github.com/TomBursch/kitchenowl/blob/main/LICENSE)
+
+</div>
 
 ## Future Features
 
 For a list of planned features check out the [Project Board](https://github.com/users/TomBursch/projects/1).
 
-## 📜 License
+---
 
-KitchenOwl is Free Software: You can use, study share and improve it at your will. Specifically you can redistribute and/or modify it under the terms of the AGPL-3.0 License.
+## Found an issue?
 
-[Read the License](https://github.com/TomBursch/kitchenowl/blob/main/LICENSE){ .md-button }
+KitchenOwl is actively maintained.
+
+There are multiple ways in which you can improve KitchenOwl to help you and others who might encounter the same issues in the future.
+
+<div class="grid cards" markdown>
+
+-   :material-bug-outline: &nbsp;
+    __Something is not working?__
+
+    ---
+
+    Report a bug by creating an issue with information on how to reproduce it
+    
+    ---
+
+    [:octicons-arrow-right-24: Report a bug](https://github.com/TomBursch/kitchenowl/issues/new?template=bug.yml)
+
+-   :material-file-document-remove-outline: &nbsp;
+    __Missing information in our docs?__
+
+    ---
+
+    Report missing information or potential inconsistencies in our
+    documentation
+
+    ---
+
+    [:octicons-arrow-right-24: Report a docs issue](https://github.com/TomBursch/kitchenowl/issues/new?template=wiki_issue.yml)
+
+-   :material-lightbulb-on-20: &nbsp;
+    __Want to submit an idea?__
+
+    ---
+
+    Propose a change, feature request, or suggest an improvement
+
+    ---
+
+    [:octicons-arrow-right-24: Request a change](https://github.com/TomBursch/kitchenowl/issues/new/choose)
+
+-   :material-source-pull: &nbsp;
+    __Want to create a pull request?__
+
+    ---
+
+    Open an issue first and then create a comprehensive and useful pull request
+
+    ---
+
+    [:octicons-arrow-right-24: Set up your development environment](./reference/contributing.md)<br/>
+    [:octicons-arrow-right-24: Create a pull request](https://github.com/TomBursch/kitchenowl/pulls)
+
+</div>
+
+!!! info "Hint"
+    Before submitting an issue, make sure to:
+
+    - Check that no similar issue already exists [here](https://github.com/TomBursch/kitchenowl/issues)
+    - You provided all information needed to understand the issue
+
+---

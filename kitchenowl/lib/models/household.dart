@@ -16,6 +16,9 @@ class Household extends Model {
   final List<ViewsEnum>? viewOrdering;
   final List<Member>? member;
   final ShoppingList? defaultShoppingList;
+  final String? description;
+  final String? link;
+  final bool verified;
 
   const Household({
     required this.id,
@@ -28,6 +31,9 @@ class Household extends Model {
     this.viewOrdering,
     this.member,
     this.defaultShoppingList,
+    this.description,
+    this.link,
+    this.verified = false,
   });
 
   factory Household.fromJson(Map<String, dynamic> map) {
@@ -51,6 +57,9 @@ class Household extends Model {
       language: map['language'],
       featurePlanner: map['planner_feature'] ?? false,
       featureExpenses: map['expenses_feature'] ?? false,
+      description: map['description'],
+      link: map['link'],
+      verified: map['verified'] ?? false,
       viewOrdering: viewOrdering,
       member: member,
       defaultShoppingList: map.containsKey("default_shopping_list")
@@ -63,6 +72,9 @@ class Household extends Model {
     String? name,
     String? image,
     String? language,
+    String? description,
+    String? link,
+    bool? verified,
     bool? featurePlanner,
     bool? featureExpenses,
     List<ViewsEnum>? viewOrdering,
@@ -76,6 +88,9 @@ class Household extends Model {
         featurePlanner: featurePlanner ?? this.featurePlanner,
         featureExpenses: featureExpenses ?? this.featureExpenses,
         viewOrdering: viewOrdering ?? this.viewOrdering,
+        description: description ?? this.description,
+        link: link ?? this.link,
+        verified: verified ?? this.verified,
       );
 
   @override
@@ -90,12 +105,16 @@ class Household extends Model {
         viewOrdering,
         member,
         defaultShoppingList,
+        description,
+        link,
+        verified,
       ];
 
   @override
   Map<String, dynamic> toJson() {
     Map<String, dynamic> data = {
       "name": name,
+      "verified": verified,
     };
     if (image != null) {
       data['photo'] = image;
@@ -112,6 +131,12 @@ class Household extends Model {
     if (viewOrdering != null) {
       data['view_ordering'] = viewOrdering!.map((e) => e.toString()).toList()
         ..remove(ViewsEnum.more.toString());
+    }
+    if (description != null) {
+      data['description'] = description;
+    }
+    if (link != null) {
+      data['link'] = link;
     }
 
     return data;

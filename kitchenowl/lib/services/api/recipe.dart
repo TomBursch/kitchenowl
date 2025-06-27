@@ -128,17 +128,38 @@ extension RecipeApi on ApiService {
     return body.map((e) => Recipe.fromJson(e)).toList();
   }
 
-  Future<RecipeSuggestions?> suggestRecipes(String? language) async {
-    final res = await get("$baseRoute/suggestions?" +
+  Future<RecipeDiscover?> discoverRecipes(String? language) async {
+    final res = await get("$baseRoute/discover?" +
         (language != null ? "language=" + language : ""));
     if (res.statusCode != 200) return null;
 
     final body = jsonDecode(res.body);
-    return RecipeSuggestions.fromJson(body);
+    return RecipeDiscover.fromJson(body);
   }
 
-  Future<List<Recipe>?> suggestRecipesNewest(String? language, int page) async {
-    final res = await get("$baseRoute/suggestions/newest/$page?" +
+  Future<List<Recipe>?> discoverRecipesCurated(
+      String? language, int page) async {
+    final res = await get("$baseRoute/discover/curated/$page?" +
+        (language != null ? "language=" + language : ""));
+    if (res.statusCode != 200) return null;
+
+    final body = jsonDecode(res.body);
+    return (body as List<dynamic>).map((e) => Recipe.fromJson(e)).toList();
+  }
+
+  Future<List<Recipe>?> discoverRecipesPopular(
+      String? language, int page) async {
+    final res = await get("$baseRoute/discover/popular/$page?" +
+        (language != null ? "language=" + language : ""));
+    if (res.statusCode != 200) return null;
+
+    final body = jsonDecode(res.body);
+    return (body as List<dynamic>).map((e) => Recipe.fromJson(e)).toList();
+  }
+
+  Future<List<Recipe>?> discoverRecipesNewest(
+      String? language, int page) async {
+    final res = await get("$baseRoute/discover/newest/$page?" +
         (language != null ? "language=" + language : ""));
     if (res.statusCode != 200) return null;
 

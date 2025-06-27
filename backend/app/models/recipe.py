@@ -58,6 +58,12 @@ class Recipe(Model, DbModelAuthorizeMixin):
     visibility: Mapped[RecipeVisibility] = db.Column(
         db.Enum(RecipeVisibility), nullable=False, default=RecipeVisibility.PRIVATE
     )
+
+    # Server suggestion metrics
+    server_curated: Mapped[bool] = db.Column(db.Boolean, default=False)
+    server_scrapes: Mapped[int] = db.Column(db.Integer, default=0)
+
+    # Internal meal planner suggestion score and rank
     suggestion_score: Mapped[int] = db.Column(db.Integer, server_default="0")
     suggestion_rank: Mapped[int] = db.Column(db.Integer, server_default="0")
     household_id: Mapped[int] = db.Column(
@@ -128,7 +134,7 @@ class Recipe(Model, DbModelAuthorizeMixin):
 
     def obj_to_dict(
         self,
-        skip_columns: list[str] | None = None,
+        skip_columns: list[str] | None = ["server_scrapes"],
         include_columns: list[str] | None = None,
     ) -> dict[str, Any]:
         res = super().obj_to_dict(skip_columns, include_columns)

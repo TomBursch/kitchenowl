@@ -65,6 +65,7 @@ class AddUpdateRecipeCubit extends ReplayCubit<AddUpdateRecipeState> {
             items: _state.items,
             tags: _state.selectedTags,
             visibility: _state.visibility,
+            curated: _state.curated,
           ),
         );
       } else {
@@ -80,6 +81,7 @@ class AddUpdateRecipeCubit extends ReplayCubit<AddUpdateRecipeState> {
           items: _state.items,
           tags: _state.selectedTags,
           visibility: _state.visibility,
+          curated: _state.curated,
         ));
       }
       emit(_state.copyWith(hasChanges: false));
@@ -138,6 +140,10 @@ class AddUpdateRecipeCubit extends ReplayCubit<AddUpdateRecipeState> {
 
   void setVisibility(RecipeVisibility visibility) {
     emit(state.copyWith(visibility: visibility, hasChanges: true));
+  }
+
+  void setCurated(bool curated) {
+    emit(state.copyWith(curated: curated, hasChanges: true));
   }
 
   void selectTag(Tag tag, bool selected) {
@@ -209,6 +215,7 @@ class AddUpdateRecipeState extends Equatable {
   final int prepTime;
   final int yields;
   final String source;
+  final bool curated;
   final NamedByteArray? image;
   final RecipeVisibility visibility;
   final List<RecipeItem> items;
@@ -224,6 +231,7 @@ class AddUpdateRecipeState extends Equatable {
     this.prepTime = 0,
     this.yields = 0,
     this.source = '',
+    this.curated = false,
     this.image,
     this.visibility = RecipeVisibility.private,
     this.items = const [],
@@ -240,6 +248,7 @@ class AddUpdateRecipeState extends Equatable {
     int? prepTime,
     int? yields,
     String? source,
+    bool? curated,
     NamedByteArray? image,
     RecipeVisibility? visibility,
     List<RecipeItem>? items,
@@ -255,6 +264,7 @@ class AddUpdateRecipeState extends Equatable {
         prepTime: prepTime ?? this.prepTime,
         yields: yields ?? this.yields,
         source: source ?? this.source,
+        curated: curated ?? this.curated,
         image: image ?? this.image,
         items: items ?? this.items,
         tags: tags ?? this.tags,
@@ -274,6 +284,7 @@ class AddUpdateRecipeState extends Equatable {
         prepTime,
         yields,
         source,
+        curated,
         image,
         items,
         tags,

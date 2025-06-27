@@ -34,6 +34,10 @@ class Household(Model):
     expenses_feature: Mapped[bool] = db.Column(
         db.Boolean(), nullable=False, default=True
     )
+    description: Mapped[str | None] = db.Column(db.String())
+    link: Mapped[str | None] = db.Column(db.String(255))
+    # For households that have verified their authenticity
+    verified: Mapped[bool | None] = db.Column(db.Boolean, default=False)
 
     view_ordering: Mapped[List[str]] = db.Column(DbListType(), default=list())
 
@@ -123,7 +127,17 @@ class Household(Model):
         return res
 
     def obj_to_public_dict(self) -> dict[str, Any]:
-        res = super().obj_to_dict(include_columns=["id", "name", "photo", "language"])
+        res = super().obj_to_dict(
+            include_columns=[
+                "id",
+                "name",
+                "photo",
+                "language",
+                "description",
+                "link",
+                "verified",
+            ]
+        )
         if self.photo_file:
             res["photo_hash"] = self.photo_file.blur_hash
         return res

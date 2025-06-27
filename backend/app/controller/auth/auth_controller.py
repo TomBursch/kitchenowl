@@ -236,7 +236,7 @@ if FRONT_URL and len(oidc_clients) > 0:
         state = rndstr()
         nonce = rndstr()
         redirect_uri = (
-            "kitchenowl://"
+            "kitchenowl:"
             if "kitchenowl_scheme" in args and args["kitchenowl_scheme"]
             else FRONT_URL
         ) + "/signin/redirect"

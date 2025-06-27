@@ -121,14 +121,26 @@ Flask.json_provider_class = KitchenOwlJSONProvider
 
 app = Flask(__name__)
 
+def get_jwt_secret():
+    secret_file = os.getenv("JWT_SECRET_KEY_FILE")
+    if secret_file:
+        try:
+            with open(secret_file, "r") as f:
+                return f.read().strip()
+        except Exception as e:
+            raise RuntimeError(f"Failed to read JWT_SECRET_KEY_FILE: {e}")
+    return os.getenv("JWT_SECRET_KEY", "super-secret")
+
+jwt_secret = get_jwt_secret()
+
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 app.config["MAX_CONTENT_LENGTH"] = 32 * 1000 * 1000  # 32MB max upload
-app.config["SECRET_KEY"] = os.getenv("JWT_SECRET_KEY", "super-secret")
+app.config["SECRET_KEY"] = jwt_secret
 # SQLAlchemy
 app.config["SQLALCHEMY_DATABASE_URI"] = DB_URL
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 # JWT
-app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY", "super-secret")
+app.config["JWT_SECRET_KEY"] = jwt_secret
 app.config["JWT_ACCESS_TOKEN_EXPIRES"] = JWT_ACCESS_TOKEN_EXPIRES
 app.config["JWT_REFRESH_TOKEN_EXPIRES"] = JWT_REFRESH_TOKEN_EXPIRES
 if COLLECT_METRICS:

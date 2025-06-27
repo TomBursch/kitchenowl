@@ -83,7 +83,7 @@ Place this in your Authelia [configuration.yaml](https://www.authelia.com/config
         - profile
     redirect_uris:
         - https://your.domain.here/signin/redirect # Put the same value as FRONT_URL, appended with /signin/redirect
-        - kitchenowl:///signin/redirect
+        - kitchenowl:/signin/redirect
     response_modes:
     userinfo_signing_algorithm: none
     token_endpoint_auth_method: client_secret_post

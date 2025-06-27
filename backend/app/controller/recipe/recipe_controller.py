@@ -1,8 +1,10 @@
+import re
 from sqlalchemy import desc, func
+from app.config import FRONT_URL
 from app.errors import NotFoundRequest
 from app.models import Household, RecipeItems, RecipeTags
 from flask import jsonify, Blueprint
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import current_user, jwt_required
 from app import db
 from app.helpers import validate_args, authorize_household
 from app.models import Recipe, Item, Tag
@@ -67,10 +69,24 @@ def addRecipe(args, household_id):
         recipe.yields = args["yields"]
     if "source" in args:
         recipe.source = args["source"]
+        localMatch = re.match(
+            r"(kitchenowl:\/\/|"
+            + re.escape((FRONT_URL or "").removesuffix("/"))
+            + r")\/recipe\/(\d+)",
+            recipe.source,
+        )
+        if localMatch:
+            # Local recipe
+            sourceRecipe = Recipe.find_by_id(int(localMatch.group(2)))
+            if sourceRecipe:
+                sourceRecipe.server_scrapes = sourceRecipe.server_scrapes + 1
+                sourceRecipe.save()
     if "visibility" in args:
         recipe.visibility = RecipeVisibility(args["visibility"])
     if "photo" in args and args["photo"] != recipe.photo:
         recipe.photo = file_has_access_or_download(args["photo"], recipe.photo)
+    if "server_curated" in args and current_user.admin:
+        recipe.server_curated = args["server_curated"]
     recipe.save()
     if "items" in args:
         for recipeItem in args["items"]:
@@ -122,6 +138,8 @@ def updateRecipe(args, id):  # noqa: C901
         recipe.visibility = RecipeVisibility(args["visibility"])
     if "photo" in args and args["photo"] != recipe.photo:
         recipe.photo = file_has_access_or_download(args["photo"], recipe.photo)
+    if "server_curated" in args and current_user.admin:
+        recipe.server_curated = args["server_curated"]
     recipe.save()
     if "items" in args:
         for con in recipe.items:
@@ -214,7 +232,7 @@ def scrapeRecipe(args, household_id):
     return "Unsupported website", 400
 
 
-@recipe.route("/suggestions", methods=["GET"])
+@recipe.route("/discover", methods=["GET"])
 @jwt_required()
 @validate_args(SuggestionsRecipe)
 def suggestedRecipes(args):
@@ -238,6 +256,25 @@ def suggestedRecipes(args):
     return jsonify(
         {
             "popular_tags": [e.name for e in tags],
+            "curated": [
+                e.obj_to_public_dict()
+                for e in Recipe.query.join(Recipe.household)
+                .filter(*queryFilter)
+                .filter(Recipe.server_curated)
+                .order_by(desc(Recipe.id))
+                .limit(10)
+                .all()
+            ],
+            "popular": [
+                e.obj_to_public_dict()
+                for e in Recipe.query.join(Recipe.household)
+                .filter(*queryFilter)
+                .order_by(
+                    desc(Recipe.server_scrapes), Recipe.server_curated, desc(Recipe.id)
+                )
+                .limit(10)
+                .all()
+            ],
             "newest": [
                 e.obj_to_public_dict()
                 for e in Recipe.query.join(Recipe.household)
@@ -250,7 +287,54 @@ def suggestedRecipes(args):
     )
 
 
-@recipe.route("/suggestions/newest/<int:page>", methods=["GET"])
+@recipe.route("/discover/curated/<int:page>", methods=["GET"])
+@jwt_required()
+@validate_args(SuggestionsRecipe)
+def curatedRecipes(args, page):
+    queryFilter = [Recipe.visibility == RecipeVisibility.PUBLIC]
+
+    if "language" in args:
+        queryFilter.append(Household.language == args["language"])
+
+    return jsonify(
+        [
+            e.obj_to_public_dict()
+            for e in Recipe.query.join(Recipe.household)
+            .filter(*queryFilter)
+            .filter(Recipe.server_curated)
+            .order_by(desc(Recipe.id))
+            .offset(page * 10)
+            .limit(10)
+            .all()
+        ]
+    )
+
+
+@recipe.route("/discover/popular/<int:page>", methods=["GET"])
+@jwt_required()
+@validate_args(SuggestionsRecipe)
+def popularRecipes(args, page):
+    queryFilter = [Recipe.visibility == RecipeVisibility.PUBLIC]
+
+    if "language" in args:
+        queryFilter.append(Household.language == args["language"])
+
+    return jsonify(
+        [
+            e.obj_to_public_dict()
+            for e in Recipe.query.join(Recipe.household)
+            .filter(*queryFilter)
+            .order_by(
+                desc(Recipe.server_scrapes), Recipe.server_curated, desc(Recipe.id)
+            )
+            .offset(page * 10)
+            .limit(10)
+            .all()
+        ]
+    )
+
+
+@recipe.route("/discover/newest/<int:page>", methods=["GET"])
 @jwt_required()
 @validate_args(SuggestionsRecipe)
 def newestRecipes(args, page):

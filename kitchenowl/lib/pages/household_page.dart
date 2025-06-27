@@ -30,8 +30,9 @@ class HouseholdPage extends StatefulWidget {
 }
 
 class _HouseholdPageState extends State<HouseholdPage>
-    with WidgetsBindingObserver {
+    with WidgetsBindingObserver, RouteAware {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+  RouteObserver? routeObserver;
 
   late final HouseholdCubit householdCubit;
   late final ShoppinglistCubit shoppingListCubit;
@@ -61,7 +62,20 @@ class _HouseholdPageState extends State<HouseholdPage>
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final newRouteObserver =
+        RepositoryProvider.of<RouteObserver<ModalRoute>>(context);
+    if (routeObserver != newRouteObserver) {
+      routeObserver?.unsubscribe(this);
+      newRouteObserver.subscribe(this, ModalRoute.of(context)!);
+      routeObserver = newRouteObserver;
+    }
+  }
+
+  @override
   void dispose() {
+    routeObserver?.unsubscribe(this);
     WidgetsBinding.instance.removeObserver(this);
     householdCubit.close();
     shoppingListCubit.close();
@@ -76,6 +90,20 @@ class _HouseholdPageState extends State<HouseholdPage>
     if (state == AppLifecycleState.resumed) {
       householdCubit.refresh();
       shoppingListCubit.refresh();
+      recipeListCubit.refresh();
+    }
+  }
+
+  @override
+  void didPopNext() {
+    if (router.state.uri.path.contains("recipes")) {
+      recipeListCubit.refresh();
+    }
+    if (router.state.uri.path.contains("planner")) {
+      plannerCubit.refresh();
+    }
+    if (router.state.uri.path.contains("balances")) {
+      expenseListCubit.refresh();
     }
   }
 

@@ -114,7 +114,10 @@ def scrapeLocal(recipe_id: int, household: Household):
     recipe = Recipe.find_by_id(recipe_id)
     if not recipe:
         return None
-    recipe.checkAuthorized()
+    if recipe.visibility == RecipeVisibility.PRIVATE:
+        recipe.checkAuthorized()
+    recipe.server_scrapes = recipe.server_scrapes + 1
+    recipe.save()
 
     items = {}
     for ingredient in recipe.items:
@@ -156,7 +159,7 @@ def scrapeKitchenOwl(
 
 
 def scrape(url: str, household: Household) -> dict[str, Any] | None:
-    localMatch = re.fullmatch(
+    localMatch = re.match(
         r"(kitchenowl:\/\/|"
         + re.escape((FRONT_URL or "").removesuffix("/"))
         + r")\/recipe\/(\d+)",
@@ -165,12 +168,12 @@ def scrape(url: str, household: Household) -> dict[str, Any] | None:
     if localMatch:
         return scrapeLocal(int(localMatch.group(2)), household)
 
-    kitchenowlMatch = re.fullmatch(
-        r"(https?:\/\/app\.kitchenowl\.org|.+)\/recipe\/(\d+)", url
+    kitchenowlMatch = re.match(
+        r"((https?:\/\/)?app\.kitchenowl\.org|.+)\/recipe\/(\d+)", url
     )
     if kitchenowlMatch and url.startswith("https://app.kitchenowl.org/"):
         return scrapeKitchenOwl(
-            url, "https://app.kitchenowl.org/api", int(kitchenowlMatch.group(2))
+            url, "https://app.kitchenowl.org/api", int(kitchenowlMatch.group(3))
         )
     if "http" not in url:
         url = "http://" + url
@@ -184,7 +187,7 @@ def scrape(url: str, household: Household) -> dict[str, Any] | None:
 
     if kitchenowlMatch and "<title>KitchenOwl</title>" in res.text:
         return scrapeKitchenOwl(
-            url, kitchenowlMatch.group(1) + "/api", int(kitchenowlMatch.group(2))
+            url, kitchenowlMatch.group(1) + "/api", int(kitchenowlMatch.group(3))
         )
 
     return scrapePublic(url, res.text, household)

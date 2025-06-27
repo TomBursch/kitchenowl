@@ -18,6 +18,7 @@ class RecipeCard extends StatelessWidget {
   final void Function()? onPressed;
   final Future<void> Function()? onLongPressed;
   final Future<void> Function()? onAddToDate;
+  final double? width;
 
   const RecipeCard({
     super.key,
@@ -27,17 +28,19 @@ class RecipeCard extends StatelessWidget {
     this.onLongPressed,
     this.onAddToDate,
     this.showHousehold = false,
+    this.width,
   });
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: getValueForScreenType(
-        context: context,
-        mobile: 250,
-        tablet: 275,
-        desktop: 275,
-      ),
+      width: width ??
+          getValueForScreenType(
+            context: context,
+            mobile: 250,
+            tablet: 275,
+            desktop: 275,
+          ),
       child: Card(
         child: InkWell(
           onTap: onPressed ??
@@ -177,7 +180,18 @@ class RecipeCard extends StatelessWidget {
                               radius: 15,
                             ),
                             const SizedBox(width: 8),
-                            Text(recipe.household!.name),
+                            Expanded(
+                              child: Text(
+                                recipe.household!.name,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                            if (recipe.household!.verified)
+                              Icon(
+                                Icons.check_circle_outline_rounded,
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
                           ],
                         ),
                       if (onLongPressed != null) const Divider(),

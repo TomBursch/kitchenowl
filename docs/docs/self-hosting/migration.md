@@ -1,7 +1,10 @@
 # Migrating from Older Versions
 
+### v0.6.16
+For OIDC users the redirect URI has changed from `kitchenowl:///signin/redirect` to `kitchenowl:/signin/redirect` (See [#644](https://github.com/TomBursch/kitchenowl/issues/644) for the reason why).
+
 ### v0.5.0
-The fronted is not required any more `tombursch/kitchenowl:latest` is now an all-in-one container that hosts the web application and backend. Take a look at the [install instructions](index.md) if you want to switch your setup.
+The frontend is not required any more `tombursch/kitchenowl:latest` is now an all-in-one container that hosts the web application and backend. Take a look at the [installation instructions](index.md) if you want to switch your setup.
 Existing setups don't need to be adapted, they will still work like they used to. Although, there now exists a docker image `tombursch/kitchenowl-backend:latest` specifically designed for the split setup.
 
 ### v0.4.9

@@ -6,6 +6,11 @@ Ingredient pills allow you to reference ingredients from inside your recipes' de
 @ingredient_name
 ```
 
+You can also override the item description for that occurrence by using curly braces:
+```
+@ingredient_name{Override description. For example: 300g}
+```
+
 #### Text formatting
 ```
 **Bold text**

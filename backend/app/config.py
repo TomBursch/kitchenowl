@@ -31,6 +31,17 @@ from flask_apscheduler import APScheduler
 import sqlite_icu
 import os
 
+def get_secret(env_var: str, default: str = None) -> str | None:
+    """Returns secret from file if *_FILE env var is set, otherwise from the env var itself."""
+    file_path = os.getenv(f"{env_var}_FILE")
+    if file_path:
+        try:
+            with open(file_path, "r") as f:
+                return f.read().strip()
+        except Exception as e:
+            raise RuntimeError(f"Failed to read {env_var}_FILE: {e}")
+    return os.getenv(env_var, default)
+
 
 MIN_FRONTEND_VERSION = 71
 BACKEND_VERSION = 113
@@ -56,8 +67,8 @@ COLLECT_METRICS = os.getenv("COLLECT_METRICS", "False").lower() == "true"
 
 DB_URL = URL.create(
     os.getenv("DB_DRIVER", "sqlite"),
-    username=os.getenv("DB_USER"),
-    password=os.getenv("DB_PASSWORD"),
+    username=get_secret("DB_USER"),
+    password=get_secret("DB_PASSWORD"),
     host=os.getenv("DB_HOST"),
     port=int(cast(str, os.getenv("DB_PORT"))) if os.getenv("DB_PORT") else None,
     database=os.getenv("DB_NAME", STORAGE_PATH + "/database.db"),
@@ -70,14 +81,14 @@ JWT_REFRESH_TOKEN_EXPIRES = timedelta(
 )
 
 OIDC_CLIENT_ID = os.getenv("OIDC_CLIENT_ID")
-OIDC_CLIENT_SECRET = os.getenv("OIDC_CLIENT_SECRET")
+OIDC_CLIENT_SECRET = get_secret("OIDC_CLIENT_SECRET")
 OIDC_ISSUER = os.getenv("OIDC_ISSUER")
 
 GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID")
-GOOGLE_CLIENT_SECRET = os.getenv("GOOGLE_CLIENT_SECRET")
+GOOGLE_CLIENT_SECRET = get_secret("GOOGLE_CLIENT_SECRET")
 
 APPLE_CLIENT_ID = os.getenv("APPLE_CLIENT_ID")
-APPLE_CLIENT_SECRET = os.getenv("APPLE_CLIENT_SECRET")
+APPLE_CLIENT_SECRET = get_secret("APPLE_CLIENT_SECRET")
 
 SUPPORTED_LANGUAGES = {
     "en": "English",
@@ -121,17 +132,7 @@ Flask.json_provider_class = KitchenOwlJSONProvider
 
 app = Flask(__name__)
 
-def get_jwt_secret():
-    secret_file = os.getenv("JWT_SECRET_KEY_FILE")
-    if secret_file:
-        try:
-            with open(secret_file, "r") as f:
-                return f.read().strip()
-        except Exception as e:
-            raise RuntimeError(f"Failed to read JWT_SECRET_KEY_FILE: {e}")
-    return os.getenv("JWT_SECRET_KEY", "super-secret")
-
-jwt_secret = get_jwt_secret()
+jwt_secret = get_secret("JWT_SECRET_KEY", "super-secret")
 
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 app.config["MAX_CONTENT_LENGTH"] = 32 * 1000 * 1000  # 32MB max upload
@@ -146,7 +147,7 @@ app.config["JWT_REFRESH_TOKEN_EXPIRES"] = JWT_REFRESH_TOKEN_EXPIRES
 if COLLECT_METRICS:
     # BASIC_AUTH
     app.config["BASIC_AUTH_USERNAME"] = os.getenv("METRICS_USER", "kitchenowl")
-    app.config["BASIC_AUTH_PASSWORD"] = os.getenv("METRICS_PASSWORD", "ZqQtidgC5n3YXb")
+    app.config["BASIC_AUTH_PASSWORD"] = get_secret("METRICS_PASSWORD", "ZqQtidgC5n3YXb")
 
 convention = {
     "ix": "ix_%(column_0_label)s",

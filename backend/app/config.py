@@ -31,6 +31,7 @@ from flask_apscheduler import APScheduler
 import sqlite_icu
 import os
 
+
 def get_secret(env_var: str, default: str = None) -> str | None:
     """Returns secret from file if *_FILE env var is set, otherwise from the env var itself."""
     file_path = os.getenv(f"{env_var}_FILE")
@@ -56,6 +57,7 @@ ALLOWED_FILE_EXTENSIONS = {"txt", "pdf", "png", "jpg", "jpeg", "gif", "webp", "j
 FRONT_URL = os.getenv("FRONT_URL")
 
 PRIVACY_POLICY_URL = os.getenv("PRIVACY_POLICY_URL")
+TERMS_URL = os.getenv("TERMS_URL")
 OPEN_REGISTRATION = os.getenv("OPEN_REGISTRATION", "False").lower() == "true"
 DISABLE_USERNAME_PASSWORD_LOGIN = (
     os.getenv("DISABLE_USERNAME_PASSWORD_LOGIN", "False").lower() == "true"

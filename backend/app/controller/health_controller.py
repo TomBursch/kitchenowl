@@ -3,6 +3,7 @@ from app.config import (
     BACKEND_VERSION,
     MIN_FRONTEND_VERSION,
     PRIVACY_POLICY_URL,
+    TERMS_URL,
     OPEN_REGISTRATION,
     EMAIL_MANDATORY,
 )
@@ -21,6 +22,8 @@ def get_health():
     }
     if PRIVACY_POLICY_URL:
         info["privacy_policy"] = PRIVACY_POLICY_URL
+    if TERMS_URL:
+        info["terms"] = TERMS_URL
     if OPEN_REGISTRATION:
         info["open_registration"] = True
     if EMAIL_MANDATORY:

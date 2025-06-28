@@ -319,6 +319,10 @@
       "privacyPolicy": {
         "example": "Privacy Policy",
         "type": "String"
+      },
+      "terms": {
+        "example": "Terms & Conditions",
+        "type": "String"
       }
     }
   },
@@ -351,7 +355,14 @@
   "@recipeEdit": {},
   "@recipeEmpty": {},
   "@recipeEmptySearch": {},
-  "@recipeGoToInHousehold": {},
+  "@recipeGoToInHousehold": {
+    "placeholders": {
+      "householdName": {
+        "example": "Home",
+        "type": "String"
+      }
+    }
+  },
   "@recipeImageSelect": {},
   "@recipeNew": {},
   "@recipes": {},
@@ -436,6 +447,7 @@
   "@tags": {},
   "@tagsPopular": {},
   "@tap": {},
+  "@terms": {},
   "@themeDark": {},
   "@themeLight": {},
   "@themeMode": {},
@@ -674,7 +686,7 @@
   "plannerTitle": "Your planned meals",
   "preparationTime": "Preparation time",
   "privacyPolicy": "Privacy policy",
-  "privacyPolicyAgree": "By creating an account you agree to our {privacyPolicy}",
+  "privacyPolicyAgree": "By creating an account you agree to our {privacyPolicy} and {terms}",
   "private": "Private",
   "privateRecipeDescription": "Only members of the household can view the recipe.",
   "profile": "Profile",
@@ -748,6 +760,7 @@
   "tags": "Tags",
   "tagsPopular": "Popular tags",
   "tap": "Tap",
+  "terms": "Terms & Conditions",
   "themeDark": "Dark",
   "themeLight": "Light",
   "themeMode": "Theme",

@@ -53,6 +53,11 @@ class _SettingsPageState extends State<SettingsPage> {
             "https://kitchenowl.org/privacy"
         : "https://kitchenowl.org/privacy";
 
+    final String termsUrl = (App.serverInfo is ConnectedServerInfoState)
+        ? (App.serverInfo as ConnectedServerInfoState).termsUrl ??
+            "https://kitchenowl.org/terms"
+        : "https://kitchenowl.org/terms";
+
     final body = CustomScrollView(
       primary: true,
       slivers: [
@@ -546,6 +551,11 @@ class _SettingsPageState extends State<SettingsPage> {
                   ),
                 ),
               ListTile(
+                title: Text(AppLocalizations.of(context)!.terms),
+                leading: const Icon(Icons.attach_file_rounded),
+                onTap: () => openUrl(context, termsUrl),
+              ),
+              ListTile(
                 title: Text(AppLocalizations.of(context)!.privacyPolicy),
                 leading: const Icon(Icons.privacy_tip_rounded),
                 onTap: () => openUrl(context, privacyPolicyUrl),
@@ -557,7 +567,8 @@ class _SettingsPageState extends State<SettingsPage> {
                 onTap: () => showLicensePage(
                   context: context,
                   applicationVersion: Config.packageInfoSync?.version,
-                  applicationLegalese: '\u{a9} 2025 KitchenOwl',
+                  applicationLegalese:
+                      '\u{a9} 2025 KitchenOwl\nKitchenOwl is Free Software: You can use, study share and improve it at your will. Specifically you can redistribute and/or modify it under the terms of the AGPL-3.0 License.',
                 ),
               ),
               Center(

@@ -10,6 +10,7 @@ import 'package:kitchenowl/helpers/short_image_markdown_extension.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/models/recipe.dart';
+import 'package:kitchenowl/services/storage/storage.dart';
 import 'package:kitchenowl/widgets/kitchenowl_markdown_builder.dart';
 import 'package:markdown/markdown.dart' as md;
 import 'package:sliver_tools/sliver_tools.dart';
@@ -17,10 +18,12 @@ import 'package:wakelock_plus/wakelock_plus.dart';
 
 class RecipeCookingPage extends StatefulWidget {
   final Recipe recipe;
+  final double? initialTextScaleFactor;
 
   RecipeCookingPage({
     super.key,
     required this.recipe,
+    this.initialTextScaleFactor,
   });
 
   @override
@@ -29,12 +32,13 @@ class RecipeCookingPage extends StatefulWidget {
 
 class _RecipeCookingPageState extends State<RecipeCookingPage> {
   int step = 0;
-  double textScaleFactor = 1;
+  late double textScaleFactor;
 
   @override
   void initState() {
     super.initState();
     WakelockPlus.enable();
+    textScaleFactor = widget.initialTextScaleFactor ?? 1;
   }
 
   @override
@@ -118,6 +122,9 @@ class _RecipeCookingPageState extends State<RecipeCookingPage> {
                     onPressed: (textScaleFactor < 4)
                         ? () => setState(() {
                               textScaleFactor += 0.1;
+                              PreferenceStorage.getInstance().writeDouble(
+                                  key: "recipeCookingPageTextScaleFactor",
+                                  value: textScaleFactor);
                             })
                         : null,
                     icon: Icon(Icons.text_increase_rounded),
@@ -126,6 +133,9 @@ class _RecipeCookingPageState extends State<RecipeCookingPage> {
                     onPressed: (textScaleFactor > 0.8)
                         ? () => setState(() {
                               textScaleFactor -= 0.1;
+                              PreferenceStorage.getInstance().writeDouble(
+                                  key: "recipeCookingPageTextScaleFactor",
+                                  value: textScaleFactor);
                             })
                         : null,
                     icon: Icon(Icons.text_decrease_rounded),

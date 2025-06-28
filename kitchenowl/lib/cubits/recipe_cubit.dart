@@ -1,5 +1,7 @@
+import 'package:collection/collection.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kitchenowl/app.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/models/item.dart';
@@ -69,12 +71,29 @@ class RecipeCubit extends Cubit<RecipeState> {
       return;
     }
 
+    Recipe? inHouseholdRecipe;
+    if (state.household != null && recipe.householdId != state.household!.id) {
+      final allRecipes = await TransactionHandler.getInstance().runTransaction(
+        TransactionRecipeGetRecipes(household: state.household!),
+        forceOffline: true,
+      );
+      inHouseholdRecipe = allRecipes.firstWhereOrNull((r) {
+        if (r.source.trim().isEmpty) return false;
+        final match = RegExp(
+                """(kitchenowl:\/\/|${App.currentServer})\/recipe\/${recipe.id}""")
+            .matchAsPrefix(r.source.trim());
+
+        return match != null;
+      });
+    }
+
     emit(RecipeState(
       recipe: recipe,
       updateState: state.updateState,
       selectedYields: state.selectedYields ?? recipe.yields,
       shoppingLists: shoppingLists != null ? await shoppingLists : const [],
       household: (await household) ?? state.household,
+      inHouseholdRecipe: inHouseholdRecipe,
     ));
   }
 
@@ -136,6 +155,7 @@ final class RecipeState extends Equatable {
   final UpdateEnum updateState;
   final List<ShoppingList> shoppingLists;
   final Household? household;
+  final Recipe? inHouseholdRecipe;
 
   RecipeState.custom({
     required this.recipe,
@@ -144,6 +164,7 @@ final class RecipeState extends Equatable {
     this.updateState = UpdateEnum.unchanged,
     this.shoppingLists = const [],
     this.household,
+    this.inHouseholdRecipe,
   }) : dynamicRecipe = recipe.withYields(selectedYields);
 
   RecipeState({
@@ -152,6 +173,7 @@ final class RecipeState extends Equatable {
     int? selectedYields,
     this.shoppingLists = const [],
     this.household,
+    this.inHouseholdRecipe,
   })  : selectedYields = selectedYields,
         dynamicRecipe = recipe.withYields(selectedYields),
         selectedItems =
@@ -164,6 +186,7 @@ final class RecipeState extends Equatable {
     UpdateEnum? updateState,
     List<ShoppingList>? shoppingLists,
     Household? household,
+    Recipe? inHouseholdRecipe,
   }) =>
       RecipeState.custom(
         recipe: recipe ?? this.recipe,
@@ -172,6 +195,7 @@ final class RecipeState extends Equatable {
         shoppingLists: shoppingLists ?? this.shoppingLists,
         updateState: updateState ?? this.updateState,
         household: household ?? this.household,
+        inHouseholdRecipe: inHouseholdRecipe ?? this.inHouseholdRecipe,
       );
 
   @override
@@ -183,9 +207,10 @@ final class RecipeState extends Equatable {
         shoppingLists,
         updateState,
         household,
+        inHouseholdRecipe,
       ];
 
-  bool isOwningHousehold(RecipeState state) =>
+  bool get isOwningHousehold =>
       household != null && recipe.householdId == household!.id;
 }
 

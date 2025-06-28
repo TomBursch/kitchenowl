@@ -14,6 +14,7 @@ import 'package:kitchenowl/pages/recipe_add_update_page.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/pages/recipe_cooking_page.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
+import 'package:kitchenowl/services/storage/storage.dart';
 import 'package:kitchenowl/widgets/recipe_markdown_body.dart';
 import 'package:kitchenowl/widgets/recipe_source_chip.dart';
 import 'package:kitchenowl/widgets/report_dialog.dart';
@@ -488,12 +489,19 @@ class _RecipePageState extends State<RecipePage> {
                                       isCollapsed
                                   ? LoadingIconButtonVariant.standard
                                   : LoadingIconButtonVariant.filledTonal,
-                              onPressed: () =>
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => RecipeCookingPage(
-                                  recipe: state.dynamicRecipe,
-                                ),
-                              )),
+                              onPressed: () async {
+                                final textScaleFactor = await PreferenceStorage
+                                        .getInstance()
+                                    .readDouble(
+                                        key:
+                                            "recipeCookingPageTextScaleFactor");
+                                Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => RecipeCookingPage(
+                                    recipe: state.dynamicRecipe,
+                                    initialTextScaleFactor: textScaleFactor,
+                                  ),
+                                ));
+                              },
                               icon: const Icon(Icons.soup_kitchen_rounded),
                             ),
                           ),

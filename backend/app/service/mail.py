@@ -4,9 +4,8 @@ import os
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email.utils import formatdate
-from app.config import app, FRONT_URL
+from app.config import app, get_secret, FRONT_URL
 from app.models import User
-from app.config import get_secret
 
 SMTP_HOST = os.getenv("SMTP_HOST") 
 SMTP_PORT = int(os.getenv("SMTP_PORT", 465))

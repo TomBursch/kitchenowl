@@ -5,7 +5,8 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-    "apispec>=6.8.1",
+    "apispec[marshmallow]>=6.8.1",
+    "apispec-webframeworks>=1.2.0",
     "apscheduler>=3.11.0",
     "blurhash-python>=1.2.2",
     "flask>=3.1.0",

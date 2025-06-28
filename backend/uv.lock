@@ -135,6 +135,26 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/f7/86/a2e7e0f6e9a82023108f52014eab389b184a06da486139fc5436d50b08d0/apispec-6.8.2-py3-none-any.whl", hash = "sha256:43c52ab6aa7d4056c1dfc6c81310c659b29f4db5858b3b4351819b77d3a1afff", size = 30508, upload-time = "2025-05-12T14:57:49.546Z" },
 ]
 
+[package.optional-dependencies]
+marshmallow = [
+    { name = "marshmallow" },
+]
+yaml = [
+    { name = "pyyaml" },
+]
+
+[[package]]
+name = "apispec-webframeworks"
+version = "1.2.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "apispec", extra = ["yaml"] },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/f9/1f/8d98328269a2507b6cfe37e8a70725d168626615865dc7aec30e8720c495/apispec_webframeworks-1.2.0.tar.gz", hash = "sha256:5689288c266a2713c2f516eacc14ea2fec9b21f193edc8f659c770342b97fd81", size = 10837, upload-time = "2024-09-16T19:01:18.051Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/71/2c/5aa396a3bca60de3b3f419ea770b8087d52aac5221bf15ddcd9b48d61d3c/apispec_webframeworks-1.2.0-py3-none-any.whl", hash = "sha256:68aea0d1eeb3caeeacc7d6772a48c59c8b60b1a88d0bd51529d94597ccf33116", size = 9119, upload-time = "2024-09-16T19:01:16.402Z" },
+]
+
 [[package]]
 name = "apscheduler"
 version = "3.11.0"
@@ -1189,7 +1209,8 @@ name = "kitchenowl-backend"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
-    { name = "apispec" },
+    { name = "apispec", extra = ["marshmallow"] },
+    { name = "apispec-webframeworks" },
     { name = "apscheduler" },
     { name = "blurhash-python" },
     { name = "celery" },
@@ -1238,7 +1259,8 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "apispec", specifier = ">=6.8.1" },
+    { name = "apispec", extras = ["marshmallow"], specifier = ">=6.8.1" },
+    { name = "apispec-webframeworks", specifier = ">=1.2.0" },
     { name = "apscheduler", specifier = ">=3.11.0" },
     { name = "blurhash-python", specifier = ">=1.2.2" },
     { name = "celery", specifier = ">=5.4.0" },

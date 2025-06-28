@@ -6,6 +6,7 @@ from sqlalchemy.engine import URL
 from sqlalchemy.event import listen
 from apispec import APISpec
 from apispec.ext.marshmallow import MarshmallowPlugin
+from apispec_webframeworks.flask import FlaskPlugin
 from prometheus_client import multiprocess
 from prometheus_client.core import CollectorRegistry
 from prometheus_flask_exporter import PrometheusMetrics
@@ -198,8 +199,15 @@ api_spec = APISpec(
         "description": "Find more info at the official documentation",
         "url": "https://docs.kitchenowl.org",
     },
-    plugins=[MarshmallowPlugin()],
+    plugins=[FlaskPlugin(), MarshmallowPlugin()],
 )
+api_spec.components.security_scheme(
+    "bearerAuth", {"type": "http", "scheme": "bearer", "bearerFormat": "JWT"}
+)
+api_spec.components.security_scheme(
+    "bearerRefreshToken", {"type": "http", "scheme": "bearer", "bearerFormat": "JWT"}
+)
+
 oidc_clients: dict[str, Client] = {}
 if FRONT_URL:
     if OIDC_CLIENT_ID and OIDC_CLIENT_SECRET and OIDC_ISSUER:

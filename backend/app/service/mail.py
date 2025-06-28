@@ -6,14 +6,15 @@ from email.mime.multipart import MIMEMultipart
 from email.utils import formatdate
 from app.config import app, FRONT_URL
 from app.models import User
+from app.config import get_secret
 
-SMTP_HOST = os.getenv("SMTP_HOST")
+SMTP_HOST = os.getenv("SMTP_HOST") 
 SMTP_PORT = int(os.getenv("SMTP_PORT", 465))
 SMTP_USE_TLS = (
     os.getenv("SMTP_USE_TLS", "true" if SMTP_PORT == 587 else "false").lower() == "true"
 )
-SMTP_USER = os.getenv("SMTP_USER")
-SMTP_PASS = os.getenv("SMTP_PASS")
+SMTP_USER = get_secret("SMTP_USER")
+SMTP_PASS = get_secret("SMTP_PASS")
 SMTP_FROM = os.getenv("SMTP_FROM")
 SMTP_REPLY_TO = os.getenv("SMTP_REPLY_TO")
 

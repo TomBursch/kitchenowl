@@ -975,7 +975,7 @@ Additionally, the releases are tagged, so you can always choose a specific versi
 <tr>
 <td><code>JWT_SECRET_KEY_FILE</code></td>
 <td></td>
-<td>Reads the JWT secret from the specified file. Should be a path to a file</td>
+<td>Reads the JWT secret from the specified file. Should be a path to a file (will override JWT_SECRET_KEY)</td>
 </tr>
 <tr>
 <td><code>FRONT_URL</code></td>
@@ -1023,6 +1023,11 @@ Additionally, the releases are tagged, so you can always choose a specific versi
 <td>Metrics basic auth password</td>
 </tr>
 <tr>
+<td><code>METRICS_PASSWORD_FILE</code></td>
+<td></td>
+<td>Allows setting METRICS_PASSWORD from a file path, will override METRICS_PASSWORD</td>
+</tr>
+<tr>
 <td><code>SKIP_UPGRADE_DEFAULT_ITEMS</code></td>
 <td><code>false</code></td>
 <td>On every restart all default items are imported and updated in every household</td>
@@ -1058,9 +1063,19 @@ Additionally, the releases are tagged, so you can always choose a specific versi
 <td></td>
 </tr>
 <tr>
+<td><code>DB_USER_FILE</code></td>
+<td></td>
+<td>Allows setting DB_USER from a file path, will override DB_USER</td>
+</tr>
+<tr>
 <td><code>DB_PASSWORD</code></td>
 <td></td>
 <td></td>
+</tr>
+<tr>
+<td><code>DB_PASSWORD_FILE</code></td>
+<td></td>
+<td>Allows setting DB_PASSWORD from a file path, will override DB_PASSWORD</td>
 </tr>
 <tr>
 <td><code>SMTP_HOST</code></td>
@@ -1083,9 +1098,19 @@ Additionally, the releases are tagged, so you can always choose a specific versi
 <td></td>
 </tr>
 <tr>
+<td><code>SMTP_USER_FILE</code></td>
+<td></td>
+<td>Allows setting SMTP_USER from a file path, will override SMTP_USER</td>
+</tr>
+<tr>
 <td><code>SMTP_PASS</code></td>
 <td></td>
 <td></td>
+</tr>
+<tr>
+<td><code>SMTP_PASS_FILE</code></td>
+<td></td>
+<td>Allows setting SMTP_PASS from a file path, will override SMTP_PASS</td>
 </tr>
 <tr>
 <td><code>SMTP_FROM</code></td>
@@ -1113,6 +1138,11 @@ Additionally, the releases are tagged, so you can always choose a specific versi
 <td></td>
 </tr>
 <tr>
+<td><code>OIDC_CLIENT_SECRET_FILE</code></td>
+<td></td>
+<td>Allows setting OIDC_CLIENT_SECRET from a file path, will override OIDC_CLIENT_SECRET</td>
+</tr>
+<tr>
 <td><code>APPLE_CLIENT_ID</code></td>
 <td></td>
 <td></td>
@@ -1123,6 +1153,11 @@ Additionally, the releases are tagged, so you can always choose a specific versi
 <td></td>
 </tr>
 <tr>
+<td><code>APPLE_CLIENT_SECRET_FILE</code></td>
+<td></td>
+<td>Allows setting APPLE_CLIENT_SECRET from a file path, will override APPLE_CLIENT_SECRET</td>
+</tr>
+<tr>
 <td><code>GOOGLE_CLIENT_ID</code></td>
 <td></td>
 <td></td>
@@ -1131,6 +1166,11 @@ Additionally, the releases are tagged, so you can always choose a specific versi
 <td><code>GOOGLE_CLIENT_SECRET</code></td>
 <td></td>
 <td></td>
+</tr>
+<tr>
+<td><code>GOOGLE_CLIENT_SECRET_FILE</code></td>
+<td></td>
+<td>Allows setting GOOGLE_CLIENT_SECRET from a file path, will override GOOGLE_CLIENT_SECRET</td>
 </tr>
 <tr>
 <td><code>LLM_MODEL</code></td>

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fraction/fraction.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kitchenowl/app.dart';
 import 'package:kitchenowl/cubits/auth_cubit.dart';
@@ -159,9 +160,7 @@ class _RecipePageState extends State<RecipePage> {
                         Divider(),
                         const SizedBox(height: 16),
                       ],
-                      RecipeMarkdownBody(
-                        recipe: state.recipe,
-                      ),
+                      RecipeMarkdownBody(recipe: state.recipe),
                     ],
                   ),
                 ),
@@ -499,6 +498,14 @@ class _RecipePageState extends State<RecipePage> {
                                   builder: (context) => RecipeCookingPage(
                                     recipe: state.dynamicRecipe,
                                     initialTextScaleFactor: textScaleFactor,
+                                    recipeScaleFactor:
+                                        state.selectedYields != null &&
+                                                state.recipe.yields > 0 &&
+                                                state.recipe.yields !=
+                                                    state.selectedYields
+                                            ? Fraction(state.selectedYields!,
+                                                state.recipe.yields)
+                                            : null,
                                   ),
                                 ));
                               },

@@ -26,12 +26,17 @@ def getUserHouseholds():
 
 @household.route("/<int:household_id>", methods=["GET"])
 @jwt_required()
-@authorize_household()
 def getHousehold(household_id):
     household = Household.find_by_id(household_id)
     if not household:
         raise NotFoundRequest()
-    return jsonify(household.obj_to_dict())
+
+    if current_user:
+        member = HouseholdMember.find_by_ids(household_id, current_user.id)
+        if member:
+            return jsonify(household.obj_to_dict())
+
+    return jsonify(household.obj_to_public_dict())
 
 
 @household.route("", methods=["POST"])

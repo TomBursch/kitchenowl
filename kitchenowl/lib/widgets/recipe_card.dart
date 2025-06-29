@@ -7,6 +7,7 @@ import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/models/recipe.dart';
+import 'package:kitchenowl/services/storage/storage.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:tuple/tuple.dart';
@@ -45,18 +46,36 @@ class RecipeCard extends StatelessWidget {
         child: InkWell(
           onTap: onPressed ??
               () async {
+                String query = "?showHousehold=${showHousehold}";
                 final household =
                     context.read<HouseholdCubit?>()?.state.household;
                 if (household == null) {
                   debugPrint(
                       "RecipeCard onTap called without a Household context");
-                  return;
+                  final lastHousehold =
+                      await PreferenceStorage.getInstance().readInt(
+                    key: 'lastHouseholdId',
+                  );
+                  if (lastHousehold == null) {
+                    context.push<UpdateEnum>(
+                      "/recipe/${recipe.id}${query}",
+                      extra: recipe,
+                    );
+                  } else {
+                    final res = await context.push<UpdateEnum>(
+                      "/household/${lastHousehold}/recipes/details/${recipe.id}${query}",
+                      extra: Tuple2<Household, Recipe>(
+                          Household(id: lastHousehold), recipe),
+                    );
+                    _handleUpdate(res);
+                  }
+                } else {
+                  final res = await context.push<UpdateEnum>(
+                    "/household/${household.id}/recipes/details/${recipe.id}${query}",
+                    extra: Tuple2<Household, Recipe>(household, recipe),
+                  );
+                  _handleUpdate(res);
                 }
-                final res = await context.push<UpdateEnum>(
-                  "/household/${household.id}/recipes/details/${recipe.id}",
-                  extra: Tuple2<Household, Recipe>(household, recipe),
-                );
-                _handleUpdate(res);
               },
           onLongPress: onLongPressed,
           child: Column(
@@ -189,7 +208,7 @@ class RecipeCard extends StatelessWidget {
                             ),
                             if (recipe.household!.verified)
                               Icon(
-                                Icons.check_circle_outline_rounded,
+                                Icons.verified_rounded,
                                 color: Theme.of(context).colorScheme.primary,
                               ),
                           ],

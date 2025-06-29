@@ -29,6 +29,7 @@ class RecipePage extends StatefulWidget {
   final Recipe recipe;
   final bool updateOnPlanningEdit;
   final int? selectedYields;
+  final bool showHousehold;
 
   const RecipePage({
     super.key,
@@ -36,6 +37,7 @@ class RecipePage extends StatefulWidget {
     this.household,
     this.updateOnPlanningEdit = false,
     this.selectedYields,
+    this.showHousehold = true,
   });
 
   @override
@@ -133,15 +135,24 @@ class _RecipePageState extends State<RecipePage> {
                         ),
                       if (state.recipe.prepTime + state.recipe.cookTime > 0)
                         const SizedBox(height: 16),
-                      if (!state.isOwningHousehold &&
-                          state.recipe.household != null) ...[
-                        Row(
+                    ],
+                  ),
+                ),
+              ),
+              if (widget.showHousehold &&
+                  BlocProvider.of<AuthCubit>(context).getUser() != null &&
+                  !state.isOwningHousehold &&
+                  state.recipe.household != null)
+                SliverList(
+                  delegate: SliverChildListDelegate(
+                    [
+                      ListTile(
+                        leading: HouseholdCircleAvatar(
+                          household: state.recipe.household!,
+                          radius: 16,
+                        ),
+                        title: Row(
                           children: [
-                            HouseholdCircleAvatar(
-                              household: state.recipe.household!,
-                              radius: 16,
-                            ),
-                            const SizedBox(width: 8),
                             Flexible(
                               child: Text(
                                 state.recipe.household!.name,
@@ -152,17 +163,33 @@ class _RecipePageState extends State<RecipePage> {
                             const SizedBox(width: 8),
                             if (state.recipe.household!.verified)
                               Icon(
-                                Icons.check_circle_outline_rounded,
+                                Icons.verified_rounded,
                                 color: Theme.of(context).colorScheme.primary,
                               ),
                           ],
                         ),
-                        Divider(),
-                        const SizedBox(height: 16),
-                      ],
-                      RecipeMarkdownBody(recipe: state.recipe),
+                        subtitle: state.recipe.household!.description != null
+                            ? Text(
+                                state.recipe.household!.description!,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              )
+                            : null,
+                        trailing: const Icon(Icons.arrow_forward_ios_rounded),
+                        onTap: () => context.push(
+                          "/household/about/${state.recipe.household!.id}",
+                          extra: state.recipe.household!,
+                        ),
+                      ),
+                      Divider(),
+                      const SizedBox(height: 16),
                     ],
                   ),
+                ),
+              SliverPadding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                sliver: SliverToBoxAdapter(
+                  child: RecipeMarkdownBody(recipe: state.recipe),
                 ),
               ),
             ];

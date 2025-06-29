@@ -34,6 +34,25 @@ def getAllRecipes(household_id):
     )
 
 
+@recipeHousehold.route("/newest/<int:page>", methods=["GET"])
+@jwt_required()
+def getNewesetPublicRecipesOfHousehold(household_id, page):
+    return jsonify(
+        [
+            e.obj_to_public_dict()
+            for e in Recipe.query.join(Recipe.household)
+            .filter(
+                Recipe.household_id == household_id,
+                Recipe.visibility == RecipeVisibility.PUBLIC,
+            )
+            .order_by(desc(Recipe.id))
+            .offset(page * 10)
+            .limit(10)
+            .all()
+        ]
+    )
+
+
 @recipe.route("/<int:id>", methods=["GET"])
 @jwt_required(optional=True)
 def getRecipeById(id):

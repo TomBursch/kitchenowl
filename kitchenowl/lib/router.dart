@@ -15,6 +15,7 @@ import 'package:kitchenowl/pages/expense_overview_page.dart';
 import 'package:kitchenowl/pages/expense_page.dart';
 import 'package:kitchenowl/pages/household_page/_export.dart';
 import 'package:kitchenowl/pages/household_list_page.dart';
+import 'package:kitchenowl/pages/household_about_page.dart';
 import 'package:kitchenowl/pages/login_page.dart';
 import 'package:kitchenowl/pages/login_redirect_page.dart';
 import 'package:kitchenowl/pages/onboarding_page.dart';
@@ -196,19 +197,36 @@ final router = GoRouter(
       ),
     ),
     GoRoute(
-        path: "/household",
-        pageBuilder: (context, state) => SharedAxisTransitionPage(
-              key: state.pageKey,
-              name: state.name,
-              transitionType: SharedAxisTransitionType.scaled,
-              child: const HouseholdListPage(),
-            ),
-        redirect: (context, state) {
+      path: "/household",
+      pageBuilder: (context, state) => SharedAxisTransitionPage(
+        key: state.pageKey,
+        name: state.name,
+        transitionType: SharedAxisTransitionType.scaled,
+        child: const HouseholdListPage(),
+      ),
+      redirect: (context, state) {
+        if (state.fullPath == "/household") {
           PreferenceStorage.getInstance().delete(
             key: 'lastHouseholdId',
           );
-          return null;
-        }),
+        }
+        return null;
+      },
+      routes: [
+        GoRoute(
+          path: '/about/:id',
+          builder: (context, state) => HouseholdAboutPage(
+            key: ValueKey(state.pathParameters['id']),
+            household: (state.extra as Household?) ??
+                Household(
+                  id: int.parse(
+                    state.pathParameters['id'] ?? '',
+                  ),
+                ),
+          ),
+        ),
+      ],
+    ),
     ShellRoute(
       builder: (context, state, child) => HouseholdPage(
         key: ValueKey(state.pathParameters['id']),
@@ -282,6 +300,9 @@ final router = GoRouter(
                       selectedYields: int.tryParse(
                         state.uri.queryParameters['selectedYields'] ?? "",
                       ),
+                      showHousehold:
+                          state.uri.queryParameters['showHousehold'] !=
+                              false.toString(),
                     );
                   },
                 ),
@@ -380,6 +401,8 @@ final router = GoRouter(
         selectedYields: int.tryParse(
           state.uri.queryParameters['selectedYields'] ?? "",
         ),
+        showHousehold:
+            state.uri.queryParameters['showHousehold'] != false.toString(),
       ),
     ),
     GoRoute(

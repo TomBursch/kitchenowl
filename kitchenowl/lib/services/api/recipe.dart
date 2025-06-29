@@ -128,6 +128,16 @@ extension RecipeApi on ApiService {
     return body.map((e) => Recipe.fromJson(e)).toList();
   }
 
+  Future<List<Recipe>?> getNewestRecipesOfHousehold(
+      Household household, int page) async {
+    final res =
+        await get("${householdPath(household)}$baseRoute/newest/$page?");
+    if (res.statusCode != 200) return null;
+
+    final body = jsonDecode(res.body);
+    return (body as List<dynamic>).map((e) => Recipe.fromJson(e)).toList();
+  }
+
   Future<RecipeDiscover?> discoverRecipes(String? language) async {
     final res = await get("$baseRoute/discover?" +
         (language != null ? "language=" + language : ""));

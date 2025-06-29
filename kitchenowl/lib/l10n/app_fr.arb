@@ -10,14 +10,6 @@
   "@add": {},
   "@addCategory": {},
   "@addDescriptionFromSource": {},
-  "@addedBy": {
-    "placeholders": {
-      "name": {
-        "example": "Tom",
-        "type": "String"
-      }
-    }
-  },
   "@addItemTitle": {},
   "@addLanguage": {},
   "@addLanguageConfirm": {
@@ -45,15 +37,24 @@
     }
   },
   "@addRecipeToPlannerShort": {},
-  "@address": {},
   "@addShoppingList": {},
   "@addTag": {},
+  "@addedBy": {
+    "placeholders": {
+      "name": {
+        "example": "Tom",
+        "type": "String"
+      }
+    }
+  },
+  "@address": {},
   "@admin": {},
   "@analysingWebsite": {},
   "@appDescription": {},
   "@appTitle": {
     "description": "The title of the app"
   },
+  "@automaticIngredientDetection": {},
   "@back": {},
   "@balances": {},
   "@budget": {},
@@ -95,6 +96,7 @@
   "@defaultWord": {},
   "@delete": {},
   "@description": {},
+  "@discover": {},
   "@done": {},
   "@dynamicAccentColor": {},
   "@email": {},
@@ -172,8 +174,8 @@
     }
   },
   "@householdNew": {},
-  "@households": {},
   "@householdSwitch": {},
+  "@households": {},
   "@icon": {},
   "@imageSelect": {},
   "@import": {},
@@ -191,9 +193,9 @@
     }
   },
   "@itemRemoveInteraction": {},
+  "@itemSize": {},
   "@items": {},
   "@itemsAdd": {},
-  "@itemSize": {},
   "@itemsMerge": {},
   "@itemsMergeConfirmation": {
     "placeholders": {
@@ -216,6 +218,9 @@
   "@link": {
     "description": "As in link social account (e.g. Google)"
   },
+  "@linkNoun": {
+    "description": "The noun, as in share using a link (URL)"
+  },
   "@linkRecipeDescription": {},
   "@list": {},
   "@lltCreate": {},
@@ -229,11 +234,12 @@
     }
   },
   "@lltNotShownAgain": {},
-  "@llts": {},
   "@lltWarningContent": {},
   "@lltWarningTitle": {},
+  "@llts": {},
   "@login": {},
   "@loginTo": {},
+  "@loginToAddToShoppingList": {},
   "@logout": {},
   "@logoutName": {
     "placeholders": {
@@ -243,8 +249,8 @@
       }
     }
   },
-  "@longerThanExpected": {},
   "@longPressToReorder": {},
+  "@longerThanExpected": {},
   "@markAsPaid": {},
   "@mealPlanner": {},
   "@member": {},
@@ -258,8 +264,8 @@
   "@more": {},
   "@name": {},
   "@next": {},
-  "@none": {},
   "@noTags": {},
+  "@none": {},
   "@now": {},
   "@offlineMessage": {},
   "@okay": {},
@@ -291,6 +297,7 @@
     }
   },
   "@pageNotFound": {},
+  "@parent": {},
   "@password": {},
   "@passwordFieldTooShort": {},
   "@passwordForgot": {},
@@ -341,8 +348,8 @@
   "@recipeEmptySearch": {},
   "@recipeImageSelect": {},
   "@recipeNew": {},
-  "@recipes": {},
   "@recipeSource": {},
+  "@recipes": {},
   "@recipesOverwrite": {},
   "@recipesOverwriteDescription": {},
   "@recipesRecent": {},
@@ -382,8 +389,8 @@
   },
   "@shoppingListEdit": {},
   "@shoppingListEmpty": {},
-  "@shoppingLists": {},
   "@shoppingListStyle": {},
+  "@shoppingLists": {},
   "@signInWith": {
     "placeholders": {
       "provider": {
@@ -457,12 +464,12 @@
       }
     }
   },
+  "@userNotSignedIn": {},
+  "@userSearchHint": {},
   "@username": {},
   "@usernameInvalid": {},
   "@usernameUnavailable": {},
-  "@userNotSignedIn": {},
   "@users": {},
-  "@userSearchHint": {},
   "@weekly": {},
   "@welcomeBack": {},
   "@writeMarkdownHere": {},
@@ -483,20 +490,21 @@
   "add": "Ajouter",
   "addCategory": "Ajouter une catégorie",
   "addDescriptionFromSource": "Ajouter une description à partir d'une source",
-  "addedBy": "Ajouté par {name}",
   "addItemTitle": "Ajouter des éléments",
   "addLanguage": "Ajouter une langue",
   "addLanguageConfirm": "Êtes-vous sûr·e de vouloir définir la langue comme '{lang}' ? Cette opération ne peut être annulée et ajoutera des articles et des catégories à votre ménage.",
   "addNumberIngredients": "Ajouter {number} ingrédient(s)",
   "addRecipeToPlanner": "Ajouter au planning de repas ({number} portions)",
   "addRecipeToPlannerShort": "Ajouter au plan de repas",
-  "address": "Adresse",
   "addShoppingList": "Ajouter une liste de courses",
   "addTag": "Ajouter une étiquette",
+  "addedBy": "Ajouté par {name}",
+  "address": "Adresse",
   "admin": "Administrateur",
   "analysingWebsite": "Analyse du site web...",
   "appDescription": "KitchenOwl vous aide à organiser votre épicerie.",
   "appTitle": "KitchenOwl",
+  "automaticIngredientDetection": "Détecte automatiquement les ingrédients dans la description d'une recette",
   "back": "Retour",
   "balances": "Soldes",
   "budget": "Budget",
@@ -524,6 +532,7 @@
   "defaultWord": "Par défaut",
   "delete": "Supprimer",
   "description": "Description",
+  "discover": "Découvrir",
   "done": "Terminé",
   "dynamicAccentColor": "Couleur d'accentuation dynamique",
   "email": "Courriel",
@@ -566,8 +575,8 @@
   "householdLeave": "Quitter le ménage",
   "householdLeaveConfirmation": "Voulez-vous vraiment quitter {household} ?",
   "householdNew": "Nouveau ménage",
-  "households": "Ménages",
   "householdSwitch": "Changer de ménage",
+  "households": "Ménages",
   "icon": "Icône",
   "imageSelect": "Sélectionner une image",
   "import": "Import",
@@ -578,9 +587,9 @@
   "itemDelete": "Supprimer l'élément",
   "itemDeleteConfirmation": "Êtes-vous sûr·e de vouloir supprimer {item} ? Ceci supprimera l'élément de toute recette qui le contient.",
   "itemRemoveInteraction": "Supprimer l'interaction de l'élément",
+  "itemSize": "Taille de l'élément",
   "items": "Éléments",
   "itemsAdd": "Ajouter des éléments",
-  "itemSize": "Taille de l'élément",
   "itemsMerge": "Fusionner les éléments",
   "itemsMergeConfirmation": "Êtes-vous sûr·e de vouloir fusionner {item} et {other} ? Ceci ne peut pas être annulé.",
   "itemsOptional": "Éléments facultatifs",
@@ -590,21 +599,23 @@
   "larger": "Plus grand",
   "lastUsed": "Dernière utilisation",
   "link": "Lien",
+  "linkNoun": "Lien",
   "linkRecipeDescription": "N'importe qui avec le lien à cette recette peut le voir.",
   "list": "Liste",
   "lltCreate": "Créer un jeton à longue durée de vie",
   "lltDelete": "Supprimer le jeton à longue durée de vie",
   "lltDeleteConfirmation": "Êtes-vous sûr·e de vouloir supprimer le jeton à longue durée de vie '{token}' ? Cette opération ne peut pas être annulée.",
   "lltNotShownAgain": "Enregistrez le jeton ; vous ne pourrez plus le revoir",
-  "llts": "Jetons à longue durée de vie",
   "lltWarningContent": "Êtes-vous sûr·e de vouloir créer un jeton à longue durée de vie ? Ceci pourrait constituer un risque potentiel pour la sécurité. Le jeton n'expire pas et donne un accès complet à votre compte.",
   "lltWarningTitle": "Savez-vous ce que vous faites ?",
+  "llts": "Jetons à longue durée de vie",
   "login": "Se connecter",
   "loginTo": "Connexion à",
+  "loginToAddToShoppingList": "Connectez-vous pour ajouter cette recette à votre liste de courses",
   "logout": "Se déconnecter",
   "logoutName": "Déconnecter {name}",
-  "longerThanExpected": "La procédure prend plus de temps que prévu",
   "longPressToReorder": "Appui long pour réorganiser",
+  "longerThanExpected": "La procédure prend plus de temps que prévu",
   "markAsPaid": "Marqué comme payé",
   "mealPlanner": "Planificateur de repas",
   "member": "Membre",
@@ -618,8 +629,8 @@
   "more": "Plus",
   "name": "Nom",
   "next": "Suivant",
-  "none": "Aucun",
   "noTags": "Aucune étiquette",
+  "none": "Aucun",
   "now": "Maintenant",
   "offlineMessage": "Vous êtes hors ligne",
   "okay": "D'accord",
@@ -633,6 +644,7 @@
   "overview": "Aperçu",
   "owesAB": "{nameA} est débiteur de {nameB}",
   "pageNotFound": "Impossible de trouver cette page",
+  "parent": "Parent",
   "password": "Mot de passe",
   "passwordFieldTooShort": "Mot de passe trop court",
   "passwordForgot": "Mot de passe oublié ?",
@@ -662,8 +674,8 @@
   "recipeEmptySearch": "Aucune recette trouvée :(",
   "recipeImageSelect": "Sélectionnez une image de recette",
   "recipeNew": "Nouvelle recette",
-  "recipes": "Recettes",
   "recipeSource": "Source de la recette",
+  "recipes": "Recettes",
   "recipesOverwrite": "Écraser les recettes",
   "recipesOverwriteDescription": "Si activé, les recettes existantes avec le même nom seront écrasées",
   "recipesRecent": "Récentes",
@@ -690,8 +702,8 @@
   "shoppingListDeleteConfirmation": "Êtes-vous sûr·e de vouloir supprimer {shoppingList} ?",
   "shoppingListEdit": "Modifier la liste de courses",
   "shoppingListEmpty": "La liste d'achat est vide. Ajoute un article à l'aide de la function de recherche ci-dessus.",
-  "shoppingLists": "Listes de courses",
   "shoppingListStyle": "Style de liste de courses",
+  "shoppingLists": "Listes de courses",
   "signInWith": "Se connecter avec {provider}",
   "signup": "S'inscrire",
   "skip": "Passer",
@@ -735,12 +747,12 @@
   "userAdd": "Ajouter un utilisateur",
   "userDelete": "Supprimer l'utilisateur",
   "userDeleteConfirmation": "Êtes-vous sûr·e de vouloir supprimer {user} ?",
+  "userNotSignedIn": "Vous devez être connecté pour lier un compte",
+  "userSearchHint": "Écrivez un nom",
   "username": "Nom d'utilisateur",
   "usernameInvalid": "Le nom d'utilisateur ne peut pas contenir « @ »",
   "usernameUnavailable": "Le nom d'utilisateur n'est pas disponible",
-  "userNotSignedIn": "Vous devez être connecté pour lier un compte",
   "users": "Utilisateurs",
-  "userSearchHint": "Écrivez un nom",
   "weekly": "Hebdomadaire",
   "welcomeBack": "Content de vous revoir",
   "writeMarkdownHere": "Vous pouvez utiliser du markdown ici !",

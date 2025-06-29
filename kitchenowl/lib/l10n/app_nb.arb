@@ -10,14 +10,6 @@
   "@add": {},
   "@addCategory": {},
   "@addDescriptionFromSource": {},
-  "@addedBy": {
-    "placeholders": {
-      "name": {
-        "example": "Tom",
-        "type": "String"
-      }
-    }
-  },
   "@addItemTitle": {},
   "@addLanguage": {},
   "@addLanguageConfirm": {
@@ -45,9 +37,17 @@
     }
   },
   "@addRecipeToPlannerShort": {},
-  "@address": {},
   "@addShoppingList": {},
   "@addTag": {},
+  "@addedBy": {
+    "placeholders": {
+      "name": {
+        "example": "Tom",
+        "type": "String"
+      }
+    }
+  },
+  "@address": {},
   "@admin": {},
   "@appDescription": {},
   "@appTitle": {
@@ -170,8 +170,8 @@
     }
   },
   "@householdNew": {},
-  "@households": {},
   "@householdSwitch": {},
+  "@households": {},
   "@icon": {},
   "@imageSelect": {},
   "@import": {},
@@ -189,9 +189,9 @@
     }
   },
   "@itemRemoveInteraction": {},
+  "@itemSize": {},
   "@items": {},
   "@itemsAdd": {},
-  "@itemSize": {},
   "@itemsMerge": {},
   "@itemsMergeConfirmation": {
     "placeholders": {
@@ -227,9 +227,9 @@
     }
   },
   "@lltNotShownAgain": {},
-  "@llts": {},
   "@lltWarningContent": {},
   "@lltWarningTitle": {},
+  "@llts": {},
   "@login": {},
   "@loginTo": {},
   "@logout": {},
@@ -255,8 +255,8 @@
   "@more": {},
   "@name": {},
   "@next": {},
-  "@none": {},
   "@noTags": {},
+  "@none": {},
   "@now": {},
   "@offlineMessage": {},
   "@okay": {},
@@ -338,8 +338,8 @@
   "@recipeEmptySearch": {},
   "@recipeImageSelect": {},
   "@recipeNew": {},
-  "@recipes": {},
   "@recipeSource": {},
+  "@recipes": {},
   "@recipesOverwrite": {},
   "@recipesOverwriteDescription": {},
   "@recipesRecent": {},
@@ -370,8 +370,8 @@
     }
   },
   "@shoppingListEdit": {},
-  "@shoppingLists": {},
   "@shoppingListStyle": {},
+  "@shoppingLists": {},
   "@signInWith": {
     "placeholders": {
       "provider": {
@@ -431,12 +431,12 @@
       }
     }
   },
+  "@userNotSignedIn": {},
+  "@userSearchHint": {},
   "@username": {},
   "@usernameInvalid": {},
   "@usernameUnavailable": {},
-  "@userNotSignedIn": {},
   "@users": {},
-  "@userSearchHint": {},
   "@weekly": {},
   "@welcomeBack": {},
   "@writeMarkdownHere": {},
@@ -456,16 +456,16 @@
   "add": "Legg til",
   "addCategory": "Legg til kategori",
   "addDescriptionFromSource": "Legg til beskrivelse fra kilde",
-  "addedBy": "Lagt til av {name}",
   "addItemTitle": "Legg til elementer",
   "addLanguage": "Legg til språk",
   "addLanguageConfirm": "Er du sikker på at du vil sette språket til '{lang}'? Dette kan ikke angres og vil legge til emner og kategorier til din husholdning.",
   "addNumberIngredients": "Legg til {number} ingredienser",
   "addRecipeToPlanner": "Legg til i måltidsplan ({number} serveringer)",
   "addRecipeToPlannerShort": "Legg til i måltidsplan",
-  "address": "Adresse",
   "addShoppingList": "Legg til i handleliste",
   "addTag": "Legg til etikett",
+  "addedBy": "Lagt til av {name}",
+  "address": "Adresse",
   "admin": "Administrator",
   "appDescription": "KitchenOwn hjelper deg å organisere dagligvarehandelen.",
   "appTitle": "KitchenOwl",
@@ -537,8 +537,8 @@
   "householdLeave": "Forlat husholdning",
   "householdLeaveConfirmation": "Er du sikker på at du vil forlate {household}?",
   "householdNew": "Ny husholdning",
-  "households": "Husholdninger",
   "householdSwitch": "Bytt husholdning",
+  "households": "Husholdninger",
   "icon": "Ikon",
   "imageSelect": "Velg et bilde",
   "import": "Importer",
@@ -549,9 +549,9 @@
   "itemDelete": "Slett element",
   "itemDeleteConfirmation": "Slett {item}? Dette vil fjerne elementet fra alle oppskrifter som inneholder det.",
   "itemRemoveInteraction": "Fjern interaksjon med element",
+  "itemSize": "Varens størrelse",
   "items": "Elementer",
   "itemsAdd": "Legg til elementer",
-  "itemSize": "Varens størrelse",
   "itemsMerge": "Slå sammen varene",
   "itemsMergeConfirmation": "Er du sikker på at du vil slå sammen {item} og {other}? Det kan ikke omgjøres.",
   "itemsOptional": "Alternative elementer",
@@ -567,9 +567,9 @@
   "lltDelete": "Slett symbol med lang holdbarhet",
   "lltDeleteConfirmation": "Slett symbolet «'{token}'»? Dette kan ikke angres.",
   "lltNotShownAgain": "Lagre symbolet. Det vil ikke bli vist igjen",
-  "llts": "Symboler med lang holdbarhet",
   "lltWarningContent": "Opprett symbol med lang holdbarhet? Dette kan potensielt være en sikkerhetsrisiko. Symbolet utløper ikke og gir full tilgang til kontoen din.",
   "lltWarningTitle": "Vet du hva du gjør?",
+  "llts": "Symboler med lang holdbarhet",
   "login": "Logg inn",
   "loginTo": "Logg inn på",
   "logout": "Logg ut",
@@ -588,8 +588,8 @@
   "more": "Mer",
   "name": "Navn",
   "next": "Neste",
-  "none": "Ingen",
   "noTags": "Ingen etiketter",
+  "none": "Ingen",
   "now": "Nå",
   "offlineMessage": "Du er frakoblet",
   "okay": "OK",
@@ -632,8 +632,8 @@
   "recipeEmptySearch": "Fant ingen oppskrifter :(",
   "recipeImageSelect": "Velg et oppskriftsbilde",
   "recipeNew": "Ny oppskrift",
-  "recipes": "Oppskrifter",
   "recipeSource": "Oppskriftskilde",
+  "recipes": "Oppskrifter",
   "recipesOverwrite": "Overskriv oppskrift",
   "recipesOverwriteDescription": "Hvis aktivert vil eksisterende oppskrifter med samme navn bli overskrevet",
   "recipesRecent": "Nylig",
@@ -657,8 +657,8 @@
   "shoppingListDelete": "Slett handleliste",
   "shoppingListDeleteConfirmation": "Er du sikker på at du vil slette {shoppingList}?",
   "shoppingListEdit": "Rediger handleliste",
-  "shoppingLists": "Handlelister",
   "shoppingListStyle": "Stil for handleliste",
+  "shoppingLists": "Handlelister",
   "signInWith": "Logg inn med {provider}",
   "signup": "Registrer",
   "smaller": "Mindre",
@@ -695,12 +695,12 @@
   "userAdd": "Legg til bruker",
   "userDelete": "Slett bruker",
   "userDeleteConfirmation": "Fjern {user}?",
+  "userNotSignedIn": "Du må være logget inn for å tilknytte en konto",
+  "userSearchHint": "Angi et navn",
   "username": "Brukernavn",
   "usernameInvalid": "Brukernavn kan ikke inneholde '@'",
   "usernameUnavailable": "Brukernavnet er utilgjengelig",
-  "userNotSignedIn": "Du må være logget inn for å tilknytte en konto",
   "users": "Brukere",
-  "userSearchHint": "Angi et navn",
   "weekly": "Ukentlig",
   "welcomeBack": "Velkommen tilbake",
   "writeMarkdownHere": "Du kan bruke markdown her!",

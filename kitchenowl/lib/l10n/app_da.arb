@@ -10,14 +10,6 @@
   "@add": {},
   "@addCategory": {},
   "@addDescriptionFromSource": {},
-  "@addedBy": {
-    "placeholders": {
-      "name": {
-        "example": "Tom",
-        "type": "String"
-      }
-    }
-  },
   "@addItemTitle": {},
   "@addLanguage": {},
   "@addLanguageConfirm": {
@@ -45,9 +37,17 @@
     }
   },
   "@addRecipeToPlannerShort": {},
-  "@address": {},
   "@addShoppingList": {},
   "@addTag": {},
+  "@addedBy": {
+    "placeholders": {
+      "name": {
+        "example": "Tom",
+        "type": "String"
+      }
+    }
+  },
+  "@address": {},
   "@admin": {},
   "@analysingWebsite": {},
   "@appDescription": {},
@@ -172,8 +172,8 @@
     }
   },
   "@householdNew": {},
-  "@households": {},
   "@householdSwitch": {},
+  "@households": {},
   "@icon": {},
   "@imageSelect": {},
   "@import": {},
@@ -191,9 +191,9 @@
     }
   },
   "@itemRemoveInteraction": {},
+  "@itemSize": {},
   "@items": {},
   "@itemsAdd": {},
-  "@itemSize": {},
   "@itemsMerge": {},
   "@itemsMergeConfirmation": {
     "placeholders": {
@@ -229,9 +229,9 @@
     }
   },
   "@lltNotShownAgain": {},
-  "@llts": {},
   "@lltWarningContent": {},
   "@lltWarningTitle": {},
+  "@llts": {},
   "@login": {},
   "@loginTo": {},
   "@logout": {},
@@ -243,8 +243,8 @@
       }
     }
   },
-  "@longerThanExpected": {},
   "@longPressToReorder": {},
+  "@longerThanExpected": {},
   "@markAsPaid": {},
   "@mealPlanner": {},
   "@member": {},
@@ -258,8 +258,8 @@
   "@more": {},
   "@name": {},
   "@next": {},
-  "@none": {},
   "@noTags": {},
+  "@none": {},
   "@now": {},
   "@offlineMessage": {},
   "@okay": {},
@@ -341,8 +341,8 @@
   "@recipeEmptySearch": {},
   "@recipeImageSelect": {},
   "@recipeNew": {},
-  "@recipes": {},
   "@recipeSource": {},
+  "@recipes": {},
   "@recipesOverwrite": {},
   "@recipesOverwriteDescription": {},
   "@recipesRecent": {},
@@ -382,8 +382,8 @@
   },
   "@shoppingListEdit": {},
   "@shoppingListEmpty": {},
-  "@shoppingLists": {},
   "@shoppingListStyle": {},
+  "@shoppingLists": {},
   "@signInWith": {
     "placeholders": {
       "provider": {
@@ -457,12 +457,12 @@
       }
     }
   },
+  "@userNotSignedIn": {},
+  "@userSearchHint": {},
   "@username": {},
   "@usernameInvalid": {},
   "@usernameUnavailable": {},
-  "@userNotSignedIn": {},
   "@users": {},
-  "@userSearchHint": {},
   "@weekly": {},
   "@welcomeBack": {},
   "@writeMarkdownHere": {},
@@ -483,16 +483,16 @@
   "add": "Tilføj",
   "addCategory": "Tilføj kategori",
   "addDescriptionFromSource": "Tilføj beskrivelse fra kilde",
-  "addedBy": "Tilføjet af {name}",
   "addItemTitle": "Tilføj varer",
   "addLanguage": "Tilføj sprog",
   "addLanguageConfirm": "Er du sikker på, at du vil sætte sproget til '{lang}'? Dette kan ikke fortrydes og føjer varer og kategorier til din husholdning.",
   "addNumberIngredients": "Tilføj {number} ingredienser",
   "addRecipeToPlanner": "Føj til måltidsplan ({number} portioner)",
   "addRecipeToPlannerShort": "Føj til madplan",
-  "address": "Adresse",
   "addShoppingList": "Tilføj indkøbsliste",
   "addTag": "Tilføj etiket",
+  "addedBy": "Tilføjet af {name}",
+  "address": "Adresse",
   "admin": "Admin",
   "analysingWebsite": "Analyserer hjemmeside...",
   "appDescription": "KitchenOwl hjælper dig med at organisere dit dagligvareliv.",
@@ -566,8 +566,8 @@
   "householdLeave": "Forlad husholdning",
   "householdLeaveConfirmation": "Er du sikker på, at du vil forlade {household}?",
   "householdNew": "Ny husholdning",
-  "households": "Husholdninger",
   "householdSwitch": "Skift husholdning",
+  "households": "Husholdninger",
   "icon": "Ikon",
   "imageSelect": "Vælg et billede",
   "import": "Importér",
@@ -578,9 +578,9 @@
   "itemDelete": "Slet vare",
   "itemDeleteConfirmation": "Er du sikker på, at du vil slette {item}? Dette fjerner varen fra de opskrifter, der indeholder den.",
   "itemRemoveInteraction": "Fjern vareinteraktion",
+  "itemSize": "Varestørrelse",
   "items": "Varer",
   "itemsAdd": "Tilføj varer",
-  "itemSize": "Varestørrelse",
   "itemsMerge": "Flet varer",
   "itemsMergeConfirmation": "Er du sikker på, at du vil flette {item} og {other}? Det kan ikke fortrydes.",
   "itemsOptional": "Valgfrie varer",
@@ -596,15 +596,15 @@
   "lltDelete": "Slet token med lang levetid",
   "lltDeleteConfirmation": "Er du sikker på, at du vil slette token '{token}'? Det kan ikke fortrydes.",
   "lltNotShownAgain": "Gem tokenet; du vil ikke kunne se det igen",
-  "llts": "Tokens med lang levetid",
   "lltWarningContent": "Er du sikker på, at du ønsker at oprette et token med lang levetid? Det kan potentielt udgøre en sikkerhedsrisiko. Tokenet udløber ikke og giver fuld adgang til din konto.",
   "lltWarningTitle": "Ved du, hvad du laver?",
+  "llts": "Tokens med lang levetid",
   "login": "Log ind",
   "loginTo": "Log ind på",
   "logout": "Log ud",
   "logoutName": "Log {name} ud",
-  "longerThanExpected": "Det tager længere tid end forventet",
   "longPressToReorder": "Hold nede for at omarrangere",
+  "longerThanExpected": "Det tager længere tid end forventet",
   "markAsPaid": "Markér som betalt",
   "mealPlanner": "Madplanlægger",
   "member": "Medlem",
@@ -618,8 +618,8 @@
   "more": "Mere",
   "name": "Navn",
   "next": "Næste",
-  "none": "Ingen",
   "noTags": "Ingen etiketter",
+  "none": "Ingen",
   "now": "Nu",
   "offlineMessage": "Du er offline",
   "okay": "Okay",
@@ -662,8 +662,8 @@
   "recipeEmptySearch": "Ingen opskrifter fundet :(",
   "recipeImageSelect": "Vælg et opskriftsbillede",
   "recipeNew": "Ny opskrift",
-  "recipes": "Opskrifter",
   "recipeSource": "Opskriftskilde",
+  "recipes": "Opskrifter",
   "recipesOverwrite": "Overskriv opskrifter",
   "recipesOverwriteDescription": "Hvis aktiveret, overskrives eksisterende opskrifter med samme navn",
   "recipesRecent": "Seneste",
@@ -690,8 +690,8 @@
   "shoppingListDeleteConfirmation": "Er du sikker på, du vil slette {shoppingList}?",
   "shoppingListEdit": "Rediger indkøbsliste",
   "shoppingListEmpty": "Indkøbslisten er tom. Tilføj et element ved hjælp af søgefunktionen ovenfor.",
-  "shoppingLists": "Indkøbslister",
   "shoppingListStyle": "Indkøbslistestil",
+  "shoppingLists": "Indkøbslister",
   "signInWith": "Log ind med {provider}",
   "signup": "Tilmeld",
   "skip": "Spring over",
@@ -735,12 +735,12 @@
   "userAdd": "Tilføj bruger",
   "userDelete": "Slet bruger",
   "userDeleteConfirmation": "Er du sikker på, at du vil fjerne {user}?",
+  "userNotSignedIn": "Du skal være logget ind for at tilknytte en konto",
+  "userSearchHint": "Skriv et navn",
   "username": "Brugernavn",
   "usernameInvalid": "Brugernavn må ikke indeholde '@'",
   "usernameUnavailable": "Brugernavnet er utilgængeligt",
-  "userNotSignedIn": "Du skal være logget ind for at tilknytte en konto",
   "users": "Brugere",
-  "userSearchHint": "Skriv et navn",
   "weekly": "Ugentlig",
   "welcomeBack": "Velkommen tilbage",
   "writeMarkdownHere": "Du kan bruge markdown her!",

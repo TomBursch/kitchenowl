@@ -10,14 +10,6 @@
   "@add": {},
   "@addCategory": {},
   "@addDescriptionFromSource": {},
-  "@addedBy": {
-    "placeholders": {
-      "name": {
-        "example": "Tom",
-        "type": "String"
-      }
-    }
-  },
   "@addItemTitle": {},
   "@addLanguage": {},
   "@addLanguageConfirm": {
@@ -47,9 +39,17 @@
   "@addRecipeToPlannerShort": {
     "description": "A shorter title/button text used wherever the space is limited. Excludes the number of yields."
   },
-  "@address": {},
   "@addShoppingList": {},
   "@addTag": {},
+  "@addedBy": {
+    "placeholders": {
+      "name": {
+        "example": "Tom",
+        "type": "String"
+      }
+    }
+  },
+  "@address": {},
   "@admin": {},
   "@analysingWebsite": {},
   "@appDescription": {},
@@ -173,8 +173,8 @@
     }
   },
   "@householdNew": {},
-  "@households": {},
   "@householdSwitch": {},
+  "@households": {},
   "@icon": {},
   "@imageSelect": {},
   "@import": {},
@@ -192,9 +192,9 @@
     }
   },
   "@itemRemoveInteraction": {},
+  "@itemSize": {},
   "@items": {},
   "@itemsAdd": {},
-  "@itemSize": {},
   "@itemsMerge": {},
   "@itemsMergeConfirmation": {
     "placeholders": {
@@ -230,9 +230,9 @@
     }
   },
   "@lltNotShownAgain": {},
-  "@llts": {},
   "@lltWarningContent": {},
   "@lltWarningTitle": {},
+  "@llts": {},
   "@login": {},
   "@loginTo": {},
   "@logout": {},
@@ -244,8 +244,8 @@
       }
     }
   },
-  "@longerThanExpected": {},
   "@longPressToReorder": {},
+  "@longerThanExpected": {},
   "@markAsPaid": {},
   "@mealPlanner": {},
   "@member": {},
@@ -259,8 +259,8 @@
   "@more": {},
   "@name": {},
   "@next": {},
-  "@none": {},
   "@noTags": {},
+  "@none": {},
   "@now": {},
   "@offlineMessage": {},
   "@okay": {},
@@ -342,8 +342,8 @@
   "@recipeEmptySearch": {},
   "@recipeImageSelect": {},
   "@recipeNew": {},
-  "@recipes": {},
   "@recipeSource": {},
+  "@recipes": {},
   "@recipesOverwrite": {},
   "@recipesOverwriteDescription": {},
   "@recipesRecent": {},
@@ -365,16 +365,16 @@
   "add": "Добави",
   "addCategory": "Добави категория",
   "addDescriptionFromSource": "Добави описание от източник",
-  "addedBy": "Добавено от {name}",
   "addItemTitle": "Добави артикул",
   "addLanguage": "Добави език",
   "addLanguageConfirm": "Сигурен ли си, че искаш да смениш езика на '{lang}'? Това е необратим процес и ще добави артикули и категории към твоето домакинство.",
   "addNumberIngredients": "Добави {number} съставки",
   "addRecipeToPlanner": "Добави към хранителния план ({number} порци)",
   "addRecipeToPlannerShort": "Добави към хранителния план",
-  "address": "Адрес",
   "addShoppingList": "Добави към списъка за пазаруване",
   "addTag": "Добави етикет",
+  "addedBy": "Добавено от {name}",
+  "address": "Адрес",
   "admin": "Админ",
   "analysingWebsite": "Уебсайтът се анализира...",
   "appDescription": "KitchenOwl ви помага да организирате живота си в магазина за хранителни стоки.",
@@ -447,8 +447,8 @@
   "householdLeave": "Напусни домакинство",
   "householdLeaveConfirmation": "Сигурен ли си, че искаш да напуснеш {household}?",
   "householdNew": "Ново домакинство",
-  "households": "Домакинства",
   "householdSwitch": "Превключи домакинство",
+  "households": "Домакинства",
   "icon": "Икона",
   "imageSelect": "Избери изображение",
   "import": "Импорт",
@@ -459,9 +459,9 @@
   "itemDelete": "Изтрий артикул",
   "itemDeleteConfirmation": "Сигурен ли си, че искаш да изтриеш {item}? Това ще изтрие този артикул от всички рецепти, които го съдържат.",
   "itemRemoveInteraction": "Начин за премахване на артикул",
+  "itemSize": "Размер на артикул",
   "items": "Артикули",
   "itemsAdd": "Добави артикули",
-  "itemSize": "Размер на артикул",
   "itemsMerge": "Обедини артикилу",
   "itemsMergeConfirmation": "Сигурен ли си, че искаш да обединиш {item} и {other}? Това не може да бъде отменено.",
   "itemsOptional": "Артикули по избор",
@@ -477,15 +477,15 @@
   "lltDelete": "Изтрий дълготраен ключ",
   "lltDeleteConfirmation": "Сигурен ли си, че искаш да изтриеш дълготраен ключ '{token}'? Това не може да бъде отменено.",
   "lltNotShownAgain": "Запази ключа! Няма да можеш да го видиш отново",
-  "llts": "Дълготрайни ключове",
   "lltWarningContent": "Сигурен ли си, че искаш да създадеш дълготраен ключ? Това може да бъде потенциален риск. Ключът няма краен срок и дава пълен достъп до твоя акаунт.",
   "lltWarningTitle": "Знаеш ли какво правиш?",
+  "llts": "Дълготрайни ключове",
   "login": "Вход",
   "loginTo": "Вход към",
   "logout": "Изход",
   "logoutName": "Изход {name}",
-  "longerThanExpected": "Това отнема повече време от очакваното",
   "longPressToReorder": "Задръж дълго за промяна на реда",
+  "longerThanExpected": "Това отнема повече време от очакваното",
   "markAsPaid": "Маркирай като платено",
   "mealPlanner": "Хранителен план",
   "member": "Член",
@@ -499,8 +499,8 @@
   "more": "Повече",
   "name": "Име",
   "next": "Следващо",
-  "none": "Няма",
   "noTags": "Без етикети",
+  "none": "Няма",
   "now": "Сега",
   "offlineMessage": "Вие сте извън линия",
   "okay": "Добре",
@@ -543,8 +543,8 @@
   "recipeEmptySearch": "Не открихме рецепти :(",
   "recipeImageSelect": "Избери изображение за рецептата",
   "recipeNew": "Нова рецепта",
-  "recipes": "Рецепти",
   "recipeSource": "Източник на рецептата",
+  "recipes": "Рецепти",
   "recipesOverwrite": "Презапиши рецепти",
   "recipesOverwriteDescription": "Ако е активирано, текущите рецепти със същото име ще бъдат презаписани",
   "recipesRecent": "Скорошни",

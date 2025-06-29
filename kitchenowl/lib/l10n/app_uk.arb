@@ -1,6 +1,7 @@
 {
   "@about": {},
   "@accountCreate": {},
+  "@accountCreateHint": {},
   "@accountCreateTitle": {},
   "@accountDelete": {},
   "@accountDeleteConfirmation": {},
@@ -50,12 +51,16 @@
   },
   "@address": {},
   "@admin": {},
+  "@analysingWebsite": {},
   "@appDescription": {},
   "@appTitle": {
     "description": "The title of the app"
   },
+  "@automaticIngredientDetection": {},
   "@back": {},
   "@balances": {},
+  "@budget": {},
+  "@budgetSet": {},
   "@camera": {},
   "@cancel": {},
   "@categories": {},
@@ -80,6 +85,7 @@
     }
   },
   "@changeIcon": {},
+  "@clear": {},
   "@colorSelect": {},
   "@confirm": {},
   "@cookingTime": {},
@@ -88,6 +94,7 @@
   "@dangerZone": {},
   "@darkmode": {},
   "@date": {},
+  "@defaultKey": {},
   "@defaultWord": {},
   "@delete": {},
   "@description": {},
@@ -110,6 +117,7 @@
   "@expenseEmpty": {},
   "@expenseFactor": {},
   "@expenseOverviewComparedToPreviousMonth": {},
+  "@expenseOverviewExpenses": {},
   "@expenseOverviewTotalTitle": {
     "placeholders": {
       "month": {
@@ -138,6 +146,14 @@
   "@go": {},
   "@grid": {},
   "@helpTranslate": {},
+  "@hi": {
+    "placeholders": {
+      "name": {
+        "example": "Tom",
+        "type": "String"
+      }
+    }
+  },
   "@household": {},
   "@householdDelete": {},
   "@householdDeleteConfirmation": {
@@ -161,6 +177,7 @@
   "@householdNew": {},
   "@householdSwitch": {},
   "@households": {},
+  "@icon": {},
   "@imageSelect": {},
   "@import": {},
   "@importStartedHint": {},
@@ -202,6 +219,10 @@
   "@link": {
     "description": "As in link social account (e.g. Google)"
   },
+  "@linkNoun": {
+    "description": "The noun, as in share using a link (URL)"
+  },
+  "@linkRecipeDescription": {},
   "@list": {},
   "@lltCreate": {},
   "@lltDelete": {},
@@ -219,6 +240,7 @@
   "@llts": {},
   "@login": {},
   "@loginTo": {},
+  "@loginToAddToShoppingList": {},
   "@logout": {},
   "@logoutName": {
     "placeholders": {
@@ -229,6 +251,7 @@
     }
   },
   "@longPressToReorder": {},
+  "@longerThanExpected": {},
   "@markAsPaid": {},
   "@mealPlanner": {},
   "@member": {},
@@ -274,6 +297,7 @@
     }
   },
   "@pageNotFound": {},
+  "@parentRights": {},
   "@password": {},
   "@passwordFieldTooShort": {},
   "@passwordForgot": {},
@@ -295,7 +319,13 @@
       }
     }
   },
+  "@private": {},
+  "@privateRecipeDescription": {},
   "@profile": {},
+  "@public": {},
+  "@publicRecipeDescription": {},
+  "@reason": {},
+  "@recentItemsCategorize": {},
   "@recipeAdd": {},
   "@recipeAddUrl": {},
   "@recipeDelete": {},
@@ -319,6 +349,7 @@
   "@recipesRecent": {},
   "@recipesSuggested": {},
   "@refresh": {},
+  "@rememberLastShoppingList": {},
   "@remove": {},
   "@rename": {},
   "@reportIssue": {},
@@ -417,6 +448,7 @@
   "@you": {},
   "about": "Інформація",
   "accountCreate": "Створити акаунт",
+  "accountCreateHint": "Ваше ім’я користувача та ім’я є загальнодоступними, тож оберіть щось, що вам зручно показувати іншим.",
   "accountCreateTitle": "Створити ваш акаунт KitchenOwl",
   "accountDelete": "Видалити акаунт",
   "accountDeleteConfirmation": "Ви впевнені, що хочете видалити ваш акаунт?",
@@ -436,10 +468,14 @@
   "addedBy": "Додано {name}",
   "address": "Адреса",
   "admin": "Адмін",
+  "analysingWebsite": "Аналіз веб-сайту...",
   "appDescription": "KitchenOwl допомагає організувати ваше продуктове життя.",
   "appTitle": "KitchenOwl",
+  "automaticIngredientDetection": "Автоматично визначати інгредієнти в описі рецепта",
   "back": "Назад",
   "balances": "Баланси",
+  "budget": "Бюджет",
+  "budgetSet": "Встановити бюджет",
   "camera": "Камера",
   "cancel": "Скасувати",
   "categories": "Категорії",
@@ -450,6 +486,7 @@
   "categoryEdit": "Змінити категорію",
   "categoryExpenseDeleteConfirmation": "Ви впевнені, що хочете видалити {category}? Це видалить категорію з усіх витрат.",
   "changeIcon": "Змінити значок",
+  "clear": "Очистити",
   "colorSelect": "Обрати колір",
   "confirm": "Підтвердити",
   "cookingTime": "Час приготування",
@@ -458,6 +495,7 @@
   "dangerZone": "Небезпечна зона",
   "darkmode": "Темний режим",
   "date": "Дата",
+  "defaultKey": "Ключ за замовчуванням",
   "defaultWord": "За замовчуванням",
   "delete": "Видалити",
   "description": "Опис",
@@ -480,7 +518,8 @@
   "expenseEmpty": "Немає витрат. Почніть зі створення витрати!",
   "expenseFactor": "Фактор",
   "expenseOverviewComparedToPreviousMonth": "У порівнянні з попередніми місяцями",
-  "expenseOverviewTotalTitle": "Загальні витрати за {month}:",
+  "expenseOverviewExpenses": "Витрати",
+  "expenseOverviewTotalTitle": "Загальні за {month}:",
   "expensePaidBy": "Оплачено",
   "expensePaidFor": "Оплачено для",
   "expenseReceivedBy": "Отримано від",
@@ -494,6 +533,7 @@
   "go": "Вперед",
   "grid": "Сітка",
   "helpTranslate": "Допоможіть з перекладом",
+  "hi": "Привіт, {name}!",
   "household": "Господарство",
   "householdDelete": "Видалити господарство",
   "householdDeleteConfirmation": "Ви впевнені, що хочете видалити {household}? Це видалить усі елементи, рецепти та витрати, які повʼязані з цим господарством.",
@@ -503,6 +543,7 @@
   "householdNew": "Нове господарство",
   "householdSwitch": "Перемкнути господарство",
   "households": "Господарства",
+  "icon": "Іконка",
   "imageSelect": "Обрати зображення",
   "import": "Імпортувати",
   "importStartedHint": "Імпорт розпочато, це може зайняти кілька хвилин.",
@@ -524,6 +565,8 @@
   "larger": "Більше",
   "lastUsed": "Останнє використане",
   "link": "Посилання",
+  "linkNoun": "Посилання",
+  "linkRecipeDescription": "Рецепт доступний для перегляду всім, у кого є посилання.",
   "list": "Список",
   "lltCreate": "Створити токен довготермінового доступу",
   "lltDelete": "Видалити токен довготермінового доступу",
@@ -534,9 +577,11 @@
   "llts": "Довготермінові токени",
   "login": "Вхід",
   "loginTo": "Увійти до",
+  "loginToAddToShoppingList": "Увійдіть, щоб додати цей рецепт до свого списку покупок",
   "logout": "Вихід",
   "logoutName": "Вийти {name}",
   "longPressToReorder": "Довгий дотик для сортування",
+  "longerThanExpected": "Процес займає більше часу, аніж передбачалося",
   "markAsPaid": "Позначити як сплачене",
   "mealPlanner": "Планувальник харчування",
   "member": "Учасник",
@@ -564,6 +609,7 @@
   "overview": "Огляд",
   "owesAB": "{nameA} володіє {nameB}",
   "pageNotFound": "Неможливо знайти цю сторінку",
+  "parentRights": "Може міняти налаштування господарства",
   "password": "Пароль",
   "passwordFieldTooShort": "Пароль занадто короткий",
   "passwordForgot": "Забули пароль?",
@@ -577,8 +623,14 @@
   "plannerTitle": "Ваша запланована їжа",
   "preparationTime": "Час підготовки",
   "privacyPolicy": "Політика приватності",
-  "privacyPolicyAgree": "Створюючи акаунт ви погоджуєтесь з нашою {privacyPolicy}",
+  "privacyPolicyAgree": "Створюючи акаунт ви погоджуєтесь з нашою {privacyPolicy} та {terms}",
+  "private": "Особистий",
+  "privateRecipeDescription": "Рецепт доступний лише для членів домогосподарства.",
   "profile": "Профіль",
+  "public": "Публічний",
+  "publicRecipeDescription": "Рецепт є загальнодоступним і може бути запропонований іншим.",
+  "reason": "Причина",
+  "recentItemsCategorize": "Категоризувати останні елементи",
   "recipeAdd": "Додати рецепт",
   "recipeAddUrl": "Додати рецепт за URL",
   "recipeDelete": "Видалити рецепт",
@@ -595,6 +647,7 @@
   "recipesRecent": "Недавні",
   "recipesSuggested": "Пропоновані",
   "refresh": "Оновити",
+  "rememberLastShoppingList": "Пам'ятати останній використаний список покупок",
   "remove": "Прибрати",
   "rename": "Перейменувати",
   "reportIssue": "Повідомити про проблему",

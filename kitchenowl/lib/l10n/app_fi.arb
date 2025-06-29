@@ -239,6 +239,7 @@
   "@llts": {},
   "@login": {},
   "@loginTo": {},
+  "@loginToAddToShoppingList": {},
   "@logout": {},
   "@logoutName": {
     "placeholders": {
@@ -620,6 +621,7 @@
   "llts": "Pitkäaikaiset tunnukset",
   "login": "Kirjaudu sisään",
   "loginTo": "Kirjaudu kohteeseen",
+  "loginToAddToShoppingList": "Kirjaudu sisään lisätäksesi reseptin ostoslistalle",
   "logout": "Kirjaudu ulos",
   "logoutName": "Kirjaa ulos {name}",
   "longPressToReorder": "Paina pitkään muokataksesi järjestystä",

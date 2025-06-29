@@ -10,14 +10,6 @@
   "@add": {},
   "@addCategory": {},
   "@addDescriptionFromSource": {},
-  "@addedBy": {
-    "placeholders": {
-      "name": {
-        "example": "Tom",
-        "type": "String"
-      }
-    }
-  },
   "@addItemTitle": {},
   "@addLanguage": {},
   "@addLanguageConfirm": {
@@ -45,9 +37,17 @@
     }
   },
   "@addRecipeToPlannerShort": {},
-  "@address": {},
   "@addShoppingList": {},
   "@addTag": {},
+  "@addedBy": {
+    "placeholders": {
+      "name": {
+        "example": "Tom",
+        "type": "String"
+      }
+    }
+  },
+  "@address": {},
   "@admin": {},
   "@analysingWebsite": {},
   "@appDescription": {},
@@ -172,8 +172,8 @@
     }
   },
   "@householdNew": {},
-  "@households": {},
   "@householdSwitch": {},
+  "@households": {},
   "@icon": {},
   "@imageSelect": {},
   "@import": {},
@@ -191,9 +191,9 @@
     }
   },
   "@itemRemoveInteraction": {},
+  "@itemSize": {},
   "@items": {},
   "@itemsAdd": {},
-  "@itemSize": {},
   "@itemsMerge": {},
   "@itemsMergeConfirmation": {
     "placeholders": {
@@ -229,9 +229,9 @@
     }
   },
   "@lltNotShownAgain": {},
-  "@llts": {},
   "@lltWarningContent": {},
   "@lltWarningTitle": {},
+  "@llts": {},
   "@login": {},
   "@loginTo": {},
   "@logout": {},
@@ -243,8 +243,8 @@
       }
     }
   },
-  "@longerThanExpected": {},
   "@longPressToReorder": {},
+  "@longerThanExpected": {},
   "@markAsPaid": {},
   "@mealPlanner": {},
   "@member": {},
@@ -258,8 +258,8 @@
   "@more": {},
   "@name": {},
   "@next": {},
-  "@none": {},
   "@noTags": {},
+  "@none": {},
   "@now": {},
   "@offlineMessage": {},
   "@okay": {},
@@ -341,8 +341,8 @@
   "@recipeEmptySearch": {},
   "@recipeImageSelect": {},
   "@recipeNew": {},
-  "@recipes": {},
   "@recipeSource": {},
+  "@recipes": {},
   "@recipesOverwrite": {},
   "@recipesOverwriteDescription": {},
   "@recipesRecent": {},
@@ -382,8 +382,8 @@
   },
   "@shoppingListEdit": {},
   "@shoppingListEmpty": {},
-  "@shoppingLists": {},
   "@shoppingListStyle": {},
+  "@shoppingLists": {},
   "@signInWith": {
     "placeholders": {
       "provider": {
@@ -457,12 +457,12 @@
       }
     }
   },
+  "@userNotSignedIn": {},
+  "@userSearchHint": {},
   "@username": {},
   "@usernameInvalid": {},
   "@usernameUnavailable": {},
-  "@userNotSignedIn": {},
   "@users": {},
-  "@userSearchHint": {},
   "@weekly": {},
   "@welcomeBack": {},
   "@writeMarkdownHere": {},
@@ -482,16 +482,16 @@
   "add": "Προσθήκη",
   "addCategory": "Προσθήκη κατηγορίας",
   "addDescriptionFromSource": "Προσθήκη περιγραφής από τη πηγή",
-  "addedBy": "Προστέθηκε από {name}",
   "addItemTitle": "Προσθήκη ειδών",
   "addLanguage": "Προσθήκη γλώσσας",
   "addLanguageConfirm": "Είστε σίγουροι πως θέλετε να ορίσετε τη γλώσσα σε '{lang}'; Αυτή η επιλογή δε μπορεί να αναιρεθεί και θα προσθέσει είδη και κατηγορίες στο νοικοκυριό σας.",
   "addNumberIngredients": "Προσθήκη {number} συστατικών",
   "addRecipeToPlanner": "Προσθήκη στο πρόγραμμα γευμάτων ({number} Σερβιρίσματα)",
   "addRecipeToPlannerShort": "Προσθήκη στο πρόγραμμα γευμάτων",
-  "address": "Διεύθυνση",
   "addShoppingList": "Προσθήκη λίστας αγορών",
   "addTag": "Προσθήκη ετικέτας",
+  "addedBy": "Προστέθηκε από {name}",
+  "address": "Διεύθυνση",
   "admin": "Διαχειριστής",
   "analysingWebsite": "Ανάλυση ιστοσελίδας...",
   "appDescription": "Το KitchenOwl σας βοηθάει να οργανώσετε τα ψώνια σας.",
@@ -565,8 +565,8 @@
   "householdLeave": "Αποχώρηση από το νοικοκυριό",
   "householdLeaveConfirmation": "Είστε σίγουροι πως θέλετε να αποχωρήσετε από το {household};",
   "householdNew": "Νέο νοικοκυριό",
-  "households": "Νοικοκυριά",
   "householdSwitch": "Αλλαγή νοικοκυριού",
+  "households": "Νοικοκυριά",
   "icon": "Εικονίδιο",
   "imageSelect": "Επιλέξτε εικόνα",
   "import": "Εισαγωγή",
@@ -577,9 +577,9 @@
   "itemDelete": "Διαγραφή είδους",
   "itemDeleteConfirmation": "Είστε σίγουροι πως θέλετε να διαγράψετε το {item}; Αυτό θα αφαιρέσει το είδος από οποιαδήποτε συνταγή το περιέχει.",
   "itemRemoveInteraction": "Αφαίρεση αλληλεπίδρασης αντικειμένου",
+  "itemSize": "Μέγεθος αντικειμένου",
   "items": "Είδη",
   "itemsAdd": "Προσθήκη ειδών",
-  "itemSize": "Μέγεθος αντικειμένου",
   "itemsMerge": "Συγχώνευση ειδών",
   "itemsMergeConfirmation": "Είστε σίγουροι πως θέλετε να συγχωνεύσετε το {item} και το {other}; Αυτή η πράξη δε μπορεί να αναιρεθεί.",
   "itemsOptional": "Προαιρετικά είδη",
@@ -595,15 +595,15 @@
   "lltDelete": "Διαγραφή token μακράς διάρκειας",
   "lltDeleteConfirmation": "Είστε σίγουροι πως θέλετε να διαγράψετε το token μακράς διάρκειας '{token}'; Αυτό δε μπορεί να αναιρεθεί.",
   "lltNotShownAgain": "Αποθήκευση token, δε θα μπορείτε να το δείτε ξανά",
-  "llts": "Tokens μακράς διάρκειας",
   "lltWarningContent": "Είστε σίγουροι πως θέλετε να δημιουργήσετε ένα token μακράς διάρκειας; Αυτό θα μπορούσε να είναι ρίσκο ασφαλείας. Το token δε λήγει και δίνει πλήρη πρόσβαση στο λογαριασμό σας.",
   "lltWarningTitle": "Ξέρετε τι κάνετε;",
+  "llts": "Tokens μακράς διάρκειας",
   "login": "Σύνδεση",
   "loginTo": "Σύνδεση σε",
   "logout": "Αποσύνδεση",
   "logoutName": "Αποσύνδεση {name}",
-  "longerThanExpected": "Αυτό παίρνει περισσότερο χρόνο από το ανεμενόμενο",
   "longPressToReorder": "Κρατήστε πατημένο για αλλαγή διάταξης",
+  "longerThanExpected": "Αυτό παίρνει περισσότερο χρόνο από το ανεμενόμενο",
   "markAsPaid": "Σημείωση ως πληρωμένο",
   "mealPlanner": "Πρόγραμμα γευμάτων",
   "member": "Μέλος",
@@ -617,8 +617,8 @@
   "more": "Περισσότερα",
   "name": "Όνομα",
   "next": "Επόμενο",
-  "none": "Κανένα",
   "noTags": "Χωρίς ετικέτες",
+  "none": "Κανένα",
   "now": "Τώρα",
   "offlineMessage": "Είστε σε σύνδεση offline",
   "okay": "Οκ",
@@ -661,8 +661,8 @@
   "recipeEmptySearch": "Δε βρέθηκαν συνταγές :(",
   "recipeImageSelect": "Επιλέξτε εικόνα συνταγής",
   "recipeNew": "Νέα συνταγή",
-  "recipes": "Συνταγές",
   "recipeSource": "Πηγή Συνταγής",
+  "recipes": "Συνταγές",
   "recipesOverwrite": "Αντικατάσταση συνταγών",
   "recipesOverwriteDescription": "Αν ενεργοποιηθεί, οι υπάρχουσες συνταγές με το ίδιο όνομα θα αντικατασταθούν",
   "recipesRecent": "Πρόσφατα",
@@ -689,8 +689,8 @@
   "shoppingListDeleteConfirmation": "Είστε σίγουροι πως θέλετε να διαγράψετε τη λίστα {shoppingList};",
   "shoppingListEdit": "Επεξεργασία λίστας αγορών",
   "shoppingListEmpty": "Η λίστα αγοράς είναι άδεια. Προσθέστε ένα αντικείμενο χρησιμοποιώντας τη λειτουργία εύρεσης πιο πάνω.",
-  "shoppingLists": "Λίστες αγορών",
   "shoppingListStyle": "Στυλ λίστας αγορών",
+  "shoppingLists": "Λίστες αγορών",
   "signInWith": "Σύνδεση με {provider}",
   "signup": "Εγγραφείτε",
   "skip": "Προσπέραση",
@@ -734,12 +734,12 @@
   "userAdd": "Προσθήκη Χρήστη",
   "userDelete": "Διαγραφή χρήστη",
   "userDeleteConfirmation": "Είστε σίγουροι πως θέλετε να αφαιρέσετε τον χρήστη {user};",
+  "userNotSignedIn": "Πρέπει να έχετε συνδεθεί ώστε να συνδέσετε κάποιον λογαριασμό",
+  "userSearchHint": "Πληκτρολογήστε ένα όνομα",
   "username": "Όνομα Χρήστη",
   "usernameInvalid": "Το όνομα χρήστη δε μπορεί να περιέχει τον χαρακτήρα '@'",
   "usernameUnavailable": "Το όνομα χρήστη δεν είναι διαθέσιμο",
-  "userNotSignedIn": "Πρέπει να έχετε συνδεθεί ώστε να συνδέσετε κάποιον λογαριασμό",
   "users": "Χρήστες",
-  "userSearchHint": "Πληκτρολογήστε ένα όνομα",
   "weekly": "Εβδομαδιαία",
   "welcomeBack": "Καλωσήρθατε",
   "writeMarkdownHere": "Μπορείτε να χρησιμοποιήσετε το markdown εδώ!",

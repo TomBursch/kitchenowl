@@ -10,14 +10,6 @@
   "@add": {},
   "@addCategory": {},
   "@addDescriptionFromSource": {},
-  "@addedBy": {
-    "placeholders": {
-      "name": {
-        "example": "Tom",
-        "type": "String"
-      }
-    }
-  },
   "@addItemTitle": {},
   "@addLanguage": {},
   "@addLanguageConfirm": {
@@ -45,9 +37,17 @@
     }
   },
   "@addRecipeToPlannerShort": {},
-  "@address": {},
   "@addShoppingList": {},
   "@addTag": {},
+  "@addedBy": {
+    "placeholders": {
+      "name": {
+        "example": "Tom",
+        "type": "String"
+      }
+    }
+  },
+  "@address": {},
   "@admin": {},
   "@appDescription": {},
   "@appTitle": {
@@ -159,8 +159,8 @@
     }
   },
   "@householdNew": {},
-  "@households": {},
   "@householdSwitch": {},
+  "@households": {},
   "@icon": {},
   "@imageSelect": {},
   "@import": {},
@@ -178,9 +178,9 @@
     }
   },
   "@itemRemoveInteraction": {},
+  "@itemSize": {},
   "@items": {},
   "@itemsAdd": {},
-  "@itemSize": {},
   "@itemsMerge": {},
   "@itemsMergeConfirmation": {
     "placeholders": {
@@ -216,9 +216,9 @@
     }
   },
   "@lltNotShownAgain": {},
-  "@llts": {},
   "@lltWarningContent": {},
   "@lltWarningTitle": {},
+  "@llts": {},
   "@login": {},
   "@loginTo": {},
   "@logout": {},
@@ -244,8 +244,8 @@
   "@more": {},
   "@name": {},
   "@next": {},
-  "@none": {},
   "@noTags": {},
+  "@none": {},
   "@now": {},
   "@offlineMessage": {},
   "@okay": {},
@@ -327,8 +327,8 @@
   "@recipeEmptySearch": {},
   "@recipeImageSelect": {},
   "@recipeNew": {},
-  "@recipes": {},
   "@recipeSource": {},
+  "@recipes": {},
   "@recipesOverwrite": {},
   "@recipesOverwriteDescription": {},
   "@recipesRecent": {},
@@ -359,8 +359,8 @@
     }
   },
   "@shoppingListEdit": {},
-  "@shoppingLists": {},
   "@shoppingListStyle": {},
+  "@shoppingLists": {},
   "@signInWith": {
     "placeholders": {
       "provider": {
@@ -420,12 +420,12 @@
       }
     }
   },
+  "@userNotSignedIn": {},
+  "@userSearchHint": {},
   "@username": {},
   "@usernameInvalid": {},
   "@usernameUnavailable": {},
-  "@userNotSignedIn": {},
   "@users": {},
-  "@userSearchHint": {},
   "@weekly": {},
   "@welcomeBack": {},
   "@writeMarkdownHere": {},
@@ -445,16 +445,16 @@
   "add": "Ekle",
   "addCategory": "Kategori ekle",
   "addDescriptionFromSource": "Kaynaktan açıklama ekle",
-  "addedBy": "{name} tarafından eklendi",
   "addItemTitle": "Öge ekle",
   "addLanguage": "Dil ekle",
   "addLanguageConfirm": "'{lang}'dilini eklemek istediğinizden emin misiniz? Bu geri alınamaz ve Evinize kategoriler ve öğeler ekleyecektir.",
   "addNumberIngredients": "{number} malzeme ekle",
   "addRecipeToPlanner": "Yemek planına ekle ({number})",
   "addRecipeToPlannerShort": "Yemek planına ekle",
-  "address": "Adres",
   "addShoppingList": "Alışveriş listesi ekle",
   "addTag": "Etiket ekle",
+  "addedBy": "{name} tarafından eklendi",
+  "address": "Adres",
   "admin": "Yönetici",
   "appDescription": "KitchenOwl, market hayatınızı düzenlemenize yardımcı olur.",
   "appTitle": "KitchenOwl",
@@ -522,8 +522,8 @@
   "householdLeave": "Haneden ayrıl",
   "householdLeaveConfirmation": "{household} hanesinden ayrılmak istediğinize emin misiniz?",
   "householdNew": "Yeni hane",
-  "households": "Haneler",
   "householdSwitch": "Diğer haneler",
+  "households": "Haneler",
   "icon": "Simge",
   "imageSelect": "Bir resim seçin",
   "import": "İçe aktar",
@@ -534,9 +534,9 @@
   "itemDelete": "Ögeyi sil",
   "itemDeleteConfirmation": "{item} ögesini silmek istediğinizden emin misiniz? Bu, ögeyi içeren tüm tariflerden kaldıracaktır.",
   "itemRemoveInteraction": "Öge etkileşimini kaldır",
+  "itemSize": "Öge boyutu",
   "items": "Ögeler",
   "itemsAdd": "Öge ekle",
-  "itemSize": "Öge boyutu",
   "itemsMerge": "Ögeleri birleştir",
   "itemsMergeConfirmation": "{item} ve {other}'ı birleştirmek istediğinizden emin misiniz? Bu geri alınamaz.",
   "itemsOptional": "İsteğe bağlı ögeler",
@@ -552,9 +552,9 @@
   "lltDelete": "Uzun ömürlü belirteci sil",
   "lltDeleteConfirmation": "Uzun ömürlü '{token}'belirtecini silmek istediğinizden emin misiniz? Bu geri alınamaz.",
   "lltNotShownAgain": "Belirteci kaydedin, bir daha göremeyeceksiniz",
-  "llts": "Uzun ömürlü belirteç",
   "lltWarningContent": "Uzun ömürlü bir belirteç oluşturmak istediğinizden emin misiniz? Bu bir güvenlik riski olabilir. Belirtecin süresi dolmaz ve hesabınıza tam erişim sağlar.",
   "lltWarningTitle": "Ne yaptığınızı biliyor musunuz?",
+  "llts": "Uzun ömürlü belirteç",
   "login": "Giriş yap",
   "loginTo": "Giriş",
   "logout": "Çıkış yap",
@@ -573,8 +573,8 @@
   "more": "Daha",
   "name": "İsim",
   "next": "Sonraki",
-  "none": "Hiçbiri",
   "noTags": "Etiketsiz",
+  "none": "Hiçbiri",
   "now": "Şimdi",
   "offlineMessage": "Çevrim dışısınız",
   "okay": "Tamam",
@@ -617,8 +617,8 @@
   "recipeEmptySearch": "Tarif bulunamadı :(",
   "recipeImageSelect": "Bir tarif görseli seçin",
   "recipeNew": "Yeni tarif",
-  "recipes": "Tarifler",
   "recipeSource": "Tarif kaynağı",
+  "recipes": "Tarifler",
   "recipesOverwrite": "Tariflerin üzerine yaz",
   "recipesOverwriteDescription": "Etkinleştirilirse, aynı ada sahip var olan tariflerin üzerine yazılır",
   "recipesRecent": "Son",
@@ -642,8 +642,8 @@
   "shoppingListDelete": "Alışveriş listesini sil",
   "shoppingListDeleteConfirmation": "{shoppingList} listesini silmek istediğinizden emin misiniz?",
   "shoppingListEdit": "Alışveriş listesini düzenle",
-  "shoppingLists": "Alışveriş listeleri",
   "shoppingListStyle": "Alışveriş listesi biçimi",
+  "shoppingLists": "Alışveriş listeleri",
   "signInWith": "{provider} ile oturum aç",
   "signup": "Kayıt ol",
   "smaller": "Daha küçük",
@@ -680,12 +680,12 @@
   "userAdd": "Kullanıcı ekle",
   "userDelete": "Kullanıcı sil",
   "userDeleteConfirmation": "{user} kullanıcısını kaldırmak istediğinizden emin misiniz?",
+  "userNotSignedIn": "Hesap bağlamak için oturum açmanız gerekir",
+  "userSearchHint": "Bir ad yazın",
   "username": "Kullanıcı adı",
   "usernameInvalid": "Kullanıcı adı \"@\" içeremez",
   "usernameUnavailable": "Kullanıcı adı müsait değil",
-  "userNotSignedIn": "Hesap bağlamak için oturum açmanız gerekir",
   "users": "Kullanıcılar",
-  "userSearchHint": "Bir ad yazın",
   "weekly": "Haftalık",
   "welcomeBack": "Tekrar hoş geldiniz",
   "writeMarkdownHere": "Burada markdown kullanabilirsiniz!",

@@ -10,14 +10,6 @@
   "@add": {},
   "@addCategory": {},
   "@addDescriptionFromSource": {},
-  "@addedBy": {
-    "placeholders": {
-      "name": {
-        "example": "Tom",
-        "type": "String"
-      }
-    }
-  },
   "@addItemTitle": {},
   "@addLanguage": {},
   "@addLanguageConfirm": {
@@ -47,9 +39,17 @@
   "@addRecipeToPlannerShort": {
     "description": "A shorter title/button text used wherever the space is limited. Excludes the number of yields."
   },
-  "@address": {},
   "@addShoppingList": {},
   "@addTag": {},
+  "@addedBy": {
+    "placeholders": {
+      "name": {
+        "example": "Tom",
+        "type": "String"
+      }
+    }
+  },
+  "@address": {},
   "@admin": {},
   "@analysingWebsite": {},
   "@appDescription": {},
@@ -173,8 +173,8 @@
     }
   },
   "@householdNew": {},
-  "@households": {},
   "@householdSwitch": {},
+  "@households": {},
   "@icon": {},
   "@imageSelect": {},
   "@import": {},
@@ -192,9 +192,9 @@
     }
   },
   "@itemRemoveInteraction": {},
+  "@itemSize": {},
   "@items": {},
   "@itemsAdd": {},
-  "@itemSize": {},
   "@itemsMerge": {},
   "@itemsMergeConfirmation": {
     "placeholders": {
@@ -230,9 +230,9 @@
     }
   },
   "@lltNotShownAgain": {},
-  "@llts": {},
   "@lltWarningContent": {},
   "@lltWarningTitle": {},
+  "@llts": {},
   "@login": {},
   "@loginTo": {},
   "@logout": {},
@@ -258,8 +258,8 @@
   "@more": {},
   "@name": {},
   "@next": {},
-  "@none": {},
   "@noTags": {},
+  "@none": {},
   "@now": {},
   "@offlineMessage": {},
   "@okay": {},
@@ -341,8 +341,8 @@
   "@recipeEmptySearch": {},
   "@recipeImageSelect": {},
   "@recipeNew": {},
-  "@recipes": {},
   "@recipeSource": {},
+  "@recipes": {},
   "@recipesOverwrite": {},
   "@recipesOverwriteDescription": {},
   "@recipesRecent": {},
@@ -373,8 +373,8 @@
     }
   },
   "@shoppingListEdit": {},
-  "@shoppingLists": {},
   "@shoppingListStyle": {},
+  "@shoppingLists": {},
   "@signInWith": {
     "placeholders": {
       "provider": {
@@ -434,12 +434,12 @@
       }
     }
   },
+  "@userNotSignedIn": {},
+  "@userSearchHint": {},
   "@username": {},
   "@usernameInvalid": {},
   "@usernameUnavailable": {},
-  "@userNotSignedIn": {},
   "@users": {},
-  "@userSearchHint": {},
   "@weekly": {},
   "@welcomeBack": {},
   "@writeMarkdownHere": {},
@@ -459,16 +459,16 @@
   "add": "Hinzufügen",
   "addCategory": "Kategorie hinzufügen",
   "addDescriptionFromSource": "Füge die Beschreibung der Quelle ein",
-  "addedBy": "Hinzugefügt von {name}",
   "addItemTitle": "Artikel hinzufügen",
   "addLanguage": "Sprache hinzufügen",
   "addLanguageConfirm": "Bist du dir sicher, dass du die Sprache auf '{lang}' setzen möchtest? Dies kann nicht rückgängig gemacht werden und fügt Produkte und Kategorien hinzu.",
   "addNumberIngredients": "Füge {number} Zutaten dazu",
   "addRecipeToPlanner": "Zum Menuplan hinzufügen ({number} Portionen)",
   "addRecipeToPlannerShort": "Zum Menuplan hinzufügen",
-  "address": "Adresse",
   "addShoppingList": "Einkaufsliste hinzufügen",
   "addTag": "Markierung hinzufügen",
+  "addedBy": "Hinzugefügt von {name}",
+  "address": "Adresse",
   "admin": "Admin",
   "analysingWebsite": "Analysiere Website...",
   "appDescription": "KitchenOwl hilft dir, deinen Lebensmitteleinkauf zu organisieren.",
@@ -541,8 +541,8 @@
   "householdLeave": "Haushalt verlassen",
   "householdLeaveConfirmation": "Bist du sicher, dass du {household} verlassen möchtest?",
   "householdNew": "Neuer Haushalt",
-  "households": "Haushalte",
   "householdSwitch": "Haushalt wechseln",
+  "households": "Haushalte",
   "icon": "Symbol",
   "imageSelect": "Bild auswählen",
   "import": "Importieren",
@@ -553,9 +553,9 @@
   "itemDelete": "Artikel löschen",
   "itemDeleteConfirmation": "Bist du dir sicher, dass du {item} löschen möchtest? Diese Aktion entfernt den Artikel aus allen Rezepten.",
   "itemRemoveInteraction": "Artikel entfernen Interaktion",
+  "itemSize": "Grösse des Artikels",
   "items": "Artikel",
   "itemsAdd": "Elemente hinzufügen",
-  "itemSize": "Grösse des Artikels",
   "itemsMerge": "Artikel zusammenführen",
   "itemsMergeConfirmation": "Bist du sicher, dass du {item} und {other} zusammenführen möchtest? Das kann nicht rückgängig gemacht werden.",
   "itemsOptional": "Optionale Artikel",
@@ -571,9 +571,9 @@
   "lltDelete": "Langlebigen Schlüssel löschen",
   "lltDeleteConfirmation": "Bist du sicher, dass du den Long-lived Token '{token}' löschen möchtest? Das kann nicht rückgängig gemacht werden.",
   "lltNotShownAgain": "Speichere das Token, du kannst ihn dir nicht noch einmal anzeigen lassen",
-  "llts": "Langlebige Schlüssel",
   "lltWarningContent": "Bist du sicher, dass du ein long-lived Token erstellen möchstest? Das stellt ein potentielles Sicherheitsrisiko dar. Das Token verfällt nicht und gibt vollen Zugang zu deinem Konto.",
   "lltWarningTitle": "Weisst du, was du machst?",
+  "llts": "Langlebige Schlüssel",
   "login": "Anmelden",
   "loginTo": "Anmelden bei",
   "logout": "Abmelden",
@@ -592,8 +592,8 @@
   "more": "Mehr",
   "name": "Name",
   "next": "Weiter",
-  "none": "Keine",
   "noTags": "Keine Tags",
+  "none": "Keine",
   "now": "Jetzt",
   "offlineMessage": "Du bist offline",
   "okay": "Okay",
@@ -636,8 +636,8 @@
   "recipeEmptySearch": "Keine Rezepte gefunden :(",
   "recipeImageSelect": "Wähle ein Rezeptbild",
   "recipeNew": "Neues Rezept",
-  "recipes": "Rezepte",
   "recipeSource": "Rezept Quelle",
+  "recipes": "Rezepte",
   "recipesOverwrite": "Rezepte überschreiben",
   "recipesOverwriteDescription": "Wenn aktiviert werden bestehende Rezepte mit dem gleichen Namen überschrieben",
   "recipesRecent": "Kürzlich",
@@ -661,8 +661,8 @@
   "shoppingListDelete": "Einkaufsliste löschen",
   "shoppingListDeleteConfirmation": "Bist du sicher, dass du {shoppingList} löschen möchtest?",
   "shoppingListEdit": "Einkaufsliste bearbeiten",
-  "shoppingLists": "Einkaufslisten",
   "shoppingListStyle": "Einkaufslisten-Stil",
+  "shoppingLists": "Einkaufslisten",
   "signInWith": "Mit {provider} anmelden",
   "signup": "Registrieren",
   "smaller": "Kleiner",
@@ -699,12 +699,12 @@
   "userAdd": "Benutzer hinzufügen",
   "userDelete": "Benutzer löschen",
   "userDeleteConfirmation": "Willst du {user} wirklich löschen?",
+  "userNotSignedIn": "Du musst angemeldet sein, um einen Account zu verknüpfen",
+  "userSearchHint": "GIb einen Namen ein",
   "username": "Benutzername",
   "usernameInvalid": "Benutzername darf nicht '@' enthalten",
   "usernameUnavailable": "Der Benutzername ist nicht verfügbar",
-  "userNotSignedIn": "Du musst angemeldet sein, um einen Account zu verknüpfen",
   "users": "Benutzer",
-  "userSearchHint": "GIb einen Namen ein",
   "weekly": "Wöchentlich",
   "welcomeBack": "Willkommen zurück",
   "writeMarkdownHere": "Hier kannst du Markdown verwenden!",

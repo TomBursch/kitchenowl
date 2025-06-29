@@ -33,7 +33,7 @@ def getHousehold(household_id):
 
     if current_user:
         member = HouseholdMember.find_by_ids(household_id, current_user.id)
-        if member:
+        if current_user.admin or member:
             return jsonify(household.obj_to_dict())
 
     return jsonify(household.obj_to_public_dict())

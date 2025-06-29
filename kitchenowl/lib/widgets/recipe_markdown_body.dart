@@ -35,8 +35,15 @@ class RecipeMarkdownBody extends StatelessWidget {
     List<md.Node> result = [];
     for (final md.Node node in astNodes) {
       if (node is md.Element && node.tag == 'ol') {
+        int index = 1;
+        if (node.attributes['start'] != null) {
+          index = int.parse(node.attributes['start']!);
+        }
         node.children?.forEach((child) {
           result.add(child);
+          if (child is md.Element) {
+            child.attributes['indexText'] = (index++).toString();
+          }
         });
 
         continue;
@@ -77,7 +84,6 @@ class RecipeMarkdownBody extends StatelessWidget {
     );
 
     List<md.Node> nodes = _parseAndGroupMarkdown(extensionSet);
-    int index = 1;
     return Column(
       children: nodes.map((node) {
         String? stepImage;
@@ -132,7 +138,7 @@ class RecipeMarkdownBody extends StatelessWidget {
                   width: 55,
                   alignment: Alignment.center,
                   child: Text(
-                    "${index++}.",
+                    "${node.attributes['indexText']}.",
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
                           color:
                               Theme.of(context).colorScheme.onPrimaryContainer,

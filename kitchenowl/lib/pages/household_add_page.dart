@@ -66,13 +66,22 @@ class _HouseholdAddPageState extends State<HouseholdAddPage> {
                   ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-                    child: TextField(
+                    child: TextFormField(
                       onChanged: (s) => cubit.setName(s),
                       textInputAction: TextInputAction.next,
                       textCapitalization: TextCapitalization.sentences,
                       decoration: InputDecoration(
                         labelText: AppLocalizations.of(context)!.name,
                       ),
+                      autovalidateMode: AutovalidateMode.always,
+                      validator: (value) {
+                        if (value != null && value.trim().isEmpty) {
+                          return AppLocalizations.of(context)!
+                              .fieldCannotBeEmpty(
+                                  AppLocalizations.of(context)!.name);
+                        }
+                        return null;
+                      },
                     ),
                   ),
                 ]),
@@ -146,14 +155,6 @@ class _HouseholdAddPageState extends State<HouseholdAddPage> {
                       child: UserListTile(
                         user: state.members[i],
                         markSelf: true,
-                        trailing: state.members[i].hasAdminRights()
-                            ? Icon(
-                                Icons.admin_panel_settings_rounded,
-                                color: state.members[i].owner
-                                    ? Colors.redAccent
-                                    : null,
-                              )
-                            : null,
                       ),
                     ),
                   ),

@@ -22,6 +22,7 @@ import 'package:kitchenowl/pages/settings_server_user_page.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
 import 'package:kitchenowl/styles/colors.dart';
 import 'package:kitchenowl/widgets/settings/color_button.dart';
+import 'package:kitchenowl/widgets/sliver_expansion_tile.dart';
 import 'package:kitchenowl/widgets/user_list_tile.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
@@ -283,99 +284,124 @@ class _SettingsPageState extends State<SettingsPage> {
                     ),
                   ),
                 ),
-                ListTile(
-                  title: Text(
-                    AppLocalizations.of(context)!.rememberLastShoppingList,
+              ]),
+            ),
+          ),
+        ),
+        SliverCrossAxisConstrained(
+          maxCrossAxisExtent: 1600,
+          child: BlocBuilder<SettingsCubit, SettingsState>(
+            builder: (context, state) => SliverExpansionTile(
+              startCollapsed: true,
+              titleCrossAxisAlignment: CrossAxisAlignment.center,
+              title: Row(
+                children: [
+                  const SizedBox(width: 16),
+                  Icon(Icons.more_horiz_rounded),
+                  const SizedBox(width: 12),
+                  Text(
+                    AppLocalizations.of(context)!.more,
+                    style: TextTheme.of(context).labelLarge,
                   ),
-                  leading: const Icon(Icons.restore_rounded),
-                  onTap: () => BlocProvider.of<SettingsCubit>(context)
-                      .setRestoreLastShoppinglist(
-                    !BlocProvider.of<SettingsCubit>(context)
-                        .state
-                        .restoreLastShoppingList,
-                  ),
-                  trailing: KitchenOwlSwitch(
-                    value: state.restoreLastShoppingList,
-                    onChanged: (value) =>
-                        BlocProvider.of<SettingsCubit>(context)
-                            .setRestoreLastShoppinglist(value),
-                  ),
-                ),
-                ListTile(
-                  title: Text(
-                    AppLocalizations.of(context)!.itemsRecent,
-                  ),
-                  leading: const Icon(Icons.numbers_rounded),
-                  trailing: NumberSelector(
-                    value: state.recentItemsCount,
-                    setValue: BlocProvider.of<SettingsCubit>(context)
-                        .setRecentItemsCount,
-                    defaultValue: 9,
-                    lowerBound: 0,
-                    upperBound: 30,
-                  ),
-                ),
-                ListTile(
-                  title: Text(
-                    AppLocalizations.of(context)!.recentItemsCategorize,
-                  ),
-                  leading: const Icon(Icons.category_rounded),
-                  onTap: () => BlocProvider.of<SettingsCubit>(context)
-                      .setRecentItemsCategorize(
-                    !BlocProvider.of<SettingsCubit>(context)
-                        .state
-                        .recentItemsCategorize,
-                  ),
-                  trailing: KitchenOwlSwitch(
-                    value: state.recentItemsCategorize,
-                    onChanged: (value) =>
-                        BlocProvider.of<SettingsCubit>(context)
-                            .setRecentItemsCategorize(value),
-                  ),
-                ),
-                ListTile(
-                  title: Text(
-                    AppLocalizations.of(context)!.automaticIngredientDetection,
-                  ),
-                  leading: const Icon(Icons.find_in_page_rounded),
-                  onTap: () => BlocProvider.of<SettingsCubit>(context)
-                      .setAutomaticIngredientDetection(
-                    !BlocProvider.of<SettingsCubit>(context)
-                        .state
-                        .automaticIngredientDetection,
-                  ),
-                  trailing: KitchenOwlSwitch(
-                    value: state.automaticIngredientDetection,
-                    onChanged: (value) =>
-                        BlocProvider.of<SettingsCubit>(context)
-                            .setAutomaticIngredientDetection(value),
-                  ),
-                ),
-                if (!kIsWeb)
+                ],
+              ),
+              sliver: SliverList.list(
+                children: [
                   ListTile(
                     title: Text(
-                      AppLocalizations.of(context)!.forceOfflineMode,
+                      AppLocalizations.of(context)!.rememberLastShoppingList,
                     ),
-                    leading: const Icon(Icons.mobiledata_off_outlined),
-                    onTap: () => BlocProvider.of<AuthCubit>(context)
-                        .setForcedOfflineMode(
-                      !BlocProvider.of<AuthCubit>(context)
+                    leading: const Icon(Icons.restore_rounded),
+                    onTap: () => BlocProvider.of<SettingsCubit>(context)
+                        .setRestoreLastShoppinglist(
+                      !BlocProvider.of<SettingsCubit>(context)
                           .state
-                          .forcedOfflineMode,
+                          .restoreLastShoppingList,
                     ),
-                    trailing: BlocBuilder<AuthCubit, AuthState>(
-                      buildWhen: (previous, current) =>
-                          previous.forcedOfflineMode !=
-                          current.forcedOfflineMode,
-                      builder: (context, state) => KitchenOwlSwitch(
-                        value: state.forcedOfflineMode,
-                        onChanged: (value) =>
-                            BlocProvider.of<AuthCubit>(context)
-                                .setForcedOfflineMode(value),
-                      ),
+                    trailing: KitchenOwlSwitch(
+                      value: state.restoreLastShoppingList,
+                      onChanged: (value) =>
+                          BlocProvider.of<SettingsCubit>(context)
+                              .setRestoreLastShoppinglist(value),
                     ),
                   ),
-              ]),
+                  ListTile(
+                    title: Text(
+                      AppLocalizations.of(context)!.itemsRecent,
+                    ),
+                    leading: const Icon(Icons.numbers_rounded),
+                    trailing: NumberSelector(
+                      value: state.recentItemsCount,
+                      setValue: BlocProvider.of<SettingsCubit>(context)
+                          .setRecentItemsCount,
+                      defaultValue: 9,
+                      lowerBound: 0,
+                      upperBound: 30,
+                    ),
+                  ),
+                  ListTile(
+                    title: Text(
+                      AppLocalizations.of(context)!.recentItemsCategorize,
+                    ),
+                    leading: const Icon(Icons.category_rounded),
+                    onTap: () => BlocProvider.of<SettingsCubit>(context)
+                        .setRecentItemsCategorize(
+                      !BlocProvider.of<SettingsCubit>(context)
+                          .state
+                          .recentItemsCategorize,
+                    ),
+                    trailing: KitchenOwlSwitch(
+                      value: state.recentItemsCategorize,
+                      onChanged: (value) =>
+                          BlocProvider.of<SettingsCubit>(context)
+                              .setRecentItemsCategorize(value),
+                    ),
+                  ),
+                  ListTile(
+                    title: Text(
+                      AppLocalizations.of(context)!
+                          .automaticIngredientDetection,
+                    ),
+                    leading: const Icon(Icons.find_in_page_rounded),
+                    onTap: () => BlocProvider.of<SettingsCubit>(context)
+                        .setAutomaticIngredientDetection(
+                      !BlocProvider.of<SettingsCubit>(context)
+                          .state
+                          .automaticIngredientDetection,
+                    ),
+                    trailing: KitchenOwlSwitch(
+                      value: state.automaticIngredientDetection,
+                      onChanged: (value) =>
+                          BlocProvider.of<SettingsCubit>(context)
+                              .setAutomaticIngredientDetection(value),
+                    ),
+                  ),
+                  if (!kIsWeb)
+                    ListTile(
+                      title: Text(
+                        AppLocalizations.of(context)!.forceOfflineMode,
+                      ),
+                      leading: const Icon(Icons.mobiledata_off_outlined),
+                      onTap: () => BlocProvider.of<AuthCubit>(context)
+                          .setForcedOfflineMode(
+                        !BlocProvider.of<AuthCubit>(context)
+                            .state
+                            .forcedOfflineMode,
+                      ),
+                      trailing: BlocBuilder<AuthCubit, AuthState>(
+                        buildWhen: (previous, current) =>
+                            previous.forcedOfflineMode !=
+                            current.forcedOfflineMode,
+                        builder: (context, state) => KitchenOwlSwitch(
+                          value: state.forcedOfflineMode,
+                          onChanged: (value) =>
+                              BlocProvider.of<AuthCubit>(context)
+                                  .setForcedOfflineMode(value),
+                        ),
+                      ),
+                    ),
+                ],
+              ),
             ),
           ),
         ),

@@ -55,6 +55,11 @@ def addHousehold(args):
         household.expenses_feature = args["expenses_feature"]
     if "view_ordering" in args:
         household.view_ordering = args["view_ordering"]
+    if "link" in args:
+        household.link = args["link"]
+    if "description" in args:
+        household.link = args["description"]
+
     household.save()
 
     member = HouseholdMember()
@@ -108,6 +113,10 @@ def updateHousehold(args, household_id):
         household.expenses_feature = args["expenses_feature"]
     if "view_ordering" in args:
         household.view_ordering = args["view_ordering"]
+    if "link" in args:
+        household.link = args["link"].strip()[:255]
+    if "description" in args:
+        household.description = args["description"].strip()[:255]
 
     household.save()
     return jsonify(household.obj_to_dict())

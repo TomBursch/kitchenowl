@@ -86,6 +86,30 @@ class _HouseholdMemberPageState extends State<HouseholdMemberPage> {
                       delegate: SliverChildBuilderDelegate(
                         childCount: state.member.length,
                         (context, i) => Dismissible(
+                          background: Container(
+                            alignment: Alignment.centerLeft,
+                            padding: const EdgeInsets.only(left: 16),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(14),
+                              color: Colors.redAccent,
+                            ),
+                            child: const Icon(
+                              Icons.delete,
+                              color: Colors.white,
+                            ),
+                          ),
+                          secondaryBackground: Container(
+                            alignment: Alignment.centerRight,
+                            padding: const EdgeInsets.only(right: 16),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(14),
+                              color: Colors.redAccent,
+                            ),
+                            child: const Icon(
+                              Icons.delete,
+                              color: Colors.white,
+                            ),
+                          ),
                           key: ValueKey<Member>(state.member[i]),
                           confirmDismiss: (direction) async {
                             if (state.member[i].owner) return false;
@@ -95,6 +119,7 @@ class _HouseholdMemberPageState extends State<HouseholdMemberPage> {
                               title: Text(
                                 AppLocalizations.of(context)!.userDelete,
                               ),
+                              confirmText: AppLocalizations.of(context)!.remove,
                               content: Text(
                                 AppLocalizations.of(context)!
                                     .userDeleteConfirmation(
@@ -110,12 +135,7 @@ class _HouseholdMemberPageState extends State<HouseholdMemberPage> {
                             user: state.member[i],
                             markSelf: true,
                             trailing: state.member[i].hasAdminRights()
-                                ? Icon(
-                                    Icons.admin_panel_settings_rounded,
-                                    color: state.member[i].owner
-                                        ? Colors.redAccent
-                                        : null,
-                                  )
+                                ? Icon(Icons.admin_panel_settings_rounded)
                                 : null,
                             onTap: () async {
                               showModalBottomSheet<void>(

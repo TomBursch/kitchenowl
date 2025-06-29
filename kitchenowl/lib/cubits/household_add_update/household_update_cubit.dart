@@ -23,6 +23,8 @@ class HouseholdUpdateCubit
           featurePlanner: household.featurePlanner ?? true,
           viewOrdering: household.viewOrdering ?? ViewsEnum.values,
           language: household.language,
+          description: household.description ?? "",
+          link: household.link ?? "",
         )) {
     refresh();
     ApiService.getInstance()
@@ -75,6 +77,8 @@ class HouseholdUpdateCubit
       categories: await categories ?? const [],
       expenseCategories: await expenseCategories ?? const [],
       supportedLanguages: state.supportedLanguages,
+      link: household.link ?? "",
+      description: household.description ?? "",
     ));
   }
 
@@ -84,6 +88,16 @@ class HouseholdUpdateCubit
       emit(state.copyWith(name: name.trim()));
       saveHousehold();
     }
+  }
+
+  void setLink(String link) {
+    emit(state.copyWith(link: link.trim()));
+    saveHousehold();
+  }
+
+  void setDescription(String description) {
+    emit(state.copyWith(description: description.trim()));
+    saveHousehold();
   }
 
   @override
@@ -128,6 +142,8 @@ class HouseholdUpdateCubit
       featureExpenses: state.featureExpenses,
       featurePlanner: state.featurePlanner,
       viewOrdering: state.viewOrdering,
+      link: state.link,
+      description: state.description,
     ));
   }
 
@@ -297,9 +313,13 @@ class HouseholdUpdateState extends HouseholdAddUpdateState {
   final Set<Tag> tags;
   final List<Category> categories;
   final List<ExpenseCategory> expenseCategories;
+  final String link;
+  final String description;
 
   const HouseholdUpdateState({
     super.name,
+    this.link = "",
+    this.description = "",
     this.image,
     super.language,
     super.featurePlanner = true,
@@ -325,6 +345,8 @@ class HouseholdUpdateState extends HouseholdAddUpdateState {
     Set<Tag>? tags,
     List<Category>? categories,
     List<ExpenseCategory>? expenseCategories,
+    String? link,
+    String? description,
   }) =>
       HouseholdUpdateState(
         name: name ?? this.name,
@@ -338,6 +360,8 @@ class HouseholdUpdateState extends HouseholdAddUpdateState {
         tags: tags ?? this.tags,
         categories: categories ?? this.categories,
         expenseCategories: expenseCategories ?? this.expenseCategories,
+        link: link ?? this.link,
+        description: description ?? this.description,
       );
 
   @override
@@ -349,6 +373,8 @@ class HouseholdUpdateState extends HouseholdAddUpdateState {
         tags,
         categories,
         expenseCategories,
+        link,
+        description,
       ];
 }
 
@@ -361,6 +387,8 @@ class LoadingHouseholdUpdateState extends HouseholdUpdateState {
     super.viewOrdering,
     super.language,
     super.supportedLanguages,
+    super.link,
+    super.description,
   });
 
   @override
@@ -377,6 +405,8 @@ class LoadingHouseholdUpdateState extends HouseholdUpdateState {
     Set<Tag>? tags,
     List<Category>? categories,
     List<ExpenseCategory>? expenseCategories,
+    String? link,
+    String? description,
   }) =>
       LoadingHouseholdUpdateState(
         name: name ?? this.name,
@@ -386,5 +416,7 @@ class LoadingHouseholdUpdateState extends HouseholdUpdateState {
         featureExpenses: featureExpenses ?? this.featureExpenses,
         viewOrdering: viewOrdering ?? this.viewOrdering,
         supportedLanguages: supportedLanguages ?? this.supportedLanguages,
+        link: link ?? this.link,
+        description: description ?? this.description,
       );
 }

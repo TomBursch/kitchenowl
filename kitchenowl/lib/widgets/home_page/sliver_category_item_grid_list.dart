@@ -3,11 +3,11 @@ import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/category.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/models/shoppinglist.dart';
+import 'package:kitchenowl/widgets/sliver_expansion_tile.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
 class SliverCategoryItemGridList<T extends Item> extends StatefulWidget {
   final String name;
-  final Duration animationDuration;
 
   // SliverItemGridList
   final void Function()? onRefresh;
@@ -27,7 +27,6 @@ class SliverCategoryItemGridList<T extends Item> extends StatefulWidget {
   const SliverCategoryItemGridList({
     super.key,
     required this.name,
-    this.animationDuration = const Duration(milliseconds: 150),
     this.onRefresh,
     this.onPressed,
     this.onLongPressed,
@@ -50,8 +49,6 @@ class SliverCategoryItemGridList<T extends Item> extends StatefulWidget {
 
 class _SliverCategoryItemGridListState<T extends Item>
     extends State<SliverCategoryItemGridList<T>> {
-  bool isExpanded = true;
-
   @override
   Widget build(BuildContext context) {
     TextStyle? titleTextStyle = Theme.of(context).textTheme.titleLarge;
@@ -99,47 +96,15 @@ class _SliverCategoryItemGridListState<T extends Item>
         advancedItemView: widget.advancedItemView,
       ));
 
-    return SliverMainAxisGroup(
-      slivers: [
-        SliverToBoxAdapter(
-          child: AnimatedPadding(
-            padding: EdgeInsets.fromLTRB(16, 0, 16, isExpanded ? 8 : 4),
-            duration: widget.animationDuration,
-            child: InkWell(
-              onTap: () => setState(() {
-                isExpanded = !isExpanded;
-              }),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Expanded(
-                    child: Text(
-                      widget.name,
-                      style: titleTextStyle,
-                    ),
-                  ),
-                  IconButton(
-                    onPressed: () => setState(() {
-                      isExpanded = !isExpanded;
-                    }),
-                    icon: AnimatedRotation(
-                      duration: widget.animationDuration,
-                      turns: isExpanded ? 0 : .25,
-                      child: const Icon(Icons.expand_more_rounded),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
+    return SliverExpansionTile(
+      title: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Text(
+          widget.name,
+          style: titleTextStyle,
         ),
-        SliverAnimatedSwitcher(
-          duration: widget.animationDuration,
-          child: !isExpanded
-              ? const SliverToBoxAdapter(child: SizedBox())
-              : MultiSliver(children: list),
-        ),
-      ],
+      ),
+      sliver: MultiSliver(children: list),
     );
   }
 }

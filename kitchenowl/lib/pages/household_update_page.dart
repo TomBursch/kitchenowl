@@ -25,6 +25,8 @@ class HouseholdUpdatePage extends StatefulWidget {
 class _HouseholdUpdatePageState extends State<HouseholdUpdatePage> {
   late HouseholdUpdateCubit cubit;
   late final TextEditingController nameController;
+  late final TextEditingController linkController;
+  late final TextEditingController descriptionController;
   late Debouncer _debouncer;
 
   @override
@@ -32,6 +34,9 @@ class _HouseholdUpdatePageState extends State<HouseholdUpdatePage> {
     super.initState();
     cubit = HouseholdUpdateCubit(widget.household);
     nameController = TextEditingController(text: widget.household.name);
+    linkController = TextEditingController(text: widget.household.link);
+    descriptionController =
+        TextEditingController(text: widget.household.description);
     _debouncer = Debouncer(duration: const Duration(milliseconds: 1000));
   }
 
@@ -52,8 +57,13 @@ class _HouseholdUpdatePageState extends State<HouseholdUpdatePage> {
         child: BlocListener<HouseholdUpdateCubit, HouseholdUpdateState>(
           listener: (context, state) {
             nameController.text = state.name;
+            linkController.text = state.link;
+            descriptionController.text = state.description;
           },
-          listenWhen: (previous, current) => previous.name != current.name,
+          listenWhen: (previous, current) =>
+              previous.name != current.name ||
+              previous.link != current.link ||
+              previous.description != current.description,
           bloc: cubit,
           child: RefreshIndicator(
             onRefresh: cubit.refresh,
@@ -78,19 +88,67 @@ class _HouseholdUpdatePageState extends State<HouseholdUpdatePage> {
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 16),
-                          child: TextField(
+                          child: TextFormField(
                             controller: nameController,
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
                             onChanged: (value) => _debouncer.run(
                               () => cubit.setName(value),
                             ),
-                            onSubmitted: (value) {
+                            onFieldSubmitted: (value) {
                               _debouncer.cancel();
                               cubit.setName(value);
+                            },
+                            validator: (value) {
+                              if (value != null && value.trim().isEmpty) {
+                                return AppLocalizations.of(context)!
+                                    .fieldCannotBeEmpty(
+                                        AppLocalizations.of(context)!.name);
+                              }
+                              return null;
                             },
                             textInputAction: TextInputAction.next,
                             textCapitalization: TextCapitalization.sentences,
                             decoration: InputDecoration(
                               labelText: AppLocalizations.of(context)!.name,
+                            ),
+                          ),
+                        ),
+                        TextField(
+                          controller: linkController,
+                          onChanged: (value) => _debouncer.run(
+                            () => cubit.setLink(value),
+                          ),
+                          onSubmitted: (value) {
+                            _debouncer.cancel();
+                            cubit.setLink(value);
+                          },
+                          textInputAction: TextInputAction.next,
+                          textCapitalization: TextCapitalization.sentences,
+                          decoration: InputDecoration(
+                            labelText: AppLocalizations.of(context)!.website,
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          child: TextField(
+                            controller: descriptionController,
+                            onChanged: (value) => _debouncer.run(
+                              () => cubit.setDescription(value),
+                            ),
+                            onSubmitted: (value) {
+                              _debouncer.cancel();
+                              cubit.setDescription(value);
+                            },
+                            maxLines: null,
+                            textInputAction: TextInputAction.next,
+                            textCapitalization: TextCapitalization.sentences,
+                            decoration: InputDecoration(
+                              border: const OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(14)),
+                              ),
+                              labelText: AppLocalizations.of(context)!.about,
                             ),
                           ),
                         ),

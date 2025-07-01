@@ -49,8 +49,7 @@ bool isValidUrl(String url) {
   try {
     final uri = Uri.parse(url);
 
-    return !uri.hasScheme ||
-        uri.isScheme("http") ||
+    return uri.isScheme("http") ||
         uri.isScheme("https") ||
         uri.isScheme("kitchenowl");
   } catch (e) {

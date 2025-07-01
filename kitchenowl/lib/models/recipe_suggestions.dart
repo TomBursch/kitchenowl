@@ -37,4 +37,12 @@ class RecipeDiscover extends Equatable {
         communityPopular,
         communityNewest,
       ];
+
+  bool isEmpty() {
+    return featured == null &&
+        popularTags.isEmpty &&
+        curated.isEmpty &&
+        communityPopular.isEmpty &&
+        communityNewest.isEmpty;
+  }
 }

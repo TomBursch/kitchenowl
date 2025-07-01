@@ -66,6 +66,23 @@ class _RecipeDiscoverPageState extends State<RecipeDiscoverPage> {
                   ],
                 );
               }
+              if (state.discover.isEmpty()) {
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    AppBar(
+                      title: Text(AppLocalizations.of(context)!.recipeEmpty),
+                    ),
+                    Spacer(),
+                    Text(
+                      AppLocalizations.of(context)!.error,
+                      textAlign: TextAlign.center,
+                    ),
+                    Spacer(),
+                  ],
+                );
+              }
               return CustomScrollView(
                 slivers: [
                   SliverAppBar(
@@ -266,6 +283,11 @@ class _RecipeDiscoverPageState extends State<RecipeDiscoverPage> {
                         ),
                       ),
                     ),
+                  SliverToBoxAdapter(
+                    child: SizedBox(
+                      height: MediaQuery.paddingOf(context).bottom,
+                    ),
+                  ),
                 ],
               );
             }),

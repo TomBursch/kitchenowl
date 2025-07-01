@@ -72,11 +72,12 @@ class _RecipeDiscoverPageState extends State<RecipeDiscoverPage> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     AppBar(
-                      title: Text(AppLocalizations.of(context)!.recipeEmpty),
+                      title:
+                          Text(AppLocalizations.of(context)!.recipesDiscover),
                     ),
                     Spacer(),
                     Text(
-                      AppLocalizations.of(context)!.error,
+                      AppLocalizations.of(context)!.recipeEmpty,
                       textAlign: TextAlign.center,
                     ),
                     Spacer(),

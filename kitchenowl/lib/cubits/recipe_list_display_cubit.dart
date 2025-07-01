@@ -28,8 +28,15 @@ class RecipeListDisplayCubit extends Cubit<RecipeListDisplayState> {
 
     final newRecipes = moreRecipes!(state.loadedPages);
 
+    late List<Recipe> recipes;
+    if (state.loadedPages == 0 && state.recipes.isNotEmpty) {
+      recipes = List.from((await newRecipes) ?? state.recipes);
+    } else {
+      recipes = List.from(state.recipes + (await newRecipes ?? []));
+    }
+
     emit(RecipeListDisplayState(
-      recipes: List.from(state.recipes + (await newRecipes ?? [])),
+      recipes: recipes,
       allLoaded: (await newRecipes ?? []).length < pageSize,
       loadedPages: state.loadedPages + 1,
     ));

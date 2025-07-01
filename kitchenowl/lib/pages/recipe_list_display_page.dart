@@ -73,7 +73,7 @@ class _RecipeListDisplayPageState extends State<RecipeListDisplayPage> {
                     ? widget.actions!(cubit, scrollController)
                     : null,
               ),
-              if (state.loadedPages <= 0)
+              if (state.loadedPages <= 0 && state.recipes.isEmpty)
                 const SliverFillRemaining(
                   hasScrollBody: false,
                   child: Center(

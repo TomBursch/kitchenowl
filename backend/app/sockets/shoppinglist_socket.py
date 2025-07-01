@@ -39,7 +39,7 @@ def on_add(args):
                 "item": con.obj_to_item_dict(),
                 "shoppinglist": shoppinglist.obj_to_dict(),
             },
-            to=shoppinglist.household_id,
+            to="household/" + str(shoppinglist.household_id),
         )
 
 
@@ -60,5 +60,5 @@ def on_remove(args):
                 "item": con.obj_to_item_dict(),
                 "shoppinglist": shoppinglist.obj_to_dict(),
             },
-            to=shoppinglist.household_id,
+            to="household/" + str(shoppinglist.household_id),
         )

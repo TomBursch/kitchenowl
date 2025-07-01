@@ -130,7 +130,7 @@ def deleteHouseholdById(household_id: int):
     for hm in hms:
         db.session.delete(hm)
     db.session.commit()
-    socketio.close_room(household_id)
+    socketio.close_room("household/" + str(household_id))
     return jsonify({"msg": "DONE"})
 
 

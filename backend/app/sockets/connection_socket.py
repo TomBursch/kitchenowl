@@ -9,7 +9,7 @@ from app import socketio
 @socket_jwt_required()
 def on_connect():
     for household in current_user.households:
-        join_room(household.household_id)
+        join_room("household/" + str(household.household_id))
 
 
 @socketio.on("reconnect")

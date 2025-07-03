@@ -1,4 +1,3 @@
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
@@ -126,38 +125,6 @@ class RecipeExplicitItemMarkdownSyntax extends md.InlineSyntax {
     if (match.group(3) != null)
       node.attributes["description"] = match.group(3)!;
     parser.addNode(node);
-
-    return true;
-  }
-}
-
-class RecipeImplicitItemMarkdownSyntax extends md.InlineSyntax {
-  final Recipe recipe;
-
-  RecipeImplicitItemMarkdownSyntax(this.recipe)
-      : super(
-          "\\b(" +
-              recipe.items
-                  // sort long to short names
-                  .sorted((a, b) => b.name.length.compareTo(a.name.length))
-                  .where((e) => e.name.isNotEmpty)
-                  .map((e) => e.name)
-                  .fold("", (a, b) => a.isEmpty ? "$b" : "$a|$b") +
-              ")\\b",
-          caseSensitive: false,
-        );
-
-  @override
-  bool onMatch(md.InlineParser parser, Match match) {
-    final name = match[1]!.toLowerCase();
-    if (name.isEmpty ||
-        !recipe.items.map((e) => e.name.toLowerCase()).contains(name)) {
-      parser.advanceBy(1);
-
-      return false;
-    }
-
-    parser.addNode(md.Element.text('recipeItem', name));
 
     return true;
   }

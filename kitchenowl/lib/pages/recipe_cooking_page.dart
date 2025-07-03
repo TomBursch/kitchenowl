@@ -4,7 +4,6 @@ import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:fraction/fraction.dart';
-import 'package:kitchenowl/app.dart';
 import 'package:kitchenowl/helpers/markdown_extract_item.dart';
 import 'package:kitchenowl/helpers/recipe_item_markdown_extension.dart';
 import 'package:kitchenowl/helpers/short_image_markdown_extension.dart';
@@ -94,8 +93,6 @@ class _RecipeCookingPageState extends State<RecipeCookingPage> {
           [
             ShortImageMarkdownSyntax(),
             RecipeExplicitItemMarkdownSyntax(widget.recipe),
-            if (App.settings.automaticIngredientDetection)
-              RecipeImplicitItemMarkdownSyntax(widget.recipe),
           ],
     );
 

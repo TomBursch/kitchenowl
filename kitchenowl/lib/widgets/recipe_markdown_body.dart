@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:kitchenowl/app.dart';
 import 'package:kitchenowl/cubits/recipe_cubit.dart';
 import 'package:kitchenowl/helpers/recipe_item_markdown_extension.dart';
 import 'package:kitchenowl/helpers/short_image_markdown_extension.dart';
@@ -78,8 +77,6 @@ class RecipeMarkdownBody extends StatelessWidget {
           [
             ShortImageMarkdownSyntax(),
             RecipeExplicitItemMarkdownSyntax(recipe),
-            if (App.settings.automaticIngredientDetection)
-              RecipeImplicitItemMarkdownSyntax(recipe)
           ],
     );
 

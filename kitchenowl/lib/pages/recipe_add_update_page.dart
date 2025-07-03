@@ -532,33 +532,63 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                                 ),
                               ),
                             ),
-                            BlocBuilder<AddUpdateRecipeCubit,
-                                AddUpdateRecipeState>(
-                              bloc: cubit,
-                              buildWhen: (previous, current) =>
-                                  previous.description != current.description ||
-                                  previous.source != current.source,
-                              builder: (context, state) => state
-                                          .description.isEmpty &&
-                                      (Uri.tryParse(state.source)
-                                              ?.hasAbsolutePath ??
-                                          false)
-                                  ? Padding(
-                                      padding: const EdgeInsets.fromLTRB(
-                                          16, 8, 16, 16),
-                                      child: Align(
-                                        alignment: Alignment.centerRight,
-                                        child: LoadingElevatedButton(
-                                          onPressed:
-                                              cubit.setDescriptionFromSource,
-                                          child: Text(
-                                            AppLocalizations.of(context)!
-                                                .addDescriptionFromSource,
+                            Wrap(
+                              children: [
+                                BlocBuilder<AddUpdateRecipeCubit,
+                                    AddUpdateRecipeState>(
+                                  bloc: cubit,
+                                  buildWhen: (previous, current) =>
+                                      previous.description !=
+                                          current.description ||
+                                      previous.source != current.source,
+                                  builder: (context, state) => state
+                                              .description.isEmpty &&
+                                          (Uri.tryParse(state.source)
+                                                  ?.hasAbsolutePath ??
+                                              false)
+                                      ? Padding(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              16, 8, 16, 16),
+                                          child: Align(
+                                            alignment: Alignment.centerRight,
+                                            child: LoadingElevatedButton(
+                                              onPressed: cubit
+                                                  .setDescriptionFromSource,
+                                              child: Text(
+                                                AppLocalizations.of(context)!
+                                                    .addDescriptionFromSource,
+                                              ),
+                                            ),
                                           ),
-                                        ),
-                                      ),
-                                    )
-                                  : const SizedBox(height: 16),
+                                        )
+                                      : const SizedBox(height: 16),
+                                ),
+                                BlocBuilder<AddUpdateRecipeCubit,
+                                    AddUpdateRecipeState>(
+                                  bloc: cubit,
+                                  buildWhen: (previous, current) =>
+                                      previous.canMatchIngredients() !=
+                                      current.canMatchIngredients(),
+                                  builder: (context, state) => state
+                                          .canMatchIngredients()
+                                      ? Padding(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              16, 8, 16, 16),
+                                          child: Align(
+                                            alignment: Alignment.centerRight,
+                                            child: LoadingElevatedButton(
+                                              onPressed: () async => cubit
+                                                  .detectIngridientsInDescription(),
+                                              child: Text(
+                                                AppLocalizations.of(context)!
+                                                    .automaticIngredientDetection,
+                                              ),
+                                            ),
+                                          ),
+                                        )
+                                      : const SizedBox(height: 16),
+                                ),
+                              ],
                             ),
                             Padding(
                               padding:

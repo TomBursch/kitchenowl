@@ -75,7 +75,7 @@ def getRecipeById(id):
 @validate_args(AddRecipe)
 def addRecipe(args, household_id):
     recipe = Recipe()
-    recipe.name = args["name"]
+    recipe.name = args["name"].strip()[:128]
     recipe.description = args["description"]
     recipe.household_id = household_id
     if "time" in args:
@@ -140,7 +140,7 @@ def updateRecipe(args, id):  # noqa: C901
     recipe.checkAuthorized()
 
     if "name" in args:
-        recipe.name = args["name"]
+        recipe.name = args["name"].strip()[:128]
     if "description" in args:
         recipe.description = args["description"]
     if "time" in args:

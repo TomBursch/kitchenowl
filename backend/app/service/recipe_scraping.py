@@ -18,7 +18,7 @@ def scrapePublic(url: str, html: str, household: Household) -> dict[str, Any] | 
         return None
     recipe = Recipe()
     try:
-        recipe.name = scraper.title()
+        recipe.name = scraper.title().strip()[:128]
     except (
         NotImplementedError,
         ValueError,

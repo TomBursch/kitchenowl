@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:equatable/equatable.dart';
 import 'package:kitchenowl/helpers/named_bytearray.dart';
 import 'package:kitchenowl/models/household.dart';
@@ -205,6 +206,29 @@ class AddUpdateRecipeCubit extends ReplayCubit<AddUpdateRecipeState> {
     l[i] = item;
     emit(state.copyWith(items: l, hasChanges: true));
   }
+
+  void detectIngridientsInDescription() {
+    final String description = state.description.replaceAllMapped(
+        RegExp(
+          "(?<!#.*)\\b(?<!@)(" +
+              state.items
+                  // sort long to short names
+                  .sorted((a, b) => b.name.length.compareTo(a.name.length))
+                  .where((e) => e.name.isNotEmpty)
+                  .map((e) => e.name)
+                  .fold("", (a, b) => a.isEmpty ? "$b" : "$a|$b") +
+              ")\\b",
+          caseSensitive: false,
+        ), (match) {
+      final name = match[1]!.toLowerCase();
+      if (name.isEmpty ||
+          !recipe.items.map((e) => e.name.toLowerCase()).contains(name)) {
+        return match[0]!;
+      }
+      return "@" + name.replaceAll(" ", "_");
+    });
+    emit(state.copyWith(description: description));
+  }
 }
 
 class AddUpdateRecipeState extends Equatable {
@@ -292,4 +316,20 @@ class AddUpdateRecipeState extends Equatable {
         selectedTags,
         hasChanges,
       ];
+
+  bool canMatchIngredients() {
+    if (items.isEmpty) return false;
+
+    return description.contains(RegExp(
+      "(?<!#.*)\\b(?<!@)(" +
+          items
+              // sort long to short names
+              .sorted((a, b) => b.name.length.compareTo(a.name.length))
+              .where((e) => e.name.isNotEmpty)
+              .map((e) => e.name)
+              .fold("", (a, b) => a.isEmpty ? "$b" : "$a|$b") +
+          ")\\b",
+      caseSensitive: false,
+    ));
+  }
 }

@@ -34,6 +34,7 @@ dependencies {
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.5' // required by local notifications
     implementation 'androidx.window:window:1.0.0' // required by local notifications
     implementation 'androidx.window:window-java:1.0.0' // required by local notifications
+    implementation 'org.unifiedpush.android:embedded-fcm-distributor:3.0.0' // required by unified push
 }
 
 configurations.configureEach {

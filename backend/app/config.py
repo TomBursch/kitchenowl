@@ -29,6 +29,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import JWTManager
 from flask_apscheduler import APScheduler
+from flask_pywebpush import WebPush
 import sqlite_icu
 import os
 
@@ -170,6 +171,7 @@ db = SQLAlchemy(app, model_class=DbModelBase)
 migrate = Migrate(app, db, render_as_batch=True)
 bcrypt = Bcrypt(app)
 jwt = JWTManager(app)
+push = WebPush(app)
 socketio = SocketIO(
     app,
     json=app.json,

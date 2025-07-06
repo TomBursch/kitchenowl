@@ -111,7 +111,8 @@ class _AppState extends State<App> {
       );
     }
 
-    NotificationService.getInstance().initialize();
+    NotificationService.getInstance().initialize().whenComplete(
+        () => widget._settingsCubit.refreshNotificationDistributor());
   }
 
   @override

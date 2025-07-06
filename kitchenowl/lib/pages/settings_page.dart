@@ -383,7 +383,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         ),
                       ),
                     ),
-                  if (!kIsWeb && Platform.isAndroid || Platform.isLinux)
+                  if (!kIsWeb && (Platform.isAndroid || Platform.isLinux))
                     ListTile(
                       title: Text(
                         AppLocalizations.of(context)!.server,
@@ -394,9 +394,12 @@ class _SettingsPageState extends State<SettingsPage> {
                             ? await NotificationService.getInstance()
                                 .unregister()
                             : await UnifiedPushUi(
-                                context,
-                                [NotificationService.instanceName],
-                                NotificationService.getInstance(),
+                                context: context,
+                                instances: [NotificationService.instanceName],
+                                unifiedPushFunctions:
+                                    NotificationService.getInstance(),
+                                showNoDistribDialog: true,
+                                onNoDistribDialogDismissed: () {},
                               ).registerAppWithDialog();
                         BlocProvider.of<SettingsCubit>(context)
                             .refreshNotificationDistributor();

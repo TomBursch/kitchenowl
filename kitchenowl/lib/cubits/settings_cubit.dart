@@ -53,8 +53,6 @@ class SettingsCubit extends Cubit<SettingsState> {
       shoppingListTapToRemove: await shoppingListTapToRemove ?? true,
       recentItemsCategorize: await recentItemsCategorize ?? false,
       restoreLastShoppingList: await restoreLastShoppingList ?? false,
-      notificationDistributor:
-          await NotificationService.getInstance().getDistributor(),
     ));
   }
 
@@ -62,7 +60,7 @@ class SettingsCubit extends Cubit<SettingsState> {
     await Future.delayed(const Duration(seconds: 1));
     String? distributor =
         await NotificationService.getInstance().getDistributor();
-    print("Refresh: ${distributor}");
+    print("Refresh distributor: ${distributor}");
     emit(state.copyWith(notificationDistributor: Nullable(distributor)));
   }
 

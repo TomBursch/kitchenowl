@@ -42,6 +42,7 @@ dependencies = [
     "psycopg2-binary>=2.9.10",
     "uWSGI>=2.0.28",
     "uwsgi-tools>=1.1.1",
+    "flask-pywebpush>=1.1",
 ]
 
 [dependency-groups]

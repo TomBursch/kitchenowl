@@ -165,7 +165,6 @@ class SettingsState extends Equatable {
     bool? shoppingListTapToRemove,
     bool? recentItemsCategorize,
     bool? restoreLastShoppingList,
-    bool? automaticIngredientDetection,
   }) =>
       SettingsState(
         themeMode: themeMode ?? this.themeMode,

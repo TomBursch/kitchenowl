@@ -121,15 +121,6 @@ class SettingsCubit extends Cubit<SettingsState> {
     );
     emit(state.copyWith(restoreLastShoppingList: restoreLastShoppingList));
   }
-
-  void setAutomaticIngredientDetection(bool automaticIngredientDetection) {
-    PreferenceStorage.getInstance().writeBool(
-      key: 'automaticIngredientDetection',
-      value: automaticIngredientDetection,
-    );
-    emit(state.copyWith(
-        automaticIngredientDetection: automaticIngredientDetection));
-  }
 }
 
 class SettingsState extends Equatable {

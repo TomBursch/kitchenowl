@@ -102,10 +102,11 @@ class _RecipeListDisplayPageState extends State<RecipeListDisplayPage> {
                     child: SliverGrid.builder(
                       itemCount: state.recipes.length,
                       gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                        maxCrossAxisExtent: widget.showHousehold ? 420 : 350,
-                        childAspectRatio: widget.showHousehold ? 0.75 : 0.8,
+                        maxCrossAxisExtent: widget.showHousehold ? 340 : 328,
+                        childAspectRatio: widget.showHousehold ? 0.62 : 0.67,
                       ),
                       itemBuilder: (context, i) => RecipeCard(
+                        imageFlex: widget.showHousehold ? 4 : 5,
                         key: Key(state.recipes[i].name),
                         recipe: state.recipes[i],
                         showHousehold: widget.showHousehold,

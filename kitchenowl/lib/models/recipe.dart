@@ -87,7 +87,7 @@ class Recipe extends Model {
       source: map['source'] ?? '',
       image: map['photo'],
       imageHash: map['photo_hash'],
-      visibility: RecipeVisibility.values[map['visibility']],
+      visibility: RecipeVisibility.values[map['visibility'] ?? 0],
       householdId: map['household_id'],
       items: items,
       tags: tags,
@@ -95,7 +95,7 @@ class Recipe extends Model {
       household: map.containsKey("household")
           ? Household.fromJson(map['household'])
           : null,
-      curated: map['server_curated'],
+      curated: map['server_curated'] ?? false,
     );
   }
 

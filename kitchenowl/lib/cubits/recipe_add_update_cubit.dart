@@ -208,6 +208,8 @@ class AddUpdateRecipeCubit extends ReplayCubit<AddUpdateRecipeState> {
   }
 
   void detectIngridientsInDescription() {
+    if (!state.canMatchIngredients()) return;
+
     final String description = state.description.replaceAllMapped(
         RegExp(
           "(?<!#.*)\\b(?<!@)(" +
@@ -227,7 +229,10 @@ class AddUpdateRecipeCubit extends ReplayCubit<AddUpdateRecipeState> {
       }
       return "@" + name.replaceAll(" ", "_");
     });
-    emit(state.copyWith(description: description));
+    emit(state.copyWith(
+      description: description,
+      hasChanges: true,
+    ));
   }
 }
 

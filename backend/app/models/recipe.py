@@ -134,7 +134,7 @@ class Recipe(Model, DbModelAuthorizeMixin):
 
     def obj_to_dict(
         self,
-        skip_columns: list[str] | None = ["server_scrapes"],
+        skip_columns: list[str] | None = None,
         include_columns: list[str] | None = None,
     ) -> dict[str, Any]:
         res = super().obj_to_dict(skip_columns, include_columns)
@@ -177,6 +177,8 @@ class Recipe(Model, DbModelAuthorizeMixin):
                 "planned_days",
                 "planned_cooking_dates",
                 "planned",
+                "suggestion_score",
+                "suggestion_rank",
             ]
         )
         return res

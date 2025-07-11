@@ -20,6 +20,7 @@ class RecipeCard extends StatelessWidget {
   final Future<void> Function()? onLongPressed;
   final Future<void> Function()? onAddToDate;
   final double? width;
+  final int imageFlex;
 
   const RecipeCard({
     super.key,
@@ -30,6 +31,7 @@ class RecipeCard extends StatelessWidget {
     this.onAddToDate,
     this.showHousehold = false,
     this.width,
+    this.imageFlex = 5,
   });
 
   @override
@@ -82,7 +84,7 @@ class RecipeCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Expanded(
-                flex: 5,
+                flex: imageFlex,
                 child: Stack(
                   fit: StackFit.passthrough,
                   children: [

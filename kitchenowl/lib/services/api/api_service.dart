@@ -538,4 +538,57 @@ class ApiService {
 
     return (null, null, null);
   }
-}
+  
+  // Add method to update shopping list order (excluding standard lists)
+  Future<bool> updateShoppingListOrder(
+    int householdId, 
+    List<int> orderedIds
+  ) async {
+    try {
+      final response = await put(
+        '/household/$householdId/shoppinglist/reorder',
+        json.encode({'ordered_ids': orderedIds}),
+      );
+      return response.statusCode == 200;
+    } catch (e) {
+      debugPrint('Error updating order: $e');
+      return false;
+    }
+  }
+
+  // Update individual shopping list (for standard list changes, renames, etc.)
+  Future<ShoppingList?> updateShoppingList(ShoppingList shoppingList) async {
+    try {
+      final response = await patch(
+        '/shoppinglist/${shoppingList.id}',
+        json.encode(shoppingList.toJson()),
+      );
+      if (response.statusCode == 200) {
+        return ShoppingList.fromJson(json.decode(response.body));
+      }
+    } catch (e) {
+      debugPrint('Error updating list: $e');
+    }
+    return null;
+  }
+
+  // Make a shopping list the standard list
+  Future<ShoppingList?> makeStandardList(int shoppingListId) async {
+    try {
+      final response = await patch(
+        '/shoppinglist/$shoppingListId/make-standard',
+        '{}',  // Empty body
+      );
+      if (response.statusCode == 200) {
+        return ShoppingList.fromJson(json.decode(response.body));
+      }
+    } catch (e) {
+      debugPrint('Error making standard: $e');
+    }
+    return null;
+  }
+  
+  Future<void> syncPendingOperations() async {
+    // Implementation to sync any pending reorder operations
+    // Should check TempStorage for queued operations
+  }

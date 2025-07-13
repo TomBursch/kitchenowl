@@ -66,3 +66,34 @@ class TransactionHouseholdGet extends Transaction<Household?> {
     return res.household;
   }
 }
+class TransactionShoppingListReorder extends Transaction<bool> {
+  final Household household;
+  final List<int> orderedIds;
+
+  TransactionShoppingListReorder({
+    required this.household,
+    required this.orderedIds,
+  });
+
+  @override
+  Future<bool> run() async {
+    return await ApiService.getInstance()
+      .updateShoppingListOrder(household.id!, orderedIds);
+  }
+}
+
+class TransactionShoppingListMakeStandard extends Transaction<bool> {
+  final Household household;
+  final ShoppingList shoppingList;
+
+  TransactionShoppingListMakeStandard({
+    required this.household,
+    required this.shoppingList,
+  });
+
+  @override
+  Future<bool> run() async {
+    return (await ApiService.getInstance()
+      .makeStandardList(shoppingList.id!)) != null;
+  }
+}

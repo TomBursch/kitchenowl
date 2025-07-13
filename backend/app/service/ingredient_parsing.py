@@ -72,18 +72,17 @@ Return only JSON and nothing else.
             "content": systemMessage,
         }
     ]
-    if targetLanguageCode in SUPPORTED_LANGUAGES:
-        messages.append(
-            {
-                "role": "user",
-                "content": f"Translate the response to {SUPPORTED_LANGUAGES[targetLanguageCode]}. Translate the JSON content to {SUPPORTED_LANGUAGES[targetLanguageCode]}. Your target language is {SUPPORTED_LANGUAGES[targetLanguageCode]}. Respond in {SUPPORTED_LANGUAGES[targetLanguageCode]} from the start.",
-            }
-        )
 
+    userMessage: str = ""
+    if targetLanguageCode in SUPPORTED_LANGUAGES:
+        userMessage += f"Translate the response to {SUPPORTED_LANGUAGES[targetLanguageCode]}. Translate the JSON content to {SUPPORTED_LANGUAGES[targetLanguageCode]}. Your target language is {SUPPORTED_LANGUAGES[targetLanguageCode]}. Respond in {SUPPORTED_LANGUAGES[targetLanguageCode]} from the start."
+        userMessage += "\n"
+
+    userMessage += json.dumps(ingredients)
     messages.append(
         {
             "role": "user",
-            "content": json.dumps(ingredients),
+            "content": userMessage,
         }
     )
 

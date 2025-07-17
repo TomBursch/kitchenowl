@@ -2,6 +2,8 @@ version: "3"
 services:
   db:
     image: postgres:15
+    security_opt:
+      - "no-new-privileges:true"
     restart: unless-stopped
     environment:
       POSTGRES_DB: kitchenowl

@@ -18,3 +18,4 @@ from .challenge_mail_verify import ChallengeMailVerify
 from .challenge_password_reset import ChallengePasswordReset
 from .oidc import OIDCLink, OIDCRequest
 from .report import Report
+from .push_notification_subscription import PushNotificationSubscription

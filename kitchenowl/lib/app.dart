@@ -15,6 +15,7 @@ import 'package:kitchenowl/cubits/settings_cubit.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/router.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
+import 'package:kitchenowl/services/notification_service.dart';
 import 'package:kitchenowl/services/storage/storage.dart';
 import 'package:kitchenowl/services/transaction_handler.dart';
 import 'package:kitchenowl/styles/colors.dart';
@@ -76,6 +77,8 @@ class _AppState extends State<App> {
         }
       });
     }
+
+    NotificationService.getInstance().initialize();
   }
 
   @override

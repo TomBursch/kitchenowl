@@ -41,7 +41,9 @@ def createShoppinglist(args, household_id):
     shoppinglist.save()
     shoppinglist_dict = shoppinglist.obj_to_dict()
     socketio.emit(
-        "shoppinglist:add", {"shoppinglist": shoppinglist_dict}, to=household_id
+        "shoppinglist:add",
+        {"shoppinglist": shoppinglist_dict},
+        to="household/" + str(household_id),
     )
     return jsonify(shoppinglist_dict)
 
@@ -115,7 +117,7 @@ def deleteShoppinglist(id):
     socketio.emit(
         "shoppinglist:delete",
         {"shoppinglist": shoppinglist.obj_to_dict()},
-        to=str(shoppinglist.household_id),
+        to="household/" + str(shoppinglist.household_id),
     )
 
     return jsonify({"msg": "DONE"})
@@ -147,7 +149,7 @@ def updateItemDescription(args, id: int, item_id: int):
             "item": con.obj_to_item_dict(),
             "shoppinglist": con.shoppinglist.obj_to_dict(),
         },
-        to=str(con.shoppinglist.household_id),
+        to="household/" + str(con.shoppinglist.household_id),
     )
     return jsonify(con.obj_to_item_dict())
 
@@ -308,7 +310,7 @@ def addShoppinglistItemByName(args, id):
                 "item": con.obj_to_item_dict(),
                 "shoppinglist": shoppinglist.obj_to_dict(),
             },
-            to=str(shoppinglist.household_id),
+            to="household/" + str(shoppinglist.household_id),
         )
 
     return jsonify(item.obj_to_dict())
@@ -335,7 +337,7 @@ def removeShoppinglistItem(args, id: int):
                 "item": con.obj_to_item_dict(),
                 "shoppinglist": shoppinglist.obj_to_dict(),
             },
-            to=str(shoppinglist.household_id),
+            to="household/" + str(shoppinglist.household_id),
         )
 
     return jsonify({"msg": "DONE"})
@@ -363,7 +365,7 @@ def removeShoppinglistItems(args, id: int):
                     "item": con.obj_to_item_dict(),
                     "shoppinglist": shoppinglist.obj_to_dict(),
                 },
-                to=str(shoppinglist.household_id),
+                to="household/" + str(shoppinglist.household_id),
             )
 
     return jsonify({"msg": "DONE"})
@@ -428,7 +430,7 @@ def addRecipeItems(args, id):
                         "item": con.obj_to_item_dict(),
                         "shoppinglist": shoppinglist.obj_to_dict(),
                     },
-                    to=str(shoppinglist.household_id),
+                    to="household/" + str(shoppinglist.household_id),
                 )
 
         db.session.commit()

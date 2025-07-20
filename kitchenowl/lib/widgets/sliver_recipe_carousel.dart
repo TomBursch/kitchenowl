@@ -20,6 +20,8 @@ class SliverRecipeCarousel extends StatelessWidget {
   final bool showHousehold;
   final bool isLoading;
   final int? limit;
+  final double? cardWidth;
+  final double? cardHeight;
 
   const SliverRecipeCarousel({
     super.key,
@@ -35,6 +37,8 @@ class SliverRecipeCarousel extends StatelessWidget {
     this.showHousehold = false,
     this.isLoading = false,
     this.limit,
+    this.cardWidth,
+    this.cardHeight,
   });
 
   @override
@@ -61,7 +65,8 @@ class SliverRecipeCarousel extends StatelessWidget {
                           mobile: false,
                           tablet: true,
                           desktop: true,
-                        )))
+                        )) &&
+                    recipes.length >= (limit ?? 0))
                   FilledButton.tonalIcon(
                     onPressed: showMore,
                     icon: Icon(Icons.keyboard_arrow_right_rounded),
@@ -79,12 +84,13 @@ class SliverRecipeCarousel extends StatelessWidget {
       ),
       SliverToBoxAdapter(
         child: SizedBox(
-          height: getValueForScreenType(
-            context: context,
-            mobile: 370,
-            tablet: 405,
-            desktop: 405,
-          ),
+          height: cardHeight ??
+              getValueForScreenType(
+                context: context,
+                mobile: 370,
+                tablet: 405,
+                desktop: 405,
+              ),
           child: ListView.builder(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             controller: scrollController,
@@ -135,10 +141,11 @@ class SliverRecipeCarousel extends StatelessWidget {
                 onPressed:
                     onPressed != null ? () => onPressed!(recipes[i]) : null,
                 showHousehold: showHousehold,
+                width: cardWidth,
               );
             },
             itemCount: math.min(limit ?? recipes.length, recipes.length) +
-                (showMore != null ? 1 : 0) +
+                (showMore != null && recipes.length >= (limit ?? 0) ? 1 : 0) +
                 (isLoading ? 1 : 0),
             scrollDirection: Axis.horizontal,
           ),

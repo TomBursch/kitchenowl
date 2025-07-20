@@ -30,8 +30,6 @@ class SettingsCubit extends Cubit<SettingsState> {
         PreferenceStorage.getInstance().readBool(key: 'recentItemsCategorize');
     final restoreLastShoppingList = PreferenceStorage.getInstance()
         .readBool(key: 'restoreLastShoppingList');
-    final automaticIngredientDetection = PreferenceStorage.getInstance()
-        .readBool(key: 'automaticIngredientDetection');
 
     Config.deviceInfo = DeviceInfoPlugin().deviceInfo;
     Config.packageInfo = PackageInfo.fromPlatform();
@@ -54,7 +52,6 @@ class SettingsCubit extends Cubit<SettingsState> {
       shoppingListTapToRemove: await shoppingListTapToRemove ?? true,
       recentItemsCategorize: await recentItemsCategorize ?? false,
       restoreLastShoppingList: await restoreLastShoppingList ?? false,
-      automaticIngredientDetection: await automaticIngredientDetection ?? true,
     ));
   }
 
@@ -124,15 +121,6 @@ class SettingsCubit extends Cubit<SettingsState> {
     );
     emit(state.copyWith(restoreLastShoppingList: restoreLastShoppingList));
   }
-
-  void setAutomaticIngredientDetection(bool automaticIngredientDetection) {
-    PreferenceStorage.getInstance().writeBool(
-      key: 'automaticIngredientDetection',
-      value: automaticIngredientDetection,
-    );
-    emit(state.copyWith(
-        automaticIngredientDetection: automaticIngredientDetection));
-  }
 }
 
 class SettingsState extends Equatable {
@@ -145,7 +133,6 @@ class SettingsState extends Equatable {
   final bool shoppingListTapToRemove;
   final bool recentItemsCategorize;
   final bool restoreLastShoppingList;
-  final bool automaticIngredientDetection;
 
   const SettingsState({
     this.themeMode = ThemeMode.system,
@@ -157,7 +144,6 @@ class SettingsState extends Equatable {
     this.shoppingListTapToRemove = true,
     this.recentItemsCategorize = false,
     this.restoreLastShoppingList = false,
-    this.automaticIngredientDetection = true,
   });
 
   SettingsState copyWith({
@@ -170,7 +156,6 @@ class SettingsState extends Equatable {
     bool? shoppingListTapToRemove,
     bool? recentItemsCategorize,
     bool? restoreLastShoppingList,
-    bool? automaticIngredientDetection,
   }) =>
       SettingsState(
         themeMode: themeMode ?? this.themeMode,
@@ -185,8 +170,6 @@ class SettingsState extends Equatable {
             recentItemsCategorize ?? this.recentItemsCategorize,
         restoreLastShoppingList:
             restoreLastShoppingList ?? this.restoreLastShoppingList,
-        automaticIngredientDetection:
-            automaticIngredientDetection ?? this.automaticIngredientDetection,
       );
 
   @override
@@ -200,6 +183,5 @@ class SettingsState extends Equatable {
         shoppingListTapToRemove,
         recentItemsCategorize,
         restoreLastShoppingList,
-        automaticIngredientDetection
       ];
 }

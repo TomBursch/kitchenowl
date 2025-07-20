@@ -34,6 +34,9 @@ class _SignupPageState extends State<SignupPage> {
         (App.serverInfo is ConnectedServerInfoState)
             ? (App.serverInfo as ConnectedServerInfoState).privacyPolicyUrl
             : null;
+    final String? termsUrl = (App.serverInfo is ConnectedServerInfoState)
+        ? (App.serverInfo as ConnectedServerInfoState).termsUrl
+        : null;
     final bool emailMandatory = (App.serverInfo is ConnectedServerInfoState)
         ? (App.serverInfo as ConnectedServerInfoState).emailMandatory
         : false;
@@ -121,13 +124,16 @@ class _SignupPageState extends State<SignupPage> {
                               enableEmail: emailMandatory,
                             ),
                             if (privacyPolicyUrl != null &&
-                                isValidUrl(privacyPolicyUrl))
+                                isValidUrl(privacyPolicyUrl) &&
+                                termsUrl != null &&
+                                isValidUrl(termsUrl))
                               Padding(
                                 padding: const EdgeInsets.only(top: 16),
                                 child: KitchenOwlMarkdownBody(
                                   data: AppLocalizations.of(context)!
                                       .privacyPolicyAgree(
                                     "[${AppLocalizations.of(context)!.privacyPolicy}]($privacyPolicyUrl)",
+                                    "[${AppLocalizations.of(context)!.terms}]($termsUrl)",
                                   ),
                                   styleSheet: MarkdownStyleSheet(
                                     p: Theme.of(context)

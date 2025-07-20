@@ -9,7 +9,7 @@ Inside your OIDC you need to configure a new client, with the following to redir
 
 <div class="annotate" markdown>
 - `FRONT_URL(1)/signin/redirect` 
-- `kitchenowl:///signin/redirect`
+- `kitchenowl:/signin/redirect`
 </div>
 
 1. FRONT_URL is the environment variable that exactly matches KitchenOwl's URL including the schema (e.g. `https://app.kitchenowl.org`)
@@ -83,7 +83,7 @@ Place this in your Authelia [configuration.yaml](https://www.authelia.com/config
         - profile
     redirect_uris:
         - https://your.domain.here/signin/redirect # Put the same value as FRONT_URL, appended with /signin/redirect
-        - kitchenowl:///signin/redirect
+        - kitchenowl:/signin/redirect
     response_modes:
     userinfo_signing_algorithm: none
     token_endpoint_auth_method: client_secret_post

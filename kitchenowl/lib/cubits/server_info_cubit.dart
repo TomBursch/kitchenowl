@@ -37,6 +37,7 @@ class ConnectedServerInfoState extends ServerInfoState {
   final int version;
   final int minFrontendVersion;
   final String? privacyPolicyUrl;
+  final String? termsUrl;
   final bool openRegistration;
   final bool emailMandatory;
   final List<OIDCProivder> oidcProvider;
@@ -45,6 +46,7 @@ class ConnectedServerInfoState extends ServerInfoState {
     required this.version,
     required this.minFrontendVersion,
     this.privacyPolicyUrl,
+    this.termsUrl,
     this.openRegistration = false,
     this.emailMandatory = false,
     this.oidcProvider = const [],
@@ -61,6 +63,7 @@ class ConnectedServerInfoState extends ServerInfoState {
       version: data["version"],
       minFrontendVersion: data["min_frontend_version"],
       privacyPolicyUrl: data["privacy_policy"],
+      termsUrl: data["terms"],
       openRegistration: data["open_registration"] ?? false,
       emailMandatory: data["email_mandatory"] ?? false,
       oidcProvider: oidcProvider,
@@ -72,6 +75,7 @@ class ConnectedServerInfoState extends ServerInfoState {
         version,
         minFrontendVersion,
         privacyPolicyUrl,
+        termsUrl,
         openRegistration,
         emailMandatory,
       ];

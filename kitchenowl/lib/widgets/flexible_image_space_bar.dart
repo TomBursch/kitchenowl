@@ -83,7 +83,6 @@ class FlexibleImageSpaceBar extends StatelessWidget {
                   image: getImageProvider(
                     context,
                     imageUrl,
-                    maxWidth: MediaQuery.sizeOf(context).width.toInt(),
                   ),
                   fit: BoxFit.cover,
                 ),

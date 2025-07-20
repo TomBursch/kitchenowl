@@ -1,18 +1,19 @@
-import 'dart:math' as math;
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:fraction/fraction.dart';
 import 'package:kitchenowl/cubits/recipe_cubit.dart';
-import 'package:kitchenowl/item_icons.dart';
+import 'package:kitchenowl/helpers/string_scaler.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/models/recipe.dart';
+import 'package:kitchenowl/widgets/item_chip.dart';
 import 'package:markdown/markdown.dart' as md;
 
 class RecipeItemMarkdownBuilder extends MarkdownElementBuilder {
   final List<RecipeItem> items;
+  final Fraction? itemScaledFactor;
 
-  RecipeItemMarkdownBuilder({required this.items});
+  RecipeItemMarkdownBuilder({required this.items, this.itemScaledFactor});
 
   @override
   Widget? visitElementAfterWithContext(
@@ -26,29 +27,22 @@ class RecipeItemMarkdownBuilder extends MarkdownElementBuilder {
     RecipeItem item = items.firstWhere(
       (e) => e.name.toLowerCase() == element.textContent,
     );
-    IconData? icon = ItemIcons.get(item);
+    String? overridenDescription = element.attributes["description"];
+    if (overridenDescription != null && itemScaledFactor != null) {
+      overridenDescription =
+          StringScaler.scale(overridenDescription, itemScaledFactor!);
+    }
     return RichText(
       text: TextSpan(children: [
         WidgetSpan(
           alignment: PlaceholderAlignment.middle,
-          child: Chip(
-            avatar: icon != null ? Icon(icon) : null,
-            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            padding: EdgeInsets.zero,
-            labelPadding:
-                icon != null ? const EdgeInsets.only(left: 1, right: 4) : null,
-            label: Text(item.name +
-                (item.description.isNotEmpty
-                    ? " (${_limitString(item.description)})"
-                    : "")),
+          child: ItemChip(
+            item: item,
+            description: overridenDescription,
           ),
         ),
       ]),
     );
-  }
-
-  String _limitString(String s) {
-    return s.length > 15 ? "${s.substring(0, math.min(15, s.length))}..." : s;
   }
 }
 
@@ -74,38 +68,35 @@ class RecipeCubitItemMarkdownBuilder extends MarkdownElementBuilder {
             bloc: cubit,
             buildWhen: (previous, current) =>
                 previous.dynamicRecipe.items.firstWhere(
-                  (e) => e.name.toLowerCase() == element.textContent,
-                ) !=
-                current.dynamicRecipe.items.firstWhere(
-                  (e) => e.name.toLowerCase() == element.textContent,
-                ),
+                      (e) => e.name.toLowerCase() == element.textContent,
+                    ) !=
+                    current.dynamicRecipe.items.firstWhere(
+                      (e) => e.name.toLowerCase() == element.textContent,
+                    ) ||
+                previous.selectedYields != current.selectedYields,
             builder: (context, state) {
               RecipeItem item = state.dynamicRecipe.items.firstWhere(
                 (e) => e.name.toLowerCase() == element.textContent,
               );
-              IconData? icon = ItemIcons.get(item);
 
-              return Chip(
-                avatar: icon != null ? Icon(icon) : null,
-                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                padding: EdgeInsets.zero,
-                labelPadding: icon != null
-                    ? const EdgeInsets.only(left: 1, right: 4)
-                    : null,
-                label: Text(item.name +
-                    (item.description.isNotEmpty
-                        ? " (${_limitString(item.description)})"
-                        : "")),
+              String? overridenDescription = element.attributes["description"];
+              if (overridenDescription != null &&
+                  state.recipe.yields != 0 &&
+                  state.selectedYields != null &&
+                  state.recipe.yields != state.selectedYields) {
+                overridenDescription = StringScaler.scale(overridenDescription,
+                    Fraction(state.selectedYields!, state.recipe.yields));
+              }
+
+              return ItemChip(
+                item: item,
+                description: overridenDescription,
               );
             },
           ),
         ),
       ]),
     );
-  }
-
-  String _limitString(String s) {
-    return s.length > 15 ? "${s.substring(0, math.min(15, s.length))}..." : s;
   }
 }
 
@@ -119,7 +110,7 @@ class RecipeExplicitItemMarkdownSyntax extends md.InlineSyntax {
         );
 
   static const String _pattern =
-      r"""@([^ \n\.\(\)\\\/\?\*\+,!%$#@^;:"=~]+)"""; // TODO: replace with \p{L} and unicode=true
+      r"""@([^ \n\.\(\)\\\/\?\*\+,!%$#@^;:"=~{]+)({([^}]*)})?"""; // TODO: replace with \p{L} and unicode=true
 
   @override
   bool onMatch(md.InlineParser parser, Match match) {
@@ -130,37 +121,10 @@ class RecipeExplicitItemMarkdownSyntax extends md.InlineSyntax {
       return false;
     }
 
-    parser.addNode(md.Element.text('recipeItem', name));
-
-    return true;
-  }
-}
-
-class RecipeImplicitItemMarkdownSyntax extends md.InlineSyntax {
-  final Recipe recipe;
-
-  RecipeImplicitItemMarkdownSyntax(this.recipe)
-      : super(
-          "\\b(" +
-              recipe.items
-                  // sort long to short names
-                  .sorted((a, b) => b.name.length.compareTo(a.name.length))
-                  .map((e) => e.name)
-                  .fold("", (a, b) => a.isEmpty ? "$b" : "$a|$b") +
-              ")\\b",
-          caseSensitive: false,
-        );
-
-  @override
-  bool onMatch(md.InlineParser parser, Match match) {
-    final name = match[1]!.toLowerCase();
-    if (!recipe.items.map((e) => e.name.toLowerCase()).contains(name)) {
-      parser.advanceBy(1);
-
-      return false;
-    }
-
-    parser.addNode(md.Element.text('recipeItem', name));
+    final node = md.Element.text('recipeItem', name);
+    if (match.group(3) != null)
+      node.attributes["description"] = match.group(3)!;
+    parser.addNode(node);
 
     return true;
   }

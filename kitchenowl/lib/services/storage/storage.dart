@@ -56,6 +56,8 @@ class PreferenceStorage extends Storage {
       (await _storage).getString(key);
   Future<int?> readInt({required String key}) async =>
       (await _storage).getInt(key);
+  Future<double?> readDouble({required String key}) async =>
+      (await _storage).getDouble(key);
   Future<bool?> readBool({required String key}) async =>
       (await _storage).getBool(key);
 
@@ -64,6 +66,9 @@ class PreferenceStorage extends Storage {
       (await _storage).setString(key, value);
   Future<void> writeInt({required String key, required int value}) async =>
       (await _storage).setInt(key, value);
+  Future<void> writeDouble(
+          {required String key, required double value}) async =>
+      (await _storage).setDouble(key, value);
   Future<void> writeBool({required String key, required bool value}) async =>
       (await _storage).setBool(key, value);
 }

@@ -1,7 +1,10 @@
-from marshmallow import fields, Schema
+from marshmallow import EXCLUDE, fields, Schema
 
 
 class AddRecipe(Schema):
+    class Meta:
+        unknown = EXCLUDE
+
     class RecipeItem(Schema):
         name = fields.String(required=True, validate=lambda a: a and not a.isspace())
         description = fields.String(load_default="")
@@ -14,6 +17,7 @@ class AddRecipe(Schema):
     prep_time = fields.Integer(validate=lambda a: a >= 0)
     yields = fields.Integer(validate=lambda a: a >= 0)
     source = fields.String()
+    server_curated = fields.Boolean()
     photo = fields.String()
     visibility = fields.Integer(validate=lambda a: a >= 0)
     items = fields.List(fields.Nested(RecipeItem()))
@@ -21,6 +25,9 @@ class AddRecipe(Schema):
 
 
 class UpdateRecipe(Schema):
+    class Meta:
+        unknown = EXCLUDE
+
     class RecipeItem(Schema):
         name = fields.String(required=True, validate=lambda a: a and not a.isspace())
         description = fields.String()
@@ -33,6 +40,7 @@ class UpdateRecipe(Schema):
     prep_time = fields.Integer(validate=lambda a: a >= 0)
     yields = fields.Integer(validate=lambda a: a >= 0)
     source = fields.String()
+    server_curated = fields.Boolean()
     photo = fields.String()
     visibility = fields.Integer(validate=lambda a: a >= 0)
     items = fields.List(fields.Nested(RecipeItem()))

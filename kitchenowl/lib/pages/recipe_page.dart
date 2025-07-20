@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fraction/fraction.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kitchenowl/app.dart';
 import 'package:kitchenowl/cubits/auth_cubit.dart';
@@ -14,6 +15,7 @@ import 'package:kitchenowl/pages/recipe_add_update_page.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/pages/recipe_cooking_page.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
+import 'package:kitchenowl/services/storage/storage.dart';
 import 'package:kitchenowl/widgets/recipe_markdown_body.dart';
 import 'package:kitchenowl/widgets/recipe_source_chip.dart';
 import 'package:kitchenowl/widgets/report_dialog.dart';
@@ -27,6 +29,7 @@ class RecipePage extends StatefulWidget {
   final Recipe recipe;
   final bool updateOnPlanningEdit;
   final int? selectedYields;
+  final bool showHousehold;
 
   const RecipePage({
     super.key,
@@ -34,6 +37,7 @@ class RecipePage extends StatefulWidget {
     this.household,
     this.updateOnPlanningEdit = false,
     this.selectedYields,
+    this.showHousehold = true,
   });
 
   @override
@@ -131,26 +135,61 @@ class _RecipePageState extends State<RecipePage> {
                         ),
                       if (state.recipe.prepTime + state.recipe.cookTime > 0)
                         const SizedBox(height: 16),
-                      if (!state.isOwningHousehold(state) &&
-                          state.recipe.household != null) ...[
-                        Row(
-                          children: [
-                            HouseholdCircleAvatar(
-                              household: state.recipe.household!,
-                              radius: 16,
-                            ),
-                            const SizedBox(width: 8),
-                            Text(state.recipe.household!.name),
-                          ],
-                        ),
-                        Divider(),
-                        const SizedBox(height: 16),
-                      ],
-                      RecipeMarkdownBody(
-                        recipe: state.recipe,
-                      ),
                     ],
                   ),
+                ),
+              ),
+              if (widget.showHousehold &&
+                  BlocProvider.of<AuthCubit>(context).getUser() != null &&
+                  !state.isOwningHousehold &&
+                  state.recipe.household != null)
+                SliverList(
+                  delegate: SliverChildListDelegate(
+                    [
+                      ListTile(
+                        leading: HouseholdCircleAvatar(
+                          household: state.recipe.household!,
+                          radius: 16,
+                        ),
+                        title: Row(
+                          children: [
+                            Flexible(
+                              child: Text(
+                                state.recipe.household!.name,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            if (state.recipe.household!.verified)
+                              Icon(
+                                Icons.verified_rounded,
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
+                          ],
+                        ),
+                        subtitle: state.recipe.household!.description != null
+                            ? Text(
+                                state.recipe.household!.description!,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              )
+                            : null,
+                        trailing: const Icon(Icons.arrow_forward_ios_rounded),
+                        onTap: () => context.push(
+                          "/household/about/${state.recipe.household!.id}",
+                          extra: state.recipe.household!,
+                        ),
+                      ),
+                      Divider(),
+                      const SizedBox(height: 16),
+                    ],
+                  ),
+                ),
+              SliverPadding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                sliver: SliverToBoxAdapter(
+                  child: RecipeMarkdownBody(recipe: state.recipe),
                 ),
               ),
             ];
@@ -224,7 +263,7 @@ class _RecipePageState extends State<RecipePage> {
                 color: Theme.of(context).colorScheme.surface,
                 child: Column(
                   children: [
-                    if (state.isOwningHousehold(state) &&
+                    if (state.isOwningHousehold &&
                         state.household!.defaultShoppingList != null &&
                         state.recipe.items.isNotEmpty)
                       Padding(
@@ -284,8 +323,9 @@ class _RecipePageState extends State<RecipePage> {
                         ),
                       ),
                     if (!App.isOffline &&
-                        !state.isOwningHousehold(state) &&
-                        state.household != null)
+                        state.household != null &&
+                        !state.isOwningHousehold &&
+                        state.inHouseholdRecipe == null)
                       Container(
                         padding: const EdgeInsets.all(16),
                         width: double.infinity,
@@ -309,6 +349,7 @@ class _RecipePageState extends State<RecipePage> {
                               }
                             } else {
                               final res = await cubit.addRecipeToHousehold();
+
                               if (mounted && res?.id != null) {
                                 context.go(
                                   "/household/${state.household!.id}/recipes/details/${res!.id!}",
@@ -323,7 +364,29 @@ class _RecipePageState extends State<RecipePage> {
                           ),
                         ),
                       ),
-                    if (state.isOwningHousehold(state) &&
+                    if (state.household != null &&
+                        !state.isOwningHousehold &&
+                        state.inHouseholdRecipe != null)
+                      Container(
+                        padding: const EdgeInsets.all(16),
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            if (mounted && state.inHouseholdRecipe != null) {
+                              context.push<UpdateEnum>(
+                                "/household/${state.household!.id}/recipes/details/${state.inHouseholdRecipe!.id}",
+                                extra: Tuple2(
+                                    state.household!, state.inHouseholdRecipe!),
+                              );
+                            }
+                          },
+                          child: Text(
+                            AppLocalizations.of(context)!
+                                .recipeGoToInHousehold(state.household!.name),
+                          ),
+                        ),
+                      ),
+                    if (state.isOwningHousehold &&
                         (state.household!.featurePlanner ?? false))
                       Padding(
                         padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
@@ -384,7 +447,7 @@ class _RecipePageState extends State<RecipePage> {
                           ],
                         ),
                       ),
-                    if (!state.isOwningHousehold(state) &&
+                    if (!state.isOwningHousehold &&
                         state.household == null &&
                         BlocProvider.of<AuthCubit>(context).getUser() == null)
                       Container(
@@ -452,16 +515,31 @@ class _RecipePageState extends State<RecipePage> {
                                       isCollapsed
                                   ? LoadingIconButtonVariant.standard
                                   : LoadingIconButtonVariant.filledTonal,
-                              onPressed: () =>
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => RecipeCookingPage(
-                                  recipe: state.dynamicRecipe,
-                                ),
-                              )),
+                              onPressed: () async {
+                                final textScaleFactor = await PreferenceStorage
+                                        .getInstance()
+                                    .readDouble(
+                                        key:
+                                            "recipeCookingPageTextScaleFactor");
+                                Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => RecipeCookingPage(
+                                    recipe: state.dynamicRecipe,
+                                    initialTextScaleFactor: textScaleFactor,
+                                    recipeScaleFactor:
+                                        state.selectedYields != null &&
+                                                state.recipe.yields > 0 &&
+                                                state.recipe.yields !=
+                                                    state.selectedYields
+                                            ? Fraction(state.selectedYields!,
+                                                state.recipe.yields)
+                                            : null,
+                                  ),
+                                ));
+                              },
                               icon: const Icon(Icons.soup_kitchen_rounded),
                             ),
                           ),
-                        if (!App.isOffline && state.isOwningHousehold(state))
+                        if (!App.isOffline && state.isOwningHousehold)
                           Padding(
                             padding: const EdgeInsets.only(right: 8),
                             child: LoadingIconButton(
@@ -491,7 +569,7 @@ class _RecipePageState extends State<RecipePage> {
                               icon: const Icon(Icons.edit),
                             ),
                           ),
-                        if (!state.isOwningHousehold(state) && !App.isOffline)
+                        if (!state.isOwningHousehold && !App.isOffline)
                           Padding(
                             padding: const EdgeInsets.only(right: 8),
                             child: MenuAnchor(
@@ -513,7 +591,31 @@ class _RecipePageState extends State<RecipePage> {
                                         .read<AuthCubit>()
                                         .getUser()
                                         ?.hasServerAdminRights() ??
-                                    false)
+                                    false) ...[
+                                  MenuItemButton(
+                                    child: Text(AppLocalizations.of(context)!
+                                        .recipeEdit),
+                                    leadingIcon: Icon(Icons.edit_rounded),
+                                    onPressed: () async {
+                                      if (state.recipe.household != null) {
+                                        final res = await Navigator.of(context)
+                                            .push<UpdateEnum>(MaterialPageRoute(
+                                          builder: (context) =>
+                                              AddUpdateRecipePage(
+                                            household: state.recipe.household!,
+                                            recipe: state.recipe,
+                                          ),
+                                        ));
+                                        if (res == UpdateEnum.updated)
+                                          cubit.refresh();
+                                        if (res == UpdateEnum.deleted) {
+                                          if (!mounted) return;
+                                          Navigator.of(context)
+                                              .pop(UpdateEnum.deleted);
+                                        }
+                                      }
+                                    },
+                                  ),
                                   MenuItemButton(
                                     child: Text(AppLocalizations.of(context)!
                                         .recipeDelete),
@@ -542,6 +644,7 @@ class _RecipePageState extends State<RecipePage> {
                                       }
                                     },
                                   ),
+                                ],
                               ],
                               builder: (context, controller, child) => Padding(
                                 padding: const EdgeInsets.only(right: 8),

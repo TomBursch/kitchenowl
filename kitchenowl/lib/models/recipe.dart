@@ -24,6 +24,7 @@ class Recipe extends Model {
   final Set<Tag> tags;
   final RecipeVisibility visibility;
   final int? householdId;
+  final bool curated;
 
   /// The household this recipe belongs to, the contained field is not complete and should only be used for external recipes
   final Household? household;
@@ -46,6 +47,7 @@ class Recipe extends Model {
     this.visibility = RecipeVisibility.private,
     this.householdId,
     this.household,
+    this.curated = false,
   });
 
   factory Recipe.fromJson(Map<String, dynamic> map) {
@@ -85,7 +87,7 @@ class Recipe extends Model {
       source: map['source'] ?? '',
       image: map['photo'],
       imageHash: map['photo_hash'],
-      visibility: RecipeVisibility.values[map['visibility']],
+      visibility: RecipeVisibility.values[map['visibility'] ?? 0],
       householdId: map['household_id'],
       items: items,
       tags: tags,
@@ -93,6 +95,7 @@ class Recipe extends Model {
       household: map.containsKey("household")
           ? Household.fromJson(map['household'])
           : null,
+      curated: map['server_curated'] ?? false,
     );
   }
 
@@ -111,6 +114,7 @@ class Recipe extends Model {
     Set<Tag>? tags,
     Set<DateTime>? plannedCookingDates,
     int? householdId,
+    bool? curated,
   }) =>
       Recipe(
         id: id,
@@ -123,6 +127,7 @@ class Recipe extends Model {
         prepTime: prepTime ?? this.prepTime,
         yields: yields ?? this.yields,
         source: source ?? this.source,
+        curated: curated ?? this.curated,
         imageHash: imageHash,
         image: image ?? this.image,
         tags: tags ?? this.tags,
@@ -161,6 +166,7 @@ class Recipe extends Model {
         visibility,
         householdId,
         household,
+        curated,
       ];
 
   @override
@@ -176,6 +182,7 @@ class Recipe extends Model {
         if (image != null) "photo": image,
         "items": items.map((e) => e.toJson()).toList(),
         "tags": tags.map((e) => e.toString()).toList(),
+        "server_curated": curated,
       };
 
   @override

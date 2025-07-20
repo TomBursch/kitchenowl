@@ -1,5 +1,5 @@
 from flask import Blueprint
-from app.config import app
+from app.config import app, api_spec
 import app.controller as api
 
 # Register Endpoints
@@ -46,3 +46,8 @@ apiv1.register_blueprint(api.analytics, url_prefix="/analytics")
 apiv1.register_blueprint(api.reportBlueprint, url_prefix="/report")
 
 app.register_blueprint(apiv1, url_prefix="/api")
+
+
+with app.test_request_context():
+    for rule in app.url_map.iter_rules():
+        api_spec.path(view=app.view_functions[rule.endpoint])

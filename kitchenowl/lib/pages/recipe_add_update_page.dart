@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:kitchenowl/cubits/auth_cubit.dart';
 import 'package:kitchenowl/cubits/household_cubit.dart';
 import 'package:kitchenowl/cubits/recipe_add_update_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
@@ -531,33 +532,63 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                                 ),
                               ),
                             ),
-                            BlocBuilder<AddUpdateRecipeCubit,
-                                AddUpdateRecipeState>(
-                              bloc: cubit,
-                              buildWhen: (previous, current) =>
-                                  previous.description != current.description ||
-                                  previous.source != current.source,
-                              builder: (context, state) => state
-                                          .description.isEmpty &&
-                                      (Uri.tryParse(state.source)
-                                              ?.hasAbsolutePath ??
-                                          false)
-                                  ? Padding(
-                                      padding: const EdgeInsets.fromLTRB(
-                                          16, 8, 16, 16),
-                                      child: Align(
-                                        alignment: Alignment.centerRight,
-                                        child: LoadingElevatedButton(
-                                          onPressed:
-                                              cubit.setDescriptionFromSource,
-                                          child: Text(
-                                            AppLocalizations.of(context)!
-                                                .addDescriptionFromSource,
+                            Wrap(
+                              children: [
+                                BlocBuilder<AddUpdateRecipeCubit,
+                                    AddUpdateRecipeState>(
+                                  bloc: cubit,
+                                  buildWhen: (previous, current) =>
+                                      previous.description !=
+                                          current.description ||
+                                      previous.source != current.source,
+                                  builder: (context, state) => state
+                                              .description.isEmpty &&
+                                          (Uri.tryParse(state.source)
+                                                  ?.hasAbsolutePath ??
+                                              false)
+                                      ? Padding(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              16, 8, 16, 16),
+                                          child: Align(
+                                            alignment: Alignment.centerRight,
+                                            child: LoadingElevatedButton(
+                                              onPressed: cubit
+                                                  .setDescriptionFromSource,
+                                              child: Text(
+                                                AppLocalizations.of(context)!
+                                                    .addDescriptionFromSource,
+                                              ),
+                                            ),
                                           ),
-                                        ),
-                                      ),
-                                    )
-                                  : const SizedBox(height: 16),
+                                        )
+                                      : const SizedBox(height: 16),
+                                ),
+                                BlocBuilder<AddUpdateRecipeCubit,
+                                    AddUpdateRecipeState>(
+                                  bloc: cubit,
+                                  buildWhen: (previous, current) =>
+                                      previous.canMatchIngredients() !=
+                                      current.canMatchIngredients(),
+                                  builder: (context, state) => state
+                                          .canMatchIngredients()
+                                      ? Padding(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              16, 8, 16, 16),
+                                          child: Align(
+                                            alignment: Alignment.centerRight,
+                                            child: LoadingElevatedButton(
+                                              onPressed: () async => cubit
+                                                  .detectIngridientsInDescription(),
+                                              child: Text(
+                                                AppLocalizations.of(context)!
+                                                    .automaticIngredientDetection,
+                                              ),
+                                            ),
+                                          ),
+                                        )
+                                      : const SizedBox(height: 16),
+                                ),
+                              ],
                             ),
                             Padding(
                               padding:
@@ -672,6 +703,23 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                                 child:
                                     Text(AppLocalizations.of(context)!.delete),
                               ),
+                            ),
+                          ),
+                        if (context
+                                .read<AuthCubit>()
+                                .getUser()
+                                ?.hasServerAdminRights() ??
+                            false)
+                          SliverToBoxAdapter(
+                            child: CheckboxListTile(
+                              contentPadding: EdgeInsets.symmetric(
+                                  horizontal: 16, vertical: 6),
+                              value: state.curated,
+                              title: Text(
+                                  AppLocalizations.of(context)!.recipesCurated),
+                              onChanged: (v) {
+                                if (v != null) cubit.setCurated(v);
+                              },
                             ),
                           ),
                         SliverToBoxAdapter(

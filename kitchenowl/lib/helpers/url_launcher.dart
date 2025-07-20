@@ -10,12 +10,13 @@ Future<void> openUrl(BuildContext context, String url,
     {bool webOpenNewTab = true}) async {
   if (!isValidUrl(url)) return;
 
-  final uri = Uri.parse(url);
-  if (uri.scheme == "kitchenowl") return Future(() => router.push(uri.path));
+  Uri uri = Uri.parse(url);
+  if (uri.isScheme("kitchenowl")) return Future(() => router.push(uri.path));
+  if (!uri.hasScheme) uri = uri.replace(scheme: "https");
 
   return (!kIsWeb && (Platform.isAndroid || Platform.isIOS))
       ? await ct.launchUrl(
-          Uri.parse(url),
+          uri,
           customTabsOptions: ct.CustomTabsOptions(
             colorSchemes: ct.CustomTabsColorSchemes.defaults(
               toolbarColor: Theme.of(context).colorScheme.primary,
@@ -39,7 +40,7 @@ Future<void> openUrl(BuildContext context, String url,
           ),
         )
       : await ul.launchUrl(
-          Uri.parse(url),
+          uri,
           webOnlyWindowName: webOpenNewTab ? '_blank' : '_self',
         );
 }
@@ -48,9 +49,9 @@ bool isValidUrl(String url) {
   try {
     final uri = Uri.parse(url);
 
-    return uri.scheme == "http" ||
-        uri.scheme == "https" ||
-        uri.scheme == "kitchenowl";
+    return uri.isScheme("http") ||
+        uri.isScheme("https") ||
+        uri.isScheme("kitchenowl");
   } catch (e) {
     return false;
   }

@@ -145,6 +145,37 @@ class TempStorage {
     }
   }
 
+  Future<void> saveReorderedShoppingLists(
+    Household household, 
+    List<int> orderedIds
+  ) async {
+    final lists = await readShoppingLists(household) ?? [];
+    final reorderedMap = {for (var i = 0; i < orderedIds.length; i++) orderedIds[i]: i};
+  
+    final updatedLists = lists.map((list) => 
+        list.copyWith(order: reorderedMap[list.id] ?? list.order)
+    ).toList();
+  
+    await writeShoppingLists(household, updatedLists);
+  }
+
+  // Add queuing support:
+  Future<void> queueReorderOperation(
+    Household household,
+    List<int> orderedIds
+  ) async {
+    final file = await _localReorderQueueFile(household);
+    await file.writeAsString(json.encode({
+      'timestamp': DateTime.now().toIso8601String(),
+      'ordered_ids': orderedIds,
+    }));
+  }
+
+  Future<File> _localReorderQueueFile(Household household) async {
+    final path = await _localPath;
+    return File('$path/${household.id}-reorder-queue.json');
+  }
+
   Future<List<Recipe>?> readRecipes(Household household) async {
     if (!foundation.kIsWeb) {
       try {
@@ -281,5 +312,21 @@ class TempStorage {
         if (await file.exists()) await file.delete();
       } catch (_) {}
     }
+  }
+
+  Future<List<Map<String, dynamic>>> getPendingReorderOperations() async {
+    final dir = await _localPath;
+    final directory = Directory(dir);
+    final files = directory.listSync()
+      .where((f) => f.path.endsWith('-reorder-queue.json'));
+    
+    final operations = <Map<String, dynamic>>[];
+    for (final file in files) {
+      try {
+        operations.add(json.decode(await file.readAsString()));
+      } catch (_) {}
+    }
+    
+    return operations;
   }
 }

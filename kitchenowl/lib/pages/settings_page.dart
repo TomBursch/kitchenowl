@@ -336,7 +336,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           .setRecentItemsCount,
                       defaultValue: 9,
                       lowerBound: 0,
-                      upperBound: 30,
+                      upperBound: 120,
                     ),
                   ),
                   ListTile(

@@ -11,6 +11,7 @@ from sqlalchemy.orm import Mapped
 
 Model = db.Model
 if TYPE_CHECKING:
+    from app.models import PushNotificationSubscription
     from app.helpers.db_model_base import DbModelBase
 
     Model = DbModelBase
@@ -51,6 +52,16 @@ class Token(Model):
         db.relationship(
             "User",
             lazy="selectin",
+        ),
+    )
+    created_push_notification_subscriptions: Mapped[
+        List["PushNotificationSubscription"]
+    ] = cast(
+        Mapped[List["PushNotificationSubscription"]],
+        db.relationship(
+            "PushNotificationSubscription",
+            back_populates="created_by_token",
+            cascade="all, delete-orphan",
         ),
     )
 

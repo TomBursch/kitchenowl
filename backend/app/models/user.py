@@ -238,9 +238,7 @@ class User(Model):
 
     @classmethod
     def search_name(cls, name: str) -> list[Self]:
-        looking_for = f"%{
-            name.replace('*', '*' * 2).replace('%', '*' + '%').replace('_', '*' + '_')
-        }%"
+        looking_for = f"%{name.replace('*', '*' * 2).replace('%', '*' + '%').replace('_', '*' + '_')}%"
         return (
             cls.query.filter(
                 cls.name.ilike(looking_for) | cls.username.ilike(looking_for)

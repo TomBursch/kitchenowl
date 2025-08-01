@@ -1,0 +1,8 @@
+{
+  "@about": {},
+  "@accountCreate": {},
+  "@accountCreateHint": {},
+  "about": "關於",
+  "accountCreate": "建立帳號",
+  "accountCreateHint": "您的使用者名稱和姓名是公開的，因此請選擇您願意與他人分享的內容。"
+}

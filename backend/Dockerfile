@@ -26,7 +26,7 @@ FROM python:3.12-slim AS runner
 
 RUN apt-get update \
     && apt-get install --yes --no-install-recommends \
-        libxml2 libpcre3 libexpat1 curl media-types \
+        libxml2 libpcre2 libre2 libexpat1 curl media-types \
     && rm -rf /var/lib/apt/lists/*
 
 # Use virtual enviroment

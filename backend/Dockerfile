@@ -5,7 +5,7 @@ FROM python:3.12-slim AS builder
 
 RUN apt-get update \
     && apt-get install --yes --no-install-recommends \
-        gcc g++ libffi-dev libpcre3-dev build-essential cargo \
+        gcc g++ libffi-dev libpcre2-dev libre2-dev build-essential cargo \
         libxml2-dev libxslt-dev cmake gfortran libopenblas-dev liblapack-dev pkg-config ninja-build \
          autoconf automake zlib1g-dev libjpeg62-turbo-dev libssl-dev libsqlite3-dev libexpat1-dev
 
@@ -26,7 +26,7 @@ FROM python:3.12-slim AS runner
 
 RUN apt-get update \
     && apt-get install --yes --no-install-recommends \
-        libxml2 libpcre3 libexpat1 curl media-types \
+        libxml2 libpcre2-dev libre2-dev libexpat1 curl media-types \
     && rm -rf /var/lib/apt/lists/*
 
 # Use virtual enviroment

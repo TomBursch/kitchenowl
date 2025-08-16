@@ -1,0 +1,37 @@
+{
+  "@about": {},
+  "@accountCreate": {},
+  "@accountCreateHint": {},
+  "@accountCreateTitle": {},
+  "@accountDelete": {},
+  "@accountDeleteConfirmation": {},
+  "@accountLinkedWithOtherUser": {},
+  "@accountsLinked": {},
+  "@add": {},
+  "@addCategory": {},
+  "@addDescriptionFromSource": {},
+  "@addItemTitle": {},
+  "@addLanguage": {},
+  "@addNumberIngredients": {
+    "placeholders": {
+      "number": {
+        "example": "2",
+        "type": "int"
+      }
+    }
+  },
+  "about": "關於",
+  "accountCreate": "建立帳號",
+  "accountCreateHint": "您的使用者名稱和姓名是公開的，因此請選擇您願意與他人分享的內容。",
+  "accountCreateTitle": "建立您的 KitchenOwl 帳號",
+  "accountDelete": "刪除帳號",
+  "accountDeleteConfirmation": "您確定您要刪除此帳號嗎？",
+  "accountLinkedWithOtherUser": "此帳號已綁定其他用戶",
+  "accountsLinked": "綁定帳號",
+  "add": "新增",
+  "addCategory": "新增分類",
+  "addDescriptionFromSource": "從來源新增內容",
+  "addItemTitle": "新增物品",
+  "addLanguage": "新增語言",
+  "addNumberIngredients": "新增 {number} 材料"
+}

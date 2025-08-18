@@ -11,7 +11,7 @@ from app.models import (
     ChallengePasswordReset,
     OIDCRequest,
 )
-from app.service.delete_unused import deleteEmptyHouseholds
+from app.service.delete_unused import deleteEmptyHouseholds, deleteUnusedFiles
 from .item_ordering import findItemOrdering
 from .item_suggestions import findItemSuggestions
 from .cluster_shoppings import clusterShoppings
@@ -21,7 +21,7 @@ if TYPE_CHECKING:
 
 if scheduler is not None:
 
-    @scheduler.task("cron", id="everyMonth", day="1", hour="0", minute="0")
+    @scheduler.task("cron", id="everyMonth", day="2", hour="0", minute="0")
     def setup_monthly():
         with app.app_context():
             monthly()
@@ -67,7 +67,7 @@ if celery_app is not None:
         )
 
         sender.add_periodic_task(
-            crontab(day_of_month="1", hour=0, minute=0),
+            crontab(day_of_month="2", hour=0, minute=0),
             monthlyTask,
             name="everyMonth",
         )
@@ -75,6 +75,7 @@ if celery_app is not None:
 
 def monthly():
     deleteEmptyHouseholds()
+    deleteUnusedFiles()
 
 
 def daily():

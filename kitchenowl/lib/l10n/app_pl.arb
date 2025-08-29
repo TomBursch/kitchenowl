@@ -54,6 +54,7 @@
   "@appTitle": {
     "description": "The title of the app"
   },
+  "@automaticIngredientDetection": {},
   "@back": {},
   "@balances": {},
   "@budget": {},
@@ -95,6 +96,7 @@
   "@defaultWord": {},
   "@delete": {},
   "@description": {},
+  "@discover": {},
   "@done": {},
   "@dynamicAccentColor": {},
   "@email": {},
@@ -216,6 +218,9 @@
   "@link": {
     "description": "As in link social account (e.g. Google)"
   },
+  "@linkNoun": {
+    "description": "The noun, as in share using a link (URL)"
+  },
   "@linkRecipeDescription": {},
   "@list": {},
   "@lltCreate": {},
@@ -292,6 +297,7 @@
     }
   },
   "@pageNotFound": {},
+  "@parent": {},
   "@password": {},
   "@passwordFieldTooShort": {},
   "@passwordForgot": {},
@@ -350,6 +356,7 @@
   "@recipesNewestCommunity": {},
   "@recipesOverwrite": {},
   "@recipesOverwriteDescription": {},
+  "@recipesPopular": {},
   "@recipesRecent": {},
   "@recipesSuggested": {},
   "@redo": {},
@@ -472,6 +479,7 @@
   "@usernameInvalid": {},
   "@usernameUnavailable": {},
   "@users": {},
+  "@website": {},
   "@weekly": {},
   "@welcomeBack": {},
   "@writeMarkdownHere": {},
@@ -506,6 +514,7 @@
   "analysingWebsite": "Analizowanie strony...",
   "appDescription": "KitchenOwl pomoże Ci z organizacją zakupów spożywczych.",
   "appTitle": "KitchenOwl",
+  "automaticIngredientDetection": "Automatycznie wykryj składniki",
   "back": "Powrót",
   "balances": "Saldo",
   "budget": "Budżet",
@@ -533,6 +542,7 @@
   "defaultWord": "Domyślny",
   "delete": "Usuń",
   "description": "Opis",
+  "discover": "Odkryj",
   "done": "Gotowe",
   "dynamicAccentColor": "Dynamiczny kolor akcentu",
   "email": "E-mail",
@@ -599,6 +609,7 @@
   "larger": "Większy",
   "lastUsed": "Ostatnio używane",
   "link": "Odnośnik",
+  "linkNoun": "Link",
   "linkRecipeDescription": "Każdy kto posiada link do tego przepisu może go zobaczyć.",
   "list": "Lista",
   "lltCreate": "Utwórz długożyjący token",
@@ -643,6 +654,7 @@
   "overview": "Przegląd",
   "owesAB": "{nameA} jest winien {nameB}",
   "pageNotFound": "Nie znaleziono strony",
+  "parent": "Rodzic",
   "password": "Hasło",
   "passwordFieldTooShort": "Hasło za krótkie",
   "passwordForgot": "Zapomniałeś hasła?",
@@ -680,6 +692,7 @@
   "recipesNewestCommunity": "Najnowsze przepisy społeczności",
   "recipesOverwrite": "Nadpisz przepisy",
   "recipesOverwriteDescription": "Jeżeli zaznaczone, istniejące przepisy z tymi samymi nazwami zostaną nadpisane",
+  "recipesPopular": "Popularne przepisy",
   "recipesRecent": "Ostatnie",
   "recipesSuggested": "Sugerowane",
   "redo": "Ponów",
@@ -759,6 +772,7 @@
   "usernameInvalid": "Nazwa użytkownika nie może zawierać '@'",
   "usernameUnavailable": "Nazwa użytkownika jest niedostępna",
   "users": "Użytkownicy",
+  "website": "Strona internetowa",
   "weekly": "Tygodniowy",
   "welcomeBack": "Witaj ponownie",
   "writeMarkdownHere": "Możesz tu używać markdown!",

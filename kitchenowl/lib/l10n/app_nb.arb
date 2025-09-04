@@ -94,6 +94,7 @@
   "@defaultWord": {},
   "@delete": {},
   "@description": {},
+  "@discover": {},
   "@done": {},
   "@dynamicAccentColor": {},
   "@email": {},
@@ -113,6 +114,7 @@
   "@expenseEmpty": {},
   "@expenseFactor": {},
   "@expenseOverviewComparedToPreviousMonth": {},
+  "@expenseOverviewExpenses": {},
   "@expenseOverviewTotalTitle": {
     "placeholders": {
       "month": {
@@ -496,6 +498,7 @@
   "defaultWord": "Standard",
   "delete": "Slett",
   "description": "Beskrivelse",
+  "discover": "Oppdag",
   "done": "Ferdig",
   "dynamicAccentColor": "Dynamisk aksentfarge",
   "email": "E-post",
@@ -515,6 +518,7 @@
   "expenseEmpty": "Ingen utgifter enda!",
   "expenseFactor": "Faktor",
   "expenseOverviewComparedToPreviousMonth": "Sammenlignet med tidligere måneder",
+  "expenseOverviewExpenses": "Utgifter",
   "expenseOverviewTotalTitle": "Totale utgifter i {month}:",
   "expensePaidBy": "Betalt av",
   "expensePaidFor": "Betalt",

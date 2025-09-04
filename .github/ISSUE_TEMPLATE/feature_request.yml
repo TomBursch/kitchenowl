@@ -8,7 +8,7 @@ body:
     id: description
     attributes:
       label: "What's the feature 🧐"
-      placeholder: "Guess what my roomates want to eat"
+      placeholder: "Guess what my roommates want to eat"
     validations:
       required: true
   - type: textarea

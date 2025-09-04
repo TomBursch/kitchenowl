@@ -71,5 +71,5 @@ body:
     id: config
     attributes:
       label: Share your configuration
-      description: Share your configuration such as `docker-compose.yml`. Ensure to remove URLs/IPs and Secrects.
+      description: Share your configuration such as `docker-compose.yml`. Ensure to remove URLs/IPs and secrets.
       render: yml

@@ -72,6 +72,7 @@
 		<string>uk</string>
 		<string>vi</string>
 		<string>zh</string>
+		<string>zh_Hant</string>
 	</array>
 	<key>CFBundleName</key>
 	<string>kitchenowl</string>

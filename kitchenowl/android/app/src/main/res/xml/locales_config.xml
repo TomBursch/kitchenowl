@@ -42,4 +42,5 @@
    <locale android:name="uk"/>
    <locale android:name="vi"/>
    <locale android:name="zh"/>
+   <locale android:name="zh-Hant"/>
 </locale-config>

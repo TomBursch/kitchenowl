@@ -106,6 +106,7 @@ SUPPORTED_LANGUAGES = {
     "de_CH": "Deutsch (Schweiz)",
     "el": "Ελληνικά",
     "es": "Español",
+    "fa": "فارسی",
     "fi": "Suomi",
     "fr": "Français",
     "he": "עִבְרִית‎",

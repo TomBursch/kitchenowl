@@ -1,12 +1,808 @@
 {
+  "@about": {},
   "@accountCreate": {},
   "@accountCreateHint": {},
   "@accountCreateTitle": {},
   "@accountDelete": {},
   "@accountDeleteConfirmation": {},
+  "@accountLinkedWithOtherUser": {},
+  "@accountsLinked": {},
+  "@add": {},
+  "@addCategory": {},
+  "@addDescriptionFromSource": {},
+  "@addItemTitle": {},
+  "@addLanguage": {},
+  "@addLanguageConfirm": {
+    "placeholders": {
+      "lang": {
+        "example": "English",
+        "type": "String"
+      }
+    }
+  },
+  "@addNumberIngredients": {
+    "placeholders": {
+      "number": {
+        "example": "2",
+        "type": "int"
+      }
+    }
+  },
+  "@addRecipeToPlanner": {
+    "placeholders": {
+      "number": {
+        "example": "2",
+        "type": "int"
+      }
+    }
+  },
+  "@addRecipeToPlannerShort": {
+    "description": "A shorter title/button text used wherever the space is limited. Excludes the number of yields."
+  },
+  "@addShoppingList": {},
+  "@addTag": {},
+  "@addedBy": {
+    "placeholders": {
+      "name": {
+        "example": "Tom",
+        "type": "String"
+      }
+    }
+  },
+  "@address": {},
+  "@admin": {},
+  "@analysingWebsite": {},
+  "@appDescription": {},
+  "@appTitle": {
+    "description": "The title of the app"
+  },
+  "@automaticIngredientDetection": {},
+  "@back": {},
+  "@balances": {},
+  "@budget": {},
+  "@budgetSet": {},
+  "@camera": {},
+  "@cancel": {},
+  "@categories": {},
+  "@categoriesMerge": {},
+  "@category": {},
+  "@categoryDelete": {},
+  "@categoryDeleteConfirmation": {
+    "placeholders": {
+      "category": {
+        "example": "Frozen",
+        "type": "String"
+      }
+    }
+  },
+  "@categoryEdit": {},
+  "@categoryExpenseDeleteConfirmation": {
+    "placeholders": {
+      "category": {
+        "example": "Frozen",
+        "type": "String"
+      }
+    }
+  },
+  "@changeIcon": {},
+  "@clear": {},
+  "@colorSelect": {},
+  "@confirm": {},
+  "@cookingTime": {},
+  "@copied": {},
+  "@daily": {},
+  "@dangerZone": {},
+  "@darkmode": {},
+  "@date": {},
+  "@defaultKey": {},
+  "@defaultWord": {},
+  "@delete": {},
+  "@description": {},
+  "@discover": {},
+  "@done": {},
+  "@dynamicAccentColor": {},
+  "@email": {},
+  "@emailInvalid": {},
+  "@emailNotVerified": {},
+  "@emailResendVerification": {},
+  "@emailSuccessfullyVerified": {},
+  "@emailUpdate": {},
+  "@emailUsed": {},
+  "@error": {},
+  "@excludeFromStatistics": {},
+  "@expense": {},
+  "@expenseAdd": {},
+  "@expenseAmount": {},
+  "@expenseCategories": {},
+  "@expenseEdit": {},
+  "@expenseEmpty": {},
+  "@expenseFactor": {},
+  "@expenseOverviewComparedToPreviousMonth": {},
+  "@expenseOverviewExpenses": {},
+  "@expenseOverviewTotalTitle": {
+    "placeholders": {
+      "month": {
+        "example": "January",
+        "type": "String"
+      }
+    }
+  },
+  "@expensePaidBy": {},
+  "@expensePaidFor": {},
+  "@expenseReceivedBy": {},
+  "@expenseReceivedFor": {},
+  "@export": {},
+  "@features": {},
+  "@fieldCannotBeEmpty": {
+    "placeholders": {
+      "field": {
+        "example": "Username",
+        "type": "String"
+      }
+    }
+  },
+  "@forceOfflineMode": {},
+  "@gallery": {},
+  "@general": {},
+  "@go": {},
+  "@grid": {},
+  "@helpTranslate": {},
+  "@hi": {
+    "placeholders": {
+      "name": {
+        "example": "Tom",
+        "type": "String"
+      }
+    }
+  },
+  "@household": {},
+  "@householdDelete": {},
+  "@householdDeleteConfirmation": {
+    "placeholders": {
+      "household": {
+        "example": "Home",
+        "type": "String"
+      }
+    }
+  },
+  "@householdEmpty": {},
+  "@householdLeave": {},
+  "@householdLeaveConfirmation": {
+    "placeholders": {
+      "household": {
+        "example": "Home",
+        "type": "String"
+      }
+    }
+  },
+  "@householdNew": {},
+  "@householdSwitch": {},
+  "@households": {},
+  "@icon": {},
+  "@imageSelect": {},
+  "@import": {},
+  "@importStartedHint": {},
+  "@income": {},
+  "@ingredients": {},
+  "@ingredientsOptional": {},
+  "@itemDelete": {},
+  "@itemDeleteConfirmation": {
+    "placeholders": {
+      "item": {
+        "example": "Cake",
+        "type": "String"
+      }
+    }
+  },
+  "@itemRemoveInteraction": {},
+  "@itemSize": {},
+  "@items": {},
+  "@itemsAdd": {},
+  "@itemsMerge": {},
+  "@itemsMergeConfirmation": {
+    "placeholders": {
+      "item": {
+        "example": "Cake",
+        "type": "String"
+      },
+      "other": {
+        "example": "Cake",
+        "type": "String"
+      }
+    }
+  },
+  "@itemsOptional": {},
+  "@itemsRecent": {},
+  "@language": {},
+  "@languageSelect": {},
+  "@larger": {},
+  "@lastUsed": {},
+  "@link": {
+    "description": "The verb, as in link social account (e.g. Google)"
+  },
+  "@linkNoun": {
+    "description": "The noun, as in share using a link (URL)"
+  },
+  "@linkRecipeDescription": {},
+  "@list": {},
+  "@lltCreate": {},
+  "@lltDelete": {},
+  "@lltDeleteConfirmation": {
+    "placeholders": {
+      "token": {
+        "example": "HomeAssistant",
+        "type": "String"
+      }
+    }
+  },
+  "@lltNotShownAgain": {},
+  "@lltWarningContent": {},
+  "@lltWarningTitle": {},
+  "@llts": {},
+  "@login": {},
+  "@loginTo": {},
+  "@loginToAddToShoppingList": {},
+  "@logout": {},
+  "@logoutName": {
+    "placeholders": {
+      "name": {
+        "example": "Tom",
+        "type": "String"
+      }
+    }
+  },
+  "@longPressToReorder": {},
+  "@longerThanExpected": {},
+  "@markAsPaid": {},
+  "@mealPlanner": {},
+  "@member": {},
+  "@memberAdd": {},
+  "@memberRemove": {},
+  "@members": {},
+  "@merge": {},
+  "@minutesAbbrev": {},
+  "@moneyTransfer": {},
+  "@monthly": {},
+  "@more": {},
+  "@name": {},
+  "@next": {},
+  "@noTags": {},
+  "@none": {},
+  "@now": {},
+  "@offlineMessage": {},
+  "@okay": {},
+  "@onboardingLoading": {},
+  "@onboardingSettingsTitle": {
+    "placeholders": {
+      "name": {
+        "example": "Tom",
+        "type": "String"
+      }
+    }
+  },
+  "@onboardingTitle": {},
+  "@optional": {},
+  "@or": {},
+  "@ordering": {},
+  "@other": {},
+  "@overview": {},
+  "@owesAB": {
+    "placeholders": {
+      "nameA": {
+        "example": "Tom",
+        "type": "String"
+      },
+      "nameB": {
+        "example": "Tom",
+        "type": "String"
+      }
+    }
+  },
+  "@pageNotFound": {},
+  "@parent": {},
+  "@parentRights": {},
+  "@password": {},
+  "@passwordFieldTooShort": {},
+  "@passwordForgot": {},
+  "@passwordRepeat": {},
+  "@passwordRepeatNoMatch": {},
+  "@passwordReset": {},
+  "@passwordSave": {},
+  "@personal": {},
+  "@planner": {},
+  "@plannerEmpty": {},
+  "@plannerTitle": {},
+  "@preparationTime": {},
+  "@privacyPolicy": {},
+  "@privacyPolicyAgree": {
+    "placeholders": {
+      "privacyPolicy": {
+        "example": "Privacy Policy",
+        "type": "String"
+      },
+      "terms": {
+        "example": "Terms & Conditions",
+        "type": "String"
+      }
+    }
+  },
+  "@private": {},
+  "@privateRecipeDescription": {},
+  "@profile": {},
+  "@public": {},
+  "@publicRecipeDescription": {},
+  "@reason": {},
+  "@recentItemsCategorize": {},
+  "@recipeAdd": {},
+  "@recipeAddToHousehold": {
+    "placeholders": {
+      "householdName": {
+        "example": "Home",
+        "type": "String"
+      }
+    }
+  },
+  "@recipeAddUrl": {},
+  "@recipeDelete": {},
+  "@recipeDeleteConfirmation": {
+    "placeholders": {
+      "recipe": {
+        "example": "Cake",
+        "type": "String"
+      }
+    }
+  },
+  "@recipeEdit": {},
+  "@recipeEmpty": {},
+  "@recipeEmptySearch": {},
+  "@recipeGoToInHousehold": {
+    "placeholders": {
+      "householdName": {
+        "example": "Home",
+        "type": "String"
+      }
+    }
+  },
+  "@recipeImageSelect": {},
+  "@recipeNew": {},
+  "@recipeSource": {},
+  "@recipes": {},
+  "@recipesCurated": {},
+  "@recipesDiscover": {},
+  "@recipesNewestCommunity": {},
+  "@recipesOverwrite": {},
+  "@recipesOverwriteDescription": {},
+  "@recipesPopular": {},
+  "@recipesRecent": {},
+  "@recipesSuggested": {},
+  "@redo": {},
+  "@refresh": {},
+  "@rememberLastShoppingList": {},
+  "@remove": {},
+  "@rename": {},
+  "@reportIssue": {},
+  "@reportRecipe": {},
+  "@reportUser": {},
+  "@reset": {},
+  "@save": {},
+  "@search": {},
+  "@searchHint": {},
+  "@send": {},
+  "@server": {},
+  "@serverChange": {},
+  "@sessions": {},
+  "@set": {},
+  "@settings": {},
+  "@setupTitle": {},
+  "@share": {},
+  "@shoppingList": {},
+  "@shoppingListContainsEntries": {
+    "placeholders": {
+      "entriesCount": {
+        "type": "num"
+      }
+    }
+  },
+  "@shoppingListDelete": {},
+  "@shoppingListDeleteConfirmation": {
+    "placeholders": {
+      "shoppingList": {
+        "example": "Supermarket",
+        "type": "String"
+      }
+    }
+  },
+  "@shoppingListEdit": {},
+  "@shoppingListEmpty": {},
+  "@shoppingListStyle": {},
+  "@shoppingLists": {},
+  "@signInWith": {
+    "placeholders": {
+      "provider": {
+        "example": "Authentik",
+        "type": "String"
+      }
+    }
+  },
+  "@signup": {},
+  "@skip": {},
+  "@smaller": {},
+  "@sortingAlgorithmic": {},
+  "@sortingAlphabetical": {},
+  "@start": {},
+  "@supportDevelopment": {},
+  "@swipeToDelete": {},
+  "@swipeToDeleteAndLongPressToReorder": {},
+  "@swipeToRemove": {},
+  "@tagDelete": {},
+  "@tagDeleteConfirmation": {
+    "placeholders": {
+      "tag": {
+        "example": "Lunch",
+        "type": "String"
+      }
+    }
+  },
+  "@tagEdit": {},
+  "@tags": {},
+  "@tagsPopular": {},
+  "@tap": {},
+  "@terms": {},
+  "@themeDark": {},
+  "@themeLight": {},
+  "@themeMode": {},
+  "@themeSystem": {},
+  "@today": {},
+  "@tomorrow": {},
+  "@total": {},
+  "@totalTime": {},
+  "@tutorialItemDescription1": {},
+  "@tutorialItemDescription2": {},
+  "@tutorialRecipeDescription": {},
+  "@tutorialRecipeMore": {
+    "placeholders": {
+      "url": {
+        "example": "https://...",
+        "type": "String"
+      }
+    }
+  },
+  "@uncategorized": {},
+  "@underConstruction": {},
+  "@undo": {},
+  "@unlink": {
+    "description": "As in remove link to social account (e.g. Google)"
+  },
+  "@unreachableMessage": {},
+  "@unsavedChangesBody": {},
+  "@unsavedChangesTitle": {},
+  "@unsupportedBackendMessage": {},
+  "@unsupportedFrontendMessage": {},
+  "@unsupportedScrapeMessage": {},
+  "@usedIn": {},
+  "@user": {},
+  "@userAdd": {},
+  "@userDelete": {},
+  "@userDeleteConfirmation": {
+    "placeholders": {
+      "user": {
+        "example": "Tom",
+        "type": "String"
+      }
+    }
+  },
+  "@userNotSignedIn": {},
+  "@userSearchHint": {},
+  "@username": {},
+  "@usernameInvalid": {},
+  "@usernameUnavailable": {},
+  "@users": {},
+  "@website": {},
+  "@weekly": {},
+  "@welcomeBack": {},
+  "@writeMarkdownHere": {},
+  "@wrongUsernameOrPassword": {},
+  "@yearly": {},
+  "@yes": {},
+  "@yesterday": {},
+  "@yields": {},
+  "@you": {},
+  "about": "O aplikaciji",
   "accountCreate": "Napravi račun",
   "accountCreateHint": "Vaše korisničko ime i račun su javni, stoga odaberite nešto što vam je ugodno dijeliti s drugima.",
   "accountCreateTitle": "Napravi svoj KitchenOwl račun",
   "accountDelete": "Uništi račun",
-  "accountDeleteConfirmation": "Jeste li sigurni da želite uniši svoj račun?"
+  "accountDeleteConfirmation": "Jeste li sigurni da želite izbrisati svoj korisnički račun?",
+  "accountLinkedWithOtherUser": "Račun je već povezan s drugim korisnikom",
+  "accountsLinked": "Povezani računi",
+  "add": "Dodaj",
+  "addCategory": "Dodaj kategoriju",
+  "addDescriptionFromSource": "Dodaj opis s izvora",
+  "addItemTitle": "Dodaj stavke",
+  "addLanguage": "Dodaj jezik",
+  "addLanguageConfirm": "Jeste li sigurni da želite koristiti jezik '{lang}'? Ovu radnju nije moguće poništiti kasnije. Stavke i kategorije bit će dodane u vaše kućanstvo.",
+  "addNumberIngredients": "Dodaj {number} sastojaka",
+  "addRecipeToPlanner": "Dodaj u prehrambeni plan ({number} porcija)",
+  "addRecipeToPlannerShort": "Dodaj u prehrambeni plan",
+  "addShoppingList": "Dodaj popis za kupnju",
+  "addTag": "Dodaj oznaku",
+  "addedBy": "Dodao {name}",
+  "address": "Adresa",
+  "admin": "Administrator",
+  "analysingWebsite": "Stranica se analizira...",
+  "appDescription": "KitchenOwl vam pomaže organizirati namirnice.",
+  "appTitle": "KitchenOwl",
+  "automaticIngredientDetection": "Automatski pronađi sastojke",
+  "back": "Nazad",
+  "balances": "Bilanca",
+  "budget": "Proračun",
+  "budgetSet": "Postavi proračun",
+  "camera": "Kamera",
+  "cancel": "Odustani",
+  "categories": "Kategorije",
+  "categoriesMerge": "Spoji kategorije",
+  "category": "Kategorija",
+  "categoryDelete": "Obriši kategoriju",
+  "categoryDeleteConfirmation": "Jeste li sigurni da želite obrisati {category}? Kategorija će biti uklonjena iz svih stavki.",
+  "categoryEdit": "Uredi kategoriju",
+  "categoryExpenseDeleteConfirmation": "Jeste li sigurni da želite izbrisati {category}? Kategorija će biti uklonjena iz svih troškova.",
+  "changeIcon": "Promjeni ikonu",
+  "clear": "Izbriši",
+  "colorSelect": "Odaberi boju",
+  "confirm": "Potvrdi",
+  "cookingTime": "Vrijeme pripreme",
+  "copied": "Kopirano",
+  "daily": "Dnevno",
+  "dangerZone": "Zona opasnosti",
+  "darkmode": "Tamni način rada",
+  "date": "Datum",
+  "defaultKey": "Podrazumijevana tipka",
+  "defaultWord": "Podrazumijevano",
+  "delete": "Izbriši",
+  "description": "Opis",
+  "discover": "Istraži",
+  "done": "Gotovo",
+  "dynamicAccentColor": "Dinamična naglasna boja",
+  "email": "Email",
+  "emailInvalid": "Neispravan email",
+  "emailNotVerified": "Nepotvrđeno",
+  "emailResendVerification": "Ponovo pošalji mail za potvrđivanje",
+  "emailSuccessfullyVerified": "Email uspješno potvrđen!",
+  "emailUpdate": "Izmijeni email",
+  "emailUsed": "Ovaj email je već povezan s drugim računom",
+  "error": "Dogodila se greška",
+  "excludeFromStatistics": "Izuzmi iz statistike",
+  "expense": "Trošak",
+  "expenseAdd": "Dodaj trošak",
+  "expenseAmount": "Količina",
+  "expenseCategories": "Kategorije troškova",
+  "expenseEdit": "Uredi trošak",
+  "expenseEmpty": "Niste dodali nijedan trošak. Dodajte ga sada!",
+  "expenseFactor": "Faktor",
+  "expenseOverviewComparedToPreviousMonth": "U usporedbi s prethodnim mjesecima",
+  "expenseOverviewExpenses": "Troškovi",
+  "expenseOverviewTotalTitle": "Ukupno za {month}:",
+  "expensePaidBy": "Platio",
+  "expensePaidFor": "Platio za",
+  "expenseReceivedBy": "Primio",
+  "expenseReceivedFor": "Primio za",
+  "export": "Izvoz",
+  "features": "Značajke",
+  "fieldCannotBeEmpty": "Polje {field} ne smije ostati prazno.",
+  "forceOfflineMode": "Postavi offline način rada",
+  "gallery": "Galerija",
+  "general": "Općenito",
+  "go": "Idi",
+  "grid": "Rešetka",
+  "helpTranslate": "Pomozi prevesti",
+  "hi": "Bok {name}!",
+  "household": "Kućanstvo",
+  "householdDelete": "Obriši kućanstvo",
+  "householdDeleteConfirmation": "Jeste li sigurni da želite izbrisati {household}? Sve stavke, recepti i troškovi povezani s tim kućanstvom bit će također izbrisani.",
+  "householdEmpty": "Niste dodali nijedno kućanstvo. Dodajte ga sada!",
+  "householdLeave": "Napusti kućanstvo",
+  "householdLeaveConfirmation": "Jeste li sigurni da želite napustiti {household}?",
+  "householdNew": "Novo kućanstvo",
+  "householdSwitch": "Promijeni kućanstvo",
+  "households": "Kućanstva",
+  "icon": "Ikona",
+  "imageSelect": "Odaberi sliku",
+  "import": "Uvoz",
+  "importStartedHint": "Uvoz je započeo i može potrajati par minuta.",
+  "income": "Prihod",
+  "ingredients": "Sastojci",
+  "ingredientsOptional": "Neobavezni sastojci",
+  "itemDelete": "Izbriši stavku",
+  "itemDeleteConfirmation": "Jeste li sigurni da želite izbrisati {item}? Stavka će biti uklonjena iz svih recepata u kojima se koristi.",
+  "itemRemoveInteraction": "Ukloni interakciju stavki",
+  "itemSize": "Veličina stavke",
+  "items": "Stavke",
+  "itemsAdd": "Dodaj stavke",
+  "itemsMerge": "Spoji stavke",
+  "itemsMergeConfirmation": "Jeste li sigurni da želite trajno spojiti {item} i {other}? Ova radnja se ne može poništiti.",
+  "itemsOptional": "Neobavezne stavke",
+  "itemsRecent": "Nedavne stavke",
+  "language": "Jezik",
+  "languageSelect": "Odaberite jezik",
+  "larger": "Veće",
+  "lastUsed": "Zadnji put korišteno",
+  "link": "Poveži",
+  "linkNoun": "Poveznica",
+  "linkRecipeDescription": "Svatko s poveznicom na recept može ga vidjeti.",
+  "list": "Popis",
+  "lltCreate": "Stvori dugoročni token",
+  "lltDelete": "Izbriši dugoročni token",
+  "lltDeleteConfirmation": "Jeste li sigurni da želite izbrisati dugoročni token '{token}'? Ova radnja se ne može poništiti.",
+  "lltNotShownAgain": "Spremi token; više ga nećete moći vidjeti",
+  "lltWarningContent": "Jeste li sigurni da želite stvoriti dugoročni token? Stvaranje dugoročnog tokena može biti sigurnosni rizik jer ne ističe i daje puni pristup vašem korisničkom računu.",
+  "lltWarningTitle": "Jeste li sigurni da znate što radite?",
+  "llts": "Dugoročni tokeni",
+  "login": "Prijava",
+  "loginTo": "Prijavite se u",
+  "loginToAddToShoppingList": "Prijavite se kako bi dodali ovaj recept u svoj popis za kupnju",
+  "logout": "Odjava",
+  "logoutName": "Odjavite se iz {name}",
+  "longPressToReorder": "Dugo držite za promjenu položaja",
+  "longerThanExpected": "Ova radnja traje dulje nego je očekivano",
+  "markAsPaid": "Označi kao plaćeno",
+  "mealPlanner": "Prehrambeni planer",
+  "member": "Član",
+  "memberAdd": "Dodaj člana",
+  "memberRemove": "Ukloni člana",
+  "members": "Članovi",
+  "merge": "Spoji",
+  "minutesAbbrev": "min",
+  "moneyTransfer": "Prijenos sredstava",
+  "monthly": "Mjesečno",
+  "more": "Više",
+  "name": "Ime",
+  "next": "Iduće",
+  "noTags": "Bez oznaka",
+  "none": "Ništa",
+  "now": "Sada",
+  "offlineMessage": "Nemate veze s mrežom",
+  "okay": "Ok",
+  "onboardingLoading": "Uvoz jezika je započeo i može potrajati neko vrijeme. Molimo da budete strpljivi :)",
+  "onboardingSettingsTitle": "Bok {name}, postavimo server!",
+  "onboardingTitle": "Stvorimo korisnika",
+  "optional": "Neobavezno",
+  "or": "ili",
+  "ordering": "Redoslijed",
+  "other": "Drugo",
+  "overview": "Pregled",
+  "owesAB": "{nameA} dužnik je od {nameB}",
+  "pageNotFound": "Stranica nije pronađena",
+  "parent": "Roditelj",
+  "parentRights": "Može mijenjati postavke kućanstva",
+  "password": "Lozinka",
+  "passwordFieldTooShort": "Lozinka je prekratka",
+  "passwordForgot": "Zaboravili ste lozinku?",
+  "passwordRepeat": "Ponovite lozinku",
+  "passwordRepeatNoMatch": "Lozinke se ne podudaraju",
+  "passwordReset": "Ponovno postavite lozinku",
+  "passwordSave": "Promijenite lozinku",
+  "personal": "Osobno",
+  "planner": "Planer",
+  "plannerEmpty": "Niste isplanirali nijedan obrok. Počnite s jednim svojim receptom!",
+  "plannerTitle": "Vaši isplanirani obroci",
+  "preparationTime": "Vrijeme pripreme",
+  "privacyPolicy": "Politika privatnosti",
+  "privacyPolicyAgree": "Stvaranjem računa prihvaćate našu {privacyPolicy} i {terms}",
+  "private": "Privatno",
+  "privateRecipeDescription": "Samo članovi kućanstva mogu vidjeti recept.",
+  "profile": "Profil",
+  "public": "Javno",
+  "publicRecipeDescription": "Ovaj recept je javan i može biti predložen drugima.",
+  "reason": "Razlog",
+  "recentItemsCategorize": "Kategoriziraj nedavne stavke",
+  "recipeAdd": "Dodaj recpet",
+  "recipeAddToHousehold": "Dodaj u {householdName}",
+  "recipeAddUrl": "Dodaj recept s URL-a",
+  "recipeDelete": "Izbriši recept",
+  "recipeDeleteConfirmation": "Jeste li sigurni da želite izbrisati {recipe}?",
+  "recipeEdit": "Uredi recept",
+  "recipeEmpty": "Niste dodali nijedan recept. Dodajte ga sada!",
+  "recipeEmptySearch": "Nijedan recept nije dodan :(",
+  "recipeGoToInHousehold": "Recept je već dodan u {householdName}",
+  "recipeImageSelect": "Odaberite sliku za recept",
+  "recipeNew": "Novi recept",
+  "recipeSource": "Izvor recepta",
+  "recipes": "Recepti",
+  "recipesCurated": "Izabrani recepti",
+  "recipesDiscover": "Istraži recepte",
+  "recipesNewestCommunity": "Najnoviji recepti zajednice",
+  "recipesOverwrite": "Piši preko recepata",
+  "recipesOverwriteDescription": "Ova radnja će prebrisati postojeće recepte s istim imenom",
+  "recipesPopular": "Popularni recepti",
+  "recipesRecent": "Nedavno",
+  "recipesSuggested": "Predloženo",
+  "redo": "Ponovi",
+  "refresh": "Osvježi",
+  "rememberLastShoppingList": "Zapamti posljednji korišteni popis za kupnju",
+  "remove": "Ukloni",
+  "rename": "Preimenuj",
+  "reportIssue": "Prijavi grešku",
+  "reportRecipe": "Prijavi recept",
+  "reportUser": "Prijavi korisnika",
+  "reset": "Ponovno pokreni",
+  "save": "Spremi",
+  "search": "Traži",
+  "searchHint": "Tražite li nešto?",
+  "send": "Pošalji",
+  "server": "Poslužitelj",
+  "serverChange": "Promijeni poslužitelja",
+  "sessions": "Sjednica",
+  "set": "Postavi",
+  "settings": "Postavke",
+  "setupTitle": "Zdravo! Jeste li spremni za kupnju?",
+  "share": "Podijeli",
+  "shoppingList": "Popis za kupnju",
+  "shoppingListContainsEntries": "{entriesCount, plural, =0{Popis za kupnju ne sadrži nijednu stavku.} other{Popis za kupnju sadrži {entriesCount} stavku/stavke/stavki.}}",
+  "shoppingListDelete": "Izbriši popis za kupnju",
+  "shoppingListDeleteConfirmation": "Jeste li sigurni da želite izbrisati {shoppingList}?",
+  "shoppingListEdit": "Uredi popis za kupnju",
+  "shoppingListEmpty": "Popis za kupnju je prazan. Pretražite i dodajte stavku koristeći funkcionalnost iznad.",
+  "shoppingListStyle": "Stil popisa za kupnju",
+  "shoppingLists": "Popisi za kupnju",
+  "signInWith": "Prijavite se s {provider}",
+  "signup": "Registrirajte se",
+  "skip": "Preskoči",
+  "smaller": "Manji",
+  "sortingAlgorithmic": "Algoritmično",
+  "sortingAlphabetical": "Abecedno",
+  "start": "Kreni",
+  "supportDevelopment": "Podržite razvoj",
+  "swipeToDelete": "Povucite za brisanje",
+  "swipeToDeleteAndLongPressToReorder": "Povucite za brisanje ili dugo držite za promjenu položaja",
+  "swipeToRemove": "Povucite za uklanjanje",
+  "tagDelete": "Izbriši oznaku",
+  "tagDeleteConfirmation": "Jeste li sigurni da želite izbrisati {tag}? Oznaka će biti uklonjena iz svih recepata koji ju koriste.",
+  "tagEdit": "Uredi oznaku",
+  "tags": "Oznake",
+  "tagsPopular": "Popularne oznake",
+  "tap": "Pritisnite",
+  "terms": "Uvjeti korištenja",
+  "themeDark": "Tamno",
+  "themeLight": "Svjetlo",
+  "themeMode": "Tema",
+  "themeSystem": "Sustav",
+  "today": "Danas",
+  "tomorrow": "Sutra",
+  "total": "Ukupno",
+  "totalTime": "Ukupno vrijeme",
+  "tutorialItemDescription1": "Ako dodate količinu na početak svoje pretrage ona će biti dodana kao opis.",
+  "tutorialItemDescription2": "Ili koristite zarez za razdvajanje imena i opisa stavke ako je količina dovoljna.",
+  "tutorialRecipeDescription": "Možete koristiti Mardown u receptima. Osnovne značajke su naslovi i podnaslovi koji kreću s jednim ili nizom #, numerirane liste za korake pripreme, i reference na sastojke u formatu @ime-sastojka.",
+  "tutorialRecipeMore": "Za više informacija posjetite [documentation]({url}).",
+  "uncategorized": "Nekategorizirano",
+  "underConstruction": "U izradi",
+  "undo": "Poništi",
+  "unlink": "Makni poveznicu",
+  "unreachableMessage": "Hmmmm...neuspješno spajanje na poslužitelja",
+  "unsavedChangesBody": "Jeste li sigurni da se želite vratiti nazad?",
+  "unsavedChangesTitle": "Postoje nespremljene promjene",
+  "unsupportedBackendMessage": "Verzija poslužitelja nije podržana, molimo vas da ažurirate backend",
+  "unsupportedFrontendMessage": "Verzija aplikacije nije podržana, molimo vas da ažurirate aplikaciju",
+  "unsupportedScrapeMessage": "Ova web stranica nije podržana",
+  "usedIn": "Korišteno u",
+  "user": "Korisnik",
+  "userAdd": "Dodaj korisnika",
+  "userDelete": "Izbriši korisnika",
+  "userDeleteConfirmation": "Jeste li sigurni da želite ukloniti {user}?",
+  "userNotSignedIn": "Morate biti prijavljeni da biste povezani račun",
+  "userSearchHint": "Unesite ime",
+  "username": "Korisničko ime",
+  "usernameInvalid": "Korisničko ime ne smije sadržavati '@'",
+  "usernameUnavailable": "To korisničko ime nije dostupno",
+  "users": "Korisnici",
+  "website": "Web stranica",
+  "weekly": "Tjedno",
+  "welcomeBack": "Dobro došli nazad",
+  "writeMarkdownHere": "Tu možete koristiti markdown!",
+  "wrongUsernameOrPassword": "Pogrešno korisničko ime ili lozinka",
+  "yearly": "Godišnje",
+  "yes": "Da",
+  "yesterday": "Jučer",
+  "yields": "Prinosi",
+  "you": "vi"
 }

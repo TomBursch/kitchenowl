@@ -1,0 +1,808 @@
+{
+  "@about": {},
+  "@accountCreate": {},
+  "@accountCreateHint": {},
+  "@accountCreateTitle": {},
+  "@accountDelete": {},
+  "@accountDeleteConfirmation": {},
+  "@accountLinkedWithOtherUser": {},
+  "@accountsLinked": {},
+  "@add": {},
+  "@addCategory": {},
+  "@addDescriptionFromSource": {},
+  "@addItemTitle": {},
+  "@addLanguage": {},
+  "@addLanguageConfirm": {
+    "placeholders": {
+      "lang": {
+        "example": "English",
+        "type": "String"
+      }
+    }
+  },
+  "@addNumberIngredients": {
+    "placeholders": {
+      "number": {
+        "example": "2",
+        "type": "int"
+      }
+    }
+  },
+  "@addRecipeToPlanner": {
+    "placeholders": {
+      "number": {
+        "example": "2",
+        "type": "int"
+      }
+    }
+  },
+  "@addRecipeToPlannerShort": {
+    "description": "A shorter title/button text used wherever the space is limited. Excludes the number of yields."
+  },
+  "@addShoppingList": {},
+  "@addTag": {},
+  "@addedBy": {
+    "placeholders": {
+      "name": {
+        "example": "Tom",
+        "type": "String"
+      }
+    }
+  },
+  "@address": {},
+  "@admin": {},
+  "@analysingWebsite": {},
+  "@appDescription": {},
+  "@appTitle": {
+    "description": "The title of the app"
+  },
+  "@automaticIngredientDetection": {},
+  "@back": {},
+  "@balances": {},
+  "@budget": {},
+  "@budgetSet": {},
+  "@camera": {},
+  "@cancel": {},
+  "@categories": {},
+  "@categoriesMerge": {},
+  "@category": {},
+  "@categoryDelete": {},
+  "@categoryDeleteConfirmation": {
+    "placeholders": {
+      "category": {
+        "example": "Frozen",
+        "type": "String"
+      }
+    }
+  },
+  "@categoryEdit": {},
+  "@categoryExpenseDeleteConfirmation": {
+    "placeholders": {
+      "category": {
+        "example": "Frozen",
+        "type": "String"
+      }
+    }
+  },
+  "@changeIcon": {},
+  "@clear": {},
+  "@colorSelect": {},
+  "@confirm": {},
+  "@cookingTime": {},
+  "@copied": {},
+  "@daily": {},
+  "@dangerZone": {},
+  "@darkmode": {},
+  "@date": {},
+  "@defaultKey": {},
+  "@defaultWord": {},
+  "@delete": {},
+  "@description": {},
+  "@discover": {},
+  "@done": {},
+  "@dynamicAccentColor": {},
+  "@email": {},
+  "@emailInvalid": {},
+  "@emailNotVerified": {},
+  "@emailResendVerification": {},
+  "@emailSuccessfullyVerified": {},
+  "@emailUpdate": {},
+  "@emailUsed": {},
+  "@error": {},
+  "@excludeFromStatistics": {},
+  "@expense": {},
+  "@expenseAdd": {},
+  "@expenseAmount": {},
+  "@expenseCategories": {},
+  "@expenseEdit": {},
+  "@expenseEmpty": {},
+  "@expenseFactor": {},
+  "@expenseOverviewComparedToPreviousMonth": {},
+  "@expenseOverviewExpenses": {},
+  "@expenseOverviewTotalTitle": {
+    "placeholders": {
+      "month": {
+        "example": "January",
+        "type": "String"
+      }
+    }
+  },
+  "@expensePaidBy": {},
+  "@expensePaidFor": {},
+  "@expenseReceivedBy": {},
+  "@expenseReceivedFor": {},
+  "@export": {},
+  "@features": {},
+  "@fieldCannotBeEmpty": {
+    "placeholders": {
+      "field": {
+        "example": "Username",
+        "type": "String"
+      }
+    }
+  },
+  "@forceOfflineMode": {},
+  "@gallery": {},
+  "@general": {},
+  "@go": {},
+  "@grid": {},
+  "@helpTranslate": {},
+  "@hi": {
+    "placeholders": {
+      "name": {
+        "example": "Tom",
+        "type": "String"
+      }
+    }
+  },
+  "@household": {},
+  "@householdDelete": {},
+  "@householdDeleteConfirmation": {
+    "placeholders": {
+      "household": {
+        "example": "Home",
+        "type": "String"
+      }
+    }
+  },
+  "@householdEmpty": {},
+  "@householdLeave": {},
+  "@householdLeaveConfirmation": {
+    "placeholders": {
+      "household": {
+        "example": "Home",
+        "type": "String"
+      }
+    }
+  },
+  "@householdNew": {},
+  "@householdSwitch": {},
+  "@households": {},
+  "@icon": {},
+  "@imageSelect": {},
+  "@import": {},
+  "@importStartedHint": {},
+  "@income": {},
+  "@ingredients": {},
+  "@ingredientsOptional": {},
+  "@itemDelete": {},
+  "@itemDeleteConfirmation": {
+    "placeholders": {
+      "item": {
+        "example": "Cake",
+        "type": "String"
+      }
+    }
+  },
+  "@itemRemoveInteraction": {},
+  "@itemSize": {},
+  "@items": {},
+  "@itemsAdd": {},
+  "@itemsMerge": {},
+  "@itemsMergeConfirmation": {
+    "placeholders": {
+      "item": {
+        "example": "Cake",
+        "type": "String"
+      },
+      "other": {
+        "example": "Cake",
+        "type": "String"
+      }
+    }
+  },
+  "@itemsOptional": {},
+  "@itemsRecent": {},
+  "@language": {},
+  "@languageSelect": {},
+  "@larger": {},
+  "@lastUsed": {},
+  "@link": {
+    "description": "The verb, as in link social account (e.g. Google)"
+  },
+  "@linkNoun": {
+    "description": "The noun, as in share using a link (URL)"
+  },
+  "@linkRecipeDescription": {},
+  "@list": {},
+  "@lltCreate": {},
+  "@lltDelete": {},
+  "@lltDeleteConfirmation": {
+    "placeholders": {
+      "token": {
+        "example": "HomeAssistant",
+        "type": "String"
+      }
+    }
+  },
+  "@lltNotShownAgain": {},
+  "@lltWarningContent": {},
+  "@lltWarningTitle": {},
+  "@llts": {},
+  "@login": {},
+  "@loginTo": {},
+  "@loginToAddToShoppingList": {},
+  "@logout": {},
+  "@logoutName": {
+    "placeholders": {
+      "name": {
+        "example": "Tom",
+        "type": "String"
+      }
+    }
+  },
+  "@longPressToReorder": {},
+  "@longerThanExpected": {},
+  "@markAsPaid": {},
+  "@mealPlanner": {},
+  "@member": {},
+  "@memberAdd": {},
+  "@memberRemove": {},
+  "@members": {},
+  "@merge": {},
+  "@minutesAbbrev": {},
+  "@moneyTransfer": {},
+  "@monthly": {},
+  "@more": {},
+  "@name": {},
+  "@next": {},
+  "@noTags": {},
+  "@none": {},
+  "@now": {},
+  "@offlineMessage": {},
+  "@okay": {},
+  "@onboardingLoading": {},
+  "@onboardingSettingsTitle": {
+    "placeholders": {
+      "name": {
+        "example": "Tom",
+        "type": "String"
+      }
+    }
+  },
+  "@onboardingTitle": {},
+  "@optional": {},
+  "@or": {},
+  "@ordering": {},
+  "@other": {},
+  "@overview": {},
+  "@owesAB": {
+    "placeholders": {
+      "nameA": {
+        "example": "Tom",
+        "type": "String"
+      },
+      "nameB": {
+        "example": "Tom",
+        "type": "String"
+      }
+    }
+  },
+  "@pageNotFound": {},
+  "@parent": {},
+  "@parentRights": {},
+  "@password": {},
+  "@passwordFieldTooShort": {},
+  "@passwordForgot": {},
+  "@passwordRepeat": {},
+  "@passwordRepeatNoMatch": {},
+  "@passwordReset": {},
+  "@passwordSave": {},
+  "@personal": {},
+  "@planner": {},
+  "@plannerEmpty": {},
+  "@plannerTitle": {},
+  "@preparationTime": {},
+  "@privacyPolicy": {},
+  "@privacyPolicyAgree": {
+    "placeholders": {
+      "privacyPolicy": {
+        "example": "Privacy Policy",
+        "type": "String"
+      },
+      "terms": {
+        "example": "Terms & Conditions",
+        "type": "String"
+      }
+    }
+  },
+  "@private": {},
+  "@privateRecipeDescription": {},
+  "@profile": {},
+  "@public": {},
+  "@publicRecipeDescription": {},
+  "@reason": {},
+  "@recentItemsCategorize": {},
+  "@recipeAdd": {},
+  "@recipeAddToHousehold": {
+    "placeholders": {
+      "householdName": {
+        "example": "Home",
+        "type": "String"
+      }
+    }
+  },
+  "@recipeAddUrl": {},
+  "@recipeDelete": {},
+  "@recipeDeleteConfirmation": {
+    "placeholders": {
+      "recipe": {
+        "example": "Cake",
+        "type": "String"
+      }
+    }
+  },
+  "@recipeEdit": {},
+  "@recipeEmpty": {},
+  "@recipeEmptySearch": {},
+  "@recipeGoToInHousehold": {
+    "placeholders": {
+      "householdName": {
+        "example": "Home",
+        "type": "String"
+      }
+    }
+  },
+  "@recipeImageSelect": {},
+  "@recipeNew": {},
+  "@recipeSource": {},
+  "@recipes": {},
+  "@recipesCurated": {},
+  "@recipesDiscover": {},
+  "@recipesNewestCommunity": {},
+  "@recipesOverwrite": {},
+  "@recipesOverwriteDescription": {},
+  "@recipesPopular": {},
+  "@recipesRecent": {},
+  "@recipesSuggested": {},
+  "@redo": {},
+  "@refresh": {},
+  "@rememberLastShoppingList": {},
+  "@remove": {},
+  "@rename": {},
+  "@reportIssue": {},
+  "@reportRecipe": {},
+  "@reportUser": {},
+  "@reset": {},
+  "@save": {},
+  "@search": {},
+  "@searchHint": {},
+  "@send": {},
+  "@server": {},
+  "@serverChange": {},
+  "@sessions": {},
+  "@set": {},
+  "@settings": {},
+  "@setupTitle": {},
+  "@share": {},
+  "@shoppingList": {},
+  "@shoppingListContainsEntries": {
+    "placeholders": {
+      "entriesCount": {
+        "type": "num"
+      }
+    }
+  },
+  "@shoppingListDelete": {},
+  "@shoppingListDeleteConfirmation": {
+    "placeholders": {
+      "shoppingList": {
+        "example": "Supermarket",
+        "type": "String"
+      }
+    }
+  },
+  "@shoppingListEdit": {},
+  "@shoppingListEmpty": {},
+  "@shoppingListStyle": {},
+  "@shoppingLists": {},
+  "@signInWith": {
+    "placeholders": {
+      "provider": {
+        "example": "Authentik",
+        "type": "String"
+      }
+    }
+  },
+  "@signup": {},
+  "@skip": {},
+  "@smaller": {},
+  "@sortingAlgorithmic": {},
+  "@sortingAlphabetical": {},
+  "@start": {},
+  "@supportDevelopment": {},
+  "@swipeToDelete": {},
+  "@swipeToDeleteAndLongPressToReorder": {},
+  "@swipeToRemove": {},
+  "@tagDelete": {},
+  "@tagDeleteConfirmation": {
+    "placeholders": {
+      "tag": {
+        "example": "Lunch",
+        "type": "String"
+      }
+    }
+  },
+  "@tagEdit": {},
+  "@tags": {},
+  "@tagsPopular": {},
+  "@tap": {},
+  "@terms": {},
+  "@themeDark": {},
+  "@themeLight": {},
+  "@themeMode": {},
+  "@themeSystem": {},
+  "@today": {},
+  "@tomorrow": {},
+  "@total": {},
+  "@totalTime": {},
+  "@tutorialItemDescription1": {},
+  "@tutorialItemDescription2": {},
+  "@tutorialRecipeDescription": {},
+  "@tutorialRecipeMore": {
+    "placeholders": {
+      "url": {
+        "example": "https://...",
+        "type": "String"
+      }
+    }
+  },
+  "@uncategorized": {},
+  "@underConstruction": {},
+  "@undo": {},
+  "@unlink": {
+    "description": "As in remove link to social account (e.g. Google)"
+  },
+  "@unreachableMessage": {},
+  "@unsavedChangesBody": {},
+  "@unsavedChangesTitle": {},
+  "@unsupportedBackendMessage": {},
+  "@unsupportedFrontendMessage": {},
+  "@unsupportedScrapeMessage": {},
+  "@usedIn": {},
+  "@user": {},
+  "@userAdd": {},
+  "@userDelete": {},
+  "@userDeleteConfirmation": {
+    "placeholders": {
+      "user": {
+        "example": "Tom",
+        "type": "String"
+      }
+    }
+  },
+  "@userNotSignedIn": {},
+  "@userSearchHint": {},
+  "@username": {},
+  "@usernameInvalid": {},
+  "@usernameUnavailable": {},
+  "@users": {},
+  "@website": {},
+  "@weekly": {},
+  "@welcomeBack": {},
+  "@writeMarkdownHere": {},
+  "@wrongUsernameOrPassword": {},
+  "@yearly": {},
+  "@yes": {},
+  "@yesterday": {},
+  "@yields": {},
+  "@you": {},
+  "about": "درباره",
+  "accountCreate": "ایجاد حساب کاربری",
+  "accountCreateHint": "نام کاربری و نام شما عمومی است، پس چیزی انتخاب کنید که راحت هستید آن را با دیگران به اشتراک بگذارید.",
+  "accountCreateTitle": "حساب کاربری KitchenOwl خود را ایجاد کنید",
+  "accountDelete": "حذف حساب کاربری",
+  "accountDeleteConfirmation": "آیا مطمئن هستید که می‌خواهید حساب کاربری خود را حذف کنید؟",
+  "accountLinkedWithOtherUser": "حساب قبلاً به کاربر دیگری پیوند داده شده است",
+  "accountsLinked": "حساب‌های پیوند داده شده",
+  "add": "افزودن",
+  "addCategory": "افزودن دسته‌بندی",
+  "addDescriptionFromSource": "افزودن توضیحات از منبع",
+  "addItemTitle": "افزودن آیتم‌ها",
+  "addLanguage": "افزودن زبان",
+  "addLanguageConfirm": "آیا مطمئن هستید که می‌خواهید زبان را به '{lang}' تنظیم کنید؟ این عمل قابل برگشت نیست و آیتم‌ها و دسته‌بندی‌ها را به خانوار شما اضافه می‌کند.",
+  "addNumberIngredients": "افزودن {number} مواد اولیه",
+  "addRecipeToPlanner": "افزودن به برنامه غذایی ({number} پرس)",
+  "addRecipeToPlannerShort": "افزودن به برنامه غذایی",
+  "addShoppingList": "افزودن لیست خرید",
+  "addTag": "افزودن برچسب",
+  "addedBy": "اضافه شده توسط {name}",
+  "address": "آدرس",
+  "admin": "مدیر",
+  "analysingWebsite": "در حال تجزیه و تحلیل وب‌سایت...",
+  "appDescription": "KitchenOwl به شما کمک می‌کند زندگی خرید مواد غذایی خود را سازماندهی کنید.",
+  "appTitle": "KitchenOwl",
+  "automaticIngredientDetection": "تشخیص خودکار مواد اولیه",
+  "back": "بازگشت",
+  "balances": "تراز حساب‌ها",
+  "budget": "بودجه",
+  "budgetSet": "تنظیم بودجه",
+  "camera": "دوربین",
+  "cancel": "انصراف",
+  "categories": "دسته‌بندی‌ها",
+  "categoriesMerge": "ادغام دسته‌بندی‌ها",
+  "category": "دسته‌بندی",
+  "categoryDelete": "حذف دسته‌بندی",
+  "categoryDeleteConfirmation": "آیا مطمئن هستید که می‌خواهید {category} را حذف کنید؟ این کار دسته‌بندی را از همه آیتم‌ها حذف می‌کند.",
+  "categoryEdit": "ویرایش دسته‌بندی",
+  "categoryExpenseDeleteConfirmation": "آیا مطمئن هستید که می‌خواهید {category} را حذف کنید؟ این کار دسته‌بندی را از همه هزینه‌ها حذف می‌کند.",
+  "changeIcon": "تغییر آیکون",
+  "clear": "پاک کردن",
+  "colorSelect": "انتخاب رنگ",
+  "confirm": "تأیید",
+  "cookingTime": "زمان پخت",
+  "copied": "کپی شد",
+  "daily": "روزانه",
+  "dangerZone": "منطقه خطرناک",
+  "darkmode": "حالت تیره",
+  "date": "تاریخ",
+  "defaultKey": "کلید پیش‌فرض",
+  "defaultWord": "پیش‌فرض",
+  "delete": "حذف",
+  "description": "توضیحات",
+  "discover": "کشف",
+  "done": "انجام شد",
+  "dynamicAccentColor": "رنگ تأکیدی پویا",
+  "email": "ایمیل",
+  "emailInvalid": "ایمیل نامعتبر",
+  "emailNotVerified": "تأیید نشده",
+  "emailResendVerification": "ارسال مجدد ایمیل تأیید",
+  "emailSuccessfullyVerified": "ایمیل با موفقیت تأیید شد!",
+  "emailUpdate": "به‌روزرسانی ایمیل",
+  "emailUsed": "این ایمیل قبلاً با یک حساب کاربری مرتبط است",
+  "error": "خطایی رخ داد",
+  "excludeFromStatistics": "حذف از آمار",
+  "expense": "هزینه",
+  "expenseAdd": "افزودن هزینه",
+  "expenseAmount": "مقدار",
+  "expenseCategories": "دسته‌بندی هزینه‌ها",
+  "expenseEdit": "ویرایش هزینه",
+  "expenseEmpty": "هیچ هزینه‌ای وجود ندارد، با ایجاد یکی شروع کنید!",
+  "expenseFactor": "ضریب",
+  "expenseOverviewComparedToPreviousMonth": "در مقایسه با ماه‌های قبل",
+  "expenseOverviewExpenses": "هزینه‌ها",
+  "expenseOverviewTotalTitle": "جمع کل برای {month}:",
+  "expensePaidBy": "پرداخت شده توسط",
+  "expensePaidFor": "پرداخت شده برای",
+  "expenseReceivedBy": "دریافت شده توسط",
+  "expenseReceivedFor": "دریافت شده برای",
+  "export": "صادرات",
+  "features": "ویژگی‌ها",
+  "fieldCannotBeEmpty": "{field} نمی‌تواند خالی باشد.",
+  "forceOfflineMode": "اجبار حالت آفلاین",
+  "gallery": "گالری",
+  "general": "عمومی",
+  "go": "برو",
+  "grid": "شبکه",
+  "helpTranslate": "کمک در ترجمه",
+  "hi": "سلام {name}!",
+  "household": "خانوار",
+  "householdDelete": "حذف خانوار",
+  "householdDeleteConfirmation": "آیا مطمئن هستید که می‌خواهید {household} را حذف کنید؟ این کار همه آیتم‌ها، دستور پخت‌ها و هزینه‌های مرتبط با آن خانوار را حذف می‌کند.",
+  "householdEmpty": "هیچ خانواری وجود ندارد، با ایجاد یکی شروع کنید!",
+  "householdLeave": "ترک خانوار",
+  "householdLeaveConfirmation": "آیا مطمئن هستید که می‌خواهید {household} را ترک کنید؟",
+  "householdNew": "خانوار جدید",
+  "householdSwitch": "تغییر خانوار",
+  "households": "خانوارها",
+  "icon": "آیکون",
+  "imageSelect": "انتخاب تصویر",
+  "import": "وارد کردن",
+  "importStartedHint": "وارد کردن شروع شد، این کار ممکن است چند دقیقه طول بکشد.",
+  "income": "درآمد",
+  "ingredients": "مواد اولیه",
+  "ingredientsOptional": "مواد اولیه اختیاری",
+  "itemDelete": "حذف آیتم",
+  "itemDeleteConfirmation": "آیا مطمئن هستید که می‌خواهید {item} را حذف کنید؟ این کار آیتم را از هر دستور پخت که شامل آن است حذف می‌کند.",
+  "itemRemoveInteraction": "حذف تعامل آیتم",
+  "itemSize": "اندازه آیتم",
+  "items": "آیتم‌ها",
+  "itemsAdd": "افزودن آیتم‌ها",
+  "itemsMerge": "ادغام آیتم‌ها",
+  "itemsMergeConfirmation": "آیا مطمئن هستید که می‌خواهید {item} و {other} را ادغام کنید؟ این عمل قابل برگشت نیست.",
+  "itemsOptional": "آیتم‌های اختیاری",
+  "itemsRecent": "آیتم‌های اخیر",
+  "language": "زبان",
+  "languageSelect": "انتخاب زبان",
+  "larger": "بزرگ‌تر",
+  "lastUsed": "آخرین استفاده",
+  "link": "پیوند دادن",
+  "linkNoun": "پیوند",
+  "linkRecipeDescription": "هر کسی که پیوند این دستور پخت را داشته باشد می‌تواند آن را مشاهده کند.",
+  "list": "لیست",
+  "lltCreate": "ایجاد توکن طولانی مدت",
+  "lltDelete": "حذف توکن طولانی مدت",
+  "lltDeleteConfirmation": "آیا مطمئن هستید که می‌خواهید توکن طولانی مدت '{token}' را حذف کنید؟ این عمل قابل برگشت نیست.",
+  "lltNotShownAgain": "توکن را ذخیره کنید؛ دوباره نمی‌توانید آن را ببینید",
+  "lltWarningContent": "آیا مطمئن هستید که می‌خواهید یک توکن طولانی مدت ایجاد کنید؟ این می‌تواند خطر امنیتی باشد. توکن منقضی نمی‌شود و دسترسی کامل به حساب شما را می‌دهد.",
+  "lltWarningTitle": "آیا می‌دانید چه کار می‌کنید؟",
+  "llts": "توکن‌های طولانی مدت",
+  "login": "ورود",
+  "loginTo": "ورود به",
+  "loginToAddToShoppingList": "برای افزودن این دستور پخت به لیست خرید خود وارد شوید",
+  "logout": "خروج",
+  "logoutName": "خروج {name}",
+  "longPressToReorder": "برای مرتب‌سازی مجدد طولانی فشار دهید",
+  "longerThanExpected": "این کار بیشتر از حد انتظار طول می‌کشد",
+  "markAsPaid": "علامت‌گذاری به عنوان پرداخت شده",
+  "mealPlanner": "برنامه‌ریز غذا",
+  "member": "عضو",
+  "memberAdd": "افزودن عضو",
+  "memberRemove": "حذف عضو",
+  "members": "اعضا",
+  "merge": "ادغام",
+  "minutesAbbrev": "دقیقه",
+  "moneyTransfer": "انتقال پول",
+  "monthly": "ماهانه",
+  "more": "بیشتر",
+  "name": "نام",
+  "next": "بعدی",
+  "noTags": "بدون برچسب",
+  "none": "هیچ‌کدام",
+  "now": "اکنون",
+  "offlineMessage": "شما آفلاین هستید",
+  "okay": "باشه",
+  "onboardingLoading": "در حال وارد کردن زبان، این کار ممکن است مدتی طول بکشد. لطفاً صبر کنید :)",
+  "onboardingSettingsTitle": "سلام {name}، بیایید سرور را راه‌اندازی کنیم!",
+  "onboardingTitle": "بیایید یک کاربر ایجاد کنیم",
+  "optional": "اختیاری",
+  "or": "یا",
+  "ordering": "مرتب‌سازی",
+  "other": "سایر",
+  "overview": "نمای کلی",
+  "owesAB": "{nameA} به {nameB} بدهکار است",
+  "pageNotFound": "این صفحه یافت نشد",
+  "parent": "والد",
+  "parentRights": "می‌تواند تنظیمات خانوار را تغییر دهد",
+  "password": "رمز عبور",
+  "passwordFieldTooShort": "رمز عبور خیلی کوتاه است",
+  "passwordForgot": "رمز عبور را فراموش کرده‌اید؟",
+  "passwordRepeat": "تکرار رمز عبور",
+  "passwordRepeatNoMatch": "رمزهای عبور مطابقت ندارند",
+  "passwordReset": "بازنشانی رمز عبور",
+  "passwordSave": "به‌روزرسانی رمز عبور",
+  "personal": "شخصی",
+  "planner": "برنامه‌ریز",
+  "plannerEmpty": "هیچ وعده غذایی برنامه‌ریزی نشده، با انتخاب یکی از دستور پخت‌هایتان شروع کنید!",
+  "plannerTitle": "وعده‌های غذایی برنامه‌ریزی شده شما",
+  "preparationTime": "زمان آماده‌سازی",
+  "privacyPolicy": "سیاست حفظ حریم خصوصی",
+  "privacyPolicyAgree": "با ایجاد حساب کاربری، شما با {privacyPolicy} و {terms} ما موافقت می‌کنید",
+  "private": "خصوصی",
+  "privateRecipeDescription": "فقط اعضای خانوار می‌توانند دستور پخت را مشاهده کنند.",
+  "profile": "پروفایل",
+  "public": "عمومی",
+  "publicRecipeDescription": "دستور پخت عمومی است و ممکن است به دیگران پیشنهاد شود.",
+  "reason": "دلیل",
+  "recentItemsCategorize": "دسته‌بندی آیتم‌های اخیر",
+  "recipeAdd": "افزودن دستور پخت",
+  "recipeAddToHousehold": "افزودن به {householdName}",
+  "recipeAddUrl": "افزودن دستور پخت از URL",
+  "recipeDelete": "حذف دستور پخت",
+  "recipeDeleteConfirmation": "آیا مطمئن هستید که می‌خواهید {recipe} را حذف کنید؟",
+  "recipeEdit": "ویرایش دستور پخت",
+  "recipeEmpty": "هیچ دستور پختی وجود ندارد، با افزودن یکی شروع کنید!",
+  "recipeEmptySearch": "هیچ دستور پختی یافت نشد :(",
+  "recipeGoToInHousehold": "قبلاً اضافه شده، به دستور پخت در {householdName} بروید",
+  "recipeImageSelect": "انتخاب تصویر دستور پخت",
+  "recipeNew": "دستور پخت جدید",
+  "recipeSource": "منبع دستور پخت",
+  "recipes": "دستور پخت‌ها",
+  "recipesCurated": "دستور پخت‌های منتخب",
+  "recipesDiscover": "کشف دستور پخت‌ها",
+  "recipesNewestCommunity": "جدیدترین دستور پخت‌های جامعه",
+  "recipesOverwrite": "بازنویسی دستور پخت‌ها",
+  "recipesOverwriteDescription": "اگر فعال شود، دستور پخت‌های موجود با همین نام بازنویسی خواهند شد",
+  "recipesPopular": "دستور پخت‌های محبوب",
+  "recipesRecent": "اخیر",
+  "recipesSuggested": "پیشنهادی",
+  "redo": "انجام مجدد",
+  "refresh": "به‌روزرسانی",
+  "rememberLastShoppingList": "آخرین لیست خرید استفاده شده را به خاطر بسپار",
+  "remove": "حذف",
+  "rename": "تغییر نام",
+  "reportIssue": "گزارش مشکل",
+  "reportRecipe": "گزارش دستور پخت",
+  "reportUser": "گزارش کاربر",
+  "reset": "بازنشانی",
+  "save": "ذخیره",
+  "search": "جستجو",
+  "searchHint": "دنبال چیزی می‌گردید؟",
+  "send": "ارسال",
+  "server": "سرور",
+  "serverChange": "تغییر سرور",
+  "sessions": "جلسات",
+  "set": "تنظیم",
+  "settings": "تنظیمات",
+  "setupTitle": "سلام! آماده خرید هستید؟",
+  "share": "اشتراک‌گذاری",
+  "shoppingList": "لیست خرید",
+  "shoppingListContainsEntries": "{entriesCount, plural, =0{لیست خرید هیچ آیتمی ندارد.} =1{لیست خرید 1 آیتم دارد.} other{لیست خرید {entriesCount} آیتم دارد.}}",
+  "shoppingListDelete": "حذف لیست خرید",
+  "shoppingListDeleteConfirmation": "آیا مطمئن هستید که می‌خواهید {shoppingList} را حذف کنید؟",
+  "shoppingListEdit": "ویرایش لیست خرید",
+  "shoppingListEmpty": "لیست خرید خالی است. با استفاده از قابلیت جستجو در بالا یک آیتم اضافه کنید.",
+  "shoppingListStyle": "سبک لیست خرید",
+  "shoppingLists": "لیست‌های خرید",
+  "signInWith": "ورود با {provider}",
+  "signup": "ثبت نام",
+  "skip": "رد کردن",
+  "smaller": "کوچک‌تر",
+  "sortingAlgorithmic": "الگوریتمی",
+  "sortingAlphabetical": "حروف الفبا",
+  "start": "شروع",
+  "supportDevelopment": "حمایت از توسعه",
+  "swipeToDelete": "برای حذف بکشید",
+  "swipeToDeleteAndLongPressToReorder": "برای حذف بکشید و برای مرتب‌سازی مجدد طولانی فشار دهید",
+  "swipeToRemove": "برای حذف بکشید",
+  "tagDelete": "حذف برچسب",
+  "tagDeleteConfirmation": "آیا مطمئن هستید که می‌خواهید {tag} را حذف کنید؟ این کار برچسب را از هر دستور پختی که شامل آن است حذف می‌کند.",
+  "tagEdit": "ویرایش برچسب",
+  "tags": "برچسب‌ها",
+  "tagsPopular": "برچسب‌های محبوب",
+  "tap": "ضربه",
+  "terms": "شرایط و ضوابط",
+  "themeDark": "تیره",
+  "themeLight": "روشن",
+  "themeMode": "پوسته",
+  "themeSystem": "سیستم",
+  "today": "امروز",
+  "tomorrow": "فردا",
+  "total": "جمع کل",
+  "totalTime": "زمان کل",
+  "tutorialItemDescription1": "هنگام جستجو برای آیتم‌ها، می‌توانید مقداری را در ابتدای جستجوی خود اضافه کنید و به عنوان توضیحات اضافه خواهد شد.",
+  "tutorialItemDescription2": "یا، اگر مقادیر کافی نیستند، از کاما برای جدا کردن نام آیتم و توضیحات استفاده کنید.",
+  "tutorialRecipeDescription": "در داخل دستور پخت‌ها، می‌توانید از Markdown استفاده کنید. ویژگی‌های اساسی عبارتند از عناوین مشخص شده با علامت هش، لیست‌های شماره‌دار برای مراحل دستورالعمل، و ارجاع به مواد اولیه با استفاده از علامت @ و سپس نام ماده اولیه.",
+  "tutorialRecipeMore": "برای اطلاعات بیشتر، از [مستندات]({url}) دیدن کنید.",
+  "uncategorized": "دسته‌بندی نشده",
+  "underConstruction": "در حال ساخت",
+  "undo": "لغو",
+  "unlink": "لغو پیوند",
+  "unreachableMessage": "هممم... نتوانستیم به سرور دسترسی پیدا کنیم",
+  "unsavedChangesBody": "آیا مطمئن هستید که می‌خواهید برگردید؟",
+  "unsavedChangesTitle": "شما تغییرات ذخیره نشده‌ای دارید",
+  "unsupportedBackendMessage": "نسخه سرور پشتیبانی نمی‌شود، لطفاً بک‌اند را به‌روزرسانی کنید",
+  "unsupportedFrontendMessage": "نسخه اپلیکیشن پشتیبانی نمی‌شود، لطفاً اپلیکیشن را به‌روزرسانی کنید",
+  "unsupportedScrapeMessage": "این وب‌سایت پشتیبانی نمی‌شود",
+  "usedIn": "استفاده شده در",
+  "user": "کاربر",
+  "userAdd": "افزودن کاربر",
+  "userDelete": "حذف کاربر",
+  "userDeleteConfirmation": "آیا مطمئن هستید که می‌خواهید {user} را حذف کنید؟",
+  "userNotSignedIn": "برای پیوند دادن حساب باید وارد شده باشید",
+  "userSearchHint": "نامی را تایپ کنید",
+  "username": "نام کاربری",
+  "usernameInvalid": "نام کاربری نمی‌تواند شامل '@' باشد",
+  "usernameUnavailable": "نام کاربری در دسترس نیست",
+  "users": "کاربران",
+  "website": "وب‌سایت",
+  "weekly": "هفتگی",
+  "welcomeBack": "خوش آمدید",
+  "writeMarkdownHere": "می‌توانید از مارک‌داون اینجا استفاده کنید!",
+  "wrongUsernameOrPassword": "نام کاربری یا رمز عبور اشتباه است",
+  "yearly": "سالانه",
+  "yes": "بله",
+  "yesterday": "دیروز",
+  "yields": "تعداد پرس",
+  "you": "شما"
+}

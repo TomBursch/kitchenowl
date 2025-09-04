@@ -1,0 +1,203 @@
+{
+  "@about": {},
+  "@accountCreate": {},
+  "@accountCreateHint": {},
+  "@accountCreateTitle": {},
+  "@accountDelete": {},
+  "@accountDeleteConfirmation": {},
+  "@accountLinkedWithOtherUser": {},
+  "@accountsLinked": {},
+  "@add": {},
+  "@addCategory": {},
+  "@addDescriptionFromSource": {},
+  "@addItemTitle": {},
+  "@addLanguage": {},
+  "@addLanguageConfirm": {
+    "placeholders": {
+      "lang": {
+        "example": "English",
+        "type": "String"
+      }
+    }
+  },
+  "@addNumberIngredients": {
+    "placeholders": {
+      "number": {
+        "example": "2",
+        "type": "int"
+      }
+    }
+  },
+  "@addRecipeToPlanner": {
+    "placeholders": {
+      "number": {
+        "example": "2",
+        "type": "int"
+      }
+    }
+  },
+  "@addShoppingList": {},
+  "@addTag": {},
+  "@addedBy": {
+    "placeholders": {
+      "name": {
+        "example": "Tom",
+        "type": "String"
+      }
+    }
+  },
+  "@address": {},
+  "@admin": {},
+  "@analysingWebsite": {},
+  "@appDescription": {},
+  "@appTitle": {
+    "description": "The title of the app"
+  },
+  "@automaticIngredientDetection": {},
+  "@back": {},
+  "@balances": {},
+  "@budget": {},
+  "@budgetSet": {},
+  "@camera": {},
+  "@cancel": {},
+  "@categories": {},
+  "@categoriesMerge": {},
+  "@category": {},
+  "@categoryDelete": {},
+  "@categoryDeleteConfirmation": {
+    "placeholders": {
+      "category": {
+        "example": "Frozen",
+        "type": "String"
+      }
+    }
+  },
+  "@categoryEdit": {},
+  "@categoryExpenseDeleteConfirmation": {
+    "placeholders": {
+      "category": {
+        "example": "Frozen",
+        "type": "String"
+      }
+    }
+  },
+  "@changeIcon": {},
+  "@clear": {},
+  "@colorSelect": {},
+  "@confirm": {},
+  "@cookingTime": {},
+  "@copied": {},
+  "@daily": {},
+  "@darkmode": {},
+  "@date": {},
+  "@defaultKey": {},
+  "@defaultWord": {},
+  "@delete": {},
+  "@description": {},
+  "@discover": {},
+  "@done": {},
+  "@dynamicAccentColor": {},
+  "@email": {},
+  "@emailInvalid": {},
+  "@emailNotVerified": {},
+  "@emailResendVerification": {},
+  "@emailSuccessfullyVerified": {},
+  "@emailUpdate": {},
+  "@emailUsed": {},
+  "@error": {},
+  "@excludeFromStatistics": {},
+  "@expense": {},
+  "@expenseAdd": {},
+  "@expenseAmount": {},
+  "@expenseCategories": {},
+  "@expenseEdit": {},
+  "@expenseEmpty": {},
+  "@expenseFactor": {},
+  "@expenseOverviewComparedToPreviousMonth": {},
+  "@expenseOverviewExpenses": {},
+  "@expenseOverviewTotalTitle": {
+    "placeholders": {
+      "month": {
+        "example": "January",
+        "type": "String"
+      }
+    }
+  },
+  "@expensePaidBy": {},
+  "@expensePaidFor": {},
+  "about": "關於",
+  "accountCreate": "建立帳號",
+  "accountCreateHint": "您的使用者名稱和姓名是公開的，因此請選擇您願意與他人分享的內容。",
+  "accountCreateTitle": "建立您的 KitchenOwl 帳號",
+  "accountDelete": "刪除帳號",
+  "accountDeleteConfirmation": "您確定您要刪除此帳號嗎？",
+  "accountLinkedWithOtherUser": "此帳號已綁定其他用戶",
+  "accountsLinked": "綁定帳號",
+  "add": "新增",
+  "addCategory": "新增分類",
+  "addDescriptionFromSource": "從來源新增內容",
+  "addItemTitle": "新增物品",
+  "addLanguage": "新增語言",
+  "addLanguageConfirm": "您確定要將語言設定為'{lang}'嗎？此操作無法撤銷，並將為您的家庭新增項目與類別。",
+  "addNumberIngredients": "新增 {number} 材料",
+  "addRecipeToPlanner": "新增（{number}份）膳食計劃",
+  "addShoppingList": "新增購物清單",
+  "addTag": "新增標簽",
+  "addedBy": "由{name}添加",
+  "address": "地址",
+  "admin": "管理員",
+  "analysingWebsite": "正在分析網站...",
+  "appDescription": "KitchenOwl協助您規劃日常採買事宜。",
+  "appTitle": "KitchenOwl",
+  "automaticIngredientDetection": "自動檢測食材",
+  "back": "返回",
+  "balances": "餘額",
+  "budget": "預算",
+  "budgetSet": "設定預算",
+  "camera": "相機",
+  "cancel": "取消",
+  "categories": "分類",
+  "categoriesMerge": "合并分類",
+  "category": "分類",
+  "categoryDelete": "刪除分類",
+  "categoryDeleteConfirmation": "您確定要刪除{category}嗎？此操作將從所有項目中移除此分類。",
+  "categoryEdit": "修改分類",
+  "categoryExpenseDeleteConfirmation": "您確定要刪除{category}嗎？此操作將從所有開支中移除此分類。",
+  "changeIcon": "修改圖示",
+  "clear": "清除",
+  "colorSelect": "選擇顔色",
+  "confirm": "確定",
+  "cookingTime": "烹調時間",
+  "copied": "已複製",
+  "daily": "日常",
+  "darkmode": "深色模式",
+  "date": "日期",
+  "defaultKey": "預設金鑰",
+  "defaultWord": "預設",
+  "delete": "移除",
+  "description": "描述",
+  "discover": "發現",
+  "done": "完成",
+  "dynamicAccentColor": "動態強調色",
+  "email": "電子郵件",
+  "emailInvalid": "無效電子郵件",
+  "emailNotVerified": "未驗證",
+  "emailResendVerification": "重新發送驗證電子郵件",
+  "emailSuccessfullyVerified": "電子郵件驗證成功！",
+  "emailUpdate": "更新電子郵件",
+  "emailUsed": "該電子郵件地址已與帳戶關聯",
+  "error": "發生錯誤",
+  "excludeFromStatistics": "從統計數據中排除",
+  "expense": "開支",
+  "expenseAdd": "新增開支",
+  "expenseAmount": "金額",
+  "expenseCategories": "開支類別",
+  "expenseEdit": "編輯開支",
+  "expenseEmpty": "未發現任何開支計劃，請先建立一個開支計劃！",
+  "expenseFactor": "開支原因",
+  "expenseOverviewComparedToPreviousMonth": "於前幾個月相比",
+  "expenseOverviewExpenses": "開支",
+  "expenseOverviewTotalTitle": "{month}總計：",
+  "expensePaidBy": "付費人",
+  "expensePaidFor": "付費項"
+}

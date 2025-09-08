@@ -4,6 +4,7 @@ import uuid
 import requests
 import blurhash
 from PIL import Image
+from app.errors import ForbiddenRequest
 from app.util.filename_validator import allowed_file
 from app.config import UPLOAD_FOLDER
 from app.models import File
@@ -12,12 +13,14 @@ from werkzeug.utils import secure_filename
 
 
 def file_has_access_or_download(
-    newPhoto: str, oldPhoto: str | None = None
+    newPhoto: str, oldPhoto: str | None = None, user=None
 ) -> str | None:
     """
     Downloads the file if the url is an external URL or checks if the user has access to the file on this server
     If the user has no access oldPhoto is returned
     """
+    if not user:
+        user = current_user
     if newPhoto is not None and "/" in newPhoto:
         from mimetypes import guess_extension
 
@@ -36,17 +39,16 @@ def file_has_access_or_download(
                 return None
             except Exception:
                 pass
-            File(filename=filename, blur_hash=blur, created_by=current_user.id).save()
+            if user:
+                File(filename=filename, blur_hash=blur, created_by=user.id).save()
+            else:
+                raise ForbiddenRequest()
             return filename
     elif newPhoto is not None:
         if not newPhoto:
             return None
         f = File.find(newPhoto)
-        if (
-            f
-            and f.isUnused()
-            and (f.created_by == current_user.id or current_user.admin)
-        ):
+        if f and f.isUnused() and (f.created_by == user.id or user.admin):
             return f.filename
         elif f:
             f.checkAuthorized()

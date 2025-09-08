@@ -145,9 +145,11 @@ def scrapeKitchenOwl(
             raise ForbiddenRequest()
         return None
 
-    recipe = res.json()
-    recipe["source"] = original_url
-    recipe["visibility"] = RecipeVisibility.PRIVATE
+    recipe = res.json() | {
+        "id": None,
+        "visibility": RecipeVisibility.PRIVATE,
+        "source": original_url,
+    }
     if recipe["photo"] is not None:
         recipe["photo"] = api_url + "/upload/" + recipe["photo"]
     items = {}

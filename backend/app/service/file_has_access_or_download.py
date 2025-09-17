@@ -21,6 +21,9 @@ def file_has_access_or_download(
     """
     if not user:
         user = current_user
+        if not user:
+            raise ForbiddenRequest("You need to be logged in")
+
     if newPhoto is not None and "/" in newPhoto:
         from mimetypes import guess_extension
 
@@ -39,10 +42,7 @@ def file_has_access_or_download(
                 return None
             except Exception:
                 pass
-            if user:
-                File(filename=filename, blur_hash=blur, created_by=user.id).save()
-            else:
-                raise ForbiddenRequest()
+            File(filename=filename, blur_hash=blur, created_by=user.id).save()
             return filename
     elif newPhoto is not None:
         if not newPhoto:
@@ -59,9 +59,7 @@ def file_has_access_or_download(
                 os.path.join(UPLOAD_FOLDER, f.filename),
                 os.path.join(UPLOAD_FOLDER, filename),
             )
-            File(
-                filename=filename, blur_hash=f.blur_hash, created_by=current_user.id
-            ).save()
+            File(filename=filename, blur_hash=f.blur_hash, created_by=user.id).save()
             return filename
 
     return oldPhoto

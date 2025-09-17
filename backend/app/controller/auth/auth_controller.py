@@ -606,6 +606,7 @@ if FRONT_URL and len(oidc_clients) > 0:
                     userinfo["picture"],
                     user=newUser,
                 )
+                newUser.save()
 
             oidcLink = OIDCLink(
                 sub=userinfo["sub"], provider=provider, user_id=newUser.id

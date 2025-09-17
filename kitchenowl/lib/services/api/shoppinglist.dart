@@ -16,6 +16,7 @@ extension ShoppinglistApi on ApiService {
     ShoppinglistSorting sorting = ShoppinglistSorting.alphabetical,
     int recentItemlimit = 9,
   }) async {
+    recentItemlimit = recentItemlimit > 120 ? 120 : recentItemlimit;
     final res = await get(route(household: household) +
         "?orderby=${sorting.index}&recent_limit=${recentItemlimit}");
     if (res.statusCode != 200) return null;

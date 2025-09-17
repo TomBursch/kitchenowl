@@ -30,7 +30,10 @@ class TransactionShoppingListGet extends Transaction<List<ShoppingList>> {
     final lists = await ApiService.getInstance().getShoppingLists(
       household,
       sorting: sorting,
-      recentItemlimit: App.settings.recentItemsCount + 3,
+      // Ensure we don't exceed backend max (120)
+      recentItemlimit: App.settings.recentItemsCount >= 117
+          ? 120
+          : App.settings.recentItemsCount + 3,
     );
     if (lists != null) {
       MemStorage.getInstance().writeShoppingLists(household, lists);

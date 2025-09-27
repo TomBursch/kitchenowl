@@ -212,8 +212,15 @@ class _PlannerPageState extends State<PlannerPage> {
                           );
                         }
 
+                        DateTime? _previousCookingDate;
                         for (final cookingDate
                             in state.getUniqueCookingDays()) {
+                          if (_previousCookingDate != null) {
+                            if (daysBetween(_previousCookingDate, cookingDate) > 1) {
+                              children.add(const SizedBox(width: 15.0));
+                            }
+                          }
+                          _previousCookingDate = cookingDate;
                           for (final plan
                               in state.getPlannedOfDate(cookingDate)) {
                             children.add(

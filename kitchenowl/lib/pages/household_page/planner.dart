@@ -176,12 +176,47 @@ class _PlannerPageState extends State<PlannerPage> {
                   SliverPadding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     sliver: SliverLayoutBuilder(
-                      builder: (context, constraints) => SliverToBoxAdapter(
-                        child: Wrap(
-                          crossAxisAlignment: WrapCrossAlignment.end,
-                          alignment: WrapAlignment.start,
-                          children: [
-                            for (final plan in state.getPlannedWithoutDay())
+                      builder: (context, constraints) {
+                        final children = <Widget>[];
+
+                        for (final plan in state.getPlannedWithoutDay()) {
+                          children.add(
+                            KitchenOwlFractionallySizedBox(
+                              widthFactor: (1 /
+                                  DynamicStyling.itemCrossAxisCount(
+                                    constraints.crossAxisExtent,
+                                    context
+                                        .read<SettingsCubit>()
+                                        .state
+                                        .gridSize,
+                                  )),
+                              child: AspectRatio(
+                                aspectRatio: 1,
+                                child: SelectableButtonCard(
+                                  key: ValueKey(plan.recipe.id),
+                                  title: plan.recipe.name,
+                                  selected: true,
+                                  description: plan.yields?.toString(),
+                                  onPressed: () {
+                                    cubit.remove(plan.recipe);
+                                  },
+                                  onLongPressed: () => _openRecipePage(
+                                    context,
+                                    cubit,
+                                    plan.recipe,
+                                    plan.yields,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
+                        }
+
+                        for (final cookingDate
+                            in state.getUniqueCookingDays()) {
+                          for (final plan
+                              in state.getPlannedOfDate(cookingDate)) {
+                            children.add(
                               KitchenOwlFractionallySizedBox(
                                 widthFactor: (1 /
                                     DynamicStyling.itemCrossAxisCount(
@@ -191,85 +226,59 @@ class _PlannerPageState extends State<PlannerPage> {
                                           .state
                                           .gridSize,
                                     )),
-                                child: AspectRatio(
-                                  aspectRatio: 1,
-                                  child: SelectableButtonCard(
-                                    key: ValueKey(plan.recipe.id),
-                                    title: plan.recipe.name,
-                                    selected: true,
-                                    description: plan.yields?.toString(),
-                                    onPressed: () {
-                                      cubit.remove(plan.recipe);
-                                    },
-                                    onLongPressed: () => _openRecipePage(
-                                      context,
-                                      cubit,
-                                      plan.recipe,
-                                      plan.yields,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            for (final cookingDate
-                                in state.getUniqueCookingDays())
-                              for (final plan
-                                  in state.getPlannedOfDate(cookingDate))
-                                KitchenOwlFractionallySizedBox(
-                                  widthFactor: (1 /
-                                      DynamicStyling.itemCrossAxisCount(
-                                        constraints.crossAxisExtent,
-                                        context
-                                            .read<SettingsCubit>()
-                                            .state
-                                            .gridSize,
-                                      )),
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.stretch,
-                                    children: [
-                                      if (plan ==
-                                          state
-                                              .getPlannedOfDate(cookingDate)[0])
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(top: 5),
-                                          child: Text(
-                                            '${_formatDate(context, daysBetween(DateTime.now(), cookingDate))}',
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodyLarge,
-                                          ),
-                                        ),
-                                      AspectRatio(
-                                        aspectRatio: 1,
-                                        child: SelectableButtonCard(
-                                          key: ValueKey(
-                                            plan.recipe.id,
-                                          ),
-                                          title: plan.recipe.name,
-                                          description: plan.yields?.toString(),
-                                          selected: true,
-                                          onPressed: () {
-                                            cubit.remove(
-                                              plan.recipe,
-                                              plan.cookingDate,
-                                            );
-                                          },
-                                          onLongPressed: () => _openRecipePage(
-                                            context,
-                                            cubit,
-                                            plan.recipe,
-                                            plan.yields,
-                                          ),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
+                                  children: [
+                                    if (plan ==
+                                        state.getPlannedOfDate(cookingDate)[0])
+                                      Padding(
+                                        padding: const EdgeInsets.only(top: 5),
+                                        child: Text(
+                                          '${_formatDate(context, daysBetween(DateTime.now(), cookingDate))}',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyLarge,
                                         ),
                                       ),
-                                    ],
-                                  ),
+                                    AspectRatio(
+                                      aspectRatio: 1,
+                                      child: SelectableButtonCard(
+                                        key: ValueKey(
+                                          plan.recipe.id,
+                                        ),
+                                        title: plan.recipe.name,
+                                        description: plan.yields?.toString(),
+                                        selected: true,
+                                        onPressed: () {
+                                          cubit.remove(
+                                            plan.recipe,
+                                            plan.cookingDate,
+                                          );
+                                        },
+                                        onLongPressed: () => _openRecipePage(
+                                          context,
+                                          cubit,
+                                          plan.recipe,
+                                          plan.yields,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                          ],
-                        ),
-                      ),
+                              ),
+                            );
+                          }
+                        }
+                        return SliverToBoxAdapter(
+                          child: Wrap(
+                            crossAxisAlignment: WrapCrossAlignment.end,
+                            alignment: WrapAlignment.start,
+                            children: children,
+                          ),
+                        );
+                      },
                     ),
                   ),
                   if (state.recentRecipes.isNotEmpty)

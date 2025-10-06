@@ -54,8 +54,10 @@ RUN flutter build web --release --no-web-resources-cdn
 # ------------
 # RUNNER
 # ------------
-FROM nginx:stable-alpine
+FROM nginxinc/nginx-unprivileged:stable-alpine
 
+USER root
+RUN chmod -R 777 /etc/nginx/conf.d
 RUN apk add --no-cache bash
 RUN mkdir -p /var/www/web/kitchenowl
 COPY --from=builder /usr/local/src/app/build/web /var/www/web/kitchenowl
@@ -68,4 +70,4 @@ HEALTHCHECK --interval=30s --timeout=3s CMD curl -f http://localhost/ || exit 1
 ENV BACK_URL='back:5000'
 
 # Expose the web server
-EXPOSE 80
+EXPOSE 8080

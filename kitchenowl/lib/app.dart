@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:background_fetch/background_fetch.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dynamic_system_colors/dynamic_system_colors.dart';
 import 'package:flutter/foundation.dart';
@@ -15,6 +16,7 @@ import 'package:kitchenowl/cubits/settings_cubit.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/router.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
+import 'package:kitchenowl/services/background_task.dart';
 import 'package:kitchenowl/services/storage/storage.dart';
 import 'package:kitchenowl/services/transaction_handler.dart';
 import 'package:kitchenowl/styles/colors.dart';
@@ -76,6 +78,35 @@ class _AppState extends State<App> {
         }
       });
     }
+
+    BackgroundFetch.configure(
+      BackgroundFetchConfig(
+        minimumFetchInterval: 30,
+        stopOnTerminate: false,
+        enableHeadless: true,
+        requiresBatteryNotLow: false,
+        requiresCharging: false,
+        requiresStorageNotLow: false,
+        requiresDeviceIdle: false,
+        requiredNetworkType: NetworkType.ANY,
+      ),
+      (String taskId) async {
+        // <-- Event handler
+        print("[BackgroundFetch] Event received $taskId");
+
+        await BackgroundTask.run(widget._authCubit);
+
+        // IMPORTANT:  You must signal completion of your task or the OS can punish your app
+        // for taking too long in the background.
+        BackgroundFetch.finish(taskId);
+      },
+      (String taskId) async {
+        // <-- Task timeout handler.
+        // This task has exceeded its allowed running-time.  You must stop what you're doing and immediately .finish(taskId)
+        print("[BackgroundFetch] TASK TIMEOUT taskId: $taskId");
+        BackgroundFetch.finish(taskId);
+      },
+    );
   }
 
   @override

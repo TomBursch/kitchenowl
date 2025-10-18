@@ -1,4 +1,5 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <!--Permissions-->
     <uses-permission android:name="android.permission.INTERNET" />
@@ -28,6 +29,7 @@
     </queries>
 
     <application
+        tools:replace="android:label"
         android:name="${applicationName}"
         android:label="KitchenOwl"
         android:icon="@mipmap/ic_launcher"

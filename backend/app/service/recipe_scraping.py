@@ -96,9 +96,7 @@ def scrapePublic(url: str, html: str, household: Household) -> dict[str, Any] | 
     items = {}
     for ingredient in parseIngredients(scraper.ingredients(), household.language):
         name = ingredient.name if ingredient.name else ingredient.originalText or ""
-        item = Item.find_by_name(household.id, name)
-        if not item:
-            item = Item.find_name_starts_with(household.id, name)
+        item = Item.find_name_starts_with(household.id, name)
         if item:
             items[ingredient.originalText] = item.obj_to_dict() | {
                 "description": ingredient.description,

@@ -6,7 +6,7 @@ import app.util.description_splitter as description_splitter
     "query,item,description",
     [
         ("", "", ""),
-        ("300ml", "ml", "300"),
+        ("300ml", "", "300ml"),
         ("300ml Milk", "Milk", "300ml"),
         ("Gouda", "Gouda", ""),
         ("Gouda, Emmentaler", "Gouda, Emmentaler", ""),

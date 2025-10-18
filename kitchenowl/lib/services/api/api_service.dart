@@ -125,6 +125,7 @@ class ApiService {
     _connectionNotifier.value = Connection.undefined;
     _serverInfoNotifier.value = null;
     _client.close();
+    socket.clearListeners();
     socket.dispose();
   }
 

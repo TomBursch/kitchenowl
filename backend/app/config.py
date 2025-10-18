@@ -127,6 +127,7 @@ SUPPORTED_LANGUAGES = {
     "sl": "Slovenščina",
     "sv": "Svenska",
     "ta": "தமிழ்",
+    "te": "తెలుగు",
     "tr": "Türkçe",
     "uk": "Українська",
     "zh_Hans": "简化字",

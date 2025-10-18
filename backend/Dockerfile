@@ -15,8 +15,8 @@ RUN pip install uv
 ENV UV_PROJECT_ENVIRONMENT="/opt/venv"
 ENV PATH="/opt/venv/bin:$PATH"
 
-COPY pyproject.toml uv.lock .python-version ./
-RUN uv sync --no-dev && find /opt/venv \( -type d -a -name test -o -name tests \) -o \( -type f -a -name '*.pyc' -o -name '*.pyo' \) -exec rm -rf '{}' \+
+COPY pyproject.toml uv.lock ./
+RUN uv python list --no-managed-python && uv sync --no-dev && find /opt/venv \( -type d -a -name test -o -name tests \) -o \( -type f -a -name '*.pyc' -o -name '*.pyo' \) -exec rm -rf '{}' \+
 
 RUN python -c "import nltk; nltk.download('averaged_perceptron_tagger_eng', download_dir='/opt/venv/nltk_data')"
 

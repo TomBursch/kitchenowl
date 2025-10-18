@@ -192,10 +192,12 @@ class Item(Model, DbModelAuthorizeMixin):
     @classmethod
     def find_name_starts_with(cls, household_id: int, starts_with: str) -> Self | None:
         starts_with = starts_with.strip()
-        return cls.query.filter(
+        return (cls.query.filter(
             cls.household_id == household_id,
             func.lower(cls.name).like(func.lower(starts_with) + "%"),
-        ).first()
+        )
+        .order_by(cls.name)
+        .first())
 
     @classmethod
     def search_name(cls, name: str, household_id: int) -> list[Self]:

@@ -23,6 +23,7 @@ Future<void> openUrl(BuildContext context, String url,
             ),
             shareState: ct.CustomTabsShareState.on,
             browser: ct.CustomTabsBrowserConfiguration(
+              prefersDefaultBrowser: true,
               fallbackCustomTabs: const [
                 'org.mozilla.firefox',
                 'org.mozilla.fenix',

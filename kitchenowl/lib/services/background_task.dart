@@ -11,9 +11,9 @@ class BackgroundTask {
         TransactionHandler.getInstance().runOpenTransactions(),
         PreferenceStorage.getInstance()
             .readInt(key: 'lastHouseholdId')
-            .then((id) {
+            .then((id) async {
           if (id != null)
-            TransactionHandler.getInstance().runTransaction(
+            await TransactionHandler.getInstance().runTransaction(
                 TransactionShoppingListGet(household: Household(id: id)));
         }),
       ]);

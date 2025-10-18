@@ -5,6 +5,7 @@ import 'package:intl/intl_standalone.dart';
 // ignore: depend_on_referenced_packages
 import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:kitchenowl/cubits/auth_cubit.dart';
+import 'package:kitchenowl/services/api/api_service.dart';
 import 'package:kitchenowl/services/background_task.dart';
 import 'app.dart';
 
@@ -25,15 +26,21 @@ void backgroundFetchHeadlessTask(HeadlessTask task) async {
   if (isTimeout) {
     // This task has exceeded its allowed running-time.
     // You must stop what you're doing and immediately .finish(taskId)
-    print("[BackgroundFetch] Headless task timed-out: $taskId");
+    debugPrint("[BackgroundFetch] Headless task timed-out: $taskId");
     BackgroundFetch.finish(taskId);
     return;
   }
-  print('[BackgroundFetch] Headless event received.');
+  debugPrint('[BackgroundFetch] Headless event received.');
 
+  // setup
   final AuthCubit authCubit = AuthCubit(reloadTokenBeforeRequest: true);
 
+  // fetch
   await BackgroundTask.run(authCubit);
+
+  // teardown
+  ApiService.getInstance().dispose();
+  await authCubit.close();
 
   BackgroundFetch.finish(taskId);
 }

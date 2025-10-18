@@ -92,7 +92,7 @@ class _AppState extends State<App> {
       ),
       (String taskId) async {
         // <-- Event handler
-        print("[BackgroundFetch] Event received $taskId");
+        debugPrint("[BackgroundFetch] Event received $taskId");
 
         await BackgroundTask.run(widget._authCubit);
 
@@ -103,7 +103,7 @@ class _AppState extends State<App> {
       (String taskId) async {
         // <-- Task timeout handler.
         // This task has exceeded its allowed running-time.  You must stop what you're doing and immediately .finish(taskId)
-        print("[BackgroundFetch] TASK TIMEOUT taskId: $taskId");
+        debugPrint("[BackgroundFetch] TASK TIMEOUT taskId: $taskId");
         BackgroundFetch.finish(taskId);
       },
     );

@@ -12,11 +12,11 @@ import 'package:kitchenowl/platform/dart_html/dart_html.dart' as html;
 class AuthCubit extends Cubit<AuthState> {
   bool _forcedOfflineMode = false;
 
-  AuthCubit() : super(const Loading()) {
+  AuthCubit({reloadTokenBeforeRequest = kIsWeb}) : super(const Loading()) {
     ApiService.getInstance().addListener(updateState);
     ApiService.setTokenRotationHandler((token) =>
         SecureStorage.getInstance().write(key: 'TOKEN', value: token));
-    if (kIsWeb) {
+    if (reloadTokenBeforeRequest) {
       ApiService.setTokenBeforeReauthHandler((token) {
         if (token == null) return Future.value(token);
 

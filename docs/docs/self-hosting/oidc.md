@@ -44,6 +44,22 @@ If you've already started using KitchenOwl or created an account first you can l
 
 Account links are permanent and can only be removed by deleting the KitchenOwl account. Users that signed in using OIDC are normal users that, after setting a password, can also sing in using their username + password. Deleting a user from your OIDC authority will not delete a user from KitchenOwl.
 
+### Alternate mobile redirect URI for OIDC providers
+
+The mobile redirect URL follows RFC compliance. Some OIDC providers request a standard URL format, you may change the behaviour by switching off RFC compliance using the the backend environment variable 
+
+```yaml
+back:
+    environment:
+        - [...]
+        - OIDC_RFC_COMPLIANT_REDIRECT=False # default: True
+```
+
+which will result in an alternative mobile redirect URI for mobiles:
+
+<div class="annotate" markdown>
+- `kitchenowl:///signin/redirect`
+</div>
 
 ### Limitations
 Currently only Web, Android, iOS, and macOS are supported.

@@ -805,6 +805,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#alternate-mobile-redirect-uri-for-oidc-providers" class="md-nav__link">
+    <span class="md-ellipsis">
+      Alternate mobile redirect URI for OIDC providers
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#limitations" class="md-nav__link">
     <span class="md-ellipsis">
       Limitations
@@ -915,6 +924,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#alternate-mobile-redirect-uri-for-oidc-providers" class="md-nav__link">
+    <span class="md-ellipsis">
+      Alternate mobile redirect URI for OIDC providers
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#limitations" class="md-nav__link">
     <span class="md-ellipsis">
       Limitations
@@ -995,6 +1013,19 @@
 <p>When signing in using OIDC you're either logged into the linked account or, if none is present, a new account is created. The account creation will fail if an email already associated with a KitchenOwl account is provided by the identity management.</p>
 <p>If you've already started using KitchenOwl or created an account first you can link an OIDC account to your existing KitchenOwl account. Just go to <em>settings</em> <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg></span> Click on your profile at the top <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg></span> <em>Linked Accounts</em> <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg></span> and link your account.</p>
 <p>Account links are permanent and can only be removed by deleting the KitchenOwl account. Users that signed in using OIDC are normal users that, after setting a password, can also sing in using their username + password. Deleting a user from your OIDC authority will not delete a user from KitchenOwl.</p>
+<h3 id="alternate-mobile-redirect-uri-for-oidc-providers">Alternate mobile redirect URI for OIDC providers</h3>
+<p>The mobile redirect URL follows RFC compliance. Some OIDC providers request a standard URL format, you may change the behaviour by switching off RFC compliance using the the backend environment variable </p>
+<div class="highlight"><pre><span></span><code><span class="nt">back</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">environment</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">...</span><span class="p p-Indicator">]</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">OIDC_RFC_COMPLIANT_REDIRECT=False</span><span class="w"> </span><span class="c1"># default: True</span>
+</code></pre></div>
+<p>which will result in an alternative mobile redirect URI for mobiles:</p>
+<div class="annotate">
+<ul>
+<li><code>kitchenowl:///signin/redirect</code></li>
+</ul>
+</div>
 <h3 id="limitations">Limitations</h3>
 <p>Currently only Web, Android, iOS, and macOS are supported.</p>
 <h3 id="apple-google">Apple &amp; Google</h3>

@@ -1,1 +1,34 @@
-{}
+{
+  "categories": {
+    "bread": "Печива",
+    "canned": "Консерви",
+    "dairy": "Млечни",
+    "drinks": "Напитки",
+    "freezer": "Фризер",
+    "fruits_vegetables": "Плодове и зеленчуци",
+    "grain": "Макарони и зърнени",
+    "hygiene": "Хигиена",
+    "refrigerated": "Хладилни",
+    "snacks": "Леки закуски"
+  },
+  "items": {
+    "agave_syrup": "Сироп от агаве",
+    "aioli": "Айоли",
+    "amaretto": "Амарето",
+    "apple": "Ябълка",
+    "apple_pulp": "Ябълково пюре",
+    "applesauce": "Ябълков сос",
+    "apricots": "Кайсии",
+    "apérol": "Аперол",
+    "arugula": "Рукола",
+    "asian_egg_noodles": "Азиатска яйчна юфка",
+    "asian_noodles": "Юфка",
+    "asparagus": "Аспержи",
+    "aspirin": "Аспирин",
+    "avocado": "Авокадо",
+    "baby_potatoes": "бейби картофи",
+    "baby_spinach": "млад спанак",
+    "bacon": "Бекон",
+    "baguette": "Франзела"
+  }
+}

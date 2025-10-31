@@ -36,6 +36,9 @@
       }
     }
   },
+  "@addRecipeToPlannerShort": {
+    "description": "A shorter title/button text used wherever the space is limited. Excludes the number of yields."
+  },
   "@addShoppingList": {},
   "@addTag": {},
   "@addedBy": {
@@ -125,6 +128,15 @@
   },
   "@expensePaidBy": {},
   "@expensePaidFor": {},
+  "@export": {},
+  "@fieldCannotBeEmpty": {
+    "placeholders": {
+      "field": {
+        "example": "Username",
+        "type": "String"
+      }
+    }
+  },
   "about": "關於",
   "accountCreate": "建立帳號",
   "accountCreateHint": "您的使用者名稱和姓名是公開的，因此請選擇您願意與他人分享的內容。",
@@ -141,6 +153,7 @@
   "addLanguageConfirm": "您確定要將語言設定為'{lang}'嗎？此操作無法撤銷，並將為您的家庭新增項目與類別。",
   "addNumberIngredients": "新增 {number} 材料",
   "addRecipeToPlanner": "新增（{number}份）膳食計劃",
+  "addRecipeToPlannerShort": "新增到膳食計劃",
   "addShoppingList": "新增購物清單",
   "addTag": "新增標簽",
   "addedBy": "由{name}添加",
@@ -176,7 +189,7 @@
   "defaultWord": "預設",
   "delete": "移除",
   "description": "描述",
-  "discover": "發現",
+  "discover": "探索",
   "done": "完成",
   "dynamicAccentColor": "動態強調色",
   "email": "電子郵件",
@@ -199,5 +212,7 @@
   "expenseOverviewExpenses": "開支",
   "expenseOverviewTotalTitle": "{month}總計：",
   "expensePaidBy": "付費人",
-  "expensePaidFor": "付費項"
+  "expensePaidFor": "付費項",
+  "export": "匯出",
+  "fieldCannotBeEmpty": "{field}不能為空白"
 }

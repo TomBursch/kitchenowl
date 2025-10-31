@@ -392,6 +392,13 @@
   "@setupTitle": {},
   "@share": {},
   "@shoppingList": {},
+  "@shoppingListContainsEntries": {
+    "placeholders": {
+      "entriesCount": {
+        "type": "num"
+      }
+    }
+  },
   "@shoppingListDelete": {},
   "@shoppingListDeleteConfirmation": {
     "placeholders": {
@@ -486,11 +493,14 @@
   "@usernameInvalid": {},
   "@usernameUnavailable": {},
   "@users": {},
+  "@website": {},
   "@weekly": {},
+  "@welcomeBack": {},
   "@writeMarkdownHere": {},
   "@wrongUsernameOrPassword": {},
   "@yearly": {},
   "@yes": {},
+  "@yesterday": {},
   "@yields": {},
   "@you": {},
   "about": "אודות",
@@ -723,6 +733,7 @@
   "setupTitle": "היי! מוכן לקניות?",
   "share": "שתף",
   "shoppingList": "רשימת קניות",
+  "shoppingListContainsEntries": "ספירת כניסות",
   "shoppingListDelete": "מחק רשימת קניות",
   "shoppingListDeleteConfirmation": "האם אתה בטוח שתרצה למחוק את {shoppingList}?",
   "shoppingListEdit": "ערוך רשימת קניות",
@@ -768,7 +779,7 @@
   "unsavedChangesTitle": "יש לך שינויים שלא נשמרו",
   "unsupportedBackendMessage": "גירסאת השרת אינה נתמכת, אנא עדכן את שרת ה-backend",
   "unsupportedFrontendMessage": "גירסאת האפליקציה אינה נתמכת, אנא עדכן את האפליקציה",
-  "unsupportedScrapeMessage": "ניתן לאסוף מידע מכתובת זו",
+  "unsupportedScrapeMessage": "אתר אינטרנט זה אינו נתמך",
   "usedIn": "שומש ב",
   "user": "משתמש",
   "userAdd": "הוספת משתמש",
@@ -780,11 +791,14 @@
   "usernameInvalid": "שם המשתמש לא יכול להכיל '@'",
   "usernameUnavailable": "שם המשתמש אינו זמין",
   "users": "משתמשים",
+  "website": "אתר",
   "weekly": "שבועי",
+  "welcomeBack": "ברוכים השבים",
   "writeMarkdownHere": "אתה יכול להשתמש ב-markdown כאן!",
   "wrongUsernameOrPassword": "שם משתמש או סיסמא שגויים",
   "yearly": "שנתי",
   "yes": "כן",
+  "yesterday": "אתמול",
   "yields": "הגשות",
   "you": "את/ה"
 }

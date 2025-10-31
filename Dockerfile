@@ -54,7 +54,7 @@ RUN flutter build web --release --no-web-resources-cdn
 # ------------
 # BACKEND BUILDER
 # ------------
-FROM python:3.13-slim AS backend_builder
+FROM python:3.14-slim AS backend_builder
 
 RUN apt-get update \
     && apt-get install --yes --no-install-recommends \
@@ -76,7 +76,7 @@ RUN python -c "import nltk; nltk.download('averaged_perceptron_tagger_eng', down
 # ------------
 # RUNNER
 # ------------
-FROM python:3.13-slim AS runner
+FROM python:3.14-slim AS runner
 
 RUN apt-get update \
     && apt-get install --yes --no-install-recommends \

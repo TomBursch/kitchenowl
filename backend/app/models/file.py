@@ -71,7 +71,10 @@ class File(Model, DbModelAuthorizeMixin):
         """
         Delete this instance of model from db
         """
-        os.remove(os.path.join(UPLOAD_FOLDER, self.filename))
+        file_path = os.path.join(UPLOAD_FOLDER, self.filename)
+        if os.path.isfile(file_path):
+            os.remove(file_path)
+
         db.session.delete(self)
         db.session.commit()
 

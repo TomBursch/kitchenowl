@@ -1,0 +1,28 @@
+services:
+  db:
+    image: postgres:15
+    container_name: kitchenowl-db
+    restart: always
+    environment:
+      POSTGRES_USER: kitchenowl
+      POSTGRES_PASSWORD: kitchenowl
+      POSTGRES_DB: kitchenowl
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+  backend:
+    image: tombursch/kitchenowl:latest
+    container_name: kitchenowl-backend
+    restart: always
+    depends_on:
+      - db
+    ports:
+      - "8080:8080"
+    environment:
+      DATABASE_URL: postgres://kitchenowl:kitchenowl@db:5432/kitchenowl
+    volumes:
+      - kitchenowl-data:/data
+
+volumes:
+  db-data:
+  kitchenowl-data:

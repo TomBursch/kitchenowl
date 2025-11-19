@@ -128,6 +128,7 @@
   },
   "@expensePaidBy": {},
   "@expensePaidFor": {},
+  "@expenseReceivedBy": {},
   "@export": {},
   "@fieldCannotBeEmpty": {
     "placeholders": {
@@ -137,6 +138,163 @@
       }
     }
   },
+  "@forceOfflineMode": {},
+  "@gallery": {},
+  "@grid": {},
+  "@helpTranslate": {},
+  "@hi": {
+    "placeholders": {
+      "name": {
+        "example": "Tom",
+        "type": "String"
+      }
+    }
+  },
+  "@icon": {},
+  "@imageSelect": {},
+  "@import": {},
+  "@importStartedHint": {},
+  "@income": {},
+  "@ingredients": {},
+  "@itemDelete": {},
+  "@itemDeleteConfirmation": {
+    "placeholders": {
+      "item": {
+        "example": "Cake",
+        "type": "String"
+      }
+    }
+  },
+  "@items": {},
+  "@itemsAdd": {},
+  "@language": {},
+  "@languageSelect": {},
+  "@larger": {},
+  "@lastUsed": {},
+  "@list": {},
+  "@lltWarningTitle": {},
+  "@login": {},
+  "@loginTo": {},
+  "@loginToAddToShoppingList": {},
+  "@logout": {},
+  "@logoutName": {
+    "placeholders": {
+      "name": {
+        "example": "Tom",
+        "type": "String"
+      }
+    }
+  },
+  "@longerThanExpected": {},
+  "@markAsPaid": {},
+  "@mealPlanner": {},
+  "@member": {},
+  "@memberAdd": {},
+  "@memberRemove": {},
+  "@members": {},
+  "@merge": {},
+  "@minutesAbbrev": {},
+  "@moneyTransfer": {},
+  "@monthly": {},
+  "@more": {},
+  "@name": {},
+  "@next": {},
+  "@noTags": {},
+  "@none": {},
+  "@now": {},
+  "@offlineMessage": {},
+  "@onboardingLoading": {},
+  "@onboardingSettingsTitle": {
+    "placeholders": {
+      "name": {
+        "example": "Tom",
+        "type": "String"
+      }
+    }
+  },
+  "@onboardingTitle": {},
+  "@or": {},
+  "@other": {},
+  "@overview": {},
+  "@owesAB": {
+    "placeholders": {
+      "nameA": {
+        "example": "Tom",
+        "type": "String"
+      },
+      "nameB": {
+        "example": "Tom",
+        "type": "String"
+      }
+    }
+  },
+  "@pageNotFound": {},
+  "@password": {},
+  "@passwordFieldTooShort": {},
+  "@passwordForgot": {},
+  "@passwordRepeat": {},
+  "@passwordReset": {},
+  "@passwordSave": {},
+  "@personal": {},
+  "@plannerTitle": {},
+  "@preparationTime": {},
+  "@reason": {},
+  "@recentItemsCategorize": {},
+  "@recipeAdd": {},
+  "@recipeAddToHousehold": {
+    "placeholders": {
+      "householdName": {
+        "example": "Home",
+        "type": "String"
+      }
+    }
+  },
+  "@recipeAddUrl": {},
+  "@recipeDelete": {},
+  "@recipeDeleteConfirmation": {
+    "placeholders": {
+      "recipe": {
+        "example": "Cake",
+        "type": "String"
+      }
+    }
+  },
+  "@recipeEdit": {},
+  "@recipeEmpty": {},
+  "@recipeEmptySearch": {},
+  "@recipeImageSelect": {},
+  "@recipeNew": {},
+  "@recipeSource": {},
+  "@recipes": {},
+  "@recipesPopular": {},
+  "@recipesRecent": {},
+  "@recipesSuggested": {},
+  "@refresh": {},
+  "@remove": {},
+  "@rename": {},
+  "@reportIssue": {},
+  "@reportRecipe": {},
+  "@reportUser": {},
+  "@reset": {},
+  "@save": {},
+  "@search": {},
+  "@searchHint": {},
+  "@send": {},
+  "@server": {},
+  "@settings": {},
+  "@setupTitle": {},
+  "@share": {},
+  "@shoppingList": {},
+  "@shoppingListDelete": {},
+  "@shoppingListDeleteConfirmation": {
+    "placeholders": {
+      "shoppingList": {
+        "example": "Supermarket",
+        "type": "String"
+      }
+    }
+  },
+  "@shoppingListEdit": {},
   "about": "關於",
   "accountCreate": "建立帳號",
   "accountCreateHint": "您的使用者名稱和姓名是公開的，因此請選擇您願意與他人分享的內容。",
@@ -213,6 +371,104 @@
   "expenseOverviewTotalTitle": "{month}總計：",
   "expensePaidBy": "付費人",
   "expensePaidFor": "付費項",
+  "expenseReceivedBy": "收件人",
   "export": "匯出",
-  "fieldCannotBeEmpty": "{field}不能為空白"
+  "fieldCannotBeEmpty": "{field}不能為空白",
+  "forceOfflineMode": "强制離綫模式",
+  "gallery": "相冊",
+  "grid": "網格",
+  "helpTranslate": "協助翻譯",
+  "hi": "你好 {name}!",
+  "icon": "圖標",
+  "imageSelect": "選擇圖片",
+  "import": "匯入",
+  "importStartedHint": "開始匯入，可能需要等待幾分鐘。",
+  "income": "收入",
+  "ingredients": "食材",
+  "itemDelete": "刪除物件",
+  "itemDeleteConfirmation": "確定要刪除 {item} 嗎? 這會刪除所有包含在内的食譜.",
+  "items": "物品",
+  "itemsAdd": "增加物品",
+  "language": "語言",
+  "languageSelect": "選擇語言",
+  "larger": "大於",
+  "lastUsed": "最後使用",
+  "list": "清單",
+  "lltWarningTitle": "你知道你在幹嘛嗎？",
+  "login": "登入",
+  "loginTo": "登入到",
+  "loginToAddToShoppingList": "登入即可增加食譜到您的購物清單",
+  "logout": "登出",
+  "logoutName": "登出 {name}",
+  "longerThanExpected": "這比預期的久",
+  "markAsPaid": "標記爲已付款",
+  "mealPlanner": "膳食計劃",
+  "member": "成員",
+  "memberAdd": "增加成員",
+  "memberRemove": "移除成員",
+  "members": "成員",
+  "merge": "合并",
+  "minutesAbbrev": "最小值",
+  "moneyTransfer": "轉帳",
+  "monthly": "每月",
+  "more": "更多",
+  "name": "名稱",
+  "next": "下一個",
+  "noTags": "沒有標簽",
+  "none": "無",
+  "now": "現在",
+  "offlineMessage": "您處於離綫狀態",
+  "onboardingLoading": "匯入語言中，可能需要稍等一下。請耐心等待 :)",
+  "onboardingSettingsTitle": "您好 {name}，一起來設定服務器吧!",
+  "onboardingTitle": "來創建一個用戶",
+  "or": "或",
+  "other": "其他",
+  "overview": "總覽",
+  "owesAB": "{nameA} 欠 {nameB}",
+  "pageNotFound": "找不到這個頁面",
+  "password": "密碼",
+  "passwordFieldTooShort": "密碼太短",
+  "passwordForgot": "忘記密碼？",
+  "passwordRepeat": "重複密碼",
+  "passwordReset": "重置密碼",
+  "passwordSave": "更新密碼",
+  "personal": "個人",
+  "plannerTitle": "您的膳食計劃",
+  "preparationTime": "準備時長",
+  "reason": "原因",
+  "recentItemsCategorize": "分類最近的物件",
+  "recipeAdd": "增加食譜",
+  "recipeAddToHousehold": "增加到 {householdName}",
+  "recipeAddUrl": "從 URL 新增食譜",
+  "recipeDelete": "刪除食譜",
+  "recipeDeleteConfirmation": "是否確定要刪除{recipe}?",
+  "recipeEdit": "修改食譜",
+  "recipeEmpty": "沒有食譜，新增一個吧！",
+  "recipeEmptySearch": "沒有食譜 :(",
+  "recipeImageSelect": "選擇食譜圖片",
+  "recipeNew": "新食譜",
+  "recipeSource": "食譜來源",
+  "recipes": "食譜",
+  "recipesPopular": "最近夯的食譜",
+  "recipesRecent": "最近",
+  "recipesSuggested": "建議",
+  "refresh": "刷新",
+  "remove": "移除",
+  "rename": "重新命名",
+  "reportIssue": "回報問題",
+  "reportRecipe": "回報食譜",
+  "reportUser": "回報用戶",
+  "reset": "重置",
+  "save": "儲存",
+  "search": "搜索",
+  "searchHint": "在尋找什麽嗎？",
+  "send": "發送",
+  "server": "服務器",
+  "settings": "設定",
+  "setupTitle": "嗨！準備好要去購物了嗎？",
+  "share": "分享",
+  "shoppingList": "購物清單",
+  "shoppingListDelete": "刪除購物清單",
+  "shoppingListDeleteConfirmation": "是否確定要刪除 {shoppingList}？",
+  "shoppingListEdit": "修改購物清單"
 }

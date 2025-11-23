@@ -826,6 +826,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#traefik-ingress" class="md-nav__link">
+    <span class="md-ellipsis">
+      Traefik ingress
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#apache" class="md-nav__link">
     <span class="md-ellipsis">
       Apache
@@ -907,6 +916,15 @@
   <a href="#traefik-v2" class="md-nav__link">
     <span class="md-ellipsis">
       Traefik v2
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#traefik-ingress" class="md-nav__link">
+    <span class="md-ellipsis">
+      Traefik ingress
     </span>
   </a>
   
@@ -1057,6 +1075,45 @@ volumes:
   - &quot;traefik.http.middlewares.security.headers.customframeoptionsvalue=SAMEORIGIN&quot;
   - &quot;traefik.http.middlewares.security.headers.referrerpolicy=same-origin&quot;
 </code></pre></div>
+<h3 id="traefik-ingress">Traefik ingress</h3>
+<p>This example configuration assumes that you are:</p>
+<ul>
+<li>running kitchenowl in a kubernetes environment where traefik is your ingress controller</li>
+<li>you have set up traefik CRDs according to <a href="https://doc.traefik.io/traefik/reference/install-configuration/providers/kubernetes/kubernetes-crd/">https://doc.traefik.io/traefik/reference/install-configuration/providers/kubernetes/kubernetes-crd/</a> (in particular you intend to use the <code>IngressRoute</code> resource instead of the kubernetes-native <code>Ingress</code>.)</li>
+<li>kitchenowl is deployed using a service named <code>kitchenowl-web</code> in the <code>default</code> namespace.</li>
+</ul>
+<div class="highlight"><pre><span></span><code>apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: kitchenowl-ingressroute
+
+spec:
+  entryPoints:
+    - websecure
+  routes:
+  - match: Host(`&lt;your.domain.here&gt;`)
+    middlewares:
+      - name: kitchenowl
+    kind: Rule
+    services:
+    - name: kitchenowl-web
+      port: 8080
+
+  tls:
+    certResolver: default-tls
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: kitchenowl
+spec:
+  headers:
+    customRequestHeaders:
+      X-Forwarded-Proto: &quot;https&quot;
+      # enable websockets
+      Upgrade: &quot;websocket&quot;
+</code></pre></div>
+<p>In this setup a new middleware is added to enable websocket support on this ingress since it is not enabled by default by the ingress controller.</p>
 <h3 id="apache">Apache</h3>
 <p>The following assumptions are made by this config:</p>
 <ul>
@@ -1117,7 +1174,7 @@ Include /etc/letsencrypt/options-ssl-apache.conf
 
     ssl_certificate /etc/letsencrypt/live/kitchenowl.example.org/fullchain.pem; # managed by
  Certbot
-    ssl_certificate_key /etc/letsencrypt/live/kitchenowl.example.org/privkey.pem; # managed 
+    ssl_certificate_key /etc/letsencrypt/live/kitchenowl.example.org/privkey.pem; # managed
 by Certbot
     include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
     ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot

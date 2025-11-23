@@ -71,6 +71,8 @@ The official installation method is using [Docker](https://docs.docker.com/engin
     - [https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security)
     - [https://www.netsparker.com/blog/web-security/http-security-headers/](https://www.netsparker.com/blog/web-security/http-security-headers/)
 
+    Make sure the reverse proxy supports websockets. Without websockets some api requests might be noticeably slower.
+
 ### Updating KitchenOwl
 To upgrade a docker compose stack, you can simply run:
 

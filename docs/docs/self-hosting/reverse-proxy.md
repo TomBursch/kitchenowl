@@ -110,6 +110,49 @@ labels:
   - "traefik.http.middlewares.security.headers.referrerpolicy=same-origin"
 ```
 
+### Traefik ingress
+
+This example configuration assumes that you are:
+
+- running kitchenowl in a kubernetes environment where traefik is your ingress controller
+- you have set up traefik CRDs according to [https://doc.traefik.io/traefik/reference/install-configuration/providers/kubernetes/kubernetes-crd/](https://doc.traefik.io/traefik/reference/install-configuration/providers/kubernetes/kubernetes-crd/) (in particular you intend to use the `IngressRoute` resource instead of the kubernetes-native `Ingress`.)
+- kitchenowl is deployed using a service named `kitchenowl-web` in the `default` namespace.
+
+```yml
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: kitchenowl-ingressroute
+
+spec:
+  entryPoints:
+    - websecure
+  routes:
+  - match: Host(`<your.domain.here>`)
+    middlewares:
+      - name: kitchenowl
+    kind: Rule
+    services:
+    - name: kitchenowl-web
+      port: 8080
+
+  tls:
+    certResolver: default-tls
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: kitchenowl
+spec:
+  headers:
+    customRequestHeaders:
+      X-Forwarded-Proto: "https"
+      # enable websockets
+      Upgrade: "websocket"
+```
+
+In this setup a new middleware is added to enable websocket support on this ingress since it is not enabled by default by the ingress controller.
+
 ### Apache
 
 The following assumptions are made by this config:
@@ -175,7 +218,7 @@ server {
 
     ssl_certificate /etc/letsencrypt/live/kitchenowl.example.org/fullchain.pem; # managed by
  Certbot
-    ssl_certificate_key /etc/letsencrypt/live/kitchenowl.example.org/privkey.pem; # managed 
+    ssl_certificate_key /etc/letsencrypt/live/kitchenowl.example.org/privkey.pem; # managed
 by Certbot
     include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
     ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot

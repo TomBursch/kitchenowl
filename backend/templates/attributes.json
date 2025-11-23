@@ -30,7 +30,7 @@
     },
     "apérol": {
       "category": "drinks",
-      "icon": "wine-bottle"
+      "icon": "wine_bottle"
     },
     "arugula": {
       "category": "fruits_vegetables",
@@ -114,7 +114,7 @@
     },
     "basmati_rice": {
       "category": "grain",
-      "icon": "grains-of-rice"
+      "icon": "grains_of_rice"
     },
     "bathroom_cleaner": {
       "category": "hygiene",
@@ -141,7 +141,7 @@
     },
     "beer": {
       "category": "drinks",
-      "icon": "beer-bottle"
+      "icon": "beer_bottle"
     },
     "beetroot": {
       "category": "fruits_vegetables",
@@ -355,7 +355,7 @@
     },
     "chocolate": {
       "category": "snacks",
-      "icon": "chocolate-bar"
+      "icon": "chocolate_bar"
     },
     "chocolate_chips": {
       "category": "snacks",
@@ -490,7 +490,7 @@
     },
     "cow's_milk": {
       "category": "dairy",
-      "icon": "milk-carton"
+      "icon": "milk_carton"
     },
     "cranberries": {},
     "cream": {
@@ -698,7 +698,7 @@
     },
     "frozen_pizza": {
       "category": "freezer",
-      "icon": "salami-pizza"
+      "icon": "salami_pizza"
     },
     "frozen_spinach": {
       "category": "freezer",
@@ -1114,7 +1114,7 @@
     },
     "milk": {
       "category": "dairy",
-      "icon": "milk-carton"
+      "icon": "milk_carton"
     },
     "mint": {
       "category": "fruits_vegetables",
@@ -1201,7 +1201,7 @@
     },
     "oat_milk": {
       "category": "dairy",
-      "icon": "milk-carton"
+      "icon": "milk_carton"
     },
     "oatmeal": {
       "category": "grain",
@@ -1358,7 +1358,7 @@
     },
     "persian_rice": {
       "category": "canned",
-      "icon": "grains-of-rice"
+      "icon": "grains_of_rice"
     },
     "pesto": {
       "category": "canned",
@@ -1389,11 +1389,11 @@
     },
     "pizza": {
       "category": "freezer",
-      "icon": "salami-pizza"
+      "icon": "salami_pizza"
     },
     "pizza_dough": {
       "category": "refrigerated",
-      "icon": "salami-pizza"
+      "icon": "salami_pizza"
     },
     "plant_magarine": {
       "category": "dairy",
@@ -1537,7 +1537,7 @@
     },
     "red_wine": {
       "category": "drinks",
-      "icon": "wine-bottle"
+      "icon": "wine_bottle"
     },
     "red_wine_vinegar": {
       "category": "canned",
@@ -1553,7 +1553,7 @@
     },
     "rice": {
       "category": "grain",
-      "icon": "grains-of-rice"
+      "icon": "grains_of_rice"
     },
     "rice_cakes": {
       "category": "snacks",
@@ -1800,7 +1800,7 @@
     },
     "sparkling_water": {
       "category": "drinks",
-      "icon": "plastic-bottle"
+      "icon": "plastic_bottle"
     },
     "spatula": {},
     "spelt": {
@@ -1878,7 +1878,7 @@
     },
     "sushi_rice": {
       "category": "canned",
-      "icon": "grains-of-rice"
+      "icon": "grains_of_rice"
     },
     "swabian_ravioli": {
       "category": "refrigerated",
@@ -1890,11 +1890,11 @@
     },
     "sweet_potato": {
       "category": "fruits_vegetables",
-      "icon": "sweet-potato"
+      "icon": "sweet_potato"
     },
     "sweet_potatoes": {
       "category": "fruits_vegetables",
-      "icon": "sweet-potato"
+      "icon": "sweet_potato"
     },
     "sweets": {
       "category": "snacks",
@@ -1985,7 +1985,7 @@
     "tortillas": {},
     "tuna": {
       "category": "canned",
-      "icon": "fish-food"
+      "icon": "fish_food"
     },
     "turkey": {},
     "turmeric": {

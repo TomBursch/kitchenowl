@@ -238,7 +238,7 @@ def getExpenseOverview(args, household_id):
     thisMonthStart = datetime.now(timezone.utc).date().replace(day=1)
 
     steps = args["steps"] if "steps" in args else 5
-    frame = args["frame"] if args["frame"] is not None else 2
+    frame = args["frame"] if "frame" in args and args["frame"] is not None else 2
     page = args["page"] if "page" in args and args["page"] is not None else 0
 
     factor = 1

@@ -98,7 +98,7 @@ if not DISABLE_USERNAME_PASSWORD_LOGIN:
 
         if not user or not user.check_password(args["password"]):
             raise UnauthorizedRequest(
-                message="Unauthorized: IP {} login attemp with wrong username or password".format(
+                message="Unauthorized: IP {} login attempt with wrong username or password".format(
                     getClientIp()
                 )
             )
@@ -495,7 +495,7 @@ if FRONT_URL and len(oidc_clients) > 0:
         oidc_request = OIDCRequest.find_by_state(args["state"])
         if not oidc_request:
             raise UnauthorizedRequest(
-                message="Unauthorized: IP {} login attemp with unknown OIDC state".format(
+                message="Unauthorized: IP {} login attempt with unknown OIDC state".format(
                     getClientIp()
                 )
             )
@@ -504,7 +504,7 @@ if FRONT_URL and len(oidc_clients) > 0:
         if not client:
             oidc_request.delete()
             raise UnauthorizedRequest(
-                message="Unauthorized: IP {} login attemp with unknown OIDC provider".format(
+                message="Unauthorized: IP {} login attempt with unknown OIDC provider".format(
                     getClientIp()
                 )
             )
@@ -514,7 +514,7 @@ if FRONT_URL and len(oidc_clients) > 0:
                 return "Request invalid: user not signed in for link request", 400
             oidc_request.delete()
             raise UnauthorizedRequest(
-                message="Unauthorized: IP {} login attemp for a different account".format(
+                message="Unauthorized: IP {} login attempt for a different account".format(
                     getClientIp()
                 )
             )
@@ -537,14 +537,14 @@ if FRONT_URL and len(oidc_clients) > 0:
         if isinstance(tokenResponse, ErrorResponse):
             oidc_request.delete()
             raise UnauthorizedRequest(
-                message="Unauthorized: IP {} login attemp for OIDC failed".format(
+                message="Unauthorized: IP {} login attempt for OIDC failed".format(
                     getClientIp()
                 )
             )
         userinfo = tokenResponse["id_token"]
         if userinfo["nonce"] != oidc_request.nonce:
             raise UnauthorizedRequest(
-                message="Unauthorized: IP {} login attemp for OIDC failed: mismatched nonce".format(
+                message="Unauthorized: IP {} login attempt for OIDC failed: mismatched nonce".format(
                     getClientIp()
                 )
             )

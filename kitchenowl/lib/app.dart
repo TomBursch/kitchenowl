@@ -79,34 +79,36 @@ class _AppState extends State<App> {
       });
     }
 
-    BackgroundFetch.configure(
-      BackgroundFetchConfig(
-        minimumFetchInterval: 30,
-        stopOnTerminate: false,
-        enableHeadless: true,
-        requiresBatteryNotLow: false,
-        requiresCharging: false,
-        requiresStorageNotLow: false,
-        requiresDeviceIdle: false,
-        requiredNetworkType: NetworkType.ANY,
-      ),
-      (String taskId) async {
-        // <-- Event handler
-        debugPrint("[BackgroundFetch] Event received $taskId");
+    if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
+      BackgroundFetch.configure(
+        BackgroundFetchConfig(
+          minimumFetchInterval: 30,
+          stopOnTerminate: false,
+          enableHeadless: true,
+          requiresBatteryNotLow: false,
+          requiresCharging: false,
+          requiresStorageNotLow: false,
+          requiresDeviceIdle: false,
+          requiredNetworkType: NetworkType.ANY,
+        ),
+        (String taskId) async {
+          // <-- Event handler
+          debugPrint("[BackgroundFetch] Event received $taskId");
 
-        await BackgroundTask.run(widget._authCubit);
+          await BackgroundTask.run(widget._authCubit);
 
-        // IMPORTANT:  You must signal completion of your task or the OS can punish your app
-        // for taking too long in the background.
-        BackgroundFetch.finish(taskId);
-      },
-      (String taskId) async {
-        // <-- Task timeout handler.
-        // This task has exceeded its allowed running-time.  You must stop what you're doing and immediately .finish(taskId)
-        debugPrint("[BackgroundFetch] TASK TIMEOUT taskId: $taskId");
-        BackgroundFetch.finish(taskId);
-      },
-    );
+          // IMPORTANT:  You must signal completion of your task or the OS can punish your app
+          // for taking too long in the background.
+          BackgroundFetch.finish(taskId);
+        },
+        (String taskId) async {
+          // <-- Task timeout handler.
+          // This task has exceeded its allowed running-time.  You must stop what you're doing and immediately .finish(taskId)
+          debugPrint("[BackgroundFetch] TASK TIMEOUT taskId: $taskId");
+          BackgroundFetch.finish(taskId);
+        },
+      );
+    }
   }
 
   @override

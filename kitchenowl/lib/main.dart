@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:background_fetch/background_fetch.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +17,9 @@ Future main() async {
   if (!kIsWeb) await findSystemLocale(); //BUG in package for web?
   runApp(App());
 
-  BackgroundFetch.registerHeadlessTask(backgroundFetchHeadlessTask);
+  if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
+    BackgroundFetch.registerHeadlessTask(backgroundFetchHeadlessTask);
+  }
 }
 
 // [Android-only] This "Headless Task" is run when the Android app is terminated with `enableHeadless: true`

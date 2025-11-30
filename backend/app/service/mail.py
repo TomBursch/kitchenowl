@@ -7,7 +7,7 @@ from email.utils import formatdate
 from app.config import app, get_secret, FRONT_URL
 from app.models import User
 
-SMTP_HOST = os.getenv("SMTP_HOST") 
+SMTP_HOST = os.getenv("SMTP_HOST")
 SMTP_PORT = int(os.getenv("SMTP_PORT", 465))
 SMTP_USE_TLS = (
     os.getenv("SMTP_USE_TLS", "true" if SMTP_PORT == 587 else "false").lower() == "true"
@@ -39,7 +39,8 @@ def mailConfigured():
         with _getMailServer() as server:
             server.login(SMTP_USER, SMTP_PASS)
         mail_configured = True
-    except Exception:
+    except Exception as e:
+        print(e)
         mail_configured = False
     return mail_configured
 

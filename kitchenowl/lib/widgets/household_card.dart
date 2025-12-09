@@ -86,7 +86,7 @@ class HouseholdCard extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.fromLTRB(16, 0, 16, 6),
                       child: Text(
-                        "${AppLocalizations.of(context)!.balances}: ${NumberFormat.simpleCurrency().format(member.balance)}",
+                        "${AppLocalizations.of(context)!.balances}: ${NumberFormat.simpleCurrency(locale: household.language).format(member.balance)}",
                         style: Theme.of(context).textTheme.bodySmall,
                       ),
                     ),

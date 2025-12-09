@@ -10,12 +10,14 @@ import 'package:collection/collection.dart';
 
 class PaidForWidget extends StatefulWidget {
   final User user;
+  final String? locale;
   final AddUpdateExpenseCubit cubit;
 
   const PaidForWidget({
     super.key,
     required this.user,
     required this.cubit,
+    this.locale,
   });
 
   @override
@@ -68,7 +70,8 @@ class _PaidForWidgetState extends State<PaidForWidget> {
               }
             }
           },
-          subtitle: Text(NumberFormat.simpleCurrency().format(
+          subtitle:
+              Text(NumberFormat.simpleCurrency(locale: widget.locale).format(
             (state.amount *
                 (paidForModel?.factor ?? 0) /
                 state.paidFor.fold(0, (p, v) => p + v.factor)),

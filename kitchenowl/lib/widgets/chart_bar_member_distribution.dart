@@ -35,7 +35,7 @@ class ChartBarMemberDistribution extends StatelessWidget {
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 10),
                               child: Text(
-                                " ${member.name}: ${NumberFormat.simpleCurrency().format(member.balance)}",
+                                " ${member.name}: ${NumberFormat.simpleCurrency(locale: household.language).format(member.balance)}",
                               ),
                             ),
                           ),

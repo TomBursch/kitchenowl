@@ -1,17 +1,13 @@
 import re
 from typing import Any
-from recipe_scrapers import scrape_html
-from recipe_scrapers._exceptions import SchemaOrgException
 from recipe_scrapers.__version__ import __version__ as recipe_scrapers_version
 from requests_hardened import Config, Manager
 import requests
-from urllib.parse import urljoin, urlparse
 from app.config import FRONT_URL
 from app.errors import ForbiddenRequest
 from app.models.recipe import RecipeVisibility
-from app.service.ingredient_parsing import parseIngredients
-
-from app.models import Recipe, Item, Household
+from app.models import Recipe, Household
+from app.service.recipe_public_scraping import scrapeHTML, scrapeHTMLLLM
 
 # taken from the recipe-scrapers library to circumvent anti-scraping measures that block requests with the default user agent
 USER_AGENT = f"Mozilla/5.0 (compatible; Windows NT 10.0; Win64; x64; rv:{recipe_scrapers_version}) recipe-scrapers/{recipe_scrapers_version}"
@@ -27,117 +23,11 @@ request_manager = Manager(
 )
 
 
-def fixRelativeUrl(url: str, baseUrl: str) -> str:
-    """
-    If the URL is already absolute (i.e. includes a scheme and host), returns the unchanged URL.
-    Otherwise, i.e. if the URL is relative, returns an absolute URL of the resource relative to baseUrl.
-    """
-    parsedUrl = urlparse(url)
-    if parsedUrl.hostname:
-        return url
-
-    return urljoin(baseUrl, url)
-
-
-def scrapePublic(url: str, html: str, household: Household) -> dict[str, Any] | None:
-    try:
-        scraper = scrape_html(html, url, supported_only=False)
-    except Exception:
-        return None
-    recipe = Recipe()
-    try:
-        recipe.name = scraper.title().strip()[:128]
-    except (
-        NotImplementedError,
-        ValueError,
-        TypeError,
-        AttributeError,
-        SchemaOrgException,
-    ):
-        return None  # Unsupported if title cannot be scraped
-    try:
-        recipe.time = int(scraper.total_time())
-    except (
-        NotImplementedError,
-        ValueError,
-        TypeError,
-        AttributeError,
-        SchemaOrgException,
-    ):
-        pass
-    try:
-        recipe.cook_time = int(scraper.cook_time())
-    except (
-        NotImplementedError,
-        ValueError,
-        TypeError,
-        AttributeError,
-        SchemaOrgException,
-    ):
-        pass
-    try:
-        recipe.prep_time = int(scraper.prep_time())
-    except (
-        NotImplementedError,
-        ValueError,
-        TypeError,
-        AttributeError,
-        SchemaOrgException,
-    ):
-        pass
-    try:
-        yields = re.search(r"\d*", scraper.yields())
-        if yields:
-            recipe.yields = int(yields.group())
-    except (
-        NotImplementedError,
-        ValueError,
-        TypeError,
-        AttributeError,
-        SchemaOrgException,
-    ):
-        pass
-    description = ""
-    try:
-        description = scraper.description() + "\n\n"
-    except (
-        NotImplementedError,
-        ValueError,
-        TypeError,
-        AttributeError,
-        SchemaOrgException,
-    ):
-        pass
-    try:
-        description = description + scraper.instructions()
-    except (
-        NotImplementedError,
-        ValueError,
-        TypeError,
-        AttributeError,
-        SchemaOrgException,
-    ):
-        pass
-    recipe.description = description
-    recipe.photo = fixRelativeUrl(scraper.image(), url)
-    recipe.source = url
-    items = {}
-    # Relies on site meta data to detect language. Possible mismatch if there is a spanish recipe on a english website
-    sourceLanguageCode = scraper.language() or "" # Fallback to handle None cases and default to LLM if in use
-    for ingredient in parseIngredients(scraper.ingredients(), household.language, sourceLanguageCode):
-        name = ingredient.name if ingredient.name else ingredient.originalText or ""
-        item = Item.find_name_starts_with(household.id, name)
-        if item:
-            items[ingredient.originalText] = item.obj_to_dict() | {
-                "description": ingredient.description,
-                "optional": False,
-            }
-        else:
-            items[ingredient.originalText] = None
-    return {
-        "recipe": recipe.obj_to_dict(),
-        "items": items,
-    }
+def scrapePublic(url: str, html: str, household: Household) -> dict | None:
+    res = scrapeHTML(url, html, household)
+    if not res:
+        res = scrapeHTMLLLM(url, html, household)
+    return res
 
 
 def scrapeLocal(recipe_id: int, household: Household):

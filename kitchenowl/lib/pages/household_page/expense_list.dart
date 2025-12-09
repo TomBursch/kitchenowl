@@ -217,6 +217,7 @@ class _ExpensePageState extends State<ExpenseListPage> {
                               onUpdated: cubit.refresh,
                               displayPersonalAmount:
                                   state.sorting == ExpenselistSorting.personal,
+                              locale: householdState.household.language,
                             ),
                           ),
                           removeItemBuilder: (context, expense, animation) =>
@@ -228,6 +229,7 @@ class _ExpensePageState extends State<ExpenseListPage> {
                               onUpdated: cubit.refresh,
                               displayPersonalAmount:
                                   state.sorting == ExpenselistSorting.personal,
+                              locale: householdState.household.language,
                             ),
                           ),
                           items: state.expenses,
@@ -313,6 +315,8 @@ class _ExpensePageState extends State<ExpenseListPage> {
                                         data: state
                                             .expenseOverview[state.sorting]!,
                                         categories: state.categories,
+                                        locale:
+                                            householdState.household.language,
                                       ),
                                     ),
                                   Expanded(
@@ -330,7 +334,10 @@ class _ExpensePageState extends State<ExpenseListPage> {
                                         ),
                                         const Divider(),
                                         Text(
-                                          NumberFormat.simpleCurrency().format(
+                                          NumberFormat.simpleCurrency(
+                                                  locale: householdState
+                                                      .household.language)
+                                              .format(
                                             state
                                                 .expenseOverview[state.sorting]!
                                                 .byCategory
@@ -394,6 +401,7 @@ class _ExpensePageState extends State<ExpenseListPage> {
                                       data: state.expenseOverview[
                                           ExpenselistSorting.personal]!,
                                       categories: state.categories,
+                                      locale: householdState.household.language,
                                     ),
                                   ),
                                 Expanded(
@@ -411,7 +419,10 @@ class _ExpensePageState extends State<ExpenseListPage> {
                                       ),
                                       const Divider(),
                                       Text(
-                                        NumberFormat.simpleCurrency().format(
+                                        NumberFormat.simpleCurrency(
+                                                locale: householdState
+                                                    .household.language)
+                                            .format(
                                           state
                                               .expenseOverview[
                                                   ExpenselistSorting.personal]!

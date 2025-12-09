@@ -97,7 +97,7 @@ class HouseholdSettingsExpenseCategoryPage extends StatelessWidget {
                       ),
                       subtitle: state.expenseCategories[i].budget != null
                           ? Text(
-                              "${AppLocalizations.of(context)!.budget}: ${NumberFormat.simpleCurrency().format(state.expenseCategories.elementAt(i).budget)}")
+                              "${AppLocalizations.of(context)!.budget}: ${NumberFormat.simpleCurrency(locale: state.language).format(state.expenseCategories.elementAt(i).budget)}")
                           : null,
                       onTap: () async {
                         _handleAction(

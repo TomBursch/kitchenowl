@@ -20,11 +20,13 @@ import 'package:kitchenowl/pages/household_update_page.dart';
 import 'package:kitchenowl/pages/reports_list_page.dart';
 import 'package:kitchenowl/pages/settings_server_user_page.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
+import 'package:kitchenowl/services/notification_service.dart';
 import 'package:kitchenowl/styles/colors.dart';
 import 'package:kitchenowl/widgets/settings/color_button.dart';
 import 'package:kitchenowl/widgets/sliver_expansion_tile.dart';
 import 'package:kitchenowl/widgets/user_list_tile.dart';
 import 'package:sliver_tools/sliver_tools.dart';
+import 'package:unifiedpush_ui/unifiedpush_ui.dart';
 
 class SettingsPage extends StatefulWidget {
   final Household? household;
@@ -379,6 +381,33 @@ class _SettingsPageState extends State<SettingsPage> {
                               BlocProvider.of<AuthCubit>(context)
                                   .setForcedOfflineMode(value),
                         ),
+                      ),
+                    ),
+                  if (!kIsWeb && (Platform.isAndroid || Platform.isLinux))
+                    ListTile(
+                      title: Text(
+                        AppLocalizations.of(context)!.server,
+                      ),
+                      leading: const Icon(Icons.notifications_rounded),
+                      onTap: () async {
+                        state.notificationDistributor != null
+                            ? await NotificationService.getInstance()
+                                .unregister()
+                            : await UnifiedPushUi(
+                                context: context,
+                                instances: [NotificationService.instanceName],
+                                unifiedPushFunctions:
+                                    NotificationService.getInstance(),
+                                showNoDistribDialog: true,
+                                onNoDistribDialogDismissed: () {},
+                              ).registerAppWithDialog();
+                        BlocProvider.of<SettingsCubit>(context)
+                            .refreshNotificationDistributor();
+                      },
+                      trailing: Padding(
+                        padding: const EdgeInsets.only(right: 8),
+                        child: Text(state.notificationDistributor ??
+                            AppLocalizations.of(context)!.none),
                       ),
                     ),
                 ],

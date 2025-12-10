@@ -6,11 +6,15 @@ list(APPEND FLUTTER_PLUGIN_LIST
   dynamic_system_colors
   file_selector_windows
   flutter_secure_storage_windows
+  screen_retriever_windows
   share_plus
   url_launcher_windows
+  webcrypto
+  window_manager
 )
 
 list(APPEND FLUTTER_FFI_PLUGIN_LIST
+  flutter_local_notifications_windows
 )
 
 set(PLUGIN_BUNDLED_LIBRARIES)

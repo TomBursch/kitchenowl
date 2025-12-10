@@ -738,6 +738,19 @@ wheels = [
 ]
 
 [[package]]
+name = "flask-pywebpush"
+version = "1.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "flask" },
+    { name = "pywebpush" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/3b/b3/65eefcdfbb2381cb1d58a9973bfdfb113178c6a9633eb384e0d0a39cd36b/Flask-pyWebPush-1.1.tar.gz", hash = "sha256:aa6b6391f35b77727948fd416a5bb4051fac916d53c5dccb8af35ff768741a96", size = 3487, upload-time = "2020-03-30T22:39:00.2Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/7b/df/74ca48a77785d5c5d02eb80202d59ac66ef25c880f585559968f71227df8/Flask_pyWebPush-1.1-py3-none-any.whl", hash = "sha256:018187d9deac755ebae9fd774801704b08540c50dd0856a1e8599fcbc9e57239", size = 4291, upload-time = "2020-03-30T22:38:58.626Z" },
+]
+
+[[package]]
 name = "flask-socketio"
 version = "5.5.1"
 source = { registry = "https://pypi.org/simple" }
@@ -980,6 +993,15 @@ wheels = [
 ]
 
 [[package]]
+name = "http-ece"
+version = "1.2.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "cryptography" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/7c/af/249d1576653b69c20b9ac30e284b63bd94af6a175d72d87813235caf2482/http_ece-1.2.1.tar.gz", hash = "sha256:8c6ab23116bbf6affda894acfd5f2ca0fb8facbcbb72121c11c75c33e7ce8cff", size = 8830, upload-time = "2024-08-08T00:10:47.301Z" }
+
+[[package]]
 name = "httpcore"
 version = "1.0.9"
 source = { registry = "https://pypi.org/simple" }
@@ -1204,6 +1226,7 @@ dependencies = [
     { name = "flask-bcrypt" },
     { name = "flask-jwt-extended" },
     { name = "flask-migrate" },
+    { name = "flask-pywebpush" },
     { name = "flask-socketio" },
     { name = "flask-sqlalchemy" },
     { name = "gevent" },
@@ -1254,6 +1277,7 @@ requires-dist = [
     { name = "flask-bcrypt", specifier = ">=1.0.1" },
     { name = "flask-jwt-extended", specifier = ">=4.7.1" },
     { name = "flask-migrate", specifier = ">=4.1.0" },
+    { name = "flask-pywebpush", specifier = ">=1.1" },
     { name = "flask-socketio", specifier = ">=5.5.1" },
     { name = "flask-sqlalchemy", specifier = ">=3.1.1" },
     { name = "gevent", specifier = ">=24.11.1" },
@@ -1890,6 +1914,18 @@ wheels = [
 ]
 
 [[package]]
+name = "py-vapid"
+version = "1.9.2"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "cryptography" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/ff/57/5c1c61f27ce01f939443cf3f6c279a295f7ec0327b18a1cbbcfefe0b5456/py_vapid-1.9.2.tar.gz", hash = "sha256:3c8973b6cf8384ad0c9ae64d6270ccc480e0b92c702d8f5ea2cc03e6b51247f9", size = 20300, upload-time = "2024-11-19T21:55:41.859Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/73/fb/b877a221b09dabcebeb073d5e7f19244f3fa1d5aec87092c359a6049a006/py_vapid-1.9.2-py3-none-any.whl", hash = "sha256:4ccf8a00fc54f1f99f66fb543c96f2c82622508ad814b6e9225f2c26948934d7", size = 21492, upload-time = "2024-11-19T21:55:40.832Z" },
+]
+
+[[package]]
 name = "pycparser"
 version = "2.23"
 source = { registry = "https://pypi.org/simple" }
@@ -2143,6 +2179,23 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/f8/bf/abbd3cdfb8fbc7fb3d4d38d320f2441b1e7cbe29be4f23797b4a2b5d8aac/pytz-2025.2.tar.gz", hash = "sha256:360b9e3dbb49a209c21ad61809c7fb453643e048b38924c765813546746e81c3", size = 320884, upload-time = "2025-03-25T02:25:00.538Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/81/c4/34e93fe5f5429d7570ec1fa436f1986fb1f00c3e0f43a589fe2bbcd22c3f/pytz-2025.2-py2.py3-none-any.whl", hash = "sha256:5ddf76296dd8c44c26eb8f4b6f35488f3ccbf6fbbd7adee0b7262d43f0ec2f00", size = 509225, upload-time = "2025-03-25T02:24:58.468Z" },
+]
+
+[[package]]
+name = "pywebpush"
+version = "2.0.3"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "aiohttp" },
+    { name = "cryptography" },
+    { name = "http-ece" },
+    { name = "py-vapid" },
+    { name = "requests" },
+    { name = "six" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/41/ca/6e669bf676916d66c8c7adedc291e9a9758650f9d85ec040fda13e3c82f4/pywebpush-2.0.3.tar.gz", hash = "sha256:584878e3c243e873a22db8895505d95715bc796ef74cc1b8fe99f596174161e3", size = 25874, upload-time = "2024-11-19T21:30:20.444Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/90/8a/ecaa2a589338a038b89148b01a5db2dac53e45918342da69baca1fb058fc/pywebpush-2.0.3-py3-none-any.whl", hash = "sha256:04666441715bc547918d7668b2ac7ad5c4b5de7d0a6cf528daf61e0c4bc5431c", size = 21364, upload-time = "2024-11-19T21:30:19.312Z" },
 ]
 
 [[package]]

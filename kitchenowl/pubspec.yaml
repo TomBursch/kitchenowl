@@ -19,7 +19,7 @@ version: 0.7.4+118
 
 environment:
   sdk: ">=3.0.0 <4.0.0"
-  flutter: ">=3.38.0"
+  flutter: ">=3.38.5"
 
 dependencies:
   flutter:
@@ -33,7 +33,7 @@ dependencies:
 
   collection: ^1.18.0
   path_provider: ^2.0.14
-  flutter_secure_storage: ^9.0.0
+  flutter_secure_storage: ^10.0.0
   shared_preferences: ^2.1.0
   flutter_bloc: ^9.0.0
   replay_bloc: ^0.3.0

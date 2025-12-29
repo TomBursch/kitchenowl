@@ -21,6 +21,7 @@ export 'tag.dart';
 export 'upload.dart';
 export 'category.dart';
 export 'household.dart';
+export 'loyalty_card.dart';
 
 enum Connection {
   disconnected,

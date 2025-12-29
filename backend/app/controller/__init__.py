@@ -15,3 +15,4 @@ from .category import *
 from .health_controller import health
 from .analytics import *
 from .report import *
+from .loyalty_card import *

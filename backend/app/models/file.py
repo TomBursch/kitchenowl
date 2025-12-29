@@ -13,7 +13,7 @@ from sqlalchemy.orm import Mapped
 
 Model = db.Model
 if TYPE_CHECKING:
-    from app.models import Household, Recipe, Expense
+    from app.models import Household, Recipe, Expense, LoyaltyCard
     from app.helpers.db_model_base import DbModelBase
 
     Model = DbModelBase
@@ -66,6 +66,13 @@ class File(Model, DbModelAuthorizeMixin):
             uselist=False,
         ),
     )
+    loyalty_card: Mapped["LoyaltyCard"] = cast(
+        Mapped["LoyaltyCard"],
+        db.relationship(
+            "LoyaltyCard",
+            uselist=False,
+        ),
+    )
 
     def delete(self):
         """
@@ -81,6 +88,7 @@ class File(Model, DbModelAuthorizeMixin):
             and not self.recipe
             and not self.expense
             and not self.profile_picture
+            and not self.loyalty_card
         )
 
     def checkAuthorized(
@@ -100,6 +108,10 @@ class File(Model, DbModelAuthorizeMixin):
         elif self.expense:
             super().checkAuthorized(
                 household_id=self.expense.household_id, requires_admin=requires_admin
+            )
+        elif self.loyalty_card:
+            super().checkAuthorized(
+                household_id=self.loyalty_card.household_id, requires_admin=requires_admin
             )
         else:
             raise ForbiddenRequest()

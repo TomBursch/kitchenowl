@@ -77,6 +77,8 @@ dependencies:
   sign_in_with_apple: ^7.0.1
   wakelock_plus: ^1.2.10
   fuzzywuzzy: ^1.2.0
+  barcode_widget: ^2.0.4
+  mobile_scanner: ^5.2.3
 
 dev_dependencies:
   flutter_test:

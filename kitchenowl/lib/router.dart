@@ -9,10 +9,14 @@ import 'package:kitchenowl/helpers/fade_through_transition_page.dart';
 import 'package:kitchenowl/helpers/shared_axis_transition_page.dart';
 import 'package:kitchenowl/models/expense.dart';
 import 'package:kitchenowl/models/household.dart';
+import 'package:kitchenowl/models/loyalty_card.dart';
 import 'package:kitchenowl/models/recipe.dart';
 import 'package:kitchenowl/pages/email_confirm_page.dart';
 import 'package:kitchenowl/pages/expense_overview_page.dart';
 import 'package:kitchenowl/pages/expense_page.dart';
+import 'package:kitchenowl/cubits/loyalty_card_list_cubit.dart';
+import 'package:kitchenowl/pages/loyalty_card_page.dart';
+import 'package:kitchenowl/pages/loyalty_card_list_page.dart';
 import 'package:kitchenowl/pages/household_page/_export.dart';
 import 'package:kitchenowl/pages/household_list_page.dart';
 import 'package:kitchenowl/pages/household_about_page.dart';
@@ -416,6 +420,54 @@ final router = GoRouter(
           path: 'account',
           parentNavigatorKey: _rootNavigatorKey,
           builder: (context, state) => const SettingsUserPage(),
+        ),
+      ],
+    ),
+    GoRoute(
+      path: '/household/:id/loyalty-cards',
+      parentNavigatorKey: _rootNavigatorKey,
+      builder: (context, state) {
+        final household = (state.extra as Household?) ??
+            Household(
+              id: int.tryParse(state.pathParameters['id'] ?? '') ?? -1,
+            );
+        return BlocProvider(
+          create: (context) => LoyaltyCardListCubit(household),
+          child: LoyaltyCardListPageStandalone(household: household),
+        );
+      },
+      routes: [
+        GoRoute(
+          path: ':loyaltyCardId',
+          parentNavigatorKey: _rootNavigatorKey,
+          builder: (context, state) {
+            final extra = state.extra;
+            final Household household;
+            final LoyaltyCard loyaltyCard;
+
+            if (extra is Tuple2<Household, LoyaltyCard>) {
+              household = extra.item1;
+              loyaltyCard = extra.item2;
+            } else if (extra is LoyaltyCard) {
+              household = Household(
+                id: int.tryParse(state.pathParameters['id'] ?? '') ?? -1,
+              );
+              loyaltyCard = extra;
+            } else {
+              household = Household(
+                id: int.tryParse(state.pathParameters['id'] ?? '') ?? -1,
+              );
+              loyaltyCard = LoyaltyCard(
+                id: int.tryParse(state.pathParameters['loyaltyCardId'] ?? ''),
+              );
+            }
+
+            return LoyaltyCardPage(
+              key: ValueKey(state.pathParameters['loyaltyCardId']),
+              household: household,
+              loyaltyCard: loyaltyCard,
+            );
+          },
         ),
       ],
     ),

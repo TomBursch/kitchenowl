@@ -124,9 +124,9 @@
 		<true/>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>Take recipe images</string>
+	<string>Take recipe images and scan barcodes</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Select recipe images</string>
+	<string>Select recipe images and scan barcodes from photos</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UIBackgroundModes</key>

@@ -59,7 +59,7 @@ class Household extends Model {
       language: map['language'],
       featurePlanner: map['planner_feature'] ?? false,
       featureExpenses: map['expenses_feature'] ?? false,
-      featureLoyaltyCards: map['loyalty_cards_feature'] ?? false,
+      featureLoyaltyCards: map['loyalty_cards_feature'],
       description: map['description'],
       link: map['link'],
       verified: map['verified'] ?? false,

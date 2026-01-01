@@ -17,12 +17,14 @@ class DynamicStyling {
 class ShoppingListStyle {
   final bool advancedItemView;
   final bool isList;
+  final bool allRaised;
   final GridSize gridSize;
   final ListStyle listStyle;
 
   const ShoppingListStyle({
     this.advancedItemView = false,
     this.isList = false,
+    this.allRaised = false,
     this.gridSize = GridSize.normal,
     this.listStyle = ListStyle.minimalist,
   });

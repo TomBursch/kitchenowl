@@ -19,12 +19,10 @@ class SliverItemGridList<T extends Item> extends StatelessWidget {
   final List<T> items;
   final List<Category>? categories; // forwarded to item page on long press
   final ShoppingList? shoppingList; // forwarded to item page on long press
-  final bool advancedItemView; // forwarded to item page on long press
   final bool Function(T)? selected;
   final bool isLoading;
-  final bool? isList;
-  final bool? allRaised;
   final Widget Function(T)? extraOption;
+  final ShoppingListStyle? shoppingListStyle;
 
   const SliverItemGridList({
     super.key,
@@ -36,17 +34,12 @@ class SliverItemGridList<T extends Item> extends StatelessWidget {
     this.shoppingList,
     this.selected,
     this.isLoading = false,
-    this.isList,
-    this.allRaised,
     this.extraOption,
-    this.advancedItemView = false,
+    this.shoppingListStyle,
   });
 
   @override
   Widget build(BuildContext context) {
-    final isList =
-        this.isList ?? context.read<SettingsCubit>().state.shoppingListListView;
-
     if (!isLoading && items.isEmpty) {
       return const SliverToBoxAdapter(child: SizedBox(height: 0));
     }
@@ -56,17 +49,17 @@ class SliverItemGridList<T extends Item> extends StatelessWidget {
       (context, i) => i >= items.length
           ? ShimmerShoppingItemWidget(
               key: ValueKey(i),
-              gridStyle: !isList,
+              gridStyle: !shoppingListStyle!.isList,
             )
           : ShoppingItemWidget<T>(
               key: ObjectKey(items[i]),
               item: items[i],
               selected: selected?.call(items[i]) ?? false,
-              gridStyle: !isList,
+              gridStyle: !shoppingListStyle!.isList,
               onPressed:
                   (onPressed ?? Nullable((item) => openMenu(context, item)))
                       .value,
-              raised: allRaised,
+              raised: shoppingListStyle!.allRaised,
               onLongPressed:
                   (onLongPressed ?? Nullable((item) => openMenu(context, item)))
                       .value,
@@ -76,7 +69,7 @@ class SliverItemGridList<T extends Item> extends StatelessWidget {
 
     return SliverPadding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
-      sliver: !isList
+      sliver: !shoppingListStyle!.isList
           ? SliverLayoutBuilder(
               builder: (context, constraints) => SliverGrid(
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -101,7 +94,7 @@ class SliverItemGridList<T extends Item> extends StatelessWidget {
           item: item,
           shoppingList: shoppingList,
           categories: categories ?? const [],
-          advancedView: advancedItemView,
+          advancedView: shoppingListStyle!.advancedItemView,
         );
         final householdCubit = context.readOrNull<HouseholdCubit>();
         if (householdCubit != null)

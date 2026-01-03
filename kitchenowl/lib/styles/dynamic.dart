@@ -26,6 +26,6 @@ class ShoppingListStyle {
     this.isList = false,
     this.allRaised = false,
     this.gridSize = GridSize.normal,
-    this.listStyle = ListStyle.minimalist,
+    this.listStyle = ListStyle.cards,
   });
 }

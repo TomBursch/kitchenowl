@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kitchenowl/styles/dynamic.dart';
 
 class SelectableButtonListTile extends StatefulWidget {
   final String title;
@@ -9,6 +10,7 @@ class SelectableButtonListTile extends StatefulWidget {
   final void Function()? onPressed;
   final void Function()? onLongPressed;
   final Widget? extraOption;
+  final ListStyle listStyle;
 
   const SelectableButtonListTile({
     super.key,
@@ -20,6 +22,7 @@ class SelectableButtonListTile extends StatefulWidget {
     this.onLongPressed,
     this.raised = true,
     this.extraOption,
+    this.listStyle = ListStyle.cards,
   });
 
   @override
@@ -32,7 +35,7 @@ class _SelectableButtonListTileState extends State<SelectableButtonListTile> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
+    Card item = new Card(
       margin: const EdgeInsets.symmetric(vertical: 4),
       elevation: !widget.raised ? 0 : null,
       color: !widget.raised
@@ -116,5 +119,6 @@ class _SelectableButtonListTileState extends State<SelectableButtonListTile> {
         ),
       ),
     );
+    return (widget.listStyle == ListStyle.cards) ? item : item.child ?? item;
   }
 }

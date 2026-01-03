@@ -152,6 +152,11 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                             primary: true,
                             slivers: [
                               SliverItemGridList(
+                                shoppingListStyle: new ShoppingListStyle(
+                                  listStyle: App.settings.listStyle,
+                                  isList: App.settings.shoppingListListView,
+                                  gridSize: App.settings.gridSize,
+                                ),
                                 items: state.result,
                                 categories: state.categories,
                                 shoppingList: state.selectedShoppinglist,
@@ -205,6 +210,11 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                                     state.selectedShoppinglistId),
                                 slivers: [
                                   SliverShopinglistItemView(
+                                    shoppingListStyle: new ShoppingListStyle(
+                                      listStyle: App.settings.listStyle,
+                                      isList: App.settings.shoppingListListView,
+                                      gridSize: App.settings.gridSize,
+                                    ),
                                     categories: state.categories,
                                     isLoading:
                                         state is LoadingShoppinglistCubitState,

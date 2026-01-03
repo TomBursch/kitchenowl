@@ -58,9 +58,11 @@ class _HouseholdSettingsItemsPageState
                 items: state.items,
                 categories: state.categories,
                 onRefresh: cubit.refresh,
-                allRaised: true,
-                advancedItemView: true,
                 extraOption: _itemPopmenuBuilder,
+                shoppingListStyle: new ShoppingListStyle(
+                  allRaised: true,
+                  advancedItemView: true,
+                ),
               );
             } else {
               List<Widget> grids = [];
@@ -78,10 +80,12 @@ class _HouseholdSettingsItemsPageState
                   isLoading: state is LoadingHouseholdSettingsItemsState,
                   categories: state.categories,
                   onRefresh: cubit.refresh,
-                  allRaised: true,
                   items: items,
-                  advancedItemView: true,
                   extraOption: _itemPopmenuBuilder,
+                  shoppingListStyle: new ShoppingListStyle(
+                    allRaised: true,
+                    advancedItemView: true,
+                  ),
                 ));
               }
               body = grids;

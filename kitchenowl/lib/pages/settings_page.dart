@@ -241,7 +241,7 @@ class _SettingsPageState extends State<SettingsPage> {
                             value: GridSize.normal,
                             icon: const Icon(Icons.grid_3x3_rounded),
                             label:
-                                Text(AppLocalizations.of(context)!.defaultWord),
+                            Text(AppLocalizations.of(context)!.defaultWord),
                           ),
                           ButtonSegment(
                             value: GridSize.large,
@@ -252,6 +252,34 @@ class _SettingsPageState extends State<SettingsPage> {
                         onSelectionChanged: (Set<GridSize> value) {
                           BlocProvider.of<SettingsCubit>(context)
                               .setGridSize(value.first);
+                        },
+                      ),
+                    ),
+                  ),
+                if (state.shoppingListListView)
+                  ListTile(
+                    title: Text(AppLocalizations.of(context)!.itemSize),
+                    leading: const Icon(Icons.grid_view_rounded),
+                    titleAlignment: ListTileTitleAlignment.top,
+                    subtitle: Padding(
+                      padding: const EdgeInsets.only(top: 6),
+                      child: SegmentedButton(
+                        selected: {state.listStyle},
+                        segments: [
+                          ButtonSegment(
+                            value: ListStyle.cards,
+                            icon: const Icon(Icons.format_list_bulleted_rounded),
+                            label: Text(AppLocalizations.of(context)!.cards),
+                          ),
+                          ButtonSegment(
+                            value: ListStyle.minimalist,
+                            icon: const Icon(Icons.list),
+                            label: Text(AppLocalizations.of(context)!.minimalist),
+                          ),
+                        ],
+                        onSelectionChanged: (Set<ListStyle> value) {
+                          BlocProvider.of<SettingsCubit>(context)
+                              .setListStyle(value.first);
                         },
                       ),
                     ),

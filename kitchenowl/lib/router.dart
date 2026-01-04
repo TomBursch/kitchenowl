@@ -18,6 +18,7 @@ import 'package:kitchenowl/pages/household_list_page.dart';
 import 'package:kitchenowl/pages/household_about_page.dart';
 import 'package:kitchenowl/pages/login_page.dart';
 import 'package:kitchenowl/pages/login_redirect_page.dart';
+import 'package:kitchenowl/pages/mass_import_page.dart';
 import 'package:kitchenowl/pages/onboarding_page.dart';
 import 'package:kitchenowl/pages/page_not_found.dart';
 import 'package:kitchenowl/pages/password_forgot_page.dart';
@@ -329,6 +330,18 @@ final router = GoRouter(
                         ),
                   ),
                 ),
+                GoRoute(
+                  parentNavigatorKey: _rootNavigatorKey,
+                  path: 'import',
+                  builder: (context, state) {
+                    final household = (state.extra is Household)
+                        ? state.extra as Household
+                        : Household(id: int.tryParse(state.pathParameters['id'] ?? '') ?? -1);
+
+                    return MassImportPage(household: household);
+                  },
+                ),
+
               ],
             ),
             GoRoute(

@@ -254,6 +254,26 @@
   "@longPressToReorder": {},
   "@longerThanExpected": {},
   "@markAsPaid": {},
+  "@massImportButton": {},
+  "@massImportDescription": {},
+  "@massImportEnterText": {},
+  "@massImportError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "@massImportHint": {},
+  "@massImportNoValidItems": {},
+  "@massImportSuccess": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@massImportTitle": {},
   "@mealPlanner": {},
   "@member": {},
   "@memberAdd": {},
@@ -645,6 +665,14 @@
   "longPressToReorder": "Long press to reorder",
   "longerThanExpected": "This is taking longer than expected",
   "markAsPaid": "Mark as paid",
+  "massImportButton": "Import Items",
+  "massImportDescription": "Enter items one per line.\nSeparate name and description with '|' or ';' or ','",
+  "massImportEnterText": "Please enter some text to import.",
+  "massImportError": "Error importing items: {error}",
+  "massImportHint": "Milk\nBread | For sandwiches\nEggs; 12 pack",
+  "massImportNoValidItems": "No valid items found to import.",
+  "massImportSuccess": "Successfully imported {count} items.",
+  "massImportTitle": "Mass Import",
   "mealPlanner": "Meal planner",
   "member": "Member",
   "memberAdd": "Add member",

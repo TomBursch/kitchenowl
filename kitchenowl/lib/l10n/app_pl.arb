@@ -298,6 +298,7 @@
   },
   "@pageNotFound": {},
   "@parent": {},
+  "@parentRights": {},
   "@password": {},
   "@passwordFieldTooShort": {},
   "@passwordForgot": {},
@@ -348,6 +349,14 @@
   "@recipeEdit": {},
   "@recipeEmpty": {},
   "@recipeEmptySearch": {},
+  "@recipeGoToInHousehold": {
+    "placeholders": {
+      "householdName": {
+        "example": "Home",
+        "type": "String"
+      }
+    }
+  },
   "@recipeImageSelect": {},
   "@recipeNew": {},
   "@recipeSource": {},
@@ -429,7 +438,9 @@
   },
   "@tagEdit": {},
   "@tags": {},
+  "@tagsPopular": {},
   "@tap": {},
+  "@terms": {},
   "@themeDark": {},
   "@themeLight": {},
   "@themeMode": {},
@@ -655,6 +666,7 @@
   "owesAB": "{nameA} jest winien {nameB}",
   "pageNotFound": "Nie znaleziono strony",
   "parent": "Rodzic",
+  "parentRights": "Może zmieniać ustawienia domostwa",
   "password": "Hasło",
   "passwordFieldTooShort": "Hasło za krótkie",
   "passwordForgot": "Zapomniałeś hasła?",
@@ -668,7 +680,7 @@
   "plannerTitle": "Zaplanowane posiłki",
   "preparationTime": "Czas przygotowania",
   "privacyPolicy": "Polityka Prywatności",
-  "privacyPolicyAgree": "Przez założenie konta zgadzasz się z naszą {privacyPolicy}",
+  "privacyPolicyAgree": "Przez założenie konta zgadzasz się z naszą {privacyPolicy} oraz {terms}",
   "private": "Prywatne",
   "privateRecipeDescription": "Tylko członkowie domostwa mogą zobaczyć przepis.",
   "profile": "Profil",
@@ -684,6 +696,7 @@
   "recipeEdit": "Edytuj przepis",
   "recipeEmpty": "Brak przepisów, utwórz nowy!",
   "recipeEmptySearch": "Nie znaleziono przepisów :(",
+  "recipeGoToInHousehold": "Już dodano, przejdź do przepisu w {householdName}",
   "recipeImageSelect": "Wybierz obrazek przepisu",
   "recipeNew": "Nowy przepis",
   "recipeSource": "Źródło przepisu",
@@ -738,7 +751,9 @@
   "tagDeleteConfirmation": "Czy jesteś pewien, że chcesz usunąć {tag}? To działanie usunie taga ze wszystkich przepisów.",
   "tagEdit": "Edytuj tag",
   "tags": "Tagi",
+  "tagsPopular": "Popularne tagi",
   "tap": "Kliknij",
+  "terms": "Obowiązujące warunki",
   "themeDark": "Ciemny",
   "themeLight": "Jasny",
   "themeMode": "Tryb",

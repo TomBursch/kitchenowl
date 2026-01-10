@@ -16,6 +16,7 @@ class SliverShopinglistItemView extends StatelessWidget {
   final ShoppinglistSorting sorting;
   final bool isLoading;
   final List<ShoppinglistItem> selectedListItems;
+  final ShoppingListStyle shoppingListStyle;
 
   const SliverShopinglistItemView({
     super.key,
@@ -27,6 +28,7 @@ class SliverShopinglistItemView extends StatelessWidget {
     required this.sorting,
     required this.isLoading,
     required this.selectedListItems,
+    this.shoppingListStyle = const ShoppingListStyle(),
   });
 
   @override
@@ -47,6 +49,7 @@ class SliverShopinglistItemView extends StatelessWidget {
         isLoading: isLoading,
         onRefresh: onRefresh,
         onPressed: onPressed,
+        shoppingListStyle: shoppingListStyle,
       );
     } else {
       List<Widget> grids = [];
@@ -72,6 +75,7 @@ class SliverShopinglistItemView extends StatelessWidget {
           isLoading: isLoading,
           onRefresh: onRefresh,
           onPressed: onPressed,
+          shoppingListStyle: shoppingListStyle,
         ));
       }
       main = grids;
@@ -79,7 +83,9 @@ class SliverShopinglistItemView extends StatelessWidget {
     return SliverMainAxisGroup(slivers: [
       if (main is List) ...main,
       if (main is! List) main,
-      if (((shoppingList?.recentItems.isNotEmpty ?? false) && (App.settings.recentItemsCount > 0)) || isLoading)
+      if (((shoppingList?.recentItems.isNotEmpty ?? false) &&
+              (App.settings.recentItemsCount > 0)) ||
+          isLoading)
         SliverCategoryItemGridList<ItemWithDescription>(
           name: '${AppLocalizations.of(context)!.itemsRecent}:',
           items: shoppingList?.recentItems
@@ -91,6 +97,7 @@ class SliverShopinglistItemView extends StatelessWidget {
           shoppingList: shoppingList,
           onRefresh: onRefresh,
           isLoading: isLoading,
+          shoppingListStyle: shoppingListStyle,
           splitByCategories: App.settings.recentItemsCategorize &&
               !(sorting != ShoppinglistSorting.category ||
                   isLoading && (shoppingList?.items.isEmpty ?? false)),

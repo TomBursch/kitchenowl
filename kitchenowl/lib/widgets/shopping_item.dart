@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kitchenowl/item_icons.dart';
 import 'package:kitchenowl/models/item.dart';
+import 'package:kitchenowl/styles/dynamic.dart';
 import 'package:kitchenowl/widgets/selectable_button_card.dart';
 import 'package:kitchenowl/widgets/selectable_button_list_tile.dart';
 
@@ -15,6 +16,7 @@ class ShoppingItemWidget<T extends Item> extends StatelessWidget {
   /// defaults to true for item is ShoppinglistItem || item is RecipeItem && selected
   final bool? raised;
   final bool gridStyle;
+  final ListStyle listStyle;
 
   const ShoppingItemWidget({
     super.key,
@@ -23,6 +25,7 @@ class ShoppingItemWidget<T extends Item> extends StatelessWidget {
     this.onLongPressed,
     this.selected = false,
     this.gridStyle = true,
+    this.listStyle = ListStyle.cards,
     this.raised,
     this.extraOption,
   });
@@ -46,6 +49,7 @@ class ShoppingItemWidget<T extends Item> extends StatelessWidget {
             title: item.name,
             selected: selected,
             icon: ItemIcons.get(item),
+            listStyle: listStyle,
             raised: raised ??
                 item is ShoppinglistItem || item is RecipeItem && selected,
             description: (item is ItemWithDescription)

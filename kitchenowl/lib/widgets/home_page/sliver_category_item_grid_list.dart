@@ -16,13 +16,12 @@ class SliverCategoryItemGridList<T extends Item> extends StatefulWidget {
   final List<T> items;
   final List<Category>? categories; // forwarded to item page on long press
   final ShoppingList? shoppingList; // forwarded to item page on long press
-  final bool advancedItemView; // forwarded to item page on long press
   final bool Function(T)? selected;
   final bool isLoading;
-  final bool? allRaised;
   final Widget Function(T)? extraOption;
   final bool isSubTitle;
   final bool splitByCategories;
+  final ShoppingListStyle shoppingListStyle;
 
   const SliverCategoryItemGridList({
     super.key,
@@ -35,11 +34,10 @@ class SliverCategoryItemGridList<T extends Item> extends StatefulWidget {
     this.shoppingList,
     this.selected,
     this.isLoading = false,
-    this.allRaised,
     this.extraOption,
     this.isSubTitle = false,
     this.splitByCategories = false,
-    this.advancedItemView = false,
+    this.shoppingListStyle = const ShoppingListStyle(),
   });
 
   @override
@@ -76,9 +74,8 @@ class _SliverCategoryItemGridListState<T extends Item>
           onRefresh: widget.onRefresh,
           onPressed: widget.onPressed,
           isSubTitle: true,
-          allRaised: widget.allRaised,
           extraOption: widget.extraOption,
-          advancedItemView: widget.advancedItemView,
+          shoppingListStyle: widget.shoppingListStyle,
         ));
       }
     } else
@@ -91,9 +88,8 @@ class _SliverCategoryItemGridListState<T extends Item>
         shoppingList: widget.shoppingList,
         selected: widget.selected,
         isLoading: widget.isLoading,
-        allRaised: widget.allRaised,
         extraOption: widget.extraOption,
-        advancedItemView: widget.advancedItemView,
+        shoppingListStyle: widget.shoppingListStyle,
       ));
 
     return SliverExpansionTile(

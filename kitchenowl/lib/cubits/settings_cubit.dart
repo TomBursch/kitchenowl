@@ -18,6 +18,7 @@ class SettingsCubit extends Cubit<SettingsState> {
     final dynamicAccentColor =
         PreferenceStorage.getInstance().readBool(key: 'dynamicAccentColor');
     final gridSize = PreferenceStorage.getInstance().readInt(key: 'gridSize');
+    final listStyle = PreferenceStorage.getInstance().readInt(key: 'listStyle');
     final recentItemsCount =
         PreferenceStorage.getInstance().readInt(key: 'recentItemsCount');
     final accentColor =
@@ -45,6 +46,9 @@ class SettingsCubit extends Cubit<SettingsState> {
       gridSize: (await gridSize) != null
           ? GridSize.values[(await gridSize)!]
           : GridSize.normal,
+      listStyle: (await listStyle) != null
+          ? ListStyle.values[(await listStyle)!]
+          : ListStyle.cards,
       recentItemsCount: await recentItemsCount ?? 9,
       accentColor:
           (await accentColor) != null ? Color((await accentColor)!) : null,
@@ -71,6 +75,12 @@ class SettingsCubit extends Cubit<SettingsState> {
     PreferenceStorage.getInstance()
         .writeInt(key: 'gridSize', value: gridSize.index);
     emit(state.copyWith(gridSize: gridSize));
+  }
+
+  void setListStyle(ListStyle listStyle) {
+    PreferenceStorage.getInstance()
+        .writeInt(key: 'listStyle', value: listStyle.index);
+    emit(state.copyWith(listStyle: listStyle));
   }
 
   void setRecentItemsCount(int recentItemsCount) {
@@ -128,6 +138,7 @@ class SettingsState extends Equatable {
   final bool dynamicAccentColor;
   final int recentItemsCount;
   final GridSize gridSize;
+  final ListStyle listStyle;
   final Color? accentColor;
   final bool shoppingListListView;
   final bool shoppingListTapToRemove;
@@ -138,6 +149,7 @@ class SettingsState extends Equatable {
     this.themeMode = ThemeMode.system,
     this.dynamicAccentColor = false,
     this.gridSize = GridSize.normal,
+    this.listStyle = ListStyle.cards,
     this.recentItemsCount = 9,
     this.accentColor,
     this.shoppingListListView = false,
@@ -150,6 +162,7 @@ class SettingsState extends Equatable {
     ThemeMode? themeMode,
     bool? dynamicAccentColor,
     GridSize? gridSize,
+    ListStyle? listStyle,
     int? recentItemsCount,
     Nullable<Color>? accentColor,
     bool? shoppingListListView,
@@ -161,6 +174,7 @@ class SettingsState extends Equatable {
         themeMode: themeMode ?? this.themeMode,
         dynamicAccentColor: dynamicAccentColor ?? this.dynamicAccentColor,
         gridSize: gridSize ?? this.gridSize,
+        listStyle: listStyle ?? this.listStyle,
         recentItemsCount: recentItemsCount ?? this.recentItemsCount,
         accentColor: (accentColor ?? Nullable(this.accentColor)).value,
         shoppingListListView: shoppingListListView ?? this.shoppingListListView,
@@ -177,6 +191,7 @@ class SettingsState extends Equatable {
         themeMode,
         dynamicAccentColor,
         gridSize,
+        listStyle,
         recentItemsCount,
         accentColor,
         shoppingListListView,

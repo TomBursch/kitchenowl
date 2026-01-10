@@ -268,15 +268,13 @@ class _SettingsPageState extends State<SettingsPage> {
                         segments: [
                           ButtonSegment(
                             value: ListStyle.cards,
-                            icon:
-                                const Icon(Icons.format_list_bulleted_rounded),
+                            icon: const Icon(Icons.view_agenda_rounded),
                             label: Text(AppLocalizations.of(context)!.cards),
                           ),
                           ButtonSegment(
                             value: ListStyle.minimalist,
-                            icon: const Icon(Icons.list),
-                            label:
-                                Text(AppLocalizations.of(context)!.minimalist),
+                            icon: const Icon(Icons.density_small_rounded),
+                            label: Text(AppLocalizations.of(context)!.compact),
                           ),
                         ],
                         onSelectionChanged: (Set<ListStyle> value) {

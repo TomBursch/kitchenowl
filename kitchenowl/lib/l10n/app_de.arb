@@ -86,6 +86,7 @@
   "@changeIcon": {},
   "@clear": {},
   "@colorSelect": {},
+  "@compact": {},
   "@confirm": {},
   "@cookingTime": {},
   "@copied": {},

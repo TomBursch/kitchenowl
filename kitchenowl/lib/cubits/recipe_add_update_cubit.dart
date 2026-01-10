@@ -218,6 +218,7 @@ class AddUpdateRecipeCubit extends ReplayCubit<AddUpdateRecipeState> {
                   .sorted((a, b) => b.name.length.compareTo(a.name.length))
                   .where((e) => e.name.isNotEmpty)
                   .map((e) => e.name)
+                  .map((e) => RegExp.escape(e))
                   .fold("", (a, b) => a.isEmpty ? "$b" : "$a|$b") +
               ")\\b",
           caseSensitive: false,
@@ -227,7 +228,11 @@ class AddUpdateRecipeCubit extends ReplayCubit<AddUpdateRecipeState> {
           !recipe.items.map((e) => e.name.toLowerCase()).contains(name)) {
         return match[0]!;
       }
-      return "@" + name.replaceAll(" ", "_");
+      return "@" +
+          name.replaceAll(" ", "_").replaceAll(
+              RegExp(
+                  r"""\n|\.|\(|\)|\\|\/|\?|\*|\+|,|!|%|$|#|@|^|;|:|"|=|~|{"""),
+              "");
     });
     emit(state.copyWith(
       description: description,
@@ -325,6 +330,19 @@ class AddUpdateRecipeState extends Equatable {
   bool canMatchIngredients() {
     if (items.isEmpty) return false;
 
+    print(RegExp(
+      "(?<!#.*)\\b(?<!@)(" +
+          items
+              // sort long to short names
+              .sorted((a, b) => b.name.length.compareTo(a.name.length))
+              .where((e) => e.name.isNotEmpty)
+              .map((e) => e.name)
+              .map((e) => RegExp.escape(e))
+              .fold("", (a, b) => a.isEmpty ? "$b" : "$a|$b") +
+          ")\\b",
+      caseSensitive: false,
+    ).toString());
+
     return description.contains(RegExp(
       "(?<!#.*)\\b(?<!@)(" +
           items
@@ -332,6 +350,7 @@ class AddUpdateRecipeState extends Equatable {
               .sorted((a, b) => b.name.length.compareTo(a.name.length))
               .where((e) => e.name.isNotEmpty)
               .map((e) => e.name)
+              .map((e) => RegExp.escape(e))
               .fold("", (a, b) => a.isEmpty ? "$b" : "$a|$b") +
           ")\\b",
       caseSensitive: false,

@@ -3,6 +3,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/app.dart';
+import 'package:kitchenowl/cubits/settings_cubit.dart';
 import 'package:kitchenowl/cubits/shoppinglist_cubit.dart';
 import 'package:kitchenowl/enums/shoppinglist_sorting.dart';
 import 'package:kitchenowl/models/item.dart';
@@ -132,105 +133,125 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                     ],
                   );
                 }
-                return PageTransitionSwitcher(
-                  transitionBuilder: (
-                    Widget child,
-                    Animation<double> animation,
-                    Animation<double> secondaryAnimation,
-                  ) {
-                    return SharedAxisTransition(
-                      animation: animation,
-                      secondaryAnimation: secondaryAnimation,
-                      transitionType: SharedAxisTransitionType.vertical,
-                      child: child,
-                    );
-                  },
-                  child: (state is SearchShoppinglistCubitState)
-                      ? RefreshIndicator(
-                          onRefresh: cubit.refresh,
-                          child: CustomScrollView(
-                            primary: true,
-                            slivers: [
-                              SliverItemGridList(
-                                items: state.result,
-                                categories: state.categories,
-                                shoppingList: state.selectedShoppinglist,
-                                onRefresh: () => cubit.refresh(),
-                                selected: (item) =>
-                                    item is ShoppinglistItem &&
-                                    (App.settings.shoppingListTapToRemove ||
-                                        !state.selectedListItems
-                                            .contains(item)),
-                                isLoading:
-                                    state is LoadingShoppinglistCubitState,
-                                onPressed: Nullable((Item item) {
-                                  if (item is ShoppinglistItem) {
-                                    if (App.settings.shoppingListTapToRemove) {
-                                      cubit.remove(item);
-                                    } else {
-                                      cubit.selectItem(item);
-                                    }
-                                  } else {
-                                    cubit.add(item);
-                                  }
-                                }),
-                              ),
-                            ],
-                          ),
-                        )
-                      : NestedScrollView(
-                          headerSliverBuilder: (context, innerBoxIsScrolled) =>
-                              [
-                            SliverToBoxAdapter(child: header),
-                          ],
-                          body: RefreshIndicator(
+                return BlocBuilder<SettingsCubit, SettingsState>(
+                  buildWhen: (previous, current) =>
+                      previous.shoppingListListView !=
+                          current.shoppingListListView ||
+                      previous.listStyle != current.listStyle ||
+                      previous.gridSize != current.gridSize,
+                  builder: (context, settingsState) => PageTransitionSwitcher(
+                    transitionBuilder: (
+                      Widget child,
+                      Animation<double> animation,
+                      Animation<double> secondaryAnimation,
+                    ) {
+                      return SharedAxisTransition(
+                        animation: animation,
+                        secondaryAnimation: secondaryAnimation,
+                        transitionType: SharedAxisTransitionType.vertical,
+                        child: child,
+                      );
+                    },
+                    child: (state is SearchShoppinglistCubitState)
+                        ? RefreshIndicator(
                             onRefresh: cubit.refresh,
-                            displacement: 0,
-                            child: PageTransitionSwitcher(
-                              transitionBuilder: (
-                                Widget child,
-                                Animation<double> animation,
-                                Animation<double> secondaryAnimation,
-                              ) {
-                                return SharedAxisTransition(
-                                  animation: animation,
-                                  secondaryAnimation: secondaryAnimation,
-                                  transitionType:
-                                      SharedAxisTransitionType.vertical,
-                                  child: child,
-                                );
-                              },
-                              child: CustomScrollView(
-                                key: PageStorageKey<int?>(
-                                    state.selectedShoppinglistId),
-                                slivers: [
-                                  SliverShopinglistItemView(
-                                    categories: state.categories,
-                                    isLoading:
-                                        state is LoadingShoppinglistCubitState,
-                                    selectedListItems: state.selectedListItems,
-                                    sorting: state.sorting,
-                                    shoppingList: state.selectedShoppinglist,
-                                    onPressed: Nullable((Item item) {
-                                      if (item is ShoppinglistItem) {
-                                        if (App
-                                            .settings.shoppingListTapToRemove) {
-                                          cubit.remove(item);
-                                        } else {
-                                          cubit.selectItem(item);
-                                        }
-                                      } else {
-                                        cubit.add(item);
-                                      }
-                                    }),
-                                    onRecentPressed: Nullable(cubit.add),
-                                    onRefresh: cubit.refresh,
+                            child: CustomScrollView(
+                              primary: true,
+                              slivers: [
+                                SliverItemGridList(
+                                  shoppingListStyle: ShoppingListStyle(
+                                    listStyle: settingsState.listStyle,
+                                    isList: settingsState.shoppingListListView,
+                                    gridSize: settingsState.gridSize,
                                   ),
-                                ],
+                                  items: state.result,
+                                  categories: state.categories,
+                                  shoppingList: state.selectedShoppinglist,
+                                  onRefresh: () => cubit.refresh(),
+                                  selected: (item) =>
+                                      item is ShoppinglistItem &&
+                                      (App.settings.shoppingListTapToRemove ||
+                                          !state.selectedListItems
+                                              .contains(item)),
+                                  isLoading:
+                                      state is LoadingShoppinglistCubitState,
+                                  onPressed: Nullable((Item item) {
+                                    if (item is ShoppinglistItem) {
+                                      if (App
+                                          .settings.shoppingListTapToRemove) {
+                                        cubit.remove(item);
+                                      } else {
+                                        cubit.selectItem(item);
+                                      }
+                                    } else {
+                                      cubit.add(item);
+                                    }
+                                  }),
+                                ),
+                              ],
+                            ),
+                          )
+                        : NestedScrollView(
+                            headerSliverBuilder:
+                                (context, innerBoxIsScrolled) => [
+                              SliverToBoxAdapter(child: header),
+                            ],
+                            body: RefreshIndicator(
+                              onRefresh: cubit.refresh,
+                              displacement: 0,
+                              child: PageTransitionSwitcher(
+                                transitionBuilder: (
+                                  Widget child,
+                                  Animation<double> animation,
+                                  Animation<double> secondaryAnimation,
+                                ) {
+                                  return SharedAxisTransition(
+                                    animation: animation,
+                                    secondaryAnimation: secondaryAnimation,
+                                    transitionType:
+                                        SharedAxisTransitionType.vertical,
+                                    child: child,
+                                  );
+                                },
+                                child: CustomScrollView(
+                                  key: PageStorageKey<int?>(
+                                      state.selectedShoppinglistId),
+                                  slivers: [
+                                    SliverShopinglistItemView(
+                                      shoppingListStyle: ShoppingListStyle(
+                                        listStyle: settingsState.listStyle,
+                                        isList:
+                                            settingsState.shoppingListListView,
+                                        gridSize: settingsState.gridSize,
+                                      ),
+                                      categories: state.categories,
+                                      isLoading: state
+                                          is LoadingShoppinglistCubitState,
+                                      selectedListItems:
+                                          state.selectedListItems,
+                                      sorting: state.sorting,
+                                      shoppingList: state.selectedShoppinglist,
+                                      onPressed: Nullable((Item item) {
+                                        if (item is ShoppinglistItem) {
+                                          if (App.settings
+                                              .shoppingListTapToRemove) {
+                                            cubit.remove(item);
+                                          } else {
+                                            cubit.selectItem(item);
+                                          }
+                                        } else {
+                                          cubit.add(item);
+                                        }
+                                      }),
+                                      onRecentPressed: Nullable(cubit.add),
+                                      onRefresh: cubit.refresh,
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
-                        ),
+                  ),
                 );
               },
             ),

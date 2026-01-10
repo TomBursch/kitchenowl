@@ -152,7 +152,7 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                             primary: true,
                             slivers: [
                               SliverItemGridList(
-                                shoppingListStyle: new ShoppingListStyle(
+                                shoppingListStyle: ShoppingListStyle(
                                   listStyle: App.settings.listStyle,
                                   isList: App.settings.shoppingListListView,
                                   gridSize: App.settings.gridSize,
@@ -210,7 +210,7 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                                     state.selectedShoppinglistId),
                                 slivers: [
                                   SliverShopinglistItemView(
-                                    shoppingListStyle: new ShoppingListStyle(
+                                    shoppingListStyle: ShoppingListStyle(
                                       listStyle: App.settings.listStyle,
                                       isList: App.settings.shoppingListListView,
                                       gridSize: App.settings.gridSize,

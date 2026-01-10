@@ -59,7 +59,7 @@ class _HouseholdSettingsItemsPageState
                 categories: state.categories,
                 onRefresh: cubit.refresh,
                 extraOption: _itemPopmenuBuilder,
-                shoppingListStyle: ShoppingListStyle(
+                shoppingListStyle: const ShoppingListStyle(
                   allRaised: true,
                   advancedItemView: true,
                 ),
@@ -82,7 +82,7 @@ class _HouseholdSettingsItemsPageState
                   onRefresh: cubit.refresh,
                   items: items,
                   extraOption: _itemPopmenuBuilder,
-                  shoppingListStyle: ShoppingListStyle(
+                  shoppingListStyle: const ShoppingListStyle(
                     allRaised: true,
                     advancedItemView: true,
                   ),

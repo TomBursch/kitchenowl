@@ -53,6 +53,8 @@ def addHousehold(args):
         household.planner_feature = args["planner_feature"]
     if "expenses_feature" in args:
         household.expenses_feature = args["expenses_feature"]
+    if "loyalty_cards_feature" in args:
+        household.loyalty_cards_feature = args["loyalty_cards_feature"]
     if "view_ordering" in args:
         household.view_ordering = args["view_ordering"]
     if "link" in args:
@@ -111,6 +113,8 @@ def updateHousehold(args, household_id):
         household.planner_feature = args["planner_feature"]
     if "expenses_feature" in args:
         household.expenses_feature = args["expenses_feature"]
+    if "loyalty_cards_feature" in args:
+        household.loyalty_cards_feature = args["loyalty_cards_feature"]
     if "view_ordering" in args:
         household.view_ordering = args["view_ordering"]
     if "link" in args:

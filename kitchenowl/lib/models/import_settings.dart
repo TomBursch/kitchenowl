@@ -6,6 +6,7 @@ class ImportSettings extends Model {
   final bool recipesOverwrite;
   final bool expenses;
   final bool shoppinglists;
+  final bool loyaltyCards;
 
   const ImportSettings({
     this.items = false,
@@ -13,6 +14,7 @@ class ImportSettings extends Model {
     this.recipesOverwrite = false,
     this.expenses = false,
     this.shoppinglists = false,
+    this.loyaltyCards = true,
   });
 
   ImportSettings copyWith({
@@ -21,6 +23,7 @@ class ImportSettings extends Model {
     bool? recipesOverwrite,
     bool? expenses,
     bool? shoppinglists,
+    bool? loyaltyCards,
   }) =>
       ImportSettings(
         items: items ?? this.items,
@@ -28,6 +31,7 @@ class ImportSettings extends Model {
         recipesOverwrite: recipesOverwrite ?? this.recipesOverwrite,
         expenses: expenses ?? this.expenses,
         shoppinglists: shoppinglists ?? this.shoppinglists,
+        loyaltyCards: loyaltyCards ?? this.loyaltyCards,
       );
 
   @override
@@ -37,6 +41,7 @@ class ImportSettings extends Model {
         recipesOverwrite,
         expenses,
         shoppinglists,
+        loyaltyCards,
       ];
 
   @override
@@ -46,5 +51,6 @@ class ImportSettings extends Model {
         "recipes_overwrite": recipesOverwrite,
         "expenses": expenses,
         "shoppinglists": shoppinglists,
+        "loyalty_cards": loyaltyCards,
       };
 }

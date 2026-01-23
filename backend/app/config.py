@@ -29,7 +29,10 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import JWTManager
 from flask_apscheduler import APScheduler
-import sqlite_icu
+try:
+    import sqlite_icu
+except ImportError:
+    sqlite_icu = None
 import os
 
 
@@ -284,7 +287,7 @@ else:
 
 
 # Load ICU extension for sqlite
-if DB_URL.drivername == "sqlite":
+if DB_URL.drivername == "sqlite" and sqlite_icu is not None:
 
     def load_extension(conn, unused):
         conn.enable_load_extension(True)

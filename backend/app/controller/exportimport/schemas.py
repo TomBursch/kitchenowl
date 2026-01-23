@@ -56,9 +56,20 @@ class ImportSchema(Schema):
         photo = fields.String(allow_none=True)
         category = fields.Nested(Category)
 
+    class LoyaltyCard(Schema):
+        class Meta:
+            unknown = EXCLUDE
+
+        name = fields.String(required=True, validate=lambda a: a and not a.isspace())
+        barcode_data = fields.String(allow_none=True)
+        barcode_type = fields.String(allow_none=True)
+        description = fields.String(allow_none=True)
+        color = fields.Integer(allow_none=True)
+
     items = fields.List(fields.Nested(Item))
     recipes = fields.List(fields.Nested(Recipe))
     recipe_overwrite = fields.Boolean()
     expenses = fields.List(fields.Nested(Expense))
+    loyalty_cards = fields.List(fields.Nested(LoyaltyCard))
     member = fields.List(fields.String())
     shoppinglists = fields.List(fields.String())

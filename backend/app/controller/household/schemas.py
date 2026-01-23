@@ -12,6 +12,7 @@ class AddHousehold(Schema):
     language = fields.String()
     planner_feature = fields.Boolean()
     expenses_feature = fields.Boolean()
+    loyalty_cards_feature = fields.Boolean()
     view_ordering = fields.List(fields.String)
     member = fields.List(fields.Integer)
 
@@ -27,6 +28,7 @@ class UpdateHousehold(Schema):
     language = fields.String()
     planner_feature = fields.Boolean()
     expenses_feature = fields.Boolean()
+    loyalty_cards_feature = fields.Boolean()
     view_ordering = fields.List(fields.String)
 
 

@@ -13,6 +13,7 @@ class Household extends Model {
   final String? language;
   final bool? featurePlanner;
   final bool? featureExpenses;
+  final bool? featureLoyaltyCards;
   final List<ViewsEnum>? viewOrdering;
   final List<Member>? member;
   final ShoppingList? defaultShoppingList;
@@ -28,6 +29,7 @@ class Household extends Model {
     this.language,
     this.featurePlanner,
     this.featureExpenses,
+    this.featureLoyaltyCards,
     this.viewOrdering,
     this.member,
     this.defaultShoppingList,
@@ -57,6 +59,7 @@ class Household extends Model {
       language: map['language'],
       featurePlanner: map['planner_feature'] ?? false,
       featureExpenses: map['expenses_feature'] ?? false,
+      featureLoyaltyCards: map['loyalty_cards_feature'],
       description: map['description'],
       link: map['link'],
       verified: map['verified'] ?? false,
@@ -77,6 +80,7 @@ class Household extends Model {
     bool? verified,
     bool? featurePlanner,
     bool? featureExpenses,
+    bool? featureLoyaltyCards,
     List<ViewsEnum>? viewOrdering,
   }) =>
       Household(
@@ -87,6 +91,7 @@ class Household extends Model {
         language: language ?? this.language,
         featurePlanner: featurePlanner ?? this.featurePlanner,
         featureExpenses: featureExpenses ?? this.featureExpenses,
+        featureLoyaltyCards: featureLoyaltyCards ?? this.featureLoyaltyCards,
         viewOrdering: viewOrdering ?? this.viewOrdering,
         description: description ?? this.description,
         link: link ?? this.link,
@@ -102,6 +107,7 @@ class Household extends Model {
         language,
         featurePlanner,
         featureExpenses,
+        featureLoyaltyCards,
         viewOrdering,
         member,
         defaultShoppingList,
@@ -127,6 +133,9 @@ class Household extends Model {
     }
     if (featureExpenses != null) {
       data['expenses_feature'] = featureExpenses;
+    }
+    if (featureLoyaltyCards != null) {
+      data['loyalty_cards_feature'] = featureLoyaltyCards;
     }
     if (viewOrdering != null) {
       data['view_ordering'] = viewOrdering!.map((e) => e.toString()).toList()

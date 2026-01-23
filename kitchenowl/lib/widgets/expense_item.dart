@@ -48,6 +48,13 @@ class ExpenseItemWidget extends StatelessWidget {
       }
     }
 
+    String formattedAmount =
+        NumberFormat.simpleCurrency(locale: locale).format(amount);
+
+    if (expense.excludeFromStatistics) {
+      formattedAmount = "($formattedAmount)";
+    }
+
     return OpenContainer<UpdateEnum>(
       useRootNavigator: true,
       closedColor: ElevationOverlay.applySurfaceTint(
@@ -73,7 +80,7 @@ class ExpenseItemWidget extends StatelessWidget {
           title: Row(
             children: [
               Expanded(child: Text(expense.name)),
-              Text(NumberFormat.simpleCurrency(locale: locale).format(amount)),
+              Text(formattedAmount),
             ],
           ),
           subtitle: Row(

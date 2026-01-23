@@ -151,6 +151,8 @@ class _AddUpdateExpensePageState extends State<AddUpdateExpensePage> {
                             if (category != null) cubit.setCategory(category);
                             cubit
                                 .setIncome(widget.suggestedNames![s]!.isIncome);
+                            cubit.setExcludeFromStatistics(widget
+                                .suggestedNames![s]!.excludeFromStatistics);
                             widget.suggestedNames![s]!.paidFor;
                             for (Member m
                                 in widget.household.member ?? const []) {

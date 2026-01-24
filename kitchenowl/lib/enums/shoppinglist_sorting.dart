@@ -13,7 +13,8 @@ enum ShoppinglistSorting {
     switch (sorting) {
       case ShoppinglistSorting.alphabetical:
       case ShoppinglistSorting.category:
-        shoppinglist.sort((a, b) => a.name.compareTo(b.name));
+        shoppinglist.sort(
+            (a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
         break;
       case ShoppinglistSorting.algorithmic:
         shoppinglist.sort((a, b) {

@@ -78,6 +78,8 @@ RUN python -c "import nltk; nltk.download('averaged_perceptron_tagger_eng', down
 # ------------
 FROM python:3.14-slim AS runner
 
+LABEL org.opencontainers.image.source="https://github.com/TomBursch/kitchenowl"
+
 RUN apt-get update \
     && apt-get install --yes --no-install-recommends \
         libxml2 libpcre2-dev libre2-dev libexpat1 curl \

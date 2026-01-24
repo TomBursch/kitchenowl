@@ -262,8 +262,8 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
     if (state is! SearchShoppinglistCubitState &&
         state.selectedShoppinglist != null &&
         state.selectedShoppinglist?.items != const []) {
-      ShoppinglistSorting.sortShoppinglistItems(
-          state.selectedShoppinglist!.items, sorting);
+      state.shoppinglists.forEach((_, l) =>
+          ShoppinglistSorting.sortShoppinglistItems(l.items, sorting));
     }
     if (savePreference) {
       PreferenceStorage.getInstance()
@@ -313,6 +313,9 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
         .then((lists) => Map.fromEntries(lists
             .map((e) => e.id != null ? MapEntry(e.id!, e) : null)
             .nonNulls));
+
+    shoppingLists.forEach((_, l) =>
+        ShoppinglistSorting.sortShoppinglistItems(l.items, state.sorting));
 
     return shoppingLists;
   }

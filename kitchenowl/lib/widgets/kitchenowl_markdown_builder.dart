@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:flutter_markdown_plus/flutter_markdown_plus.dart';
 import 'package:kitchenowl/helpers/url_launcher.dart';
 import 'package:markdown/markdown.dart' as md;
 
@@ -82,7 +82,7 @@ class KitchenOwlMarkdownBuilder extends StatefulWidget {
   final md.ExtensionSet? extensionSet;
 
   /// Call when build an image widget.
-  final MarkdownSizedImageBuilder? imageBuilder;
+  final MarkdownImageBuilder? imageBuilder;
 
   /// Call when build a checkbox widget.
   final MarkdownCheckboxBuilder? checkboxBuilder;
@@ -186,13 +186,13 @@ class _KitchenOwlMarkdownBuilderState extends State<KitchenOwlMarkdownBuilder>
             textScaler: widget.textScaler,
           ),
       imageDirectory: widget.imageDirectory,
-      sizedImageBuilder: widget.imageBuilder ??
-          (config) => Padding(
+      imageBuilder: widget.imageBuilder ??
+          (uri, title, alt) => Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(16),
                   child: CachedNetworkImage(
-                    imageUrl: config.uri.toString(),
+                    imageUrl: uri.toString(),
                     placeholder: (context, url) =>
                         const Center(child: CircularProgressIndicator()),
                     errorWidget: (context, url, error) =>

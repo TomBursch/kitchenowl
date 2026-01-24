@@ -113,6 +113,7 @@ SUPPORTED_LANGUAGES = {
     "fi": "Suomi",
     "fr": "Français",
     "he": "עִבְרִית‎",
+    "hr": "Hrvatski",
     "hu": "Magyar nyelv",
     "id": "Bahasa Indonesia",
     "it": "Italiano",

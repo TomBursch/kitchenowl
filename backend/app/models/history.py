@@ -113,11 +113,10 @@ class History(Model):
                 )
                 .distinct(cls.item_id)
                 .order_by(cls.item_id, cls.created_at.desc())
-                .limit(limit)
                 .subquery()
             )
             alias = db.aliased(cls, sq2)
-            q = db.session.query(alias).order_by(alias.created_at.desc())
+            q = db.session.query(alias).order_by(alias.created_at.desc()).limit(limit)
             return q.all()
         else:
             sq = db.session.query(ShoppinglistItems.item_id).subquery().select()

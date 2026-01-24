@@ -1201,7 +1201,7 @@ sdist = { url = "https://files.pythonhosted.org/packages/5f/c1/3791e39d65c39b4e0
 
 [[package]]
 name = "kitchenowl-backend"
-version = "0.1.0"
+version = "0.7.6"
 source = { virtual = "." }
 dependencies = [
     { name = "apispec", extra = ["marshmallow"] },

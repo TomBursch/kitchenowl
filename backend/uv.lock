@@ -1285,7 +1285,7 @@ requires-dist = [
     { name = "psycopg2-binary", specifier = ">=2.9.10" },
     { name = "pyjwt", specifier = "==2.9.0" },
     { name = "python-socketio", specifier = "==5.13.0" },
-    { name = "recipe-scrapers", specifier = ">=15.6.0" },
+    { name = "recipe-scrapers", specifier = ">=15.11.0" },
     { name = "requests", specifier = ">=2.32.3" },
     { name = "sqlalchemy", specifier = ">=2.0.40" },
     { name = "sqlite-icu", specifier = ">=1.0" },

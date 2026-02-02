@@ -383,6 +383,23 @@ class _PlannerPageState extends State<PlannerPage> {
                         ),
                       ),
                     ),
+                  SliverPadding(
+                    padding: const EdgeInsets.all(16),
+                    sliver: SliverToBoxAdapter(
+                      child: ElevatedButton.icon(
+                        onPressed: () {
+                          // We pass the active cubit as an 'extra' object so the
+                          // new page can interact with the existing list.
+                          context.push(
+                            "/household/${cubit.household.id}/recipes/import",
+                            extra: household,
+                          );
+                        },
+                        icon: const Icon(Icons.input_rounded),
+                        label: const Text("Mass import"),
+                      ),
+                    ),
+                  ),
                 ],
               );
             },

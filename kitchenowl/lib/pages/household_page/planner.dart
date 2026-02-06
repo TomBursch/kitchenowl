@@ -91,6 +91,10 @@ class _PlannerPageState extends State<PlannerPage> {
     final cubit = BlocProvider.of<PlannerCubit>(context);
     final household = BlocProvider.of<HouseholdCubit>(context).state.household;
 
+    bool _isPastDate(DateTime cookingDate) {
+  return cookingDate.isBefore(DateTime.now().subtract(Duration(days: 1)));
+}
+
     return SafeArea(
       child: Scrollbar(
         child: RefreshIndicator(
@@ -262,7 +266,9 @@ class _PlannerPageState extends State<PlannerPage> {
                                       ),
                                     AspectRatio(
                                       aspectRatio: 1,
-                                      child: SelectableButtonCard(
+                                      child: Opacity(
+  opacity: _isPastDate(cookingDate) ? 0.5 : 1.0,
+  child: SelectableButtonCard(
                                         key: ValueKey(
                                           plan.recipe.id,
                                         ),
@@ -282,7 +288,7 @@ class _PlannerPageState extends State<PlannerPage> {
                                           plan.yields,
                                         ),
                                       ),
-                                    ),
+                                    ),),
                                   ],
                                 ),
                               ),

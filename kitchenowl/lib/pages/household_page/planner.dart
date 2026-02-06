@@ -92,8 +92,8 @@ class _PlannerPageState extends State<PlannerPage> {
     final household = BlocProvider.of<HouseholdCubit>(context).state.household;
 
     bool _isPastDate(DateTime cookingDate) {
-  return cookingDate.isBefore(DateTime.now().subtract(Duration(days: 1)));
-}
+      return cookingDate.isBefore(DateTime.now().subtract(Duration(days: 1)));
+    }
 
     return SafeArea(
       child: Scrollbar(
@@ -220,7 +220,8 @@ class _PlannerPageState extends State<PlannerPage> {
                         for (final cookingDate
                             in state.getUniqueCookingDays()) {
                           if (_previousCookingDate != null) {
-                            if (daysBetween(_previousCookingDate, cookingDate) > 1) {
+                            if (daysBetween(_previousCookingDate, cookingDate) >
+                                1) {
                               children.add(Container(
                                 width: 3.0,
                                 height: constraints.crossAxisExtent /
@@ -231,7 +232,9 @@ class _PlannerPageState extends State<PlannerPage> {
                                           .state
                                           .gridSize,
                                     ),
-                                color: Theme.of(context).dividerColor.withOpacity(0.3),
+                                color: Theme.of(context)
+                                    .dividerColor
+                                    .withOpacity(0.3),
                               ));
                             }
                           }
@@ -267,28 +270,31 @@ class _PlannerPageState extends State<PlannerPage> {
                                     AspectRatio(
                                       aspectRatio: 1,
                                       child: Opacity(
-  opacity: _isPastDate(cookingDate) ? 0.5 : 1.0,
-  child: SelectableButtonCard(
-                                        key: ValueKey(
-                                          plan.recipe.id,
-                                        ),
-                                        title: plan.recipe.name,
-                                        description: plan.yields?.toString(),
-                                        selected: true,
-                                        onPressed: () {
-                                          cubit.remove(
+                                        opacity: _isPastDate(cookingDate)
+                                            ? 0.5
+                                            : 1.0,
+                                        child: SelectableButtonCard(
+                                          key: ValueKey(
+                                            plan.recipe.id,
+                                          ),
+                                          title: plan.recipe.name,
+                                          description: plan.yields?.toString(),
+                                          selected: true,
+                                          onPressed: () {
+                                            cubit.remove(
+                                              plan.recipe,
+                                              plan.cookingDate,
+                                            );
+                                          },
+                                          onLongPressed: () => _openRecipePage(
+                                            context,
+                                            cubit,
                                             plan.recipe,
-                                            plan.cookingDate,
-                                          );
-                                        },
-                                        onLongPressed: () => _openRecipePage(
-                                          context,
-                                          cubit,
-                                          plan.recipe,
-                                          plan.yields,
+                                            plan.yields,
+                                          ),
                                         ),
                                       ),
-                                    ),),
+                                    ),
                                   ],
                                 ),
                               ),

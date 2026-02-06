@@ -217,7 +217,18 @@ class _PlannerPageState extends State<PlannerPage> {
                             in state.getUniqueCookingDays()) {
                           if (_previousCookingDate != null) {
                             if (daysBetween(_previousCookingDate, cookingDate) > 1) {
-                              children.add(const SizedBox(width: 15.0));
+                              children.add(Container(
+                                width: 3.0,
+                                height: constraints.crossAxisExtent /
+                                    DynamicStyling.itemCrossAxisCount(
+                                      constraints.crossAxisExtent,
+                                      context
+                                          .read<SettingsCubit>()
+                                          .state
+                                          .gridSize,
+                                    ),
+                                color: Theme.of(context).dividerColor.withOpacity(0.3),
+                              ));
                             }
                           }
                           _previousCookingDate = cookingDate;

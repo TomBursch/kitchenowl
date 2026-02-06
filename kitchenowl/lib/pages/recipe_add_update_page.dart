@@ -622,7 +622,7 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                               !listEquals(previous.items, current.items),
                           builder: (context, state) => SliverItemGridList(
                             items:
-                                state.items.where((e) => !e.optional).toList(),
+                                state.items.where((e) => !e.optional).toList()..sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase())),
                             selected: (item) => true,
                             onPressed: Nullable(cubit.removeItem),
                             onLongPressed: Nullable(
@@ -658,7 +658,7 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                               !listEquals(previous.items, current.items),
                           builder: (context, state) => SliverItemGridList(
                             items:
-                                state.items.where((e) => e.optional).toList(),
+                                state.items.where((e) => e.optional).toList()..sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase())),
                             selected: (item) => true,
                             onPressed: Nullable(cubit.removeItem),
                             onLongPressed: Nullable(

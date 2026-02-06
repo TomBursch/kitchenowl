@@ -232,7 +232,8 @@ class _RecipePageState extends State<RecipePage> {
                   SliverItemGridList(
                     items: state.dynamicRecipe.items
                         .where((e) => !e.optional)
-                        .toList(),
+                        .toList()
+                        ..sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase())),
                     selected: (item) => state.selectedItems.contains(item.name),
                     onPressed: Nullable(cubit.itemSelected),
                     onLongPressed:
@@ -252,7 +253,8 @@ class _RecipePageState extends State<RecipePage> {
                   SliverItemGridList(
                     items: state.dynamicRecipe.items
                         .where((e) => e.optional)
-                        .toList(),
+                        .toList()
+                        ..sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase())),
                     selected: (item) => state.selectedItems.contains(item.name),
                     onPressed: Nullable(cubit.itemSelected),
                     onLongPressed:

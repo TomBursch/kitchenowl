@@ -19,7 +19,7 @@ class ExpenseCreateFab extends StatelessWidget {
             BlocProvider.of<ExpenseListCubit>(context)
                 .state
                 .expenses
-                .map((e) => MapEntry(e.name.trim(), e.category))
+                .map((e) => MapEntry(e.name.trim(), e))
                 .take(25)
                 .toList()
                 .reversed,

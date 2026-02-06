@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:flutter_markdown_plus/flutter_markdown_plus.dart';
 import 'package:fraction/fraction.dart';
 import 'package:kitchenowl/cubits/recipe_cubit.dart';
 import 'package:kitchenowl/helpers/string_scaler.dart';
@@ -51,6 +51,12 @@ class RecipeCubitItemMarkdownBuilder extends MarkdownElementBuilder {
 
   RecipeCubitItemMarkdownBuilder({required this.cubit});
 
+  String cleanItemName(String name) {
+    return name.toLowerCase().replaceAll(
+        RegExp(r"""\n|\.|\(|\)|\\|\/|\?|\*|\+|,|!|%|$|#|@|^|;|:|"|=|~|{"""),
+        "");
+  }
+
   @override
   Widget? visitElementAfterWithContext(
     BuildContext context,
@@ -68,15 +74,15 @@ class RecipeCubitItemMarkdownBuilder extends MarkdownElementBuilder {
             bloc: cubit,
             buildWhen: (previous, current) =>
                 previous.dynamicRecipe.items.firstWhere(
-                      (e) => e.name.toLowerCase() == element.textContent,
+                      (e) => cleanItemName(e.name) == element.textContent,
                     ) !=
                     current.dynamicRecipe.items.firstWhere(
-                      (e) => e.name.toLowerCase() == element.textContent,
+                      (e) => cleanItemName(e.name) == element.textContent,
                     ) ||
                 previous.selectedYields != current.selectedYields,
             builder: (context, state) {
               RecipeItem item = state.dynamicRecipe.items.firstWhere(
-                (e) => e.name.toLowerCase() == element.textContent,
+                (e) => cleanItemName(e.name) == element.textContent,
               );
 
               String? overridenDescription = element.attributes["description"];
@@ -115,7 +121,11 @@ class RecipeExplicitItemMarkdownSyntax extends md.InlineSyntax {
   @override
   bool onMatch(md.InlineParser parser, Match match) {
     final name = match[1]!.replaceAll("_", " ").trim().toLowerCase();
-    if (!recipe.items.map((e) => e.name.toLowerCase()).contains(name)) {
+    if (!recipe.items
+        .map((e) => e.name.toLowerCase().replaceAll(
+            RegExp(r"""\n|\.|\(|\)|\\|\/|\?|\*|\+|,|!|%|$|#|@|^|;|:|"|=|~|{"""),
+            ""))
+        .contains(name)) {
       parser.advanceBy(1);
 
       return false;

@@ -10,13 +10,14 @@ import 'package:kitchenowl/models/expense.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/expense_category.dart';
 import 'package:kitchenowl/models/household.dart';
+import 'package:kitchenowl/models/member.dart';
 import 'package:kitchenowl/widgets/expense_add_update/paid_for_widget.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
 class AddUpdateExpensePage extends StatefulWidget {
   final Household household;
   final Expense? expense;
-  final Map<String, ExpenseCategory?>? suggestedNames;
+  final Map<String, Expense?>? suggestedNames;
 
   AddUpdateExpensePage({
     super.key,
@@ -139,13 +140,30 @@ class _AddUpdateExpensePageState extends State<AddUpdateExpensePage> {
                             TextEditingValue(text: widget.expense?.name ?? ""),
                         onSelected: (s) {
                           cubit.setName(s);
-                          ExpenseCategory? category = (widget.suggestedNames
-                                      ?.containsKey(s) ??
-                                  false)
-                              ? cubit.state.categories.firstWhereOrNull(
-                                  (e) => widget.suggestedNames![s]?.id == e.id)
-                              : null;
-                          if (category != null) cubit.setCategory(category);
+                          if (widget.suggestedNames![s] != null) {
+                            ExpenseCategory? category = (widget.suggestedNames
+                                        ?.containsKey(s) ??
+                                    false)
+                                ? cubit.state.categories.firstWhereOrNull((e) =>
+                                    widget.suggestedNames![s]!.category?.id ==
+                                    e.id)
+                                : null;
+                            if (category != null) cubit.setCategory(category);
+                            cubit
+                                .setIncome(widget.suggestedNames![s]!.isIncome);
+                            cubit.setExcludeFromStatistics(widget
+                                .suggestedNames![s]!.excludeFromStatistics);
+                            widget.suggestedNames![s]!.paidFor;
+                            for (Member m
+                                in widget.household.member ?? const []) {
+                              int factor = widget.suggestedNames![s]!.paidFor
+                                      .where((e) => e.userId == m.id)
+                                      .firstOrNull
+                                      ?.factor ??
+                                  0;
+                              cubit.setFactor(m, factor);
+                            }
+                          }
                         },
                         fieldViewBuilder: (context, textEditingController,
                                 focusNode, onFieldSubmitted) =>
@@ -429,6 +447,7 @@ class _AddUpdateExpensePageState extends State<AddUpdateExpensePage> {
                   (context, i) => PaidForWidget(
                     user: widget.household.member![i],
                     cubit: cubit,
+                    locale: widget.household.language,
                   ),
                   childCount: widget.household.member?.length ?? 0,
                 ),

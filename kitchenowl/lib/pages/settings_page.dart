@@ -256,6 +256,34 @@ class _SettingsPageState extends State<SettingsPage> {
                       ),
                     ),
                   ),
+                if (state.shoppingListListView)
+                  ListTile(
+                    title: Text(AppLocalizations.of(context)!.itemSize),
+                    leading: const Icon(Icons.line_style_rounded),
+                    titleAlignment: ListTileTitleAlignment.top,
+                    subtitle: Padding(
+                      padding: const EdgeInsets.only(top: 6),
+                      child: SegmentedButton(
+                        selected: {state.listStyle},
+                        segments: [
+                          ButtonSegment(
+                            value: ListStyle.cards,
+                            icon: const Icon(Icons.view_agenda_rounded),
+                            label: Text(AppLocalizations.of(context)!.cards),
+                          ),
+                          ButtonSegment(
+                            value: ListStyle.minimalist,
+                            icon: const Icon(Icons.density_small_rounded),
+                            label: Text(AppLocalizations.of(context)!.compact),
+                          ),
+                        ],
+                        onSelectionChanged: (Set<ListStyle> value) {
+                          BlocProvider.of<SettingsCubit>(context)
+                              .setListStyle(value.first);
+                        },
+                      ),
+                    ),
+                  ),
                 ListTile(
                   title:
                       Text(AppLocalizations.of(context)!.itemRemoveInteraction),

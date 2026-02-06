@@ -46,7 +46,7 @@ def get_secret(env_var: str, default: str = None) -> str | None:
 
 
 MIN_FRONTEND_VERSION = 71
-BACKEND_VERSION = 118
+BACKEND_VERSION = 120
 
 APP_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_DIR = os.path.dirname(APP_DIR)
@@ -113,6 +113,7 @@ SUPPORTED_LANGUAGES = {
     "fi": "Suomi",
     "fr": "Français",
     "he": "עִבְרִית‎",
+    "hr": "Hrvatski",
     "hu": "Magyar nyelv",
     "id": "Bahasa Indonesia",
     "it": "Italiano",

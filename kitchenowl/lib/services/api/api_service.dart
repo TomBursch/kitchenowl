@@ -390,7 +390,8 @@ class ApiService {
       final res =
           await delete('/auth' + (tokenId != null ? "/${tokenId}" : ""));
       if (tokenId == null) {
-        socket.disconnect();
+        headers.remove('Authorization');
+        _setConnectionState(Connection.disconnected);
         if (res.statusCode == 200) refreshToken = '';
       }
 

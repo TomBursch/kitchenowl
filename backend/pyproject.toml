@@ -1,6 +1,6 @@
 [project]
 name = "KitchenOwl-Backend"
-version = "0.1.0"
+version = "0.7.6"
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.14"
@@ -16,6 +16,7 @@ dependencies = [
     "flask-jwt-extended>=4.7.1",
     "flask-migrate>=4.1.0",
     "flask-socketio>=5.5.1",
+    "python-socketio==5.13.0", # Remove once https://github.com/miguelgrinberg/python-socketio/issues/1549 is fixed
     "flask-sqlalchemy>=3.1.1",
     "gevent>=24.11.1",
     "greenlet>=3.1.1",

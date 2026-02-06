@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:flutter_markdown_plus/flutter_markdown_plus.dart';
 import 'package:fraction/fraction.dart';
 import 'package:kitchenowl/helpers/markdown_extract_item.dart';
 import 'package:kitchenowl/helpers/recipe_item_markdown_extension.dart';
@@ -178,7 +178,7 @@ class _RecipeCookingPageState extends State<RecipeCookingPage> {
                                 },
                                 textScaler: TextScaler.linear(textScaleFactor),
                                 extensionSet: extensionSet,
-                                imageBuilder: (config) => Image(
+                                imageBuilder: (uri, title, alt) => Image(
                                   fit: BoxFit.cover,
                                   frameBuilder: (context, child, frame,
                                           wasSynchronouslyLoaded) =>
@@ -191,10 +191,9 @@ class _RecipeCookingPageState extends State<RecipeCookingPage> {
                                   ),
                                   image: getImageProvider(
                                     context,
-                                    int.tryParse(config.uri.toString()) == 0
-                                        ? widget.recipe.image ??
-                                            config.uri.toString()
-                                        : config.uri.toString(),
+                                    int.tryParse(uri.toString()) == 0
+                                        ? widget.recipe.image ?? uri.toString()
+                                        : uri.toString(),
                                   ),
                                   loadingBuilder: (context, child, progress) =>
                                       progress == null

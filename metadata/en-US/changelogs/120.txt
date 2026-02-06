@@ -1,0 +1,3 @@
+- New minimalist shopping list
+- New and updated translations
+- Bug fixes and other minor improvements

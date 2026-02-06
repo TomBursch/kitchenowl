@@ -178,7 +178,8 @@ class _ExpenseOverviewPageState extends State<ExpenseOverviewPage> {
                                 ),
                                 SizedBox(width: 8),
                                 Text(
-                                  NumberFormat.simpleCurrency()
+                                  NumberFormat.simpleCurrency(
+                                          locale: state.household.language)
                                       .format(totalForSelectedMonth.abs()),
                                   style: Theme.of(context)
                                       .textTheme
@@ -196,7 +197,7 @@ class _ExpenseOverviewPageState extends State<ExpenseOverviewPage> {
                                     .isFinite) ...[
                                   SizedBox(width: 8),
                                   Text(
-                                    "⌀ ${NumberFormat.simpleCurrency().format(state.getAverageForLastMonths(6))}",
+                                    "⌀ ${NumberFormat.simpleCurrency(locale: state.household.language).format(state.getAverageForLastMonths(6))}",
                                     style: Theme.of(context)
                                         .textTheme
                                         .bodyMedium
@@ -225,8 +226,10 @@ class _ExpenseOverviewPageState extends State<ExpenseOverviewPage> {
                                         Theme.of(context).textTheme.bodyMedium,
                                   ),
                                   trailing: Text(
-                                    NumberFormat.simpleCurrency().format(
-                                        totalIncomeForSelectedMonth.abs()),
+                                    NumberFormat.simpleCurrency(
+                                            locale: state.household.language)
+                                        .format(
+                                            totalIncomeForSelectedMonth.abs()),
                                     style: Theme.of(context)
                                         .textTheme
                                         .bodyMedium
@@ -248,7 +251,8 @@ class _ExpenseOverviewPageState extends State<ExpenseOverviewPage> {
                                         Theme.of(context).textTheme.bodyMedium,
                                   ),
                                   trailing: Text(
-                                    NumberFormat.simpleCurrency()
+                                    NumberFormat.simpleCurrency(
+                                            locale: state.household.language)
                                         .format(totalExpensesForSelectedMonth),
                                     style: Theme.of(context)
                                         .textTheme
@@ -319,7 +323,9 @@ class _ExpenseOverviewPageState extends State<ExpenseOverviewPage> {
                             title: Text(category?.name ??
                                 AppLocalizations.of(context)!.other),
                             trailing: Text(
-                              NumberFormat.simpleCurrency().format(amount),
+                              NumberFormat.simpleCurrency(
+                                      locale: state.household.language)
+                                  .format(amount),
                             ),
                             subtitle: (amountPercentage > 0)
                                 ? Text(NumberFormat.percentPattern()
@@ -402,7 +408,8 @@ class _ExpenseOverviewPageState extends State<ExpenseOverviewPage> {
                                     AppLocalizations.of(context)!.markAsPaid),
                               ),
                               const SizedBox(width: 4),
-                              Text(NumberFormat.simpleCurrency()
+                              Text(NumberFormat.simpleCurrency(
+                                      locale: state.household.language)
                                   .format(state.owes[i].$3)),
                             ],
                           ),

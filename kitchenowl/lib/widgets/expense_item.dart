@@ -22,6 +22,7 @@ class ExpenseItemWidget extends StatelessWidget {
   final Expense expense;
   final void Function()? onUpdated;
   final bool displayPersonalAmount;
+  final String? locale;
 
   const ExpenseItemWidget({
     super.key,
@@ -29,6 +30,7 @@ class ExpenseItemWidget extends StatelessWidget {
     this.household,
     this.onUpdated,
     this.displayPersonalAmount = false,
+    this.locale,
   });
 
   @override
@@ -44,6 +46,13 @@ class ExpenseItemWidget extends StatelessWidget {
             expense.paidFor[i].factor /
             expense.paidFor.fold(0, (p, v) => p + v.factor);
       }
+    }
+
+    String formattedAmount =
+        NumberFormat.simpleCurrency(locale: locale).format(amount);
+
+    if (expense.excludeFromStatistics) {
+      formattedAmount = "($formattedAmount)";
     }
 
     return OpenContainer<UpdateEnum>(
@@ -71,7 +80,7 @@ class ExpenseItemWidget extends StatelessWidget {
           title: Row(
             children: [
               Expanded(child: Text(expense.name)),
-              Text(NumberFormat.simpleCurrency().format(amount)),
+              Text(formattedAmount),
             ],
           ),
           subtitle: Row(

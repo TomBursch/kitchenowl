@@ -388,6 +388,25 @@ class _SettingsPageState extends State<SettingsPage> {
                   if (!kIsWeb)
                     ListTile(
                       title: Text(
+                        AppLocalizations.of(context)!.shoppingListKeepAwake,
+                      ),
+                      leading: const Icon(Icons.visibility_rounded),
+                      onTap: () => BlocProvider.of<SettingsCubit>(context)
+                          .setShoppingListKeepAwake(
+                        !BlocProvider.of<SettingsCubit>(context)
+                            .state
+                            .shoppingListKeepAwake,
+                      ),
+                      trailing: KitchenOwlSwitch(
+                        value: state.shoppingListKeepAwake,
+                        onChanged: (value) =>
+                            BlocProvider.of<SettingsCubit>(context)
+                                .setShoppingListKeepAwake(value),
+                      ),
+                    ),
+                  if (!kIsWeb)
+                    ListTile(
+                      title: Text(
                         AppLocalizations.of(context)!.forceOfflineMode,
                       ),
                       leading: const Icon(Icons.mobiledata_off_outlined),

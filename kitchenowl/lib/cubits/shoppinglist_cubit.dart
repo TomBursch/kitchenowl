@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:collection/collection.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,6 +18,8 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
   final Household household;
   Future<void>? _refreshThread;
   String? _refreshCurrentQuery;
+  Timer? _periodicRefreshTimer;
+  Connection? _lastConnectionState;
 
   String get query => (state is SearchShoppinglistCubitState)
       ? (state as SearchShoppinglistCubitState).query
@@ -37,10 +41,35 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
     ApiService.getInstance().onShoppinglistDelete(onShoppinglistDelete);
     ApiService.getInstance().onShoppinglistItemAdd(onShoppinglistItemAdd);
     ApiService.getInstance().onShoppinglistItemRemove(onShoppinglistItemRemove);
+
+    // Refresh data when connection state transitions to authenticated
+    _lastConnectionState = ApiService.getInstance().connectionStatus;
+    ApiService.getInstance().addListener(_onConnectionChange);
+
+    // Periodic refresh as fallback for missed WebSocket events
+    _periodicRefreshTimer = Timer.periodic(
+      const Duration(seconds: 30),
+      (_) {
+        if (ApiService.getInstance().isAuthenticated()) {
+          refresh();
+        }
+      },
+    );
+  }
+
+  void _onConnectionChange() {
+    final current = ApiService.getInstance().connectionStatus;
+    if (current == Connection.authenticated &&
+        _lastConnectionState != Connection.authenticated) {
+      refresh();
+    }
+    _lastConnectionState = current;
   }
 
   @override
   Future<void> close() async {
+    _periodicRefreshTimer?.cancel();
+    ApiService.getInstance().removeListener(_onConnectionChange);
     ApiService.getInstance().offShoppinglistAdd(onShoppinglistAdd);
     ApiService.getInstance().offShoppinglistDelete(onShoppinglistDelete);
     ApiService.getInstance().offShoppinglistItemAdd(onShoppinglistItemAdd);

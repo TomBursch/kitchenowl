@@ -19,6 +19,7 @@ class LoyaltyCardItem extends StatelessWidget {
         ? Color(loyaltyCard.color!)
         : Theme.of(context).colorScheme.primaryContainer;
     final contrastColor = _getContrastColor(cardColor);
+    final hasBarcode = loyaltyCard.barcodeData != null && loyaltyCard.barcodeData!.isNotEmpty;
 
     return Material(
       color: Colors.transparent,
@@ -78,37 +79,46 @@ class LoyaltyCardItem extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: 8),
-                  // Barcode container - use Flexible instead of Expanded
-                  Flexible(
-                    child: Center(
-                      child: Container(
-                        constraints: const BoxConstraints(
-                          maxHeight: 60,
+                  if (hasBarcode) ...[
+                    // Barcode container - use Flexible instead of Expanded
+                    Flexible(
+                      child: Center(
+                        child: Container(
+                          constraints: const BoxConstraints(
+                            maxHeight: 60,
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 4,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: _buildBarcode(context),
                         ),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 4,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        child: _buildBarcode(context),
                       ),
                     ),
-                  ),
-                  const SizedBox(height: 6),
-                  // Barcode data text
-                  Text(
-                    _truncateMiddle(loyaltyCard.barcodeData, 24),
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: contrastColor.withOpacity(0.7),
-                          fontFamily: 'monospace',
-                          fontSize: 11,
-                        ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
+                    const SizedBox(height: 6),
+                    // Barcode data text
+                    Text(
+                      _truncateMiddle(loyaltyCard.barcodeData!, 24),
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: contrastColor.withOpacity(0.7),
+                            fontFamily: 'monospace',
+                            fontSize: 11,
+                          ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ] else ...[
+                    const SizedBox(height: 8),
+                    Icon(
+                      Icons.credit_card_rounded,
+                      size: 32,
+                      color: contrastColor.withOpacity(0.5),
+                    ),
+                  ],
                 ],
               ),
             ),
@@ -126,13 +136,13 @@ class LoyaltyCardItem extends StatelessWidget {
 
   Widget _buildBarcode(BuildContext context) {
     try {
-      final barcodeType = _getBarcodeType(loyaltyCard.barcodeType);
+      final barcodeType = _getBarcodeType(loyaltyCard.barcodeType ?? 'CODE128');
       final isQrLike = ['QR', 'DATAMATRIX', 'AZTEC', 'PDF417']
-          .contains(loyaltyCard.barcodeType.toUpperCase());
+          .contains((loyaltyCard.barcodeType ?? '').toUpperCase());
 
       return BarcodeWidget(
         barcode: barcodeType,
-        data: loyaltyCard.barcodeData,
+        data: loyaltyCard.barcodeData ?? '',
         width: isQrLike ? 45 : 150,
         height: isQrLike ? 45 : 35,
         drawText: false,

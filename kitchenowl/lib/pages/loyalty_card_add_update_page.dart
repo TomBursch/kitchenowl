@@ -1,4 +1,3 @@
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
@@ -6,7 +5,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/models/loyalty_card.dart';
-import 'package:kitchenowl/helpers/web_barcode_scanner.dart';
 import 'package:kitchenowl/pages/barcode_scanner_page.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
@@ -105,13 +103,7 @@ class _LoyaltyCardAddUpdatePageState extends State<LoyaltyCardAddUpdatePage> {
     });
 
     try {
-      if (kIsWeb) {
-        // Web platform: use file picker and web barcode scanner
-        await _scanFromGalleryWeb();
-      } else {
-        // Mobile platform: use mobile_scanner
-        await _scanFromGalleryMobile();
-      }
+      await _scanFromGalleryMobile();
     } catch (e) {
       if (mounted) {
         _showNoBarcodeError();
@@ -122,31 +114,6 @@ class _LoyaltyCardAddUpdatePageState extends State<LoyaltyCardAddUpdatePage> {
           _isScanning = false;
         });
       }
-    }
-  }
-
-  Future<void> _scanFromGalleryWeb() async {
-    final result = await FilePicker.platform.pickFiles(
-      type: FileType.image,
-      withData: true,
-    );
-
-    if (result == null || result.files.first.bytes == null) {
-      return;
-    }
-
-    final bytes = result.files.first.bytes!;
-    final scanResult = await scanBarcodeFromImageBytes(bytes);
-
-    if (scanResult != null && mounted) {
-      setState(() {
-        _barcodeDataController.text = scanResult.data;
-        _detectedBarcodeType = scanResult.type;
-        _isAutoDetected = true;
-        _showManualEntry = false;
-      });
-    } else if (mounted) {
-      _showNoBarcodeError();
     }
   }
 
@@ -332,19 +299,20 @@ class _LoyaltyCardAddUpdatePageState extends State<LoyaltyCardAddUpdatePage> {
                   ),
                 ),
                 const SizedBox(width: 12),
-                Expanded(
-                  child: OutlinedButton.icon(
-                    onPressed: _isScanning ? null : _scanFromGallery,
-                    icon: _isScanning
-                        ? const SizedBox(
-                            width: 18,
-                            height: 18,
-                            child: CircularProgressIndicator(strokeWidth: 2),
-                          )
-                        : const Icon(Icons.photo_library),
-                    label: Text(AppLocalizations.of(context)!.gallery),
+                if (!kIsWeb)
+                  Expanded(
+                    child: OutlinedButton.icon(
+                      onPressed: _isScanning ? null : _scanFromGallery,
+                      icon: _isScanning
+                          ? const SizedBox(
+                              width: 18,
+                              height: 18,
+                              child: CircularProgressIndicator(strokeWidth: 2),
+                            )
+                          : const Icon(Icons.photo_library),
+                      label: Text(AppLocalizations.of(context)!.gallery),
+                    ),
                   ),
-                ),
               ],
             ),
             const SizedBox(height: 12),
@@ -442,12 +410,6 @@ class _LoyaltyCardAddUpdatePageState extends State<LoyaltyCardAddUpdatePage> {
             prefixIcon: const Icon(Icons.numbers),
           ),
           keyboardType: TextInputType.text,
-          validator: (value) {
-            if (value == null || value.trim().isEmpty) {
-              return AppLocalizations.of(context)!.fieldRequired;
-            }
-            return null;
-          },
           onChanged: (value) {
             setState(() {});
           },
@@ -521,16 +483,6 @@ class _LoyaltyCardAddUpdatePageState extends State<LoyaltyCardAddUpdatePage> {
   Future<void> _save() async {
     if (!_formKey.currentState!.validate()) return;
 
-    // Validate barcode data exists
-    if (_barcodeDataController.text.trim().isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(AppLocalizations.of(context)!.fieldRequired),
-        ),
-      );
-      return;
-    }
-
     setState(() {
       _isLoading = true;
     });
@@ -539,8 +491,12 @@ class _LoyaltyCardAddUpdatePageState extends State<LoyaltyCardAddUpdatePage> {
       final loyaltyCard = LoyaltyCard(
         id: widget.loyaltyCard?.id,
         name: _nameController.text.trim(),
-        barcodeType: _detectedBarcodeType ?? 'CODE128',
-        barcodeData: _barcodeDataController.text.trim(),
+        barcodeType: _barcodeDataController.text.trim().isNotEmpty
+            ? (_detectedBarcodeType ?? 'CODE128')
+            : null,
+        barcodeData: _barcodeDataController.text.trim().isNotEmpty
+            ? _barcodeDataController.text.trim()
+            : null,
         description: _descriptionController.text.trim().isEmpty
             ? null
             : _descriptionController.text.trim(),

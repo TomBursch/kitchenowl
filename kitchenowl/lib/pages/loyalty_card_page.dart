@@ -58,8 +58,9 @@ class _LoyaltyCardPageState extends State<LoyaltyCardPage> {
               ? Color(loyaltyCard.color!)
               : Theme.of(context).colorScheme.primaryContainer;
           final contrastColor = _getContrastColor(cardColor);
-          final isQrLike = _isQrLike(loyaltyCard.barcodeType);
-          final isLongData = loyaltyCard.barcodeData.length > 20;
+          final hasBarcode = loyaltyCard.barcodeData != null && loyaltyCard.barcodeData!.isNotEmpty;
+          final isQrLike = hasBarcode ? _isQrLike(loyaltyCard.barcodeType!) : false;
+          final isLongData = hasBarcode ? loyaltyCard.barcodeData!.length > 20 : false;
 
           return Scaffold(
             backgroundColor: Theme.of(context).colorScheme.surface,
@@ -84,14 +85,15 @@ class _LoyaltyCardPageState extends State<LoyaltyCardPage> {
                 ),
                 PopupMenuButton(
                   itemBuilder: (context) => [
-                    PopupMenuItem(
-                      value: 'copy',
-                      child: ListTile(
-                        leading: const Icon(Icons.copy),
-                        title: Text(AppLocalizations.of(context)!.copyBarcode),
-                        contentPadding: EdgeInsets.zero,
+                    if (hasBarcode)
+                      PopupMenuItem(
+                        value: 'copy',
+                        child: ListTile(
+                          leading: const Icon(Icons.copy),
+                          title: Text(AppLocalizations.of(context)!.copyBarcode),
+                          contentPadding: EdgeInsets.zero,
+                        ),
                       ),
-                    ),
                     PopupMenuItem(
                       value: 'delete',
                       child: ListTile(
@@ -162,60 +164,69 @@ class _LoyaltyCardPageState extends State<LoyaltyCardPage> {
                               child: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  // Barcode container
-                                  Container(
-                                    padding: EdgeInsets.all(isQrLike ? 16 : 12),
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    child: _buildBarcode(context, loyaltyCard),
-                                  ),
-                                  const SizedBox(height: 16),
-                                  
-                                  // Barcode data - tappable to copy
-                                  InkWell(
-                                    onTap: () => _copyBarcode(context, loyaltyCard),
-                                    borderRadius: BorderRadius.circular(8),
-                                    child: Container(
-                                      width: double.infinity,
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 12,
-                                        vertical: 10,
-                                      ),
+                                  if (hasBarcode) ...[
+                                    // Barcode container
+                                    Container(
+                                      padding: EdgeInsets.all(isQrLike ? 16 : 12),
                                       decoration: BoxDecoration(
-                                        color: contrastColor.withOpacity(0.1),
-                                        borderRadius: BorderRadius.circular(8),
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(12),
                                       ),
-                                      child: Row(
-                                        children: [
-                                          Expanded(
-                                            child: Text(
-                                              isLongData
-                                                  ? _truncateMiddle(loyaltyCard.barcodeData, 30)
-                                                  : loyaltyCard.barcodeData,
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .bodyMedium
-                                                  ?.copyWith(
-                                                    color: contrastColor,
-                                                    fontFamily: 'monospace',
-                                                    letterSpacing: 1,
-                                                  ),
-                                              textAlign: TextAlign.center,
-                                              overflow: TextOverflow.ellipsis,
+                                      child: _buildBarcode(context, loyaltyCard),
+                                    ),
+                                    const SizedBox(height: 16),
+                                    
+                                    // Barcode data - tappable to copy
+                                    InkWell(
+                                      onTap: () => _copyBarcode(context, loyaltyCard),
+                                      borderRadius: BorderRadius.circular(8),
+                                      child: Container(
+                                        width: double.infinity,
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 12,
+                                          vertical: 10,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color: contrastColor.withOpacity(0.1),
+                                          borderRadius: BorderRadius.circular(8),
+                                        ),
+                                        child: Row(
+                                          children: [
+                                            Expanded(
+                                              child: Text(
+                                                isLongData
+                                                    ? _truncateMiddle(loyaltyCard.barcodeData!, 30)
+                                                    : loyaltyCard.barcodeData!,
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyMedium
+                                                    ?.copyWith(
+                                                      color: contrastColor,
+                                                      fontFamily: 'monospace',
+                                                      letterSpacing: 1,
+                                                    ),
+                                                textAlign: TextAlign.center,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
                                             ),
-                                          ),
-                                          const SizedBox(width: 8),
-                                          Icon(
-                                            Icons.copy_rounded,
-                                            size: 18,
-                                            color: contrastColor.withOpacity(0.7),
-                                          ),
-                                        ],
+                                            const SizedBox(width: 8),
+                                            Icon(
+                                              Icons.copy_rounded,
+                                              size: 18,
+                                              color: contrastColor.withOpacity(0.7),
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ),
-                                  ),
+                                  ] else ...[
+                                    // No barcode - show store icon
+                                    Icon(
+                                      Icons.store_rounded,
+                                      size: 64,
+                                      color: contrastColor.withOpacity(0.5),
+                                    ),
+                                  ],
                                 ],
                               ),
                             ),
@@ -304,11 +315,14 @@ class _LoyaltyCardPageState extends State<LoyaltyCardPage> {
   }
 
   Widget _buildBarcode(BuildContext context, LoyaltyCard loyaltyCard) {
+    if (loyaltyCard.barcodeType == null || loyaltyCard.barcodeData == null) {
+      return const SizedBox.shrink();
+    }
     try {
-      final barcodeType = _getBarcodeType(loyaltyCard.barcodeType);
-      final isQrLike = _isQrLike(loyaltyCard.barcodeType);
+      final barcodeType = _getBarcodeType(loyaltyCard.barcodeType!);
+      final isQrLike = _isQrLike(loyaltyCard.barcodeType!);
       // Don't show text for QR codes or long data (like URLs)
-      final showText = !isQrLike && loyaltyCard.barcodeData.length <= 20;
+      final showText = !isQrLike && loyaltyCard.barcodeData!.length <= 20;
 
       return ConstrainedBox(
         constraints: BoxConstraints(
@@ -316,7 +330,7 @@ class _LoyaltyCardPageState extends State<LoyaltyCardPage> {
         ),
         child: BarcodeWidget(
           barcode: barcodeType,
-          data: loyaltyCard.barcodeData,
+          data: loyaltyCard.barcodeData!,
           width: isQrLike ? 200 : double.infinity,
           height: isQrLike ? 200 : 80,
           drawText: showText,
@@ -398,7 +412,8 @@ class _LoyaltyCardPageState extends State<LoyaltyCardPage> {
   }
 
   void _copyBarcode(BuildContext context, LoyaltyCard loyaltyCard) {
-    Clipboard.setData(ClipboardData(text: loyaltyCard.barcodeData));
+    if (loyaltyCard.barcodeData == null) return;
+    Clipboard.setData(ClipboardData(text: loyaltyCard.barcodeData!));
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(AppLocalizations.of(context)!.copied),

@@ -76,6 +76,23 @@ class TestLoyaltyCardAPI:
         assert data["barcode_type"] == minimal_data["barcode_type"]
         assert data["barcode_data"] == minimal_data["barcode_data"]
 
+    def test_create_loyalty_card_without_barcode(
+        self, user_client_with_household, household_id
+    ):
+        """Test creating a loyalty card without barcode data."""
+        no_barcode_data = {
+            "name": "No Barcode Card",
+        }
+        response = user_client_with_household.post(
+            f"/api/household/{household_id}/loyalty-card",
+            json=no_barcode_data,
+        )
+        assert response.status_code == 200
+        data = response.get_json()
+        assert data["name"] == no_barcode_data["name"]
+        assert data["barcode_type"] is None
+        assert data["barcode_data"] is None
+
     def test_get_all_loyalty_cards_after_create(
         self, user_client_with_household, household_id, loyalty_card_data
     ):
@@ -202,10 +219,10 @@ class TestLoyaltyCardAPI:
         self, user_client_with_household, household_id
     ):
         """Test creating a loyalty card with missing required fields fails."""
-        # Missing barcode_data
+        # Missing name (required field)
         incomplete_data = {
-            "name": "Incomplete Card",
             "barcode_type": "CODE128",
+            "barcode_data": "1234567890",
         }
         response = user_client_with_household.post(
             f"/api/household/{household_id}/loyalty-card",

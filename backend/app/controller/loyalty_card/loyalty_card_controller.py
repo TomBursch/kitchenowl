@@ -3,7 +3,6 @@ from flask import jsonify, Blueprint
 from flask_jwt_extended import jwt_required
 from app.helpers import validate_args, authorize_household
 from app.models import LoyaltyCard
-from app.service.file_has_access_or_download import file_has_access_or_download
 from .schemas import AddLoyaltyCard, UpdateLoyaltyCard
 
 loyaltyCard = Blueprint("loyalty_card", __name__)
@@ -36,15 +35,15 @@ def getLoyaltyCardById(id):
 def addLoyaltyCard(args, household_id):
     loyalty_card = LoyaltyCard()
     loyalty_card.name = args["name"]
-    loyalty_card.barcode_type = args["barcode_type"]
-    loyalty_card.barcode_data = args["barcode_data"]
     loyalty_card.household_id = household_id
+    if "barcode_type" in args:
+        loyalty_card.barcode_type = args["barcode_type"]
+    if "barcode_data" in args:
+        loyalty_card.barcode_data = args["barcode_data"]
     if "description" in args:
         loyalty_card.description = args["description"]
     if "color" in args:
         loyalty_card.color = args["color"]
-    if "photo" in args and args["photo"]:
-        loyalty_card.photo = file_has_access_or_download(args["photo"], None)
     loyalty_card.save()
     return jsonify(loyalty_card.obj_to_dict())
 
@@ -68,8 +67,6 @@ def updateLoyaltyCard(args, id):
         loyalty_card.description = args["description"]
     if "color" in args:
         loyalty_card.color = args["color"]
-    if "photo" in args and args["photo"] != loyalty_card.photo:
-        loyalty_card.photo = file_has_access_or_download(args["photo"], loyalty_card.photo)
 
     loyalty_card.save()
     return jsonify(loyalty_card.obj_to_dict())

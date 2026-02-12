@@ -120,7 +120,7 @@ class LoyaltyCardListPageStandalone extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              'Store all your loyalty cards in one place and access them quickly at checkout.',
+              AppLocalizations.of(context)!.loyaltyCardsDescription,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: Theme.of(context).colorScheme.onSurfaceVariant,
                   ),

@@ -345,7 +345,7 @@ class _LoyaltyCardPageState extends State<LoyaltyCardPage> {
               ),
               const SizedBox(height: 8),
               Text(
-                'Invalid barcode',
+                AppLocalizations.of(context)!.barcodeInvalid,
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
                       color: Theme.of(context).colorScheme.error,
                     ),
@@ -365,7 +365,7 @@ class _LoyaltyCardPageState extends State<LoyaltyCardPage> {
           ),
           const SizedBox(height: 8),
           Text(
-            'Cannot display barcode',
+            AppLocalizations.of(context)!.barcodeCannotDisplay,
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
                   color: Theme.of(context).colorScheme.error,
                 ),

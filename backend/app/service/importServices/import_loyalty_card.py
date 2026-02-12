@@ -1,5 +1,4 @@
-from ...models import LoyaltyCard
-from app.config import db
+from app.models import LoyaltyCard
 
 
 def importLoyaltyCard(household, card_data):
@@ -24,5 +23,4 @@ def importLoyaltyCard(household, card_data):
     if "color" in card_data:
         card.color = card_data["color"]
 
-    db.session.add(card)
-    db.session.commit()
+    card.save()

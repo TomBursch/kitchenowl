@@ -5,6 +5,7 @@ import 'package:kitchenowl/app.dart';
 import 'package:kitchenowl/cubits/household_cubit.dart';
 import 'package:kitchenowl/cubits/shoppinglist_cubit.dart';
 import 'package:kitchenowl/kitchenowl.dart';
+import 'package:kitchenowl/models/household.dart';
 
 class ShoppingListFab extends StatelessWidget {
   const ShoppingListFab({super.key});
@@ -20,7 +21,7 @@ class ShoppingListFab extends StatelessWidget {
 
         // Check if loyalty cards feature is enabled
         final household = context.read<HouseholdCubit>().state.household;
-        final showLoyaltyCardsFab = household.featureLoyaltyCards ?? true;
+        final showLoyaltyCardsFab = household.featureLoyaltyCards ?? false;
 
         if (!showConfirmFab && !showLoyaltyCardsFab) {
           return const SizedBox();
@@ -66,7 +67,7 @@ class ShoppingListFab extends StatelessWidget {
     );
   }
 
-  void _openLoyaltyCards(BuildContext context, dynamic household) {
+  void _openLoyaltyCards(BuildContext context, Household household) {
     context.push('/household/${household.id}/loyalty-cards');
   }
 }

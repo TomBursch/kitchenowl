@@ -71,15 +71,49 @@ def list_shoppinglist_items(list_id: int) -> Any:
 
 
 @mcp.tool()
+def list_items(household_id: int, query: str) -> Any:
+    """Search items in household by name."""
+    return _request("GET", f"/household/{household_id}/item/search", params={"query": query})
+
+
+@mcp.tool()
+def create_item(household_id: int, name: str) -> Any:
+    """Create item in household."""
+    return _request("POST", f"/household/{household_id}/item", json={"name": name})
+
+
+@mcp.tool()
 def list_recipes(household_id: int) -> Any:
     """List recipes for a household."""
     return _request("GET", f"/household/{household_id}/recipe")
 
 
 @mcp.tool()
+def search_recipes(household_id: int, query: str, page: int = 0) -> Any:
+    """Search recipes in household by name."""
+    return _request(
+        "GET",
+        f"/household/{household_id}/recipe/search",
+        params={"query": query, "page": page},
+    )
+
+
+@mcp.tool()
 def create_shoppinglist(household_id: int, name: str) -> Any:
     """Create a shopping list in selected household."""
     return _request("POST", f"/household/{household_id}/shoppinglist", json={"name": name})
+
+
+@mcp.tool()
+def update_shoppinglist(list_id: int, name: str) -> Any:
+    """Rename shopping list."""
+    return _request("POST", f"/shoppinglist/{list_id}", json={"name": name})
+
+
+@mcp.tool()
+def delete_shoppinglist(list_id: int) -> Any:
+    """Delete shopping list."""
+    return _request("DELETE", f"/shoppinglist/{list_id}")
 
 
 @mcp.tool()
@@ -108,6 +142,25 @@ def create_recipe(household_id: int, name: str, description: str = "") -> Any:
     """Create a basic recipe in household."""
     payload = {"name": name, "description": description}
     return _request("POST", f"/household/{household_id}/recipe", json=payload)
+
+
+@mcp.tool()
+def update_recipe(recipe_id: int, name: str | None = None, description: str | None = None) -> Any:
+    """Update recipe (name/description subset)."""
+    payload: dict[str, Any] = {}
+    if name is not None:
+        payload["name"] = name
+    if description is not None:
+        payload["description"] = description
+    if not payload:
+        raise KitchenOwlApiError("At least one of name/description must be provided")
+    return _request("POST", f"/recipe/{recipe_id}", json=payload)
+
+
+@mcp.tool()
+def delete_recipe(recipe_id: int) -> Any:
+    """Delete recipe by id."""
+    return _request("DELETE", f"/recipe/{recipe_id}")
 
 
 if __name__ == "__main__":

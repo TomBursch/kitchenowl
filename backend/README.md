@@ -32,9 +32,16 @@ Current tools:
 - `list_households`
 - `list_shoppinglists`
 - `list_shoppinglist_items`
+- `list_items`
+- `create_item`
 - `list_recipes`
+- `search_recipes`
 - `create_shoppinglist`
+- `update_shoppinglist`
+- `delete_shoppinglist`
 - `add_item_by_name`
 - `remove_item`
 - `update_item_description`
 - `create_recipe`
+- `update_recipe`
+- `delete_recipe`

@@ -45,3 +45,13 @@ Current tools:
 - `create_recipe`
 - `update_recipe`
 - `delete_recipe`
+- `list_expenses`
+- `get_expense`
+- `create_expense`
+- `update_expense`
+- `delete_expense`
+- `expense_overview`
+- `expense_categories`
+- `create_expense_category`
+- `update_expense_category`
+- `delete_expense_category`

@@ -163,5 +163,126 @@ def delete_recipe(recipe_id: int) -> Any:
     return _request("DELETE", f"/recipe/{recipe_id}")
 
 
+@mcp.tool()
+def list_expenses(household_id: int, search: str | None = None) -> Any:
+    """List expenses for household (latest first)."""
+    params: dict[str, Any] = {}
+    if search:
+        params["search"] = search
+    return _request("GET", f"/household/{household_id}/expense", params=params or None)
+
+
+@mcp.tool()
+def get_expense(expense_id: int) -> Any:
+    """Get expense details by id."""
+    return _request("GET", f"/expense/{expense_id}")
+
+
+@mcp.tool()
+def create_expense(
+    household_id: int,
+    name: str,
+    amount: float,
+    paid_by_id: int,
+    paid_for_ids: list[int],
+    description: str = "",
+    category_id: int | None = None,
+    date_ms: int | None = None,
+) -> Any:
+    """Create expense. paid_for_ids split equally (factor=1 each)."""
+    if not paid_for_ids:
+        raise KitchenOwlApiError("paid_for_ids cannot be empty")
+    payload: dict[str, Any] = {
+        "name": name,
+        "amount": amount,
+        "paid_by": {"id": paid_by_id},
+        "paid_for": [{"id": uid, "factor": 1} for uid in paid_for_ids],
+    }
+    if description:
+        payload["description"] = description
+    if category_id is not None:
+        payload["category"] = category_id
+    if date_ms is not None:
+        payload["date"] = date_ms
+    return _request("POST", f"/household/{household_id}/expense", json=payload)
+
+
+@mcp.tool()
+def update_expense(
+    expense_id: int,
+    name: str | None = None,
+    amount: float | None = None,
+    description: str | None = None,
+    category_id: int | None = None,
+) -> Any:
+    """Update expense basic fields."""
+    payload: dict[str, Any] = {}
+    if name is not None:
+        payload["name"] = name
+    if amount is not None:
+        payload["amount"] = amount
+    if description is not None:
+        payload["description"] = description
+    if category_id is not None:
+        payload["category"] = category_id
+    if not payload:
+        raise KitchenOwlApiError("No fields provided for update")
+    return _request("POST", f"/expense/{expense_id}", json=payload)
+
+
+@mcp.tool()
+def delete_expense(expense_id: int) -> Any:
+    """Delete expense by id."""
+    return _request("DELETE", f"/expense/{expense_id}")
+
+
+@mcp.tool()
+def expense_overview(household_id: int, frame: int = 2, steps: int = 5, page: int = 0) -> Any:
+    """Get expense overview aggregates (default monthly frame)."""
+    return _request(
+        "GET",
+        f"/household/{household_id}/expense/overview",
+        params={"frame": frame, "steps": steps, "page": page},
+    )
+
+
+@mcp.tool()
+def expense_categories(household_id: int) -> Any:
+    """List expense categories for household."""
+    return _request("GET", f"/household/{household_id}/expense/categories")
+
+
+@mcp.tool()
+def create_expense_category(household_id: int, name: str, color: int | None = None, budget: float | None = None) -> Any:
+    """Create expense category."""
+    payload: dict[str, Any] = {"name": name}
+    if color is not None:
+        payload["color"] = color
+    if budget is not None:
+        payload["budget"] = budget
+    return _request("POST", f"/household/{household_id}/expense/categories", json=payload)
+
+
+@mcp.tool()
+def update_expense_category(category_id: int, name: str | None = None, color: int | None = None, budget: float | None = None) -> Any:
+    """Update expense category."""
+    payload: dict[str, Any] = {}
+    if name is not None:
+        payload["name"] = name
+    if color is not None:
+        payload["color"] = color
+    if budget is not None:
+        payload["budget"] = budget
+    if not payload:
+        raise KitchenOwlApiError("No fields provided for update")
+    return _request("POST", f"/expense/categories/{category_id}", json=payload)
+
+
+@mcp.tool()
+def delete_expense_category(category_id: int) -> Any:
+    """Delete expense category."""
+    return _request("DELETE", f"/expense/categories/{category_id}")
+
+
 if __name__ == "__main__":
     mcp.run()

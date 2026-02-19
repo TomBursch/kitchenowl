@@ -23,6 +23,7 @@ dependencies = [
     "ingredient-parser-nlp>=2.0.0",
     "litellm>=1.65.0",
     "marshmallow>=3.26.1",
+    "mcp>=1.13.0",
     "mlxtend==0.23.1",
     "numpy>=2.2.4",
     "prometheus-flask-exporter>=0.23.2",

@@ -16,3 +16,20 @@ Take a look at the general contribution rules [here](../CONTRIBUTING.md).
 - Run debug server with `uv run wsgi.py`
 - The backend should be reachable at `localhost:5000`
 - For some simple interactions with the backend (like adding a user), you can use `uv run manage.py`
+
+### MCP server (experimental)
+A lightweight MCP bridge is available in `mcp_server.py`.
+
+Run:
+- `uv run python mcp_server.py`
+
+Environment variables:
+- `KITCHENOWL_API_URL` (default: `http://127.0.0.1:5000/api`)
+- `KITCHENOWL_BEARER_TOKEN` (JWT token for authenticated endpoints)
+
+Current tools:
+- `health`
+- `list_households`
+- `list_shoppinglists`
+- `list_shoppinglist_items`
+- `list_recipes`

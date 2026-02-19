@@ -97,5 +97,18 @@ def remove_item(list_id: int, item_id: int) -> Any:
     return _request("DELETE", f"/shoppinglist/{list_id}/item", json={"item_id": item_id})
 
 
+@mcp.tool()
+def update_item_description(list_id: int, item_id: int, description: str = "") -> Any:
+    """Update/attach description for shopping list item."""
+    return _request("POST", f"/shoppinglist/{list_id}/item/{item_id}", json={"description": description})
+
+
+@mcp.tool()
+def create_recipe(household_id: int, name: str, description: str = "") -> Any:
+    """Create a basic recipe in household."""
+    payload = {"name": name, "description": description}
+    return _request("POST", f"/household/{household_id}/recipe", json=payload)
+
+
 if __name__ == "__main__":
     mcp.run()

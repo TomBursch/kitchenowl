@@ -36,3 +36,5 @@ Current tools:
 - `create_shoppinglist`
 - `add_item_by_name`
 - `remove_item`
+- `update_item_description`
+- `create_recipe`

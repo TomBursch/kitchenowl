@@ -33,3 +33,6 @@ Current tools:
 - `list_shoppinglists`
 - `list_shoppinglist_items`
 - `list_recipes`
+- `create_shoppinglist`
+- `add_item_by_name`
+- `remove_item`

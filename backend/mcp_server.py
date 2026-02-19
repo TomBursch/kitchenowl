@@ -76,5 +76,26 @@ def list_recipes(household_id: int) -> Any:
     return _request("GET", f"/household/{household_id}/recipe")
 
 
+@mcp.tool()
+def create_shoppinglist(household_id: int, name: str) -> Any:
+    """Create a shopping list in selected household."""
+    return _request("POST", f"/household/{household_id}/shoppinglist", json={"name": name})
+
+
+@mcp.tool()
+def add_item_by_name(list_id: int, name: str, description: str = "") -> Any:
+    """Add item to shopping list by name (creates item if missing)."""
+    payload = {"name": name}
+    if description:
+        payload["description"] = description
+    return _request("POST", f"/shoppinglist/{list_id}/add-item-by-name", json=payload)
+
+
+@mcp.tool()
+def remove_item(list_id: int, item_id: int) -> Any:
+    """Remove item from shopping list (marks as done/removed)."""
+    return _request("DELETE", f"/shoppinglist/{list_id}/item", json={"item_id": item_id})
+
+
 if __name__ == "__main__":
     mcp.run()

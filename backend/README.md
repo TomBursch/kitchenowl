@@ -55,3 +55,8 @@ Current tools:
 - `create_expense_category`
 - `update_expense_category`
 - `delete_expense_category`
+- `list_planner`
+- `add_recipe_to_planner`
+- `remove_recipe_from_planner`
+- `planner_recent_recipes`
+- `planner_suggested_recipes`

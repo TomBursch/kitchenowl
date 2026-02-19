@@ -284,5 +284,58 @@ def delete_expense_category(category_id: int) -> Any:
     return _request("DELETE", f"/expense/categories/{category_id}")
 
 
+@mcp.tool()
+def list_planner(household_id: int) -> Any:
+    """List planner entries for household."""
+    return _request("GET", f"/household/{household_id}/planner")
+
+
+@mcp.tool()
+def add_recipe_to_planner(
+    household_id: int,
+    recipe_id: int,
+    cooking_date_ms: int | None = None,
+    day: int | None = None,
+    yields: int | None = None,
+) -> Any:
+    """Add recipe to planner by date or weekday."""
+    payload: dict[str, Any] = {"recipe_id": recipe_id}
+    if cooking_date_ms is not None:
+        payload["cooking_date"] = cooking_date_ms
+    if day is not None:
+        payload["day"] = day
+    if yields is not None:
+        payload["yields"] = yields
+    return _request("POST", f"/household/{household_id}/planner/recipe", json=payload)
+
+
+@mcp.tool()
+def remove_recipe_from_planner(
+    household_id: int,
+    recipe_id: int,
+    cooking_date_ms: int | None = None,
+    day: int | None = None,
+) -> Any:
+    """Remove recipe from planner."""
+    payload: dict[str, Any] = {}
+    if cooking_date_ms is not None:
+        payload["cooking_date"] = cooking_date_ms
+    if day is not None:
+        payload["day"] = day
+    return _request("DELETE", f"/household/{household_id}/planner/recipe/{recipe_id}", json=payload or None)
+
+
+@mcp.tool()
+def planner_recent_recipes(household_id: int, page: int = 0) -> Any:
+    """List recently planned recipes."""
+    return _request("GET", f"/household/{household_id}/planner/recent-recipes/{page}")
+
+
+@mcp.tool()
+def planner_suggested_recipes(household_id: int, page: int = 0) -> Any:
+    """List suggested recipes for planner."""
+    return _request("GET", f"/household/{household_id}/planner/suggested-recipes/{page}")
+
+
 if __name__ == "__main__":
     mcp.run()

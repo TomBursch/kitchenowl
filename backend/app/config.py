@@ -38,7 +38,7 @@ def get_secret(env_var: str, default: str = None) -> str | None:
     file_path = os.getenv(f"{env_var}_FILE")
     if file_path:
         try:
-            with open(file_path, "r") as f:
+            with open(file_path, "r", encoding="utf-8") as f:
                 return f.read().strip()
         except Exception as e:
             raise RuntimeError(f"Failed to read {env_var}_FILE: {e}")

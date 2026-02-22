@@ -31,7 +31,9 @@ def file_has_access_or_download(
         ext = guess_extension(resp.headers["content-type"])
         if ext and allowed_file("file" + ext):
             filename = secure_filename(str(uuid.uuid4()) + ext)
-            with open(os.path.join(UPLOAD_FOLDER, filename), "wb") as o:
+            with open(
+                os.path.join(UPLOAD_FOLDER, filename), "wb", encoding="utf-8"
+            ) as o:
                 o.write(resp.content)
             blur = None
             try:

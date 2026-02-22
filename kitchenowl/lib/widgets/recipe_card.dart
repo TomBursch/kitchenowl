@@ -184,9 +184,9 @@ class RecipeCard extends StatelessWidget {
                         recipe.name,
                         maxLines: getValueForScreenType(
                           context: context,
-                          mobile: 2,
-                          tablet: 2,
-                          desktop: 2,
+                          mobile: 4,
+                          tablet: 4,
+                          desktop: 4,
                         ),
                         overflow: TextOverflow.ellipsis,
                         softWrap: true,

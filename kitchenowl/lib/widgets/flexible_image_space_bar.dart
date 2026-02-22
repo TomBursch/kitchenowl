@@ -23,6 +23,7 @@ class FlexibleImageSpaceBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FlexibleSpaceBar(
+      expandedTitleScale: 1.2,
       titlePadding: EdgeInsetsDirectional.only(
         start: 60,
         bottom: 16,
@@ -30,7 +31,7 @@ class FlexibleImageSpaceBar extends StatelessWidget {
       ),
       title: Text(
         title,
-        maxLines: isCollapsed ? 1 : 2,
+        maxLines: isCollapsed ? 1 : 6,
         overflow: TextOverflow.ellipsis,
         style: TextStyle(
           color: Theme.of(context).colorScheme.onSurface,

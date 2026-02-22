@@ -56,12 +56,13 @@ class App extends StatefulWidget {
   State<App> createState() => _AppState();
 }
 
-class _AppState extends State<App> {
+class _AppState extends State<App> with WidgetsBindingObserver {
   StreamSubscription? _intentDataStreamSubscription;
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
 
     if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
       final handler = ShareHandlerPlatform.instance;
@@ -112,7 +113,18 @@ class _AppState extends State<App> {
   }
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.resumed) {
+      ApiService.getInstance().refresh().then((_) {
+        TransactionHandler.getInstance().runOpenTransactions();
+      });
+    }
+  }
+
+  @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _intentDataStreamSubscription?.cancel();
     super.dispose();
   }

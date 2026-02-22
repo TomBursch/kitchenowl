@@ -12,9 +12,11 @@ def importLanguage(household_id: int, lang: str, bulkSave: bool = False):
         file_path = f"{APP_DIR}/../templates/l10n/{lang}.json"
         if lang not in SUPPORTED_LANGUAGES or not exists(file_path):
             raise NotFoundRequest("Language code not supported")
-        with open(file_path, "r") as f:
+        with open(file_path, "r", encoding="utf-8") as f:
             data = json.load(f)
-        with open(f"{APP_DIR}/../templates/attributes.json", "r") as f:
+        with open(
+            f"{APP_DIR}/../templates/attributes.json", "r", encoding="utf-8"
+        ) as f:
             attributes = json.load(f)
 
         t0 = time.time()

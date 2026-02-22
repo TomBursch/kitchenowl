@@ -1,113 +1,18 @@
 import re
 from typing import Any
-from recipe_scrapers import scrape_html
-from recipe_scrapers._exceptions import SchemaOrgException
 import requests
 from app.config import FRONT_URL
 from app.errors import ForbiddenRequest
 from app.models.recipe import RecipeVisibility
-from app.service.ingredient_parsing import parseIngredients
+from app.models import Recipe, Household
+from app.service.recipe_public_scraping import scrapeHTML, scrapeHTMLLLM
 
-from app.models import Recipe, Item, Household
 
-
-def scrapePublic(url: str, html: str, household: Household) -> dict[str, Any] | None:
-    try:
-        scraper = scrape_html(html, url, supported_only=False)
-    except Exception:
-        return None
-    recipe = Recipe()
-    try:
-        recipe.name = scraper.title().strip()[:128]
-    except (
-        NotImplementedError,
-        ValueError,
-        TypeError,
-        AttributeError,
-        SchemaOrgException,
-    ):
-        return None  # Unsupported if title cannot be scraped
-    try:
-        recipe.time = int(scraper.total_time())
-    except (
-        NotImplementedError,
-        ValueError,
-        TypeError,
-        AttributeError,
-        SchemaOrgException,
-    ):
-        pass
-    try:
-        recipe.cook_time = int(scraper.cook_time())
-    except (
-        NotImplementedError,
-        ValueError,
-        TypeError,
-        AttributeError,
-        SchemaOrgException,
-    ):
-        pass
-    try:
-        recipe.prep_time = int(scraper.prep_time())
-    except (
-        NotImplementedError,
-        ValueError,
-        TypeError,
-        AttributeError,
-        SchemaOrgException,
-    ):
-        pass
-    try:
-        yields = re.search(r"\d*", scraper.yields())
-        if yields:
-            recipe.yields = int(yields.group())
-    except (
-        NotImplementedError,
-        ValueError,
-        TypeError,
-        AttributeError,
-        SchemaOrgException,
-    ):
-        pass
-    description = ""
-    try:
-        description = scraper.description() + "\n\n"
-    except (
-        NotImplementedError,
-        ValueError,
-        TypeError,
-        AttributeError,
-        SchemaOrgException,
-    ):
-        pass
-    try:
-        description = description + scraper.instructions()
-    except (
-        NotImplementedError,
-        ValueError,
-        TypeError,
-        AttributeError,
-        SchemaOrgException,
-    ):
-        pass
-    recipe.description = description
-    recipe.photo = scraper.image()
-    recipe.source = url
-    items = {}
-    for ingredient in parseIngredients(scraper.ingredients(), household.language):
-        name = ingredient.name if ingredient.name else ingredient.originalText or ""
-        item = Item.find_name_starts_with(household.id, name)
-        if item:
-            items[ingredient.originalText] = item.obj_to_dict() | {
-                "description": ingredient.description,
-                "optional": False,
-            }
-        else:
-            items[ingredient.originalText] = None
-    return {
-        "recipe": recipe.obj_to_dict(),
-        "items": items,
-    }
+def scrapePublic(url: str, html: str, household: Household) -> dict | None:
+    res = scrapeHTML(url, html, household)
+    if not res:
+        res = scrapeHTMLLLM(url, html, household)
+    return res
 
 
 def scrapeLocal(recipe_id: int, household: Household):

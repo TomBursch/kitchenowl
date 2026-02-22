@@ -42,10 +42,17 @@ class GetRecentItems(Schema):
 
 
 class UpdateDescription(Schema):
+    class Meta:
+        unknown = EXCLUDE
+
     description = fields.String(required=True)
+    client_timestamp = fields.Integer()
 
 
 class RemoveItem(Schema):
+    class Meta:
+        unknown = EXCLUDE
+
     item_id = fields.Integer(
         required=True,
     )

@@ -25,6 +25,7 @@ from .schemas import (
 from app.errors import NotFoundRequest, InvalidUsage
 from datetime import datetime, timedelta, timezone
 import app.util.description_merger as description_merger
+import app.util.transaction_resolver as resolver
 from app import socketio
 
 
@@ -128,20 +129,48 @@ def deleteShoppinglist(id):
 @validate_args(UpdateDescription)
 def updateItemDescription(args, id: int, item_id: int):
     con = ShoppinglistItems.find_by_ids(id, item_id)
-    if not con:
-        shoppinglist = Shoppinglist.find_by_id(id)
-        item = Item.find_by_id(item_id)
-        if not item or not shoppinglist:
-            raise NotFoundRequest()
-        if shoppinglist.household_id != item.household_id:
-            raise InvalidUsage()
+    client_timestamp = args.get("client_timestamp")
+
+    shoppinglist_obj = Shoppinglist.find_by_id(id)
+    item = Item.find_by_id(item_id)
+    if not item or not shoppinglist_obj:
+        raise NotFoundRequest()
+    if shoppinglist_obj.household_id != item.household_id:
+        raise InvalidUsage()
+    shoppinglist_obj.checkAuthorized()
+
+    # Look up History DROPPED record for the resolver (needed when item is not on list)
+    most_recent_dropped = None
+    if con is None:
+        most_recent_dropped = History.find_most_recent_dropped(id, item_id)
+
+    result = resolver.resolve_update_description(
+        con, client_timestamp, most_recent_dropped
+    )
+
+    if result.resolution == resolver.Resolution.REJECT:
+        # Operation is stale — return success to the client (don't retry) but do nothing
+        return jsonify({"msg": "CONFLICT_REJECTED", "reason": result.reason})
+
+    if result.resolution == resolver.Resolution.NOOP:
+        # Item not on list and no History to update
+        return jsonify({"msg": "NOOP", "reason": result.reason})
+
+    if result.resolution == resolver.Resolution.UPDATE_HISTORY:
+        # Item was removed — update the History DROPPED record's description
+        most_recent_dropped.description = args["description"] or ""
+        most_recent_dropped.save()
+        return jsonify({"msg": "HISTORY_UPDATED", "reason": result.reason})
+
+    # Resolution.ACCEPT — proceed with the update (or create if not on list)
+    if con is None:
         con = ShoppinglistItems()
-        con.shoppinglist = shoppinglist
+        con.shoppinglist = shoppinglist_obj
         con.item = item
         con.created_by = current_user.id
-    con.shoppinglist.checkAuthorized()
 
     con.description = args["description"] or ""
+    resolver.set_updated_at(con, client_timestamp)
     con.save()
     socketio.emit(
         "shoppinglist_item:add",
@@ -378,14 +407,18 @@ def removeShoppinglistItemFunc(
     if not item:
         return None
     con = ShoppinglistItems.find_by_ids(shoppinglist.id, item.id)
-    if not con:
+
+    # Use the transaction resolver to check if this remove should proceed
+    result = resolver.resolve_remove(con, removed_at)
+    if result.resolution != resolver.Resolution.ACCEPT:
         return None
+
     description = con.description
     con.delete()
 
     removed_at_datetime = None
     if removed_at:
-        removed_at_datetime = datetime.fromtimestamp(removed_at / 1000, timezone.utc)
+        removed_at_datetime = resolver.epoch_ms_to_datetime(removed_at)
 
     History.create_dropped(shoppinglist, item, description, removed_at_datetime)
     return con

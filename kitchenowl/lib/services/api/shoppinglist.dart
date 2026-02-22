@@ -59,11 +59,15 @@ extension ShoppinglistApi on ApiService {
 
   Future<bool> putItem(
     ShoppingList shoppinglist,
-    Item item,
-  ) async {
+    Item item, [
+    DateTime? timestamp,
+  ]) async {
     final Map<String, dynamic> data = {};
     if (item is ItemWithDescription) {
       data['description'] = item.description;
+    }
+    if (timestamp != null) {
+      data['client_timestamp'] = timestamp.toUtc().millisecondsSinceEpoch;
     }
     final res = await put(
       '${route(shoppinglist: shoppinglist)}/item/${item.id}',

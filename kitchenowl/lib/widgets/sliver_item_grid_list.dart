@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/cubits/household_cubit.dart';
+import 'package:kitchenowl/cubits/shoppinglist_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/helpers/build_context_extension.dart';
 import 'package:kitchenowl/kitchenowl.dart';
@@ -101,6 +102,13 @@ class SliverItemGridList<T extends Item> extends StatelessWidget {
         if (householdCubit != null)
           page = BlocProvider.value(
             value: householdCubit,
+            child: page,
+          );
+
+        final shoppinglistCubit = context.readOrNull<ShoppinglistCubit>();
+        if (shoppinglistCubit != null)
+          page = BlocProvider.value(
+            value: shoppinglistCubit,
             child: page,
           );
 

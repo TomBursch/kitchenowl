@@ -90,6 +90,37 @@ class ItemEditCubit<T extends Item> extends Cubit<ItemEditState> {
     }
   }
 
+  Future<void> moveItem(ShoppingList targetList) async {
+    if (shoppingList == null || household == null) return;
+    if (shoppingList!.id == targetList.id) return;
+
+    await TransactionHandler.getInstance().runTransaction(
+      TransactionShoppingListAddItem(
+        household: household!,
+        shoppinglist: targetList,
+        item: item,
+      ),
+    );
+
+    if (_item is ShoppinglistItem) {
+      await TransactionHandler.getInstance().runTransaction(
+        TransactionShoppingListRemoveItem(
+          household: household!,
+          shoppinglist: shoppingList!,
+          item: _item as ShoppinglistItem,
+        ),
+      );
+    } else {
+      await TransactionHandler.getInstance().runTransaction(
+        TransactionShoppingListRemoveItem(
+          household: household!,
+          shoppinglist: targetList,
+          item: ShoppinglistItem.fromItem(item: item),
+        ),
+      );
+    }
+  }
+
   Future<bool> deleteItem() async {
     if (_item.id != null) {
       return ApiService.getInstance().deleteItem(_item);

@@ -2,9 +2,9 @@ from unittest.mock import patch
 
 
 def _rpc(client, method, params=None, id_=1):
-    payload = {jsonrpc: 2.0, id: id_, method: method}
+    payload = {"jsonrpc": "2.0", "id": id_, "method": method}
     if params is not None:
-        payload[params] = params
+        payload["params"] = params
     return client.post('/mcp', json=payload)
 
 

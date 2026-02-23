@@ -25,6 +25,7 @@ from app.models import (
     Tag,
 )
 from app.models.recipe import RecipeVisibility
+from app.service.recipe_scraping import scrape
 
 mcp = Blueprint("mcp", __name__)
 
@@ -511,6 +512,21 @@ def _tool_list_planner(args: dict[str, Any]) -> Any:
     return {"items": [p.obj_to_full_dict() for p in plans]}
 
 
+def _tool_scrape_recipe(args: dict[str, Any]) -> Any:
+    household_id = int(args["household_id"])
+    url = str(args["url"]).strip()
+    _require_household_access(household_id)
+
+    household = current_user.get_household(household_id)
+    if not household:
+        raise NotFoundRequest()
+
+    res = scrape(url, household)
+    if not res:
+        raise ValueError("Unsupported website")
+    return res
+
+
 TOOLS: dict[str, tuple[dict[str, Any], Callable[[dict[str, Any]], Any]]] = {
     "list_households": (
         {"type": "object", "properties": {}},
@@ -806,6 +822,17 @@ TOOLS: dict[str, tuple[dict[str, Any], Callable[[dict[str, Any]], Any]]] = {
             "required": ["household_id", "recipe_id", "cooking_date"],
         },
         _tool_remove_planner_entry,
+    ),
+    scrape_recipe: (
+        {
+            type: object,
+            properties: {
+                household_id: {type: integer},
+                url: {type: string},
+            },
+            required: [household_id, url],
+        },
+        _tool_scrape_recipe,
     ),
 }
 

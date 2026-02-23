@@ -24,7 +24,7 @@ def update_names(saveToTemplate: bool = False, consensus_count: int = 2):
         default_items[lang] = {"items": {}}
         if os.path.exists(BASE_PATH + "/templates/l10n/" + lang + ".json"):
             with open(
-                BASE_PATH + "/templates/l10n/" + lang + ".json", "r", encoding="utf8"
+                BASE_PATH + "/templates/l10n/" + lang + ".json", "r", encoding="utf-8"
             ) as f:
                 default_items[lang] = json.loads(f.read())
 
@@ -79,15 +79,15 @@ def update_names(saveToTemplate: bool = False, consensus_count: int = 2):
 
     folder = BASE_PATH + "/templates/l10n/" if saveToTemplate else (EXPORT_FOLDER + "/")
     for key, content in default_items.items():
-        with open(folder + key + ".json", "w", encoding="utf8") as f:
+        with open(folder + key + ".json", "w", encoding="utf-8") as f:
             f.write(json.dumps(content, ensure_ascii=False, indent=2, sort_keys=True))
 
 
 def update_attributes(saveToTemplate: bool = False):
     # read files
-    with open(BASE_PATH + "/templates/l10n/en.json", encoding="utf8") as f:
+    with open(BASE_PATH + "/templates/l10n/en.json", encoding="utf-8") as f:
         en: dict = json.load(f)
-    with open(BASE_PATH + "/templates/attributes.json", encoding="utf8") as f:
+    with open(BASE_PATH + "/templates/attributes.json", encoding="utf-8") as f:
         attr: dict = json.load(f)
 
     unkownKeys = []
@@ -135,10 +135,10 @@ def update_attributes(saveToTemplate: bool = False):
 
     jsonContent = json.dumps(attr, ensure_ascii=False, indent=2, sort_keys=True)
     if saveToTemplate:
-        with open(BASE_PATH + "/templates/attributes.json", "w", encoding="utf8") as f:
+        with open(BASE_PATH + "/templates/attributes.json", "w", encoding="utf-8") as f:
             f.write(jsonContent)
     else:
-        with open(EXPORT_FOLDER + "/attributes.json", "w", encoding="utf8") as f:
+        with open(EXPORT_FOLDER + "/attributes.json", "w", encoding="utf-8") as f:
             f.write(jsonContent)
 
 

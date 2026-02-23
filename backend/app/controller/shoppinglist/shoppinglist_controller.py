@@ -163,6 +163,7 @@ def updateItemDescription(args, id: int, item_id: int):
         return jsonify({"msg": "HISTORY_UPDATED", "reason": result.reason})
 
     # Resolution.ACCEPT — proceed with the update (or create if not on list)
+    created = con is None
     if con is None:
         con = ShoppinglistItems()
         con.shoppinglist = shoppinglist_obj
@@ -172,6 +173,10 @@ def updateItemDescription(args, id: int, item_id: int):
     con.description = args["description"] or ""
     resolver.set_updated_at(con, client_timestamp)
     con.save()
+
+    if created:
+        History.create_added(shoppinglist_obj, item, con.description)
+
     socketio.emit(
         "shoppinglist_item:add",
         {

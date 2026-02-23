@@ -6,9 +6,9 @@ Covers all cases from the resolution table:
   Update: ACCEPT (legacy), ACCEPT (ts > updated_at), REJECT (ts <= updated_at),
           NOOP (item gone, no history), UPDATE_HISTORY (item gone, history exists)
   Add:    Idempotent (already on list), always succeeds (not on list)
+  Validation: zero, negative, and far-future timestamps are rejected by schema
 """
 
-import time
 from datetime import datetime, timedelta, timezone
 
 import pytest
@@ -26,6 +26,16 @@ def _epoch_ms(dt: datetime) -> int:
 
 def _now_ms() -> int:
     return _epoch_ms(datetime.now(timezone.utc))
+
+
+def _future_ms(seconds: int = 60) -> int:
+    """Return an epoch-ms timestamp ``seconds`` in the future (within validation window)."""
+    return _epoch_ms(datetime.now(timezone.utc) + timedelta(seconds=seconds))
+
+
+def _past_ms(seconds: int = 3600) -> int:
+    """Return an epoch-ms timestamp ``seconds`` in the past."""
+    return _epoch_ms(datetime.now(timezone.utc) - timedelta(seconds=seconds))
 
 
 def _add_item_to_list(client, shoppinglist_id, item_name="conflict_item"):
@@ -99,8 +109,8 @@ class TestRemoveConflictResolution:
             user_client_with_household, shoppinglist_id, "fresh_remove"
         )
 
-        # Use a timestamp well in the future so it's guaranteed > updated_at
-        future_ts = _epoch_ms(datetime.now(timezone.utc) + timedelta(hours=1))
+        # Use a timestamp slightly in the future (within the 5-min validation window)
+        future_ts = _future_ms(60)
         resp = user_client_with_household.delete(
             f"/api/shoppinglist/{shoppinglist_id}/item",
             json={"item_id": item_id, "removed_at": future_ts},
@@ -119,7 +129,7 @@ class TestRemoveConflictResolution:
         )
 
         # First, update the item's description with a fresh timestamp to bump updated_at
-        fresh_ts = _epoch_ms(datetime.now(timezone.utc) + timedelta(hours=1))
+        fresh_ts = _future_ms(120)
         resp = user_client_with_household.put(
             f"/api/shoppinglist/{shoppinglist_id}/item/{item_id}",
             json={
@@ -130,7 +140,7 @@ class TestRemoveConflictResolution:
         assert resp.status_code == 200
 
         # Now try to remove with a stale timestamp (before the update)
-        stale_ts = _epoch_ms(datetime.now(timezone.utc) - timedelta(hours=1))
+        stale_ts = _past_ms(3600)
         resp = user_client_with_household.delete(
             f"/api/shoppinglist/{shoppinglist_id}/item",
             json={"item_id": item_id, "removed_at": stale_ts},
@@ -172,7 +182,7 @@ class TestUpdateDescriptionConflictResolution:
         item_id = _add_item_to_list(
             user_client_with_household, shoppinglist_id, "fresh_update"
         )
-        future_ts = _epoch_ms(datetime.now(timezone.utc) + timedelta(hours=1))
+        future_ts = _future_ms(60)
         resp = user_client_with_household.put(
             f"/api/shoppinglist/{shoppinglist_id}/item/{item_id}",
             json={"description": "fresh update", "client_timestamp": future_ts},
@@ -190,7 +200,7 @@ class TestUpdateDescriptionConflictResolution:
         )
 
         # First update with a fresh timestamp to bump updated_at
-        fresh_ts = _epoch_ms(datetime.now(timezone.utc) + timedelta(hours=1))
+        fresh_ts = _future_ms(120)
         resp = user_client_with_household.put(
             f"/api/shoppinglist/{shoppinglist_id}/item/{item_id}",
             json={"description": "first update", "client_timestamp": fresh_ts},
@@ -198,7 +208,7 @@ class TestUpdateDescriptionConflictResolution:
         assert resp.status_code == 200
 
         # Now try to update with a stale timestamp
-        stale_ts = _epoch_ms(datetime.now(timezone.utc) - timedelta(hours=1))
+        stale_ts = _past_ms(3600)
         resp = user_client_with_household.put(
             f"/api/shoppinglist/{shoppinglist_id}/item/{item_id}",
             json={"description": "stale update", "client_timestamp": stale_ts},
@@ -255,7 +265,7 @@ class TestUpdateDescriptionConflictResolution:
         assert resp.status_code == 200
 
         # Update with a timestamp in the future (> History DROPPED created_at)
-        future_ts = _epoch_ms(datetime.now(timezone.utc) + timedelta(hours=1))
+        future_ts = _future_ms(60)
         resp = user_client_with_household.put(
             f"/api/shoppinglist/{shoppinglist_id}/item/{item_id}",
             json={"description": "updated in history", "client_timestamp": future_ts},
@@ -279,16 +289,15 @@ class TestUpdateDescriptionConflictResolution:
             user_client_with_household, shoppinglist_id, "noop_history_item"
         )
 
-        # Remove the item with a far-future timestamp so History's created_at is in the future
-        far_future = _epoch_ms(datetime.now(timezone.utc) + timedelta(days=10))
+        # Remove the item (legacy — no removed_at). History created_at ~ server now.
         resp = user_client_with_household.delete(
             f"/api/shoppinglist/{shoppinglist_id}/item",
-            json={"item_id": item_id, "removed_at": far_future},
+            json={"item_id": item_id},
         )
         assert resp.status_code == 200
 
-        # Try to update with a timestamp that's still in the past relative to the removal
-        past_ts = _epoch_ms(datetime.now(timezone.utc) - timedelta(hours=1))
+        # Try to update with a timestamp in the past (before the removal)
+        past_ts = _past_ms(3600)
         resp = user_client_with_household.put(
             f"/api/shoppinglist/{shoppinglist_id}/item/{item_id}",
             json={"description": "should be ignored", "client_timestamp": past_ts},
@@ -376,6 +385,22 @@ class TestBackwardsCompatibility:
         )
         assert resp.status_code == 200
 
+    def test_bulk_remove_with_unknown_fields_excluded(
+        self, user_client_with_household, shoppinglist_id
+    ):
+        """RemoveItems (bulk) schema should silently drop unknown fields."""
+        item_id = _add_item_to_list(
+            user_client_with_household, shoppinglist_id, "bulk_exclude"
+        )
+        resp = user_client_with_household.delete(
+            f"/api/shoppinglist/{shoppinglist_id}/items",
+            json={
+                "items": [{"item_id": item_id, "unknown_field": 42}],
+                "top_level_unknown": True,
+            },
+        )
+        assert resp.status_code == 200
+
 
 # ===========================================================================
 # Ordering correctness
@@ -400,8 +425,8 @@ class TestTimestampOrdering:
             user_client_with_household, shoppinglist_id, "ordering_item"
         )
 
-        # Update with a timestamp far in the future
-        far_future = _epoch_ms(datetime.now(timezone.utc) + timedelta(days=5))
+        # Update with a timestamp at the edge of the validation window
+        far_future = _future_ms(240)
         resp = user_client_with_household.put(
             f"/api/shoppinglist/{shoppinglist_id}/item/{item_id}",
             json={"description": "future update", "client_timestamp": far_future},
@@ -409,7 +434,7 @@ class TestTimestampOrdering:
         assert resp.status_code == 200
 
         # Try to update with a timestamp that's AFTER now but BEFORE far_future
-        slightly_less = _epoch_ms(datetime.now(timezone.utc) + timedelta(days=3))
+        slightly_less = _future_ms(60)
         resp = user_client_with_household.put(
             f"/api/shoppinglist/{shoppinglist_id}/item/{item_id}",
             json={
@@ -437,8 +462,8 @@ class TestTimestampOrdering:
             user_client_with_household, shoppinglist_id, "remove_order_item"
         )
 
-        # Update with far-future timestamp
-        far_future = _epoch_ms(datetime.now(timezone.utc) + timedelta(days=5))
+        # Update with future timestamp
+        far_future = _future_ms(240)
         resp = user_client_with_household.put(
             f"/api/shoppinglist/{shoppinglist_id}/item/{item_id}",
             json={"description": "pinned", "client_timestamp": far_future},
@@ -446,7 +471,7 @@ class TestTimestampOrdering:
         assert resp.status_code == 200
 
         # Remove with a timestamp between now and far_future
-        mid_ts = _epoch_ms(datetime.now(timezone.utc) + timedelta(days=2))
+        mid_ts = _future_ms(60)
         resp = user_client_with_household.delete(
             f"/api/shoppinglist/{shoppinglist_id}/item",
             json={"item_id": item_id, "removed_at": mid_ts},
@@ -456,3 +481,108 @@ class TestTimestampOrdering:
         # Item should still be on the list
         items = _get_items(user_client_with_household, shoppinglist_id)
         assert any(i["id"] == item_id for i in items)
+
+
+# ===========================================================================
+# Timestamp validation (schema-level)
+# ===========================================================================
+
+
+class TestTimestampValidation:
+    """Tests that the schema rejects invalid timestamp values."""
+
+    def test_update_rejects_zero_timestamp(
+        self, user_client_with_household, shoppinglist_id
+    ):
+        """client_timestamp=0 should be rejected by schema validation."""
+        item_id = _add_item_to_list(
+            user_client_with_household, shoppinglist_id, "val_zero"
+        )
+        resp = user_client_with_household.put(
+            f"/api/shoppinglist/{shoppinglist_id}/item/{item_id}",
+            json={"description": "test", "client_timestamp": 0},
+        )
+        assert resp.status_code == 400
+
+    def test_update_rejects_negative_timestamp(
+        self, user_client_with_household, shoppinglist_id
+    ):
+        """Negative client_timestamp should be rejected by schema validation."""
+        item_id = _add_item_to_list(
+            user_client_with_household, shoppinglist_id, "val_negative"
+        )
+        resp = user_client_with_household.put(
+            f"/api/shoppinglist/{shoppinglist_id}/item/{item_id}",
+            json={"description": "test", "client_timestamp": -1000},
+        )
+        assert resp.status_code == 400
+
+    def test_update_rejects_far_future_timestamp(
+        self, user_client_with_household, shoppinglist_id
+    ):
+        """client_timestamp far in the future (>5 min) should be rejected."""
+        item_id = _add_item_to_list(
+            user_client_with_household, shoppinglist_id, "val_future"
+        )
+        far_future = _epoch_ms(datetime.now(timezone.utc) + timedelta(hours=1))
+        resp = user_client_with_household.put(
+            f"/api/shoppinglist/{shoppinglist_id}/item/{item_id}",
+            json={"description": "test", "client_timestamp": far_future},
+        )
+        assert resp.status_code == 400
+
+    def test_remove_rejects_zero_timestamp(
+        self, user_client_with_household, shoppinglist_id
+    ):
+        """removed_at=0 should be rejected by schema validation."""
+        item_id = _add_item_to_list(
+            user_client_with_household, shoppinglist_id, "rm_val_zero"
+        )
+        resp = user_client_with_household.delete(
+            f"/api/shoppinglist/{shoppinglist_id}/item",
+            json={"item_id": item_id, "removed_at": 0},
+        )
+        assert resp.status_code == 400
+
+    def test_remove_rejects_negative_timestamp(
+        self, user_client_with_household, shoppinglist_id
+    ):
+        """Negative removed_at should be rejected by schema validation."""
+        item_id = _add_item_to_list(
+            user_client_with_household, shoppinglist_id, "rm_val_neg"
+        )
+        resp = user_client_with_household.delete(
+            f"/api/shoppinglist/{shoppinglist_id}/item",
+            json={"item_id": item_id, "removed_at": -999},
+        )
+        assert resp.status_code == 400
+
+    def test_remove_rejects_far_future_timestamp(
+        self, user_client_with_household, shoppinglist_id
+    ):
+        """removed_at far in the future (>5 min) should be rejected."""
+        item_id = _add_item_to_list(
+            user_client_with_household, shoppinglist_id, "rm_val_future"
+        )
+        far_future = _epoch_ms(datetime.now(timezone.utc) + timedelta(hours=1))
+        resp = user_client_with_household.delete(
+            f"/api/shoppinglist/{shoppinglist_id}/item",
+            json={"item_id": item_id, "removed_at": far_future},
+        )
+        assert resp.status_code == 400
+
+    def test_valid_timestamp_within_window_accepted(
+        self, user_client_with_household, shoppinglist_id
+    ):
+        """A timestamp within the 5-minute window should be accepted."""
+        item_id = _add_item_to_list(
+            user_client_with_household, shoppinglist_id, "val_ok"
+        )
+        valid_ts = _future_ms(60)
+        resp = user_client_with_household.put(
+            f"/api/shoppinglist/{shoppinglist_id}/item/{item_id}",
+            json={"description": "valid", "client_timestamp": valid_ts},
+        )
+        assert resp.status_code == 200
+        data = resp.get_json()
+        assert data.get("description") == "valid"

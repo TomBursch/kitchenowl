@@ -825,12 +825,12 @@ TOOLS: dict[str, tuple[dict[str, Any], Callable[[dict[str, Any]], Any]]] = {
     ),
     "scrape_recipe": (
         {
-            type: object,
-            properties: {
-                household_id: {type: integer},
-                url: {type: string},
+            "type": "object",
+            "properties": {
+                "household_id": {"type": "integer"},
+                "url": {"type": "string"},
             },
-            required: [household_id, url],
+            "required": ["household_id", "url"],
         },
         _tool_scrape_recipe,
     ),

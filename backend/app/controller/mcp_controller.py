@@ -823,7 +823,7 @@ TOOLS: dict[str, tuple[dict[str, Any], Callable[[dict[str, Any]], Any]]] = {
         },
         _tool_remove_planner_entry,
     ),
-    scrape_recipe: (
+    "scrape_recipe": (
         {
             type: object,
             properties: {

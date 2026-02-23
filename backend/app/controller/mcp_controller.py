@@ -13,6 +13,7 @@ from app import db
 from app.errors import NotFoundRequest
 from app.models import (
     History,
+    Household,
     HouseholdMember,
     Item,
     Recipe,
@@ -517,7 +518,7 @@ def _tool_scrape_recipe(args: dict[str, Any]) -> Any:
     url = str(args["url"]).strip()
     _require_household_access(household_id)
 
-    household = current_user.get_household(household_id)
+    household = Household.find_by_id(household_id)
     if not household:
         raise NotFoundRequest()
 

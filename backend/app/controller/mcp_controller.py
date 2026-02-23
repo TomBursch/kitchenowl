@@ -1,9 +1,12 @@
 from __future__ import annotations
 
 import json
+import time
+import uuid
+from datetime import datetime
 from typing import Any, Callable
 
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, Response, jsonify, request, stream_with_context
 from flask_jwt_extended import current_user, jwt_required
 
 from app import db
@@ -13,11 +16,15 @@ from app.models import (
     HouseholdMember,
     Item,
     Recipe,
+    RecipeItems,
+    RecipeTags,
     Shoppinglist,
     ShoppinglistItems,
     Expense,
     Planner,
+    Tag,
 )
+from app.models.recipe import RecipeVisibility
 
 mcp = Blueprint("mcp", __name__)
 
@@ -46,13 +53,13 @@ def _require_household_access(household_id: int):
 
 def _tool_list_households(_args: dict[str, Any]) -> Any:
     members = HouseholdMember.find_by_user(current_user.id)
-    return [m.household.obj_to_dict() for m in members]
+    return {"items": [m.household.obj_to_dict() for m in members]}
 
 
 def _tool_list_shoppinglists(args: dict[str, Any]) -> Any:
     household_id = int(args["household_id"])
     _require_household_access(household_id)
-    return [e.obj_to_dict() for e in Shoppinglist.all_from_household(household_id)]
+    return {"items": [e.obj_to_dict() for e in Shoppinglist.all_from_household(household_id)]}
 
 
 def _tool_list_shoppinglist_items(args: dict[str, Any]) -> Any:
@@ -66,7 +73,7 @@ def _tool_list_shoppinglist_items(args: dict[str, Any]) -> Any:
         .join(ShoppinglistItems.item)
         .all()
     )
-    return [e.obj_to_item_dict() for e in items]
+    return {"items": [e.obj_to_item_dict() for e in items]}
 
 
 def _tool_add_item_by_name(args: dict[str, Any]) -> Any:
@@ -99,7 +106,7 @@ def _tool_list_recipes(args: dict[str, Any]) -> Any:
     household_id = int(args["household_id"])
     _require_household_access(household_id)
     recipes = Recipe.query.filter(Recipe.household_id == household_id).order_by(Recipe.name).all()
-    return [r.obj_to_full_dict() for r in recipes]
+    return {"items": [r.obj_to_full_dict() for r in recipes]}
 
 
 def _tool_search_recipes(args: dict[str, Any]) -> Any:

@@ -91,6 +91,10 @@ class _PlannerPageState extends State<PlannerPage> {
     final cubit = BlocProvider.of<PlannerCubit>(context);
     final household = BlocProvider.of<HouseholdCubit>(context).state.household;
 
+    bool _isPastDate(DateTime cookingDate) {
+      return cookingDate.isBefore(DateTime.now().subtract(Duration(days: 1)));
+    }
+
     return SafeArea(
       child: Scrollbar(
         child: RefreshIndicator(
@@ -176,12 +180,68 @@ class _PlannerPageState extends State<PlannerPage> {
                   SliverPadding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     sliver: SliverLayoutBuilder(
-                      builder: (context, constraints) => SliverToBoxAdapter(
-                        child: Wrap(
-                          crossAxisAlignment: WrapCrossAlignment.end,
-                          alignment: WrapAlignment.start,
-                          children: [
-                            for (final plan in state.getPlannedWithoutDay())
+                      builder: (context, constraints) {
+                        final children = <Widget>[];
+
+                        for (final plan in state.getPlannedWithoutDay()) {
+                          children.add(
+                            KitchenOwlFractionallySizedBox(
+                              widthFactor: (1 /
+                                  DynamicStyling.itemCrossAxisCount(
+                                    constraints.crossAxisExtent,
+                                    context
+                                        .read<SettingsCubit>()
+                                        .state
+                                        .gridSize,
+                                  )),
+                              child: AspectRatio(
+                                aspectRatio: 1,
+                                child: SelectableButtonCard(
+                                  key: ValueKey(plan.recipe.id),
+                                  title: plan.recipe.name,
+                                  selected: true,
+                                  description: plan.yields?.toString(),
+                                  onPressed: () {
+                                    cubit.remove(plan.recipe);
+                                  },
+                                  onLongPressed: () => _openRecipePage(
+                                    context,
+                                    cubit,
+                                    plan.recipe,
+                                    plan.yields,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
+                        }
+
+                        DateTime? _previousCookingDate;
+                        for (final cookingDate
+                            in state.getUniqueCookingDays()) {
+                          if (_previousCookingDate != null) {
+                            if (daysBetween(_previousCookingDate, cookingDate) >
+                                1) {
+                              children.add(Container(
+                                width: 3.0,
+                                height: constraints.crossAxisExtent /
+                                    DynamicStyling.itemCrossAxisCount(
+                                      constraints.crossAxisExtent,
+                                      context
+                                          .read<SettingsCubit>()
+                                          .state
+                                          .gridSize,
+                                    ),
+                                color: Theme.of(context)
+                                    .dividerColor
+                                    .withOpacity(0.3),
+                              ));
+                            }
+                          }
+                          _previousCookingDate = cookingDate;
+                          for (final plan
+                              in state.getPlannedOfDate(cookingDate)) {
+                            children.add(
                               KitchenOwlFractionallySizedBox(
                                 widthFactor: (1 /
                                     DynamicStyling.itemCrossAxisCount(
@@ -191,58 +251,28 @@ class _PlannerPageState extends State<PlannerPage> {
                                           .state
                                           .gridSize,
                                     )),
-                                child: AspectRatio(
-                                  aspectRatio: 1,
-                                  child: SelectableButtonCard(
-                                    key: ValueKey(plan.recipe.id),
-                                    title: plan.recipe.name,
-                                    selected: true,
-                                    description: plan.yields?.toString(),
-                                    onPressed: () {
-                                      cubit.remove(plan.recipe);
-                                    },
-                                    onLongPressed: () => _openRecipePage(
-                                      context,
-                                      cubit,
-                                      plan.recipe,
-                                      plan.yields,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            for (final cookingDate
-                                in state.getUniqueCookingDays())
-                              for (final plan
-                                  in state.getPlannedOfDate(cookingDate))
-                                KitchenOwlFractionallySizedBox(
-                                  widthFactor: (1 /
-                                      DynamicStyling.itemCrossAxisCount(
-                                        constraints.crossAxisExtent,
-                                        context
-                                            .read<SettingsCubit>()
-                                            .state
-                                            .gridSize,
-                                      )),
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.stretch,
-                                    children: [
-                                      if (plan ==
-                                          state
-                                              .getPlannedOfDate(cookingDate)[0])
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(top: 5),
-                                          child: Text(
-                                            '${_formatDate(context, daysBetween(DateTime.now(), cookingDate))}',
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodyLarge,
-                                          ),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
+                                  children: [
+                                    if (plan ==
+                                        state.getPlannedOfDate(cookingDate)[0])
+                                      Padding(
+                                        padding: const EdgeInsets.only(top: 5),
+                                        child: Text(
+                                          '${_formatDate(context, daysBetween(DateTime.now(), cookingDate))}',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyLarge,
                                         ),
-                                      AspectRatio(
-                                        aspectRatio: 1,
+                                      ),
+                                    AspectRatio(
+                                      aspectRatio: 1,
+                                      child: Opacity(
+                                        opacity: _isPastDate(cookingDate)
+                                            ? 0.5
+                                            : 1.0,
                                         child: SelectableButtonCard(
                                           key: ValueKey(
                                             plan.recipe.id,
@@ -264,12 +294,21 @@ class _PlannerPageState extends State<PlannerPage> {
                                           ),
                                         ),
                                       ),
-                                    ],
-                                  ),
+                                    ),
+                                  ],
                                 ),
-                          ],
-                        ),
-                      ),
+                              ),
+                            );
+                          }
+                        }
+                        return SliverToBoxAdapter(
+                          child: Wrap(
+                            crossAxisAlignment: WrapCrossAlignment.end,
+                            alignment: WrapAlignment.start,
+                            children: children,
+                          ),
+                        );
+                      },
                     ),
                   ),
                   if (state.recentRecipes.isNotEmpty)

@@ -46,6 +46,7 @@ apiv1.register_blueprint(api.analytics, url_prefix="/analytics")
 apiv1.register_blueprint(api.reportBlueprint, url_prefix="/report")
 
 app.register_blueprint(apiv1, url_prefix="/api")
+app.register_blueprint(api.mcp, url_prefix="/mcp")
 
 
 with app.test_request_context():

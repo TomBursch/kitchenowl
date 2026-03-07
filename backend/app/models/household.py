@@ -15,6 +15,7 @@ if TYPE_CHECKING:
         ExpenseCategory,
         User,
         File,
+        LoyaltyCard,
     )
     from app.helpers.db_model_base import DbModelBase
 
@@ -32,6 +33,9 @@ class Household(Model):
         db.Boolean(), nullable=False, default=True
     )
     expenses_feature: Mapped[bool] = db.Column(
+        db.Boolean(), nullable=False, default=True
+    )
+    loyalty_cards_feature: Mapped[bool] = db.Column(
         db.Boolean(), nullable=False, default=True
     )
     description: Mapped[str | None] = db.Column(db.String())
@@ -93,6 +97,14 @@ class Household(Model):
         Mapped[List["ExpenseCategory"]],
         db.relationship(
             "ExpenseCategory",
+            back_populates="household",
+            cascade="all, delete-orphan",
+        ),
+    )
+    loyaltyCards: Mapped[List["LoyaltyCard"]] = cast(
+        Mapped[List["LoyaltyCard"]],
+        db.relationship(
+            "LoyaltyCard",
             back_populates="household",
             cascade="all, delete-orphan",
         ),

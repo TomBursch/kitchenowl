@@ -6,6 +6,7 @@ from app.service.importServices import (
     importRecipe,
     importExpense,
     importShoppinglist,
+    importLoyaltyCard,
 )
 from app.service.recalculate_balances import recalculateBalances
 from .schemas import ImportSchema
@@ -48,6 +49,10 @@ def importData(args, household_id):
     if "shoppinglists" in args:
         for shoppinglist in args["shoppinglists"]:
             importShoppinglist(household, shoppinglist)
+
+    if "loyalty_cards" in args:
+        for card in args["loyalty_cards"]:
+            importLoyaltyCard(household, card)
 
     app.logger.info(f"Import took: {(time.time() - t0):.3f}s")
     return jsonify({"msg": "DONE"})

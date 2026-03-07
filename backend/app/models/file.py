@@ -66,7 +66,6 @@ class File(Model, DbModelAuthorizeMixin):
             uselist=False,
         ),
     )
-
     def delete(self):
         """
         Delete this instance of model from db

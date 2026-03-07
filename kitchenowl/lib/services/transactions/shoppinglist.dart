@@ -344,6 +344,7 @@ class TransactionShoppingListUpdateItem extends Transaction<bool> {
     return ApiService.getInstance().putItem(
       shoppinglist,
       ItemWithDescription.fromItem(item: item, description: description),
+      timestamp,
     );
   }
 }

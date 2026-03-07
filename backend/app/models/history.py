@@ -98,6 +98,25 @@ class History(Model):
         return cls.query.filter(cls.shoppinglist_id == shoppinglist_id).all()
 
     @classmethod
+    def find_most_recent_dropped(
+        cls, shoppinglist_id: int, item_id: int
+    ) -> Self | None:
+        """
+        Find the most recent History record with status=DROPPED for a given
+        shoppinglist + item combination. Used by the transaction resolver to
+        update the description on a removed item's History record.
+        """
+        return (
+            cls.query.filter(
+                cls.shoppinglist_id == shoppinglist_id,
+                cls.item_id == item_id,
+                cls.status == Status.DROPPED,
+            )
+            .order_by(cls.created_at.desc())
+            .first()
+        )
+
+    @classmethod
     def find_all(cls) -> list[Self]:
         return cls.query.all()
 

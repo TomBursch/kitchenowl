@@ -1,4 +1,15 @@
-from marshmallow import fields, Schema, EXCLUDE
+from datetime import datetime, timezone
+
+from marshmallow import fields, Schema, EXCLUDE, ValidationError
+
+
+def _validate_epoch_ms(value: int) -> None:
+    """Reject timestamps that are non-positive or more than 5 minutes in the future."""
+    if value <= 0:
+        raise ValidationError("Timestamp must be a positive integer.")
+    max_ms = int(datetime.now(timezone.utc).timestamp() * 1000) + 300_000  # +5 min
+    if value > max_ms:
+        raise ValidationError("Timestamp is too far in the future.")
 
 
 class GetShoppingLists(Schema):
@@ -42,17 +53,27 @@ class GetRecentItems(Schema):
 
 
 class UpdateDescription(Schema):
+    class Meta:
+        unknown = EXCLUDE
+
     description = fields.String(required=True)
+    client_timestamp = fields.Integer(validate=_validate_epoch_ms)
 
 
 class RemoveItem(Schema):
+    class Meta:
+        unknown = EXCLUDE
+
     item_id = fields.Integer(
         required=True,
     )
-    removed_at = fields.Integer()
+    removed_at = fields.Integer(validate=_validate_epoch_ms)
 
 
 class RemoveItems(Schema):
+    class Meta:
+        unknown = EXCLUDE
+
     class RecipeItem(Schema):
         class Meta:
             unknown = EXCLUDE
@@ -60,6 +81,6 @@ class RemoveItems(Schema):
         item_id = fields.Integer(
             required=True,
         )
-        removed_at = fields.Integer()
+        removed_at = fields.Integer(validate=_validate_epoch_ms)
 
     items = fields.List(fields.Nested(RecipeItem))

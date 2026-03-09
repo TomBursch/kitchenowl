@@ -79,6 +79,15 @@ class _ImportSettingsDialogState extends State<_ImportSettingsDialog> {
               });
             },
           ),
+          CheckboxListTile(
+            title: Text(AppLocalizations.of(context)!.loyaltyCards),
+            value: settings.loyaltyCards,
+            onChanged: (value) {
+              setState(() {
+                settings = settings.copyWith(loyaltyCards: value);
+              });
+            },
+          ),
         ],
       ),
       shape: RoundedRectangleBorder(

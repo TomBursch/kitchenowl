@@ -7,8 +7,9 @@ import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/widgets/expense_create_fab.dart';
 import 'package:kitchenowl/widgets/recipe_create_fab.dart';
-import 'package:kitchenowl/widgets/shoppinglist_confirm_remove_fab.dart';
+import 'package:kitchenowl/widgets/shopping_list_fab.dart';
 
+// Note: loyaltyCards is not a navigation view - accessed via FAB on shopping list page
 enum ViewsEnum {
   items,
   recipes,
@@ -100,9 +101,7 @@ enum ViewsEnum {
             ? const ExpenseCreateFab()
             : null;
       case ViewsEnum.items:
-        return App.settings.shoppingListTapToRemove
-            ? null
-            : const ShoppingListConfirmRememoveFab();
+        return const ShoppingListFab();
       default:
         return null;
     }
@@ -143,6 +142,10 @@ enum ViewsEnum {
       default:
         return null;
     }
+  }
+
+  String toRouteName() {
+    return name;
   }
 
   @override

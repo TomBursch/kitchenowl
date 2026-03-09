@@ -254,6 +254,26 @@
   "@longPressToReorder": {},
   "@longerThanExpected": {},
   "@markAsPaid": {},
+  "@massImportButton": {},
+  "@massImportDescription": {},
+  "@massImportEnterText": {},
+  "@massImportError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "@massImportHint": {},
+  "@massImportNoValidItems": {},
+  "@massImportSuccess": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@massImportTitle": {},
   "@mealPlanner": {},
   "@member": {},
   "@memberAdd": {},
@@ -636,6 +656,14 @@
   "longPressToReorder": "Halte lang zum Umsortieren",
   "longerThanExpected": "Das dauert länger als erwartet",
   "markAsPaid": "Als gezahlt markieren",
+  "massImportButton": "Importiere Artikel",
+  "massImportDescription": "Gib Artikel einzeln pro Zeile ein.\nTrenne Name und Beschreibung mit '|', ';' oder ','",
+  "massImportEnterText": "Bitte gib etwas Text zum Importieren ein.",
+  "massImportError": "Fehler beim Importieren der Artikel: {error}",
+  "massImportHint": "Milch\nBrot | Für Sandwiches\nEier; 12er Packung",
+  "massImportNoValidItems": "Keine gültigen Artikel zum Importieren gefunden.",
+  "massImportSuccess": "Erfolgreich {count} Artikel importiert.",
+  "massImportTitle": "Massenimport",
   "mealPlanner": "Essensplaner",
   "member": "Mitglied",
   "memberAdd": "Mitglied hinzufügen",

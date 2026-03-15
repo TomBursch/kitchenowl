@@ -3,7 +3,7 @@ import pytest
 from unittest.mock import patch
 from datetime import datetime, timedelta, timezone
 
-os.environ.setdefault("KITCHENOWL_MCP_ENABLED", "true")
+os.environ["KITCHENOWL_MCP_ENABLED"] = "true"
 
 from app import app, db
 

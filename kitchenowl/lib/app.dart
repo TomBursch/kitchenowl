@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:background_fetch/background_fetch.dart';
 import 'package:device_info_plus/device_info_plus.dart';
-import 'package:dynamic_system_colors/dynamic_system_colors.dart';
+import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -56,12 +56,13 @@ class App extends StatefulWidget {
   State<App> createState() => _AppState();
 }
 
-class _AppState extends State<App> {
+class _AppState extends State<App> with WidgetsBindingObserver {
   StreamSubscription? _intentDataStreamSubscription;
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
 
     if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
       final handler = ShareHandlerPlatform.instance;
@@ -112,7 +113,18 @@ class _AppState extends State<App> {
   }
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.resumed) {
+      ApiService.getInstance().refresh().then((_) {
+        TransactionHandler.getInstance().runOpenTransactions();
+      });
+    }
+  }
+
+  @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _intentDataStreamSubscription?.cancel();
     super.dispose();
   }

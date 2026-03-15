@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:dynamic_system_colors/dynamic_system_colors.dart';
+import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -385,6 +385,25 @@ class _SettingsPageState extends State<SettingsPage> {
                               .setRecentItemsCategorize(value),
                     ),
                   ),
+                  if (!kIsWeb)
+                    ListTile(
+                      title: Text(
+                        AppLocalizations.of(context)!.shoppingListKeepAwake,
+                      ),
+                      leading: const Icon(Icons.visibility_rounded),
+                      onTap: () => BlocProvider.of<SettingsCubit>(context)
+                          .setShoppingListKeepAwake(
+                        !BlocProvider.of<SettingsCubit>(context)
+                            .state
+                            .shoppingListKeepAwake,
+                      ),
+                      trailing: KitchenOwlSwitch(
+                        value: state.shoppingListKeepAwake,
+                        onChanged: (value) =>
+                            BlocProvider.of<SettingsCubit>(context)
+                                .setShoppingListKeepAwake(value),
+                      ),
+                    ),
                   if (!kIsWeb)
                     ListTile(
                       title: Text(

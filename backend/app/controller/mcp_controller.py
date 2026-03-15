@@ -10,6 +10,7 @@ from flask import Blueprint, Response, jsonify, request, stream_with_context
 from flask_jwt_extended import current_user, jwt_required
 
 from app import db
+from app.config import BACKEND_VERSION
 from app.errors import NotFoundRequest
 from app.models import (
     History,
@@ -850,7 +851,7 @@ def _handle_jsonrpc(body: dict[str, Any]):
                 {
                     "protocolVersion": "2024-11-05",
                     "capabilities": {"tools": {}},
-                    "serverInfo": {"name": "kitchenowl-mcp", "version": "0.2.0"},
+                    "serverInfo": {"name": "kitchenowl-mcp", "version": str(BACKEND_VERSION)},
                 },
             )
 

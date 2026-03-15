@@ -48,7 +48,8 @@ apiv1.register_blueprint(api.reportBlueprint, url_prefix="/report")
 
 app.register_blueprint(apiv1, url_prefix="/api")
 
-if os.getenv("KITCHENOWL_MCP_ENABLED", "False").lower() == "true":
+mcp_enabled = os.getenv("KITCHENOWL_MCP_ENABLED", "False").lower() == "true"
+if mcp_enabled or app.config.get("TESTING", False):
     app.register_blueprint(api.mcp, url_prefix="/mcp")
 
 

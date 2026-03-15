@@ -1,3 +1,4 @@
+import os
 from flask import Blueprint
 from app.config import app, api_spec
 import app.controller as api
@@ -46,7 +47,9 @@ apiv1.register_blueprint(api.analytics, url_prefix="/analytics")
 apiv1.register_blueprint(api.reportBlueprint, url_prefix="/report")
 
 app.register_blueprint(apiv1, url_prefix="/api")
-app.register_blueprint(api.mcp, url_prefix="/mcp")
+
+if os.getenv("KITCHENOWL_MCP_ENABLED", "False").lower() == "true":
+    app.register_blueprint(api.mcp, url_prefix="/mcp")
 
 
 with app.test_request_context():

@@ -15,6 +15,12 @@ server {
         include uwsgi_params;
         uwsgi_pass ${BACK_URL};
     }
+    location /mcp {
+        include uwsgi_params;
+        proxy_buffering off;
+        uwsgi_buffering off;
+        uwsgi_pass ${BACK_URL};
+    }
     location /socket.io/ {
         include uwsgi_params;
         proxy_set_header Host $http_host;

@@ -14,9 +14,11 @@ import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/styles/color_mapper.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:sliver_tools/sliver_tools.dart';
+import 'package:kitchenowl/pages/splash_page.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+  final String? launch;
+  const LoginPage({super.key, this.launch});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -28,6 +30,14 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.launch != null) {
+      var provider = OIDCProivder.parse(widget.launch as String);
+      if (provider != null && _providerEnabled(provider)) {
+        provider.login(context);
+        return const SplashPage();
+      }
+    }
+  
     return Scaffold(
       body: Row(
         crossAxisAlignment: CrossAxisAlignment.stretch,

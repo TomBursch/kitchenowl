@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#kitchenowl-v118" class="md-skip">
+        <a href="#kitchenowl-v120" class="md-skip">
           Skip to content
         </a>
       
@@ -1153,7 +1153,7 @@ https://github.com/Neoteroi/essentials-openapi
 Most likely, it is not desirable to edit this file by hand!
 -->
 
-<h1 id="kitchenowl-v118">KitchenOwl <span class="api-version">v118</span></h1>
+<h1 id="kitchenowl-v120">KitchenOwl <span class="api-version">v120</span></h1>
 <p>WIP KitchenOwl API documentation</p>
 <hr />
 <div class="terms-of-service info-data">
@@ -1222,12 +1222,12 @@ Most likely, it is not desirable to edit this file by hand!
         </tr>
     </tbody>
 </table>
+<p class="responses-title"><strong>Responses</strong></p>
 
-<p class="response-title">
-    <strong>Response <span class="response-code code-200">200</span>&nbsp;<span class="status-phrase">OK</span></strong>
-</p>
-
-<div class="tabbed-set tabbed-alternate" data-tabs="1:1"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">application/json</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">200 OK</label><label for="__tabbed_1_2">401 Unauthorized</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="tabbed-set tabbed-alternate" data-tabs="2:1"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">application/json</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <p><div class="highlight"><pre><span></span><code><span class="p">{</span>
@@ -1250,17 +1250,17 @@ Most likely, it is not desirable to edit this file by hand!
 </div>
 </div>
 </div>
-<p class="response-title">
-    <strong>Response <span class="response-code code-401">401</span>&nbsp;<span class="status-phrase">Unauthorized</span></strong>
-</p>
-
+</div>
+<div class="tabbed-block"></div>
+</div>
+</div>
 <hr class="operation-separator" />
 
 <h3 id="post-apiauth"><span class="http-post">POST</span> /api/auth</h3>
 <p>User login</p>
 <p class="request-body-title"><strong>Request body</strong></p>
 
-<div class="tabbed-set tabbed-alternate" data-tabs="2:1"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">application/json</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="3:1"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">application/json</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <p><div class="highlight"><pre><span></span><code><span class="p">{</span>
@@ -1298,11 +1298,12 @@ Most likely, it is not desirable to edit this file by hand!
 </div>
 </div>
 </div>
-<p class="response-title">
-    <strong>Response <span class="response-code code-200">200</span>&nbsp;<span class="status-phrase">OK</span></strong>
-</p>
+<p class="responses-title"><strong>Responses</strong></p>
 
-<div class="tabbed-set tabbed-alternate" data-tabs="3:1"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">application/json</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="4:3"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><input id="__tabbed_4_2" name="__tabbed_4" type="radio" /><input id="__tabbed_4_3" name="__tabbed_4" type="radio" /><div class="tabbed-labels"><label for="__tabbed_4_1">200 OK</label><label for="__tabbed_4_2">400 Bad Request</label><label for="__tabbed_4_3">401 Unauthorized</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="tabbed-set tabbed-alternate" data-tabs="5:1"><input checked="checked" id="__tabbed_5_1" name="__tabbed_5" type="radio" /><div class="tabbed-labels"><label for="__tabbed_5_1">application/json</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <p><div class="highlight"><pre><span></span><code><span class="p">{</span>
@@ -1333,14 +1334,11 @@ Most likely, it is not desirable to edit this file by hand!
 </div>
 </div>
 </div>
-<p class="response-title">
-    <strong>Response <span class="response-code code-400">400</span>&nbsp;<span class="status-phrase">Bad Request</span></strong>
-</p>
-
-<p class="response-title">
-    <strong>Response <span class="response-code code-401">401</span>&nbsp;<span class="status-phrase">Unauthorized</span></strong>
-</p>
-
+</div>
+<div class="tabbed-block"></div>
+<div class="tabbed-block"></div>
+</div>
+</div>
 <hr class="operation-separator" />
 
 <h3 id="post-apiauthllt"><span class="http-post">POST</span> /api/auth/llt</h3>
@@ -1370,7 +1368,7 @@ Most likely, it is not desirable to edit this file by hand!
 </table>
 <p class="request-body-title"><strong>Request body</strong></p>
 
-<div class="tabbed-set tabbed-alternate" data-tabs="4:1"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><div class="tabbed-labels"><label for="__tabbed_4_1">application/json</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="6:1"><input checked="checked" id="__tabbed_6_1" name="__tabbed_6" type="radio" /><div class="tabbed-labels"><label for="__tabbed_6_1">application/json</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <p><div class="highlight"><pre><span></span><code><span class="p">{</span>
@@ -1398,11 +1396,12 @@ Most likely, it is not desirable to edit this file by hand!
 </div>
 </div>
 </div>
-<p class="response-title">
-    <strong>Response <span class="response-code code-200">200</span>&nbsp;<span class="status-phrase">OK</span></strong>
-</p>
+<p class="responses-title"><strong>Responses</strong></p>
 
-<div class="tabbed-set tabbed-alternate" data-tabs="5:1"><input checked="checked" id="__tabbed_5_1" name="__tabbed_5" type="radio" /><div class="tabbed-labels"><label for="__tabbed_5_1">application/json</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="7:2"><input checked="checked" id="__tabbed_7_1" name="__tabbed_7" type="radio" /><input id="__tabbed_7_2" name="__tabbed_7" type="radio" /><div class="tabbed-labels"><label for="__tabbed_7_1">200 OK</label><label for="__tabbed_7_2">401 Unauthorized</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="tabbed-set tabbed-alternate" data-tabs="8:1"><input checked="checked" id="__tabbed_8_1" name="__tabbed_8" type="radio" /><div class="tabbed-labels"><label for="__tabbed_8_1">application/json</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <p><div class="highlight"><pre><span></span><code><span class="p">{</span>
@@ -1425,10 +1424,10 @@ Most likely, it is not desirable to edit this file by hand!
 </div>
 </div>
 </div>
-<p class="response-title">
-    <strong>Response <span class="response-code code-401">401</span>&nbsp;<span class="status-phrase">Unauthorized</span></strong>
-</p>
-
+</div>
+<div class="tabbed-block"></div>
+</div>
+</div>
 <hr class="operation-separator" />
 
 <h3 id="delete-apiauthlltid"><span class="http-delete">DELETE</span> /api/auth/llt/<span class="route-param">{id}</span></h3>
@@ -1464,12 +1463,12 @@ Most likely, it is not desirable to edit this file by hand!
         </tr>
     </tbody>
 </table>
+<p class="responses-title"><strong>Responses</strong></p>
 
-<p class="response-title">
-    <strong>Response <span class="response-code code-200">200</span>&nbsp;<span class="status-phrase">OK</span></strong>
-</p>
-
-<div class="tabbed-set tabbed-alternate" data-tabs="6:1"><input checked="checked" id="__tabbed_6_1" name="__tabbed_6" type="radio" /><div class="tabbed-labels"><label for="__tabbed_6_1">application/json</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="9:2"><input checked="checked" id="__tabbed_9_1" name="__tabbed_9" type="radio" /><input id="__tabbed_9_2" name="__tabbed_9" type="radio" /><div class="tabbed-labels"><label for="__tabbed_9_1">200 OK</label><label for="__tabbed_9_2">401 Unauthorized</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="tabbed-set tabbed-alternate" data-tabs="10:1"><input checked="checked" id="__tabbed_10_1" name="__tabbed_10" type="radio" /><div class="tabbed-labels"><label for="__tabbed_10_1">application/json</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <p><div class="highlight"><pre><span></span><code><span class="p">{</span>
@@ -1492,10 +1491,10 @@ Most likely, it is not desirable to edit this file by hand!
 </div>
 </div>
 </div>
-<p class="response-title">
-    <strong>Response <span class="response-code code-401">401</span>&nbsp;<span class="status-phrase">Unauthorized</span></strong>
-</p>
-
+</div>
+<div class="tabbed-block"></div>
+</div>
+</div>
 <hr class="operation-separator" />
 
 <h3 id="get-apiauthrefresh"><span class="http-get">GET</span> /api/auth/refresh</h3>
@@ -1523,12 +1522,12 @@ Most likely, it is not desirable to edit this file by hand!
         </tr>
     </tbody>
 </table>
+<p class="responses-title"><strong>Responses</strong></p>
 
-<p class="response-title">
-    <strong>Response <span class="response-code code-200">200</span>&nbsp;<span class="status-phrase">OK</span></strong>
-</p>
-
-<div class="tabbed-set tabbed-alternate" data-tabs="7:1"><input checked="checked" id="__tabbed_7_1" name="__tabbed_7" type="radio" /><div class="tabbed-labels"><label for="__tabbed_7_1">application/json</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="11:2"><input checked="checked" id="__tabbed_11_1" name="__tabbed_11" type="radio" /><input id="__tabbed_11_2" name="__tabbed_11" type="radio" /><div class="tabbed-labels"><label for="__tabbed_11_1">200 OK</label><label for="__tabbed_11_2">401 Unauthorized</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="tabbed-set tabbed-alternate" data-tabs="12:1"><input checked="checked" id="__tabbed_12_1" name="__tabbed_12" type="radio" /><div class="tabbed-labels"><label for="__tabbed_12_1">application/json</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <p><div class="highlight"><pre><span></span><code><span class="p">{</span>
@@ -1559,17 +1558,17 @@ Most likely, it is not desirable to edit this file by hand!
 </div>
 </div>
 </div>
-<p class="response-title">
-    <strong>Response <span class="response-code code-401">401</span>&nbsp;<span class="status-phrase">Unauthorized</span></strong>
-</p>
-
+</div>
+<div class="tabbed-block"></div>
+</div>
+</div>
 <hr class="operation-separator" />
 
 <h3 id="post-apiauthsignup"><span class="http-post">POST</span> /api/auth/signup</h3>
 <p>User registration</p>
 <p class="request-body-title"><strong>Request body</strong></p>
 
-<div class="tabbed-set tabbed-alternate" data-tabs="8:1"><input checked="checked" id="__tabbed_8_1" name="__tabbed_8" type="radio" /><div class="tabbed-labels"><label for="__tabbed_8_1">application/json</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="13:1"><input checked="checked" id="__tabbed_13_1" name="__tabbed_13" type="radio" /><div class="tabbed-labels"><label for="__tabbed_13_1">application/json</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <p><div class="highlight"><pre><span></span><code><span class="p">{</span>
@@ -1618,11 +1617,12 @@ Most likely, it is not desirable to edit this file by hand!
 </div>
 </div>
 </div>
-<p class="response-title">
-    <strong>Response <span class="response-code code-200">200</span>&nbsp;<span class="status-phrase">OK</span></strong>
-</p>
+<p class="responses-title"><strong>Responses</strong></p>
 
-<div class="tabbed-set tabbed-alternate" data-tabs="9:1"><input checked="checked" id="__tabbed_9_1" name="__tabbed_9" type="radio" /><div class="tabbed-labels"><label for="__tabbed_9_1">application/json</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="14:2"><input checked="checked" id="__tabbed_14_1" name="__tabbed_14" type="radio" /><input id="__tabbed_14_2" name="__tabbed_14" type="radio" /><div class="tabbed-labels"><label for="__tabbed_14_1">200 OK</label><label for="__tabbed_14_2">400 Bad Request</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="tabbed-set tabbed-alternate" data-tabs="15:1"><input checked="checked" id="__tabbed_15_1" name="__tabbed_15" type="radio" /><div class="tabbed-labels"><label for="__tabbed_15_1">application/json</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <p><div class="highlight"><pre><span></span><code><span class="p">{</span>
@@ -1653,10 +1653,10 @@ Most likely, it is not desirable to edit this file by hand!
 </div>
 </div>
 </div>
-<p class="response-title">
-    <strong>Response <span class="response-code code-400">400</span>&nbsp;<span class="status-phrase">Bad Request</span></strong>
-</p>
-
+</div>
+<div class="tabbed-block"></div>
+</div>
+</div>
 <hr />
 <h2 id="schemas">Schemas</h2>
 <h3 id="createlonglivedtoken">CreateLongLivedToken</h3>
@@ -1665,12 +1665,14 @@ Most likely, it is not desirable to edit this file by hand!
         <tr>
             <th>Name</th>
             <th>Type</th>
+            <th>Description</th>
         </tr>
     </thead>
     <tbody>
         <tr>
             <td><code>device</code></td>
             <td><span class="string-type">string</span></td>
+            <td></td>
         </tr>
     </tbody>
 </table>
@@ -1681,20 +1683,24 @@ Most likely, it is not desirable to edit this file by hand!
         <tr>
             <th>Name</th>
             <th>Type</th>
+            <th>Description</th>
         </tr>
     </thead>
     <tbody>
         <tr>
             <td><code>device</code></td>
             <td><span class="string-type">string</span></td>
+            <td></td>
         </tr>
         <tr>
             <td><code>password</code></td>
             <td><span class="string-type">string</span></td>
+            <td></td>
         </tr>
         <tr>
             <td><code>username</code></td>
             <td><span class="string-type">string</span></td>
+            <td></td>
         </tr>
     </tbody>
 </table>
@@ -1705,28 +1711,34 @@ Most likely, it is not desirable to edit this file by hand!
         <tr>
             <th>Name</th>
             <th>Type</th>
+            <th>Description</th>
         </tr>
     </thead>
     <tbody>
         <tr>
             <td><code>device</code></td>
             <td><span class="string-type">string</span></td>
+            <td></td>
         </tr>
         <tr>
             <td><code>email</code></td>
             <td><span class="string-type">string</span></td>
+            <td></td>
         </tr>
         <tr>
             <td><code>name</code></td>
             <td><span class="string-type">string</span></td>
+            <td></td>
         </tr>
         <tr>
             <td><code>password</code></td>
             <td><span class="string-type">string</span></td>
+            <td></td>
         </tr>
         <tr>
             <td><code>username</code></td>
             <td><span class="string-type">string</span></td>
+            <td></td>
         </tr>
     </tbody>
 </table>

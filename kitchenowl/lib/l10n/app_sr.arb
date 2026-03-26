@@ -1,0 +1,41 @@
+{
+  "@addLanguageConfirm": {
+    "placeholders": {
+      "lang": {
+        "example": "English",
+        "type": "String"
+      }
+    }
+  },
+  "@addNumberIngredients": {
+    "placeholders": {
+      "number": {
+        "example": "2",
+        "type": "int"
+      }
+    }
+  },
+  "about": "O nama",
+  "accountCreate": "Kreiraj nalog",
+  "accountCreateHint": "Vaše korisničko ime i ime su javni, zato izaberite nešto sa cime ste konforni da delite sa drugima.",
+  "accountCreateTitle": "Kreirajte vaš KitchenOwl nalog",
+  "accountDelete": "Obriši nalog",
+  "accountDeleteConfirmation": "Da li ste sigurni da želite da obrišete vaš nalog?",
+  "accountLinkedWithOtherUser": "Nalog je već povezan sa drugim korisnikom",
+  "accountsLinked": "Povezani nalozi",
+  "add": "Dodaj",
+  "addCategory": "Dodaj kategoriju",
+  "addDescriptionFromSource": "Dodaj opis iz izvora",
+  "addItemTitle": "Dodaj stavke",
+  "addLanguage": "Dodaj jezik",
+  "addLanguageConfirm": "Da li ste sigurni da želite da podesite jezik na '{lang}'? Ova radnja se ne može poništiti i dodaće stavke i kategorije vašem domaćinstvu.",
+  "addNumberIngredients": "Dodaj {number} sastojaka",
+  "analysingWebsite": "Analiziram vebsajt...",
+  "camera": "Kamera",
+  "cancel": "Otkaži",
+  "cards": "Kartice",
+  "categories": "Kategorije",
+  "categoriesMerge": "Spoji kategorije",
+  "category": "Kategorija",
+  "categoryDelete": "Obrisi kategoriju"
+}

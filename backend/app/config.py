@@ -110,6 +110,7 @@ SUPPORTED_LANGUAGES = {
     "el": "Ελληνικά",
     "es": "Español",
     "et": "eesti keel",
+    "eu": "euskara",
     "fa": "فارسی",
     "fi": "Suomi",
     "fr": "Français",

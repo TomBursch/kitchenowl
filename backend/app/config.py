@@ -131,6 +131,7 @@ SUPPORTED_LANGUAGES = {
     "ru": "Русский язык",
     "sk": "Slovenčina",
     "sl": "Slovenščina",
+    "sr": "Српски",
     "sv": "Svenska",
     "ta": "தமிழ்",
     "te": "తెలుగు",

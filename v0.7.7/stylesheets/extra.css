@@ -1,0 +1,10 @@
+[data-md-color-primary="kitchenowl"] {
+  --md-primary-fg-color: #20ac64;
+  --md-primary-fg-color--light: #20ac64;
+  --md-primary-fg-color--dark: #198a50;
+  --md-accent-fg-color: #20ac64;
+}
+
+[data-md-color-scheme="slate"] {
+  --md-default-bg-color: #303030;
+}

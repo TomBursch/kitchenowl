@@ -64,6 +64,9 @@ which will result in an alternative mobile redirect URI for mobiles:
 ### Limitations
 Currently only Web, Android, iOS, and macOS are supported.
 
+### Automatic Login
+It is possible to directly launch the OIDC flow from a link with a query parameter of `launch`. The correct URL would therefor be `FRONT_URL(1)/signin?launch=custom` to start the flow with your own OIDC provider.
+
 ### Apple & Google
 These two providers will allow anyone to sign in with an Apple or Google account. They can be configured similarly to custom providers but will show up with a branded sign in with button.
 It is not recommended setting up social logins for self-hosted versions as they might not work correctly.

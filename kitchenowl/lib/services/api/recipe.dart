@@ -11,9 +11,13 @@ extension RecipeApi on ApiService {
 
   // ignore: constant_identifier_names
   static const Duration _TIMEOUT_SCRAPE = Duration(minutes: 3);
+  static const Duration _TIMEOUT_GET_RECIPES = Duration(seconds: 10);
 
   Future<List<Recipe>?> getRecipes(Household household) async {
-    final res = await get(householdPath(household) + baseRoute);
+    final res = await get(
+      householdPath(household) + baseRoute,
+      timeout: _TIMEOUT_GET_RECIPES,
+    );
     if (res.statusCode != 200) return null;
 
     final body = List.from(jsonDecode(res.body));

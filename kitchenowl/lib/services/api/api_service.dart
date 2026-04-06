@@ -200,11 +200,14 @@ class ApiService {
 
   Future<http.Response> get(
     String url, {
+    Map<String, String>? queryParameters,
     bool refreshOnException = true,
     Duration? timeout,
   }) =>
       _handleRequest(
-        () => _client.get(Uri.parse(baseUrl + url), headers: headers),
+        () => _client.get(
+            Uri.parse(baseUrl + url).replace(queryParameters: queryParameters),
+            headers: headers),
         refreshOnException: refreshOnException,
         timeout: timeout,
       );

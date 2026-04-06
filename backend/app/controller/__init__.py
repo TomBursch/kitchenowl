@@ -16,3 +16,4 @@ from .health_controller import health
 from .analytics import *
 from .report import *
 from .mcp_controller import mcp
+from .inventory import inventory, inventoryHousehold

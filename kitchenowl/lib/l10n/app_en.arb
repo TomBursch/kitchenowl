@@ -301,6 +301,7 @@
     }
   },
   "@pageNotFound": {},
+  "@pantry": {},
   "@parent": {},
   "@parentRights": {},
   "@password": {},
@@ -677,6 +678,7 @@
   "overview": "Overview",
   "owesAB": "{nameA} owes {nameB}",
   "pageNotFound": "Couldn't find this page",
+  "pantry": "Pantry",
   "parent": "Parent",
   "parentRights": "Can change household settings",
   "password": "Password",

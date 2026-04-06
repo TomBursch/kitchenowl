@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:kitchenowl/cubits/auth_cubit.dart';
 import 'package:kitchenowl/cubits/expense_list_cubit.dart';
 import 'package:kitchenowl/cubits/household_cubit.dart';
+import 'package:kitchenowl/cubits/inventory_cubit.dart';
 import 'package:kitchenowl/cubits/planner_cubit.dart';
 import 'package:kitchenowl/cubits/recipe_list_cubit.dart';
 import 'package:kitchenowl/cubits/shoppinglist_cubit.dart';
@@ -39,6 +40,7 @@ class _HouseholdPageState extends State<HouseholdPage>
   late final RecipeListCubit recipeListCubit;
   late final PlannerCubit plannerCubit;
   late final ExpenseListCubit expenseListCubit;
+  late final InventoryCubit inventoryCubit;
 
   @override
   void initState() {
@@ -48,6 +50,7 @@ class _HouseholdPageState extends State<HouseholdPage>
     recipeListCubit = RecipeListCubit(widget.household);
     plannerCubit = PlannerCubit(widget.household);
     expenseListCubit = ExpenseListCubit(widget.household);
+    inventoryCubit = InventoryCubit(widget.household);
     WidgetsBinding.instance.addObserver(this);
 
     if (router.state.uri.path.contains("recipes")) {
@@ -82,6 +85,7 @@ class _HouseholdPageState extends State<HouseholdPage>
     recipeListCubit.close();
     plannerCubit.close();
     expenseListCubit.close();
+    inventoryCubit.close();
     super.dispose();
   }
 
@@ -104,6 +108,9 @@ class _HouseholdPageState extends State<HouseholdPage>
     }
     if (router.state.uri.path.contains("balances")) {
       expenseListCubit.refresh();
+    }
+    if (router.state.uri.path.contains("inventory")) {
+      inventoryCubit.refresh();
     }
   }
 
@@ -134,6 +141,13 @@ class _HouseholdPageState extends State<HouseholdPage>
       case ViewsEnum.balances:
         expenseListCubit.refresh();
         break;
+      case ViewsEnum.inventory:
+        if (tapped == current) {
+          inventoryCubit.refresh(query: '');
+        } else {
+          inventoryCubit.refresh();
+        }
+        break;
       case ViewsEnum.more:
         showModalBottomSheet(
           context: context,
@@ -158,6 +172,7 @@ class _HouseholdPageState extends State<HouseholdPage>
         BlocProvider.value(value: recipeListCubit),
         BlocProvider.value(value: plannerCubit),
         BlocProvider.value(value: expenseListCubit),
+        BlocProvider.value(value: inventoryCubit),
       ],
       child: BlocConsumer<HouseholdCubit, HouseholdState>(
         listener: (context, state) {

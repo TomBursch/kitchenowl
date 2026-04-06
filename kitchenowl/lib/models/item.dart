@@ -355,3 +355,91 @@ class RecipeItem extends ItemWithDescription {
   @override
   List<Object?> get props => super.props + [optional];
 }
+
+class InventoryItem extends ItemWithDescription {
+  final int? createdById;
+  final DateTime? createdAt;
+
+  const InventoryItem({
+    super.id,
+    required super.name,
+    super.description = '',
+    super.category,
+    super.icon,
+    super.ordering = 0,
+    super.defaultKey,
+    super.isDefault,
+    this.createdById,
+    this.createdAt,
+  });
+
+  factory InventoryItem.fromJson(Map<String, dynamic> map) {
+    return InventoryItem(
+      id: map['id'],
+      name: map['name'],
+      description: map['description'],
+      ordering: map['ordering'],
+      isDefault: map['default'],
+      defaultKey: map['default_key'],
+      icon: map['icon'],
+      category:
+          map['category'] != null ? Category.fromJson(map['category']) : null,
+      createdAt: map['created_at'] != null
+          ? DateTime.fromMillisecondsSinceEpoch(map['created_at'], isUtc: true)
+              .toLocal()
+          : null,
+      createdById: map['created_by'],
+    );
+  }
+
+  /// Turn an Item into a Shopping list item.
+  ///
+  /// If description is null and item is an ItemWithDescription the existing description is used.
+  factory InventoryItem.fromItem({
+    required Item item,
+    String? description,
+    DateTime? createdAt,
+    int? createdById,
+  }) =>
+      InventoryItem(
+        id: item.id,
+        name: item.name,
+        icon: item.icon,
+        description: description ??
+            (item is ItemWithDescription ? item.description : ""),
+        category: item.category,
+        ordering: item.ordering,
+        isDefault: item.isDefault,
+        defaultKey: item.defaultKey,
+        createdAt: createdAt ?? DateTime.now(),
+        createdById: createdById,
+      );
+
+  @override
+  InventoryItem copyWith({
+    String? name,
+    Nullable<Category>? category,
+    Nullable<String>? icon,
+    String? description,
+  }) =>
+      InventoryItem(
+        id: id,
+        name: name ?? this.name,
+        category: (category ?? Nullable(this.category)).value,
+        icon: (icon ?? Nullable(this.icon)).value,
+        description: description ?? this.description,
+        ordering: ordering,
+        isDefault: isDefault,
+        defaultKey: defaultKey,
+      );
+
+  @override
+  List<Object?> get props => super.props + [createdAt, createdById];
+
+  @override
+  Map<String, dynamic> toJsonWithId() => super.toJsonWithId()
+    ..addAll({
+      "created_at": createdAt?.toUtc().millisecondsSinceEpoch,
+      "created_by": createdById,
+    });
+}

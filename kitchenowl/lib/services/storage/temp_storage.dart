@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart' as foundation;
 import 'package:kitchenowl/models/category.dart';
 import 'package:kitchenowl/models/household.dart';
+import 'package:kitchenowl/models/inventory.dart';
 import 'package:kitchenowl/models/recipe.dart';
 import 'package:kitchenowl/models/shoppinglist.dart';
 import 'package:kitchenowl/models/tag.dart';
@@ -58,6 +59,12 @@ class TempStorage {
     final path = await _localPath;
 
     return File('$path/${household.id}-tags.json');
+  }
+
+  Future<File> _localInventoriesFile(Household household) async {
+    final path = await _localPath;
+
+    return File('$path/${household.id}-inventories.json');
   }
 
   Future<void> clearAll() async {
@@ -247,6 +254,41 @@ class TempStorage {
         final file = await _localTagsFile(household);
         if (await file.exists()) await file.delete();
       } catch (_) {}
+    }
+  }
+
+  Future<List<Inventory>?> readInventories(Household household) async {
+    if (!foundation.kIsWeb) {
+      try {
+        final file = await _localInventoriesFile(household);
+        final String content = await file.readAsString();
+        List list = json.decode(content);
+
+        return list.map((e) => Inventory.fromJson(e)).toList();
+      } catch (_) {}
+    }
+
+    return null;
+  }
+
+  Future<void> clearInventories(Household household) async {
+    if (!foundation.kIsWeb) {
+      try {
+        final file = await _localInventoriesFile(household);
+        if (await file.exists()) await file.delete();
+      } catch (_) {}
+    }
+  }
+
+  Future<void> writeInventories(
+    Household household,
+    List<Inventory> inventories,
+  ) async {
+    if (!foundation.kIsWeb) {
+      final file = await _localInventoriesFile(household);
+      await file.writeAsString(
+        json.encode(inventories.map((e) => e.toJsonWithId()).toList()),
+      );
     }
   }
 

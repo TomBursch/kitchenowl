@@ -5,14 +5,14 @@ from sqlalchemy.orm import Mapped
 
 Model = db.Model
 if TYPE_CHECKING:
-    from app.models import Household, History, Item, User
+    from app.models import Household, Item, User
     from app.helpers.db_model_base import DbModelBase
 
     Model = DbModelBase
 
 
-class Shoppinglist(Model, DbModelAuthorizeMixin):
-    __tablename__ = "shoppinglist"
+class Inventory(Model, DbModelAuthorizeMixin):
+    __tablename__ = "inventory"
 
     id: Mapped[int] = db.Column(db.Integer, primary_key=True)
     name: Mapped[str] = db.Column(db.String(128))
@@ -28,19 +28,10 @@ class Shoppinglist(Model, DbModelAuthorizeMixin):
             uselist=False,
         ),
     )
-    items: Mapped[List["ShoppinglistItems"]] = cast(
-        Mapped[List["ShoppinglistItems"]],
+    items: Mapped[List["InventoryItems"]] = cast(
+        Mapped[List["InventoryItems"]],
         db.relationship(
-            "ShoppinglistItems",
-            cascade="all, delete-orphan",
-        ),
-    )
-
-    history: Mapped[List["History"]] = cast(
-        Mapped[List["History"]],
-        db.relationship(
-            "History",
-            back_populates="shoppinglist",
+            "InventoryItems",
             cascade="all, delete-orphan",
         ),
     )
@@ -56,11 +47,11 @@ class Shoppinglist(Model, DbModelAuthorizeMixin):
         return self.id == self.getDefault(self.household_id).id
 
 
-class ShoppinglistItems(Model):
-    __tablename__ = "shoppinglist_items"
+class InventoryItems(Model):
+    __tablename__ = "inventory_items"
 
-    shoppinglist_id: Mapped[int] = db.Column(
-        db.Integer, db.ForeignKey("shoppinglist.id"), primary_key=True
+    inventory_id: Mapped[int] = db.Column(
+        db.Integer, db.ForeignKey("inventory.id"), primary_key=True
     )
     item_id: Mapped[int] = db.Column(
         db.Integer, db.ForeignKey("item.id"), primary_key=True
@@ -74,13 +65,13 @@ class ShoppinglistItems(Model):
         Mapped["Item"],
         db.relationship(
             "Item",
-            back_populates="shoppinglists",
+            back_populates="inventories",
         ),
     )
-    shoppinglist: Mapped["Shoppinglist"] = cast(
-        Mapped["Shoppinglist"],
+    inventory: Mapped["Inventory"] = cast(
+        Mapped["Inventory"],
         db.relationship(
-            "Shoppinglist",
+            "Inventory",
             back_populates="items",
         ),
     )
@@ -102,7 +93,7 @@ class ShoppinglistItems(Model):
         return res
 
     @classmethod
-    def find_by_ids(cls, shoppinglist_id: int, item_id: int) -> Self | None:
+    def find_by_ids(cls, inventory_id: int, item_id: int) -> Self | None:
         return cls.query.filter(
-            cls.shoppinglist_id == shoppinglist_id, cls.item_id == item_id
+            cls.inventory_id == inventory_id, cls.item_id == item_id
         ).first()

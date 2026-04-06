@@ -10,7 +10,7 @@ from sqlalchemy.orm import Mapped
 
 Model = db.Model
 if TYPE_CHECKING:
-    from app.models import Household, RecipeItems, ShoppinglistItems
+    from app.models import Household, RecipeItems, ShoppinglistItems, InventoryItems
     from app.helpers.db_model_base import DbModelBase
 
     Model = DbModelBase
@@ -57,6 +57,14 @@ class Item(Model, DbModelAuthorizeMixin):
         Mapped[List["ShoppinglistItems"]],
         db.relationship(
             "ShoppinglistItems",
+            back_populates="item",
+            cascade="all, delete-orphan",
+        ),
+    )
+    inventories: Mapped[List["InventoryItems"]] = cast(
+        Mapped[List["InventoryItems"]],
+        db.relationship(
+            "InventoryItems",
             back_populates="item",
             cascade="all, delete-orphan",
         ),
@@ -192,12 +200,14 @@ class Item(Model, DbModelAuthorizeMixin):
     @classmethod
     def find_name_starts_with(cls, household_id: int, starts_with: str) -> Self | None:
         starts_with = starts_with.strip()
-        return (cls.query.filter(
-            cls.household_id == household_id,
-            func.lower(cls.name).like(func.lower(starts_with) + "%"),
+        return (
+            cls.query.filter(
+                cls.household_id == household_id,
+                func.lower(cls.name).like(func.lower(starts_with) + "%"),
+            )
+            .order_by(cls.name)
+            .first()
         )
-        .order_by(cls.name)
-        .first())
 
     @classmethod
     def search_name(cls, name: str, household_id: int) -> list[Self]:

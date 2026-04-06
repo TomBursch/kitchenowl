@@ -16,6 +16,7 @@ import 'package:kitchenowl/pages/expense_page.dart';
 import 'package:kitchenowl/pages/household_page/_export.dart';
 import 'package:kitchenowl/pages/household_list_page.dart';
 import 'package:kitchenowl/pages/household_about_page.dart';
+import 'package:kitchenowl/pages/household_page/inventory.dart';
 import 'package:kitchenowl/pages/login_page.dart';
 import 'package:kitchenowl/pages/login_redirect_page.dart';
 import 'package:kitchenowl/pages/onboarding_page.dart';
@@ -265,6 +266,14 @@ final router = GoRouter(
                 key: state.pageKey,
                 name: state.name,
                 child: const ShoppinglistPage(),
+              ),
+            ),
+            GoRoute(
+              path: "inventory",
+              pageBuilder: (context, state) => FadeThroughTransitionPage(
+                key: state.pageKey,
+                name: state.name,
+                child: const InventoryPage(),
               ),
             ),
             GoRoute(

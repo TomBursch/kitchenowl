@@ -15,6 +15,7 @@ if TYPE_CHECKING:
         ExpenseCategory,
         User,
         File,
+        Inventory,
     )
     from app.helpers.db_model_base import DbModelBase
 
@@ -32,6 +33,9 @@ class Household(Model):
         db.Boolean(), nullable=False, default=True
     )
     expenses_feature: Mapped[bool] = db.Column(
+        db.Boolean(), nullable=False, default=True
+    )
+    inventory_feature: Mapped[bool] = db.Column(
         db.Boolean(), nullable=False, default=True
     )
     description: Mapped[str | None] = db.Column(db.String())
@@ -97,6 +101,14 @@ class Household(Model):
             cascade="all, delete-orphan",
         ),
     )
+    inventories: Mapped[List["Inventory"]] = cast(
+        Mapped[List["Inventory"]],
+        db.relationship(
+            "Inventory",
+            back_populates="household",
+            cascade="all, delete-orphan",
+        ),
+    )
     member: Mapped[List["HouseholdMember"]] = cast(
         Mapped[List["HouseholdMember"]],
         db.relationship(
@@ -149,6 +161,7 @@ class Household(Model):
             "view_ordering": self.view_ordering,
             "planner_feature": self.planner_feature,
             "expenses_feature": self.expenses_feature,
+            "inventory_feature": self.inventory_feature,
             "member": [m.user.username for m in getattr(self, "member")],
             "shoppinglists": [s.name for s in self.shoppinglists],
             "recipes": [s.obj_to_export_dict() for s in self.recipes],

@@ -13,6 +13,7 @@ class Household extends Model {
   final String? language;
   final bool? featurePlanner;
   final bool? featureExpenses;
+  final bool? featureInventory;
   final List<ViewsEnum>? viewOrdering;
   final List<Member>? member;
   final ShoppingList? defaultShoppingList;
@@ -28,6 +29,7 @@ class Household extends Model {
     this.language,
     this.featurePlanner,
     this.featureExpenses,
+    this.featureInventory,
     this.viewOrdering,
     this.member,
     this.defaultShoppingList,
@@ -57,6 +59,7 @@ class Household extends Model {
       language: map['language'],
       featurePlanner: map['planner_feature'] ?? false,
       featureExpenses: map['expenses_feature'] ?? false,
+      featureInventory: map['inventory_feature'] ?? false,
       description: map['description'],
       link: map['link'],
       verified: map['verified'] ?? false,
@@ -77,6 +80,7 @@ class Household extends Model {
     bool? verified,
     bool? featurePlanner,
     bool? featureExpenses,
+    bool? featureInventory,
     List<ViewsEnum>? viewOrdering,
   }) =>
       Household(
@@ -87,6 +91,7 @@ class Household extends Model {
         language: language ?? this.language,
         featurePlanner: featurePlanner ?? this.featurePlanner,
         featureExpenses: featureExpenses ?? this.featureExpenses,
+        featureInventory: featureInventory ?? this.featureInventory,
         viewOrdering: viewOrdering ?? this.viewOrdering,
         description: description ?? this.description,
         link: link ?? this.link,
@@ -102,6 +107,7 @@ class Household extends Model {
         language,
         featurePlanner,
         featureExpenses,
+        featureInventory,
         viewOrdering,
         member,
         defaultShoppingList,
@@ -127,6 +133,9 @@ class Household extends Model {
     }
     if (featureExpenses != null) {
       data['expenses_feature'] = featureExpenses;
+    }
+    if (featureInventory != null) {
+      data['expenses_feature'] = featureInventory;
     }
     if (viewOrdering != null) {
       data['view_ordering'] = viewOrdering!.map((e) => e.toString()).toList()

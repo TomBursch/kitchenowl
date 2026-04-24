@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:cronet_http/cronet_http.dart';
+import 'package:cupertino_http/cupertino_http.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/io_client.dart';
@@ -72,6 +74,25 @@ class ApiService {
     if (!kIsWeb) {
       Config.packageInfo?.then((info) => headers["User-Agent"] =
           "KitchenOwl-${Platform.operatingSystem}/${Config.packageInfoSync?.version}");
+    }
+
+    if (!kIsWeb && Platform.isAndroid) {
+      final engine = CronetEngine.build(
+        cacheMode: CacheMode.memory,
+        cacheMaxSize: 2 * 1024 * 1024,
+        userAgent:
+            "KitchenOwl-${Platform.operatingSystem}/${Config.packageInfoSync?.version}",
+      );
+      _client = CronetClient.fromCronetEngine(engine, closeEngine: true);
+    } else if (!kIsWeb && (Platform.isIOS || Platform.isMacOS)) {
+      final config = URLSessionConfiguration.ephemeralSessionConfiguration()
+        ..cache = URLCache.withCapacity(memoryCapacity: 2 * 1024 * 1024)
+        ..httpAdditionalHeaders = {
+          "User-Agent":
+              "KitchenOwl-${Platform.operatingSystem}/${Config.packageInfoSync?.version}"
+        };
+      _client = CupertinoClient.fromSessionConfiguration(config);
+    } else if (!kIsWeb) {
       _client = IOClient(HttpClient()
         ..userAgent =
             "KitchenOwl-${Platform.operatingSystem}/${Config.packageInfoSync?.version}");

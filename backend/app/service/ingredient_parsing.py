@@ -52,6 +52,9 @@ def parseNLP(ingredients: list[str]) -> list[IngredientParsingResult]:
 def parseLLM(
     ingredients: list[str], targetLanguageCode: str | None = None
 ) -> list[IngredientParsingResult] | None:
+    if not LLM_MODEL:
+        return None
+
     systemMessage = """
 You are a tool that returns only JSON in the form of [{"name": name, "description": description}, ...]. Split every string from the list into these two properties. You receive recipe ingredients and fill the name field with the singular name of the ingredient and everything else is the description. Translate the response into the specified language.
 

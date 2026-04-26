@@ -3,6 +3,7 @@
    <locale android:name="ar"/>
    <locale android:name="be"/>
    <locale android:name="bg"/>
+   <locale android:name="br"/>
    <locale android:name="ca"/>
    <locale android:name="ca-valencia"/>
    <locale android:name="cs"/>

@@ -102,6 +102,7 @@ SUPPORTED_LANGUAGES = {
     "ar": "اَلْعَرَبِيَّةُ",
     "bg": "български език",
     "bn": "বাংলা",
+    "br": "Brezhoneg",
     "ca": "Catalan",
     "cs": "čeština",
     "da": "Dansk",

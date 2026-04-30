@@ -40,8 +40,23 @@ class _ItemSelectionPageState extends State<ItemSelectionPage> {
 
   @override
   void dispose() {
-    cubit.close();
+    if (mounted) {
+      cubit.close();
+    }
+    
     super.dispose();
+  }
+
+  List<RecipeItem> _getFilteredResult() {
+    final filteredPlans = _get_filteredPlans();
+    final allResults = cubit.getResult();
+
+    return allResults.where((item) {
+      return filteredPlans.any((plan) => 
+        plan.recipeWithYields.mandatoryItems.contains(item) || 
+        plan.recipeWithYields.optionalItems.contains(item)
+      );
+    }).toList();
   }
 
   List<RecipePlan> _get_filteredPlans() {
@@ -56,7 +71,7 @@ class _ItemSelectionPageState extends State<ItemSelectionPage> {
   @override
   Widget build(BuildContext context) {
     final filteredPlans = _get_filteredPlans();
-    
+
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title ?? AppLocalizations.of(context)!.itemsAdd),
@@ -140,16 +155,16 @@ class _ItemSelectionPageState extends State<ItemSelectionPage> {
                                 if (widget.handleResult != null) {
                                   Navigator.of(context).pop(
                                     await widget.handleResult!(
-                                        null, cubit.getResult()),
+                                        null, _getFilteredResult()),
                                   );
                                 } else {
                                   Navigator.of(context)
-                                      .pop((null, cubit.getResult()));
+                                      .pop((null, _getFilteredResult()));
                                 }
                               },
                         child: Text(
                           AppLocalizations.of(context)!.addNumberIngredients(
-                            state.getResult().length,
+                            _getFilteredResult().length,
                           ),
                         ),
                       ),
@@ -167,7 +182,7 @@ class _ItemSelectionPageState extends State<ItemSelectionPage> {
                                     builder: (context) => SelectDialog(
                                       title: AppLocalizations.of(context)!
                                           .addNumberIngredients(
-                                              state.selectedItems.length),
+                                              _getFilteredResult().length),
                                       cancelText:
                                           AppLocalizations.of(context)!.cancel,
                                       options: widget.shoppingLists
@@ -184,11 +199,11 @@ class _ItemSelectionPageState extends State<ItemSelectionPage> {
                                     if (widget.handleResult != null) {
                                       Navigator.of(context).pop(
                                         await widget.handleResult!(
-                                            list, cubit.getResult()),
+                                            list, _getFilteredResult()),
                                       );
                                     } else {
                                       Navigator.of(context)
-                                          .pop((list, cubit.getResult()));
+                                          .pop((list, _getFilteredResult()));
                                     }
                                   }
                                 },

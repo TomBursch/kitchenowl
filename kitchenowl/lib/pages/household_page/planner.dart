@@ -243,12 +243,14 @@ class _PlannerPageState extends State<PlannerPage> {
                                         ),
                                       AspectRatio(
                                         aspectRatio: 1,
-                                        child: SelectableButtonCard(
-                                          key: ValueKey(
-                                            plan.recipe.id,
-                                          ),
-                                          title: plan.recipe.name,
-                                          description: plan.yields?.toString(),
+                                        child: Opacity(
+                                          opacity: cookingDate.isBefore(DateTime.now()) ? 0.6 : 1.0,
+                                          child: SelectableButtonCard(
+                                            key: ValueKey(
+                                              plan.recipe.id,
+                                            ),
+                                            title: plan.recipe.name,
+                                            description: plan.yields?.toString(),
                                           selected: true,
                                           onPressed: () {
                                             cubit.remove(
@@ -263,6 +265,7 @@ class _PlannerPageState extends State<PlannerPage> {
                                             plan.yields,
                                           ),
                                         ),
+                                      ),
                                       ),
                                     ],
                                   ),

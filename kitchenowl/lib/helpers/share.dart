@@ -32,7 +32,7 @@ abstract class Share {
       html.document.body?.children.remove(anchor);
       html.Url.revokeObjectUrl(url.toString());
     } else if (Platform.isLinux || Platform.isMacOS || Platform.isWindows) {
-      String? outputPath = await FilePicker.platform.saveFile(
+      String? outputPath = await FilePicker.saveFile(
         dialogTitle: 'Please select an output file:',
         allowedExtensions: ['json'],
         type: FileType.custom,

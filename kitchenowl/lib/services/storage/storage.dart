@@ -8,7 +8,11 @@ abstract class Storage {
 }
 
 class SecureStorage extends Storage {
-  final _storage = const FlutterSecureStorage();
+  final _storage = const FlutterSecureStorage(
+    iOptions: IOSOptions(
+      accessibility: KeychainAccessibility.first_unlock,
+    ),
+  );
   static SecureStorage? _instance;
 
   SecureStorage._internal();

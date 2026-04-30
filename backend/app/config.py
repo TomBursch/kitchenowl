@@ -38,7 +38,7 @@ def get_secret(env_var: str, default: str = None) -> str | None:
     file_path = os.getenv(f"{env_var}_FILE")
     if file_path:
         try:
-            with open(file_path, "r") as f:
+            with open(file_path, "r", encoding="utf-8") as f:
                 return f.read().strip()
         except Exception as e:
             raise RuntimeError(f"Failed to read {env_var}_FILE: {e}")
@@ -46,7 +46,7 @@ def get_secret(env_var: str, default: str = None) -> str | None:
 
 
 MIN_FRONTEND_VERSION = 71
-BACKEND_VERSION = 120
+BACKEND_VERSION = 122
 
 APP_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_DIR = os.path.dirname(APP_DIR)
@@ -102,6 +102,7 @@ SUPPORTED_LANGUAGES = {
     "ar": "اَلْعَرَبِيَّةُ",
     "bg": "български език",
     "bn": "বাংলা",
+    "br": "Brezhoneg",
     "ca": "Catalan",
     "cs": "čeština",
     "da": "Dansk",
@@ -109,6 +110,8 @@ SUPPORTED_LANGUAGES = {
     "de_CH": "Deutsch (Schweiz)",
     "el": "Ελληνικά",
     "es": "Español",
+    "et": "Eesti keel",
+    "eu": "Euskara",
     "fa": "فارسی",
     "fi": "Suomi",
     "fr": "Français",
@@ -129,6 +132,7 @@ SUPPORTED_LANGUAGES = {
     "ru": "Русский язык",
     "sk": "Slovenčina",
     "sl": "Slovenščina",
+    "sr": "Српски",
     "sv": "Svenska",
     "ta": "தமிழ்",
     "te": "తెలుగు",

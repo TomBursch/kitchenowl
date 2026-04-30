@@ -40,8 +40,12 @@ extension ItemApi on ApiService {
     Household household,
     String query,
   ) async {
-    final res =
-        await get('${householdPath(household)}$baseRoute/search?query=$query');
+    final res = await get(
+      '${householdPath(household)}$baseRoute/search',
+      queryParameters: {
+        "query": query,
+      },
+    );
     if (res.statusCode != 200) return null;
 
     final body = List.from(jsonDecode(res.body));

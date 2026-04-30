@@ -57,7 +57,7 @@ class ApiService {
   Map<String, String> headers = {};
   Future<void>? _refreshThread;
 
-  static void Function(String)? _handleTokenRotation;
+  static Future<void> Function(String)? _handleTokenRotation;
   static Future<String?> Function(String?)? _handleTokenBeforeReauth;
 
   static final ValueNotifier<Connection> _connectionNotifier =
@@ -145,7 +145,7 @@ class ApiService {
     _serverInfoNotifier.removeListener(f);
   }
 
-  static void setTokenRotationHandler(void Function(String) handler) {
+  static void setTokenRotationHandler(Future<void> Function(String) handler) {
     _handleTokenRotation = handler;
   }
 
@@ -200,11 +200,14 @@ class ApiService {
 
   Future<http.Response> get(
     String url, {
+    Map<String, String>? queryParameters,
     bool refreshOnException = true,
     Duration? timeout,
   }) =>
       _handleRequest(
-        () => _client.get(Uri.parse(baseUrl + url), headers: headers),
+        () => _client.get(
+            Uri.parse(baseUrl + url).replace(queryParameters: queryParameters),
+            headers: headers),
         refreshOnException: refreshOnException,
         timeout: timeout,
       );
@@ -353,7 +356,7 @@ class ApiService {
         headers['Authorization'] = 'Bearer ${body['access_token']}';
         _refreshToken = body['refresh_token'];
         if (_handleTokenRotation != null) {
-          _handleTokenRotation!(_refreshToken!);
+          await _handleTokenRotation!(_refreshToken!);
         }
 
         return true;

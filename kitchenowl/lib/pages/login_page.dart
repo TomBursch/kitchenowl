@@ -14,9 +14,11 @@ import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/styles/color_mapper.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:sliver_tools/sliver_tools.dart';
+import 'package:kitchenowl/pages/splash_page.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+  final String? launch;
+  const LoginPage({super.key, this.launch});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -28,6 +30,14 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.launch != null) {
+      var provider = OIDCProivder.parse(widget.launch as String);
+      if (provider != null && _providerEnabled(provider)) {
+        provider.login(context);
+        return const SplashPage();
+      }
+    }
+  
     return Scaffold(
       body: Row(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -106,48 +116,29 @@ class _LoginPageState extends State<LoginPage> {
                               Text(
                                 '${AppLocalizations.of(context)!.loginTo} ${Uri.parse(ApiService.getInstance().baseUrl).authority}',
                               ),
-                            const SizedBox(height: 10),
-                            TextField(
-                              controller: usernameController,
-                              autofocus: true,
-                              autofillHints: const [
-                                AutofillHints.username,
-                                AutofillHints.email,
-                              ],
-                              keyboardType: TextInputType.name,
-                              textInputAction: TextInputAction.next,
-                              decoration: InputDecoration(
-                                labelText:
-                                    AppLocalizations.of(context)!.username,
-                              ),
-                            ),
-                            TextField(
-                              controller: passwordController,
-                              obscureText: true,
-                              textInputAction: TextInputAction.go,
-                              autofillHints: const [AutofillHints.password],
-                              keyboardType: TextInputType.visiblePassword,
-                              onSubmitted: (value) =>
-                                  BlocProvider.of<AuthCubit>(context).login(
-                                usernameController.text,
-                                passwordController.text,
-                                () => showSnackbar(
-                                  context: context,
-                                  content: Text(AppLocalizations.of(context)!
-                                      .wrongUsernameOrPassword),
-                                  width: null,
+                            if (_displayUsernamePassword()) ...[
+                              const SizedBox(height: 10),
+                              TextField(
+                                controller: usernameController,
+                                autofocus: true,
+                                autofillHints: const [
+                                  AutofillHints.username,
+                                  AutofillHints.email,
+                                ],
+                                keyboardType: TextInputType.name,
+                                textInputAction: TextInputAction.next,
+                                decoration: InputDecoration(
+                                  labelText:
+                                      AppLocalizations.of(context)!.username,
                                 ),
                               ),
-                              decoration: InputDecoration(
-                                labelText:
-                                    AppLocalizations.of(context)!.password,
-                              ),
-                            ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.only(top: 16, bottom: 10),
-                              child: LoadingFilledButton(
-                                onPressed: () =>
+                              TextField(
+                                controller: passwordController,
+                                obscureText: true,
+                                textInputAction: TextInputAction.go,
+                                autofillHints: const [AutofillHints.password],
+                                keyboardType: TextInputType.visiblePassword,
+                                onSubmitted: (value) =>
                                     BlocProvider.of<AuthCubit>(context).login(
                                   usernameController.text,
                                   passwordController.text,
@@ -158,10 +149,31 @@ class _LoginPageState extends State<LoginPage> {
                                     width: null,
                                   ),
                                 ),
-                                child:
-                                    Text(AppLocalizations.of(context)!.login),
+                                decoration: InputDecoration(
+                                  labelText:
+                                      AppLocalizations.of(context)!.password,
+                                ),
                               ),
-                            ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(top: 16, bottom: 10),
+                                child: LoadingFilledButton(
+                                  onPressed: () =>
+                                      BlocProvider.of<AuthCubit>(context).login(
+                                    usernameController.text,
+                                    passwordController.text,
+                                    () => showSnackbar(
+                                      context: context,
+                                      content: Text(AppLocalizations.of(context)!
+                                          .wrongUsernameOrPassword),
+                                      width: null,
+                                    ),
+                                  ),
+                                  child:
+                                      Text(AppLocalizations.of(context)!.login),
+                                ),
+                              ),
+                            ],
                             if (_displayRegister())
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -192,7 +204,8 @@ class _LoginPageState extends State<LoginPage> {
                                       AppLocalizations.of(context)!.signup),
                                 ),
                               ),
-                            const Spacer(),
+                            if (_displayUsernamePassword())
+                              const Spacer(),
                             if (App.serverInfo is ConnectedServerInfoState &&
                                 (App.serverInfo as ConnectedServerInfoState)
                                     .emailMandatory)
@@ -204,10 +217,13 @@ class _LoginPageState extends State<LoginPage> {
                                     context.push("/forgot-password"),
                               ),
                             if (_displayOIDC()) ...[
-                              const Padding(
-                                padding: EdgeInsets.only(top: 4),
-                                child: Divider(),
-                              ),
+                              if (_displayUsernamePassword())
+                                const Padding(
+                                  padding: EdgeInsets.only(top: 4),
+                                  child: Divider(),
+                                )
+                              else
+                                SizedBox(height: 10),
                               if (_providerEnabled(OIDCProivder.custom))
                                 Padding(
                                   padding:
@@ -253,6 +269,8 @@ class _LoginPageState extends State<LoginPage> {
                             SizedBox(
                                 height:
                                     MediaQuery.paddingOf(context).bottom + 16),
+                            if (!_displayUsernamePassword())
+                              const Spacer(),
                           ],
                         ),
                       ),
@@ -279,4 +297,7 @@ class _LoginPageState extends State<LoginPage> {
       (App.serverInfo as ConnectedServerInfoState)
           .oidcProvider
           .contains(provider);
+  bool _displayUsernamePassword() =>
+      App.serverInfo is ConnectedServerInfoState &&
+      !(App.serverInfo as ConnectedServerInfoState).disableUsernamePasswordLogin;
 }

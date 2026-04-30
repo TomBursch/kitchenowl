@@ -121,7 +121,9 @@ final router = GoRouter(
       pageBuilder: (context, state) => SharedAxisTransitionPage(
         key: state.pageKey,
         name: state.name,
-        child: const LoginPage(),
+        child: LoginPage(
+          launch: state.uri.queryParameters["launch"],
+        ),
       ),
       redirect: (BuildContext context, GoRouterState state) {
         final authState = BlocProvider.of<AuthCubit>(context).state;

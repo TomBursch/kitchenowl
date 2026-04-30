@@ -11,6 +11,7 @@ import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/widgets/choice_scroll.dart';
 import 'package:kitchenowl/widgets/shopping_list/shopping_list_choice_chip.dart';
 import 'package:kitchenowl/widgets/shopping_list/sliver_shopinglist_item_view.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 
 class ShoppinglistPage extends StatefulWidget {
   const ShoppinglistPage({super.key});
@@ -26,10 +27,14 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
   void initState() {
     super.initState();
     searchController.text = BlocProvider.of<ShoppinglistCubit>(context).query;
+    if (BlocProvider.of<SettingsCubit>(context).state.shoppingListKeepAwake) {
+      WakelockPlus.enable();
+    }
   }
 
   @override
   void dispose() {
+    WakelockPlus.disable();
     searchController.dispose();
     super.dispose();
   }

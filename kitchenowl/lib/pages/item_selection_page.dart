@@ -30,11 +30,12 @@ class ItemSelectionPage extends StatefulWidget {
 class _ItemSelectionPageState extends State<ItemSelectionPage> {
   final TextEditingController searchController = TextEditingController();
   late ItemSelectionCubit cubit;
+  bool _hidePastPlans = true;
 
   @override
   void initState() {
     super.initState();
-    cubit = ItemSelectionCubit(widget.plans);
+    cubit = ItemSelectionCubit(_get_filteredPlans());
   }
 
   @override
@@ -43,17 +44,47 @@ class _ItemSelectionPageState extends State<ItemSelectionPage> {
     super.dispose();
   }
 
+  List<RecipePlan> _get_filteredPlans() {
+    if (!_hidePastPlans) return widget.plans;
+
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+
+    return widget.plans.where((plan) {
+      if (plan.cookingDate == null) return true; 
+      final planDay = DateTime(plan.cookingDate!.year, plan.cookingDate!.month, plan.cookingDate!.day);
+      return !planDay.isBefore(today);
+    }).toList();
+  }
+
+  void _toggleFilter() {
+    setState(() {
+      _hidePastPlans = !_hidePastPlans;
+      cubit.close();
+      cubit = ItemSelectionCubit(_get_filteredPlans());
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    final filteredPlans = _get_filteredPlans();
+
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title ?? AppLocalizations.of(context)!.itemsAdd),
+        actions: [
+          IconButton(
+            icon: Icon(_hidePastPlans ? Icons.filter_alt_off : Icons.filter_alt), 
+            tooltip: _hidePastPlans ? AppLocalizations.of(context)!.showPastPlans : AppLocalizations.of(context)!.hidePastPlans ,
+            onPressed: _toggleFilter,
+          ),
+        ],
       ),
       body: BlocBuilder<ItemSelectionCubit, ItemSelectionState>(
         bloc: cubit,
         builder: (context, state) => CustomScrollView(
           slivers: [
-            for (final plan in widget.plans) ...[
+            for (final plan in filteredPlans) ...[
               if (plan.recipe.items.isNotEmpty)
                 SliverToBoxAdapter(
                   child: CheckboxListTile(
@@ -145,7 +176,7 @@ class _ItemSelectionPageState extends State<ItemSelectionPage> {
                                     builder: (context) => SelectDialog(
                                       title: AppLocalizations.of(context)!
                                           .addNumberIngredients(
-                                              state.selectedItems.length),
+                                              state.getResult().length),
                                       cancelText:
                                           AppLocalizations.of(context)!.cancel,
                                       options: widget.shoppingLists

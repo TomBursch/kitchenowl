@@ -35,37 +35,32 @@ class _ItemSelectionPageState extends State<ItemSelectionPage> {
   @override
   void initState() {
     super.initState();
-    cubit = ItemSelectionCubit(widget.plans);
+    cubit = ItemSelectionCubit(_get_filteredPlans());
   }
 
   @override
   void dispose() {
-    if (mounted) {
-      cubit.close();
-    }
-    
+    cubit.close();
     super.dispose();
-  }
-
-  List<RecipeItem> _getFilteredResult() {
-    final filteredPlans = _get_filteredPlans();
-    final allResults = cubit.getResult();
-
-    return allResults.where((item) {
-      return filteredPlans.any((plan) => 
-        plan.recipeWithYields.mandatoryItems.contains(item) || 
-        plan.recipeWithYields.optionalItems.contains(item)
-      );
-    }).toList();
   }
 
   List<RecipePlan> _get_filteredPlans() {
     if (!_hidePastPlans) return widget.plans;
 
     final now = DateTime.now();
-    return widget.plans
-        .where((plan) => plan.cookingDate == null || plan.cookingDate!.isAfter(now))
-        .toList();
+
+    return widget.plans.where((plan) {
+      if (plan.cookingDate == null) return true; 
+      return !plan.cookingDate!.isBefore(now);
+    }).toList();
+  }
+
+  void _toggleFilter() {
+    setState(() {
+      _hidePastPlans = !_hidePastPlans;
+      cubit.close();
+      cubit = ItemSelectionCubit(_get_filteredPlans());
+    });
   }
 
   @override
@@ -77,13 +72,10 @@ class _ItemSelectionPageState extends State<ItemSelectionPage> {
         title: Text(widget.title ?? AppLocalizations.of(context)!.itemsAdd),
         actions: [
           IconButton(
-            icon: Icon(_hidePastPlans ? Icons.visibility_off_rounded : Icons.visibility_rounded), 
+            icon: Icon(_hidePastPlans ? Icons.filter_alt : Icons.filter_alt_off), 
             tooltip: _hidePastPlans ? AppLocalizations.of(context)!.showPastPlans : AppLocalizations.of(context)!.hidePastPlans ,
-            onPressed: () {
-            setState(() {
-              _hidePastPlans = !_hidePastPlans;
-            });
-          }),
+            onPressed: _toggleFilter,
+          ),
         ],
       ),
       body: BlocBuilder<ItemSelectionCubit, ItemSelectionState>(
@@ -155,16 +147,16 @@ class _ItemSelectionPageState extends State<ItemSelectionPage> {
                                 if (widget.handleResult != null) {
                                   Navigator.of(context).pop(
                                     await widget.handleResult!(
-                                        null, _getFilteredResult()),
+                                        null, cubit.getResult()),
                                   );
                                 } else {
                                   Navigator.of(context)
-                                      .pop((null, _getFilteredResult()));
+                                      .pop((null, cubit.getResult()));
                                 }
                               },
                         child: Text(
                           AppLocalizations.of(context)!.addNumberIngredients(
-                            _getFilteredResult().length,
+                            state.getResult().length,
                           ),
                         ),
                       ),
@@ -182,7 +174,7 @@ class _ItemSelectionPageState extends State<ItemSelectionPage> {
                                     builder: (context) => SelectDialog(
                                       title: AppLocalizations.of(context)!
                                           .addNumberIngredients(
-                                              _getFilteredResult().length),
+                                              state.getResult().length),
                                       cancelText:
                                           AppLocalizations.of(context)!.cancel,
                                       options: widget.shoppingLists
@@ -199,11 +191,11 @@ class _ItemSelectionPageState extends State<ItemSelectionPage> {
                                     if (widget.handleResult != null) {
                                       Navigator.of(context).pop(
                                         await widget.handleResult!(
-                                            list, _getFilteredResult()),
+                                            list, cubit.getResult()),
                                       );
                                     } else {
                                       Navigator.of(context)
-                                          .pop((list, _getFilteredResult()));
+                                          .pop((list, cubit.getResult()));
                                     }
                                   }
                                 },

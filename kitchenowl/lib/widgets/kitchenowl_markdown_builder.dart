@@ -184,6 +184,7 @@ class _KitchenOwlMarkdownBuilderState extends State<KitchenOwlMarkdownBuilder>
               borderRadius: BorderRadius.circular(2.0),
             ),
             textScaler: widget.textScaler,
+            pPadding: const EdgeInsets.only(bottom: 12),
           ),
       imageDirectory: widget.imageDirectory,
       imageBuilder: widget.imageBuilder ??

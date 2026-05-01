@@ -75,7 +75,7 @@ class _ItemSelectionPageState extends State<ItemSelectionPage> {
         title: Text(widget.title ?? AppLocalizations.of(context)!.itemsAdd),
         actions: [
           IconButton(
-            icon: Icon(_hidePastPlans ? Icons.filter_alt : Icons.filter_alt_off), 
+            icon: Icon(_hidePastPlans ? Icons.filter_alt_off : Icons.filter_alt), 
             tooltip: _hidePastPlans ? AppLocalizations.of(context)!.showPastPlans : AppLocalizations.of(context)!.hidePastPlans ,
             onPressed: _toggleFilter,
           ),

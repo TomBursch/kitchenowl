@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/cubits/item_selection_cubit.dart';
+import 'package:kitchenowl/cubits/planner_cubit.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/planner.dart';
@@ -48,10 +49,12 @@ class _ItemSelectionPageState extends State<ItemSelectionPage> {
     if (!_hidePastPlans) return widget.plans;
 
     final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
 
     return widget.plans.where((plan) {
       if (plan.cookingDate == null) return true; 
-      return !plan.cookingDate!.isBefore(now);
+      final planDay = DateTime(plan.cookingDate!.year, plan.cookingDate!.month, plan.cookingDate!.day);
+      return !planDay.isBefore(today);
     }).toList();
   }
 

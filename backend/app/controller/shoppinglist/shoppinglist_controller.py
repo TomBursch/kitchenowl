@@ -153,34 +153,21 @@ def updateItemDescription(args, id: int, item_id: int):
     )
     return jsonify(con.obj_to_item_dict())
 
-
 @shoppinglist.route("/<int:id>/items", methods=["GET"])
 @jwt_required()
 @validate_args(GetItems)
 def getAllShoppingListItems(args, id):
     """
-    Deprecated in favor of including it directly in the shopping list
+    Gibt Einkaufslisten-Items basierend auf Haushalt-Sortierung zurück
     """
     shoppinglist = Shoppinglist.find_by_id(id)
     if not shoppinglist:
         raise NotFoundRequest()
     shoppinglist.checkAuthorized()
 
-    orderby = [Item.name]
-    if "orderby" in args:
-        if args["orderby"] == 1:
-            orderby = [Item.ordering == 0, Item.ordering]
-        elif args["orderby"] == 2:
-            orderby = [Item.name]
-
-    items = (
-        ShoppinglistItems.query.filter(ShoppinglistItems.shoppinglist_id == id)
-        .join(ShoppinglistItems.item)
-        .order_by(*orderby, Item.name)
-        .all()
-    )
+    # Nutze neue Sortierfunktion
+    items = Shoppinglist.get_items_sorted(shoppinglist.household_id, id)
     return jsonify([e.obj_to_item_dict() for e in items])
-
 
 @shoppinglist.route("/<int:id>/recent-items", methods=["GET"])
 @jwt_required()

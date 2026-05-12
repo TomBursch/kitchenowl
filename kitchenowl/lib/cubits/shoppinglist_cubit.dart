@@ -15,10 +15,13 @@ import 'package:kitchenowl/services/transactions/shoppinglist.dart';
 import 'package:kitchenowl/services/transaction_handler.dart';
 
 class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
+  static const _searchDebounce = Duration(milliseconds: 120);
+
   final Household household;
   Future<void>? _refreshThread;
   String? _refreshCurrentQuery;
   Timer? _periodicRefreshTimer;
+  Timer? _searchDebounceTimer;
   Connection? _lastConnectionState;
 
   String get query => (state is SearchShoppinglistCubitState)
@@ -69,6 +72,7 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
   @override
   Future<void> close() async {
     _periodicRefreshTimer?.cancel();
+    _searchDebounceTimer?.cancel();
     ApiService.getInstance().removeListener(_onConnectionChange);
     ApiService.getInstance().offShoppinglistAdd(onShoppinglistAdd);
     ApiService.getInstance().offShoppinglistDelete(onShoppinglistDelete);
@@ -117,7 +121,17 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
     removeLocally(item, data["shoppinglist"]["id"]);
   }
 
-  Future<void> search(String query) => refresh(query: query);
+  Future<void> search(String query) {
+    _searchDebounceTimer?.cancel();
+    // Empty query => clear search immediately (user hit the clear button).
+    if (query.isEmpty) return refresh(query: query);
+
+    final completer = Completer<void>();
+    _searchDebounceTimer = Timer(_searchDebounce, () {
+      refresh(query: query).whenComplete(completer.complete);
+    });
+    return completer.future;
+  }
 
   Future<void> add(Item item) async {
     final _state = state;
@@ -396,10 +410,11 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
   Future<void> _refresh([String? query]) async {
     // Get required information
     late ShoppinglistCubitState resState;
+    final isSearch = query != null && query.isNotEmpty;
     if (state.selectedShoppinglistId == null ||
         (state.selectedShoppinglist?.items.isEmpty ?? true) &&
             (state.selectedShoppinglist?.recentItems.isEmpty ?? true) &&
-            (query == null || query.isEmpty)) {
+            !isSearch) {
       emit(LoadingShoppinglistCubitState(
         selectedShoppinglistId: state.selectedShoppinglistId,
         shoppinglists: state.shoppinglists,
@@ -409,7 +424,11 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
       ));
     }
 
-    final shoppingLists = await fetchShoppingLists();
+    // During search-as-you-type, the list of shopping lists and the category
+    // catalogue don't depend on the query — reuse them from current state.
+    // Cuts 2 round-trips per keystroke (the /shoppinglist and /category endpoints).
+    final shoppingLists =
+        isSearch ? state.shoppinglists : await fetchShoppingLists();
 
     int? selectedShoppinglistId = state.selectedShoppinglistId;
     if (selectedShoppinglistId != null &&
@@ -422,11 +441,12 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
 
     final shoppinglist = shoppingLists[selectedShoppinglistId];
 
-    Future<List<Category>> categories = fetchCategories();
+    final List<Category> categories =
+        isSearch ? state.categories : await fetchCategories();
 
-    if (query != null && query.isNotEmpty) {
+    if (isSearch) {
       // Split query into name and description
-      final splitIndex = query.indexOf(',');
+      final splitIndex = query!.indexOf(',');
       String queryName = query.trim();
       String? queryDescription;
       if (splitIndex >= 0) {
@@ -464,7 +484,7 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
         selectedShoppinglistId: selectedShoppinglistId,
         result: loadedItems,
         query: query,
-        categories: await categories,
+        categories: categories,
         sorting: state.sorting,
         selectedListItems: state.selectedListItems
             .map((e) =>
@@ -476,7 +496,7 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
       resState = ShoppinglistCubitState(
         shoppinglists: shoppingLists,
         selectedShoppinglistId: selectedShoppinglistId,
-        categories: await categories,
+        categories: categories,
         sorting: state.sorting,
         selectedListItems: state.selectedListItems
             .map((e) =>

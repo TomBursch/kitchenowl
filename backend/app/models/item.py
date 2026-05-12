@@ -3,6 +3,7 @@ from typing import Any, Optional, Self, List, TYPE_CHECKING, cast
 
 from sqlalchemy import func
 from app import db
+from app.config import DISABLE_FUZZY_SEARCH
 from app.helpers import DbModelAuthorizeMixin
 from app.models.category import Category
 from app.util import description_merger
@@ -203,6 +204,16 @@ class Item(Model, DbModelAuthorizeMixin):
     def search_name(cls, name: str, household_id: int) -> list[Self]:
         item_count = 11
         if "postgresql" in db.engine.name:
+            if DISABLE_FUZZY_SEARCH:
+                return (
+                    cls.query.filter(
+                        cls.household_id == household_id,
+                        cls.name.ilike("{0}%".format(name)),
+                    )
+                    .order_by(cls.support.desc(), cls.name)
+                    .limit(item_count)
+                    .all()
+                )
             return (
                 cls.query.filter(
                     cls.household_id == household_id,
@@ -241,12 +252,13 @@ class Item(Model, DbModelAuthorizeMixin):
         # name is no regex
         starts_with = "{0}%".format(name)
         contains = "%{0}%".format(name)
-        one_error: List[str] = []
-        for index in range(len(name)):
-            name_one_error = name[:index] + "_" + name[index + 1 :]
-            one_error.append("%{0}%".format(name_one_error))
+        patterns: List[str] = [starts_with, contains]
+        if not DISABLE_FUZZY_SEARCH:
+            for index in range(len(name)):
+                name_one_error = name[:index] + "_" + name[index + 1 :]
+                patterns.append("%{0}%".format(name_one_error))
 
-        for looking_for in [starts_with, contains] + one_error:
+        for looking_for in patterns:
             res = (
                 cls.query.filter(
                     cls.name.ilike(looking_for), cls.household_id == household_id

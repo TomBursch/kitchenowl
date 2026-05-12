@@ -65,6 +65,7 @@ DISABLE_USERNAME_PASSWORD_LOGIN = (
 )
 EMAIL_MANDATORY = os.getenv("EMAIL_MANDATORY", "False").lower() == "true"
 DISABLE_ONBOARDING = os.getenv("DISABLE_ONBOARDING", "False").lower() == "true"
+DISABLE_FUZZY_SEARCH = os.getenv("DISABLE_FUZZY_SEARCH", "False").lower() == "true"
 
 COLLECT_METRICS = os.getenv("COLLECT_METRICS", "False").lower() == "true"
 

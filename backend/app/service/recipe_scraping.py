@@ -2,7 +2,7 @@ import re
 from typing import Any
 from recipe_scrapers import scrape_html
 from recipe_scrapers._exceptions import SchemaOrgException
-import recipe_scrapers.__version__
+from recipe_scrapers.__version__ import __version__ as recipe_scrapers_version
 import requests
 from app.config import FRONT_URL
 from app.errors import ForbiddenRequest
@@ -13,7 +13,7 @@ from app.models import Recipe, Item, Household
 
 # taken from the recipe-scrapers library to circumvent anti-scraping measures that block requests with the default user agent
 HEADERS = {
-    "User-Agent": f"Mozilla/5.0 (compatible; Windows NT 10.0; Win64; x64; rv:{recipe_scrapers.__version__}) recipe-scrapers/{recipe_scrapers.__version__}",
+    "User-Agent": f"Mozilla/5.0 (compatible; Windows NT 10.0; Win64; x64; rv:{recipe_scrapers_version}) recipe-scrapers/{recipe_scrapers_version}",
 }
 
 

@@ -50,12 +50,25 @@ class ItemSelectionState extends Equatable {
 
   ItemSelectionState(this.plans, {this.hidePastPlans = true})
       : selectedItems = Map.fromEntries(
-          plans.map(
-            (plan) => MapEntry(
+          plans.map((plan) {
+            final now = DateTime.now();
+            final today = DateTime(now.year, now.month, now.day);
+            var isPast = false;
+            if (plan.cookingDate != null) {
+              final planDay = DateTime(
+                plan.cookingDate!.year,
+                plan.cookingDate!.month,
+                plan.cookingDate!.day,
+              );
+              isPast = planDay.isBefore(today);
+            }
+            return MapEntry(
               plan,
-              plan.recipeWithYields.mandatoryItems.toSet(),
-            ),
-          ),
+              isPast
+                  ? <RecipeItem>{}
+                  : plan.recipeWithYields.mandatoryItems.toSet(),
+            );
+          }),
         );
 
   const ItemSelectionState._({

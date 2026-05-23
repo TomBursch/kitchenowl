@@ -7,6 +7,18 @@ class ItemSelectionCubit extends Cubit<ItemSelectionState> {
   ItemSelectionCubit(List<RecipePlan> plans)
       : super(ItemSelectionState(plans));
 
+  bool _isPastPlan(RecipePlan plan) {
+    if (plan.cookingDate == null) return false;
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final planDay = DateTime(
+      plan.cookingDate!.year,
+      plan.cookingDate!.month,
+      plan.cookingDate!.day,
+    );
+    return planDay.isBefore(today);
+  }
+
   void toggleItem(RecipePlan recipe, RecipeItem item) {
     final s = Map.of(state.selectedItems);
     if (!s.containsKey(recipe)) return;
@@ -35,7 +47,16 @@ class ItemSelectionCubit extends Cubit<ItemSelectionState> {
   }
 
   void toggleHidePastPlans() {
-    emit(state.copyWith(hidePastPlans: !state.hidePastPlans));
+    final newHide = !state.hidePastPlans;
+    if (newHide) {
+      final s = Map.of(state.selectedItems);
+      for (final plan in s.keys) {
+        if (_isPastPlan(plan)) s[plan] = {};
+      }
+      emit(state.copyWith(hidePastPlans: newHide, selectedItems: s));
+    } else {
+      emit(state.copyWith(hidePastPlans: newHide));
+    }
   }
 
   List<RecipeItem> getResult() {

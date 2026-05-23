@@ -59,7 +59,7 @@ if not DISABLE_USERNAME_PASSWORD_LOGIN:
 
     @auth.route("", methods=["POST"])
     @validate_args(Login)
-    def login(args):
+    def login(args: Login):
         """Authenticate user with username/email and password.
         ---
         post:
@@ -89,14 +89,14 @@ if not DISABLE_USERNAME_PASSWORD_LOGIN:
               description: Validation error
           security: []
         """
-        username = args["username"].lower().replace(" ", "")
+        username = args.username.lower().replace(" ", "")
         user = None
         if "@" not in username:
             user = User.find_by_username(username)
         else:
             user = User.find_by_email(username)
 
-        if not user or not user.check_password(args["password"]):
+        if not user or not user.check_password(args.password):
             raise UnauthorizedRequest(
                 message="Unauthorized: IP {} login attempt with wrong username or password".format(
                     getClientIp()
@@ -104,7 +104,7 @@ if not DISABLE_USERNAME_PASSWORD_LOGIN:
             )
         device = "Unkown"
         if "device" in args:
-            device = args["device"]
+            device = args.device
 
         # Create refresh token
         refreshToken, refreshModel = Token.create_refresh_token(user, device)
@@ -125,7 +125,7 @@ if OPEN_REGISTRATION and not DISABLE_USERNAME_PASSWORD_LOGIN:
 
     @auth.route("signup", methods=["POST"])
     @validate_args(Signup)
-    def signup(args):
+    def signup(args: Signup):
         """Register new user account.
         ---
         post:
@@ -153,22 +153,19 @@ if OPEN_REGISTRATION and not DISABLE_USERNAME_PASSWORD_LOGIN:
               description: Invalid username/email
           security: []
         """
-        username = args["username"].lower().replace(" ", "").replace("@", "")
+        username = args.username.lower().replace(" ", "").replace("@", "")
         user = User.find_by_username(username)
         if user:
             return "Request invalid: username", 400
-        if "email" in args:
-            user = User.find_by_email(args["email"])
+        if args.email:
+            user = User.find_by_email(args.email)
             if user:
                 return "Request invalid: email", 400
 
         user = User.create(
-            username=username,
-            name=args["name"],
-            password=args["password"],
-            email=args["email"] if "email" in args else None,
+            username=username, name=args.name, password=args.password, email=args.email
         )
-        if "email" in args and mail.mailConfigured():
+        if args.email and mail.mailConfigured():
             gevent.spawn(
                 mail.sendVerificationMail,
                 user.id,
@@ -177,7 +174,7 @@ if OPEN_REGISTRATION and not DISABLE_USERNAME_PASSWORD_LOGIN:
 
         device = "Unkown"
         if "device" in args:
-            device = args["device"]
+            device = args.device
 
         # Create refresh token
         refreshToken, refreshModel = Token.create_refresh_token(user, device)
@@ -297,7 +294,7 @@ def logout(id):
 @auth.route("llt", methods=["POST"])
 @jwt_required()
 @validate_args(CreateLongLivedToken)
-def createLongLivedToken(args):
+def createLongLivedToken(args: CreateLongLivedToken):
     """Generate long-lived authentication token.
     ---
     post:
@@ -326,7 +323,7 @@ def createLongLivedToken(args):
     if not user:
         raise UnauthorizedRequest(message="Unauthorized: IP {}".format(getClientIp()))
 
-    llToken, _ = Token.create_longlived_token(user, args["device"])
+    llToken, _ = Token.create_longlived_token(user, args.device)
 
     return jsonify({"longlived_token": llToken})
 
@@ -378,7 +375,7 @@ if FRONT_URL and len(oidc_clients) > 0:
     @auth.route("oidc", methods=["GET"])
     @jwt_required(optional=True)
     @validate_args(GetOIDCLoginUrl)
-    def getOIDCLoginUrl(args):
+    def getOIDCLoginUrl(args: GetOIDCLoginUrl):
         """Generate OIDC authentication URL.
         ---
         get:
@@ -416,7 +413,7 @@ if FRONT_URL and len(oidc_clients) > 0:
             - bearerAuth: []
             - {}
         """
-        provider = args["provider"] if "provider" in args else "custom"
+        provider = args.provider if args.provider else "custom"
         if provider not in oidc_clients:
             raise NotFoundRequest()
         client = oidc_clients[provider]
@@ -430,7 +427,7 @@ if FRONT_URL and len(oidc_clients) > 0:
         nonce = rndstr()
         redirect_uri = (
             ("kitchenowl:" + ("" if OIDC_RFC_COMPLIANT_REDIRECT else "//"))
-            if "kitchenowl_scheme" in args and args["kitchenowl_scheme"]
+            if args.kitchenowl_scheme
             else FRONT_URL
         ) + "/signin/redirect"
         args = {
@@ -456,7 +453,7 @@ if FRONT_URL and len(oidc_clients) > 0:
     @auth.route("callback", methods=["POST"])
     @jwt_required(optional=True)
     @validate_args(LoginOIDC)
-    def loginWithOIDC(args):
+    def loginWithOIDC(args: LoginOIDC):
         """Handle OIDC authentication callback.
         ---
         post:
@@ -492,7 +489,7 @@ if FRONT_URL and len(oidc_clients) > 0:
             - {}
         """
         # Validate oidc login
-        oidc_request = OIDCRequest.find_by_state(args["state"])
+        oidc_request = OIDCRequest.find_by_state(args.state)
         if not oidc_request:
             raise UnauthorizedRequest(
                 message="Unauthorized: IP {} login attempt with unknown OIDC state".format(
@@ -521,7 +518,7 @@ if FRONT_URL and len(oidc_clients) > 0:
 
         client.parse_response(
             AuthorizationResponse,
-            info={"code": args["code"], "state": oidc_request.state},
+            info={"code": args.code, "state": oidc_request.state},
             sformat="dict",
         )
 
@@ -529,7 +526,7 @@ if FRONT_URL and len(oidc_clients) > 0:
             scope=["openid", "profile", "email"],
             state=oidc_request.state,
             request_args={
-                "code": args["code"],
+                "code": args.code,
                 "redirect_uri": oidc_request.redirect_uri,
             },
             authn_method="client_secret_post",
@@ -622,8 +619,8 @@ if FRONT_URL and len(oidc_clients) > 0:
 
         # login user
         device = "Unkown"
-        if "device" in args:
-            device = args["device"]
+        if args.device:
+            device = args.device
 
         # Create refresh token
         refreshToken, refreshModel = Token.create_refresh_token(user, device)

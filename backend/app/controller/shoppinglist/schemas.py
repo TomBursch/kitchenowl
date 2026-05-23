@@ -1,65 +1,57 @@
-from marshmallow import fields, Schema, EXCLUDE
+from typing import Annotated
+
+from pydantic import BaseModel, StringConstraints, Field
 
 
-class GetShoppingLists(Schema):
-    orderby = fields.Integer()
-    recent_limit = fields.Integer(load_default=9, validate=lambda x: x > 0 and x <= 120)
+class GetShoppingLists(BaseModel):
+    orderby: int | None = None
+    recent_limit: Annotated[int, Field(gt=0, le=120)] = 9
 
 
-class AddItemByName(Schema):
-    name = fields.String(required=True)
-    description = fields.String()
+class AddItemByName(BaseModel):
+    name: str
+    description: str | None = None
 
 
-class AddRecipeItems(Schema):
-    class RecipeItem(Schema):
-        class Meta:
-            unknown = EXCLUDE
+class AddRecipeItems(BaseModel):
+    class RecipeItem(BaseModel):
+        id: int
+        name: Annotated[str, StringConstraints(min_length=1, strip_whitespace=True)]
+        description: str = ""
+        optional: bool = True
 
-        id = fields.Integer(required=True)
-        name = fields.String(required=True, validate=lambda a: a and not a.isspace())
-        description = fields.String(load_default="")
-        optional = fields.Boolean(load_default=True)
-
-    items = fields.List(fields.Nested(RecipeItem))
+    items: list[RecipeItem]
 
 
-class CreateList(Schema):
-    name = fields.String(required=True, validate=lambda a: a and not a.isspace())
+class CreateList(BaseModel):
+    name: Annotated[str, StringConstraints(min_length=1, strip_whitespace=True)]
 
 
-class UpdateList(Schema):
-    name = fields.String(validate=lambda a: a and not a.isspace())
+class UpdateList(BaseModel):
+    name: Annotated[str, StringConstraints(min_length=1, strip_whitespace=True)]
 
 
-class GetItems(Schema):
-    orderby = fields.Integer()
+class GetItems(BaseModel):
+    orderby: int | None = None
 
 
-class GetRecentItems(Schema):
+class GetRecentItems(BaseModel):
     # Align deprecated endpoint limit with list endpoint (<=120)
-    limit = fields.Integer(load_default=9, validate=lambda x: x > 0 and x <= 120)
+    limit: Annotated[int, Field(gt=0, le=120)] = 9
 
 
-class UpdateDescription(Schema):
-    description = fields.String(required=True)
+class UpdateDescription(BaseModel):
+    description: str
 
 
-class RemoveItem(Schema):
-    item_id = fields.Integer(
-        required=True,
-    )
-    removed_at = fields.Integer()
+class RemoveItem(BaseModel):
+    item_id: int
+    removed_at: int | None = None
 
 
-class RemoveItems(Schema):
-    class RecipeItem(Schema):
-        class Meta:
-            unknown = EXCLUDE
+class RemoveItems(BaseModel):
+    class RecipeItem(BaseModel):
+        item_id: int
+        removed_at: int | None = None
 
-        item_id = fields.Integer(
-            required=True,
-        )
-        removed_at = fields.Integer()
-
-    items = fields.List(fields.Nested(RecipeItem))
+    items: list[RecipeItem]

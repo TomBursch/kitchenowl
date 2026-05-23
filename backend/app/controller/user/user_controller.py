@@ -76,14 +76,14 @@ def updateUser(args):
     user: User = current_user
     if not user:
         raise NotFoundRequest()
-    if "name" in args:
-        user.name = args["name"].strip()
-    if "password" in args:
-        user.set_password(args["password"])
-    if "email" in args and args["email"].strip() != user.email:
-        if user.find_by_email(args["email"].strip()):
+    if args.name is not None:
+        user.name = args.name.strip()
+    if args.password is not None:
+        user.set_password(args.password)
+    if args.email is not None and args.email.strip() != user.email:
+        if user.find_by_email(args.email.strip()):
             return "Request invalid: email", 400
-        user.email = args["email"].strip()
+        user.email = args.email.strip()
         user.email_verified = False
         ChallengeMailVerify.delete_by_user(user)
         if mail.mailConfigured():
@@ -92,8 +92,8 @@ def updateUser(args):
                 user.id,
                 ChallengeMailVerify.create_challenge(user),
             )
-    if "photo" in args and user.photo != args["photo"]:
-        user.photo = file_has_access_or_download(args["photo"], user.photo)
+    if args.photo is not None and user.photo != args.photo:
+        user.photo = file_has_access_or_download(args.photo, user.photo)
     user.save()
     return jsonify({"msg": "DONE"})
 
@@ -102,24 +102,24 @@ def updateUser(args):
 @jwt_required()
 @server_admin_required()
 @validate_args(UpdateUser)
-def updateUserById(args, id):
+def updateUserById(args: UpdateUser, id: int):
     user = User.find_by_id(id)
     if not user:
         raise NotFoundRequest()
-    if "name" in args:
-        user.name = args["name"].strip()
-    if "password" in args:
-        user.set_password(args["password"])
-    if "email" in args and args["email"].strip() != user.email:
-        if user.find_by_email(args["email"].strip()):
+    if args.name is not None:
+        user.name = args.name.strip()
+    if args.password is not None:
+        user.set_password(args.password)
+    if args.email is not None and args.email.strip() != user.email:
+        if user.find_by_email(args.email.strip()):
             return "Request invalid: email", 400
-        user.email = args["email"].strip()
+        user.email = args.email.strip()
         user.email_verified = True
         ChallengeMailVerify.delete_by_user(user)
-    if "photo" in args and user.photo != args["photo"]:
-        user.photo = file_has_access_or_download(args["photo"], user.photo)
-    if "admin" in args:
-        user.admin = args["admin"]
+    if args.photo is not None and user.photo != args.photo:
+        user.photo = file_has_access_or_download(args.photo, user.photo)
+    if args.admin is not None:
+        user.admin = args.admin
     user.save()
     return jsonify({"msg": "DONE"})
 
@@ -128,12 +128,12 @@ def updateUserById(args, id):
 @jwt_required()
 @server_admin_required()
 @validate_args(CreateUser)
-def createUser(args):
+def createUser(args: CreateUser):
     User.create(
-        args["username"].replace(" ", ""),
-        args["password"],
-        args["name"],
-        email=args["email"] if "email" in args else None,
+        args.username.replace(" ", ""),
+        args.password,
+        args.name,
+        email=args.email,
     )
     return jsonify({"msg": "DONE"})
 
@@ -141,8 +141,8 @@ def createUser(args):
 @user.route("/search", methods=["GET"])
 @jwt_required()
 @validate_args(SearchByNameRequest)
-def searchUser(args):
-    return jsonify([e.obj_to_dict() for e in User.search_name(args["query"])])
+def searchUser(args: SearchByNameRequest):
+    return jsonify([e.obj_to_dict() for e in User.search_name(args.query)])
 
 
 @user.route("/resend-verification-mail", methods=["POST"])
@@ -162,8 +162,8 @@ def resendVerificationMail():
 
 @user.route("/confirm-mail", methods=["POST"])
 @validate_args(ConfirmMail)
-def confirmMail(args):
-    challenge = ChallengeMailVerify.find_by_challenge(args["token"])
+def confirmMail(args: ConfirmMail):
+    challenge = ChallengeMailVerify.find_by_challenge(args.token)
     if not challenge:
         raise NotFoundRequest()
     user: User = challenge.user
@@ -176,12 +176,12 @@ def confirmMail(args):
 
 @user.route("/reset-password", methods=["POST"])
 @validate_args(ResetPassword)
-def resetPassword(args):
-    challenge = ChallengePasswordReset.find_by_challenge(args["token"])
+def resetPassword(args: ResetPassword):
+    challenge = ChallengePasswordReset.find_by_challenge(args.token)
     if not challenge:
         raise NotFoundRequest()
     user: User = challenge.user
-    user.set_password(args["password"])
+    user.set_password(args.password)
     user.save()
     ChallengePasswordReset.delete_by_user(user)
     return jsonify({"msg": "DONE"})
@@ -189,11 +189,11 @@ def resetPassword(args):
 
 @user.route("/forgot-password", methods=["POST"])
 @validate_args(ForgotPassword)
-def forgotPassword(args):
+def forgotPassword(args: ForgotPassword):
     if not mail.mailConfigured():
         raise Exception("Mail service not configured")
 
-    user = User.find_by_email(args["email"])
+    user = User.find_by_email(args.email)
     if not user:
         return jsonify({"msg": "DONE"})
 

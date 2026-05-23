@@ -1,56 +1,35 @@
-from marshmallow import fields, Schema, EXCLUDE
+from typing import Annotated
+from pydantic import BaseModel, PositiveInt, StringConstraints
 
 
-class SearchByNameRequest(Schema):
-    query = fields.String(required=True, validate=lambda a: a and not a.isspace())
+class SearchByNameRequest(BaseModel):
+    query: Annotated[
+        str | None, StringConstraints(min_length=1, strip_whitespace=True)
+    ] = None
 
 
-class UpdateItem(Schema):
-    class Meta:
-        unknown = EXCLUDE
+class UpdateItem(BaseModel):
+    class Category(BaseModel):
+        id: PositiveInt
+        name: Annotated[
+            str | None, StringConstraints(min_length=1, strip_whitespace=True)
+        ] = None
 
-    class Category(Schema):
-        class Meta:
-            unknown = EXCLUDE
-
-        id = fields.Integer(required=True, validate=lambda a: a > 0)
-        name = fields.String(validate=lambda a: not a or a and not a.isspace())
-
-    category = fields.Nested(Category(), allow_none=True)
-    icon = fields.String(
-        validate=lambda a: not a or not a.isspace(),
-        allow_none=True,
-    )
-    name = fields.String(
-        validate=lambda a: not a or not a.isspace(),
-        allow_none=True,
-    )
+    category: Category | None = None
+    icon: str | None = None
+    name: Annotated[
+        str | None, StringConstraints(min_length=1, strip_whitespace=True)
+    ] = None
 
     # if set this merges the specified item into this item thus combining them to one
-    merge_item_id = fields.Integer(
-        validate=lambda a: a > 0,
-        allow_none=True,
-    )
+    merge_item_id: PositiveInt | None = None
 
 
-class AddItem(Schema):
-    class Meta:
-        unknown = EXCLUDE
+class AddItem(BaseModel):
+    class Category(BaseModel):
+        id: PositiveInt
+        name: Annotated[str, StringConstraints(min_length=1, strip_whitespace=True)]
 
-    class Category(Schema):
-        class Meta:
-            unknown = EXCLUDE
-
-        id = fields.Integer(required=True, validate=lambda a: a > 0)
-        name = fields.String(validate=lambda a: not a or a and not a.isspace())
-
-    category = fields.Nested(Category(), allow_none=True)
-    icon = fields.String(
-        validate=lambda a: not a or not a.isspace(),
-        allow_none=True,
-    )
-    name = fields.String(
-        validate=lambda a: not a or not a.isspace(),
-        allow_none=False,
-        required=True,
-    )
+    category: Category | None = None
+    icon: Annotated[str | None, StringConstraints(min_length=1, strip_whitespace=True)]
+    name: Annotated[str, StringConstraints(min_length=1, strip_whitespace=True)]

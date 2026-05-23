@@ -29,22 +29,22 @@ expenseHousehold = Blueprint("expense", __name__)
 @jwt_required()
 @authorize_household()
 @validate_args(GetExpenses)
-def getAllExpenses(args, household_id):
+def getAllExpenses(args: GetExpenses, household_id):
     filter = [Expense.household_id == household_id]
-    if "startAfterId" in args:
-        filter.append(Expense.id < args["startAfterId"])
-    if "startAfterDate" in args:
+    if args.startAfterId is not None:
+        filter.append(Expense.id < args.startAfterId)
+    if args.startAfterDate is not None:
         filter.append(
             Expense.date
-            < datetime.fromtimestamp(args["startAfterDate"] / 1000, timezone.utc)
+            < datetime.fromtimestamp(args.startAfterDate / 1000, timezone.utc)
         )
-    if "endBeforeDate" in args:
+    if args.endBeforeDate is not None:
         filter.append(
             Expense.date
-            > datetime.fromtimestamp(args["endBeforeDate"] / 1000, timezone.utc)
+            > datetime.fromtimestamp(args.endBeforeDate / 1000, timezone.utc)
         )
 
-    if "view" in args and args["view"] == 1:
+    if args.view is not None and args.view == 1:
         subquery = (
             db.session.query(ExpensePaidFor.expense_id)
             .filter(ExpensePaidFor.user_id == current_user.id)
@@ -52,23 +52,19 @@ def getAllExpenses(args, household_id):
         )
         filter.append(Expense.id.in_(subquery))
 
-    if "filter" in args:
-        if None in args["filter"]:
+    if args.filter is not None:
+        if None in args.filter:
             filter.append(
-                or_(
-                    Expense.category_id == None, Expense.category_id.in_(args["filter"])
-                )
+                or_(Expense.category_id == None, Expense.category_id.in_(args.filter))
             )
         else:
-            filter.append(Expense.category_id.in_(args["filter"]))
+            filter.append(Expense.category_id.in_(args.filter))
 
-    if "search" in args and args["search"]:
-        if "*" in args["search"] or "_" in args["search"]:
-            query = (
-                args["search"].replace("_", "__").replace("*", "%").replace("?", "_")
-            )
+    if args.search is not None and args.search:
+        if "*" in args.search or "_" in args.search:
+            query = args.search.replace("_", "__").replace("*", "%").replace("?", "_")
         else:
-            query = "%{0}%".format(args["search"])
+            query = "%{0}%".format(args.search)
         filter.append(Expense.name.ilike(query))
 
     return jsonify(
@@ -97,39 +93,39 @@ def getExpenseById(id):
 @jwt_required()
 @authorize_household()
 @validate_args(AddExpense)
-def addExpense(args, household_id):
-    member = HouseholdMember.find_by_ids(household_id, args["paid_by"]["id"])
+def addExpense(args: AddExpense, household_id):
+    member = HouseholdMember.find_by_ids(household_id, args.paid_by.id)
     if not member:
         raise NotFoundRequest()
     expense = Expense()
-    expense.name = args["name"]
-    expense.amount = args["amount"]
+    expense.name = args.name
+    expense.amount = args.amount
     expense.household_id = household_id
-    if "description" in args:
-        expense.description = args["description"]
-    if "date" in args:
-        expense.date = datetime.fromtimestamp(args["date"] / 1000, timezone.utc)
-    if "photo" in args and args["photo"] != expense.photo:
-        expense.photo = file_has_access_or_download(args["photo"], expense.photo)
-    if "category" in args:
-        if args["category"] is not None:
-            category = ExpenseCategory.find_by_id(args["category"])
+    if args.description is not None:
+        expense.description = args.description
+    if args.date is not None:
+        expense.date = datetime.fromtimestamp(args.date / 1000, timezone.utc)
+    if args.photo is not None and args.photo != expense.photo:
+        expense.photo = file_has_access_or_download(args.photo, expense.photo)
+    if args.category is not None:
+        if args.category is not None:
+            category = ExpenseCategory.find_by_id(args.category)
             expense.category = category
-    if "exclude_from_statistics" in args:
-        expense.exclude_from_statistics = args["exclude_from_statistics"]
+    if args.exclude_from_statistics is not None:
+        expense.exclude_from_statistics = args.exclude_from_statistics
     expense.paid_by_id = member.user_id
     expense.save()
     member.expense_balance = (member.expense_balance or 0) + expense.amount
     member.save()
     factor_sum = 0
-    for user_data in args["paid_for"]:
-        if HouseholdMember.find_by_ids(household_id, user_data["id"]):
-            factor_sum += user_data["factor"]
-    for user_data in args["paid_for"]:
-        member_for = HouseholdMember.find_by_ids(household_id, user_data["id"])
+    for user_data in args.paid_for:
+        if HouseholdMember.find_by_ids(household_id, user_data.id):
+            factor_sum += user_data.factor
+    for user_data in args.paid_for:
+        member_for = HouseholdMember.find_by_ids(household_id, user_data.id)
         if member_for:
             con = ExpensePaidFor(
-                factor=user_data["factor"],
+                factor=user_data.factor,
             )
             con.user_id = member_for.user_id
             con.expense = expense
@@ -144,52 +140,50 @@ def addExpense(args, household_id):
 @expense.route("/<int:id>", methods=["POST"])
 @jwt_required()
 @validate_args(UpdateExpense)
-def updateExpense(args, id):  # noqa: C901
+def updateExpense(args: UpdateExpense, id):  # noqa: C901
     expense = Expense.find_by_id(id)
     if not expense:
         raise NotFoundRequest()
     expense.checkAuthorized()
 
-    if "name" in args:
-        expense.name = args["name"]
-    if "amount" in args:
-        expense.amount = args["amount"]
-    if "description" in args:
-        expense.description = args["description"]
-    if "date" in args:
-        expense.date = datetime.fromtimestamp(args["date"] / 1000, timezone.utc)
-    if "photo" in args and args["photo"] != expense.photo:
-        expense.photo = file_has_access_or_download(args["photo"], expense.photo)
-    if "category" in args:
-        if args["category"] is not None:
-            category = ExpenseCategory.find_by_id(args["category"])
+    if args.name is not None:
+        expense.name = args.name
+    if args.amount is not None:
+        expense.amount = args.amount
+    if args.description is not None:
+        expense.description = args.description
+    if args.date is not None:
+        expense.date = datetime.fromtimestamp(args.date / 1000, timezone.utc)
+    if args.photo is not None and args.photo != expense.photo:
+        expense.photo = file_has_access_or_download(args.photo, expense.photo)
+    if args.category is not None:
+        if args.category is not None:
+            category = ExpenseCategory.find_by_id(args.category)
             expense.category = category
         else:
             expense.category = None
-    if "exclude_from_statistics" in args:
-        expense.exclude_from_statistics = args["exclude_from_statistics"]
-    if "paid_by" in args:
-        member = HouseholdMember.find_by_ids(
-            expense.household_id, args["paid_by"]["id"]
-        )
+    if args.exclude_from_statistics is not None:
+        expense.exclude_from_statistics = args.exclude_from_statistics
+    if args.paid_by is not None:
+        member = HouseholdMember.find_by_ids(expense.household_id, args.paid_by.id)
         if member:
             expense.paid_by_id = member.user_id
     expense.save()
-    if "paid_for" in args:
+    if args.paid_for is not None:
         for con in expense.paid_for:
-            user_ids = [e["id"] for e in args["paid_for"]]
+            user_ids = [e.id for e in args.paid_for]
             if con.user.id not in user_ids:
                 con.delete()
-        for user_data in args["paid_for"]:
-            member = HouseholdMember.find_by_ids(expense.household_id, user_data["id"])
+        for user_data in args.paid_for:
+            member = HouseholdMember.find_by_ids(expense.household_id, user_data.id)
             if member:
                 con = ExpensePaidFor.find_by_ids(expense.id, member.user_id)
                 if con:
-                    if "factor" in user_data and user_data["factor"]:
-                        con.factor = user_data["factor"]
+                    if user_data.factor is not None:
+                        con.factor = user_data.factor
                 else:
                     con = ExpensePaidFor(
-                        factor=user_data["factor"],
+                        factor=user_data.factor,
                     )
                     con.expense = expense
                     con.user_id = member.user_id
@@ -234,12 +228,12 @@ def getExpenseCategories(household_id):
 @jwt_required()
 @authorize_household()
 @validate_args(GetExpenseOverview)
-def getExpenseOverview(args, household_id):
+def getExpenseOverview(args: GetExpenseOverview, household_id):
     thisMonthStart = datetime.now(timezone.utc).date().replace(day=1)
 
-    steps = args["steps"] if "steps" in args else 5
-    frame = args["frame"] if "frame" in args and args["frame"] is not None else 2
-    page = args["page"] if "page" in args and args["page"] is not None else 0
+    steps = args.steps if args.steps is not None else 5
+    frame = args.frame if args.frame is not None else 2
+    page = args.page if args.page is not None else 0
 
     factor = 1
     by_category_query = (
@@ -266,7 +260,7 @@ def getExpenseOverview(args, household_id):
         else func.strftime(groupByStr, Expense.date)
     )
 
-    if "view" in args and args["view"] == 1:
+    if args.view == 1:
         filterQuery = (
             db.session.query(ExpensePaidFor.expense_id)
             .filter(ExpensePaidFor.user_id == current_user.id)
@@ -357,12 +351,12 @@ def getExpenseOverview(args, household_id):
 @jwt_required()
 @authorize_household()
 @validate_args(AddExpenseCategory)
-def addExpenseCategory(args, household_id):
+def addExpenseCategory(args: AddExpenseCategory, household_id):
     category = ExpenseCategory()
-    category.name = args["name"]
-    category.color = args["color"]
-    if "budget" in args:
-        category.budget = args["budget"]
+    category.name = args.name
+    category.color = args.color
+    if args.budget is not None:
+        category.budget = args.budget
     category.household_id = household_id
     category.save()
     return jsonify(category.obj_to_dict())
@@ -382,23 +376,23 @@ def deleteExpenseCategoryById(id):
 @expense.route("/categories/<int:id>", methods=["POST"])
 @jwt_required()
 @validate_args(UpdateExpenseCategory)
-def updateExpenseCategory(args, id):
+def updateExpenseCategory(args: UpdateExpenseCategory, id):
     category = ExpenseCategory.find_by_id(id)
     if not category:
         raise NotFoundRequest()
     category.checkAuthorized()
 
-    if "name" in args:
-        category.name = args["name"]
-    if "color" in args:
-        category.color = args["color"]
-    if "budget" in args:
-        category.budget = args["budget"]
+    if args.name is not None:
+        category.name = args.name
+    if args.color is not None:
+        category.color = args.color
+    if args.budget is not None:
+        category.budget = args.budget
 
     category.save()
 
-    if "merge_category_id" in args and args["merge_category_id"] != id:
-        mergeCategory = ExpenseCategory.find_by_id(args["merge_category_id"])
+    if args.merge_category_id is not None and args.merge_category_id != id:
+        mergeCategory = ExpenseCategory.find_by_id(args.merge_category_id)
         if mergeCategory:
             category.merge(mergeCategory)
 

@@ -1,19 +1,15 @@
-from marshmallow import fields, Schema
+from typing import Annotated
+
+from pydantic import AfterValidator, BaseModel, StringConstraints
+
+from app.helpers.validators import validate_non_emty_no_at
 
 
-class OnboardSchema(Schema):
-    name = fields.String(required=True, validate=lambda a: a and not a.isspace())
-    username = fields.String(
-        required=True,
-        validate=lambda a: a and not a.isspace() and "@" not in a,
-    )
-    password = fields.String(
-        required=True,
-        validate=lambda a: a and not a.isspace(),
-        load_only=True,
-    )
-    device = fields.String(
-        required=False,
-        validate=lambda a: a and not a.isspace(),
-        load_only=True,
-    )
+class OnboardSchema(BaseModel):
+    name: Annotated[str, StringConstraints(min_length=1, strip_whitespace=True)]
+    # TODO: load only for username and password and device
+    username: Annotated[str, AfterValidator(validate_non_emty_no_at)]
+    password: Annotated[str, StringConstraints(min_length=1, strip_whitespace=True)]
+    device: Annotated[
+        str | None, StringConstraints(min_length=1, strip_whitespace=True)
+    ] = None

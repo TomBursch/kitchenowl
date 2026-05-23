@@ -73,18 +73,18 @@ def getPlanner(household_id):
 @jwt_required()
 @authorize_household()
 @validate_args(AddPlannedRecipe)
-def addPlannedRecipe(args, household_id):
-    recipe = Recipe.find_by_id(args["recipe_id"])
+def addPlannedRecipe(args: AddPlannedRecipe, household_id: int):
+    recipe = Recipe.find_by_id(args.recipe_id)
     if not recipe:
         raise NotFoundRequest()
     cooking_date = (
-        datetime.fromtimestamp(args["cooking_date"] / 1000, timezone.utc).date()
-        if "cooking_date" in args
+        datetime.fromtimestamp(args.cooking_date / 1000, timezone.utc).date()
+        if args.cooking_date is not None
         else date.min
     )
-    if "day" in args:
+    if args.day is not None:
         # if outdated "day" was used, transform it into next date with that weekday
-        cooking_date = next_weekday(args["day"])
+        cooking_date = next_weekday(args.day)
     planner = Planner.find_by_datetime(
         household_id=household_id, recipe_id=recipe.id, cooking_date=cooking_date
     )
@@ -101,8 +101,8 @@ def addPlannedRecipe(args, household_id):
         planner.recipe_id = recipe.id
         planner.household_id = household_id
         planner.cooking_date = datetime.combine(cooking_date, datetime.min.time())
-        if "yields" in args:
-            planner.yields = args["yields"]
+        if args.yields is not None:
+            planner.yields = args.yields
         planner.save()
 
         RecipeHistory.create_added(recipe, household_id)
@@ -114,19 +114,19 @@ def addPlannedRecipe(args, household_id):
 @jwt_required()
 @authorize_household()
 @validate_args(RemovePlannedRecipe)
-def removePlannedRecipeById(args, household_id, id):
+def removePlannedRecipeById(args: RemovePlannedRecipe, household_id: int, id: int):
     recipe = Recipe.find_by_id(id)
     if not recipe:
         raise NotFoundRequest()
 
     cooking_date = (
-        datetime.fromtimestamp(args["cooking_date"] / 1000, timezone.utc).date()
-        if "cooking_date" in args
+        datetime.fromtimestamp(args.cooking_date / 1000, timezone.utc).date()
+        if args.cooking_date is not None
         else date.min
     )
-    if "day" in args:
+    if args.day is not None:
         # if outdated "day" was used, transform it into next date with that weekday
-        cooking_date = next_weekday(args["day"])
+        cooking_date = next_weekday(args.day)
     planner = Planner.find_by_datetime(
         household_id, recipe_id=recipe.id, cooking_date=cooking_date
     )
@@ -140,7 +140,7 @@ def removePlannedRecipeById(args, household_id, id):
 @plannerHousehold.route("/recent-recipes/<int:page>", methods=["GET"])
 @jwt_required()
 @authorize_household()
-def getRecentRecipes(household_id, page):
+def getRecentRecipes(household_id: int, page: int):
     recipes = RecipeHistory.get_recent(household_id, page)
     return jsonify([e.recipe.obj_to_full_dict() for e in recipes])
 
@@ -149,7 +149,7 @@ def getRecentRecipes(household_id, page):
 @plannerHousehold.route("/suggested-recipes/<int:page>", methods=["GET"])
 @jwt_required()
 @authorize_household()
-def getSuggestedRecipes(household_id, page):
+def getSuggestedRecipes(household_id: int, page: int):
     # all suggestions
     suggested_recipes = Recipe.find_suggestions(household_id, page)
     # remove recipes on recent list

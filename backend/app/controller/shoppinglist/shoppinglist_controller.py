@@ -36,8 +36,8 @@ shoppinglistHousehold = Blueprint("shoppinglist", __name__)
 @jwt_required()
 @authorize_household()
 @validate_args(CreateList)
-def createShoppinglist(args, household_id):
-    shoppinglist = Shoppinglist(name=args["name"], household_id=household_id)
+def createShoppinglist(args: CreateList, household_id):
+    shoppinglist = Shoppinglist(name=args.name, household_id=household_id)
     shoppinglist.save()
     shoppinglist_dict = shoppinglist.obj_to_dict()
     socketio.emit(
@@ -52,17 +52,17 @@ def createShoppinglist(args, household_id):
 @jwt_required()
 @authorize_household()
 @validate_args(GetShoppingLists)
-def getShoppinglists(args, household_id):
+def getShoppinglists(args: GetShoppingLists, household_id: int):
     shoppinglists = Shoppinglist.all_from_household(household_id)
     recentItems = {}
     for shoppinglist in shoppinglists:
         recentItems[shoppinglist.id] = [
             e.item.obj_to_dict() | {"description": e.description}
-            for e in History.get_recent(shoppinglist.id, args["recent_limit"])
+            for e in History.get_recent(shoppinglist.id, args.recent_limit)
         ]
 
     orderby = [Item.name]
-    if "orderby" in args and args["orderby"] == 1:
+    if args.orderby == 1:
         orderby = [Item.ordering == 0, Item.ordering]
 
     items = {}
@@ -91,14 +91,14 @@ def getShoppinglists(args, household_id):
 @shoppinglist.route("/<int:id>", methods=["POST"])
 @jwt_required()
 @validate_args(UpdateList)
-def updateShoppinglist(args, id):
+def updateShoppinglist(args: UpdateList, id):
     shoppinglist = Shoppinglist.find_by_id(id)
     if not shoppinglist:
         raise NotFoundRequest()
     shoppinglist.checkAuthorized()
 
-    if "name" in args:
-        shoppinglist.name = args["name"]
+    if args.name is not None:
+        shoppinglist.name = args.name
 
     shoppinglist.save()
     return jsonify(shoppinglist.obj_to_dict())
@@ -126,7 +126,7 @@ def deleteShoppinglist(id):
 @shoppinglist.route("/<int:id>/item/<int:item_id>", methods=["POST", "PUT"])
 @jwt_required()
 @validate_args(UpdateDescription)
-def updateItemDescription(args, id: int, item_id: int):
+def updateItemDescription(args: UpdateDescription, id: int, item_id: int):
     con = ShoppinglistItems.find_by_ids(id, item_id)
     if not con:
         shoppinglist = Shoppinglist.find_by_id(id)
@@ -141,7 +141,7 @@ def updateItemDescription(args, id: int, item_id: int):
         con.created_by = current_user.id
     con.shoppinglist.checkAuthorized()
 
-    con.description = args["description"] or ""
+    con.description = args.description or ""
     con.save()
     socketio.emit(
         "shoppinglist_item:add",
@@ -157,7 +157,7 @@ def updateItemDescription(args, id: int, item_id: int):
 @shoppinglist.route("/<int:id>/items", methods=["GET"])
 @jwt_required()
 @validate_args(GetItems)
-def getAllShoppingListItems(args, id):
+def getAllShoppingListItems(args: GetItems, id: int):
     """
     Deprecated in favor of including it directly in the shopping list
     """
@@ -167,10 +167,10 @@ def getAllShoppingListItems(args, id):
     shoppinglist.checkAuthorized()
 
     orderby = [Item.name]
-    if "orderby" in args:
-        if args["orderby"] == 1:
+    if args.orderby is not None:
+        if args.orderby == 1:
             orderby = [Item.ordering == 0, Item.ordering]
-        elif args["orderby"] == 2:
+        elif args.orderby == 2:
             orderby = [Item.name]
 
     items = (
@@ -185,7 +185,7 @@ def getAllShoppingListItems(args, id):
 @shoppinglist.route("/<int:id>/recent-items", methods=["GET"])
 @jwt_required()
 @validate_args(GetRecentItems)
-def getRecentItems(args, id):
+def getRecentItems(args: GetRecentItems, id):
     """
     Deprecated in favor of including it directly in the shopping list
     """
@@ -194,7 +194,7 @@ def getRecentItems(args, id):
         raise NotFoundRequest()
     shoppinglist.checkAuthorized()
 
-    items = History.get_recent(id, args["limit"])
+    items = History.get_recent(id, args.limit)
     return jsonify(
         [e.item.obj_to_dict() | {"description": e.description} for e in items]
     )
@@ -283,19 +283,19 @@ def getSuggestedItems(id):
 @shoppinglist.route("/<int:id>/add-item-by-name", methods=["POST"])
 @jwt_required()
 @validate_args(AddItemByName)
-def addShoppinglistItemByName(args, id):
+def addShoppinglistItemByName(args: AddItemByName, id):
     shoppinglist = Shoppinglist.find_by_id(id)
     if not shoppinglist:
         raise NotFoundRequest()
     shoppinglist.checkAuthorized()
 
-    item = Item.find_by_name(shoppinglist.household_id, args["name"])
+    item = Item.find_by_name(shoppinglist.household_id, args.name)
     if not item:
-        item = Item.create_by_name(shoppinglist.household_id, args["name"])
+        item = Item.create_by_name(shoppinglist.household_id, args.name)
 
     con = ShoppinglistItems.find_by_ids(shoppinglist.id, item.id)
     if not con:
-        description = args["description"] if "description" in args else ""
+        description = args.description if args.description is not None else ""
         con = ShoppinglistItems(description=description)
         con.created_by = current_user.id
         con.item = item
@@ -319,7 +319,7 @@ def addShoppinglistItemByName(args, id):
 @shoppinglist.route("/<int:id>/item", methods=["DELETE"])
 @jwt_required()
 @validate_args(RemoveItem)
-def removeShoppinglistItem(args, id: int):
+def removeShoppinglistItem(args: RemoveItem, id: int):
     shoppinglist = Shoppinglist.find_by_id(id)
     if not shoppinglist:
         raise NotFoundRequest()
@@ -327,8 +327,8 @@ def removeShoppinglistItem(args, id: int):
 
     con = removeShoppinglistItemFunc(
         shoppinglist,
-        args["item_id"],
-        args["removed_at"] if "removed_at" in args else None,
+        args.item_id,
+        args.removed_at if args.removed_at is not None else None,
     )
     if con:
         socketio.emit(
@@ -346,17 +346,17 @@ def removeShoppinglistItem(args, id: int):
 @shoppinglist.route("/<int:id>/items", methods=["DELETE"])
 @jwt_required()
 @validate_args(RemoveItems)
-def removeShoppinglistItems(args, id: int):
+def removeShoppinglistItems(args: RemoveItems, id: int):
     shoppinglist = Shoppinglist.find_by_id(id)
     if not shoppinglist:
         raise NotFoundRequest()
     shoppinglist.checkAuthorized()
 
-    for arg in args["items"]:
+    for arg in args.items:
         con = removeShoppinglistItemFunc(
             shoppinglist,
-            arg["item_id"],
-            arg["removed_at"] if "removed_at" in arg else None,
+            arg.item_id,
+            arg.removed_at if arg.removed_at is not None else None,
         )
         if con:
             socketio.emit(
@@ -394,18 +394,18 @@ def removeShoppinglistItemFunc(
 @shoppinglist.route("/<int:id>/recipeitems", methods=["POST"])
 @jwt_required()
 @validate_args(AddRecipeItems)
-def addRecipeItems(args, id):
+def addRecipeItems(args: AddRecipeItems, id: int):
     shoppinglist = Shoppinglist.find_by_id(id)
     if not shoppinglist:
         raise NotFoundRequest()
     shoppinglist.checkAuthorized()
 
     try:
-        for recipeItem in args["items"]:
-            item = Item.find_by_id(recipeItem["id"])
+        for recipeItem in args.items:
+            item = Item.find_by_id(recipeItem.id)
             if item:
                 item.checkAuthorized()
-                description = recipeItem["description"]
+                description = recipeItem.description
                 con = ShoppinglistItems.find_by_ids(shoppinglist.id, item.id)
                 if con:
                     # merge descriptions

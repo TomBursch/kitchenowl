@@ -32,17 +32,13 @@ abstract class Share {
       html.document.body?.children.remove(anchor);
       html.Url.revokeObjectUrl(url.toString());
     } else if (Platform.isLinux || Platform.isMacOS || Platform.isWindows) {
-      String? outputPath = await FilePicker.saveFile(
+      await FilePicker.saveFile(
         dialogTitle: 'Please select an output file:',
         allowedExtensions: ['json'],
         type: FileType.custom,
         fileName: filename,
+        bytes: Uint8List.fromList(content.codeUnits),
       );
-      if (outputPath == null) return;
-
-      try {
-        await File(outputPath).writeAsString(content);
-      } catch (_) {}
     } else {
       final box = context.findRenderObject() as RenderBox?;
       SharePlus.Share.shareXFiles(

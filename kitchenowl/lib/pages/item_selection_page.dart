@@ -30,12 +30,11 @@ class ItemSelectionPage extends StatefulWidget {
 class _ItemSelectionPageState extends State<ItemSelectionPage> {
   final TextEditingController searchController = TextEditingController();
   late ItemSelectionCubit cubit;
-  bool _hidePastPlans = true;
 
   @override
   void initState() {
     super.initState();
-    cubit = ItemSelectionCubit(_get_filteredPlans());
+    cubit = ItemSelectionCubit(widget.plans);
   }
 
   @override
@@ -44,47 +43,32 @@ class _ItemSelectionPageState extends State<ItemSelectionPage> {
     super.dispose();
   }
 
-  List<RecipePlan> _get_filteredPlans() {
-    if (!_hidePastPlans) return widget.plans;
-
-    final now = DateTime.now();
-    final today = DateTime(now.year, now.month, now.day);
-
-    return widget.plans.where((plan) {
-      if (plan.cookingDate == null) return true; 
-      final planDay = DateTime(plan.cookingDate!.year, plan.cookingDate!.month, plan.cookingDate!.day);
-      return !planDay.isBefore(today);
-    }).toList();
-  }
-
   void _toggleFilter() {
-    setState(() {
-      _hidePastPlans = !_hidePastPlans;
-      cubit.close();
-      cubit = ItemSelectionCubit(_get_filteredPlans());
-    });
+    cubit.toggleHidePastPlans();
   }
 
   @override
   Widget build(BuildContext context) {
-    final filteredPlans = _get_filteredPlans();
-
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title ?? AppLocalizations.of(context)!.itemsAdd),
-        actions: [
-          IconButton(
-            icon: Icon(_hidePastPlans ? Icons.filter_alt_off : Icons.filter_alt), 
-            tooltip: _hidePastPlans ? AppLocalizations.of(context)!.showPastPlans : AppLocalizations.of(context)!.hidePastPlans ,
-            onPressed: _toggleFilter,
-          ),
-        ],
-      ),
-      body: BlocBuilder<ItemSelectionCubit, ItemSelectionState>(
-        bloc: cubit,
-        builder: (context, state) => CustomScrollView(
+    return BlocBuilder<ItemSelectionCubit, ItemSelectionState>(
+      bloc: cubit,
+      builder: (context, state) => Scaffold(
+        appBar: AppBar(
+          title: Text(widget.title ?? AppLocalizations.of(context)!.itemsAdd),
+          actions: [
+            IconButton(
+              icon: Icon(
+                state.hidePastPlans ? Icons.filter_alt_off : Icons.filter_alt,
+              ),
+              tooltip: state.hidePastPlans
+                  ? AppLocalizations.of(context)!.showPastPlans
+                  : AppLocalizations.of(context)!.hidePastPlans,
+              onPressed: _toggleFilter,
+            ),
+          ],
+        ),
+        body: CustomScrollView(
           slivers: [
-            for (final plan in filteredPlans) ...[
+            for (final plan in state.filteredPlans) ...[
               if (plan.recipe.items.isNotEmpty)
                 SliverToBoxAdapter(
                   child: CheckboxListTile(

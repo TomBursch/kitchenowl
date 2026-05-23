@@ -5,13 +5,7 @@ import 'package:kitchenowl/models/planner.dart';
 
 class ItemSelectionCubit extends Cubit<ItemSelectionState> {
   ItemSelectionCubit(List<RecipePlan> plans)
-      : super(
-          ItemSelectionState(
-            Map.fromEntries(plans.map(
-              (e) => MapEntry(e, e.recipeWithYields.items),
-            )),
-          ),
-        );
+      : super(ItemSelectionState(plans));
 
   void toggleItem(RecipePlan recipe, RecipeItem item) {
     final s = Map.of(state.selectedItems);
@@ -40,35 +34,66 @@ class ItemSelectionCubit extends Cubit<ItemSelectionState> {
     emit(state.copyWith(selectedItems: s));
   }
 
+  void toggleHidePastPlans() {
+    emit(state.copyWith(hidePastPlans: !state.hidePastPlans));
+  }
+
   List<RecipeItem> getResult() {
     return state.getResult();
   }
 }
 
 class ItemSelectionState extends Equatable {
+  final List<RecipePlan> plans;
   final Map<RecipePlan, Set<RecipeItem>> selectedItems;
+  final bool hidePastPlans;
 
-  ItemSelectionState(Map<RecipePlan, List<RecipeItem>> items)
-      : this.withSelection(
-          items.map((key, value) =>
-              MapEntry(key, value.where((e) => !e.optional).toSet())),
+  ItemSelectionState(this.plans, {this.hidePastPlans = true})
+      : selectedItems = Map.fromEntries(
+          plans.map(
+            (plan) => MapEntry(
+              plan,
+              plan.recipeWithYields.mandatoryItems.toSet(),
+            ),
+          ),
         );
 
-  const ItemSelectionState.withSelection(this.selectedItems);
-
-  const ItemSelectionState._all({
+  const ItemSelectionState._({
+    required this.plans,
     required this.selectedItems,
+    required this.hidePastPlans,
   });
 
   ItemSelectionState copyWith({
+    List<RecipePlan>? plans,
     Map<RecipePlan, Set<RecipeItem>>? selectedItems,
+    bool? hidePastPlans,
   }) =>
-      ItemSelectionState._all(
+      ItemSelectionState._(
+        plans: plans ?? this.plans,
         selectedItems: selectedItems ?? this.selectedItems,
+        hidePastPlans: hidePastPlans ?? this.hidePastPlans,
       );
 
+  List<RecipePlan> get filteredPlans {
+    if (!hidePastPlans) return plans;
+
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+
+    return plans.where((plan) {
+      if (plan.cookingDate == null) return true;
+      final planDay = DateTime(
+        plan.cookingDate!.year,
+        plan.cookingDate!.month,
+        plan.cookingDate!.day,
+      );
+      return !planDay.isBefore(today);
+    }).toList();
+  }
+
   @override
-  List<Object?> get props => selectedItems.values.toList();
+  List<Object?> get props => [plans, selectedItems, hidePastPlans];
 
   List<RecipeItem> getResult() {
     return selectedItems.values.expand((e) => e).toList();

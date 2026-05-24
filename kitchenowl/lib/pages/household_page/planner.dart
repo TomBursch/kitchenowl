@@ -48,6 +48,8 @@ String formatDateAsWeekday(
   }
 }
 
+DateTime _toDate(DateTime dt) => DateTime(dt.year, dt.month, dt.day);
+
 String _formatDate(BuildContext context, int daysToAdd) {
   DateTime date = DateTime.now().add(Duration(days: daysToAdd));
   if (daysToAdd >= -1 && daysToAdd < 7) {
@@ -243,15 +245,17 @@ class _PlannerPageState extends State<PlannerPage> {
                                         ),
                                       AspectRatio(
                                         aspectRatio: 1,
-                                        child: Opacity(
-                                          opacity: cookingDate.isBefore(DateTime.now()) ? 0.6 : 1.0,
-                                          child: SelectableButtonCard(
-                                            key: ValueKey(
-                                              plan.recipe.id,
-                                            ),
-                                            title: plan.recipe.name,
-                                            description: plan.yields?.toString(),
-                                          selected: true,
+                                        child: SelectableButtonCard(
+                                          key: ValueKey(
+                                            plan.recipe.id,
+                                          ),
+                                          title: plan.recipe.name,
+                                          description: plan.yields?.toString(),
+                                          selected: plan.cookingDate == null
+                                              ? true
+                                              : !_toDate(plan.cookingDate!)
+                                                  .isBefore(
+                                                      _toDate(DateTime.now())),
                                           onPressed: () {
                                             cubit.remove(
                                               plan.recipe,
@@ -265,7 +269,6 @@ class _PlannerPageState extends State<PlannerPage> {
                                             plan.yields,
                                           ),
                                         ),
-                                      ),
                                       ),
                                     ],
                                   ),

@@ -8,7 +8,7 @@ class ItemSelectionCubit extends Cubit<ItemSelectionState> {
       : super(ItemSelectionState(plans));
 
   bool _isPastPlan(RecipePlan plan) {
-    if (plan.cookingDate == null) return false;
+    if (plan.cookingDate == null || plan.isWithoutPlannedDay) return false;
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
     final planDay = DateTime(
@@ -75,7 +75,7 @@ class ItemSelectionState extends Equatable {
             final now = DateTime.now();
             final today = DateTime(now.year, now.month, now.day);
             var isPast = false;
-            if (plan.cookingDate != null) {
+            if (plan.cookingDate != null  && !plan.isWithoutPlannedDay) {
               final planDay = DateTime(
                 plan.cookingDate!.year,
                 plan.cookingDate!.month,
@@ -116,7 +116,7 @@ class ItemSelectionState extends Equatable {
     final today = DateTime(now.year, now.month, now.day);
 
     return plans.where((plan) {
-      if (plan.cookingDate == null) return true;
+      if (plan.cookingDate == null || plan.isWithoutPlannedDay) return true;
       final planDay = DateTime(
         plan.cookingDate!.year,
         plan.cookingDate!.month,

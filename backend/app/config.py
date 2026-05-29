@@ -53,6 +53,7 @@ PROJECT_DIR = os.path.dirname(APP_DIR)
 
 STORAGE_PATH = os.getenv("STORAGE_PATH", PROJECT_DIR)
 UPLOAD_FOLDER = STORAGE_PATH + "/upload"
+DEFAULT_MAX_CONTENT_LENGTH_MB = 128
 ALLOWED_FILE_EXTENSIONS = {"txt", "pdf", "png", "jpg", "jpeg", "gif", "webp", "jxl"}
 
 FRONT_URL = os.getenv("FRONT_URL")
@@ -148,7 +149,13 @@ app = Flask(__name__)
 jwt_secret = get_secret("JWT_SECRET_KEY", "super-secret")
 
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
-app.config["MAX_CONTENT_LENGTH"] = 32 * 1000 * 1000  # 32MB max upload
+try:
+    max_upload_mb = int(
+        os.getenv("MAX_CONTENT_LENGTH_MB", str(DEFAULT_MAX_CONTENT_LENGTH_MB))
+    )
+except (TypeError, ValueError):
+    max_upload_mb = DEFAULT_MAX_CONTENT_LENGTH_MB
+app.config["MAX_CONTENT_LENGTH"] = max_upload_mb * 1000 * 1000
 app.config["SECRET_KEY"] = jwt_secret
 # SQLAlchemy
 app.config["SQLALCHEMY_DATABASE_URI"] = DB_URL

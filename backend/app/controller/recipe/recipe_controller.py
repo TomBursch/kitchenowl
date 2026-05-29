@@ -104,6 +104,12 @@ def addRecipe(args, household_id):
         recipe.visibility = RecipeVisibility(args["visibility"])
     if "photo" in args and args["photo"] != recipe.photo:
         recipe.photo = file_has_access_or_download(args["photo"], recipe.photo)
+    if "photos" in args:
+        recipe.photos = [
+            file_has_access_or_download(photo, user=current_user)
+            for photo in args["photos"]
+            if photo
+        ]
     if "server_curated" in args and current_user.admin:
         recipe.server_curated = args["server_curated"]
     recipe.save()
@@ -157,6 +163,12 @@ def updateRecipe(args, id):  # noqa: C901
         recipe.visibility = RecipeVisibility(args["visibility"])
     if "photo" in args and args["photo"] != recipe.photo:
         recipe.photo = file_has_access_or_download(args["photo"], recipe.photo)
+    if "photos" in args:
+        recipe.photos = [
+            file_has_access_or_download(photo, user=current_user)
+            for photo in args["photos"]
+            if photo
+        ]
     if "server_curated" in args and current_user.admin:
         recipe.server_curated = args["server_curated"]
     recipe.save()

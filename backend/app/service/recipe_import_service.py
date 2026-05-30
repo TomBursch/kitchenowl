@@ -4,6 +4,7 @@ import io
 import json
 import gzip
 import os
+import re
 import time
 import uuid
 import zipfile
@@ -61,6 +62,13 @@ def _normalize_text(value: Any) -> str:
     if value is None:
         return ""
     return str(value).strip()
+
+
+def _normalize_instruction_step(value: Any) -> str:
+    text = _normalize_text(value)
+    if not text:
+        return ""
+    return re.sub(r"^(?:\d+\s*[\.)]\s+)+", "", text)
 
 
 def _normalize_int(value: Any) -> int | None:
@@ -157,13 +165,13 @@ def _normalize_recipe(raw: dict[str, Any]) -> dict[str, Any] | None:
         steps = []
         for entry in instructions:
             if isinstance(entry, dict):
-                text = _normalize_text(
+                text = _normalize_instruction_step(
                     entry.get("text") or entry.get("instruction") or entry.get("value")
                 )
                 if text:
                     steps.append(text)
             else:
-                text = _normalize_text(entry)
+                text = _normalize_instruction_step(entry)
                 if text:
                     steps.append(text)
         if steps:

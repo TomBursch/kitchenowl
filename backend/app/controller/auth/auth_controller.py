@@ -41,8 +41,8 @@ def check_if_token_revoked(jwt_header, jwt_payload: dict) -> bool:
 # Register a callback function that takes whatever object is passed in as the
 # identity when creating JWTs and converts it to a JSON serializable format.
 @jwt.user_identity_loader
-def user_identity_lookup(user: User):
-    return user.id
+def user_identity_lookup(user: User) -> str:
+    return str(user.id)
 
 
 # Register a callback function that loads a user from your database whenever
@@ -51,7 +51,7 @@ def user_identity_lookup(user: User):
 # if the user has been deleted from the database).
 @jwt.user_lookup_loader
 def user_lookup_callback(_jwt_header, jwt_data) -> User | None:
-    identity = jwt_data["sub"]
+    identity = int(jwt_data["sub"])
     return User.find_by_id(identity)
 
 

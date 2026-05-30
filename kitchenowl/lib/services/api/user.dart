@@ -107,7 +107,12 @@ extension UserApi on ApiService {
   }
 
   Future<List<User>?> searchUser(String query) async {
-    final res = await get('$baseRoute/search?query=$query');
+    final res = await get(
+      '$baseRoute/search',
+      queryParameters: {
+        'query': query,
+      },
+    );
     if (res.statusCode != 200) return null;
 
     final body = List.from(jsonDecode(res.body));

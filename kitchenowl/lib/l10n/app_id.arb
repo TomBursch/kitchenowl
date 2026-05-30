@@ -1,13 +1,4 @@
 {
-  "@about": {},
-  "@accountCreate": {},
-  "@accountCreateTitle": {},
-  "@accountDelete": {},
-  "@accountDeleteConfirmation": {},
-  "@add": {},
-  "@addCategory": {},
-  "@addDescriptionFromSource": {},
-  "@addLanguage": {},
   "@addLanguageConfirm": {
     "placeholders": {
       "lang": {
@@ -32,9 +23,6 @@
       }
     }
   },
-  "@addRecipeToPlannerShort": {},
-  "@addShoppingList": {},
-  "@addTag": {},
   "@addedBy": {
     "placeholders": {
       "name": {
@@ -43,21 +31,17 @@
       }
     }
   },
-  "@address": {},
-  "@admin": {},
-  "@appDescription": {},
   "@appTitle": {
     "description": "The title of the app"
   },
-  "@back": {},
-  "@balances": {},
-  "@camera": {},
-  "@cancel": {},
-  "@categories": {},
-  "@categoriesMerge": {},
-  "@category": {},
-  "@categoryDelete": {},
-  "@categoryEdit": {},
+  "@categoryDeleteConfirmation": {
+    "placeholders": {
+      "category": {
+        "example": "Frozen",
+        "type": "String"
+      }
+    }
+  },
   "@categoryExpenseDeleteConfirmation": {
     "placeholders": {
       "category": {
@@ -66,31 +50,6 @@
       }
     }
   },
-  "@changeIcon": {},
-  "@colorSelect": {},
-  "@confirm": {},
-  "@cookingTime": {},
-  "@copied": {},
-  "@daily": {},
-  "@dangerZone": {},
-  "@darkmode": {},
-  "@date": {},
-  "@defaultWord": {},
-  "@delete": {},
-  "@description": {},
-  "@done": {},
-  "@email": {},
-  "@emailInvalid": {},
-  "@emailUpdate": {},
-  "@emailUsed": {},
-  "@error": {},
-  "@expense": {},
-  "@expenseAdd": {},
-  "@expenseAmount": {},
-  "@expenseCategories": {},
-  "@expenseEdit": {},
-  "@expenseEmpty": {},
-  "@expenseOverviewComparedToPreviousMonth": {},
   "@expenseOverviewTotalTitle": {
     "placeholders": {
       "month": {
@@ -99,10 +58,6 @@
       }
     }
   },
-  "@expensePaidBy": {},
-  "@expenseReceivedBy": {},
-  "@export": {},
-  "@features": {},
   "@fieldCannotBeEmpty": {
     "placeholders": {
       "field": {
@@ -111,15 +66,22 @@
       }
     }
   },
-  "@forceOfflineMode": {},
-  "@gallery": {},
-  "@general": {},
-  "@grid": {},
-  "@helpTranslate": {},
-  "@household": {},
-  "@householdDelete": {},
-  "@householdEmpty": {},
-  "@householdLeave": {},
+  "@hi": {
+    "placeholders": {
+      "name": {
+        "example": "Tom",
+        "type": "String"
+      }
+    }
+  },
+  "@householdDeleteConfirmation": {
+    "placeholders": {
+      "household": {
+        "example": "Home",
+        "type": "String"
+      }
+    }
+  },
   "@householdLeaveConfirmation": {
     "placeholders": {
       "household": {
@@ -128,16 +90,6 @@
       }
     }
   },
-  "@householdNew": {},
-  "@householdSwitch": {},
-  "@households": {},
-  "@imageSelect": {},
-  "@import": {},
-  "@importStartedHint": {},
-  "@income": {},
-  "@ingredients": {},
-  "@ingredientsOptional": {},
-  "@itemDelete": {},
   "@itemDeleteConfirmation": {
     "placeholders": {
       "item": {
@@ -158,16 +110,20 @@
       }
     }
   },
-  "@language": {},
-  "@languageSelect": {},
-  "@larger": {},
-  "@lastUsed": {},
-  "@list": {},
-  "@lltNotShownAgain": {},
-  "@lltWarningTitle": {},
-  "@login": {},
-  "@loginTo": {},
-  "@logout": {},
+  "@link": {
+    "description": "The verb, as in link social account (e.g. Google)"
+  },
+  "@linkNoun": {
+    "description": "The noun, as in share using a link (URL)"
+  },
+  "@lltDeleteConfirmation": {
+    "placeholders": {
+      "token": {
+        "example": "HomeAssistant",
+        "type": "String"
+      }
+    }
+  },
   "@logoutName": {
     "placeholders": {
       "name": {
@@ -176,19 +132,6 @@
       }
     }
   },
-  "@mealPlanner": {},
-  "@member": {},
-  "@memberAdd": {},
-  "@memberRemove": {},
-  "@members": {},
-  "@merge": {},
-  "@minutesAbbrev": {},
-  "@monthly": {},
-  "@name": {},
-  "@next": {},
-  "@offlineMessage": {},
-  "@okay": {},
-  "@onboardingLoading": {},
   "@onboardingSettingsTitle": {
     "placeholders": {
       "name": {
@@ -197,22 +140,18 @@
       }
     }
   },
-  "@onboardingTitle": {},
-  "@optional": {},
-  "@or": {},
-  "@other": {},
-  "@overview": {},
-  "@pageNotFound": {},
-  "@password": {},
-  "@passwordFieldTooShort": {},
-  "@passwordRepeat": {},
-  "@passwordRepeatNoMatch": {},
-  "@passwordSave": {},
-  "@personal": {},
-  "@planner": {},
-  "@plannerTitle": {},
-  "@preparationTime": {},
-  "@privacyPolicy": {},
+  "@owesAB": {
+    "placeholders": {
+      "nameA": {
+        "example": "Tom",
+        "type": "String"
+      },
+      "nameB": {
+        "example": "Tom",
+        "type": "String"
+      }
+    }
+  },
   "@privacyPolicyAgree": {
     "placeholders": {
       "privacyPolicy": {
@@ -221,10 +160,14 @@
       }
     }
   },
-  "@profile": {},
-  "@recipeAdd": {},
-  "@recipeAddUrl": {},
-  "@recipeDelete": {},
+  "@recipeAddToHousehold": {
+    "placeholders": {
+      "householdName": {
+        "example": "Home",
+        "type": "String"
+      }
+    }
+  },
   "@recipeDeleteConfirmation": {
     "placeholders": {
       "recipe": {
@@ -233,29 +176,14 @@
       }
     }
   },
-  "@recipeEdit": {},
-  "@recipeEmpty": {},
-  "@recipeEmptySearch": {},
-  "@recipeImageSelect": {},
-  "@recipeNew": {},
-  "@recipeSource": {},
-  "@recipes": {},
-  "@recipesRecent": {},
-  "@recipesSuggested": {},
-  "@refresh": {},
-  "@remove": {},
-  "@rename": {},
-  "@reportIssue": {},
-  "@save": {},
-  "@searchHint": {},
-  "@server": {},
-  "@serverChange": {},
-  "@sessions": {},
-  "@set": {},
-  "@settings": {},
-  "@setupTitle": {},
-  "@shoppingList": {},
-  "@shoppingListDelete": {},
+  "@recipeGoToInHousehold": {
+    "placeholders": {
+      "householdName": {
+        "example": "Home",
+        "type": "String"
+      }
+    }
+  },
   "@shoppingListDeleteConfirmation": {
     "placeholders": {
       "shoppingList": {
@@ -264,19 +192,14 @@
       }
     }
   },
-  "@shoppingListEdit": {},
-  "@shoppingListStyle": {},
-  "@shoppingLists": {},
-  "@signup": {},
-  "@smaller": {},
-  "@sortingAlgorithmic": {},
-  "@sortingAlphabetical": {},
-  "@start": {},
-  "@supportDevelopment": {},
-  "@swipeToDelete": {},
-  "@swipeToDeleteAndLongPressToReorder": {},
-  "@swipeToRemove": {},
-  "@tagDelete": {},
+  "@signInWith": {
+    "placeholders": {
+      "provider": {
+        "example": "Authentik",
+        "type": "String"
+      }
+    }
+  },
   "@tagDeleteConfirmation": {
     "placeholders": {
       "tag": {
@@ -285,25 +208,17 @@
       }
     }
   },
-  "@tagEdit": {},
-  "@tags": {},
-  "@tap": {},
-  "@themeDark": {},
-  "@themeLight": {},
-  "@themeMode": {},
-  "@themeSystem": {},
-  "@total": {},
-  "@totalTime": {},
-  "@uncategorized": {},
-  "@underConstruction": {},
-  "@unreachableMessage": {},
-  "@unsavedChangesBody": {},
-  "@unsavedChangesTitle": {},
-  "@unsupportedBackendMessage": {},
-  "@unsupportedFrontendMessage": {},
-  "@user": {},
-  "@userAdd": {},
-  "@userDelete": {},
+  "@tutorialRecipeMore": {
+    "placeholders": {
+      "url": {
+        "example": "https://...",
+        "type": "String"
+      }
+    }
+  },
+  "@unlink": {
+    "description": "As in remove link to social account (e.g. Google)"
+  },
   "@userDeleteConfirmation": {
     "placeholders": {
       "user": {
@@ -312,26 +227,18 @@
       }
     }
   },
-  "@userSearchHint": {},
-  "@username": {},
-  "@usernameInvalid": {},
-  "@usernameUnavailable": {},
-  "@users": {},
-  "@weekly": {},
-  "@writeMarkdownHere": {},
-  "@wrongUsernameOrPassword": {},
-  "@yearly": {},
-  "@yes": {},
-  "@yields": {},
-  "@you": {},
   "about": "Tentang",
   "accountCreate": "Buat Akun",
+  "accountCreateHint": "Nama pengguna dan nama Anda bersifat publik, jadi pilihlah sesuatu yang nyaman untuk Anda bagikan dengan orang lain.",
   "accountCreateTitle": "Buat akun KitchenOwl kamu",
   "accountDelete": "Hapus Akun",
   "accountDeleteConfirmation": "Apa kamu yakin ingin menghapus akunmu?",
+  "accountLinkedWithOtherUser": "Akun sudah terhubung ke pengguna lain",
+  "accountsLinked": "Akun yang terhubung",
   "add": "Tambah",
   "addCategory": "Tambah Kategori",
   "addDescriptionFromSource": "Tambah keterangan dari sumber",
+  "addItemTitle": "Tambahkan item",
   "addLanguage": "Tambah Bahasa",
   "addLanguageConfirm": "Apa kamu yakin ingin menambahkan bahasa '{lang}'? Hal ini tidak dapat dibatalkan (saat ini).",
   "addNumberIngredients": "Tambahkan {number} bahan",
@@ -342,20 +249,28 @@
   "addedBy": "Ditambahkan oleh {name}",
   "address": "Alamat",
   "admin": "Admin",
+  "analysingWebsite": "Menganalisis situs web...",
   "appDescription": "KitchenOwl membantumu mengatur kebutuhan sehari-hari kamu.",
   "appTitle": "KitchenOwl",
+  "automaticIngredientDetection": "Mendeteksi bahan secara otomatis",
   "back": "Kembali",
   "balances": "Saldo",
+  "budget": "Anggaran",
+  "budgetSet": "Tetapkan anggaran",
   "camera": "Kamera",
   "cancel": "Batal",
+  "cards": "Kartu",
   "categories": "Kategori",
   "categoriesMerge": "Satukan Kategori",
   "category": "Kategori",
   "categoryDelete": "Hapus Kategori",
+  "categoryDeleteConfirmation": "Apakah Anda yakin ingin menghapus {category}? Ini akan menghapus kategori dari semua item.",
   "categoryEdit": "Atur Kategori",
   "categoryExpenseDeleteConfirmation": "Apa kamu yakin ingin menghapus {category}? Tindakan ini akan menghapus kategori ini dari semua pengeluaran.",
   "changeIcon": "Ubah Ikon",
+  "clear": "Bersihkan",
   "colorSelect": "Pilih warna",
+  "compact": "Rapat",
   "confirm": "Konfirmasi",
   "cookingTime": "Waktu memasak",
   "copied": "Disalin",
@@ -363,41 +278,56 @@
   "dangerZone": "Zona Berbahaya",
   "darkmode": "Mode gelap",
   "date": "Tanggal",
-  "defaultWord": "Bawaan",
+  "defaultKey": "Kunci default",
+  "defaultWord": "Default",
   "delete": "Hapus",
   "description": "Keterangan",
+  "discover": "Menemukan",
   "done": "Selesai",
+  "dynamicAccentColor": "Warna aksen dinamis",
   "email": "Email",
   "emailInvalid": "Email tidak sah",
+  "emailNotVerified": "Belum diverifikasi",
+  "emailResendVerification": "Kirim ulang email verifikasi",
+  "emailSuccessfullyVerified": "Email berhasil diverifikasi!",
   "emailUpdate": "Perbarui Email",
   "emailUsed": "Email ini sudah terhubung dengan akun lain",
   "error": "Terjadi kesalahan",
+  "excludeFromStatistics": "Kecualikan dari statistik",
   "expense": "Pengeluaran",
   "expenseAdd": "Tambahkan pengeluaran",
   "expenseAmount": "Jumlah",
   "expenseCategories": "Kategori Pengeluaran",
   "expenseEdit": "Atur Pengeluaran",
   "expenseEmpty": "Belum ada pengeluaran, yuk buat!",
+  "expenseFactor": "Faktor",
   "expenseOverviewComparedToPreviousMonth": "Dibandingkan bulan yang telah lalu",
+  "expenseOverviewExpenses": "Pengeluaran",
   "expenseOverviewTotalTitle": "Jumlah pengeluaran pada {month}:",
   "expensePaidBy": "Dibayar oleh",
+  "expensePaidFor": "Dibayar untuk",
   "expenseReceivedBy": "Diterima oleh",
+  "expenseReceivedFor": "Diterima untuk",
   "export": "Ekspor",
   "features": "Fitur-fitur",
   "fieldCannotBeEmpty": "{field} tidak boleh kosong.",
   "forceOfflineMode": "Paksa mode luring",
   "gallery": "Galeri",
   "general": "Umum",
+  "go": "Pergi",
   "grid": "Tabel",
   "helpTranslate": "Bantu menerjemahkan",
+  "hi": "Hai {name}!",
   "household": "Rumah tangga",
   "householdDelete": "Hapus Rumah tangga",
+  "householdDeleteConfirmation": "Apakah Anda yakin ingin menghapus {household}? Ini akan menghapus semua barang, resep, dan pengeluaran yang terkait dengan rumah tangga tersebut.",
   "householdEmpty": "Belum ada rumah tangga, buatlah!",
   "householdLeave": "Tinggalkan Rumah Tangga",
   "householdLeaveConfirmation": "Apa kamu yakin ingin meninggalkan {household}?",
   "householdNew": "Rumah Tangga Baru",
   "householdSwitch": "Beralih Rumah Tangga",
   "households": "Rumah Tangga",
+  "icon": "Ikon",
   "imageSelect": "Pilih gambar",
   "import": "Impor",
   "importStartedHint": "Pengimporan dimulai, ini mungkin memakan waktu beberapa menit.",
@@ -406,18 +336,37 @@
   "ingredientsOptional": "Bahan Opsional",
   "itemDelete": "Hapus Item",
   "itemDeleteConfirmation": "Apa kamu yakin ingin menghapus {item}? Hal ini akan menghapusnya dari resep yang membutuhkannya.",
+  "itemRemoveInteraction": "Hapus interaksi item",
+  "itemSize": "Ukuran barang",
+  "items": "Barang-barang",
+  "itemsAdd": "Tambahkan barang",
+  "itemsMerge": "Gabungkan barang",
   "itemsMergeConfirmation": "Apa kamu ingin menyatukan {item} dengan {other}? Tindakan ini tidak dapat dibatalkan.",
+  "itemsOptional": "Barang opsional",
+  "itemsRecent": "Barang-barang terbaru",
   "language": "Bahasa",
   "languageSelect": "Pilih bahasa",
   "larger": "Besar",
   "lastUsed": "Terakhir digunakan",
+  "link": "Tautan",
+  "linkNoun": "Tautan",
+  "linkRecipeDescription": "Siapa pun yang memiliki tautan ke resep ini dapat melihatnya.",
   "list": "Daftar",
+  "lltCreate": "Buat token berumur panjang",
+  "lltDelete": "Hapus token berumur panjang",
+  "lltDeleteConfirmation": "Apakah Anda yakin ingin menghapus token '{token}' yang berumur panjang? Hal ini tidak dapat dibatalkan.",
   "lltNotShownAgain": "Simpan tokennya, kamu tidak akan bisa melihatnya lagi",
+  "lltWarningContent": "Apakah Anda yakin ingin membuat token yang berumur panjang? Hal ini berpotensi menjadi risiko keamanan. Token tidak kedaluwarsa dan memberikan akses penuh ke akun Anda.",
   "lltWarningTitle": "Apa kamu benar-benar yakin?",
+  "llts": "Token berumur panjang",
   "login": "Masuk",
   "loginTo": "Masuk ke",
+  "loginToAddToShoppingList": "Masuk untuk menambahkan resep ini ke daftar belanja Anda",
   "logout": "Keluar akun",
   "logoutName": "Keluar akun {name}",
+  "longPressToReorder": "Tekan lama untuk menyusun ulang",
+  "longerThanExpected": "Ini memakan waktu lebih lama dari yang diperkirakan",
+  "markAsPaid": "Tandai sebagai berbayar",
   "mealPlanner": "Perencana Makan",
   "member": "Anggota",
   "memberAdd": "Tambah Anggota",
@@ -425,9 +374,14 @@
   "members": "Anggota",
   "merge": "Satukan",
   "minutesAbbrev": "mnt",
+  "moneyTransfer": "Pengiriman uang",
   "monthly": "Bulanan",
+  "more": "Lebih banyak",
   "name": "Nama",
   "next": "Berikutnya",
+  "noTags": "Tidak ada tag",
+  "none": "Tidak ada",
+  "now": "Sekarang",
   "offlineMessage": "Kamu sedang luring",
   "okay": "Oke",
   "onboardingLoading": "Mengimpor bahasa, ini mungkin membutuhkan sedikit waktu. Harap sabar :)",
@@ -435,53 +389,86 @@
   "onboardingTitle": "Mari buat sebuah pengguna",
   "optional": "Opsional",
   "or": "atau",
+  "ordering": "Pemesanan",
   "other": "Lainnya",
   "overview": "Sekilas",
+  "owesAB": "{nameA} berhutang pada {nameB}",
   "pageNotFound": "Tidak dapat menemukan halaman ini",
+  "parent": "Orang tua",
+  "parentRights": "Dapat mengubah pengaturan rumah tangga",
   "password": "Sandi",
   "passwordFieldTooShort": "Sandi terlalu pendek",
+  "passwordForgot": "Lupa kata sandi?",
   "passwordRepeat": "Ulangi Sandi",
   "passwordRepeatNoMatch": "Sandi tidak cocok",
+  "passwordReset": "Setel ulang kata sandi",
   "passwordSave": "Ubah Sandi",
   "personal": "Pribadi",
   "planner": "Perencana",
+  "plannerEmpty": "Tidak ada rencana makan, mulailah dengan memilih salah satu resep Anda!",
   "plannerTitle": "Makan terencanamu",
   "preparationTime": "Waktu penyiapan",
   "privacyPolicy": "Kebijakan Privasi",
   "privacyPolicyAgree": "Dengan membuat akun kamu setuju pada {privacyPolicy} kami",
+  "private": "Pribadi",
+  "privateRecipeDescription": "Hanya anggota rumah tangga yang dapat melihat resepnya.",
   "profile": "Profil",
+  "public": "Publik",
+  "publicRecipeDescription": "Resepnya bersifat publik dan mungkin disarankan kepada orang lain.",
+  "reason": "Alasan",
+  "recentItemsCategorize": "Kategorikan item terbaru",
   "recipeAdd": "Tambah Resep",
+  "recipeAddToHousehold": "Tambahkan ke {householdName}",
   "recipeAddUrl": "Tambah Resep dari URL",
   "recipeDelete": "Hapus Resep",
   "recipeDeleteConfirmation": "Apa kamu yakin ingin menghapus resep {recipe}?",
   "recipeEdit": "Atur Resep",
   "recipeEmpty": "Tak ada resep, yuk buat!",
   "recipeEmptySearch": "Tak ditemukan resep :(",
+  "recipeGoToInHousehold": "Sudah ditambahkan, buka resep di {householdName}",
   "recipeImageSelect": "Pilih gambar resep",
   "recipeNew": "Resep Baru",
   "recipeSource": "Sumber Resep",
   "recipes": "Resep",
+  "recipesCurated": "Resep yang dikurasi",
+  "recipesDiscover": "Temukan resep",
+  "recipesNewestCommunity": "Resep komunitas terbaru",
+  "recipesOverwrite": "Timpa resep",
+  "recipesOverwriteDescription": "Jika diaktifkan, resep yang sudah ada dengan nama yang sama akan ditimpa",
+  "recipesPopular": "Resep populer",
   "recipesRecent": "Baru-Baru Ini",
   "recipesSuggested": "Disarankan",
+  "redo": "Mengulangi",
   "refresh": "Muat Ulang",
+  "rememberLastShoppingList": "Ingat daftar belanjaan yang terakhir digunakan",
   "remove": "Hapus",
   "rename": "Ubah Nama",
   "reportIssue": "Laporkan masalah",
+  "reportRecipe": "Laporkan resep",
+  "reportUser": "Laporkan pengguna",
+  "reset": "Reset",
   "save": "Simpan",
+  "search": "Cari",
   "searchHint": "Mencari sesuatu?",
+  "send": "Kirim",
   "server": "Server",
   "serverChange": "Beralih Server",
   "sessions": "Sesi",
   "set": "Atur",
   "settings": "Pengaturan",
   "setupTitle": "Halo! Siap berbelanja?",
+  "share": "Bagikan",
   "shoppingList": "Daftar belanja",
   "shoppingListDelete": "Hapus Daftar belanja",
   "shoppingListDeleteConfirmation": "Apa kamu yakin ingin menghapus {shoppingList}?",
   "shoppingListEdit": "Ubah Daftar belanja",
+  "shoppingListEmpty": "Daftar belanjaannya kosong. Tambahkan item menggunakan fungsi pencarian di atas.",
+  "shoppingListKeepAwake": "Tetap nyalakan layar saat berbelanja",
   "shoppingListStyle": "Gaya daftar belanja",
   "shoppingLists": "Daftar belanja",
+  "signInWith": "Masuk dengan {provider}",
   "signup": "Daftar",
+  "skip": "Lewati",
   "smaller": "Kecil",
   "sortingAlgorithmic": "Algoritma",
   "sortingAlphabetical": "Abjad",
@@ -494,34 +481,49 @@
   "tagDeleteConfirmation": "Apa kamu yakin ingin menghapus {tag}? Hal ini akan menghapus tag tersebut dari resep yang memilikinya.",
   "tagEdit": "Atur Tag",
   "tags": "Tag",
+  "tagsPopular": "Tag populer",
   "tap": "Ketuk",
+  "terms": "Syarat & Ketentuan",
   "themeDark": "Gelap",
   "themeLight": "Cerah",
   "themeMode": "Tema",
   "themeSystem": "Sistem",
+  "today": "Hari ini",
+  "tomorrow": "Besok",
   "total": "Jumlah",
   "totalTime": "Jumlah waktu",
+  "tutorialItemDescription1": "Saat mencari item, Anda dapat menambahkan jumlah di awal kueri, dan jumlah tersebut akan ditambahkan sebagai deskripsi.",
+  "tutorialItemDescription2": "Atau jika jumlahnya tidak cukup, gunakan koma untuk memisahkan nama barang dan deskripsi.",
+  "tutorialRecipeDescription": "Di dalam resep, Anda dapat menggunakan Markdown. Fitur dasarnya adalah judul yang ditentukan dengan tanda pagar, daftar bernomor untuk langkah-langkah instruksi, dan referensi bahan menggunakan tanda at diikuti dengan nama bahan.",
+  "tutorialRecipeMore": "Untuk informasi lebih lanjut, kunjungi [documantation]({url}).",
   "uncategorized": "Tak berkategori",
   "underConstruction": "Dalam Pengembangan",
+  "unlink": "Hapus tautan",
   "unreachableMessage": "Hmmmm… tidak dapat menjangkau server",
   "unsavedChangesBody": "Apa kamu yakin ingin kembali?",
   "unsavedChangesTitle": "Kamu memiliki perubahan yang belum tersimpan",
   "unsupportedBackendMessage": "Versi server tidak didukung, harap perbarui backend-nya",
   "unsupportedFrontendMessage": "Versi aplikasi tidak didukung, harap perbarui aplikasinya",
+  "unsupportedScrapeMessage": "Situs web ini tidak didukung",
+  "usedIn": "Digunakan di",
   "user": "Pengguna",
   "userAdd": "Tambah Pengguna",
   "userDelete": "Hapus Pengguna",
   "userDeleteConfirmation": "Apa kamu yakin ingin menghapus {user}?",
+  "userNotSignedIn": "Anda harus masuk untuk menautkan akun",
   "userSearchHint": "Ketik nama",
   "username": "Nama Pengguna",
   "usernameInvalid": "Nama pengguna tidak boleh mengandung '@'",
   "usernameUnavailable": "Nama pengguna ini tidak tersedia",
   "users": "Pengguna",
+  "website": "Situs web",
   "weekly": "Mingguan",
+  "welcomeBack": "Selamat datang kembali",
   "writeMarkdownHere": "Kamu bisa menggunakan markdown di sini!",
   "wrongUsernameOrPassword": "Nama pengguna atau sandi salah",
   "yearly": "Tahunan",
   "yes": "Ya",
+  "yesterday": "Kemarin",
   "yields": "Sajian",
   "you": "kamu"
 }

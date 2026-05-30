@@ -1,0 +1,186 @@
+{
+  "@addLanguageConfirm": {
+    "placeholders": {
+      "lang": {
+        "example": "English",
+        "type": "String"
+      }
+    }
+  },
+  "@addNumberIngredients": {
+    "placeholders": {
+      "number": {
+        "example": "2",
+        "type": "int"
+      }
+    }
+  },
+  "@addRecipeToPlanner": {
+    "placeholders": {
+      "number": {
+        "example": "2",
+        "type": "int"
+      }
+    }
+  },
+  "@addRecipeToPlannerShort": {
+    "description": "A shorter title/button text used wherever the space is limited. Excludes the number of yields."
+  },
+  "@addedBy": {
+    "placeholders": {
+      "name": {
+        "example": "Tom",
+        "type": "String"
+      }
+    }
+  },
+  "@appTitle": {
+    "description": "The title of the app"
+  },
+  "@categoryDeleteConfirmation": {
+    "placeholders": {
+      "category": {
+        "example": "Frozen",
+        "type": "String"
+      }
+    }
+  },
+  "@categoryExpenseDeleteConfirmation": {
+    "placeholders": {
+      "category": {
+        "example": "Frozen",
+        "type": "String"
+      }
+    }
+  },
+  "@fieldCannotBeEmpty": {
+    "placeholders": {
+      "field": {
+        "example": "Username",
+        "type": "String"
+      }
+    }
+  },
+  "@hi": {
+    "placeholders": {
+      "name": {
+        "example": "Tom",
+        "type": "String"
+      }
+    }
+  },
+  "@householdDeleteConfirmation": {
+    "placeholders": {
+      "household": {
+        "example": "Home",
+        "type": "String"
+      }
+    }
+  },
+  "@householdLeaveConfirmation": {
+    "placeholders": {
+      "household": {
+        "example": "Home",
+        "type": "String"
+      }
+    }
+  },
+  "@itemDeleteConfirmation": {
+    "placeholders": {
+      "item": {
+        "example": "Cake",
+        "type": "String"
+      }
+    }
+  },
+  "@itemsMergeConfirmation": {
+    "placeholders": {
+      "item": {
+        "example": "Cake",
+        "type": "String"
+      },
+      "other": {
+        "example": "Cake",
+        "type": "String"
+      }
+    }
+  },
+  "about": "Meist",
+  "accountCreate": "Loo konto",
+  "accountCreateHint": "Sinu kasutajanimi ja nimi on avalikud, seega vali midagi, mida sa teistega jagada tahad.",
+  "accountCreateTitle": "Loo KitchenOwl konto",
+  "accountDelete": "Kustuta konto",
+  "accountDeleteConfirmation": "Oled kindel, et soovid kontot kustutada?",
+  "accountLinkedWithOtherUser": "Konto juba kuulub kellegile teisele",
+  "accountsLinked": "Lingitud kontod",
+  "add": "Lisa",
+  "addCategory": "Lisa kategooria",
+  "addDescriptionFromSource": "Lisa kirjeldus allikast",
+  "addItemTitle": "Lisa üksusi",
+  "addLanguage": "Lisa keel",
+  "addLanguageConfirm": "Kas oled kindel, et soovid keeleks määrata '{lang}'? Seda toimingut ei saa tagasi võtta ja see lisab sinu leibkonda esemeid ja kategooriaid.",
+  "addNumberIngredients": "Lisa {number} koostisosi",
+  "addRecipeToPlanner": "Lisa toitlustuskavasse ({number} portsjonit)",
+  "addRecipeToPlannerShort": "Lisage toitumiskavasse",
+  "addShoppingList": "Lisa ostu nimekiri",
+  "addTag": "Lisa silt",
+  "addedBy": "Lisanud {name}",
+  "address": "Aadress",
+  "analysingWebsite": "Veebilehe analüüsimine...",
+  "appDescription": "KitchenOwl aitab sul oma toidupoeelu korraldada.",
+  "appTitle": "KöögiKakk",
+  "automaticIngredientDetection": "Tuvastage koostisosad automaatselt",
+  "back": "Tagasi",
+  "balances": "Saldo",
+  "budget": "Eelarve",
+  "budgetSet": "Määra eelarve",
+  "camera": "Kaamera",
+  "cancel": "Tühista",
+  "cards": "Kaardid",
+  "categories": "Kategooriad",
+  "categoriesMerge": "Ühendage kategooriad",
+  "category": "Kategooria",
+  "categoryDelete": "Kustuta kategooria",
+  "categoryDeleteConfirmation": "Kas olete kindel, et soovite kategooria {category} kustutada? See eemaldab kategooria kõigilt üksustelt.",
+  "categoryEdit": "Muuda kategooriat",
+  "categoryExpenseDeleteConfirmation": "Kas olete kindel, et soovite kategooria {category} kustutada? See eemaldab kategooria kõikidelt kuludelt.",
+  "changeIcon": "Muuda ikooni",
+  "clear": "Tühjenda",
+  "colorSelect": "Valige värv",
+  "confirm": "Kinnita",
+  "cookingTime": "Küpsetusaeg",
+  "copied": "Kopeeritud",
+  "daily": "Igapäevane",
+  "date": "Kuupäev",
+  "defaultKey": "Vaikevõti",
+  "defaultWord": "Vaikimisi",
+  "delete": "Kustuta",
+  "description": "Kirjeldus",
+  "discover": "Avasta",
+  "done": "Tehtud",
+  "expenseAmount": "Kogus",
+  "fieldCannotBeEmpty": "{field} ei tohi olla tühi.",
+  "hi": "Tere {name}!",
+  "household": "Retseptiraamat",
+  "householdDelete": "Eemalda retseptiraamat",
+  "householdDeleteConfirmation": "Kas olete kindel, et soovite {household} kustutada? See kustutab kõik selle retseptiraamatuga seotud esemed, retseptid ja kulud.",
+  "householdEmpty": "Pole retseptiraamatuid, alustage ühe loomisest!",
+  "householdLeave": "Lahku retseptiraamatust",
+  "householdLeaveConfirmation": "Kas olete kindel, et soovite {household} lahkuda?",
+  "householdNew": "Uus retseptiraamat",
+  "householdSwitch": "Vaheta retseptiraamatut",
+  "households": "Retseptiraamatud",
+  "icon": "Ikoon",
+  "imageSelect": "Vali pilt",
+  "ingredients": "Koostisosad",
+  "ingredientsOptional": "Valikulised koostisosad",
+  "itemDelete": "Kustuta üksus",
+  "itemDeleteConfirmation": "Kas oled kindel, et soovid {item} kustutada? See eemaldab üksuse kõikidest retseptidest, mis seda sisaldavad.",
+  "itemsAdd": "Lisa üksusi",
+  "itemsMerge": "Ühendage üksused",
+  "itemsMergeConfirmation": "Kas olete kindel, et soovite {item} ja {other} ühendada? Seda ei saa tagasi võtta.",
+  "itemsOptional": "Valikulised esemed",
+  "itemsRecent": "Viimased üksused",
+  "language": "Keel",
+  "languageSelect": "Vali keel"
+}

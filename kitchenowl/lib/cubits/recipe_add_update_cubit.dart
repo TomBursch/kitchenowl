@@ -330,19 +330,6 @@ class AddUpdateRecipeState extends Equatable {
   bool canMatchIngredients() {
     if (items.isEmpty) return false;
 
-    print(RegExp(
-      "(?<!#.*)\\b(?<!@)(" +
-          items
-              // sort long to short names
-              .sorted((a, b) => b.name.length.compareTo(a.name.length))
-              .where((e) => e.name.isNotEmpty)
-              .map((e) => e.name)
-              .map((e) => RegExp.escape(e))
-              .fold("", (a, b) => a.isEmpty ? "$b" : "$a|$b") +
-          ")\\b",
-      caseSensitive: false,
-    ).toString());
-
     return description.contains(RegExp(
       "(?<!#.*)\\b(?<!@)(" +
           items

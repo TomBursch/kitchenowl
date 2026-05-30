@@ -11,9 +11,13 @@ extension RecipeApi on ApiService {
 
   // ignore: constant_identifier_names
   static const Duration _TIMEOUT_SCRAPE = Duration(minutes: 3);
+  static const Duration _TIMEOUT_GET_RECIPES = Duration(seconds: 10);
 
   Future<List<Recipe>?> getRecipes(Household household) async {
-    final res = await get(householdPath(household) + baseRoute);
+    final res = await get(
+      householdPath(household) + baseRoute,
+      timeout: _TIMEOUT_GET_RECIPES,
+    );
     if (res.statusCode != 200) return null;
 
     final body = List.from(jsonDecode(res.body));
@@ -38,7 +42,11 @@ extension RecipeApi on ApiService {
 
   Future<List<int>?> searchRecipeById(Household household, String query) async {
     final res = await get(
-      '${householdPath(household)}$baseRoute/search?only_ids=true&query=$query',
+      '${householdPath(household)}$baseRoute/search',
+      queryParameters: {
+        'only_ids': true.toString(),
+        'query': query,
+      },
     );
     if (res.statusCode != 200) return null;
 
@@ -47,7 +55,10 @@ extension RecipeApi on ApiService {
 
   Future<List<Recipe>?> searchRecipe(Household household, String query) async {
     final res = await get(
-      '${householdPath(household)}$baseRoute/search?query=$query',
+      '${householdPath(household)}$baseRoute/search',
+      queryParameters: {
+        'query': query,
+      },
     );
     if (res.statusCode != 200) return null;
 
@@ -105,8 +116,12 @@ extension RecipeApi on ApiService {
   Future<List<Recipe>?> searchAllRecipes(String query,
       [int page = 0, String? language]) async {
     final res = await get(
-      '$baseRoute/search?query=$query&page=$page' +
-          (language != null ? "&language=" + language : ""),
+      '$baseRoute/search',
+      queryParameters: {
+        'page': page.toString(),
+        'query': query,
+        if (language != null) 'language': language,
+      },
     );
     if (res.statusCode != 200) return null;
 
@@ -118,8 +133,12 @@ extension RecipeApi on ApiService {
   Future<List<Recipe>?> searchAllRecipesByTag(String tag,
       [int page = 0, String? language]) async {
     final res = await get(
-      '$baseRoute/search-tag?tag=$tag&page=$page' +
-          (language != null ? "&language=" + language : ""),
+      '$baseRoute/search-tag',
+      queryParameters: {
+        'page': page.toString(),
+        'tag': tag,
+        if (language != null) 'language': language,
+      },
     );
     if (res.statusCode != 200) return null;
 
@@ -130,8 +149,7 @@ extension RecipeApi on ApiService {
 
   Future<List<Recipe>?> getNewestRecipesOfHousehold(
       Household household, int page) async {
-    final res =
-        await get("${householdPath(household)}$baseRoute/newest/$page?");
+    final res = await get("${householdPath(household)}$baseRoute/newest/$page");
     if (res.statusCode != 200) return null;
 
     final body = jsonDecode(res.body);
@@ -139,8 +157,12 @@ extension RecipeApi on ApiService {
   }
 
   Future<RecipeDiscover?> discoverRecipes(String? language) async {
-    final res = await get("$baseRoute/discover?" +
-        (language != null ? "language=" + language : ""));
+    final res = await get(
+      "$baseRoute/discover",
+      queryParameters: {
+        if (language != null) 'language': language,
+      },
+    );
     if (res.statusCode != 200) return null;
 
     final body = jsonDecode(res.body);
@@ -149,8 +171,12 @@ extension RecipeApi on ApiService {
 
   Future<List<Recipe>?> discoverRecipesCurated(
       String? language, int page) async {
-    final res = await get("$baseRoute/discover/curated/$page?" +
-        (language != null ? "language=" + language : ""));
+    final res = await get(
+      "$baseRoute/discover/curated/$page",
+      queryParameters: {
+        if (language != null) 'language': language,
+      },
+    );
     if (res.statusCode != 200) return null;
 
     final body = jsonDecode(res.body);
@@ -159,8 +185,12 @@ extension RecipeApi on ApiService {
 
   Future<List<Recipe>?> discoverRecipesPopular(
       String? language, int page) async {
-    final res = await get("$baseRoute/discover/popular/$page?" +
-        (language != null ? "language=" + language : ""));
+    final res = await get(
+      "$baseRoute/discover/popular/$page",
+      queryParameters: {
+        if (language != null) 'language': language,
+      },
+    );
     if (res.statusCode != 200) return null;
 
     final body = jsonDecode(res.body);
@@ -169,8 +199,12 @@ extension RecipeApi on ApiService {
 
   Future<List<Recipe>?> discoverRecipesNewest(
       String? language, int page) async {
-    final res = await get("$baseRoute/discover/newest/$page?" +
-        (language != null ? "language=" + language : ""));
+    final res = await get(
+      "$baseRoute/discover/newest/$page",
+      queryParameters: {
+        if (language != null) 'language': language,
+      },
+    );
     if (res.statusCode != 200) return null;
 
     final body = jsonDecode(res.body);

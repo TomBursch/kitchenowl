@@ -75,7 +75,7 @@ Future<NamedByteArray?> selectFile({
       if (i == null) return null;
       if (i == -1) return NamedByteArray.empty;
     }
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
+    FilePickerResult? result = await FilePicker.pickFiles(
       type: FileType.image,
       withData: true,
     );

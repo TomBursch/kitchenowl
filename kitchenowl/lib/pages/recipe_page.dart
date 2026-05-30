@@ -482,6 +482,7 @@ class _RecipePageState extends State<RecipePage> {
                     SliverImageAppBar(
                       title: state.recipe.name,
                       imageUrl: state.recipe.image,
+                      imageUrls: state.recipe.galleryImages,
                       imageHash: state.recipe.imageHash,
                       popValue: () => cubit.state.updateState,
                       actions: (isCollapsed) => [

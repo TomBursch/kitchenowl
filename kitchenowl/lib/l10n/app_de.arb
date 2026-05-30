@@ -176,6 +176,82 @@
       }
     }
   },
+  "@recipeImportActionCopy": {},
+  "@recipeImportActionOverwrite": {},
+  "@recipeImportActionSkip": {},
+  "@recipeImportApplyAllDuplicates": {},
+  "@recipeImportChooseFile": {},
+  "@recipeImportDuplicateMatch": {
+    "placeholders": {
+      "name": {
+        "example": "Cake",
+        "type": "String"
+      }
+    }
+  },
+  "@recipeImportDuplicatesBody": {},
+  "@recipeImportDuplicatesTitle": {},
+  "@recipeImportNoRecipes": {},
+  "@recipeImportPreviewFailed": {},
+  "@recipeImportProgressDetected": {
+    "placeholders": {
+      "count": {
+        "example": "3",
+        "type": "int"
+      }
+    }
+  },
+  "@recipeImportProgressDoneTitle": {},
+  "@recipeImportProgressFailed": {
+    "placeholders": {
+      "count": {
+        "example": "1",
+        "type": "int"
+      }
+    }
+  },
+  "@recipeImportProgressImported": {
+    "placeholders": {
+      "count": {
+        "example": "3",
+        "type": "int"
+      }
+    }
+  },
+  "@recipeImportProgressSkipped": {
+    "placeholders": {
+      "count": {
+        "example": "0",
+        "type": "int"
+      }
+    }
+  },
+  "@recipeImportProgressTitle": {},
+  "@recipeImportResultSummary": {
+    "placeholders": {
+      "imported": {
+        "example": "3",
+        "type": "int"
+      },
+      "failed": {
+        "example": "1",
+        "type": "int"
+      },
+      "skipped": {
+        "example": "0",
+        "type": "int"
+      }
+    }
+  },
+  "@recipeImportTitle": {},
+  "@recipeSavedCount": {
+    "placeholders": {
+      "count": {
+        "example": "42",
+        "type": "int"
+      }
+    }
+  },
   "@shoppingListContainsEntries": {
     "placeholders": {
       "entriesCount": {
@@ -426,7 +502,26 @@
   "recipeEmptySearch": "Keine Rezepte gefunden :(",
   "recipeGoToInHousehold": "Bereits hinzugefügt, gehe zum Rezept in {householdName}",
   "recipeImageSelect": "Wähle ein Rezeptbild",
+  "recipeImportActionCopy": "Als Kopie importieren",
+  "recipeImportActionOverwrite": "Überschreiben",
+  "recipeImportActionSkip": "Überspringen",
+  "recipeImportApplyAllDuplicates": "Auf alle Duplikate anwenden:",
+  "recipeImportChooseFile": "JSON- oder ZIP-Datei auswählen",
+  "recipeImportDuplicateMatch": "Passt zu vorhandenem Rezept: {name}",
+  "recipeImportDuplicatesBody": "Wähle, was mit bereits vorhandenen Rezepten passieren soll.",
+  "recipeImportDuplicatesTitle": "Duplikate auflösen",
+  "recipeImportNoRecipes": "Keine Rezepte in dieser Datei gefunden.",
+  "recipeImportPreviewFailed": "Rezeptimport konnte nicht vorbereitet werden.",
+  "recipeImportProgressDetected": "Erkannt: {count}",
+  "recipeImportProgressDoneTitle": "Import abgeschlossen",
+  "recipeImportProgressFailed": "Fehlgeschlagen: {count}",
+  "recipeImportProgressImported": "Importiert: {count}",
+  "recipeImportProgressSkipped": "Übersprungen: {count}",
+  "recipeImportProgressTitle": "Rezepte werden importiert",
+  "recipeImportResultSummary": "Import abgeschlossen: {imported} importiert, {failed} fehlgeschlagen, {skipped} übersprungen.",
+  "recipeImportTitle": "Rezepte importieren",
   "recipeNew": "Neues Rezept",
+  "recipeSavedCount": "Gespeicherte Rezepte: {count}",
   "recipeSource": "Rezept Quelle",
   "recipes": "Rezepte",
   "recipesCurated": "Ausgewählte Rezepte",

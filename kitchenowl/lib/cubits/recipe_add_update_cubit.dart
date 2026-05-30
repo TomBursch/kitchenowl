@@ -27,6 +27,7 @@ class AddUpdateRecipeCubit extends ReplayCubit<AddUpdateRecipeState> {
           yields: recipe.yields,
           source: recipe.source,
           items: recipe.items,
+          additionalImages: recipe.additionalImages,
           selectedTags: recipe.tags,
           tags: recipe.tags,
           visibility: recipe.visibility,
@@ -51,6 +52,14 @@ class AddUpdateRecipeCubit extends ReplayCubit<AddUpdateRecipeState> {
             ? ''
             : await ApiService.getInstance().uploadBytes(_state.image!);
       }
+      final List<String> additionalImages =
+          List<String>.from(_state.additionalImages);
+      for (final pendingImage in _state.additionalImageFiles) {
+        final uploaded = await ApiService.getInstance().uploadBytes(pendingImage);
+        if (uploaded != null && uploaded.isNotEmpty) {
+          additionalImages.add(uploaded);
+        }
+      }
       if (recipe.id == null) {
         return ApiService.getInstance().addRecipe(
           household,
@@ -63,6 +72,7 @@ class AddUpdateRecipeCubit extends ReplayCubit<AddUpdateRecipeState> {
             yields: _state.yields,
             source: _state.source,
             image: image ?? recipe.image,
+            additionalImages: additionalImages,
             items: _state.items,
             tags: _state.selectedTags,
             visibility: _state.visibility,
@@ -79,13 +89,19 @@ class AddUpdateRecipeCubit extends ReplayCubit<AddUpdateRecipeState> {
           yields: _state.yields,
           source: _state.source,
           image: image,
+          additionalImages: additionalImages,
           items: _state.items,
           tags: _state.selectedTags,
           visibility: _state.visibility,
           curated: _state.curated,
         ));
       }
-      emit(_state.copyWith(hasChanges: false));
+      emit(_state.copyWith(
+        image: null,
+        additionalImages: additionalImages,
+        additionalImageFiles: const [],
+        hasChanges: false,
+      ));
       this.clearHistory();
     }
 
@@ -104,6 +120,15 @@ class AddUpdateRecipeCubit extends ReplayCubit<AddUpdateRecipeState> {
 
   void setImage(NamedByteArray image) {
     emit(state.copyWith(image: image, hasChanges: true));
+  }
+
+  Future<void> addAdditionalImage(NamedByteArray image) async {
+    if (image.isEmpty) return;
+    emit(state.copyWith(
+      additionalImageFiles:
+          List<NamedByteArray>.from(state.additionalImageFiles)..add(image),
+      hasChanges: true,
+    ));
   }
 
   void setDescription(String desc) {
@@ -251,6 +276,8 @@ class AddUpdateRecipeState extends Equatable {
   final String source;
   final bool curated;
   final NamedByteArray? image;
+  final List<String> additionalImages;
+  final List<NamedByteArray> additionalImageFiles;
   final RecipeVisibility visibility;
   final List<RecipeItem> items;
   final Set<Tag> tags;
@@ -267,6 +294,8 @@ class AddUpdateRecipeState extends Equatable {
     this.source = '',
     this.curated = false,
     this.image,
+    this.additionalImages = const [],
+    this.additionalImageFiles = const [],
     this.visibility = RecipeVisibility.private,
     this.items = const [],
     this.tags = const {},
@@ -284,6 +313,8 @@ class AddUpdateRecipeState extends Equatable {
     String? source,
     bool? curated,
     NamedByteArray? image,
+    List<String>? additionalImages,
+    List<NamedByteArray>? additionalImageFiles,
     RecipeVisibility? visibility,
     List<RecipeItem>? items,
     Set<Tag>? tags,
@@ -300,6 +331,8 @@ class AddUpdateRecipeState extends Equatable {
         source: source ?? this.source,
         curated: curated ?? this.curated,
         image: image ?? this.image,
+        additionalImages: additionalImages ?? this.additionalImages,
+        additionalImageFiles: additionalImageFiles ?? this.additionalImageFiles,
         items: items ?? this.items,
         tags: tags ?? this.tags,
         visibility: visibility ?? this.visibility,
@@ -320,6 +353,8 @@ class AddUpdateRecipeState extends Equatable {
         source,
         curated,
         image,
+        additionalImages,
+        additionalImageFiles,
         items,
         tags,
         visibility,

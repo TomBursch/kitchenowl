@@ -161,11 +161,7 @@ def _normalize_recipe(raw: dict[str, Any]) -> dict[str, Any] | None:
                     entry.get("text") or entry.get("instruction") or entry.get("value")
                 )
                 if text:
-                    image = _normalize_step_image(entry)
-                    if image:
-                        steps.append(f"![step image]({image})\n\n{text}")
-                    else:
-                        steps.append(text)
+                    steps.append(text)
             else:
                 text = _normalize_text(entry)
                 if text:

@@ -20,6 +20,7 @@ class Recipe extends Model {
   final String source;
   final String? image;
   final String? imageHash;
+  final List<String> additionalImages;
   final List<RecipeItem> items;
   final Set<Tag> tags;
   final RecipeVisibility visibility;
@@ -41,6 +42,7 @@ class Recipe extends Model {
     this.source = '',
     this.image,
     this.imageHash,
+    this.additionalImages = const [],
     this.items = const [],
     this.tags = const {},
     this.plannedCookingDates = const {},
@@ -87,13 +89,17 @@ class Recipe extends Model {
       source: map['source'] ?? '',
       image: map['photo'],
       imageHash: map['photo_hash'],
+      additionalImages: List<String>.from(map['photos'] ?? const [])
+        .where((e) => e.toString().isNotEmpty)
+        .map((e) => e.toString())
+        .toList(),
       visibility: RecipeVisibility.values[map['visibility'] ?? 0],
       householdId: map['household_id'],
       items: items,
       tags: tags,
       plannedCookingDates: plannedCookingDates,
-      household: map.containsKey("household")
-          ? Household.fromJson(map['household'])
+      household: map['household'] is Map
+          ? Household.fromJson(Map<String, dynamic>.from(map['household']))
           : null,
       curated: map['server_curated'] ?? false,
     );
@@ -109,6 +115,7 @@ class Recipe extends Model {
     int? yields,
     String? source,
     String? image,
+    List<String>? additionalImages,
     RecipeVisibility? visibility,
     List<RecipeItem>? items,
     Set<Tag>? tags,
@@ -130,6 +137,7 @@ class Recipe extends Model {
         curated: curated ?? this.curated,
         imageHash: imageHash,
         image: image ?? this.image,
+        additionalImages: additionalImages ?? this.additionalImages,
         tags: tags ?? this.tags,
         plannedCookingDates: plannedCookingDates ?? this.plannedCookingDates,
         visibility: visibility ?? this.visibility,
@@ -160,6 +168,7 @@ class Recipe extends Model {
         source,
         image,
         imageHash,
+        additionalImages,
         tags,
         items,
         plannedCookingDates,
@@ -180,6 +189,7 @@ class Recipe extends Model {
         "source": source,
         "visibility": visibility.index,
         if (image != null) "photo": image,
+        if (additionalImages.isNotEmpty) "photos": additionalImages,
         "items": items.map((e) => e.toJson()).toList(),
         "tags": tags.map((e) => e.toString()).toList(),
         "server_curated": curated,
@@ -193,10 +203,27 @@ class Recipe extends Model {
       "items": items.map((e) => e.toJsonWithId()).toList(),
       "tags": tags.map((e) => e.toJsonWithId()).toList(),
       if (imageHash != null) "photo_hash": imageHash,
+      if (additionalImages.isNotEmpty) "photos": additionalImages,
       "planned_cooking_dates":
           plannedCookingDates.map((e) => e.millisecondsSinceEpoch).toList(),
       "household_id": householdId,
     });
+
+  List<String> get galleryImages {
+    final seen = <String>{};
+    final result = <String>[];
+    
+    for (final candidate in [image, ...additionalImages]) {
+      final normalized = candidate?.trim();
+      if (normalized?.isNotEmpty ?? false) {
+        if (seen.add(normalized!)) {
+          result.add(normalized);
+        }
+      }
+    }
+    
+    return result;
+  }
 
   List<RecipeItem> get optionalItems => items.where((e) => e.optional).toList();
   List<RecipeItem> get mandatoryItems =>

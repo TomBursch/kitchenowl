@@ -367,6 +367,82 @@
     }
   },
   "@recipeImageSelect": {},
+  "@recipeImportActionCopy": {},
+  "@recipeImportActionOverwrite": {},
+  "@recipeImportActionSkip": {},
+  "@recipeImportApplyAllDuplicates": {},
+  "@recipeImportChooseFile": {},
+  "@recipeImportDuplicateMatch": {
+    "placeholders": {
+      "name": {
+        "example": "Cake",
+        "type": "String"
+      }
+    }
+  },
+  "@recipeImportDuplicatesBody": {},
+  "@recipeImportDuplicatesTitle": {},
+  "@recipeImportNoRecipes": {},
+  "@recipeImportPreviewFailed": {},
+  "@recipeImportProgressDetected": {
+    "placeholders": {
+      "count": {
+        "example": "3",
+        "type": "int"
+      }
+    }
+  },
+  "@recipeImportProgressDoneTitle": {},
+  "@recipeImportProgressFailed": {
+    "placeholders": {
+      "count": {
+        "example": "1",
+        "type": "int"
+      }
+    }
+  },
+  "@recipeImportProgressImported": {
+    "placeholders": {
+      "count": {
+        "example": "3",
+        "type": "int"
+      }
+    }
+  },
+  "@recipeImportProgressSkipped": {
+    "placeholders": {
+      "count": {
+        "example": "0",
+        "type": "int"
+      }
+    }
+  },
+  "@recipeImportProgressTitle": {},
+  "@recipeImportResultSummary": {
+    "placeholders": {
+      "imported": {
+        "example": "3",
+        "type": "int"
+      },
+      "failed": {
+        "example": "1",
+        "type": "int"
+      },
+      "skipped": {
+        "example": "0",
+        "type": "int"
+      }
+    }
+  },
+  "@recipeImportTitle": {},
+  "@recipeSavedCount": {
+    "placeholders": {
+      "count": {
+        "example": "42",
+        "type": "int"
+      }
+    }
+  },
   "@recipeNew": {},
   "@recipeSource": {},
   "@recipes": {},
@@ -710,7 +786,26 @@
   "recipeEmptySearch": "No recipes found :(",
   "recipeGoToInHousehold": "Already added, go to recipe in {householdName}",
   "recipeImageSelect": "Select a recipe image",
+  "recipeImportActionCopy": "Import as copy",
+  "recipeImportActionOverwrite": "Overwrite",
+  "recipeImportActionSkip": "Skip",
+  "recipeImportApplyAllDuplicates": "Apply to all duplicates:",
+  "recipeImportChooseFile": "Select a JSON or ZIP file",
+  "recipeImportDuplicateMatch": "Matches existing: {name}",
+  "recipeImportDuplicatesBody": "Choose what to do with recipes that already exist.",
+  "recipeImportDuplicatesTitle": "Resolve duplicates",
+  "recipeImportNoRecipes": "No recipes found in this file.",
+  "recipeImportPreviewFailed": "Recipe import preview failed.",
+  "recipeImportProgressDetected": "Detected: {count}",
+  "recipeImportProgressDoneTitle": "Import complete",
+  "recipeImportProgressFailed": "Failed: {count}",
+  "recipeImportProgressImported": "Imported: {count}",
+  "recipeImportProgressSkipped": "Skipped: {count}",
+  "recipeImportProgressTitle": "Importing recipes",
+  "recipeImportResultSummary": "Import complete: {imported} imported, {failed} failed, {skipped} skipped.",
+  "recipeImportTitle": "Import recipes",
   "recipeNew": "New recipe",
+  "recipeSavedCount": "Saved recipes: {count}",
   "recipeSource": "Recipe source",
   "recipes": "Recipes",
   "recipesCurated": "Curated recipes",

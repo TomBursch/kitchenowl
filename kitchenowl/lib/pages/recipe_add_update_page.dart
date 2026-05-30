@@ -219,6 +219,105 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                                 setImage: cubit.setImage,
                               ),
                             ),
+                            BlocBuilder<AddUpdateRecipeCubit,
+                                AddUpdateRecipeState>(
+                              bloc: cubit,
+                              buildWhen: (previous, current) =>
+                                !listEquals(previous.additionalImages,
+                                    current.additionalImages) ||
+                                !listEquals(previous.additionalImageFiles,
+                                  current.additionalImageFiles),
+                              builder: (context, state) => Padding(
+                                padding:
+                                    const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                                  children: [
+                                    Text(
+                                      AppLocalizations.of(context)!
+                                          .recipeImageSelect,
+                                      style:
+                                          Theme.of(context).textTheme.titleMedium,
+                                    ),
+                                    const SizedBox(height: 8),
+                                    Wrap(
+                                      spacing: 8,
+                                      runSpacing: 8,
+                                      children: [
+                                        ...state.additionalImages.map(
+                                          (image) => ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(12),
+                                            child: SizedBox(
+                                              width: 88,
+                                              height: 88,
+                                              child: Image(
+                                                fit: BoxFit.cover,
+                                                image: getImageProvider(
+                                                  context,
+                                                  image,
+                                                  maxWidth: 256,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        ...state.additionalImageFiles.map(
+                                          (image) => ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(12),
+                                            child: SizedBox(
+                                              width: 88,
+                                              height: 88,
+                                              child: Image.memory(
+                                                image.bytes,
+                                                fit: BoxFit.cover,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        InkWell(
+                                          onTap: () async {
+                                            final image = await selectFile(
+                                              context: context,
+                                              title: AppLocalizations.of(
+                                                      context)!
+                                                  .recipeImageSelect,
+                                            );
+                                            if (image != null &&
+                                                image.isNotEmpty) {
+                                              await cubit.addAdditionalImage(
+                                                  image);
+                                            }
+                                          },
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                          child: Container(
+                                            width: 88,
+                                            height: 88,
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
+                                              border: Border.all(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .secondary,
+                                              ),
+                                            ),
+                                            child: Icon(
+                                              Icons.add_photo_alternate_rounded,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .secondary,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
                             Padding(
                               padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
                               child: TextField(

@@ -9,7 +9,7 @@ from unittest.mock import patch
 
 from app import db
 from app.config import UPLOAD_FOLDER
-from app.models import Household, Recipe
+from app.models import Household, Recipe, RecipeTags, Tag
 from app.service.recipe_import_service import (
     commit_recipe_import,
     preview_recipe_import,
@@ -51,6 +51,25 @@ def _create_household(name: str) -> Household:
     db.session.add(household)
     db.session.commit()
     return household
+
+
+def _create_recipe_with_tag(household: Household, name: str, tag_name: str) -> None:
+    recipe = Recipe(
+        household_id=household.id,
+        name=name,
+        description="Existing recipe",
+    )
+    tag = Tag(name=tag_name, household_id=household.id)
+    db.session.add_all([recipe, tag])
+    db.session.commit()
+
+    db.session.add(
+        RecipeTags(
+            recipe_id=recipe.id,
+            tag_id=tag.id,
+        )
+    )
+    db.session.commit()
 
 
 def test_recipe_import_nextcloud_and_tandoor_folder_images(client):
@@ -180,3 +199,36 @@ def test_recipe_import_paprika_gzipped_zip_entries(client):
     assert _get_recipe(household.id, "Paprika Recipe Two").description.startswith(
         "Second paprika recipe"
     )
+
+
+def test_recipe_import_overwrite_keeps_existing_tags_without_error(client):
+    household = _create_household("Overwrite import")
+    _create_recipe_with_tag(household, "Overwrite Me", "Dinner")
+
+    archive = _make_zip(
+        {
+            "recipe.json": json.dumps(
+                {
+                    "name": "Overwrite Me",
+                    "description": "Updated recipe",
+                    "tags": ["Dinner"],
+                }
+            ).encode("utf-8")
+        }
+    )
+
+    preview = preview_recipe_import(household.id, archive, "overwrite.zip")
+    assert len(preview["duplicates"]) == 1
+
+    result = commit_recipe_import(
+        household.id,
+        preview["token"],
+        {preview["recipes"][0]["import_id"]: "overwrite"},
+    )
+
+    assert result["imported"] == 1
+    assert result["failed"] == 0
+
+    recipe = _get_recipe(household.id, "Overwrite Me")
+    assert recipe.description == "Updated recipe"
+    assert [tag.tag.name for tag in recipe.tags] == ["Dinner"]

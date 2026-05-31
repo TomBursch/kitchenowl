@@ -132,11 +132,18 @@ def importRecipe(
             con.recipe = recipe
             con.save()
     if "tags" in args:
+        seen_tag_ids: set[int] = set()
         for tagName in args["tags"]:
             tag = Tag.find_by_name(household_id, tagName)
             if not tag:
                 tag = Tag.create_by_name(household_id, tagName)
-            con = RecipeTags()
-            con.tag = tag
-            con.recipe = recipe
-            con.save()
+            if tag.id in seen_tag_ids:
+                continue
+            seen_tag_ids.add(tag.id)
+
+            con = RecipeTags.find_by_ids(recipe.id, tag.id)
+            if not con:
+                con = RecipeTags()
+                con.tag = tag
+                con.recipe = recipe
+                con.save()

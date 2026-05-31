@@ -251,9 +251,8 @@ class _PlannerPageState extends State<PlannerPage> {
                                           ),
                                           title: plan.recipe.name,
                                           description: plan.yields?.toString(),
-                                          selected: plan.cookingDate == null
-                                              ? true
-                                              : !_toDate(plan.cookingDate!)
+                                          selected: plan.cookingDate == null ||
+                                              !_toDate(plan.cookingDate!)
                                                   .isBefore(
                                                       _toDate(DateTime.now())),
                                           onPressed: () {

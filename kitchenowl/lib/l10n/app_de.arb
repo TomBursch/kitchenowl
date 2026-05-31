@@ -519,6 +519,7 @@
   "recipeImportProgressSkipped": "Übersprungen: {count}",
   "recipeImportProgressTitle": "Rezepte werden importiert",
   "recipeImportResultSummary": "Import abgeschlossen: {imported} importiert, {failed} fehlgeschlagen, {skipped} übersprungen.",
+  "recipeImportStatusFetchFailed": "Der Importstatus konnte nicht abgerufen werden. Der Import läuft möglicherweise noch im Hintergrund.",
   "recipeImportTitle": "Rezepte importieren",
   "recipeNew": "Neues Rezept",
   "recipeSavedCount": "Gespeicherte Rezepte: {count}",

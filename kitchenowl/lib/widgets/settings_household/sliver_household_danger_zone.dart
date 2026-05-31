@@ -327,16 +327,6 @@ class _SliverHouseholdDangerZoneState
 
                     _RecipeImportProgressTracker.start(preview.recipes.length);
 
-                    if (mounted) {
-                      showSnackbar(
-                        context: context,
-                        content: Text(
-                          AppLocalizations.of(context)!.importStartedHint,
-                        ),
-                        width: null,
-                      );
-                    }
-
                     final result = await householdUpdateCubit.commitRecipeImport(
                       preview.token,
                       decisions,
@@ -364,8 +354,9 @@ class _SliverHouseholdDangerZoneState
                             if (mounted) {
                               showSnackbar(
                                 context: context,
-                                content: const Text(
-                                  'Could not fetch import status. Import may still be running in the background.',
+                                content: Text(
+                                  AppLocalizations.of(context)!
+                                      .recipeImportStatusFetchFailed,
                                 ),
                                 width: null,
                               );
@@ -379,22 +370,6 @@ class _SliverHouseholdDangerZoneState
                         _RecipeImportProgressTracker.update(
                           current,
                           preview.recipes.length,
-                        );
-                      }
-                      final progress =
-                          _RecipeImportProgressTracker.value.value;
-                      if (mounted && progress != null) {
-                        showSnackbar(
-                          context: context,
-                          content: Text(
-                            AppLocalizations.of(context)!
-                                .recipeImportResultSummary(
-                              progress.imported,
-                              progress.failed,
-                              progress.skipped,
-                            ),
-                          ),
-                          width: null,
                         );
                       }
                     } else {

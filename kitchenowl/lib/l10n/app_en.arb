@@ -803,6 +803,7 @@
   "recipeImportProgressSkipped": "Skipped: {count}",
   "recipeImportProgressTitle": "Importing recipes",
   "recipeImportResultSummary": "Import complete: {imported} imported, {failed} failed, {skipped} skipped.",
+  "recipeImportStatusFetchFailed": "Could not fetch import status. Import may still be running in the background.",
   "recipeImportTitle": "Import recipes",
   "recipeNew": "New recipe",
   "recipeSavedCount": "Saved recipes: {count}",

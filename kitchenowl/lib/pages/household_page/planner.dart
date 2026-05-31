@@ -48,6 +48,8 @@ String formatDateAsWeekday(
   }
 }
 
+DateTime _toDate(DateTime dt) => DateTime(dt.year, dt.month, dt.day);
+
 String _formatDate(BuildContext context, int daysToAdd) {
   DateTime date = DateTime.now().add(Duration(days: daysToAdd));
   if (daysToAdd >= -1 && daysToAdd < 7) {
@@ -249,7 +251,10 @@ class _PlannerPageState extends State<PlannerPage> {
                                           ),
                                           title: plan.recipe.name,
                                           description: plan.yields?.toString(),
-                                          selected: true,
+                                          selected: plan.cookingDate == null ||
+                                              !_toDate(plan.cookingDate!)
+                                                  .isBefore(
+                                                      _toDate(DateTime.now())),
                                           onPressed: () {
                                             cubit.remove(
                                               plan.recipe,

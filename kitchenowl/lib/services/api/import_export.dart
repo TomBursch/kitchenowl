@@ -70,7 +70,11 @@ extension ImportExportApi on ApiService {
     Household household,
     String token,
   ) async {
-    final res = await get('${householdPath(household)}$baseRoute/recipes/commit/$token');
+    final res = await get(
+      '${householdPath(household)}$baseRoute/recipes/commit/$token',
+      refreshOnException: false,
+      timeout: const Duration(seconds: 15),
+    );
     if (res.statusCode != 200) return null;
 
     return RecipeImportResult.fromJson(

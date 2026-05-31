@@ -30,6 +30,35 @@ class _RecipeImportProgress {
   });
 }
 
+class _RecipeImportProgressTracker {
+  static final ValueNotifier<_RecipeImportProgress?> value =
+      ValueNotifier<_RecipeImportProgress?>(null);
+
+  static void start(int detected) {
+    value.value = _RecipeImportProgress(
+      detected: detected,
+      imported: 0,
+      failed: 0,
+      skipped: 0,
+      complete: false,
+    );
+  }
+
+  static void update(RecipeImportResult current, int fallbackDetected) {
+    value.value = _RecipeImportProgress(
+      detected: current.detected > 0 ? current.detected : fallbackDetected,
+      imported: current.imported,
+      failed: current.failed,
+      skipped: current.skipped,
+      complete: current.complete,
+    );
+  }
+
+  static void clear() {
+    value.value = null;
+  }
+}
+
 class SliverHouseholdDangerZone extends StatefulWidget {
   const SliverHouseholdDangerZone({super.key});
 
@@ -40,74 +69,89 @@ class SliverHouseholdDangerZone extends StatefulWidget {
 
 class _SliverHouseholdDangerZoneState
     extends State<SliverHouseholdDangerZone> {
-  _RecipeImportProgress? _progress;
-
   @override
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          if (_progress != null) ...[
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(14),
-                border: Border.all(
-                  color: Colors.orangeAccent,
-                  width: 2,
+          ValueListenableBuilder<_RecipeImportProgress?>(
+            valueListenable: _RecipeImportProgressTracker.value,
+            builder: (context, progress, child) {
+              if (progress == null) return const SizedBox.shrink();
+
+              return Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(14),
+                  border: Border.all(
+                    color: Colors.orangeAccent,
+                    width: 2,
+                  ),
                 ),
-              ),
-              padding: const EdgeInsets.all(16),
-              margin: const EdgeInsets.only(top: 16, bottom: 8),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    _progress!.complete
-                        ? AppLocalizations.of(context)!
-                            .recipeImportProgressDoneTitle
-                        : AppLocalizations.of(context)!
-                            .recipeImportProgressTitle,
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    AppLocalizations.of(context)!
-                        .recipeImportProgressDetected(_progress!.detected),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    AppLocalizations.of(context)!
-                        .recipeImportProgressImported(_progress!.imported),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    AppLocalizations.of(context)!
-                        .recipeImportProgressFailed(_progress!.failed),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    AppLocalizations.of(context)!
-                        .recipeImportProgressSkipped(_progress!.skipped),
-                  ),
-                  if (_progress!.complete) ...[
-                    const SizedBox(height: 8),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: TextButton(
-                        onPressed: () {
-                          setState(() {
-                            _progress = null;
-                          });
-                        },
-                        child: Text(AppLocalizations.of(context)!.done),
-                      ),
+                padding: const EdgeInsets.all(16),
+                margin: const EdgeInsets.only(top: 16, bottom: 8),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      progress.complete
+                          ? AppLocalizations.of(context)!
+                              .recipeImportProgressDoneTitle
+                          : AppLocalizations.of(context)!
+                              .recipeImportProgressTitle,
+                      style: Theme.of(context).textTheme.titleMedium,
                     ),
+                    const SizedBox(height: 8),
+                    Text(
+                      [
+                        AppLocalizations.of(context)!.recipeImportProgressDetected(
+                          progress.detected,
+                        ),
+                        AppLocalizations.of(context)!.recipeImportProgressImported(
+                          progress.imported,
+                        ),
+                        AppLocalizations.of(context)!.recipeImportProgressFailed(
+                          progress.failed,
+                        ),
+                        AppLocalizations.of(context)!.recipeImportProgressSkipped(
+                          progress.skipped,
+                        ),
+                      ].join('  |  '),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: 8),
+                    LinearProgressIndicator(
+                      value: progress.complete
+                          ? 1
+                          : (progress.detected > 0
+                              ? ((progress.imported +
+                                          progress.failed +
+                                          progress.skipped) /
+                                      progress.detected)
+                                  .clamp(0.0, 1.0)
+                              : null),
+                    ),
+                    if (progress.complete) ...[
+                      const SizedBox(height: 8),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: TextButton(
+                          onPressed: () {
+                            _RecipeImportProgressTracker.clear();
+                          },
+                          child: Text(AppLocalizations.of(context)!.done),
+                        ),
+                      ),
+                    ],
                   ],
-                ],
-              ),
-            ),
-          ],
+                ),
+              );
+            },
+          ),
           Container(
+            width: double.infinity,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(14),
               border: Border.all(
@@ -226,7 +270,7 @@ class _SliverHouseholdDangerZoneState
                     ),
                   ],
                 ),
-                const Divider(),
+                const SizedBox(height: 8),
                 LoadingElevatedButton(
                   onPressed: () async {
                     final file = await FilePicker.pickFiles(
@@ -272,88 +316,89 @@ class _SliverHouseholdDangerZoneState
                       return;
                     }
 
+                    final householdUpdateCubit =
+                        BlocProvider.of<HouseholdUpdateCubit>(context);
+
                     final decisions = await askForRecipeImportDecisions(
                       context: context,
                       preview: preview,
                     );
                     if (decisions == null) return;
 
-                    setState(() {
-                      _progress = _RecipeImportProgress(
-                        detected: preview.recipes.length,
-                        imported: 0,
-                        failed: 0,
-                        skipped: 0,
-                        complete: false,
+                    _RecipeImportProgressTracker.start(preview.recipes.length);
+
+                    if (mounted) {
+                      showSnackbar(
+                        context: context,
+                        content: Text(
+                          AppLocalizations.of(context)!.importStartedHint,
+                        ),
+                        width: null,
                       );
-                    });
+                    }
 
-                    showSnackbar(
-                      context: context,
-                      content: Text(
-                        AppLocalizations.of(context)!.importStartedHint,
-                      ),
-                      width: null,
+                    final result = await householdUpdateCubit.commitRecipeImport(
+                      preview.token,
+                      decisions,
                     );
-
-                    final result =
-                        await BlocProvider.of<HouseholdUpdateCubit>(context)
-                            .commitRecipeImport(preview.token, decisions);
-
-                    if (!mounted) return;
 
                     if (result != null) {
                       RecipeImportResult current = result;
-                      setState(() {
-                        _progress = _RecipeImportProgress(
-                          detected: current.detected > 0
-                              ? current.detected
-                              : preview.recipes.length,
-                          imported: current.imported,
-                          failed: current.failed,
-                          skipped: current.skipped,
-                          complete: current.complete,
-                        );
-                      });
-                      while (!current.complete && mounted) {
+                      int failedStatusPolls = 0;
+                      const int maxFailedStatusPolls = 100;
+                      _RecipeImportProgressTracker.update(
+                        current,
+                        preview.recipes.length,
+                      );
+                      while (!current.complete) {
                         await Future<void>.delayed(
                           const Duration(milliseconds: 500),
                         );
                         final status =
-                            await BlocProvider.of<HouseholdUpdateCubit>(context)
-                                .getRecipeImportStatus(preview.token);
-                        if (!mounted || status == null) break;
+                            await householdUpdateCubit.getRecipeImportStatus(
+                          preview.token,
+                        );
+                        if (status == null) {
+                          failedStatusPolls += 1;
+                          if (failedStatusPolls >= maxFailedStatusPolls) {
+                            if (mounted) {
+                              showSnackbar(
+                                context: context,
+                                content: const Text(
+                                  'Could not fetch import status. Import may still be running in the background.',
+                                ),
+                                width: null,
+                              );
+                            }
+                            break;
+                          }
+                          continue;
+                        }
+                        failedStatusPolls = 0;
                         current = status;
-                        setState(() {
-                          _progress = _RecipeImportProgress(
-                            detected: current.detected > 0
-                                ? current.detected
-                                : preview.recipes.length,
-                            imported: current.imported,
-                            failed: current.failed,
-                            skipped: current.skipped,
-                            complete: current.complete,
-                          );
-                        });
+                        _RecipeImportProgressTracker.update(
+                          current,
+                          preview.recipes.length,
+                        );
                       }
-                      if (mounted && _progress != null) {
+                      final progress =
+                          _RecipeImportProgressTracker.value.value;
+                      if (mounted && progress != null) {
                         showSnackbar(
                           context: context,
                           content: Text(
                             AppLocalizations.of(context)!
                                 .recipeImportResultSummary(
-                              _progress!.imported,
-                              _progress!.failed,
-                              _progress!.skipped,
+                              progress.imported,
+                              progress.failed,
+                              progress.skipped,
                             ),
                           ),
                           width: null,
                         );
                       }
                     } else {
-                      setState(() {
-                        _progress = null;
-                      });
+                      _RecipeImportProgressTracker.clear();
                     }
                   },
                   child: Text(AppLocalizations.of(context)!.recipeImportTitle),

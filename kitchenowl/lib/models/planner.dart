@@ -44,7 +44,7 @@ class RecipePlan extends Model {
       "recipe": recipe.toJson(),
     });
 
-    bool get isWithoutPlannedDay =>
+  bool get isWithoutPlannedDay =>
       cookingDate == null ||
       (cookingDate != null && cookingDate!.millisecondsSinceEpoch < 0);
 }

@@ -4,8 +4,7 @@ import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/models/planner.dart';
 
 class ItemSelectionCubit extends Cubit<ItemSelectionState> {
-  ItemSelectionCubit(List<RecipePlan> plans)
-      : super(ItemSelectionState(plans));
+  ItemSelectionCubit(List<RecipePlan> plans) : super(ItemSelectionState(plans));
 
   bool _isPastPlan(RecipePlan plan) {
     if (plan.cookingDate == null || plan.isWithoutPlannedDay) return false;
@@ -69,13 +68,15 @@ class ItemSelectionState extends Equatable {
   final Map<RecipePlan, Set<RecipeItem>> selectedItems;
   final bool hidePastPlans;
 
-  ItemSelectionState(this.plans, {this.hidePastPlans = true})
-      : selectedItems = Map.fromEntries(
+  ItemSelectionState(
+    this.plans, {
+    this.hidePastPlans = true,
+  }) : selectedItems = Map.fromEntries(
           plans.map((plan) {
             final now = DateTime.now();
             final today = DateTime(now.year, now.month, now.day);
             var isPast = false;
-            if (plan.cookingDate != null  && !plan.isWithoutPlannedDay) {
+            if (plan.cookingDate != null && !plan.isWithoutPlannedDay) {
               final planDay = DateTime(
                 plan.cookingDate!.year,
                 plan.cookingDate!.month,

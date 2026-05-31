@@ -43,10 +43,6 @@ class _ItemSelectionPageState extends State<ItemSelectionPage> {
     super.dispose();
   }
 
-  void _toggleFilter() {
-    cubit.toggleHidePastPlans();
-  }
-
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ItemSelectionCubit, ItemSelectionState>(
@@ -62,7 +58,7 @@ class _ItemSelectionPageState extends State<ItemSelectionPage> {
               tooltip: state.hidePastPlans
                   ? AppLocalizations.of(context)!.showPastPlans
                   : AppLocalizations.of(context)!.hidePastPlans,
-              onPressed: _toggleFilter,
+              onPressed: cubit.toggleHidePastPlans,
             ),
           ],
         ),

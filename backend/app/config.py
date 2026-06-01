@@ -5,7 +5,6 @@ from flask_socketio import SocketIO
 from sqlalchemy.engine import URL
 from sqlalchemy.event import listen
 from apispec import APISpec
-from apispec.ext.marshmallow import MarshmallowPlugin
 from apispec_webframeworks.flask import FlaskPlugin
 from prometheus_client import multiprocess
 from prometheus_client.core import CollectorRegistry
@@ -210,7 +209,7 @@ api_spec = APISpec(
         "description": "Find more info at the official documentation",
         "url": "https://docs.kitchenowl.org",
     },
-    plugins=[FlaskPlugin(), MarshmallowPlugin()],
+    plugins=[FlaskPlugin()],
 )
 api_spec.components.security_scheme(
     "bearerAuth", {"type": "http", "scheme": "bearer", "bearerFormat": "JWT"}

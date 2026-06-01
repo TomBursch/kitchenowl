@@ -41,16 +41,16 @@ def deleteReportById(id):
 @reportBlueprint.route("", methods=["POST"])
 @jwt_required()
 @validate_args(AddReport)
-def addReport(args):
+def addReport(args: AddReport):
     report = Report(
         created_by_id=current_user.id,
     )
-    if "description" in args:
-        report.description = args["description"]
-    if "user_id" in args:
-        report.user_id = args["user_id"]
-    elif "recipe_id" in args:
-        report.recipe_id = args["recipe_id"]
+    if args.description is not None:
+        report.description = args.description
+    if args.user_id is not None:
+        report.user_id = args.user_id
+    elif args.recipe_id is not None:
+        report.recipe_id = args.recipe_id
     else:
         raise InvalidUsage()
     report.save()

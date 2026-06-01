@@ -24,8 +24,8 @@ def test_meal_planning_cooking_date_field(
     planned_meals = response.get_json()
     actual = datetime.fromtimestamp(
         planned_meals[0]["cooking_date"] / 1000, timezone.utc
-    ).replace(tzinfo=None)
-    expected = datetime.fromtimestamp(pytest.FIX_DATETIME / 1000, None)
+    )
+    expected = datetime.fromtimestamp(pytest.FIX_DATETIME / 1000, timezone.utc)
     assert actual == expected
 
 

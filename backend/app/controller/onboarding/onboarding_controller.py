@@ -17,15 +17,15 @@ def isOnboarding():
 
 @onboarding.route("", methods=["POST"])
 @validate_args(OnboardSchema)
-def onboard(args):
+def onboard(args: OnboardSchema):
     if User.count() > 0 or DISABLE_ONBOARDING:
         return jsonify({"msg": "Onboarding not allowed"}), 403
 
-    user = User.create(args["username"], args["password"], args["name"], admin=True)
+    user = User.create(args.username, args.password, args.name, admin=True)
 
     device = "Unkown"
-    if "device" in args:
-        device = args["device"]
+    if args.device is not None:
+        device = args.device
 
     # Create refresh token
     refreshToken, refreshModel = Token.create_refresh_token(user, device)

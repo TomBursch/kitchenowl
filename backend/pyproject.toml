@@ -5,7 +5,6 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.14"
 dependencies = [
-    "apispec[marshmallow]>=6.8.1",
     "apispec-webframeworks>=1.2.0",
     "apscheduler>=3.11.0",
     "blurhash-python>=1.2.2",
@@ -42,16 +41,11 @@ dependencies = [
     "psycopg2-binary>=2.9.10",
     "uWSGI>=2.0.28",
     "uwsgi-tools>=1.1.1",
+    "pydantic[email]>=2.13.4",
 ]
 
 [dependency-groups]
-dev = [
-    "pytest",
-    "pytest-cov",
-    "ruff",
-    "pyright",
-    "pre-commit",
-]
+dev = ["pytest", "pytest-cov", "ruff", "pyright", "pre-commit"]
 
 [tool.pyright]
 reportMissingTypeStubs = true

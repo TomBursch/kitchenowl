@@ -21,7 +21,7 @@ def getAllItems(household_id):
 
 @item.route("/<int:id>", methods=["GET"])
 @jwt_required()
-def getItem(id):
+def getItem(id: int):
     item = Item.find_by_id(id)
     if not item:
         raise NotFoundRequest()
@@ -31,7 +31,7 @@ def getItem(id):
 
 @item.route("/<int:id>/recipes", methods=["GET"])
 @jwt_required()
-def getItemRecipes(id):
+def getItemRecipes(id: int):
     item = Item.find_by_id(id)
     if not item:
         raise NotFoundRequest()
@@ -47,7 +47,7 @@ def getItemRecipes(id):
 
 @item.route("/<int:id>", methods=["DELETE"])
 @jwt_required()
-def deleteItemById(id):
+def deleteItemById(id: int):
     item = Item.find_by_id(id)
     if not item:
         raise NotFoundRequest()
@@ -60,8 +60,8 @@ def deleteItemById(id):
 @jwt_required()
 @authorize_household()
 @validate_args(SearchByNameRequest)
-def searchItemByName(args, household_id):
-    query, description = description_splitter.split(args["query"])
+def searchItemByName(args: SearchByNameRequest, household_id: int):
+    query, description = description_splitter.split(args.query)
     return jsonify(
         [
             e.obj_to_dict() | {"description": description}
@@ -74,21 +74,16 @@ def searchItemByName(args, household_id):
 @jwt_required()
 @authorize_household()
 @validate_args(AddItem)
-def addItem(args, household_id):
-    name: str = args["name"].strip()[:128]
+def addItem(args: AddItem, household_id: int):
+    name: str = args.name.strip()[:128]
     if Item.find_by_name(household_id, name):
         raise InvalidUsage()
 
     item = Item(household_id=household_id, name=name)
-    if "category" in args:
-        if not args["category"]:
-            item.category = None
-        elif "id" in args["category"]:
-            item.category = Category.find_by_id(args["category"]["id"])
-        else:
-            raise InvalidUsage()
-    if "icon" in args:
-        item.icon = args["icon"]
+    if args.category is not None:
+        item.category = Category.find_by_id(args.category.id)
+    if args.icon is not None:
+        item.icon = args.icon
     item.save()
 
     return jsonify(item.obj_to_dict())
@@ -97,29 +92,24 @@ def addItem(args, household_id):
 @item.route("/<int:id>", methods=["POST"])
 @jwt_required()
 @validate_args(UpdateItem)
-def updateItem(args, id):
+def updateItem(args: UpdateItem, id: int):
     item = Item.find_by_id(id)
     if not item:
         raise NotFoundRequest()
     item.checkAuthorized()
 
-    if "category" in args:
-        if not args["category"]:
-            item.category = None
-        elif "id" in args["category"]:
-            item.category = Category.find_by_id(args["category"]["id"])
-        else:
-            raise InvalidUsage()
-    if "icon" in args:
-        item.icon = args["icon"]
-    if "name" in args and args["name"] != item.name:
-        newName: str = args["name"].strip()[:128]
+    if args.category is not None:
+        item.category = Category.find_by_id(args.category.id)
+    if args.icon is not None:
+        item.icon = args.icon
+    if args.name is not None and args.name != item.name:
+        newName: str = args.name.strip()[:128]
         if not Item.find_by_name(item.household_id, newName):
             item.name = newName
     item.save()
 
-    if "merge_item_id" in args and args["merge_item_id"] != id:
-        mergeItem = Item.find_by_id(args["merge_item_id"])
+    if args.merge_item_id is not None and args.merge_item_id != id:
+        mergeItem = Item.find_by_id(args.merge_item_id)
         if mergeItem:
             item.merge(mergeItem)
 

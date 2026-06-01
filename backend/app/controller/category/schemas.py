@@ -1,23 +1,20 @@
-from marshmallow import fields, Schema, EXCLUDE
+from typing import Annotated
+from pydantic import BaseModel, StringConstraints, PositiveInt
 
 
-class AddCategory(Schema):
-    class Meta:
-        unknown = EXCLUDE
-
-    name = fields.String(required=True, validate=lambda a: a and not a.isspace())
+class AddCategory(BaseModel):
+    name: Annotated[str, StringConstraints(min_length=1, strip_whitespace=True)]
 
 
-class UpdateCategory(Schema):
-    name = fields.String(validate=lambda a: a and not a.isspace())
-    ordering = fields.Integer(validate=lambda i: i >= 0)
+class UpdateCategory(BaseModel):
+    name: Annotated[
+        str | None, StringConstraints(min_length=1, strip_whitespace=True)
+    ] = None
+    ordering: PositiveInt | None = None
 
     # if set this merges the specified category into this category thus combining them to one
-    merge_category_id = fields.Integer(
-        validate=lambda a: a > 0,
-        allow_none=True,
-    )
+    merge_category_id: PositiveInt | None = None
 
 
-class DeleteCategory(Schema):
-    name = fields.String(required=True, validate=lambda a: a and not a.isspace())
+class DeleteCategory(BaseModel):
+    name: Annotated[str, StringConstraints(min_length=1, strip_whitespace=True)]

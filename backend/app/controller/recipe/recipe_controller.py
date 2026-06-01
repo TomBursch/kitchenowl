@@ -73,21 +73,21 @@ def getRecipeById(id):
 @jwt_required()
 @authorize_household()
 @validate_args(AddRecipe)
-def addRecipe(args, household_id):
+def addRecipe(args: AddRecipe, household_id: int):
     recipe = Recipe()
-    recipe.name = args["name"].strip()[:128]
-    recipe.description = args["description"]
+    recipe.name = args.name.strip()[:128]
+    recipe.description = args.description
     recipe.household_id = household_id
-    if "time" in args:
-        recipe.time = args["time"]
-    if "cook_time" in args:
-        recipe.cook_time = args["cook_time"]
-    if "prep_time" in args:
-        recipe.prep_time = args["prep_time"]
-    if "yields" in args:
-        recipe.yields = args["yields"]
-    if "source" in args:
-        recipe.source = args["source"]
+    if args.time is not None:
+        recipe.time = args.time
+    if args.cook_time is not None:
+        recipe.cook_time = args.cook_time
+    if args.prep_time is not None:
+        recipe.prep_time = args.prep_time
+    if args.yields is not None:
+        recipe.yields = args.yields
+    if args.source is not None:
+        recipe.source = args.source
         localMatch = re.match(
             r"(kitchenowl:\/\/|"
             + re.escape((FRONT_URL or "").removesuffix("/"))
@@ -100,26 +100,26 @@ def addRecipe(args, household_id):
             if sourceRecipe:
                 sourceRecipe.server_scrapes = sourceRecipe.server_scrapes + 1
                 sourceRecipe.save()
-    if "visibility" in args:
-        recipe.visibility = RecipeVisibility(args["visibility"])
-    if "photo" in args and args["photo"] != recipe.photo:
-        recipe.photo = file_has_access_or_download(args["photo"], recipe.photo)
-    if "server_curated" in args and current_user.admin:
-        recipe.server_curated = args["server_curated"]
+    if args.visibility is not None:
+        recipe.visibility = RecipeVisibility(args.visibility)
+    if args.photo is not None and args.photo != recipe.photo:
+        recipe.photo = file_has_access_or_download(args.photo, recipe.photo)
+    if args.server_curated is not None and current_user.admin:
+        recipe.server_curated = args.server_curated
     recipe.save()
-    if "items" in args:
-        for recipeItem in args["items"]:
-            item = Item.find_by_name(household_id, recipeItem["name"])
+    if args.items is not None:
+        for recipeItem in args.items:
+            item = Item.find_by_name(household_id, recipeItem.name)
             if not item:
-                item = Item.create_by_name(household_id, recipeItem["name"])
+                item = Item.create_by_name(household_id, recipeItem.name)
             con = RecipeItems(
-                description=recipeItem["description"], optional=recipeItem["optional"]
+                description=recipeItem.description, optional=recipeItem.optional
             )
             con.item = item
             con.recipe = recipe
             con.save()
-    if "tags" in args:
-        for tagName in args["tags"]:
+    if args.tags is not None:
+        for tagName in args.tags:
             tag = Tag.find_by_name(household_id, tagName)
             if not tag:
                 tag = Tag.create_by_name(household_id, tagName)
@@ -133,61 +133,61 @@ def addRecipe(args, household_id):
 @recipe.route("/<int:id>", methods=["POST"])
 @jwt_required()
 @validate_args(UpdateRecipe)
-def updateRecipe(args, id):  # noqa: C901
+def updateRecipe(args: UpdateRecipe, id: int):  # noqa: C901
     recipe = Recipe.find_by_id(id)
     if not recipe:
         raise NotFoundRequest()
     recipe.checkAuthorized()
 
-    if "name" in args:
-        recipe.name = args["name"].strip()[:128]
-    if "description" in args:
-        recipe.description = args["description"]
-    if "time" in args:
-        recipe.time = args["time"]
-    if "cook_time" in args:
-        recipe.cook_time = args["cook_time"]
-    if "prep_time" in args:
-        recipe.prep_time = args["prep_time"]
-    if "yields" in args:
-        recipe.yields = args["yields"]
-    if "source" in args:
-        recipe.source = args["source"]
-    if "visibility" in args:
-        recipe.visibility = RecipeVisibility(args["visibility"])
-    if "photo" in args and args["photo"] != recipe.photo:
-        recipe.photo = file_has_access_or_download(args["photo"], recipe.photo)
-    if "server_curated" in args and current_user.admin:
-        recipe.server_curated = args["server_curated"]
+    if args.name is not None:
+        recipe.name = args.name.strip()[:128]
+    if args.description is not None:
+        recipe.description = args.description
+    if args.time is not None:
+        recipe.time = args.time
+    if args.cook_time is not None:
+        recipe.cook_time = args.cook_time
+    if args.prep_time is not None:
+        recipe.prep_time = args.prep_time
+    if args.yields is not None:
+        recipe.yields = args.yields
+    if args.source is not None:
+        recipe.source = args.source
+    if args.visibility is not None:
+        recipe.visibility = RecipeVisibility(args.visibility)
+    if args.photo is not None and args.photo != recipe.photo:
+        recipe.photo = file_has_access_or_download(args.photo, recipe.photo)
+    if args.server_curated is not None and current_user.admin:
+        recipe.server_curated = args.server_curated
     recipe.save()
-    if "items" in args:
+    if args.items is not None:
         for con in recipe.items:
-            item_names = [e["name"] for e in args["items"]]
+            item_names = [e.name for e in args.items]
             if con.item.name not in item_names:
                 con.delete()
-        for recipeItem in args["items"]:
-            item = Item.find_by_name(recipe.household_id, recipeItem["name"])
+        for recipeItem in args.items:
+            item = Item.find_by_name(recipe.household_id, recipeItem.name)
             if not item:
-                item = Item.create_by_name(recipe.household_id, recipeItem["name"])
+                item = Item.create_by_name(recipe.household_id, recipeItem.name)
             con = RecipeItems.find_by_ids(recipe.id, item.id)
             if con:
-                if "description" in recipeItem:
-                    con.description = recipeItem["description"]
-                if "optional" in recipeItem:
-                    con.optional = recipeItem["optional"]
+                if recipeItem.description is not None:
+                    con.description = recipeItem.description
+                if recipeItem.optional is not None:
+                    con.optional = recipeItem.optional
             else:
                 con = RecipeItems(
-                    description=recipeItem["description"],
-                    optional=recipeItem["optional"],
+                    description=recipeItem.description,
+                    optional=recipeItem.optional,
                 )
             con.item = item
             con.recipe = recipe
             con.save()
-    if "tags" in args:
+    if args.tags is not None:
         for con in recipe.tags:
-            if con.tag.name not in args["tags"]:
+            if con.tag.name not in args.tags:
                 con.delete()
-        for recipeTag in args["tags"]:
+        for recipeTag in args.tags:
             tag = Tag.find_by_name(recipe.household_id, recipeTag)
             if not tag:
                 tag = Tag.create_by_name(recipe.household_id, recipeTag)
@@ -215,11 +215,11 @@ def deleteRecipeById(id):
 @jwt_required()
 @authorize_household()
 @validate_args(SearchByNameRequest)
-def searchRecipeInHouseholdByName(args, household_id):
-    if "only_ids" in args and args["only_ids"]:
-        return jsonify([e.id for e in Recipe.search_name(args["query"], household_id)])
+def searchRecipeInHouseholdByName(args: SearchByNameRequest, household_id: int):
+    if args.only_ids is not None and args.only_ids:
+        return jsonify([e.id for e in Recipe.search_name(args.query, household_id)])
     return jsonify(
-        [e.obj_to_full_dict() for e in Recipe.search_name(args["query"], household_id)]
+        [e.obj_to_full_dict() for e in Recipe.search_name(args.query, household_id)]
     )
 
 
@@ -227,11 +227,11 @@ def searchRecipeInHouseholdByName(args, household_id):
 @jwt_required()
 @authorize_household()
 @validate_args(GetAllFilterRequest)
-def getAllFiltered(args, household_id):
+def getAllFiltered(args: GetAllFilterRequest, household_id: int):
     return jsonify(
         [
             e.obj_to_full_dict()
-            for e in Recipe.all_by_name_with_filter(household_id, args["filter"])
+            for e in Recipe.all_by_name_with_filter(household_id, args.filter)
         ]
     )
 
@@ -240,12 +240,12 @@ def getAllFiltered(args, household_id):
 @jwt_required()
 @authorize_household()
 @validate_args(ScrapeRecipe)
-def scrapeRecipe(args, household_id):
+def scrapeRecipe(args: ScrapeRecipe, household_id: int):
     household = Household.find_by_id(household_id)
     if not household:
         raise NotFoundRequest()
 
-    res = scrape(args["url"], household)
+    res = scrape(args.url, household)
     if res:
         return jsonify(res)
     return "Unsupported website", 400
@@ -254,11 +254,11 @@ def scrapeRecipe(args, household_id):
 @recipe.route("/discover", methods=["GET"])
 @jwt_required()
 @validate_args(SuggestionsRecipe)
-def suggestedRecipes(args):
+def suggestedRecipes(args: SuggestionsRecipe):
     queryFilter = [Recipe.visibility == RecipeVisibility.PUBLIC]
 
-    if "language" in args:
-        queryFilter.append(Household.language == args["language"])
+    if args.language is not None:
+        queryFilter.append(Household.language == args.language)
 
     tags = (
         RecipeTags.query.join(RecipeTags.tag)
@@ -309,11 +309,11 @@ def suggestedRecipes(args):
 @recipe.route("/discover/curated/<int:page>", methods=["GET"])
 @jwt_required()
 @validate_args(SuggestionsRecipe)
-def curatedRecipes(args, page):
+def curatedRecipes(args: SuggestionsRecipe, page: int):
     queryFilter = [Recipe.visibility == RecipeVisibility.PUBLIC]
 
-    if "language" in args:
-        queryFilter.append(Household.language == args["language"])
+    if args.language is not None:
+        queryFilter.append(Household.language == args.language)
 
     return jsonify(
         [
@@ -332,11 +332,11 @@ def curatedRecipes(args, page):
 @recipe.route("/discover/popular/<int:page>", methods=["GET"])
 @jwt_required()
 @validate_args(SuggestionsRecipe)
-def popularRecipes(args, page):
+def popularRecipes(args: SuggestionsRecipe, page: int):
     queryFilter = [Recipe.visibility == RecipeVisibility.PUBLIC]
 
-    if "language" in args:
-        queryFilter.append(Household.language == args["language"])
+    if args.language is not None:
+        queryFilter.append(Household.language == args.language)
 
     return jsonify(
         [
@@ -356,11 +356,11 @@ def popularRecipes(args, page):
 @recipe.route("/discover/newest/<int:page>", methods=["GET"])
 @jwt_required()
 @validate_args(SuggestionsRecipe)
-def newestRecipes(args, page):
+def newestRecipes(args: SuggestionsRecipe, page: int):
     queryFilter = [Recipe.visibility == RecipeVisibility.PUBLIC]
 
-    if "language" in args:
-        queryFilter.append(Household.language == args["language"])
+    if args.language is not None:
+        queryFilter.append(Household.language == args.language)
 
     return jsonify(
         [
@@ -378,15 +378,15 @@ def newestRecipes(args, page):
 @recipe.route("/search", methods=["GET"])
 @jwt_required()
 @validate_args(SearchByNameRequest)
-def searchAllRecipeByName(args):
-    if "only_ids" in args and args["only_ids"]:
+def searchAllRecipeByName(args: SearchByNameRequest):
+    if args.only_ids is not None and args.only_ids:
         return jsonify(
             [
                 e.id
                 for e in Recipe.search_name(
-                    args["query"],
-                    page=args["page"],
-                    language=args["language"] if "language" in args else None,
+                    args.query,
+                    page=args.page,
+                    language=args.language if args.language is not None else None,
                 )
             ]
         )
@@ -394,9 +394,9 @@ def searchAllRecipeByName(args):
         [
             e.obj_to_full_dict()
             for e in Recipe.search_name(
-                args["query"],
-                page=args["page"],
-                language=args["language"] if "language" in args else None,
+                args.query,
+                page=args.page,
+                language=args.language if args.language is not None else None,
             )
         ]
     )
@@ -405,28 +405,21 @@ def searchAllRecipeByName(args):
 @recipe.route("/search-tag", methods=["GET"])
 @jwt_required()
 @validate_args(SearchByTagRequest)
-def searchAllRecipeByTag(args):
+def searchAllRecipeByTag(args: SearchByTagRequest):
     query = Recipe.query.filter(
         Recipe.visibility == RecipeVisibility.PUBLIC,
         Recipe.tags.any(
             RecipeTags.tag_id.in_(
-                db.session.query(Tag.id)
-                .filter(Tag.name == args["tag"])
-                .scalar_subquery()
+                db.session.query(Tag.id).filter(Tag.name == args.tag).scalar_subquery()
             )
         ),
     )
-    if "language" in args:
-        query = query.join(Recipe.household).filter(
-            Household.language == args["language"]
-        )
+    if args.language is not None:
+        query = query.join(Recipe.household).filter(Household.language == args.language)
 
     return jsonify(
         [
             e.obj_to_full_dict()
-            for e in query.order_by(Recipe.name)
-            .offset(args["page"] * 10)
-            .limit(10)
-            .all()
+            for e in query.order_by(Recipe.name).offset(args.page * 10).limit(10).all()
         ]
     )

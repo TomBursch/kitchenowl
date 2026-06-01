@@ -210,19 +210,6 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                                 AddUpdateRecipeState>(
                               bloc: cubit,
                               buildWhen: (previous, current) =>
-                                  previous.image != current.image,
-                              builder: (context, state) => ImageSelector(
-                                tooltip: AppLocalizations.of(context)!
-                                    .recipeImageSelect,
-                                image: state.image,
-                                originalImage: cubit.recipe.image,
-                                setImage: cubit.setImage,
-                              ),
-                            ),
-                            BlocBuilder<AddUpdateRecipeCubit,
-                                AddUpdateRecipeState>(
-                              bloc: cubit,
-                              buildWhen: (previous, current) =>
                                 !listEquals(previous.additionalImages,
                                     current.additionalImages) ||
                                 !listEquals(previous.additionalImageFiles,
@@ -245,34 +232,30 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                                       runSpacing: 8,
                                       children: [
                                         ...state.additionalImages.map(
-                                          (image) => ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(12),
-                                            child: SizedBox(
-                                              width: 88,
-                                              height: 88,
-                                              child: Image(
-                                                fit: BoxFit.cover,
-                                                image: getImageProvider(
-                                                  context,
-                                                  image,
-                                                  maxWidth: 256,
-                                                ),
+                                          (image) => _RecipeImageTile(
+                                            image: Image(
+                                              fit: BoxFit.cover,
+                                              image: getImageProvider(
+                                                context,
+                                                image,
+                                                maxWidth: 256,
                                               ),
+                                            ),
+                                            onRemove: () =>
+                                                cubit.removeAdditionalImage(
+                                              image,
                                             ),
                                           ),
                                         ),
                                         ...state.additionalImageFiles.map(
-                                          (image) => ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(12),
-                                            child: SizedBox(
-                                              width: 88,
-                                              height: 88,
-                                              child: Image.memory(
-                                                image.bytes,
-                                                fit: BoxFit.cover,
-                                              ),
+                                          (image) => _RecipeImageTile(
+                                            image: Image.memory(
+                                              image.bytes,
+                                              fit: BoxFit.cover,
+                                            ),
+                                            onRemove: () =>
+                                                cubit.removeAdditionalImageFile(
+                                              image,
                                             ),
                                           ),
                                         ),
@@ -868,5 +851,52 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
         (res.state == UpdateEnum.deleted || res.state == UpdateEnum.updated)) {
       cubit.updateItem(res.data!);
     }
+  }
+}
+
+class _RecipeImageTile extends StatelessWidget {
+  final Widget image;
+  final VoidCallback onRemove;
+
+  const _RecipeImageTile({
+    required this.image,
+    required this.onRemove,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(12),
+      child: SizedBox(
+        width: 88,
+        height: 88,
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            image,
+            Positioned(
+              top: 4,
+              right: 4,
+              child: Material(
+                color: Theme.of(context).colorScheme.surface.withValues(alpha: .8),
+                shape: const CircleBorder(),
+                clipBehavior: Clip.antiAlias,
+                child: IconButton(
+                  onPressed: onRemove,
+                  iconSize: 18,
+                  padding: const EdgeInsets.all(4),
+                  constraints: const BoxConstraints.tightFor(
+                    width: 28,
+                    height: 28,
+                  ),
+                  icon: const Icon(Icons.close_rounded),
+                  tooltip: AppLocalizations.of(context)!.delete,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

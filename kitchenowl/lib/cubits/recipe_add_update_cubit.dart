@@ -27,7 +27,7 @@ class AddUpdateRecipeCubit extends ReplayCubit<AddUpdateRecipeState> {
           yields: recipe.yields,
           source: recipe.source,
           items: recipe.items,
-          additionalImages: recipe.additionalImages,
+          additionalImages: recipe.galleryImages,
           selectedTags: recipe.tags,
           tags: recipe.tags,
           visibility: recipe.visibility,
@@ -46,12 +46,6 @@ class AddUpdateRecipeCubit extends ReplayCubit<AddUpdateRecipeState> {
   Future<Recipe?> saveRecipe() async {
     final AddUpdateRecipeState _state = state;
     if (state.isValid()) {
-      String? image;
-      if (_state.image != null) {
-        image = _state.image!.isEmpty
-            ? ''
-            : await ApiService.getInstance().uploadBytes(_state.image!);
-      }
       final List<String> additionalImages =
           List<String>.from(_state.additionalImages);
       for (final pendingImage in _state.additionalImageFiles) {
@@ -71,7 +65,6 @@ class AddUpdateRecipeCubit extends ReplayCubit<AddUpdateRecipeState> {
             prepTime: _state.prepTime,
             yields: _state.yields,
             source: _state.source,
-            image: image ?? recipe.image,
             additionalImages: additionalImages,
             items: _state.items,
             tags: _state.selectedTags,
@@ -88,7 +81,6 @@ class AddUpdateRecipeCubit extends ReplayCubit<AddUpdateRecipeState> {
           prepTime: _state.prepTime,
           yields: _state.yields,
           source: _state.source,
-          image: image,
           additionalImages: additionalImages,
           items: _state.items,
           tags: _state.selectedTags,
@@ -129,6 +121,27 @@ class AddUpdateRecipeCubit extends ReplayCubit<AddUpdateRecipeState> {
           List<NamedByteArray>.from(state.additionalImageFiles)..add(image),
       hasChanges: true,
     ));
+  }
+
+  void removeAdditionalImage(String image) {
+    final additionalImages = List<String>.from(state.additionalImages);
+    if (additionalImages.remove(image)) {
+      emit(state.copyWith(
+        additionalImages: additionalImages,
+        hasChanges: true,
+      ));
+    }
+  }
+
+  void removeAdditionalImageFile(NamedByteArray image) {
+    final additionalImageFiles =
+        List<NamedByteArray>.from(state.additionalImageFiles);
+    if (additionalImageFiles.remove(image)) {
+      emit(state.copyWith(
+        additionalImageFiles: additionalImageFiles,
+        hasChanges: true,
+      ));
+    }
   }
 
   void setDescription(String desc) {

@@ -57,6 +57,10 @@ class Recipe extends Model {
     if (map.containsKey('items')) {
       items = List.from(map['items'].map((e) => RecipeItem.fromJson(e)));
     }
+    final additionalImages = List<String>.from(map['photos'] ?? const [])
+        .where((e) => e.toString().isNotEmpty)
+        .map((e) => e.toString())
+        .toList();
     Set<Tag> tags = const {};
     if (map.containsKey('tags')) {
       tags = Set.from(map['tags'].map((e) => Tag.fromJson(e)));
@@ -87,12 +91,12 @@ class Recipe extends Model {
       prepTime: map['prep_time'] ?? 0,
       yields: map['yields'] ?? 0,
       source: map['source'] ?? '',
-      image: map['photo'],
+      image: (additionalImages.isNotEmpty
+              ? additionalImages.first
+              : map['photo'])
+          ?.toString(),
       imageHash: map['photo_hash'],
-      additionalImages: List<String>.from(map['photos'] ?? const [])
-        .where((e) => e.toString().isNotEmpty)
-        .map((e) => e.toString())
-        .toList(),
+      additionalImages: additionalImages,
       visibility: RecipeVisibility.values[map['visibility'] ?? 0],
       householdId: map['household_id'],
       items: items,
@@ -188,8 +192,7 @@ class Recipe extends Model {
         "yields": yields,
         "source": source,
         "visibility": visibility.index,
-        if (image != null) "photo": image,
-        if (additionalImages.isNotEmpty) "photos": additionalImages,
+        "photos": additionalImages,
         "items": items.map((e) => e.toJson()).toList(),
         "tags": tags.map((e) => e.toString()).toList(),
         "server_curated": curated,

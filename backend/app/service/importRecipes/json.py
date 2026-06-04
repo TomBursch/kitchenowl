@@ -2,20 +2,20 @@ from __future__ import annotations
 
 from typing import Any
 from app.service.importRecipes.utils import (
-    _normalize_text,
-    _normalize_instruction_step,
-    _normalize_int,
-    _parse_minutes,
-    _normalize_items,
+    normalize_text,
+    normalize_instruction_step,
+    normalize_int,
+    normalize_items,
+    parse_time,
 )
 
 
 def _normalize_recipe(raw: dict[str, Any]) -> dict[str, Any] | None:
-    name = _normalize_text(raw.get("name") or raw.get("title") or raw.get("headline"))
+    name = normalize_text(raw.get("name") or raw.get("title") or raw.get("headline"))
     if not name:
         return None
 
-    description = _normalize_text(raw.get("description") or "")
+    description = normalize_text(raw.get("description") or "")
     instructions = (
         raw.get("recipeInstructions") or raw.get("instructions") or raw.get("method")
     )
@@ -27,7 +27,7 @@ def _normalize_recipe(raw: dict[str, Any]) -> dict[str, Any] | None:
                 if isinstance(entry, dict)
                 else entry
             )
-            text = _normalize_instruction_step(raw_text)
+            text = normalize_instruction_step(raw_text)
             if text:
                 steps.append(text)
 
@@ -36,49 +36,46 @@ def _normalize_recipe(raw: dict[str, Any]) -> dict[str, Any] | None:
                 f"{idx + 1}. {step}" for idx, step in enumerate(steps)
             )
     else:
-        instructions_text = _normalize_text(instructions)
+        instructions_text = normalize_text(instructions)
         if instructions_text:
             description = (
                 description + "\n\n" if description else ""
             ) + instructions_text
 
-    def parse_time(*keys: str) -> int | None:
-        for k in keys:
-            val = raw.get(k)
-            if val:
-                res = _normalize_int(val) or _parse_minutes(val)
-                if res is not None:
-                    return res
-        return None
-
     recipe: dict[str, Any] = {
         "name": name,
         "description": description,
-        "time": parse_time("time", "total_time", "totalTime"),
-        "cook_time": parse_time("cook_time", "cookTime"),
-        "prep_time": parse_time("prep_time", "prepTime"),
-        "yields": _normalize_int(
+        "cook_time": parse_time(raw, "cook_time", "cookTime"),
+        "prep_time": parse_time(raw, "prep_time", "prepTime"),
+        "time": parse_time(raw, "time", "total_time", "totalTime"),
+        "yields": normalize_int(
             raw.get("yields")
             or raw.get("servings")
             or raw.get("persons_served")
             or raw.get("recipeYield")
         ),
-        "source": _normalize_text(raw.get("source") or raw.get("url")),
-        "cuisine": _normalize_text(raw.get("cuisine") or raw.get("recipeCuisine")),
-        "items": _normalize_items(
+        "source": normalize_text(raw.get("source") or raw.get("url")),
+        "cuisine": normalize_text(raw.get("cuisine") or raw.get("recipeCuisine")),
+        "items": normalize_items(
             raw.get("items") or raw.get("ingredients") or raw.get("recipeIngredient")
         ),
     }
 
-    photo = _normalize_text(
+    if recipe["time"] is None:
+        prep = recipe.get("prep_time") or 0
+        cook = recipe.get("cook_time") or 0
+        if (prep + cook) > 0:
+            recipe["time"] = prep + cook
+
+    photo = normalize_text(
         raw.get("photo") or raw.get("image") or raw.get("preview_picture")
     )
     if photo:
         recipe["photo"] = photo
     photos = [
-        _normalize_text(photo)
+        normalize_text(photo)
         for photo in (raw.get("photos") or raw.get("images") or [])
-        if _normalize_text(photo)
+        if normalize_text(photo)
     ]
     if photos:
         recipe["photos"] = photos
@@ -89,7 +86,7 @@ def _normalize_recipe(raw: dict[str, Any]) -> dict[str, Any] | None:
     if isinstance(raw_tags, str):
         raw_tags = [t.strip() for t in raw_tags.split(",")]
 
-    tags = [_normalize_text(tag) for tag in raw_tags if _normalize_text(tag)]
+    tags = [normalize_text(tag) for tag in raw_tags if normalize_text(tag)]
     if tags:
         recipe["tags"] = tags
 

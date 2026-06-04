@@ -8,10 +8,10 @@ import zipfile
 from typing import Any
 
 from app.service.importRecipes.utils import (
-    _maybe_decode_json_payload,
-    _normalize_text,
-    _normalize_instruction_step,
-    _parse_minutes,
+    maybe_decode_json_payload,
+    normalize_text,
+    normalize_instruction_step,
+    parse_time,
 )
 from app import app
 
@@ -19,26 +19,23 @@ from app import app
 def _parse_tandoor_recipe(
     payload: dict[str, Any], inner: zipfile.ZipFile | None, images_dir: str
 ) -> dict[str, Any] | None:
-    name = _normalize_text(payload.get("name"))
+    name = normalize_text(payload.get("name"))
     if not name:
         return None
 
     rec: dict[str, Any] = {}
     rec["name"] = name
-    rec["description"] = _normalize_text(payload.get("description"))
-    rec["source"] = _normalize_text(payload.get("source_url") or payload.get("source"))
+    rec["description"] = normalize_text(payload.get("description"))
+    rec["source"] = normalize_text(payload.get("source_url") or payload.get("source"))
 
     servings = payload.get("servings")
     if isinstance(servings, (int, float)):
         rec["yields"] = round(servings)
     else:
-        rec["yields"] = _normalize_text(payload.get("servings_text")) or None
+        rec["yields"] = normalize_text(payload.get("servings_text")) or None
 
-    def parse_time(val: Any) -> int | None:
-        return int(round(val)) if isinstance(val, (int, float)) else _parse_minutes(val)
-
-    rec["prep_time"] = parse_time(payload.get("working_time"))
-    rec["cook_time"] = parse_time(payload.get("waiting_time"))
+    rec["prep_time"] = parse_time(payload, "working_time")
+    rec["cook_time"] = parse_time(payload, "waiting_time")
 
     prep = rec.get("prep_time") or 0
     cook = rec.get("cook_time") or 0
@@ -47,7 +44,7 @@ def _parse_tandoor_recipe(
     kws = payload.get("keywords") or []
     tags = []
     for k in kws:
-        tag = _normalize_text(k.get("name") if isinstance(k, dict) else k)
+        tag = normalize_text(k.get("name") if isinstance(k, dict) else k)
         if tag:
             tags.append(tag)
     if tags:
@@ -61,10 +58,10 @@ def _parse_tandoor_recipe(
     items: list[dict[str, Any]] = []
 
     for s in steps:
-        section = _normalize_instruction_step(s.get("name"))
+        section = normalize_instruction_step(s.get("name"))
         if section:
             instr_lines.append(("header", section))
-        raw_instruction = _normalize_instruction_step(s.get("instruction"))
+        raw_instruction = normalize_instruction_step(s.get("instruction"))
         if raw_instruction:
             cleaned = re.sub(r"\n{2,}", "\n", raw_instruction.strip())
             instr_lines.append(("step", cleaned))
@@ -75,7 +72,7 @@ def _parse_tandoor_recipe(
             if ing.get("is_header"):
                 continue
             food = ing.get("food") or {}
-            food_name = _normalize_text(
+            food_name = normalize_text(
                 food.get("name") if isinstance(food, dict) else ing.get("name")
             )
             if not food_name:
@@ -83,7 +80,7 @@ def _parse_tandoor_recipe(
             unit = ing.get("unit") or {}
             unit_name = unit.get("name") if isinstance(unit, dict) else None
             amount = ing.get("amount") if not ing.get("no_amount") else None
-            note = _normalize_text(ing.get("note") or "")
+            note = normalize_text(ing.get("note") or "")
             parts = [str(p) for p in (amount, unit_name, note) if p not in (None, "")]
 
             items.append(
@@ -152,7 +149,7 @@ def parse_tandoor_zip(
         flat_entry = zip_entries.get("recipes.json")
         if flat_entry:
             try:
-                payload = _maybe_decode_json_payload(zf.read(flat_entry))
+                payload = maybe_decode_json_payload(zf.read(flat_entry))
                 if isinstance(payload, list):
                     for item in payload:
                         if isinstance(item, dict):
@@ -176,7 +173,7 @@ def parse_tandoor_zip(
                 )
                 if not recipe_json_name:
                     continue
-                payload = _maybe_decode_json_payload(inner.read(recipe_json_name))
+                payload = maybe_decode_json_payload(inner.read(recipe_json_name))
                 if not isinstance(payload, dict):
                     continue
                 rec = _parse_tandoor_recipe(payload, inner=inner, images_dir=images_dir)

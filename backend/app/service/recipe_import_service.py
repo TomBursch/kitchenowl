@@ -22,6 +22,9 @@ from app.models import Recipe
 from app.models.user import User
 from app.service.file_has_access_or_download import file_has_access_or_download
 from app.service.importServices import importRecipe
+from app.service.importRecipes.mealie import parse_mealie_zip
+from app.service.importRecipes.tandoor import parse_tandoor_zip
+from app.service.importRecipes.json import json_extract_recipes
 from app.util.filename_validator import allowed_file
 from flask_jwt_extended import current_user
 
@@ -235,26 +238,31 @@ def _normalize_recipe(raw: dict[str, Any]) -> dict[str, Any] | None:
 
 
 def _extract_recipes(payload: Any) -> list[dict[str, Any]]:
-    recipes: list[dict[str, Any]] = []
-    if isinstance(payload, dict):
-        candidates = payload.get("recipes")
-        if isinstance(candidates, list):
-            for entry in candidates:
-                if isinstance(entry, dict):
-                    normalized = _normalize_recipe(entry)
-                    if normalized:
-                        recipes.append(normalized)
-        else:
-            normalized = _normalize_recipe(payload)
-            if normalized:
-                recipes.append(normalized)
-    elif isinstance(payload, list):
-        for entry in payload:
-            if isinstance(entry, dict):
-                normalized = _normalize_recipe(entry)
-                if normalized:
-                    recipes.append(normalized)
-    return recipes
+    try:
+        return json_extract_recipes(payload)
+    except Exception:
+        return []
+
+
+def _parse_mealie_zip(
+    zf: zipfile.ZipFile, zip_entries: dict[str, str]
+) -> list[dict[str, Any]]:
+    try:
+        return parse_mealie_zip(zf, zip_entries)
+    except Exception:
+        return []
+
+
+def _parse_tandoor_zip(
+    zf: zipfile.ZipFile,
+    entry_names: list[str],
+    zip_entries: dict[str, str],
+    images_dir: str,
+) -> list[dict[str, Any]]:
+    try:
+        return parse_tandoor_zip(zf, entry_names, zip_entries, images_dir)
+    except Exception:
+        return []
 
 
 def _is_gzip_bytes(data: bytes) -> bool:
@@ -487,26 +495,45 @@ def preview_recipe_import(
                 }
             )
             recipe_images = _collect_zip_images(entries)
-            json_entries = [name for name in entries if name.lower().endswith(".json")]
-            for json_name in json_entries:
-                payload = _maybe_decode_json_payload(zf.read(json_name))
-                if payload is None:
-                    continue
-                recipe_dir = _normalize_zip_path(os.path.dirname(json_name))
-                for recipe in _extract_recipes(payload):
-                    recipe["import_source_dir"] = recipe_dir
+            # Detect Mealie export (database.json at root)
+            if "database.json" in zip_entries:
+                mrecipes = _parse_mealie_zip(zf, zip_entries)
+                for recipe in mrecipes:
+                    recipe["import_source_dir"] = ""
                     recipes.append(recipe)
+            else:
+                # Detect Tandoor export: root-level entries are ZIP files
+                root_entries = [name for name in entries if os.path.dirname(name) == ""]
+                if root_entries and all(
+                    name.lower().endswith(".zip") for name in root_entries
+                ):
+                    trecipes = _parse_tandoor_zip(zf, entries, zip_entries, images_dir)
+                    for recipe in trecipes:
+                        recipe["import_source_dir"] = ""
+                        recipes.append(recipe)
+                else:
+                    json_entries = [
+                        name for name in entries if name.lower().endswith(".json")
+                    ]
+                    for json_name in json_entries:
+                        payload = _maybe_decode_json_payload(zf.read(json_name))
+                        if payload is None:
+                            continue
+                        recipe_dir = _normalize_zip_path(os.path.dirname(json_name))
+                        for recipe in _extract_recipes(payload):
+                            recipe["import_source_dir"] = recipe_dir
+                            recipes.append(recipe)
 
-            for entry_name in entries:
-                if entry_name.lower().endswith(".json"):
-                    continue
-                payload = _maybe_decode_json_payload(zf.read(entry_name))
-                if payload is None:
-                    continue
-                recipe_dir = _normalize_zip_path(os.path.dirname(entry_name))
-                for recipe in _extract_recipes(payload):
-                    recipe["import_source_dir"] = recipe_dir
-                    recipes.append(recipe)
+                    for entry_name in entries:
+                        if entry_name.lower().endswith(".json"):
+                            continue
+                        payload = _maybe_decode_json_payload(zf.read(entry_name))
+                        if payload is None:
+                            continue
+                        recipe_dir = _normalize_zip_path(os.path.dirname(entry_name))
+                        for recipe in _extract_recipes(payload):
+                            recipe["import_source_dir"] = recipe_dir
+                            recipes.append(recipe)
 
             for recipe in recipes:
                 photo_value = recipe.get("photo", "")

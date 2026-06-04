@@ -42,6 +42,7 @@ dependencies = [
     "psycopg2-binary>=2.9.10",
     "uWSGI>=2.0.28",
     "uwsgi-tools>=1.1.1",
+    "pyright>=1.1.410",
 ]
 
 [dependency-groups]

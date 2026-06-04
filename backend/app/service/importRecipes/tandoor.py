@@ -34,21 +34,15 @@ def _parse_tandoor_recipe(
     else:
         rec["yields"] = _normalize_text(payload.get("servings_text")) or None
 
-    working = payload.get("working_time")
-    waiting = payload.get("waiting_time")
-    rec["prep_time"] = (
-        int(round(working))
-        if isinstance(working, (int, float))
-        else _parse_minutes(working)
-    )
-    rec["cook_time"] = (
-        int(round(waiting))
-        if isinstance(waiting, (int, float))
-        else _parse_minutes(waiting)
-    )
+    def parse_time(val: Any) -> int | None:
+        return int(round(val)) if isinstance(val, (int, float)) else _parse_minutes(val)
+
+    rec["prep_time"] = parse_time(payload.get("working_time"))
+    rec["cook_time"] = parse_time(payload.get("waiting_time"))
+
     prep = rec.get("prep_time") or 0
     cook = rec.get("cook_time") or 0
-    rec["time"] = (prep + cook) if (prep + cook) > 0 else None
+    rec["time"] = (prep + cook) or None
 
     kws = payload.get("keywords") or []
     tags = []
@@ -63,7 +57,7 @@ def _parse_tandoor_recipe(
     steps = [s for s in steps if isinstance(s, dict)]
     steps.sort(key=lambda s: s.get("order") or 0)
 
-    instr_lines: list[str] = []
+    instr_lines: list[tuple[str, str]] = []
     items: list[dict[str, Any]] = []
 
     for s in steps:
@@ -90,15 +84,8 @@ def _parse_tandoor_recipe(
             unit_name = unit.get("name") if isinstance(unit, dict) else None
             amount = ing.get("amount") if not ing.get("no_amount") else None
             note = _normalize_text(ing.get("note") or "")
-            parts = [
-                p
-                for p in [
-                    str(amount) if amount is not None else None,
-                    str(unit_name) if unit_name else None,
-                    note if note else None,
-                ]
-                if p
-            ]
+            parts = [str(p) for p in (amount, unit_name, note) if p not in (None, "")]
+
             items.append(
                 {
                     "name": food_name,

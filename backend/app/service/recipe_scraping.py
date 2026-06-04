@@ -3,6 +3,7 @@ from typing import Any
 from recipe_scrapers import scrape_html
 from recipe_scrapers._exceptions import SchemaOrgException
 from recipe_scrapers.__version__ import __version__ as recipe_scrapers_version
+from requests_hardened import Config, Manager
 import requests
 from app.config import FRONT_URL
 from app.errors import ForbiddenRequest
@@ -12,9 +13,17 @@ from app.service.ingredient_parsing import parseIngredients
 from app.models import Recipe, Item, Household
 
 # taken from the recipe-scrapers library to circumvent anti-scraping measures that block requests with the default user agent
-HEADERS = {
-    "User-Agent": f"Mozilla/5.0 (compatible; Windows NT 10.0; Win64; x64; rv:{recipe_scrapers_version}) recipe-scrapers/{recipe_scrapers_version}",
-}
+USER_AGENT = f"Mozilla/5.0 (compatible; Windows NT 10.0; Win64; x64; rv:{recipe_scrapers_version}) recipe-scrapers/{recipe_scrapers_version}"
+
+request_manager = Manager(
+    Config(
+        default_timeout=(2, 10),
+        never_redirect=False,
+        ip_filter_enable=True,
+        ip_filter_allow_loopback_ips=False,
+        user_agent_override=USER_AGENT,
+    )
+)
 
 
 def scrapePublic(url: str, html: str, household: Household) -> dict[str, Any] | None:
@@ -187,7 +196,7 @@ def scrape(url: str, household: Household) -> dict[str, Any] | None:
         url = "http://" + url
 
     try:
-        res = requests.get(url=url, headers=HEADERS)
+        res = request_manager.send_request("GET", url)
     except Exception:
         return None
     if res.status_code != requests.codes.ok:

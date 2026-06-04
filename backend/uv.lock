@@ -1286,6 +1286,7 @@ dependencies = [
     { name = "python-socketio" },
     { name = "recipe-scrapers" },
     { name = "requests" },
+    { name = "requests-hardened" },
     { name = "sqlalchemy" },
     { name = "sqlite-icu" },
     { name = "tqdm" },
@@ -1336,6 +1337,7 @@ requires-dist = [
     { name = "python-socketio", specifier = ">=5.16.2" },
     { name = "recipe-scrapers", specifier = ">=15.6.0" },
     { name = "requests", specifier = ">=2.32.3" },
+    { name = "requests-hardened", specifier = ">=1.2.2" },
     { name = "sqlalchemy", specifier = ">=2.0.40" },
     { name = "sqlite-icu", specifier = ">=1.0" },
     { name = "tqdm", specifier = ">=4.67.1" },
@@ -2364,6 +2366,18 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/ac/c3/e2a2b89f2d3e2179abd6d00ebd70bff6273f37fb3e0cc209f48b39d00cbf/requests-2.34.2.tar.gz", hash = "sha256:f288924cae4e29463698d6d60bc6a4da69c89185ad1e0bcc4104f584e960b9ed", size = 142856, upload-time = "2026-05-14T19:25:27.735Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/a0/f4/c67b0b3f1b9245e8d266f0f112c500d50e5b4e83cb6f3b71b6528104182a/requests-2.34.2-py3-none-any.whl", hash = "sha256:2a0d60c172f83ac6ab31e4554906c0f3b3588d37b5cb939b1c061f4907e278e0", size = 73075, upload-time = "2026-05-14T19:25:26.443Z" },
+]
+
+[[package]]
+name = "requests-hardened"
+version = "1.2.2"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "requests" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/f5/98/64cb67a037879f10e60b36f73e5ead4416d6d9b8907b0b683dfa30d6cbb4/requests_hardened-1.2.2.tar.gz", hash = "sha256:f9a479bf097a8debeade1643b4777669161ed98c8a4a12a4d19fa008bc6ae5ea", size = 7735, upload-time = "2026-04-28T12:30:49.668Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/f6/33/fdb3e06a4e5d588012d7f6107a8b7885e3f939592266d6f01fe2b53ca537/requests_hardened-1.2.2-py3-none-any.whl", hash = "sha256:0bf87b1c72fdb761b9643f8c91c059262bb825af55011fab55547397a401740c", size = 9726, upload-time = "2026-04-28T12:30:48.277Z" },
 ]
 
 [[package]]

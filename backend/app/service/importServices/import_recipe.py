@@ -1,5 +1,6 @@
 import re
 from typing import Any
+from app.config import db
 from app.models import Recipe, RecipeTags, RecipeItems, Item, Tag
 from app.service.file_has_access_or_download import file_has_access_or_download
 
@@ -73,6 +74,7 @@ def importRecipe(
     elif overwrite:
         RecipeItems.query.filter_by(recipe_id=recipe.id).delete()
         RecipeTags.query.filter_by(recipe_id=recipe.id).delete()
+        db.session.commit()
     recipe.name = args["name"] + (
         f" ({recipeNameCount + 1})" if recipeNameCount > 0 else ""
     )

@@ -1,5 +1,4 @@
 import re
-
 from typing import Any
 from app.models import Recipe, RecipeTags, RecipeItems, Item, Tag
 from app.service.file_has_access_or_download import file_has_access_or_download
@@ -71,6 +70,9 @@ def importRecipe(
     if not recipe:
         recipe = Recipe()
         recipe.household_id = household_id
+    elif overwrite:
+        RecipeItems.query.filter_by(recipe_id=recipe.id).delete()
+        RecipeTags.query.filter_by(recipe_id=recipe.id).delete()
     recipe.name = args["name"] + (
         f" ({recipeNameCount + 1})" if recipeNameCount > 0 else ""
     )
@@ -99,6 +101,8 @@ def importRecipe(
             file_has_access_or_download(photo, user=user) for photo in extra_photos
         ]
         recipe.photos = [photo for photo in resolved_photos if photo]
+        if not recipe.photo and recipe.photos:
+            recipe.photo = recipe.photos[0]
     elif "photos" in args:
         recipe.photos = []
 

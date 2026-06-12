@@ -177,8 +177,8 @@ def updateRecipe(args, id):  # noqa: C901
         recipe.server_curated = args["server_curated"]
     recipe.save()
     if "items" in args:
+        item_names = [e["name"] for e in args["items"]]
         for con in recipe.items:
-            item_names = [e["name"] for e in args["items"]]
             if con.item.name not in item_names:
                 con.delete()
         for recipeItem in args["items"]:

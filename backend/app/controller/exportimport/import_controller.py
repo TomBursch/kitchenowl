@@ -10,7 +10,7 @@ from app.service.importServices import (
 from app.service.recalculate_balances import recalculateBalances
 from .schemas import ImportSchema, RecipeImportCommitSchema
 from app.helpers import validate_args, authorize_household
-from flask import jsonify, Blueprint, request
+from flask import jsonify, Blueprint, request, abort
 from flask_jwt_extended import jwt_required
 from app.service.recipe_import_service import (
     preview_recipe_import,
@@ -96,5 +96,5 @@ def commitRecipeImport(args, household_id):
 def getRecipeImportCommitStatus(household_id, token):
     res = get_recipe_import_job(token)
     if res is None:
-        return jsonify({"imported": 0, "skipped": 0, "failed": 0, "complete": True})
+        abort(404, description="Import job not found or token has expired")
     return jsonify(res)

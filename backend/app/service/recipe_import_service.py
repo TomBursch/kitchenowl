@@ -4,7 +4,7 @@ import io
 import json
 import gzip
 import os
-import re
+import shutil
 import time
 import uuid
 import zipfile
@@ -59,182 +59,6 @@ def _store_image_bytes(file_bytes: bytes, filename: str, user=None) -> str | Non
         pass
     File(filename=stored_filename, blur_hash=blur, created_by=user.id).save()
     return stored_filename
-
-
-def _normalize_text(value: Any) -> str:
-    if value is None:
-        return ""
-    return str(value).strip()
-
-
-def _normalize_instruction_step(value: Any) -> str:
-    text = _normalize_text(value)
-    if not text:
-        return ""
-    return re.sub(r"^(?:\d+\s*[\.)]\s+)+", "", text)
-
-
-def _normalize_int(value: Any) -> int | None:
-    if value is None:
-        return None
-    try:
-        return int(value)
-    except (TypeError, ValueError):
-        return None
-
-
-def _parse_minutes(value: Any) -> int | None:
-    if value is None:
-        return None
-    if isinstance(value, (int, float)):
-        return int(value)
-    text = str(value)
-    digits = "".join([c for c in text if c.isdigit() or c == " "])
-    parts = [p for p in digits.split(" ") if p]
-    if not parts:
-        return None
-    try:
-        return int(parts[0])
-    except ValueError:
-        return None
-
-
-def _normalize_items(value: Any) -> list[dict[str, Any]]:
-    if not value:
-        return []
-    if isinstance(value, list):
-        items: list[dict[str, Any]] = []
-        for entry in value:
-            if isinstance(entry, dict):
-                name = _normalize_text(
-                    entry.get("name") or entry.get("item") or entry.get("ingredient")
-                )
-                if not name:
-                    continue
-                quantity = _normalize_text(entry.get("quantity") or entry.get("amount"))
-                note = _normalize_text(entry.get("note"))
-                description_parts = [p for p in [quantity, note] if p]
-                items.append(
-                    {
-                        "name": name,
-                        "description": " ".join(description_parts).strip(),
-                        "optional": bool(entry.get("optional", False)),
-                    }
-                )
-            else:
-                name = _normalize_text(entry)
-                if name:
-                    items.append(
-                        {
-                            "name": name,
-                            "description": "",
-                            "optional": False,
-                        }
-                    )
-        return items
-    return []
-
-
-def _normalize_step_image(entry: dict[str, Any]) -> str:
-    image_sources = [
-        entry.get("image"),
-        entry.get("photo"),
-        entry.get("picture"),
-        entry.get("preview_picture"),
-        entry.get("step_image"),
-        entry.get("stepImage"),
-        entry.get("img"),
-    ]
-    images = entry.get("images")
-    if isinstance(images, list):
-        image_sources.extend(images)
-    for source in image_sources:
-        if isinstance(source, dict):
-            source = source.get("url") or source.get("src") or source.get("path")
-        source_text = _normalize_text(source)
-        if source_text:
-            return source_text
-    return ""
-
-
-def _normalize_recipe(raw: dict[str, Any]) -> dict[str, Any] | None:
-    name = _normalize_text(raw.get("name") or raw.get("title") or raw.get("headline"))
-    if not name:
-        return None
-
-    description = _normalize_text(raw.get("description") or "")
-    instructions = raw.get("instructions") or raw.get("method")
-    if isinstance(instructions, list):
-        steps = []
-        for entry in instructions:
-            if isinstance(entry, dict):
-                text = _normalize_instruction_step(
-                    entry.get("text") or entry.get("instruction") or entry.get("value")
-                )
-                if text:
-                    steps.append(text)
-            else:
-                text = _normalize_instruction_step(entry)
-                if text:
-                    steps.append(text)
-        if steps:
-            if description:
-                description += "\n\n"
-            description += "\n".join(
-                [f"{idx + 1}. {step}" for idx, step in enumerate(steps)]
-            )
-    else:
-        instructions_text = _normalize_text(instructions)
-        if instructions_text:
-            if description:
-                description += "\n\n"
-            description += instructions_text
-
-    recipe: dict[str, Any] = {
-        "name": name,
-        "description": description,
-        "time": _normalize_int(raw.get("time") or raw.get("total_time")),
-        "cook_time": _normalize_int(raw.get("cook_time")),
-        "prep_time": _normalize_int(raw.get("prep_time")),
-        "yields": _normalize_int(
-            raw.get("yields") or raw.get("servings") or raw.get("persons_served")
-        ),
-        "source": _normalize_text(raw.get("source") or raw.get("url")),
-        "photo": _normalize_text(
-            raw.get("photo") or raw.get("image") or raw.get("preview_picture")
-        ),
-        "photos": [
-            _normalize_text(photo)
-            for photo in (raw.get("photos") or raw.get("images") or [])
-            if _normalize_text(photo)
-        ],
-        "items": _normalize_items(raw.get("items") or raw.get("ingredients")),
-        "tags": [
-            _normalize_text(tag)
-            for tag in (raw.get("tags") or [])
-            if _normalize_text(tag)
-        ],
-    }
-
-    if recipe["time"] is None:
-        recipe["time"] = _parse_minutes(raw.get("time") or raw.get("total_time"))
-    if recipe["cook_time"] is None:
-        recipe["cook_time"] = _parse_minutes(raw.get("cook_time"))
-    if recipe["prep_time"] is None:
-        recipe["prep_time"] = _parse_minutes(raw.get("prep_time"))
-
-    if not recipe["tags"] and isinstance(raw.get("categories"), list):
-        recipe["tags"] = [
-            _normalize_text(tag)
-            for tag in raw.get("categories", [])
-            if _normalize_text(tag)
-        ]
-
-    if not recipe["photo"]:
-        recipe.pop("photo", None)
-    if not recipe["photos"]:
-        recipe.pop("photos", None)
-    return recipe
 
 
 def _extract_recipes(payload: Any) -> list[dict[str, Any]]:
@@ -427,43 +251,9 @@ def _cleanup_old_tmp(max_age_seconds: int = 60 * 60 * 24) -> None:
         created = float(meta.get("created", 0))
         if created and now - created > max_age_seconds:
             try:
-                for root, dirs, files in os.walk(entry.path, topdown=False):
-                    for file in files:
-                        os.remove(os.path.join(root, file))
-                    for dir_name in dirs:
-                        os.rmdir(os.path.join(root, dir_name))
-                os.rmdir(entry.path)
+                shutil.rmtree(entry.path)
             except Exception:
                 continue
-
-
-def _resolve_zip_photo(
-    photo_value: str,
-    zip_entries: dict[str, str],
-    zip_file: zipfile.ZipFile,
-    images_dir: str,
-) -> str | None:
-    if not photo_value:
-        return None
-    photo_key = photo_value.strip().lower().replace("\\", "/")
-    if photo_key in zip_entries:
-        entry_name = zip_entries[photo_key]
-    else:
-        base_name = os.path.basename(photo_key)
-        entry_name = zip_entries.get(base_name)
-    if not entry_name:
-        return None
-    try:
-        data = zip_file.read(entry_name)
-    except Exception:
-        return None
-    if not allowed_file(entry_name):
-        return None
-    filename = f"{uuid.uuid4()}_{os.path.basename(entry_name)}"
-    path = os.path.join(images_dir, filename)
-    with open(path, "wb") as handle:
-        handle.write(data)
-    return filename
 
 
 def preview_recipe_import(
@@ -725,12 +515,7 @@ def _run_recipe_import_job(
             )
 
         try:
-            for root, dirs, files in os.walk(base_dir, topdown=False):
-                for file in files:
-                    os.remove(os.path.join(root, file))
-                for dir_name in dirs:
-                    os.rmdir(os.path.join(root, dir_name))
-            os.rmdir(base_dir)
+            shutil.rmtree(base_dir)
         except Exception:
             app.logger.warning("Failed to cleanup recipe import temp dir")
 

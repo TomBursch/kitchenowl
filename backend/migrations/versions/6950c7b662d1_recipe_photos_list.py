@@ -1,7 +1,7 @@
 """recipe photos list
 
 Revision ID: 6950c7b662d1
-Revises: bd383e73ef4d
+Revises: 0b10d67750be
 Create Date: 2026-05-29 21:32:23.419806
 
 """
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 # revision identifiers, used by Alembic.
 revision = '6950c7b662d1'
-down_revision = 'bd383e73ef4d'
+down_revision = '0b10d67750be'
 branch_labels = None
 depends_on = None
 

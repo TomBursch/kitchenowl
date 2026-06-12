@@ -102,8 +102,16 @@ def addRecipe(args, household_id):
                 sourceRecipe.save()
     if "visibility" in args:
         recipe.visibility = RecipeVisibility(args["visibility"])
-    if "photo" in args and args["photo"] != recipe.photo:
+    if "photos" in args:
+        recipe.photos = [
+            file_has_access_or_download(photo, user=current_user)
+            for photo in args["photos"]
+            if photo
+        ]
+        recipe.photo = recipe.photos[0] if recipe.photos else None
+    elif "photo" in args:
         recipe.photo = file_has_access_or_download(args["photo"], recipe.photo)
+        recipe.photos = [recipe.photo] if recipe.photo else []
     if "server_curated" in args and current_user.admin:
         recipe.server_curated = args["server_curated"]
     recipe.save()
@@ -155,14 +163,22 @@ def updateRecipe(args, id):  # noqa: C901
         recipe.source = args["source"]
     if "visibility" in args:
         recipe.visibility = RecipeVisibility(args["visibility"])
-    if "photo" in args and args["photo"] != recipe.photo:
+    if "photos" in args:
+        recipe.photos = [
+            file_has_access_or_download(photo, user=current_user)
+            for photo in args["photos"]
+            if photo
+        ]
+        recipe.photo = recipe.photos[0] if recipe.photos else None
+    elif "photo" in args:
         recipe.photo = file_has_access_or_download(args["photo"], recipe.photo)
+        recipe.photos = [recipe.photo] if recipe.photo else []
     if "server_curated" in args and current_user.admin:
         recipe.server_curated = args["server_curated"]
     recipe.save()
     if "items" in args:
+        item_names = [e["name"] for e in args["items"]]
         for con in recipe.items:
-            item_names = [e["name"] for e in args["items"]]
             if con.item.name not in item_names:
                 con.delete()
         for recipeItem in args["items"]:

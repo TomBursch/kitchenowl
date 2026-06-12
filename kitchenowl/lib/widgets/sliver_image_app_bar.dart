@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:kitchenowl/kitchenowl.dart';
+import 'package:kitchenowl/widgets/flexible_image_space_bar.dart';
 
 class SliverImageAppBar extends StatefulWidget {
   final String title;
   final String? imageUrl;
+  final List<String>? imageUrls;
   final String? imageHash;
   final Object? Function() popValue;
   final List<Widget>? Function(bool isCollapsed)? actions;
@@ -13,6 +14,7 @@ class SliverImageAppBar extends StatefulWidget {
     super.key,
     required this.title,
     required this.imageUrl,
+    this.imageUrls,
     this.imageHash,
     required this.popValue,
     this.actions,
@@ -32,19 +34,22 @@ class SliverImageAppBarrState extends State<SliverImageAppBar> {
 
     return SliverAppBar(
       flexibleSpace: LayoutBuilder(builder: (context, constraints) {
-        bool localIsCollapsed = constraints.biggest.height <=
+        final bool localIsCollapsed = constraints.biggest.height <=
             MediaQuery.paddingOf(context).top + kToolbarHeight - 16 + 32;
-        if (isCollapsed != localIsCollapsed)
+        if (isCollapsed != localIsCollapsed) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
-            if (mounted)
+            if (mounted) {
               setState(() {
                 isCollapsed = localIsCollapsed;
               });
+            }
           });
+        }
 
         return FlexibleImageSpaceBar(
           title: widget.title,
           imageUrl: widget.imageUrl,
+          imageUrls: widget.imageUrls,
           imageHash: widget.imageHash,
           isCollapsed: isCollapsed,
           actionCount: isCollapsed ? actions?.length ?? 0 : 0,
@@ -56,18 +61,20 @@ class SliverImageAppBarrState extends State<SliverImageAppBar> {
             (widget.imageUrl == null || widget.imageUrl!.isEmpty || isCollapsed
                 ? IconButton.new
                 : IconButton.filledTonal)(
-          key: ValueKey('back' + isCollapsed.toString()),
+          key: ValueKey('back$isCollapsed'),
           icon: const BackButtonIcon(),
           tooltip: MaterialLocalizations.of(context).backButtonTooltip,
           onPressed: () {
-            if (Navigator.canPop(context))
+            if (Navigator.canPop(context)) {
               Navigator.of(context).pop(widget.popValue());
-            else
-              context.go("/");
+            } else {
+              context.go('/');
+            }
           },
         ),
       ),
-      expandedHeight: widget.imageUrl?.isNotEmpty ?? false
+      expandedHeight: (widget.imageUrls?.isNotEmpty ?? false) ||
+              (widget.imageUrl?.isNotEmpty ?? false)
           ? (MediaQuery.sizeOf(context).height / 3.3).clamp(160, 350)
           : null,
       pinned: true,

@@ -37,7 +37,9 @@ def _jsonrpc_ok(id_value: Any, result: Any):
 
 
 def _jsonrpc_err(id_value: Any, code: int, message: str):
-    return jsonify({"jsonrpc": "2.0", "id": id_value, "error": {"code": code, "message": message}})
+    return jsonify(
+        {"jsonrpc": "2.0", "id": id_value, "error": {"code": code, "message": message}}
+    )
 
 
 def _as_tool_result(payload: Any):
@@ -62,7 +64,11 @@ def _tool_list_households(_args: dict[str, Any]) -> Any:
 def _tool_list_shoppinglists(args: dict[str, Any]) -> Any:
     household_id = int(args["household_id"])
     _require_household_access(household_id)
-    return {"items": [e.obj_to_dict() for e in Shoppinglist.all_from_household(household_id)]}
+    return {
+        "items": [
+            e.obj_to_dict() for e in Shoppinglist.all_from_household(household_id)
+        ]
+    }
 
 
 def _tool_list_shoppinglist_items(args: dict[str, Any]) -> Any:
@@ -108,7 +114,11 @@ def _tool_add_item_by_name(args: dict[str, Any]) -> Any:
 def _tool_list_recipes(args: dict[str, Any]) -> Any:
     household_id = int(args["household_id"])
     _require_household_access(household_id)
-    recipes = Recipe.query.filter(Recipe.household_id == household_id).order_by(Recipe.name).all()
+    recipes = (
+        Recipe.query.filter(Recipe.household_id == household_id)
+        .order_by(Recipe.name)
+        .all()
+    )
     return {"items": [r.obj_to_full_dict() for r in recipes]}
 
 
@@ -150,7 +160,7 @@ def _tool_create_recipe(args: dict[str, Any]) -> Any:
 
     recipe.save()
 
-    for recipe_item in (args.get("items") or []):
+    for recipe_item in args.get("items") or []:
         if isinstance(recipe_item, str):
             item_name = recipe_item
             item_description = ""
@@ -172,7 +182,7 @@ def _tool_create_recipe(args: dict[str, Any]) -> Any:
         con.recipe = recipe
         con.save()
 
-    for tag_name in (args.get("tags") or []):
+    for tag_name in args.get("tags") or []:
         name = str(tag_name).strip()
         if not name:
             continue
@@ -404,9 +414,13 @@ def _tool_update_recipe(args: dict[str, Any]) -> Any:
     if "time" in args:
         recipe.time = int(args["time"]) if args["time"] is not None else None
     if "cook_time" in args:
-        recipe.cook_time = int(args["cook_time"]) if args["cook_time"] is not None else None
+        recipe.cook_time = (
+            int(args["cook_time"]) if args["cook_time"] is not None else None
+        )
     if "prep_time" in args:
-        recipe.prep_time = int(args["prep_time"]) if args["prep_time"] is not None else None
+        recipe.prep_time = (
+            int(args["prep_time"]) if args["prep_time"] is not None else None
+        )
     if "yields" in args:
         recipe.yields = int(args["yields"]) if args["yields"] is not None else None
     if "source" in args:
@@ -469,7 +483,9 @@ def _tool_add_planner_entry(args: dict[str, Any]) -> Any:
     if not recipe or recipe.household_id != household_id:
         raise NotFoundRequest()
 
-    cooking_date = datetime.fromisoformat(str(args["cooking_date"]).replace("Z", "+00:00"))
+    cooking_date = datetime.fromisoformat(
+        str(args["cooking_date"]).replace("Z", "+00:00")
+    )
 
     existing = Planner.query.filter(
         Planner.household_id == household_id,
@@ -492,7 +508,9 @@ def _tool_add_planner_entry(args: dict[str, Any]) -> Any:
 def _tool_remove_planner_entry(args: dict[str, Any]) -> Any:
     household_id = int(args["household_id"])
     recipe_id = int(args["recipe_id"])
-    cooking_date = datetime.fromisoformat(str(args["cooking_date"]).replace("Z", "+00:00"))
+    cooking_date = datetime.fromisoformat(
+        str(args["cooking_date"]).replace("Z", "+00:00")
+    )
     _require_household_access(household_id)
 
     plan = Planner.query.filter(
@@ -504,7 +522,12 @@ def _tool_remove_planner_entry(args: dict[str, Any]) -> Any:
         return {"removed": False, "reason": "not_found"}
 
     plan.delete()
-    return {"removed": True, "household_id": household_id, "recipe_id": recipe_id, "cooking_date": cooking_date}
+    return {
+        "removed": True,
+        "household_id": household_id,
+        "recipe_id": recipe_id,
+        "cooking_date": cooking_date,
+    }
 
 
 def _tool_list_planner(args: dict[str, Any]) -> Any:
@@ -851,7 +874,10 @@ def _handle_jsonrpc(body: dict[str, Any]):
                 {
                     "protocolVersion": "2024-11-05",
                     "capabilities": {"tools": {}},
-                    "serverInfo": {"name": "kitchenowl-mcp", "version": str(BACKEND_VERSION)},
+                    "serverInfo": {
+                        "name": "kitchenowl-mcp",
+                        "version": str(BACKEND_VERSION),
+                    },
                 },
             )
 

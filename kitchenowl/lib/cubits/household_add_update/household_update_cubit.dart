@@ -5,6 +5,8 @@ import 'package:kitchenowl/models/expense_category.dart';
 import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/models/import_settings.dart';
 import 'package:kitchenowl/models/member.dart';
+import 'package:kitchenowl/models/recipe_import_preview.dart';
+import 'package:kitchenowl/models/recipe_import_result.dart';
 import 'package:kitchenowl/models/shoppinglist.dart';
 import 'package:kitchenowl/models/tag.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
@@ -304,6 +306,24 @@ class HouseholdUpdateCubit
     };
     await ApiService.getInstance()
         .importHousehold(household, content, settings.recipesOverwrite);
+  }
+
+  Future<RecipeImportPreview?> previewRecipeImport(
+    NamedByteArray file,
+  ) async {
+    return ApiService.getInstance().previewRecipeImport(household, file);
+  }
+
+  Future<RecipeImportResult?> commitRecipeImport(
+    String token,
+    Map<String, String> decisions,
+  ) async {
+    return ApiService.getInstance()
+        .commitRecipeImport(household, token, decisions);
+  }
+
+  Future<RecipeImportResult?> getRecipeImportStatus(String token) async {
+    return ApiService.getInstance().getRecipeImportStatus(household, token);
   }
 }
 

@@ -1,6 +1,9 @@
 import 'dart:convert';
 
+import 'package:kitchenowl/helpers/named_bytearray.dart';
 import 'package:kitchenowl/models/household.dart';
+import 'package:kitchenowl/models/recipe_import_preview.dart';
+import 'package:kitchenowl/models/recipe_import_result.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
 
 extension ImportExportApi on ApiService {
@@ -28,5 +31,54 @@ extension ImportExportApi on ApiService {
     if (res.statusCode != 200) return null;
 
     return res.body;
+  }
+
+  Future<RecipeImportPreview?> previewRecipeImport(
+    Household household,
+    NamedByteArray file,
+  ) async {
+    final res = await postBytes(
+      '${householdPath(household)}$baseRoute/recipes/preview',
+      file,
+    );
+    if (res.statusCode != 200) return null;
+    final body = jsonDecode(res.body) as Map<String, dynamic>;
+
+    return RecipeImportPreview.fromJson(body);
+  }
+
+  Future<RecipeImportResult?> commitRecipeImport(
+    Household household,
+    String token,
+    Map<String, String> decisions,
+  ) async {
+    final res = await post(
+      '${householdPath(household)}$baseRoute/recipes/commit',
+      jsonEncode({
+        'token': token,
+        'decisions': decisions,
+      }),
+    );
+    if (res.statusCode != 200) return null;
+
+    return RecipeImportResult.fromJson(
+      jsonDecode(res.body) as Map<String, dynamic>,
+    );
+  }
+
+  Future<RecipeImportResult?> getRecipeImportStatus(
+    Household household,
+    String token,
+  ) async {
+    final res = await get(
+      '${householdPath(household)}$baseRoute/recipes/commit/$token',
+      refreshOnException: false,
+      timeout: const Duration(seconds: 15),
+    );
+    if (res.statusCode != 200) return null;
+
+    return RecipeImportResult.fromJson(
+      jsonDecode(res.body) as Map<String, dynamic>,
+    );
   }
 }

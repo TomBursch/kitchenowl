@@ -1283,6 +1283,7 @@ dependencies = [
     { name = "prometheus-client" },
     { name = "prometheus-flask-exporter" },
     { name = "psycopg2-binary" },
+    { name = "pyright" },
     { name = "python-socketio" },
     { name = "recipe-scrapers" },
     { name = "requests" },
@@ -1334,6 +1335,7 @@ requires-dist = [
     { name = "prometheus-client", specifier = ">=0.21.1" },
     { name = "prometheus-flask-exporter", specifier = ">=0.23.2" },
     { name = "psycopg2-binary", specifier = ">=2.9.10" },
+    { name = "pyright", specifier = ">=1.1.410" },
     { name = "python-socketio", specifier = ">=5.16.2" },
     { name = "recipe-scrapers", specifier = ">=15.6.0" },
     { name = "requests", specifier = ">=2.32.3" },
@@ -1419,7 +1421,7 @@ wheels = [
 
 [[package]]
 name = "litellm"
-version = "1.87.0"
+version = "1.87.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "aiohttp" },
@@ -1435,9 +1437,9 @@ dependencies = [
     { name = "tiktoken" },
     { name = "tokenizers" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/77/0d/ccdf682ccfd7f18bf0e179c39d85616b8f8ef05a798588285310412db13d/litellm-1.87.0.tar.gz", hash = "sha256:cafc1882cb0cbab8374c41180af86e4a067796e4524e15f59e99f6e689cd1bd8", size = 15453755, upload-time = "2026-06-02T03:53:29.076Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/5d/e5/d0ac1c8f55e2c8d8799589e831bef0d450e69e02ecb511901ffc8de054d9/litellm-1.87.1.tar.gz", hash = "sha256:70ac9d6b25f56ad30de6ff95d26fac3b3fc697a95da582b6072d25d8dc73d493", size = 15455709, upload-time = "2026-06-04T16:23:23.339Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/98/20/88a372fa7e50fc2c33458c6eef94a79afcf7bdfa43610079531b82b484a3/litellm-1.87.0-py3-none-any.whl", hash = "sha256:fbbba7e47ae29b55f878fe1acc80effb92761bc168f6236bd81a0cb6e147d855", size = 17103948, upload-time = "2026-06-02T03:53:25.677Z" },
+    { url = "https://files.pythonhosted.org/packages/ff/18/8275c95ef09e81ab0c01a162c7b780ce3fbc49066b5d532c6b6ab3dc0118/litellm-1.87.1-py3-none-any.whl", hash = "sha256:dd4e00278cdb846d52e99a09d732575a897273540b54eb044247ecbc0d98f67c", size = 17105482, upload-time = "2026-06-04T16:23:20.769Z" },
 ]
 
 [[package]]

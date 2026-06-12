@@ -210,13 +210,95 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                                 AddUpdateRecipeState>(
                               bloc: cubit,
                               buildWhen: (previous, current) =>
-                                  previous.image != current.image,
-                              builder: (context, state) => ImageSelector(
-                                tooltip: AppLocalizations.of(context)!
-                                    .recipeImageSelect,
-                                image: state.image,
-                                originalImage: cubit.recipe.image,
-                                setImage: cubit.setImage,
+                                !listEquals(previous.additionalImages,
+                                    current.additionalImages) ||
+                                !listEquals(previous.additionalImageFiles,
+                                  current.additionalImageFiles),
+                              builder: (context, state) => Padding(
+                                padding:
+                                    const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                                  children: [
+                                    Text(
+                                      AppLocalizations.of(context)!
+                                          .recipeImageSelect,
+                                      style:
+                                          Theme.of(context).textTheme.titleMedium,
+                                    ),
+                                    const SizedBox(height: 8),
+                                    Wrap(
+                                      spacing: 8,
+                                      runSpacing: 8,
+                                      children: [
+                                        ...state.additionalImages.map(
+                                          (image) => _RecipeImageTile(
+                                            image: Image(
+                                              fit: BoxFit.cover,
+                                              image: getImageProvider(
+                                                context,
+                                                image,
+                                                maxWidth: 256,
+                                              ),
+                                            ),
+                                            onRemove: () =>
+                                                cubit.removeAdditionalImage(
+                                              image,
+                                            ),
+                                          ),
+                                        ),
+                                        ...state.additionalImageFiles.map(
+                                          (image) => _RecipeImageTile(
+                                            image: Image.memory(
+                                              image.bytes,
+                                              fit: BoxFit.cover,
+                                            ),
+                                            onRemove: () =>
+                                                cubit.removeAdditionalImageFile(
+                                              image,
+                                            ),
+                                          ),
+                                        ),
+                                        InkWell(
+                                          onTap: () async {
+                                            final image = await selectFile(
+                                              context: context,
+                                              title: AppLocalizations.of(
+                                                      context)!
+                                                  .recipeImageSelect,
+                                            );
+                                            if (image != null &&
+                                                image.isNotEmpty) {
+                                              await cubit.addAdditionalImage(
+                                                  image);
+                                            }
+                                          },
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                          child: Container(
+                                            width: 88,
+                                            height: 88,
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
+                                              border: Border.all(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .secondary,
+                                              ),
+                                            ),
+                                            child: Icon(
+                                              Icons.add_photo_alternate_rounded,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .secondary,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                             Padding(
@@ -769,5 +851,52 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
         (res.state == UpdateEnum.deleted || res.state == UpdateEnum.updated)) {
       cubit.updateItem(res.data!);
     }
+  }
+}
+
+class _RecipeImageTile extends StatelessWidget {
+  final Widget image;
+  final VoidCallback onRemove;
+
+  const _RecipeImageTile({
+    required this.image,
+    required this.onRemove,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(12),
+      child: SizedBox(
+        width: 88,
+        height: 88,
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            image,
+            Positioned(
+              top: 4,
+              right: 4,
+              child: Material(
+                color: Theme.of(context).colorScheme.surface.withValues(alpha: .8),
+                shape: const CircleBorder(),
+                clipBehavior: Clip.antiAlias,
+                child: IconButton(
+                  onPressed: onRemove,
+                  iconSize: 18,
+                  padding: const EdgeInsets.all(4),
+                  constraints: const BoxConstraints.tightFor(
+                    width: 28,
+                    height: 28,
+                  ),
+                  icon: const Icon(Icons.close_rounded),
+                  tooltip: AppLocalizations.of(context)!.delete,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

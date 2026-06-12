@@ -29,6 +29,7 @@ class ImportSchema(Schema):
         yields = fields.Integer(allow_none=True)
         source = fields.String(allow_none=True)
         photo = fields.String(allow_none=True)
+        photos = fields.List(fields.String(), load_default=[])
         items = fields.List(fields.Nested(RecipeItem))
         tags = fields.List(fields.String())
 
@@ -62,3 +63,12 @@ class ImportSchema(Schema):
     expenses = fields.List(fields.Nested(Expense))
     member = fields.List(fields.String())
     shoppinglists = fields.List(fields.String())
+
+
+class RecipeImportCommitSchema(Schema):
+    token = fields.String(required=True, validate=lambda a: a and not a.isspace())
+    decisions = fields.Dict(
+        keys=fields.String(),
+        values=fields.String(),
+        load_default={},
+    )

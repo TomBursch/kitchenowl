@@ -7,7 +7,7 @@ class ShortImageMarkdownSyntax extends md.InlineSyntax {
           caseSensitive: false,
         );
 
-  static const String _pattern = r"""!\[(.+)\]""";
+  static const String _pattern = r"""!\[([^\]]+)\](?!\s*\()""";
 
   @override
   bool onMatch(md.InlineParser parser, Match match) {

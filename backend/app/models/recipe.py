@@ -50,6 +50,7 @@ class Recipe(Model, DbModelAuthorizeMixin):
     name: Mapped[str] = db.Column(db.String(128))
     description: Mapped[str] = db.Column(db.String())
     photo: Mapped[str | None] = db.Column(db.String(), db.ForeignKey("file.filename"))
+    photos: Mapped[list[str]] = db.Column(db.JSON, nullable=False, default=list)
     time: Mapped[int] = db.Column(db.Integer)
     cook_time: Mapped[int] = db.Column(db.Integer)
     prep_time: Mapped[int] = db.Column(db.Integer)
@@ -138,6 +139,7 @@ class Recipe(Model, DbModelAuthorizeMixin):
         include_columns: list[str] | None = None,
     ) -> dict[str, Any]:
         res = super().obj_to_dict(skip_columns, include_columns)
+        res["photos"] = list(self.photos or [])
         res["planned"] = len(self.plans) > 0
         res["planned_days"] = [
             transform_cooking_date_to_day(plan.cooking_date)
@@ -164,7 +166,9 @@ class Recipe(Model, DbModelAuthorizeMixin):
         res = self.obj_to_dict(skip_columns, include_columns)
         res["items"] = [e.obj_to_item_dict() for e in self.items]
         res["tags"] = [e.obj_to_item_dict() for e in self.tags]
-        res["household"] = self.household.obj_to_public_dict()
+        res["household"] = (
+            self.household.obj_to_public_dict() if self.household else None
+        )
 
         for column_name in skip_columns or []:
             if column_name in res:
@@ -189,6 +193,7 @@ class Recipe(Model, DbModelAuthorizeMixin):
             "description": self.description,
             "time": self.time,
             "photo": self.photo,
+            "photos": list(self.photos or []),
             "cook_time": self.cook_time,
             "prep_time": self.prep_time,
             "yields": self.yields,

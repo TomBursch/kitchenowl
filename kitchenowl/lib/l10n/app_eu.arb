@@ -1,3 +1,283 @@
 {
-  "about": "Honi buruz"
+  "@addLanguageConfirm": {
+    "placeholders": {
+      "lang": {
+        "example": "English",
+        "type": "String"
+      }
+    }
+  },
+  "@addNumberIngredients": {
+    "placeholders": {
+      "number": {
+        "example": "2",
+        "type": "int"
+      }
+    }
+  },
+  "@addRecipeToPlannerShort": {
+    "description": "A shorter title/button text used wherever the space is limited. Excludes the number of yields."
+  },
+  "@appTitle": {
+    "description": "The title of the app"
+  },
+  "@categoryDeleteConfirmation": {
+    "placeholders": {
+      "category": {
+        "example": "Frozen",
+        "type": "String"
+      }
+    }
+  },
+  "@categoryExpenseDeleteConfirmation": {
+    "placeholders": {
+      "category": {
+        "example": "Frozen",
+        "type": "String"
+      }
+    }
+  },
+  "@expenseOverviewTotalTitle": {
+    "placeholders": {
+      "month": {
+        "example": "January",
+        "type": "String"
+      }
+    }
+  },
+  "@fieldCannotBeEmpty": {
+    "placeholders": {
+      "field": {
+        "example": "Username",
+        "type": "String"
+      }
+    }
+  },
+  "@hi": {
+    "placeholders": {
+      "name": {
+        "example": "Tom",
+        "type": "String"
+      }
+    }
+  },
+  "@householdLeaveConfirmation": {
+    "placeholders": {
+      "household": {
+        "example": "Home",
+        "type": "String"
+      }
+    }
+  },
+  "@link": {
+    "description": "The verb, as in link social account (e.g. Google)"
+  },
+  "@linkNoun": {
+    "description": "The noun, as in share using a link (URL)"
+  },
+  "@logoutName": {
+    "placeholders": {
+      "name": {
+        "example": "Tom",
+        "type": "String"
+      }
+    }
+  },
+  "@onboardingSettingsTitle": {
+    "placeholders": {
+      "name": {
+        "example": "Tom",
+        "type": "String"
+      }
+    }
+  },
+  "@owesAB": {
+    "placeholders": {
+      "nameA": {
+        "example": "Tom",
+        "type": "String"
+      },
+      "nameB": {
+        "example": "Tom",
+        "type": "String"
+      }
+    }
+  },
+  "about": "Honi buruz",
+  "accountCreate": "Sortu kontua",
+  "accountCreateHint": "Zure erabiltzailea eta izena publikoak dira, beraz, aukeratu besteekin partekatzeko eroso sentituko zaren zerbait.",
+  "accountCreateTitle": "Sortu zure KitchenOwl kontua",
+  "accountDelete": "Ezabatu kontua",
+  "accountDeleteConfirmation": "Ziur zaude kontua ezabatu nahi duzula?",
+  "accountLinkedWithOtherUser": "Kontua beste erabiltzaile bati lotuta dago",
+  "accountsLinked": "Lotutako kontuak",
+  "add": "Gehitu",
+  "addCategory": "Gehitu kategoria",
+  "addLanguage": "Gehitu hizkuntza",
+  "addLanguageConfirm": "Ziur zaude hizkuntza '{lang}' izatera pasa nahi duzula? Hau ezin da desegin eta elementu eta kategoriak gehituko dira zure etxera.",
+  "addNumberIngredients": "Gehitu {number} osagai",
+  "addRecipeToPlannerShort": "Gehitu jatordu-planera",
+  "addShoppingList": "Gehitu erosketa-zerrenda",
+  "addTag": "Gehitu etiketa",
+  "address": "Helbidea",
+  "admin": "Administratzailea",
+  "analysingWebsite": "Webgunea aztertzen...",
+  "appDescription": "KitchenOwl-ek zure erosketak antolatzen laguntzen dizu.",
+  "appTitle": "KitchenOwl",
+  "automaticIngredientDetection": "Osagaiak automatikoki detektatu",
+  "back": "Atzera",
+  "balances": "Balantzea",
+  "budget": "Aurrekontua",
+  "budgetSet": "Aurrekontua finkatu",
+  "camera": "Kamera",
+  "cancel": "Utzi",
+  "categories": "Kategoriak",
+  "categoriesMerge": "Batu kategoriak",
+  "category": "Kategoria",
+  "categoryDelete": "Ezabatu kategoria",
+  "categoryDeleteConfirmation": "Ziur zaude {category} ezabatu nahi duzula? Honek kategoria elementu guztietatik kenduko du.",
+  "categoryEdit": "Editatu kategoria",
+  "categoryExpenseDeleteConfirmation": "Ziur zaude {category} ezabatu nahi duzula? Honek kategoria gastu guztietatik kenduko du.",
+  "changeIcon": "Aldatu ikonoa",
+  "clear": "Garbitu",
+  "colorSelect": "Aukeratu kolore bat",
+  "confirm": "Onartu",
+  "copied": "Kopiatuta",
+  "daily": "Egunero",
+  "dangerZone": "Arrisku-eremua",
+  "darkmode": "Modu iluna",
+  "date": "Data",
+  "defaultKey": "Gako lehenetsia",
+  "defaultWord": "Lehenetsia",
+  "delete": "Ezabatu",
+  "description": "Deskribapena",
+  "discover": "Aurkitu",
+  "done": "Eginda",
+  "dynamicAccentColor": "Azentu-kolore dinamikoa",
+  "email": "Helbide elektronikoa",
+  "emailInvalid": "Helbide elektroniko balio gabea",
+  "emailNotVerified": "Egiaztatu gabe",
+  "emailResendVerification": "Berbidali egiaztatzeko mezua",
+  "emailSuccessfullyVerified": "Helbide elektronikoa egiaztatu da!",
+  "emailUpdate": "Eguneratu helbide elektronikoa",
+  "emailUsed": "Helbide elektronikoa dagoeneko beste kontu bati lotuta dago",
+  "error": "Errore bat gertatu da",
+  "excludeFromStatistics": "Estatistiketatik kendu",
+  "expense": "Gastua",
+  "expenseAdd": "Gehitu gastua",
+  "expenseAmount": "Kopurua",
+  "expenseCategories": "Gastuen kategoriak",
+  "expenseEdit": "Gastua editatu",
+  "expenseEmpty": "Gasturik ez, has zaitez gastu bat sartzen!",
+  "expenseOverviewComparedToPreviousMonth": "Aurreko hilabeteekin alderatuta",
+  "expenseOverviewExpenses": "Gastuak",
+  "expenseOverviewTotalTitle": "{month} guztira:",
+  "expensePaidBy": "Ordaintzailea",
+  "expenseReceivedBy": "Hartzailea",
+  "expenseReceivedFor": "Jasotzeko arrazoia",
+  "export": "Esportatu",
+  "features": "Hobekuntzak",
+  "fieldCannotBeEmpty": "{field} ezin da hutsik geratu.",
+  "forceOfflineMode": "Offline modua indarrez jarri",
+  "gallery": "Galeria",
+  "general": "Orokorra",
+  "go": "Joan",
+  "grid": "Sareta",
+  "helpTranslate": "Lagundu itzulpenarekin",
+  "hi": "Kaixo {name}!",
+  "household": "Etxea",
+  "householdDelete": "Ezabatu etxea",
+  "householdEmpty": "Ez dago etxerik, hasi bat sortzen!",
+  "householdLeave": "Utzi etxea",
+  "householdLeaveConfirmation": "Ziur zaude {household} utzi nahi duzula?",
+  "householdNew": "Etxe berria",
+  "householdSwitch": "Etxea aldatu",
+  "households": "Etxeak",
+  "icon": "Ikonoa",
+  "imageSelect": "Aukeratu irudi bat",
+  "import": "Inportatu",
+  "importStartedHint": "Inporazioa hasi da, agian minutu batzuk beharko ditu.",
+  "income": "Diru-sarrerak",
+  "ingredients": "Osagaiak",
+  "ingredientsOptional": "Hautazko osagaiak",
+  "itemsAdd": "Gehitu gauzak",
+  "itemsMerge": "Batu gauzak",
+  "itemsOptional": "Hautazko gauzak",
+  "itemsRecent": "Gauza berrienak",
+  "language": "Hizkuntza",
+  "languageSelect": "Aukeratu hizkuntza bat",
+  "larger": "Handiagoa",
+  "lastUsed": "Azkena erabilia",
+  "link": "Lotu",
+  "linkNoun": "Esteka",
+  "linkRecipeDescription": "Esteka duen orok ikusi dezake errezeta.",
+  "list": "Zerrenda",
+  "lltWarningTitle": "Badakizu zer egiten ari zaren?",
+  "login": "Hasi saioa",
+  "loginTo": "Sartu",
+  "loginToAddToShoppingList": "Hasi saioa errezeta hau zure erosketa-zerrendara gehitzeko.",
+  "logout": "Itxi saioa",
+  "logoutName": "Irten {name}",
+  "longPressToReorder": "Luze sakatu berrordenatzeko",
+  "longerThanExpected": "Hau uste baino gehiago luzatzen ari da",
+  "markAsPaid": "Markatu ordainduta bezala",
+  "mealPlanner": "Jatordu-planifikatzailea",
+  "member": "Kidea",
+  "memberAdd": "Gehitu kidea",
+  "memberRemove": "Kendu kidea",
+  "members": "Kideak",
+  "merge": "Batu",
+  "minutesAbbrev": "min",
+  "moneyTransfer": "Diru transferentzia",
+  "monthly": "Hilero",
+  "more": "Gehiago",
+  "name": "Izena",
+  "next": "Hurrengoa",
+  "noTags": "Etiketarik ez",
+  "none": "Bat ere ez",
+  "now": "Orain",
+  "offlineMessage": "Offline zaude",
+  "okay": "Ados",
+  "onboardingSettingsTitle": "Kaixo {name}, zerbitzaria prestatu dezagun!",
+  "onboardingTitle": "Sortu dezagun erabiltzaile bat",
+  "optional": "Hautazkoa",
+  "or": "edo",
+  "other": "Beste bat",
+  "overview": "Ikuspegi orokorra",
+  "owesAB": "{nameA}(e)k {nameB}(r)i zor dio",
+  "pageNotFound": "Ezin izan da orri hau aurkitu",
+  "parent": "Guraso",
+  "password": "Pasahitza",
+  "passwordFieldTooShort": "Pasahitza motzegia da",
+  "passwordForgot": "Pasahitza ahaztu duzu?",
+  "passwordRepeat": "Errepikatu pasahitza",
+  "passwordRepeatNoMatch": "Pasahitzak ez datoz bat",
+  "passwordReset": "Pasahitza berrezarri",
+  "passwordSave": "Eguneratu pasahitza",
+  "personal": "Pertsonala",
+  "planner": "Planifikatzailea",
+  "plannerEmpty": "Ez dago jatordurik planifikatuta, has zaitez zure errezetaren bat aukeratzen!",
+  "plannerTitle": "Planifikatutako jatorduak",
+  "preparationTime": "Prestatzeko denbora",
+  "privacyPolicy": "Pribatutasun politika",
+  "send": "Bidali",
+  "server": "Zerbitzari",
+  "sessions": "Saioak",
+  "set": "Ezarri",
+  "settings": "Ezarpenak",
+  "share": "Partekatu",
+  "skip": "Salto egin",
+  "smaller": "Txikiagoa",
+  "sortingAlgorithmic": "Algoritmiko",
+  "sortingAlphabetical": "Alfabetikoa",
+  "start": "Hasi",
+  "tags": "Etiketak",
+  "tap": "Ukitu",
+  "themeDark": "Iluna",
+  "themeLight": "Argia",
+  "themeMode": "Gaia",
+  "themeSystem": "Sistema",
+  "today": "Gaur",
+  "tomorrow": "Bihar",
+  "total": "Guztira"
 }

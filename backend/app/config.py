@@ -46,7 +46,7 @@ def get_secret(env_var: str, default: str = None) -> str | None:
 
 
 MIN_FRONTEND_VERSION = 71
-BACKEND_VERSION = 122
+BACKEND_VERSION = 123
 
 APP_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_DIR = os.path.dirname(APP_DIR)
@@ -160,6 +160,10 @@ app.config["SECRET_KEY"] = jwt_secret
 # SQLAlchemy
 app.config["SQLALCHEMY_DATABASE_URI"] = DB_URL
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
+    "pool_size": int(os.getenv("DB_POOL_SIZE", 5)),
+    "max_overflow": int(os.getenv("DB_MAX_OVERFLOW", 10)),
+}
 # JWT
 app.config["JWT_SECRET_KEY"] = jwt_secret
 app.config["JWT_ACCESS_TOKEN_EXPIRES"] = JWT_ACCESS_TOKEN_EXPIRES

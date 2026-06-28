@@ -1063,6 +1063,11 @@ Additionally, the releases are tagged, so you can always choose a specific versi
 <td>When the driver is <code>sqlite</code> this decides where to store the DB</td>
 </tr>
 <tr>
+<td><code>DB_SQLITE_SYNCHRONOUS</code></td>
+<td><code>FULL</code></td>
+<td>SQLite only. <code>synchronous</code> PRAGMA. <code>NORMAL</code> is far faster on slow disks (e.g. NAS); <code>FULL</code> (default) is safest. One of <code>OFF</code>/<code>NORMAL</code>/<code>FULL</code>/<code>EXTRA</code></td>
+</tr>
+<tr>
 <td><code>DB_USER</code></td>
 <td></td>
 <td></td>

@@ -77,6 +77,11 @@ DB_URL = URL.create(
     port=int(cast(str, os.getenv("DB_PORT"))) if os.getenv("DB_PORT") else None,
     database=os.getenv("DB_NAME", STORAGE_PATH + "/database.db"),
 )
+_SQLITE_SYNCHRONOUS_MODES = {"OFF", "NORMAL", "FULL", "EXTRA"}
+DB_SQLITE_SYNCHRONOUS = os.getenv("DB_SQLITE_SYNCHRONOUS", "FULL").upper()
+if DB_SQLITE_SYNCHRONOUS not in _SQLITE_SYNCHRONOUS_MODES:
+    DB_SQLITE_SYNCHRONOUS = "FULL"
+
 MESSAGE_BROKER = os.getenv("MESSAGE_BROKER")
 
 JWT_ACCESS_TOKEN_EXPIRES = timedelta(minutes=15)
@@ -300,16 +305,22 @@ else:
     app.extensions["celery"] = celery_app
 
 
-# Load ICU extension for sqlite
+# Load ICU extension and enable WAL for sqlite
 if DB_URL.drivername == "sqlite":
 
-    def load_extension(conn, unused):
+    def on_sqlite_connect(conn, unused):
         conn.enable_load_extension(True)
         conn.load_extension(cast(str, sqlite_icu.extension_path()).replace(".so", ""))
         conn.enable_load_extension(False)
 
+        cursor = conn.cursor()
+        cursor.execute("PRAGMA journal_mode=WAL")
+        cursor.execute(f"PRAGMA synchronous={DB_SQLITE_SYNCHRONOUS}")
+        cursor.execute("PRAGMA busy_timeout=5000")
+        cursor.close()
+
     with app.app_context():
-        listen(db.engine, "connect", load_extension)
+        listen(db.engine, "connect", on_sqlite_connect)
 
 
 @app.after_request

@@ -40,6 +40,7 @@ extension ImportExportApi on ApiService {
     final res = await postBytes(
       '${householdPath(household)}$baseRoute/recipes/preview',
       file,
+      timeout: const Duration(minutes: 10),
     );
     if (res.statusCode != 200) return null;
     final body = jsonDecode(res.body) as Map<String, dynamic>;

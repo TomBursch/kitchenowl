@@ -53,7 +53,7 @@ PROJECT_DIR = os.path.dirname(APP_DIR)
 
 STORAGE_PATH = os.getenv("STORAGE_PATH", PROJECT_DIR)
 UPLOAD_FOLDER = STORAGE_PATH + "/upload"
-DEFAULT_MAX_CONTENT_LENGTH_MB = 128
+DEFAULT_MAX_CONTENT_LENGTH_MB = 32
 ALLOWED_FILE_EXTENSIONS = {"txt", "pdf", "png", "jpg", "jpeg", "gif", "webp", "jxl"}
 
 FRONT_URL = os.getenv("FRONT_URL")
@@ -155,7 +155,7 @@ try:
     )
 except (TypeError, ValueError):
     max_upload_mb = DEFAULT_MAX_CONTENT_LENGTH_MB
-app.config["MAX_CONTENT_LENGTH"] = max_upload_mb * 1000 * 1000
+app.config["MAX_CONTENT_LENGTH"] = max_upload_mb * 1024 * 1024
 app.config["SECRET_KEY"] = jwt_secret
 # SQLAlchemy
 app.config["SQLALCHEMY_DATABASE_URI"] = DB_URL

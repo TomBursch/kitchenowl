@@ -8,13 +8,13 @@ server {
     server_name _;
 
     location / {
-        client_max_body_size 32M;
+        client_max_body_size ${MAX_CONTENT_LENGTH_MB}M;
         try_files $uri $uri/ /index.html;
     }
     location /api/ {
         include uwsgi_params;
         uwsgi_pass ${BACK_URL};
-        client_max_body_size 32M;
+        client_max_body_size ${MAX_CONTENT_LENGTH_MB}M;
     }
     location /mcp {
         include uwsgi_params;

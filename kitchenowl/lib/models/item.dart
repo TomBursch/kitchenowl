@@ -88,7 +88,7 @@ class Item extends Model {
       "category": category?.toJsonWithId(),
       "default": isDefault,
       "default_key": defaultKey,
-      "store_ids": stores.map((e) => e.id).toList(),
+      "stores": stores.map((e) => e.toJsonWithId()).toList(),
     });
 }
 

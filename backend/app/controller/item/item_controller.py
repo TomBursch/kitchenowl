@@ -11,8 +11,8 @@ item = Blueprint("item", __name__)
 itemHousehold = Blueprint("item", __name__)
 
 
-def _setItemStores(item: Item, store_ids: list[int] | None) -> None:
-    new_ids = set(store_ids or [])
+def _setItemStores(item: Item, stores: list[dict] | None) -> None:
+    new_ids = {s["id"] for s in stores or []}
     existing_ids = {s.store_id for s in item.stores}
     for store_id in existing_ids - new_ids:
         ItemStores.query.filter_by(item_id=item.id, store_id=store_id).delete()
@@ -104,8 +104,8 @@ def addItem(args, household_id):
         item.icon = args["icon"]
     item.save()
 
-    if "store_ids" in args:
-        _setItemStores(item, args["store_ids"])
+    if "stores" in args:
+        _setItemStores(item, args["stores"])
 
     return jsonify(item.obj_to_dict())
 
@@ -134,8 +134,8 @@ def updateItem(args, id):
             item.name = newName
     item.save()
 
-    if "store_ids" in args:
-        _setItemStores(item, args["store_ids"])
+    if "stores" in args:
+        _setItemStores(item, args["stores"])
 
     if "merge_item_id" in args and args["merge_item_id"] != id:
         mergeItem = Item.find_by_id(args["merge_item_id"])

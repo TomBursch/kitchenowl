@@ -15,7 +15,7 @@ def create_store(client, household_id, name):
 def create_item(client, household_id, name, store_ids=None):
     body = {"name": name}
     if store_ids is not None:
-        body["store_ids"] = store_ids
+        body["stores"] = [{"id": store_id} for store_id in store_ids]
     response = client.post(f"/api/household/{household_id}/item", json=body)
     assert response.status_code == 200
     return response.get_json()
@@ -86,14 +86,14 @@ def test_update_item_store_ids_replaces_full_set(
     )
 
     response = user_client_with_household.post(
-        f"/api/item/{item['id']}", json={"store_ids": [store_b]}
+        f"/api/item/{item['id']}", json={"stores": [{"id": store_b}]}
     )
     assert response.status_code == 200
     data = response.get_json()
     assert {s["id"] for s in data["stores"]} == {store_b}
 
     response = user_client_with_household.post(
-        f"/api/item/{item['id']}", json={"store_ids": []}
+        f"/api/item/{item['id']}", json={"stores": []}
     )
     assert response.status_code == 200
     assert "stores" not in response.get_json()

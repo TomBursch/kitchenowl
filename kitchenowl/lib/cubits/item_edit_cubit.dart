@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart' show setEquals;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/category.dart';
@@ -6,6 +7,7 @@ import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/models/recipe.dart';
 import 'package:kitchenowl/models/shoppinglist.dart';
+import 'package:kitchenowl/models/store.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
 import 'package:kitchenowl/services/transaction_handler.dart';
 import 'package:kitchenowl/services/transactions/item.dart';
@@ -23,6 +25,7 @@ class ItemEditCubit<T extends Item> extends Cubit<ItemEditState> {
         category: Nullable(state.category),
         icon: Nullable(state.icon),
         name: state.name,
+        stores: state.stores,
       )) as T);
     }
 
@@ -30,6 +33,7 @@ class ItemEditCubit<T extends Item> extends Cubit<ItemEditState> {
       category: Nullable(state.category),
       icon: Nullable(state.icon),
       name: state.name,
+      stores: state.stores,
     ) as T;
   }
 
@@ -40,6 +44,7 @@ class ItemEditCubit<T extends Item> extends Cubit<ItemEditState> {
           icon: item.icon,
           name: item.name,
           category: item.category,
+          stores: item.stores,
         )) {
     refresh();
   }
@@ -128,6 +133,16 @@ class ItemEditCubit<T extends Item> extends Cubit<ItemEditState> {
       icon: Nullable(icon),
     ));
   }
+
+  void toggleStore(Store store, bool selected) {
+    final stores = List<Store>.of(state.stores);
+    if (selected) {
+      if (!stores.contains(store)) stores.add(store);
+    } else {
+      stores.remove(store);
+    }
+    emit(state.copyWith(stores: stores));
+  }
 }
 
 class ItemEditState extends Equatable {
@@ -136,6 +151,7 @@ class ItemEditState extends Equatable {
   final String? icon;
   final List<Recipe> recipes;
   final Category? category;
+  final List<Store> stores;
   final bool hasMerged;
 
   const ItemEditState({
@@ -144,6 +160,7 @@ class ItemEditState extends Equatable {
     this.icon,
     this.recipes = const [],
     this.category,
+    this.stores = const [],
     this.hasMerged = false,
   });
 
@@ -153,6 +170,7 @@ class ItemEditState extends Equatable {
     Nullable<String>? icon,
     List<Recipe>? recipes,
     Nullable<Category>? category,
+    List<Store>? stores,
     bool? hasMerged,
   }) =>
       ItemEditState(
@@ -161,12 +179,13 @@ class ItemEditState extends Equatable {
         icon: (icon ?? Nullable(this.icon)).value,
         recipes: recipes ?? this.recipes,
         category: (category ?? Nullable(this.category)).value,
+        stores: stores ?? this.stores,
         hasMerged: hasMerged ?? this.hasMerged,
       );
 
   @override
   List<Object?> get props =>
-      [name, description, icon, recipes, category, hasMerged];
+      [name, description, icon, recipes, category, stores, hasMerged];
 
   bool hasChanged(Item comparedTo) =>
       hasChangedItem(comparedTo) || hasChangedDescription(comparedTo);
@@ -175,6 +194,7 @@ class ItemEditState extends Equatable {
       comparedTo.category != category ||
       comparedTo.icon != icon ||
       comparedTo.name != name ||
+      !setEquals(Set.of(comparedTo.stores), Set.of(stores)) ||
       hasMerged;
 
   bool hasChangedDescription(Item comparedTo) {

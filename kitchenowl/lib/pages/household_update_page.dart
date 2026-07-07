@@ -11,6 +11,7 @@ import 'package:kitchenowl/pages/settings_household/household_settings_expense_c
 import 'package:kitchenowl/widgets/settings_household/sliver_household_feature_settings.dart';
 import 'package:kitchenowl/pages/settings_household/household_settings_shoppinglist_page.dart';
 import 'package:kitchenowl/pages/settings_household/household_settings_tags_page.dart';
+import 'package:kitchenowl/pages/settings_household/household_settings_store_page.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
 class HouseholdUpdatePage extends StatefulWidget {
@@ -222,6 +223,21 @@ class _HouseholdUpdatePageState extends State<HouseholdUpdatePage> {
                             builder: (context) => BlocProvider.value(
                               value: cubit,
                               child: HouseholdSettingsTagsPage(),
+                            ),
+                          ),
+                        ),
+                      ),
+                      ListTile(
+                        title: Text(AppLocalizations.of(context)!.stores),
+                        leading: const Icon(Icons.store_rounded),
+                        trailing: const Icon(Icons.arrow_forward_ios_rounded),
+                        contentPadding:
+                            const EdgeInsets.only(left: 16, right: 16),
+                        onTap: () => Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => BlocProvider.value(
+                              value: cubit,
+                              child: HouseholdSettingsStorePage(),
                             ),
                           ),
                         ),

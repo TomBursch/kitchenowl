@@ -40,6 +40,7 @@
     "description": "A shorter title/button text used wherever the space is limited. Excludes the number of yields."
   },
   "@addShoppingList": {},
+  "@addStore": {},
   "@addTag": {},
   "@addedBy": {
     "placeholders": {
@@ -415,6 +416,18 @@
   "@sortingAlgorithmic": {},
   "@sortingAlphabetical": {},
   "@start": {},
+  "@store": {},
+  "@storeDelete": {},
+  "@storeDeleteConfirmation": {
+    "placeholders": {
+      "store": {
+        "example": "Supermarket",
+        "type": "String"
+      }
+    }
+  },
+  "@storeEdit": {},
+  "@stores": {},
   "@supportDevelopment": {},
   "@swipeToDelete": {},
   "@swipeToDeleteAndLongPressToReorder": {},
@@ -510,6 +523,7 @@
   "addRecipeToPlanner": "Afegir a la planificació de menjades ({number} porcions)",
   "addRecipeToPlannerShort": "Afegir a la planificació de menjades",
   "addShoppingList": "Afegir llista d'anar a comprar",
+  "addStore": "Afegir botiga",
   "addTag": "Afegir etiqueta",
   "addedBy": "Afegit per {name}",
   "address": "Adreça",
@@ -732,6 +746,11 @@
   "sortingAlgorithmic": "Algorítmic",
   "sortingAlphabetical": "Alfabètic",
   "start": "Inici",
+  "store": "Botiga",
+  "storeDelete": "Eliminar Botiga",
+  "storeDeleteConfirmation": "Estàs segur que vols eliminar {store}? Aquesta acció eliminarà la botiga de tots els ítems.",
+  "storeEdit": "Editar Botiga",
+  "stores": "Botigues",
   "supportDevelopment": "Donar suport al desenvolupament",
   "swipeToDelete": "Llisca per eliminar",
   "swipeToDeleteAndLongPressToReorder": "Llisca per eliminar i mantén apretat per reordenar",

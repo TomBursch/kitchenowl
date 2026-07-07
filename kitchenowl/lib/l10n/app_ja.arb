@@ -101,6 +101,14 @@
       }
     }
   },
+  "@storeDeleteConfirmation": {
+    "placeholders": {
+      "store": {
+        "example": "Supermarket",
+        "type": "String"
+      }
+    }
+  },
   "about": "このアプリについて",
   "accountCreate": "アカウントを作成",
   "accountCreateHint": "ユーザー名と氏名は公開されます。公開されて問題ないものを使ってください。",
@@ -119,6 +127,7 @@
   "addRecipeToPlanner": "食事プランに追加({number}食)",
   "addRecipeToPlannerShort": "献立に追加",
   "addShoppingList": "買い物リストに追加",
+  "addStore": "店舗を追加",
   "addTag": "タグを追加",
   "addedBy": "{name}が追加",
   "address": "住所",
@@ -207,5 +216,10 @@
   "ingredients": "材料",
   "ingredientsOptional": "任意の材料",
   "itemDelete": "アイテムを削除",
-  "itemDeleteConfirmation": "{item} を削除しますか？ 削除すると、その材料を含むすべてのレシピから削除されます。"
+  "itemDeleteConfirmation": "{item} を削除しますか？ 削除すると、その材料を含むすべてのレシピから削除されます。",
+  "store": "店舗",
+  "storeDelete": "店舗を削除",
+  "storeDeleteConfirmation": "{store}を削除してもよいですか？ 削除すると、すべてのアイテムからこの店舗が削除されます。",
+  "storeEdit": "店舗を編集",
+  "stores": "店舗"
 }

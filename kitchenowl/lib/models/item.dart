@@ -2,6 +2,7 @@ import 'package:fraction/fraction.dart';
 import 'package:kitchenowl/helpers/string_scaler.dart';
 import 'package:kitchenowl/models/category.dart';
 import 'package:kitchenowl/models/model.dart';
+import 'package:kitchenowl/models/store.dart';
 
 import 'nullable.dart';
 
@@ -13,6 +14,7 @@ class Item extends Model {
   final Category? category;
   final bool? isDefault;
   final String? defaultKey;
+  final List<Store> stores;
 
   const Item({
     this.id,
@@ -22,6 +24,7 @@ class Item extends Model {
     this.category,
     this.isDefault,
     this.defaultKey,
+    this.stores = const [],
   });
 
   factory Item.fromItem({
@@ -35,6 +38,7 @@ class Item extends Model {
         ordering: item.ordering,
         isDefault: item.isDefault,
         defaultKey: item.defaultKey,
+        stores: item.stores,
       );
 
   factory Item.fromJson(Map<String, dynamic> map) => Item(
@@ -46,12 +50,16 @@ class Item extends Model {
         icon: map['icon'],
         category:
             map['category'] != null ? Category.fromJson(map['category']) : null,
+        stores: map['stores'] != null
+            ? List<Store>.from(map['stores'].map((e) => Store.fromJson(e)))
+            : const [],
       );
 
   Item copyWith({
     String? name,
     Nullable<Category>? category,
     Nullable<String>? icon,
+    List<Store>? stores,
   }) =>
       Item(
         id: id,
@@ -59,11 +67,12 @@ class Item extends Model {
         category: (category ?? Nullable(this.category)).value,
         icon: (icon ?? Nullable(this.icon)).value,
         ordering: ordering,
+        stores: stores ?? this.stores,
       );
 
   @override
   List<Object?> get props =>
-      [id, name, icon, ordering, isDefault, defaultKey, category];
+      [id, name, icon, ordering, isDefault, defaultKey, category, stores];
 
   @override
   Map<String, dynamic> toJson() => {
@@ -79,6 +88,7 @@ class Item extends Model {
       "category": category?.toJsonWithId(),
       "default": isDefault,
       "default_key": defaultKey,
+      "store_ids": stores.map((e) => e.id).toList(),
     });
 }
 
@@ -93,6 +103,7 @@ class ItemWithDescription extends Item {
     super.isDefault,
     super.defaultKey,
     super.category,
+    super.stores,
     this.description = '',
   });
 
@@ -106,6 +117,9 @@ class ItemWithDescription extends Item {
         defaultKey: map['default_key'],
         category:
             map['category'] != null ? Category.fromJson(map['category']) : null,
+        stores: map['stores'] != null
+            ? List<Store>.from(map['stores'].map((e) => Store.fromJson(e)))
+            : const [],
       );
 
   factory ItemWithDescription.fromItem({
@@ -120,6 +134,7 @@ class ItemWithDescription extends Item {
         ordering: item.ordering,
         isDefault: item.isDefault,
         defaultKey: item.defaultKey,
+        stores: item.stores,
         description: description ??
             ((item is ItemWithDescription) ? item.description : ''),
       );
@@ -135,6 +150,7 @@ class ItemWithDescription extends Item {
     String? name,
     Nullable<Category>? category,
     Nullable<String>? icon,
+    List<Store>? stores,
     String? description,
   }) =>
       ItemWithDescription(
@@ -142,6 +158,7 @@ class ItemWithDescription extends Item {
         name: name ?? this.name,
         category: (category ?? Nullable(this.category)).value,
         icon: (icon ?? Nullable(this.icon)).value,
+        stores: stores ?? this.stores,
         description: description ?? this.description,
         ordering: ordering,
         isDefault: isDefault,
@@ -165,6 +182,7 @@ class ShoppinglistItem extends ItemWithDescription {
     super.ordering = 0,
     super.defaultKey,
     super.isDefault,
+    super.stores,
     this.createdById,
     this.createdAt,
   });
@@ -180,6 +198,9 @@ class ShoppinglistItem extends ItemWithDescription {
       icon: map['icon'],
       category:
           map['category'] != null ? Category.fromJson(map['category']) : null,
+      stores: map['stores'] != null
+          ? List<Store>.from(map['stores'].map((e) => Store.fromJson(e)))
+          : const [],
       createdAt: map['created_at'] != null
           ? DateTime.fromMillisecondsSinceEpoch(map['created_at'], isUtc: true)
               .toLocal()
@@ -207,6 +228,7 @@ class ShoppinglistItem extends ItemWithDescription {
         ordering: item.ordering,
         isDefault: item.isDefault,
         defaultKey: item.defaultKey,
+        stores: item.stores,
         createdAt: createdAt ?? DateTime.now(),
         createdById: createdById,
       );
@@ -216,6 +238,7 @@ class ShoppinglistItem extends ItemWithDescription {
     String? name,
     Nullable<Category>? category,
     Nullable<String>? icon,
+    List<Store>? stores,
     String? description,
   }) =>
       ShoppinglistItem(
@@ -223,10 +246,13 @@ class ShoppinglistItem extends ItemWithDescription {
         name: name ?? this.name,
         category: (category ?? Nullable(this.category)).value,
         icon: (icon ?? Nullable(this.icon)).value,
+        stores: stores ?? this.stores,
         description: description ?? this.description,
         ordering: ordering,
         isDefault: isDefault,
         defaultKey: defaultKey,
+        createdById: createdById,
+        createdAt: createdAt,
       );
 
   @override
@@ -252,6 +278,7 @@ class RecipeItem extends ItemWithDescription {
     super.isDefault,
     super.category,
     super.icon,
+    super.stores,
     this.optional = false,
   });
 
@@ -265,6 +292,9 @@ class RecipeItem extends ItemWithDescription {
         optional: map['optional'],
         category:
             map['category'] != null ? Category.fromJson(map['category']) : null,
+        stores: map['stores'] != null
+            ? List<Store>.from(map['stores'].map((e) => Store.fromJson(e)))
+            : const [],
       );
 
   factory RecipeItem.fromItem({
@@ -280,6 +310,7 @@ class RecipeItem extends ItemWithDescription {
         ordering: item.ordering,
         isDefault: item.isDefault,
         defaultKey: item.defaultKey,
+        stores: item.stores,
         description:
             item is ItemWithDescription ? item.description : description,
         optional: optional,
@@ -296,6 +327,7 @@ class RecipeItem extends ItemWithDescription {
     String? name,
     Nullable<Category>? category,
     Nullable<String>? icon,
+    List<Store>? stores,
     String? description,
     bool? optional,
   }) =>
@@ -304,6 +336,7 @@ class RecipeItem extends ItemWithDescription {
         name: name ?? this.name,
         category: (category ?? Nullable(this.category)).value,
         icon: (icon ?? Nullable(this.icon)).value,
+        stores: stores ?? this.stores,
         description: description ?? this.description,
         optional: optional ?? this.optional,
         ordering: ordering,
@@ -328,6 +361,7 @@ class RecipeItem extends ItemWithDescription {
         defaultKey: defaultKey,
         isDefault: isDefault,
         category: category,
+        stores: stores,
       );
 
   ItemWithDescription toItemWithDescription() => ItemWithDescription(
@@ -338,6 +372,7 @@ class RecipeItem extends ItemWithDescription {
         defaultKey: defaultKey,
         isDefault: isDefault,
         category: category,
+        stores: stores,
         description: description,
       );
 
@@ -349,6 +384,7 @@ class RecipeItem extends ItemWithDescription {
         defaultKey: defaultKey,
         isDefault: isDefault,
         category: category,
+        stores: stores,
         description: description,
       );
 

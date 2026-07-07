@@ -40,6 +40,7 @@
     "description": "A shorter title/button text used wherever the space is limited. Excludes the number of yields."
   },
   "@addShoppingList": {},
+  "@addStore": {},
   "@addTag": {},
   "@addedBy": {
     "placeholders": {
@@ -426,6 +427,18 @@
   "@sortingAlgorithmic": {},
   "@sortingAlphabetical": {},
   "@start": {},
+  "@store": {},
+  "@storeDelete": {},
+  "@storeDeleteConfirmation": {
+    "placeholders": {
+      "store": {
+        "example": "Supermarket",
+        "type": "String"
+      }
+    }
+  },
+  "@storeEdit": {},
+  "@stores": {},
   "@supportDevelopment": {},
   "@swipeToDelete": {},
   "@swipeToDeleteAndLongPressToReorder": {},
@@ -521,6 +534,7 @@
   "addRecipeToPlanner": "Dodaj v plan obrokov ({number} porcij)",
   "addRecipeToPlannerShort": "Dodaj v plan obrokov",
   "addShoppingList": "Dodaj na nakupovalni list",
+  "addStore": "Dodaj trgovino",
   "addTag": "Dodaj oznako",
   "addedBy": "Dodano od {name}",
   "address": "Naslov",
@@ -747,6 +761,11 @@
   "sortingAlgorithmic": "Algoritemsko",
   "sortingAlphabetical": "Abecedno",
   "start": "Začni",
+  "store": "Trgovina",
+  "storeDelete": "Izbriši trgovino",
+  "storeDeleteConfirmation": "Ali si prepričan, da želiš izbrisati {store}? To bo odstranilo trgovino iz vseh izdelkov.",
+  "storeEdit": "Uredi trgovino",
+  "stores": "Trgovine",
   "supportDevelopment": "Podpri razvijalce",
   "swipeToDelete": "Podrsaj da izbrišeš",
   "swipeToDeleteAndLongPressToReorder": "Podrsaj, da izbrišeš in dolgo pritisni , da prerazporediš",

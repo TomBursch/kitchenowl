@@ -1,13 +1,26 @@
+from app import db
 from app.helpers import validate_args, authorize_household
 from flask import jsonify, Blueprint
 from app.errors import InvalidUsage, NotFoundRequest
 import app.util.description_splitter as description_splitter
 from flask_jwt_extended import jwt_required
-from app.models import Item, RecipeItems, Recipe, Category
+from app.models import Item, RecipeItems, Recipe, Category, Store, ItemStores
 from .schemas import SearchByNameRequest, UpdateItem, AddItem
 
 item = Blueprint("item", __name__)
 itemHousehold = Blueprint("item", __name__)
+
+
+def _setItemStores(item: Item, store_ids: list[int] | None) -> None:
+    new_ids = set(store_ids or [])
+    existing_ids = {s.store_id for s in item.stores}
+    for store_id in existing_ids - new_ids:
+        ItemStores.query.filter_by(item_id=item.id, store_id=store_id).delete()
+    for store_id in new_ids - existing_ids:
+        store = Store.find_by_id(store_id)
+        if store and store.household_id == item.household_id:
+            db.session.add(ItemStores(item_id=item.id, store_id=store_id))
+    db.session.commit()
 
 
 @itemHousehold.route("", methods=["GET"])
@@ -91,6 +104,9 @@ def addItem(args, household_id):
         item.icon = args["icon"]
     item.save()
 
+    if "store_ids" in args:
+        _setItemStores(item, args["store_ids"])
+
     return jsonify(item.obj_to_dict())
 
 
@@ -117,6 +133,9 @@ def updateItem(args, id):
         if not Item.find_by_name(item.household_id, newName):
             item.name = newName
     item.save()
+
+    if "store_ids" in args:
+        _setItemStores(item, args["store_ids"])
 
     if "merge_item_id" in args and args["merge_item_id"] != id:
         mergeItem = Item.find_by_id(args["merge_item_id"])

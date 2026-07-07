@@ -7,6 +7,7 @@
     "description": "A shorter title/button text used wherever the space is limited. Excludes the number of yields."
   },
   "@addShoppingList": {},
+  "@addStore": {},
   "@addTag": {},
   "@addedBy": {
     "placeholders": {
@@ -103,6 +104,18 @@
   },
   "@signup": {},
   "@start": {},
+  "@store": {},
+  "@storeDelete": {},
+  "@storeDeleteConfirmation": {
+    "placeholders": {
+      "store": {
+        "type": "String",
+        "example": "Supermarket"
+      }
+    }
+  },
+  "@storeEdit": {},
+  "@stores": {},
   "@tagDelete": {},
   "@tagEdit": {},
   "@themeMode": {},
@@ -119,6 +132,7 @@
   "addLanguage": "언어 추가",
   "addRecipeToPlannerShort": "식단 추가",
   "addShoppingList": "쇼핑리스트 추가",
+  "addStore": "매장 추가",
   "addTag": "태그 추가",
   "addedBy": "{name}에서 추가됨",
   "address": "주소",
@@ -187,6 +201,11 @@
   "signInWith": "{provider}로 로그인",
   "signup": "가입",
   "start": "시작",
+  "store": "매장",
+  "storeDelete": "매장 삭제",
+  "storeDeleteConfirmation": "정말 {store}을(를) 삭제하겠습니까? 이 작업은 모든 항목에서 매장을 제거합니다.",
+  "storeEdit": "매장 편집",
+  "stores": "매장",
   "tagDelete": "태그 삭제",
   "tagEdit": "태그 편집",
   "themeMode": "테마",

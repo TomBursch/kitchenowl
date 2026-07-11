@@ -40,9 +40,8 @@ class RecipeSyncService {
   /// for the same household is silently dropped.
   Future<void> sync(Household household) async {
     if (kIsWeb) return;
-    if (household.id == null) return;
     if (_inFlight.contains(household.id)) return;
-    _inFlight.add(household.id!);
+    _inFlight.add(household.id);
 
     try {
       final cursor = await _readCursor(household);
@@ -92,7 +91,7 @@ class RecipeSyncService {
       // Only advance the cursor after a complete walk so a mid-sync abort
       // retries the same window next time (upserts make re-processing safe).
       if (completed && serverTimestamp != null) {
-        await _writeCursor(household, serverTimestamp!);
+        await _writeCursor(household, serverTimestamp);
       }
     } catch (_) {
       // Background sync errors are non-fatal; the UI continues with cached data.

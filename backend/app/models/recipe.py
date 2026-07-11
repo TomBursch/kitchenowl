@@ -435,8 +435,16 @@ class RecipeItems(Model):
         ).first()
 
 
+TOMBSTONE_RETENTION_DAYS = 90
+
+
 class RecipeTombstone(Model):
-    """Tracks deleted recipes so incremental sync clients can remove them."""
+    """Tracks deleted recipes so incremental sync clients can remove them.
+
+    Tombstones older than TOMBSTONE_RETENTION_DAYS are pruned by the monthly
+    job. Clients whose cursor predates the pruning horizon should perform a
+    full resync (fetch updated_after=0 to rebuild the local store).
+    """
     __tablename__ = "recipe_tombstone"
 
     id: Mapped[int] = db.Column(db.Integer, primary_key=True)
@@ -446,13 +454,6 @@ class RecipeTombstone(Model):
     )
 
     @classmethod
-    def record(cls, recipe_id: int, household_id: int) -> None:
-        tombstone = cls()
-        tombstone.recipe_id = recipe_id
-        tombstone.household_id = household_id
-        db.session.add(tombstone)
-
-    @classmethod
     def deleted_since(
         cls, household_id: int, since: "datetime"
     ) -> list[int]:
@@ -460,6 +461,13 @@ class RecipeTombstone(Model):
         if since.timestamp() > 0:
             query = query.filter(cls.created_at > since)
         return [t.recipe_id for t in query.all()]
+
+    @classmethod
+    def prune(cls) -> None:
+        from datetime import timezone as tz
+        horizon = datetime.now(tz.utc) - timedelta(days=TOMBSTONE_RETENTION_DAYS)
+        cls.query.filter(cls.created_at < horizon).delete()
+        db.session.commit()
 
 
 class RecipeTags(Model):

@@ -11,23 +11,9 @@ extension RecipeApi on ApiService {
 
   // ignore: constant_identifier_names
   static const Duration _TIMEOUT_SCRAPE = Duration(minutes: 3);
-  static const Duration _TIMEOUT_GET_RECIPES = Duration(seconds: 10);
   // Used by paginated and delta-sync requests that may transfer many pages.
   // ignore: constant_identifier_names
   static const Duration _TIMEOUT_GET_RECIPES_LONG = Duration(seconds: 60);
-
-  Future<List<Recipe>?> getRecipes(Household household) async {
-    final res = await get(
-      householdPath(household) + baseRoute,
-      queryParameters: {'details': 'slim'},
-      timeout: _TIMEOUT_GET_RECIPES,
-    );
-    if (res.statusCode != 200) return null;
-
-    final body = List.from(jsonDecode(res.body));
-
-    return body.map((e) => Recipe.fromJson(e)).toList();
-  }
 
   Future<List<Recipe>?> getRecipesFiltered(
     Household household,

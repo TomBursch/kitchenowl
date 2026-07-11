@@ -12,16 +12,15 @@ extension RecipeApi on ApiService {
   // ignore: constant_identifier_names
   static const Duration _TIMEOUT_SCRAPE = Duration(minutes: 3);
   static const Duration _TIMEOUT_GET_RECIPES = Duration(seconds: 10);
+  // Used by paginated and delta-sync requests that may transfer many pages.
+  // ignore: constant_identifier_names
   static const Duration _TIMEOUT_GET_RECIPES_LONG = Duration(seconds: 60);
 
-  Future<List<Recipe>?> getRecipes(
-    Household household, {
-    bool emptyCache = false,
-  }) async {
+  Future<List<Recipe>?> getRecipes(Household household) async {
     final res = await get(
       householdPath(household) + baseRoute,
       queryParameters: {'details': 'slim'},
-      timeout: emptyCache ? _TIMEOUT_GET_RECIPES_LONG : _TIMEOUT_GET_RECIPES,
+      timeout: _TIMEOUT_GET_RECIPES,
     );
     if (res.statusCode != 200) return null;
 
@@ -35,11 +34,12 @@ extension RecipeApi on ApiService {
     Set<Tag> filter, {
     bool slim = true,
   }) async {
-    final url = '${householdPath(household)}$baseRoute/filter'
-        '${slim ? '?details=slim' : ''}';
     final res = await post(
-      url,
-      jsonEncode({"filter": filter.map((e) => e.toString()).toList()}),
+      '${householdPath(household)}$baseRoute/filter',
+      jsonEncode({
+        "filter": filter.map((e) => e.toString()).toList(),
+        if (slim) "details": "slim",
+      }),
     );
     if (res.statusCode != 200) return null;
 

@@ -113,35 +113,19 @@ class RecipeListCubit extends Cubit<RecipeListState> {
       final merged = List<Recipe>.from(recipeList)..addAll(result.items);
       recipeList = merged;
 
-      final tags =
-          await TransactionHandler.getInstance().runTransaction(
+      final tags = await TransactionHandler.getInstance().runTransaction(
         TransactionTagGetAll(household: household),
         forceOffline: true,
       );
 
-      Set<Tag> filter = const {};
-      if (state is FilteredListRecipeListState) {
-        filter = (state as FilteredListRecipeListState).selectedTags;
-      }
-
       if (!isClosed) {
-        emit(filter.isNotEmpty
-            ? FilteredListRecipeListState(
-                recipes: _getFilteredRecipesCopy(merged, filter),
-                tags: tags,
-                selectedTags: filter,
-                allRecipes: merged,
-                listView: state.listView,
-                hasMore: result.hasMore,
-                currentPage: nextPage,
-              )
-            : ListRecipeListState(
-                recipes: merged,
-                tags: tags,
-                listView: state.listView,
-                hasMore: result.hasMore,
-                currentPage: nextPage,
-              ));
+        emit(ListRecipeListState(
+          recipes: merged,
+          tags: tags,
+          listView: state.listView,
+          hasMore: result.hasMore,
+          currentPage: nextPage,
+        ));
       }
     } catch (_) {
       // restore previous state without loading indicator

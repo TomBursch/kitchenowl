@@ -358,7 +358,6 @@
   "@recipeEdit": {},
   "@recipeEmpty": {},
   "@recipeEmptySearch": {},
-  "@recipeLoadError": {},
   "@recipeGoToInHousehold": {
     "placeholders": {
       "householdName": {
@@ -368,6 +367,7 @@
     }
   },
   "@recipeImageSelect": {},
+  "@recipeLoadError": {},
   "@recipeNew": {},
   "@recipeSource": {},
   "@recipes": {},
@@ -710,9 +710,9 @@
   "recipeEdit": "Edit recipe",
   "recipeEmpty": "No recipes, start by adding one!",
   "recipeEmptySearch": "No recipes found :(",
-  "recipeLoadError": "Could not load recipes. Please check your connection.",
   "recipeGoToInHousehold": "Already added, go to recipe in {householdName}",
   "recipeImageSelect": "Select a recipe image",
+  "recipeLoadError": "Could not load recipes. Please check your connection.",
   "recipeNew": "New recipe",
   "recipeSource": "Recipe source",
   "recipes": "Recipes",

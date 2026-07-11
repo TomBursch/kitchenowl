@@ -308,7 +308,7 @@ if DB_URL.drivername == "sqlite":
 
     def on_sqlite_connect(conn, unused):
         conn.enable_load_extension(True)
-        conn.load_extension(cast(str, sqlite_icu.extension_path()).replace(".so", ""))
+        conn.load_extension(cast(str, sqlite_icu.extension_path()))
         conn.enable_load_extension(False)
 
         cursor = conn.cursor()

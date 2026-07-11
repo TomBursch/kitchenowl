@@ -12,11 +12,16 @@ extension RecipeApi on ApiService {
   // ignore: constant_identifier_names
   static const Duration _TIMEOUT_SCRAPE = Duration(minutes: 3);
   static const Duration _TIMEOUT_GET_RECIPES = Duration(seconds: 10);
+  static const Duration _TIMEOUT_GET_RECIPES_LONG = Duration(seconds: 60);
 
-  Future<List<Recipe>?> getRecipes(Household household) async {
+  Future<List<Recipe>?> getRecipes(
+    Household household, {
+    bool emptyCache = false,
+  }) async {
     final res = await get(
       householdPath(household) + baseRoute,
-      timeout: _TIMEOUT_GET_RECIPES,
+      queryParameters: {'details': 'slim'},
+      timeout: emptyCache ? _TIMEOUT_GET_RECIPES_LONG : _TIMEOUT_GET_RECIPES,
     );
     if (res.statusCode != 200) return null;
 
@@ -27,10 +32,13 @@ extension RecipeApi on ApiService {
 
   Future<List<Recipe>?> getRecipesFiltered(
     Household household,
-    Set<Tag> filter,
-  ) async {
+    Set<Tag> filter, {
+    bool slim = true,
+  }) async {
+    final url = '${householdPath(household)}$baseRoute/filter'
+        '${slim ? '?details=slim' : ''}';
     final res = await post(
-      '${householdPath(household)}$baseRoute/filter',
+      url,
       jsonEncode({"filter": filter.map((e) => e.toString()).toList()}),
     );
     if (res.statusCode != 200) return null;
@@ -53,11 +61,16 @@ extension RecipeApi on ApiService {
     return List.from(jsonDecode(res.body));
   }
 
-  Future<List<Recipe>?> searchRecipe(Household household, String query) async {
+  Future<List<Recipe>?> searchRecipe(
+    Household household,
+    String query, {
+    bool slim = true,
+  }) async {
     final res = await get(
       '${householdPath(household)}$baseRoute/search',
       queryParameters: {
         'query': query,
+        if (slim) 'details': 'slim',
       },
     );
     if (res.statusCode != 200) return null;
@@ -65,6 +78,59 @@ extension RecipeApi on ApiService {
     final body = List.from(jsonDecode(res.body));
 
     return body.map((e) => Recipe.fromJson(e)).toList();
+  }
+
+  Future<({List<Recipe> items, int total, bool hasMore})?> getRecipesPaginated(
+    Household household, {
+    int page = 0,
+    int perPage = 50,
+  }) async {
+    final res = await get(
+      householdPath(household) + baseRoute,
+      queryParameters: {
+        'details': 'slim',
+        'page': page.toString(),
+        'per_page': perPage.toString(),
+      },
+      timeout: _TIMEOUT_GET_RECIPES_LONG,
+    );
+    if (res.statusCode != 200) return null;
+
+    final body = jsonDecode(res.body) as Map<String, dynamic>;
+    final items = (body['items'] as List)
+        .map((e) => Recipe.fromJson(e as Map<String, dynamic>))
+        .toList();
+    final total = body['total'] as int;
+    final hasMore = (page + 1) * perPage < total;
+    return (items: items, total: total, hasMore: hasMore);
+  }
+
+  Future<({List<Recipe> recipes, List<int> deletedIds, bool hasMore, int serverTime})?> getRecipesDeltaSync(
+    Household household, {
+    int updatedAfter = 0,
+    int page = 0,
+    int perPage = 50,
+  }) async {
+    final res = await get(
+      '${householdPath(household)}$baseRoute/sync',
+      queryParameters: {
+        'updated_after': updatedAfter.toString(),
+        'page': page.toString(),
+        'per_page': perPage.toString(),
+      },
+      timeout: _TIMEOUT_GET_RECIPES_LONG,
+    );
+    if (res.statusCode != 200) return null;
+
+    final body = jsonDecode(res.body) as Map<String, dynamic>;
+    final recipes = (body['recipes'] as List)
+        .map((e) => Recipe.fromJson(e as Map<String, dynamic>))
+        .toList();
+    final deletedIds =
+        (body['deleted_ids'] as List).map((e) => e as int).toList();
+    final hasMore = body['has_more'] as bool;
+    final serverTime = (body['server_time'] as num).toInt();
+    return (recipes: recipes, deletedIds: deletedIds, hasMore: hasMore, serverTime: serverTime);
   }
 
   Future<(Recipe?, int)> getRecipe(Recipe recipe) async {

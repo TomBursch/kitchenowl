@@ -2,6 +2,7 @@ import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/models/recipe.dart';
 import 'package:kitchenowl/models/tag.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
+import 'package:kitchenowl/services/recipe_sync_service.dart';
 import 'package:kitchenowl/services/storage/mem_storage.dart';
 import 'package:kitchenowl/services/transaction.dart';
 import 'package:fuzzywuzzy/fuzzywuzzy.dart';
@@ -22,9 +23,14 @@ class TransactionRecipeGetRecipes extends Transaction<List<Recipe>> {
 
   @override
   Future<List<Recipe>?> runOnline() async {
-    final recipes = await ApiService.getInstance().getRecipes(household);
+    final cached = await MemStorage.getInstance().readRecipes(household);
+    final emptyCache = cached == null || cached.isEmpty;
+    final recipes = await ApiService.getInstance()
+        .getRecipes(household, emptyCache: emptyCache);
     if (recipes != null) {
       MemStorage.getInstance().writeRecipes(household, recipes);
+      // Kick off background full-detail sync (no-op on web)
+      RecipeSyncService.getInstance().sync(household);
     }
 
     return recipes;

@@ -156,6 +156,13 @@ class Recipe(Model, DbModelAuthorizeMixin):
                 del res[column_name]
         return res
 
+    def obj_to_slim_dict(self) -> dict[str, Any]:
+        """Metadata-only dict for list views: no items, no description, no household."""
+        res = self.obj_to_dict()
+        res.pop("description", None)
+        res["tags"] = [e.obj_to_item_dict() for e in self.tags]
+        return res
+
     def obj_to_full_dict(
         self,
         skip_columns: list[str] | None = None,
@@ -257,6 +264,15 @@ class Recipe(Model, DbModelAuthorizeMixin):
         )
 
     @classmethod
+    def all_from_household_by_name_paginated(
+        cls, household_id: int, page: int, per_page: int
+    ) -> tuple[list[Self], int]:
+        query = cls.query.filter(cls.household_id == household_id).order_by(cls.name)
+        total = query.count()
+        items = query.offset(page * per_page).limit(per_page).all()
+        return items, total
+
+    @classmethod
     def find_by_name(cls, household_id: int, name: str) -> Self | None:
         return cls.query.filter(
             cls.household_id == household_id, cls.name == name
@@ -269,13 +285,16 @@ class Recipe(Model, DbModelAuthorizeMixin):
         household_id: int | None = None,
         page: int = 0,
         language: str | None = None,
+        query_options: list | None = None,
     ) -> list[Self]:
         query = cls.query
+        if query_options:
+            query = query.options(*query_options)
 
         from app.models import Household
 
         if household_id is not None:
-            query.filter(
+            query = query.filter(
                 cls.household_id == household_id,
             )
         else:
@@ -340,7 +359,7 @@ class Recipe(Model, DbModelAuthorizeMixin):
 
     @classmethod
     def all_by_name_with_filter(
-        cls, household_id: int, filter: list[str]
+        cls, household_id: int, filter: list[str], query_options: list | None = None
     ) -> list[Self]:
         sq = (
             db.session.query(RecipeTags.recipe_id)
@@ -348,12 +367,14 @@ class Recipe(Model, DbModelAuthorizeMixin):
             .filter(Tag.name.in_(filter))
             .subquery()
         )
-        return (
+        query = (
             db.session.query(cls)
             .filter(cls.household_id == household_id, cls.id.in_(sq))
             .order_by(cls.name)
-            .all()
         )
+        if query_options:
+            query = query.options(*query_options)
+        return query.all()
 
 
 class RecipeItems(Model):
@@ -412,6 +433,33 @@ class RecipeItems(Model):
         return cls.query.filter(
             cls.recipe_id == recipe_id, cls.item_id == item_id
         ).first()
+
+
+class RecipeTombstone(Model):
+    """Tracks deleted recipes so incremental sync clients can remove them."""
+    __tablename__ = "recipe_tombstone"
+
+    id: Mapped[int] = db.Column(db.Integer, primary_key=True)
+    recipe_id: Mapped[int] = db.Column(db.Integer, nullable=False, index=True)
+    household_id: Mapped[int] = db.Column(
+        db.Integer, db.ForeignKey("household.id"), nullable=False, index=True
+    )
+
+    @classmethod
+    def record(cls, recipe_id: int, household_id: int) -> None:
+        tombstone = cls()
+        tombstone.recipe_id = recipe_id
+        tombstone.household_id = household_id
+        db.session.add(tombstone)
+
+    @classmethod
+    def deleted_since(
+        cls, household_id: int, since: "datetime"
+    ) -> list[int]:
+        query = cls.query.filter(cls.household_id == household_id)
+        if since.timestamp() > 0:
+            query = query.filter(cls.created_at > since)
+        return [t.recipe_id for t in query.all()]
 
 
 class RecipeTags(Model):

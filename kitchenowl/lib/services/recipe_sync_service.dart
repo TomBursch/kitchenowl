@@ -17,6 +17,10 @@ class RecipeSyncService {
     return _instance!;
   }
 
+  // Per-household in-flight guard: prevents concurrent walks from interleaving
+  // and clobbering each other's final writeRecipes.
+  final Set<int> _inFlight = {};
+
   static String _cursorKey(Household household) =>
       'recipe_sync_cursor_${household.id}';
 
@@ -32,19 +36,24 @@ class RecipeSyncService {
   }
 
   /// Trigger an incremental background sync for [household].
-  /// Does nothing on web.
+  /// Does nothing on web. A second call while a walk is already in progress
+  /// for the same household is silently dropped.
   Future<void> sync(Household household) async {
     if (kIsWeb) return;
+    if (household.id == null) return;
+    if (_inFlight.contains(household.id)) return;
+    _inFlight.add(household.id!);
 
     try {
       final cursor = await _readCursor(household);
       int page = 0;
       bool hasMore = true;
+      bool completed = false;
       // Server timestamp from the first page response — used as new cursor to
       // avoid client-clock skew dropping updates written between pages.
       int? serverTimestamp;
 
-      // Load existing cached list to upsert into
+      // Load existing cached list to upsert into.
       final existing =
           await MemStorage.getInstance().readRecipes(household) ?? [];
       final byId = <int, Recipe>{
@@ -59,7 +68,7 @@ class RecipeSyncService {
           page: page,
           perPage: 50,
         );
-        if (result == null) break;
+        if (result == null) break; // network error mid-walk: abort, keep old cursor
 
         serverTimestamp ??= result.serverTime;
 
@@ -72,18 +81,23 @@ class RecipeSyncService {
 
         hasMore = result.hasMore;
         page++;
+        if (!hasMore) completed = true;
       }
 
       final merged = byId.values.toList()
         ..sort((a, b) => a.name.compareTo(b.name));
 
       await MemStorage.getInstance().writeRecipes(household, merged);
-      // Persist the server-provided timestamp to avoid client-clock skew.
-      if (serverTimestamp != null) {
+
+      // Only advance the cursor after a complete walk so a mid-sync abort
+      // retries the same window next time (upserts make re-processing safe).
+      if (completed && serverTimestamp != null) {
         await _writeCursor(household, serverTimestamp!);
       }
     } catch (_) {
       // Background sync errors are non-fatal; the UI continues with cached data.
+    } finally {
+      _inFlight.remove(household.id);
     }
   }
 }

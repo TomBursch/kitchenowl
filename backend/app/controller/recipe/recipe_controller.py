@@ -278,7 +278,9 @@ def deleteRecipeById(id):
     recipe.checkAuthorized()
     household_id = recipe.household_id
     recipe_id = recipe.id
-    recipe.delete()
+    # Use session.delete directly (not recipe.delete()) so the tombstone lands
+    # in the same transaction and a crash between the two can't lose a deletion.
+    db.session.delete(recipe)
     tombstone = RecipeTombstone()
     tombstone.recipe_id = recipe_id
     tombstone.household_id = household_id
@@ -292,9 +294,9 @@ def deleteRecipeById(id):
 @authorize_household()
 @validate_args(SearchByNameRequest)
 def searchRecipeInHouseholdByName(args, household_id):
-    if "only_ids" in args and args["only_ids"]:
+    if args["only_ids"]:
         return jsonify([e.id for e in Recipe.search_name(args["query"], household_id)])
-    use_slim = request.args.get("details") == "slim"
+    use_slim = args["details"] == "slim"
     serializer = Recipe.obj_to_slim_dict if use_slim else Recipe.obj_to_full_dict
     query_opts = [noload(Recipe.items)] if use_slim else []
     return jsonify(
@@ -307,7 +309,7 @@ def searchRecipeInHouseholdByName(args, household_id):
 @authorize_household()
 @validate_args(GetAllFilterRequest)
 def getAllFiltered(args, household_id):
-    use_slim = request.args.get("details") == "slim"
+    use_slim = args["details"] == "slim"
     serializer = Recipe.obj_to_slim_dict if use_slim else Recipe.obj_to_full_dict
     query_opts = [noload(Recipe.items)] if use_slim else []
     return jsonify(

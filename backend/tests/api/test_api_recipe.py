@@ -102,6 +102,125 @@ def test_recipe_deletion(user_client_with_household, recipe_with_items):
 # --- New endpoint tests ---
 
 
+def test_slim_list_omits_items_and_description(
+    user_client_with_household, household_id, recipe_with_items
+):
+    """?details=slim omits items and description; tags are present."""
+    response = user_client_with_household.get(
+        f"/api/household/{household_id}/recipe?details=slim"
+    )
+    assert response.status_code == 200
+    recipes = response.get_json()
+    assert len(recipes) > 0
+    for r in recipes:
+        assert "items" not in r, "slim response must not include items"
+        assert "description" not in r, "slim response must not include description"
+        assert "tags" in r
+
+
+def test_full_list_still_includes_items(
+    user_client_with_household, household_id, recipe_with_items
+):
+    """Default (no ?details) response still returns full dict with items."""
+    response = user_client_with_household.get(
+        f"/api/household/{household_id}/recipe"
+    )
+    assert response.status_code == 200
+    recipes = response.get_json()
+    recipe = next(r for r in recipes if r["id"] == recipe_with_items)
+    assert "items" in recipe
+    assert "description" in recipe
+
+
+def test_pagination_math(user_client_with_household, household_id, recipe_with_items):
+    """page/per_page returns wrapped response with total and correct slice."""
+    response = user_client_with_household.get(
+        f"/api/household/{household_id}/recipe?details=slim&page=0&per_page=1"
+    )
+    assert response.status_code == 200
+    body = response.get_json()
+    assert "items" in body
+    assert "total" in body
+    assert body["page"] == 0
+    assert body["per_page"] == 1
+    assert len(body["items"]) <= 1
+    assert body["total"] >= 1
+
+
+def test_pagination_bad_params_returns_400(user_client_with_household, household_id):
+    """Non-integer page param returns 400, not 500."""
+    response = user_client_with_household.get(
+        f"/api/household/{household_id}/recipe?page=notanint"
+    )
+    assert response.status_code == 400
+
+
+def test_sync_endpoint_returns_required_fields(
+    user_client_with_household, household_id, recipe_with_items
+):
+    """Sync endpoint returns recipes, deleted_ids, has_more, and server_time."""
+    response = user_client_with_household.get(
+        f"/api/household/{household_id}/recipe/sync?updated_after=0"
+    )
+    assert response.status_code == 200
+    body = response.get_json()
+    assert "recipes" in body
+    assert "deleted_ids" in body
+    assert "has_more" in body
+    assert "server_time" in body
+    assert isinstance(body["server_time"], float)
+    assert any(r["id"] == recipe_with_items for r in body["recipes"])
+    assert "items" in body["recipes"][0]  # full dict, not slim
+
+
+def test_sync_endpoint_delta_window(
+    user_client_with_household, household_id, recipe_with_items
+):
+    """updated_after=<future> returns no recipes (nothing updated yet)."""
+    import time
+    future = int(time.time()) + 86400  # 1 day ahead
+    response = user_client_with_household.get(
+        f"/api/household/{household_id}/recipe/sync?updated_after={future}"
+    )
+    assert response.status_code == 200
+    body = response.get_json()
+    assert body["recipes"] == []
+
+
+def test_tombstone_created_on_delete(
+    user_client_with_household, household_id, recipe_with_items
+):
+    """Deleting a recipe creates a tombstone visible in the sync deleted_ids."""
+    recipe_id = recipe_with_items
+    user_client_with_household.delete(f"/api/recipe/{recipe_id}")
+
+    response = user_client_with_household.get(
+        f"/api/household/{household_id}/recipe/sync?updated_after=0"
+    )
+    assert response.status_code == 200
+    body = response.get_json()
+    assert recipe_id in body["deleted_ids"]
+
+
+def test_filtered_slim_omits_items(
+    user_client_with_household, household_id, recipe_with_items
+):
+    """POST /filter with details=slim in body must not return items."""
+    tag_name = "dessert"
+    user_client_with_household.post(
+        f"/api/recipe/{recipe_with_items}", json={"tags": [tag_name]}
+    )
+    response = user_client_with_household.post(
+        f"/api/household/{household_id}/recipe/filter",
+        json={"filter": [tag_name], "details": "slim"},
+    )
+    assert response.status_code == 200
+    recipes = response.get_json()
+    assert len(recipes) > 0
+    for r in recipes:
+        assert "items" not in r, "filtered slim response must not include items"
+
+
 def test_search_is_scoped_to_household(
     admin_client,
     user_client_with_household,

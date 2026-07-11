@@ -96,3 +96,21 @@ class GenerateRecipe(Schema):
 
 class SuggestionsRecipe(Schema):
     language = fields.String()
+
+
+class GetAllRecipesRequest(Schema):
+    class Meta:
+        unknown = EXCLUDE
+
+    details = fields.String(load_default="full")
+    page = fields.Integer(validate=lambda a: a >= 0, load_default=0)
+    per_page = fields.Integer(validate=lambda a: a >= 0, load_default=0)
+
+
+class SyncRecipesRequest(Schema):
+    class Meta:
+        unknown = EXCLUDE
+
+    updated_after = fields.Float(validate=lambda a: a >= 0, load_default=0.0)
+    page = fields.Integer(validate=lambda a: a >= 0, load_default=0)
+    per_page = fields.Integer(validate=lambda a: a >= 0, load_default=50)

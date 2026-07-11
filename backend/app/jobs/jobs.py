@@ -10,6 +10,7 @@ from app.models import (
     Recipe,
     ChallengePasswordReset,
     OIDCRequest,
+    RecipeTombstone,
 )
 from app.service.delete_unused import deleteEmptyHouseholds, deleteUnusedFiles
 from .item_ordering import findItemOrdering
@@ -76,6 +77,7 @@ if celery_app is not None:
 def monthly():
     deleteEmptyHouseholds()
     deleteUnusedFiles()
+    RecipeTombstone.prune()
 
 
 def daily():

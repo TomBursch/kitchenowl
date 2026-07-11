@@ -97,3 +97,38 @@ def test_recipe_deletion(user_client_with_household, recipe_with_items):
     # Verify deletion
     response = user_client_with_household.get(f"/api/recipe/{recipe_id}")
     assert response.status_code != 200  # Should not be found
+
+
+# --- New endpoint tests ---
+
+
+def test_search_is_scoped_to_household(
+    admin_client,
+    user_client_with_household,
+    household_id,
+    recipe_with_items,
+    recipe_name,
+):
+    """Cross-household search leak regression: a recipe in household A must not
+    appear in a search on household B."""
+    # Create a second household via admin
+    response = admin_client.get("/api/user")
+    assert response.status_code == 200
+    admin_id = response.get_json()["id"]
+
+    response = admin_client.post(
+        "/api/household", json={"name": "other household", "member": [admin_id]}
+    )
+    assert response.status_code == 200
+    other_household_id = response.get_json()["id"]
+
+    # Search other household for the recipe name — must return nothing
+    response = admin_client.get(
+        f"/api/household/{other_household_id}/recipe/search?query={recipe_name}"
+    )
+    assert response.status_code == 200
+    results = response.get_json()
+    ids = [r["id"] for r in results]
+    assert recipe_with_items not in ids, (
+        "Recipe from another household leaked into search results"
+    )

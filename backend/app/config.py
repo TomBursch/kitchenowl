@@ -144,6 +144,7 @@ SUPPORTED_LANGUAGES = {
     "tr": "Türkçe",
     "uk": "Українська",
     "zh_Hans": "简化字",
+    "zh_Hant": "繁體字",
 }
 
 Flask.json_provider_class = KitchenOwlJSONProvider

@@ -1,5 +1,7 @@
 import re
+from datetime import datetime, timezone
 from sqlalchemy import desc, func
+from sqlalchemy.orm import noload
 from app.config import FRONT_URL
 from app.errors import NotFoundRequest
 from app.models import Household, RecipeItems, RecipeTags
@@ -7,7 +9,7 @@ from flask import jsonify, Blueprint
 from flask_jwt_extended import current_user, jwt_required
 from app import db
 from app.helpers import validate_args, authorize_household
-from app.models import Recipe, Item, Tag
+from app.models import Recipe, Item, Tag, RecipeTombstone
 from app.models.recipe import RecipeVisibility
 from app.service.file_has_access_or_download import file_has_access_or_download
 from app.service.recipe_scraping import scrape
@@ -19,6 +21,8 @@ from .schemas import (
     GetAllFilterRequest,
     ScrapeRecipe,
     SuggestionsRecipe,
+    GetAllRecipesRequest,
+    SyncRecipesRequest,
 )
 
 recipe = Blueprint("recipe", __name__)
@@ -28,10 +32,75 @@ recipeHousehold = Blueprint("recipe", __name__)
 @recipeHousehold.route("", methods=["GET"])
 @jwt_required()
 @authorize_household()
-def getAllRecipes(household_id):
-    return jsonify(
-        [e.obj_to_full_dict() for e in Recipe.all_from_household_by_name(household_id)]
+@validate_args(GetAllRecipesRequest)
+def getAllRecipes(args, household_id):
+    use_slim = args["details"] == "slim"
+    per_page: int = args["per_page"]
+    page: int = args["page"]
+    query_opts = [noload(Recipe.items)] if use_slim else []
+    serializer = Recipe.obj_to_slim_dict if use_slim else Recipe.obj_to_full_dict
+    if per_page > 0:
+        base_query = (
+            Recipe.query
+            .filter(Recipe.household_id == household_id)
+            .options(*query_opts)
+            .order_by(Recipe.name)
+        )
+        total = base_query.count()
+        items = base_query.offset(page * per_page).limit(per_page).all()
+        return jsonify({
+            "items": [serializer(e) for e in items],
+            "total": total,
+            "page": page,
+            "per_page": per_page,
+        })
+    recipes = (
+        Recipe.query
+        .filter(Recipe.household_id == household_id)
+        .options(*query_opts)
+        .order_by(Recipe.name)
+        .all()
     )
+    return jsonify([serializer(e) for e in recipes])
+
+
+@recipeHousehold.route("/sync", methods=["GET"])
+@jwt_required()
+@authorize_household()
+@validate_args(SyncRecipesRequest)
+def syncRecipes(args, household_id):
+    updated_after_ts: float = args["updated_after"]
+    page: int = args["page"]
+    per_page: int = args["per_page"]
+
+    server_now = datetime.now(timezone.utc)
+    since = (
+        datetime.fromtimestamp(updated_after_ts, tz=timezone.utc)
+        if updated_after_ts > 0
+        else None
+    )
+
+    query = Recipe.query.filter(Recipe.household_id == household_id)
+    if since is not None:
+        query = query.filter(Recipe.updated_at > since)
+    query = query.order_by(Recipe.updated_at, Recipe.id)
+
+    total = query.count()
+    recipes = query.offset(page * per_page).limit(per_page).all()
+    has_more = (page + 1) * per_page < total
+
+    epoch = datetime.fromtimestamp(0, tz=timezone.utc)
+    deleted_ids = RecipeTombstone.deleted_since(
+        household_id, since if since is not None else epoch
+    )
+
+    return jsonify({
+        "recipes": [e.obj_to_full_dict() for e in recipes],
+        "deleted_ids": deleted_ids,
+        "page": page,
+        "has_more": has_more,
+        "server_time": server_now.timestamp(),
+    })
 
 
 @recipeHousehold.route("/newest/<int:page>", methods=["GET"])
@@ -207,7 +276,16 @@ def deleteRecipeById(id):
     if not recipe:
         raise NotFoundRequest()
     recipe.checkAuthorized()
-    recipe.delete()
+    household_id = recipe.household_id
+    recipe_id = recipe.id
+    # Use session.delete directly (not recipe.delete()) so the tombstone lands
+    # in the same transaction and a crash between the two can't lose a deletion.
+    db.session.delete(recipe)
+    tombstone = RecipeTombstone()
+    tombstone.recipe_id = recipe_id
+    tombstone.household_id = household_id
+    db.session.add(tombstone)
+    db.session.commit()
     return jsonify({"msg": "DONE"})
 
 
@@ -216,10 +294,13 @@ def deleteRecipeById(id):
 @authorize_household()
 @validate_args(SearchByNameRequest)
 def searchRecipeInHouseholdByName(args, household_id):
-    if "only_ids" in args and args["only_ids"]:
+    if args["only_ids"]:
         return jsonify([e.id for e in Recipe.search_name(args["query"], household_id)])
+    use_slim = args["details"] == "slim"
+    serializer = Recipe.obj_to_slim_dict if use_slim else Recipe.obj_to_full_dict
+    query_opts = [noload(Recipe.items)] if use_slim else []
     return jsonify(
-        [e.obj_to_full_dict() for e in Recipe.search_name(args["query"], household_id)]
+        [serializer(e) for e in Recipe.search_name(args["query"], household_id, query_options=query_opts)]
     )
 
 
@@ -228,10 +309,13 @@ def searchRecipeInHouseholdByName(args, household_id):
 @authorize_household()
 @validate_args(GetAllFilterRequest)
 def getAllFiltered(args, household_id):
+    use_slim = args["details"] == "slim"
+    serializer = Recipe.obj_to_slim_dict if use_slim else Recipe.obj_to_full_dict
+    query_opts = [noload(Recipe.items)] if use_slim else []
     return jsonify(
         [
-            e.obj_to_full_dict()
-            for e in Recipe.all_by_name_with_filter(household_id, args["filter"])
+            serializer(e)
+            for e in Recipe.all_by_name_with_filter(household_id, args["filter"], query_options=query_opts)
         ]
     )
 

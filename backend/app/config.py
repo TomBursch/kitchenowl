@@ -24,6 +24,7 @@ from oic.oic.message import RegistrationResponse
 from oic.utils.authn.client import CLIENT_AUTHN_METHOD
 from flask import Flask, jsonify, request
 from flask_basicauth import BasicAuth
+from flask_compress import Compress
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
@@ -182,6 +183,10 @@ convention = {
 }
 
 
+app.config["COMPRESS_MIMETYPES"] = ["application/json"]
+app.config["COMPRESS_MIN_SIZE"] = 500
+Compress(app)
+
 db = SQLAlchemy(app, model_class=DbModelBase)
 migrate = Migrate(app, db, render_as_batch=True)
 bcrypt = Bcrypt(app)
@@ -304,7 +309,7 @@ if DB_URL.drivername == "sqlite":
 
     def on_sqlite_connect(conn, unused):
         conn.enable_load_extension(True)
-        conn.load_extension(cast(str, sqlite_icu.extension_path()).replace(".so", ""))
+        conn.load_extension(cast(str, sqlite_icu.extension_path()))
         conn.enable_load_extension(False)
 
         cursor = conn.cursor()

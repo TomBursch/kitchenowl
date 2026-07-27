@@ -49,6 +49,20 @@ class _RecipeListPageState extends State<RecipeListPage> {
       getHeaderHeight: getHeaderHeight,
       getItemRowCount: getRowCount,
     );
+    // Attach the infinite-scroll trigger to the same controller used by
+    // CustomScrollView so the IndexBar and pagination share one controller.
+    scrollController.addListener(_onScroll);
+  }
+
+  void _onScroll() {
+    if (!mounted) return;
+    if (!scrollController.hasClients) return;
+    final cubit = BlocProvider.of<RecipeListCubit>(context);
+    final maxScroll = scrollController.position.maxScrollExtent;
+    final current = scrollController.offset;
+    if (maxScroll - current < 400) {
+      cubit.loadMore();
+    }
   }
 
   @override
@@ -174,6 +188,44 @@ class _RecipeListPageState extends State<RecipeListPage> {
                   );
                 }
 
+                // Error state
+                if (state is ErrorRecipeListState) {
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Align(
+                        key: headerKey,
+                        alignment: Alignment.topRight,
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 16),
+                          child: TrailingIconTextButton(
+                            onPressed: cubit.toggleView,
+                            text: state.listView
+                                ? AppLocalizations.of(context)!
+                                    .sortingAlphabetical
+                                : AppLocalizations.of(context)!.grid,
+                            icon: Icon(state.listView
+                                ? Icons.view_agenda_rounded
+                                : Icons.grid_view_rounded),
+                          ),
+                        ),
+                      ),
+                      const Spacer(),
+                      const Icon(Icons.cloud_off_rounded, size: 48),
+                      const SizedBox(height: 16),
+                      Text(AppLocalizations.of(context)!.recipeLoadError),
+                      const SizedBox(height: 16),
+                      ElevatedButton.icon(
+                        onPressed: cubit.refresh,
+                        icon: const Icon(Icons.refresh_rounded),
+                        label: Text(AppLocalizations.of(context)!.refresh),
+                      ),
+                      const Spacer(),
+                    ],
+                  );
+                }
+
                 if (state is! ListRecipeListState) {
                   return Column(
                     children: [
@@ -252,6 +304,14 @@ class _RecipeListPageState extends State<RecipeListPage> {
                                     ),
                                   ),
                           ),
+                          if (state.isLoadingMore)
+                            const SliverToBoxAdapter(
+                              child: Padding(
+                                padding: EdgeInsets.all(16),
+                                child: Center(
+                                    child: CircularProgressIndicator()),
+                              ),
+                            ),
                         ],
                       ),
                       if (state is! SearchRecipeListState)

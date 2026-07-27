@@ -26,6 +26,10 @@ class Recipe extends Model {
   final int? householdId;
   final bool curated;
 
+  /// True when this instance contains full details (items, description).
+  /// False for slim list entries — fetch the full recipe before using items.
+  final bool hasFullDetails;
+
   /// The household this recipe belongs to, the contained field is not complete and should only be used for external recipes
   final Household? household;
 
@@ -48,6 +52,7 @@ class Recipe extends Model {
     this.householdId,
     this.household,
     this.curated = false,
+    this.hasFullDetails = true,
   });
 
   factory Recipe.fromJson(Map<String, dynamic> map) {
@@ -78,7 +83,7 @@ class Recipe extends Model {
     return Recipe(
       id: map['id'],
       name: map['name'],
-      description: map['description'],
+      description: map['description'] ?? '',
       isPlanned: map['planned'] ?? false,
       time: map['time'] ?? 0,
       cookTime: map['cook_time'] ?? 0,
@@ -96,6 +101,7 @@ class Recipe extends Model {
           ? Household.fromJson(map['household'])
           : null,
       curated: map['server_curated'] ?? false,
+      hasFullDetails: map.containsKey('items'),
     );
   }
 
@@ -115,6 +121,7 @@ class Recipe extends Model {
     Set<DateTime>? plannedCookingDates,
     int? householdId,
     bool? curated,
+    bool? hasFullDetails,
   }) =>
       Recipe(
         id: id,
@@ -135,6 +142,7 @@ class Recipe extends Model {
         visibility: visibility ?? this.visibility,
         householdId: householdId ?? this.householdId,
         household: this.household,
+        hasFullDetails: hasFullDetails ?? this.hasFullDetails,
       );
 
   Recipe withYields(int? yields) {
@@ -167,6 +175,7 @@ class Recipe extends Model {
         householdId,
         household,
         curated,
+        hasFullDetails,
       ];
 
   @override

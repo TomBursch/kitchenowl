@@ -48,12 +48,14 @@ class UpdateRecipe(Schema):
 
 
 class SearchByNameRequest(Schema):
+    class Meta:
+        unknown = EXCLUDE
+
     query = fields.String(required=True, validate=lambda a: a and not a.isspace())
     page = fields.Integer(validate=lambda a: a >= 0, load_default=0)
     language = fields.String()
-    only_ids = fields.Boolean(
-        load_default=False,
-    )
+    only_ids = fields.Boolean(load_default=False)
+    details = fields.String(load_default="full")
 
 
 class SearchByTagRequest(Schema):
@@ -63,7 +65,11 @@ class SearchByTagRequest(Schema):
 
 
 class GetAllFilterRequest(Schema):
+    class Meta:
+        unknown = EXCLUDE
+
     filter = fields.List(fields.String())
+    details = fields.String(load_default="full")
 
 
 class AddItemByName(Schema):
@@ -83,3 +89,21 @@ class ScrapeRecipe(Schema):
 
 class SuggestionsRecipe(Schema):
     language = fields.String()
+
+
+class GetAllRecipesRequest(Schema):
+    class Meta:
+        unknown = EXCLUDE
+
+    details = fields.String(load_default="full")
+    page = fields.Integer(validate=lambda a: a >= 0, load_default=0)
+    per_page = fields.Integer(validate=lambda a: a >= 0, load_default=0)
+
+
+class SyncRecipesRequest(Schema):
+    class Meta:
+        unknown = EXCLUDE
+
+    updated_after = fields.Float(validate=lambda a: a >= 0, load_default=0.0)
+    page = fields.Integer(validate=lambda a: a >= 0, load_default=0)
+    per_page = fields.Integer(validate=lambda a: a >= 0, load_default=50)

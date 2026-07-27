@@ -367,6 +367,7 @@
     }
   },
   "@recipeImageSelect": {},
+  "@recipeLoadError": {},
   "@recipeNew": {},
   "@recipeSource": {},
   "@recipes": {},
@@ -711,6 +712,7 @@
   "recipeEmptySearch": "No recipes found :(",
   "recipeGoToInHousehold": "Already added, go to recipe in {householdName}",
   "recipeImageSelect": "Select a recipe image",
+  "recipeLoadError": "Could not load recipes. Please check your connection.",
   "recipeNew": "New recipe",
   "recipeSource": "Recipe source",
   "recipes": "Recipes",

@@ -1,4 +1,5 @@
 import 'package:collection/collection.dart';
+import 'package:flutter/foundation.dart' show setEquals;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -12,6 +13,7 @@ import 'package:kitchenowl/models/category.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/shoppinglist.dart';
+import 'package:kitchenowl/models/store.dart';
 import 'package:kitchenowl/models/update_value.dart';
 import 'package:kitchenowl/widgets/item_popup_menu_button.dart';
 import 'package:kitchenowl/widgets/item_wrap_menu.dart';
@@ -21,6 +23,7 @@ class ItemPage<T extends Item> extends StatefulWidget {
   final T item;
   final ShoppingList? shoppingList;
   final List<Category> categories;
+  final List<Store> stores;
   final bool advancedView;
 
   const ItemPage({
@@ -28,6 +31,7 @@ class ItemPage<T extends Item> extends StatefulWidget {
     required this.item,
     this.shoppingList,
     this.categories = const [],
+    this.stores = const [],
     this.advancedView = false,
   });
 
@@ -250,6 +254,45 @@ class _ItemPageState<T extends Item> extends State<ItemPage<T>> {
                                       )
                                     : null,
                               ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  if (widget.item is! RecipeItem && widget.stores.isNotEmpty)
+                    SliverPadding(
+                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                      sliver: SliverToBoxAdapter(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              AppLocalizations.of(context)!.stores,
+                              style: Theme.of(context).textTheme.bodySmall,
+                            ),
+                            const SizedBox(height: 8),
+                            BlocBuilder<ItemEditCubit, ItemEditState>(
+                              bloc: cubit,
+                              buildWhen: (prev, curr) => !setEquals(
+                                Set.of(prev.stores),
+                                Set.of(curr.stores),
+                              ),
+                              builder: (context, state) => Wrap(
+                                spacing: 8,
+                                runSpacing: 8,
+                                children: widget.stores
+                                    .map(
+                                      (e) => FilterChip(
+                                        label: Text(e.name),
+                                        selected: state.stores.contains(e),
+                                        onSelected: !App.isOffline
+                                            ? (selected) =>
+                                                cubit.toggleStore(e, selected)
+                                            : null,
+                                      ),
+                                    )
+                                    .toList(),
+                              ),
+                            ),
                           ],
                         ),
                       ),

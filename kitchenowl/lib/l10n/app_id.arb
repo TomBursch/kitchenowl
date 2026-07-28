@@ -207,6 +207,14 @@
       }
     }
   },
+  "@storeDeleteConfirmation": {
+    "placeholders": {
+      "store": {
+        "example": "Supermarket",
+        "type": "String"
+      }
+    }
+  },
   "@tagDeleteConfirmation": {
     "placeholders": {
       "tag": {
@@ -252,6 +260,7 @@
   "addRecipeToPlanner": "Tambah ke rencana makan ({number} saji)",
   "addRecipeToPlannerShort": "Tambah ke rencana makan",
   "addShoppingList": "Tambah Daftar belanja",
+  "addStore": "Tambah Toko",
   "addTag": "Tambah Tag",
   "addedBy": "Ditambahkan oleh {name}",
   "address": "Alamat",
@@ -483,6 +492,11 @@
   "sortingAlgorithmic": "Algoritma",
   "sortingAlphabetical": "Abjad",
   "start": "Mulai",
+  "store": "Toko",
+  "storeDelete": "Hapus Toko",
+  "storeDeleteConfirmation": "Apakah Anda yakin ingin menghapus {store}? Ini akan menghapus toko dari semua item.",
+  "storeEdit": "Atur Toko",
+  "stores": "Toko",
   "supportDevelopment": "Dukung pengembangannya",
   "swipeToDelete": "Geser untuk menghapus",
   "swipeToDeleteAndLongPressToReorder": "Geser untuk menghapus dan ketuk lama untuk mengatur urutan",

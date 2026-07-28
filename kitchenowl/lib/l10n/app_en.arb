@@ -40,6 +40,7 @@
     "description": "A shorter title/button text used wherever the space is limited. Excludes the number of yields."
   },
   "@addShoppingList": {},
+  "@addStore": {},
   "@addTag": {},
   "@addedBy": {
     "placeholders": {
@@ -433,6 +434,18 @@
   "@sortingAlgorithmic": {},
   "@sortingAlphabetical": {},
   "@start": {},
+  "@store": {},
+  "@storeDelete": {},
+  "@storeDeleteConfirmation": {
+    "placeholders": {
+      "store": {
+        "example": "Supermarket",
+        "type": "String"
+      }
+    }
+  },
+  "@storeEdit": {},
+  "@stores": {},
   "@supportDevelopment": {},
   "@swipeToDelete": {},
   "@swipeToDeleteAndLongPressToReorder": {},
@@ -528,6 +541,7 @@
   "addRecipeToPlanner": "Add to meal plan ({number} serves)",
   "addRecipeToPlannerShort": "Add to meal plan",
   "addShoppingList": "Add shopping list",
+  "addStore": "Add store",
   "addTag": "Add tag",
   "addedBy": "Added by {name}",
   "address": "Address",
@@ -759,6 +773,11 @@
   "sortingAlgorithmic": "Algorithmic",
   "sortingAlphabetical": "Alphabetical",
   "start": "Start",
+  "store": "Store",
+  "storeDelete": "Delete store",
+  "storeDeleteConfirmation": "Are you sure you want to delete {store}? This will remove the store from all items.",
+  "storeEdit": "Edit store",
+  "stores": "Stores",
   "supportDevelopment": "Support the development",
   "swipeToDelete": "Swipe to delete",
   "swipeToDeleteAndLongPressToReorder": "Swipe to delete and long press to reorder",

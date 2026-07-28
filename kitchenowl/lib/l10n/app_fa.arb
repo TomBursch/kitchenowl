@@ -40,6 +40,7 @@
     "description": "A shorter title/button text used wherever the space is limited. Excludes the number of yields."
   },
   "@addShoppingList": {},
+  "@addStore": {},
   "@addTag": {},
   "@addedBy": {
     "placeholders": {
@@ -430,6 +431,18 @@
   "@sortingAlgorithmic": {},
   "@sortingAlphabetical": {},
   "@start": {},
+  "@store": {},
+  "@storeDelete": {},
+  "@storeDeleteConfirmation": {
+    "placeholders": {
+      "store": {
+        "example": "Supermarket",
+        "type": "String"
+      }
+    }
+  },
+  "@storeEdit": {},
+  "@stores": {},
   "@supportDevelopment": {},
   "@swipeToDelete": {},
   "@swipeToDeleteAndLongPressToReorder": {},
@@ -525,6 +538,7 @@
   "addRecipeToPlanner": "افزودن به برنامه غذایی ({number} پرس)",
   "addRecipeToPlannerShort": "افزودن به برنامه غذایی",
   "addShoppingList": "افزودن لیست خرید",
+  "addStore": "افزودن فروشگاه",
   "addTag": "افزودن برچسب",
   "addedBy": "اضافه شده توسط {name}",
   "address": "آدرس",
@@ -751,6 +765,11 @@
   "sortingAlgorithmic": "الگوریتمی",
   "sortingAlphabetical": "حروف الفبا",
   "start": "شروع",
+  "store": "فروشگاه",
+  "storeDelete": "حذف فروشگاه",
+  "storeDeleteConfirmation": "آیا مطمئن هستید که می‌خواهید {store} را حذف کنید؟ این کار فروشگاه را از همه آیتم‌ها حذف می‌کند.",
+  "storeEdit": "ویرایش فروشگاه",
+  "stores": "فروشگاه‌ها",
   "supportDevelopment": "حمایت از توسعه",
   "swipeToDelete": "برای حذف بکشید",
   "swipeToDeleteAndLongPressToReorder": "برای حذف بکشید و برای مرتب‌سازی مجدد طولانی فشار دهید",

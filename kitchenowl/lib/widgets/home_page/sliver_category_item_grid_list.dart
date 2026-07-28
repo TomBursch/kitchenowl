@@ -3,6 +3,7 @@ import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/category.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/models/shoppinglist.dart';
+import 'package:kitchenowl/models/store.dart';
 import 'package:kitchenowl/widgets/sliver_expansion_tile.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
@@ -15,6 +16,7 @@ class SliverCategoryItemGridList<T extends Item> extends StatefulWidget {
   final Nullable<void Function(T)>? onLongPressed;
   final List<T> items;
   final List<Category>? categories; // forwarded to item page on long press
+  final List<Store>? stores; // forwarded to item page on long press
   final ShoppingList? shoppingList; // forwarded to item page on long press
   final bool Function(T)? selected;
   final bool isLoading;
@@ -31,6 +33,7 @@ class SliverCategoryItemGridList<T extends Item> extends StatefulWidget {
     this.onLongPressed,
     this.items = const [],
     this.categories,
+    this.stores,
     this.shoppingList,
     this.selected,
     this.isLoading = false,
@@ -68,6 +71,7 @@ class _SliverCategoryItemGridListState<T extends Item>
           name: category?.name ?? AppLocalizations.of(context)!.uncategorized,
           items: items,
           categories: widget.categories,
+          stores: widget.stores,
           shoppingList: widget.shoppingList,
           selected: widget.selected,
           isLoading: widget.isLoading,
@@ -85,6 +89,7 @@ class _SliverCategoryItemGridListState<T extends Item>
         onLongPressed: widget.onLongPressed,
         items: widget.items,
         categories: widget.categories,
+        stores: widget.stores,
         shoppingList: widget.shoppingList,
         selected: widget.selected,
         isLoading: widget.isLoading,

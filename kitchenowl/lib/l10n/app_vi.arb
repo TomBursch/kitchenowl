@@ -39,6 +39,7 @@
     "description": "A shorter title/button text used wherever the space is limited. Excludes the number of yields."
   },
   "@addShoppingList": {},
+  "@addStore": {},
   "@addTag": {},
   "@addedBy": {
     "placeholders": {
@@ -356,6 +357,18 @@
   "@sortingAlgorithmic": {},
   "@sortingAlphabetical": {},
   "@start": {},
+  "@store": {},
+  "@storeDelete": {},
+  "@storeDeleteConfirmation": {
+    "placeholders": {
+      "store": {
+        "example": "Supermarket",
+        "type": "String"
+      }
+    }
+  },
+  "@storeEdit": {},
+  "@stores": {},
   "@supportDevelopment": {},
   "@swipeToDelete": {},
   "@swipeToDeleteAndLongPressToReorder": {},
@@ -431,6 +444,7 @@
   "addRecipeToPlanner": "Thêm vào kế hoạch bữa ăn ({number} suất)",
   "addRecipeToPlannerShort": "Thêm vào kế hoạch bữa ăn",
   "addShoppingList": "Thêm danh sách mua",
+  "addStore": "Thêm cửa hàng",
   "addTag": "Thêm thẻ",
   "addedBy": "Được thêm bởi {name}",
   "address": "Địa chỉ",
@@ -617,6 +631,11 @@
   "sortingAlgorithmic": "Thuật toán",
   "sortingAlphabetical": "Theo bảng chữ cái",
   "start": "Bắt đầu",
+  "store": "Cửa hàng",
+  "storeDelete": "Xóa cửa hàng",
+  "storeDeleteConfirmation": "Bạn có chắc muốn xóa {store}? Thao tác này sẽ xóa cửa hàng từ tất cả phần tử.",
+  "storeEdit": "Chỉnh sửa cửa hàng",
+  "stores": "Cửa hàng",
   "supportDevelopment": "Hỗ trợ việc phát triển",
   "swipeToDelete": "Vuốt để xóa",
   "swipeToDeleteAndLongPressToReorder": "Vuốt để xóa và nhấn giữ để sắp xếp",

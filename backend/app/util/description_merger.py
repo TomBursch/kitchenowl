@@ -3,14 +3,13 @@ from lark import Lark, Transformer, Tree, Token
 from lark.visitors import Interpreter
 import re
 
+from app.util import units
+
 grammar = r"""
 start: ","* item (","+ item)*
 
 item: NUMBER? unit?
-unit: COUNT | SI_WEIGHT | SI_VOLUME | DESCRIPTION
-COUNT.5: "x"i
-SI_WEIGHT.5: "mg"i | "g"i | "kg"i
-SI_VOLUME.5: "ml"i | "l"i
+unit: """ + units.NAMED + r""" | DESCRIPTION""" + units.TERMINALS + r"""
 DESCRIPTION: /[^, ][^,]*/
 
 DECIMAL: INT "." INT? | "." INT
@@ -39,17 +38,19 @@ class TreeItem(Tree):
         return not self.unit or cast(Token, self.unit.children[0]).type == "COUNT"
 
     def sameUnit(self, other: Self) -> bool:
-        return (self.unitIsCount() and other.unitIsCount()) or (
-            self.unit is not None
-            and other.unit is not None
-            and (
-                cast(Token, self.unit.children[0]).type
-                == cast(Token, other.unit.children[0]).type
-                and not cast(Token, other.unit.children[0]).type == "DESCRIPTION"
-                or cast(Token, self.unit.children[0]).lower().strip()
-                == cast(Token, other.unit.children[0]).lower().strip()
-            )
-        )
+        if self.unitIsCount() and other.unitIsCount():
+            return True
+        if self.unit is None or other.unit is None:
+            return False
+
+        mine = cast(Token, self.unit.children[0])
+        theirs = cast(Token, other.unit.children[0])
+
+        # SI units merge across the family because they convert exactly; the
+        # rest only merge with themselves, so tsp never becomes ml.
+        if mine.type == theirs.type and mine.type in ("SI_WEIGHT", "SI_VOLUME"):
+            return True
+        return units.canonical(mine) == units.canonical(theirs)
 
 
 class T(Transformer):
@@ -65,7 +66,7 @@ class Printer(Interpreter):
         res = ""
         for child in item.children:
             if isinstance(child, Tree):
-                if res and cast(Token, child.children[0]).type == "DESCRIPTION":
+                if res and cast(Token, child.children[0]).type in units.SPACED:
                     res += " "
                 res += self.visit(child)
             elif child.type == "NUMBER":

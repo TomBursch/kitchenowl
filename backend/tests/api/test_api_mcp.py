@@ -64,6 +64,8 @@ def test_mcp_scrape_recipe_tool_unsupported(user_client_with_household, househol
 
     assert res.status_code == 200
     body = res.get_json()
-    assert 'error' in body
-    assert body['error']['code'] == -32000
-    assert 'Unsupported website' in body['error']['message']
+    # A tool that fails reports isError so the model can react, rather than
+    # raising a protocol-level error that aborts the call.
+    assert 'error' not in body
+    assert body['result']['isError'] is True
+    assert 'Unsupported website' in body['result']['content'][0]['text']

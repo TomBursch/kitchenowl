@@ -32,16 +32,12 @@ class RecipeItemMarkdownBuilder extends MarkdownElementBuilder {
       overridenDescription =
           StringScaler.scale(overridenDescription, itemScaledFactor!);
     }
-    return RichText(
-      text: TextSpan(children: [
-        WidgetSpan(
-          alignment: PlaceholderAlignment.middle,
-          child: ItemChip(
-            item: item,
-            description: overridenDescription,
-          ),
-        ),
-      ]),
+    return Padding(
+      padding: _trailingPadding(context, element, parentStyle),
+      child: ItemChip(
+        item: item,
+        description: overridenDescription,
+      ),
     );
   }
 }
@@ -66,44 +62,54 @@ class RecipeCubitItemMarkdownBuilder extends MarkdownElementBuilder {
   ) {
     if ((parentStyle?.fontSize ?? 0) > 14) return null;
 
-    return RichText(
-      text: TextSpan(children: [
-        WidgetSpan(
-          alignment: PlaceholderAlignment.middle,
-          child: BlocBuilder<RecipeCubit, RecipeState>(
-            bloc: cubit,
-            buildWhen: (previous, current) =>
-                previous.dynamicRecipe.items.firstWhere(
-                      (e) => cleanItemName(e.name) == element.textContent,
-                    ) !=
-                    current.dynamicRecipe.items.firstWhere(
-                      (e) => cleanItemName(e.name) == element.textContent,
-                    ) ||
-                previous.selectedYields != current.selectedYields,
-            builder: (context, state) {
-              RecipeItem item = state.dynamicRecipe.items.firstWhere(
+    return BlocBuilder<RecipeCubit, RecipeState>(
+      bloc: cubit,
+      buildWhen: (previous, current) =>
+          previous.dynamicRecipe.items.firstWhere(
                 (e) => cleanItemName(e.name) == element.textContent,
-              );
+              ) !=
+              current.dynamicRecipe.items.firstWhere(
+                (e) => cleanItemName(e.name) == element.textContent,
+              ) ||
+          previous.selectedYields != current.selectedYields,
+      builder: (context, state) {
+        RecipeItem item = state.dynamicRecipe.items.firstWhere(
+          (e) => cleanItemName(e.name) == element.textContent,
+        );
 
-              String? overridenDescription = element.attributes["description"];
-              if (overridenDescription != null &&
-                  state.recipe.yields != 0 &&
-                  state.selectedYields != null &&
-                  state.recipe.yields != state.selectedYields) {
-                overridenDescription = StringScaler.scale(overridenDescription,
-                    Fraction(state.selectedYields!, state.recipe.yields));
-              }
+        String? overridenDescription = element.attributes["description"];
+        if (overridenDescription != null &&
+            state.recipe.yields != 0 &&
+            state.selectedYields != null &&
+            state.recipe.yields != state.selectedYields) {
+          overridenDescription = StringScaler.scale(overridenDescription,
+              Fraction(state.selectedYields!, state.recipe.yields));
+        }
 
-              return ItemChip(
-                item: item,
-                description: overridenDescription,
-              );
-            },
+        return Padding(
+          padding: _trailingPadding(context, element, parentStyle),
+          child: ItemChip(
+            item: item,
+            description: overridenDescription,
           ),
-        ),
-      ]),
+        );
+      },
     );
   }
+}
+
+EdgeInsets _trailingPadding(
+  BuildContext context,
+  md.Element element,
+  TextStyle? parentStyle,
+) {
+  if (!element.attributes.containsKey("trailingSpace")) {
+    return EdgeInsets.zero;
+  }
+  final fontSize = parentStyle?.fontSize ?? 14;
+  return EdgeInsets.only(
+    right: MediaQuery.textScalerOf(context).scale(fontSize) * 0.25,
+  );
 }
 
 /// Common grammatical suffixes that an LLM might append to (or omit from) an
@@ -155,8 +161,9 @@ String? resolveRecipeItemName(
 }
 
 String _normalizeItemName(String name) {
-  return name.toLowerCase().replaceAll(
-      RegExp(r"""[\n.()\\/?\*+,!%$#@^;:"=~{]"""), "");
+  return name
+      .toLowerCase()
+      .replaceAll(RegExp(r"""[\n.()\\/?\*+,!%$#@^;:"=~{]"""), "");
 }
 
 class RecipeExplicitItemMarkdownSyntax extends md.InlineSyntax {
@@ -168,7 +175,7 @@ class RecipeExplicitItemMarkdownSyntax extends md.InlineSyntax {
           startCharacter: 0x40,
         );
 
-  static const String _pattern = r"""@([\p{L}_]+)(\{([^}]*)\})?""";
+  static const String _pattern = r"""@([\p{L}_]+)(\{([^}]*)\})?([ \t]+)?""";
 
   @override
   final RegExp pattern = RegExp(
@@ -194,6 +201,7 @@ class RecipeExplicitItemMarkdownSyntax extends md.InlineSyntax {
     final node = md.Element.text('recipeItem', resolved);
     if (match.group(3) != null)
       node.attributes["description"] = match.group(3)!;
+    if (match.group(4) != null) node.attributes["trailingSpace"] = "true";
     parser.addNode(node);
 
     return true;

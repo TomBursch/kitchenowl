@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:kitchenowl/cubits/agent_chat_list_cubit.dart';
 import 'package:kitchenowl/cubits/auth_cubit.dart';
 import 'package:kitchenowl/cubits/expense_list_cubit.dart';
 import 'package:kitchenowl/cubits/household_cubit.dart';
@@ -39,6 +40,7 @@ class _HouseholdPageState extends State<HouseholdPage>
   late final RecipeListCubit recipeListCubit;
   late final PlannerCubit plannerCubit;
   late final ExpenseListCubit expenseListCubit;
+  late final AgentChatListCubit agentChatListCubit;
 
   @override
   void initState() {
@@ -48,6 +50,7 @@ class _HouseholdPageState extends State<HouseholdPage>
     recipeListCubit = RecipeListCubit(widget.household);
     plannerCubit = PlannerCubit(widget.household);
     expenseListCubit = ExpenseListCubit(widget.household);
+    agentChatListCubit = AgentChatListCubit(widget.household);
     WidgetsBinding.instance.addObserver(this);
 
     if (router.state.uri.path.contains("recipes")) {
@@ -58,6 +61,9 @@ class _HouseholdPageState extends State<HouseholdPage>
     }
     if (router.state.uri.path.contains("balances")) {
       expenseListCubit.refresh();
+    }
+    if (router.state.uri.path.contains("agent")) {
+      agentChatListCubit.refresh();
     }
   }
 
@@ -82,6 +88,7 @@ class _HouseholdPageState extends State<HouseholdPage>
     recipeListCubit.close();
     plannerCubit.close();
     expenseListCubit.close();
+    agentChatListCubit.close();
     super.dispose();
   }
 
@@ -96,6 +103,10 @@ class _HouseholdPageState extends State<HouseholdPage>
 
   @override
   void didPopNext() {
+    // Settings (and other sub-pages) may have toggled household feature
+    // flags or reordered tabs; refresh the household so the navigation
+    // bar reflects the new state.
+    householdCubit.refresh();
     if (router.state.uri.path.contains("recipes")) {
       recipeListCubit.refresh();
     }
@@ -104,6 +115,9 @@ class _HouseholdPageState extends State<HouseholdPage>
     }
     if (router.state.uri.path.contains("balances")) {
       expenseListCubit.refresh();
+    }
+    if (router.state.uri.path.contains("agent")) {
+      agentChatListCubit.refresh();
     }
   }
 
@@ -134,6 +148,9 @@ class _HouseholdPageState extends State<HouseholdPage>
       case ViewsEnum.balances:
         expenseListCubit.refresh();
         break;
+      case ViewsEnum.agent:
+        agentChatListCubit.refresh();
+        break;
       case ViewsEnum.more:
         showModalBottomSheet(
           context: context,
@@ -158,6 +175,7 @@ class _HouseholdPageState extends State<HouseholdPage>
         BlocProvider.value(value: recipeListCubit),
         BlocProvider.value(value: plannerCubit),
         BlocProvider.value(value: expenseListCubit),
+        BlocProvider.value(value: agentChatListCubit),
       ],
       child: BlocConsumer<HouseholdCubit, HouseholdState>(
         listener: (context, state) {
@@ -248,26 +266,64 @@ class _HouseholdPageState extends State<HouseholdPage>
             drawerEnableOpenDragGesture: false,
             bottomNavigationBar: useBottomNavigationBar
                 ? BlocBuilder<AuthCubit, AuthState>(
-                    builder: (context, state) => NavigationBar(
-                      labelBehavior:
-                          NavigationDestinationLabelBehavior.onlyShowSelected,
-                      destinations: pages
-                          .map((e) => NavigationDestination(
-                                icon: e.toIconWidget(context) ??
-                                    Icon(e.toIcon(context)),
-                                selectedIcon: Icon(e.toSelectedIcon(context)),
-                                label: e.toLocalizedShortString(context),
-                                tooltip: e.toLocalizedString(context),
-                              ))
-                          .take(5)
-                          .toList(),
-                      selectedIndex: _selectedIndex,
-                      onDestinationSelected: (i) => _onItemTapped(
-                        context,
-                        pages[i],
+                    builder: (context, state) {
+                      // Reserve the last bottom-nav slot for "more" when
+                      // there are more active views than slots, so the
+                      // overflow remains reachable. Always keep the
+                      // currently selected page visible — otherwise it
+                      // would silently fall out of the bar (e.g. agent
+                      // when balances is also active).
+                      const maxPrimaryDestinations = 5;
+                      List<ViewsEnum> navPages;
+                      if (pages.length > maxPrimaryDestinations + 1) {
+                        final selected = pages[_selectedIndex];
+                        final candidates = pages
+                            .where((e) => e != ViewsEnum.more)
+                            .toList();
+                        var primary =
+                            candidates.take(maxPrimaryDestinations).toList();
+                        if (selected != ViewsEnum.more &&
+                            !primary.contains(selected)) {
+                          // Drop the last non-selected entry to make room
+                          // for the active view, preserving order.
+                          primary = [
+                            ...primary.take(maxPrimaryDestinations - 1),
+                            selected
+                          ];
+                        }
+                        navPages = [...primary, ViewsEnum.more];
+                      } else {
+                        navPages = pages;
+                      }
+                      int navSelectedIndex = navPages.indexOf(
                         pages[_selectedIndex],
-                      ),
-                    ),
+                      );
+                      if (navSelectedIndex < 0) {
+                        navSelectedIndex =
+                            navPages.indexOf(ViewsEnum.more);
+                      }
+                      if (navSelectedIndex < 0) navSelectedIndex = 0;
+                      return NavigationBar(
+                        labelBehavior:
+                            NavigationDestinationLabelBehavior.onlyShowSelected,
+                        destinations: navPages
+                            .map((e) => NavigationDestination(
+                                  icon: e.toIconWidget(context) ??
+                                      Icon(e.toIcon(context)),
+                                  selectedIcon:
+                                      Icon(e.toSelectedIcon(context)),
+                                  label: e.toLocalizedShortString(context),
+                                  tooltip: e.toLocalizedString(context),
+                                ))
+                            .toList(),
+                        selectedIndex: navSelectedIndex,
+                        onDestinationSelected: (i) => _onItemTapped(
+                          context,
+                          navPages[i],
+                          pages[_selectedIndex],
+                        ),
+                      );
+                    },
                   )
                 : null,
           );

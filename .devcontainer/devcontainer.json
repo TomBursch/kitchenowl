@@ -1,0 +1,78 @@
+{
+	"name": "KitchenOwl (Backend + Flutter)",
+	"build": {
+		"context": ".",
+		"dockerfile": "Dockerfile"
+	},
+	"features": {
+		"ghcr.io/devcontainers/features/common-utils:2": {
+			"installZsh": true,
+			"configureZshAsDefaultShell": false,
+			"upgradePackages": true
+		},
+		"ghcr.io/devcontainers/features/git:1": {},
+		"ghcr.io/devcontainers/features/github-cli:1": {},
+		"ghcr.io/devcontainers/features/node:1": {
+			"version": "lts"
+		}
+	},
+	"containerEnv": {
+		"FLUTTER_HOME": "/opt/flutter",
+		"PUB_CACHE": "/home/vscode/.pub-cache",
+		"UV_PROJECT_ENVIRONMENT": "${containerWorkspaceFolder}/backend/.venv",
+		"STORAGE_PATH": "${containerWorkspaceFolder}/backend/.data",
+		"JWT_SECRET_KEY": "dev-secret-change-me",
+		"DEBUG": "True"
+	},
+	"remoteEnv": {
+		"PATH": "${containerEnv:PATH}:/opt/flutter/bin:/home/vscode/.pub-cache/bin:/home/vscode/.local/bin"
+	},
+	"runArgs": [
+		"--publish=5000:5000",
+		"--publish=8080:8080"
+	],
+	"forwardPorts": [5000, 8080],
+	"portsAttributes": {
+		"5000": {
+			"label": "KitchenOwl Backend",
+			"onAutoForward": "notify",
+			"protocol": "http",
+			"requireLocalPort": true
+		},
+		"8080": {
+			"label": "Flutter Web",
+			"onAutoForward": "openBrowser",
+			"protocol": "http",
+			"requireLocalPort": true
+		}
+	},
+	"postCreateCommand": "bash .devcontainer/post-create.sh",
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"ms-python.python",
+				"ms-python.vscode-pylance",
+				"charliermarsh.ruff",
+				"ms-python.debugpy",
+				"Dart-Code.dart-code",
+				"Dart-Code.flutter",
+				"tamasfe.even-better-toml",
+				"redhat.vscode-yaml",
+				"eamodio.gitlens",
+				"GitHub.vscode-pull-request-github"
+			],
+			"settings": {
+				"python.defaultInterpreterPath": "${containerWorkspaceFolder}/backend/.venv/bin/python",
+				"python.terminal.activateEnvironment": true,
+				"[python]": {
+					"editor.defaultFormatter": "charliermarsh.ruff",
+					"editor.formatOnSave": true
+				},
+				"dart.flutterSdkPath": "/opt/flutter",
+				"dart.checkForSdkUpdates": false,
+				"terminal.integrated.defaultProfile.linux": "bash"
+			}
+		}
+	},
+	"remoteUser": "vscode"
+}

@@ -1,16 +1,15 @@
 name:  Quality
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - kitchenowl/**
   pull_request:
     types:
       - opened
       - synchronize
     paths:
-      - kitchenowl/**
+      - kitchenowl/**  # push:
+  #   branches: [main]
+  #   paths:
+  #     - kitchenowl/**
 
 jobs:
   analyze:
@@ -21,7 +20,7 @@ jobs:
       - name: Clone Flutter repository with stable channel
         uses: subosito/flutter-action@v2
         with:
-          channel: stable
+          flutter-version: 3.44.8
       - run: flutter packages get
         working-directory: kitchenowl
 
@@ -40,7 +39,7 @@ jobs:
       - name: Clone Flutter repository with stable channel
         uses: subosito/flutter-action@v2
         with:
-          channel: stable
+          flutter-version: 3.44.8
       - run: flutter packages get
         working-directory: kitchenowl
 

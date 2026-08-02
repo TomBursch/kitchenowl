@@ -106,32 +106,92 @@ class RecipeCubitItemMarkdownBuilder extends MarkdownElementBuilder {
   }
 }
 
+/// Common grammatical suffixes that an LLM might append to (or omit from) an
+/// ingredient name due to declension/plural inflection. Used by
+/// [resolveRecipeItemName] so that e.g. an `@Lachsfilets` pill still matches
+/// an item registered as "Lachsfilet".
+const List<String> _kInflectionSuffixes = <String>[
+  "nen",
+  "ern",
+  "en",
+  "es",
+  "er",
+  "ie",
+  "n",
+  "s",
+  "e",
+];
+
+/// Returns the cleaned name of the recipe item matching [input] (already
+/// lower-cased and stripped of underscores), or `null` if no item matches.
+///
+/// Match order: exact, then `input` with a common suffix stripped (handles
+/// inflected pill like `@Lachsfilets` for item "Lachsfilet"), then `input`
+/// with a common suffix appended (handles bare-singular pill like
+/// `@Tomate` for item "Tomaten").
+String? resolveRecipeItemName(
+  String input,
+  Iterable<String> normalizedItemNames,
+) {
+  final names = normalizedItemNames.toSet();
+  if (names.contains(input)) return input;
+
+  // Don't strip suffixes from very short tokens to avoid false positives.
+  if (input.length > 3) {
+    for (final suffix in _kInflectionSuffixes) {
+      if (input.length > suffix.length + 2 && input.endsWith(suffix)) {
+        final stripped = input.substring(0, input.length - suffix.length);
+        if (names.contains(stripped)) return stripped;
+      }
+    }
+  }
+
+  for (final suffix in _kInflectionSuffixes) {
+    final extended = input + suffix;
+    if (names.contains(extended)) return extended;
+  }
+
+  return null;
+}
+
+String _normalizeItemName(String name) {
+  return name.toLowerCase().replaceAll(
+      RegExp(r"""[\n.()\\/?\*+,!%$#@^;:"=~{]"""), "");
+}
+
 class RecipeExplicitItemMarkdownSyntax extends md.InlineSyntax {
   final Recipe recipe;
 
   RecipeExplicitItemMarkdownSyntax(this.recipe)
       : super(
-          _pattern,
-          caseSensitive: false,
+          r"$^",
+          startCharacter: 0x40,
         );
 
-  static const String _pattern =
-      r"""@([^ \n\.\(\)\\\/\?\*\+,!%$#@^;:"=~{]+)({([^}]*)})?"""; // TODO: replace with \p{L} and unicode=true
+  static const String _pattern = r"""@([\p{L}_]+)(\{([^}]*)\})?""";
+
+  @override
+  final RegExp pattern = RegExp(
+    _pattern,
+    multiLine: true,
+    caseSensitive: false,
+    unicode: true,
+  );
 
   @override
   bool onMatch(md.InlineParser parser, Match match) {
     final name = match[1]!.replaceAll("_", " ").trim().toLowerCase();
-    if (!recipe.items
-        .map((e) => e.name.toLowerCase().replaceAll(
-            RegExp(r"""\n|\.|\(|\)|\\|\/|\?|\*|\+|,|!|%|$|#|@|^|;|:|"|=|~|{"""),
-            ""))
-        .contains(name)) {
+    final resolved = resolveRecipeItemName(
+      name,
+      recipe.items.map((e) => _normalizeItemName(e.name)),
+    );
+    if (resolved == null) {
       parser.advanceBy(1);
 
       return false;
     }
 
-    final node = md.Element.text('recipeItem', name);
+    final node = md.Element.text('recipeItem', resolved);
     if (match.group(3) != null)
       node.attributes["description"] = match.group(3)!;
     parser.addNode(node);

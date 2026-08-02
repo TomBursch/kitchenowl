@@ -1,7 +1,7 @@
 # ------------
 # BUILDER
 # ------------
-FROM python:3.14-slim AS builder
+FROM python:3.14.0-slim-bookworm AS builder
 
 RUN apt-get update \
     && apt-get install --yes --no-install-recommends \
@@ -23,7 +23,7 @@ RUN python -c "import nltk; nltk.download('averaged_perceptron_tagger_eng', down
 # ------------
 # RUNNER
 # ------------
-FROM python:3.14-slim AS runner
+FROM python:3.14.0-slim-bookworm AS runner
 
 LABEL org.opencontainers.image.source="https://github.com/TomBursch/kitchenowl"
 
@@ -48,7 +48,6 @@ VOLUME ["/data"]
 HEALTHCHECK --interval=60s --timeout=3s CMD uwsgi_curl localhost:5000 /api/health/8M4F88S8ooi4sMbLBfkkV7ctWwgibW6V || exit 1
 
 ENV STORAGE_PATH='/data'
-ENV JWT_SECRET_KEY='PLEASE_CHANGE_ME'
 ENV DEBUG='False'
 
 RUN chmod u+x ./entrypoint.sh

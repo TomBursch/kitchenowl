@@ -14,6 +14,7 @@ enum ViewsEnum {
   recipes,
   planner,
   balances,
+  agent,
   more;
 
   String toLocalizedString(BuildContext context) {
@@ -24,6 +25,7 @@ enum ViewsEnum {
       loc.recipes,
       loc.mealPlanner,
       loc.balances,
+      loc.agent,
       loc.more,
     ][index];
   }
@@ -36,6 +38,7 @@ enum ViewsEnum {
       loc.recipes,
       loc.planner,
       loc.balances,
+      loc.agentShort,
       loc.more,
     ][index];
   }
@@ -61,6 +64,7 @@ enum ViewsEnum {
       Icons.receipt_outlined,
       Icons.calendar_today_outlined,
       Icons.account_balance_outlined,
+      Icons.smart_toy_outlined,
       App.isOffline ? Icons.cloud_off_rounded : Icons.house_rounded,
     ][index];
   }
@@ -71,6 +75,7 @@ enum ViewsEnum {
       Icons.receipt_rounded,
       Icons.calendar_today_rounded,
       Icons.account_balance_rounded,
+      Icons.smart_toy_rounded,
       App.isOffline ? Icons.cloud_off_rounded : Icons.house_rounded,
     ][index];
   }
@@ -79,6 +84,7 @@ enum ViewsEnum {
     return const [
       false,
       false,
+      true,
       true,
       true,
       false,
@@ -115,6 +121,9 @@ enum ViewsEnum {
     if (this == ViewsEnum.balances) {
       return household.featureExpenses ?? true;
     }
+    if (this == ViewsEnum.agent) {
+      return household.featureAgent ?? false;
+    }
 
     return true;
   }
@@ -137,6 +146,8 @@ enum ViewsEnum {
         return ViewsEnum.planner;
       case 'balances':
         return ViewsEnum.balances;
+      case 'agent':
+        return ViewsEnum.agent;
       case 'profile':
       case 'more':
         return ViewsEnum.more;

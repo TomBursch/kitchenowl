@@ -31,6 +31,7 @@ def get_health():
         info["email_mandatory"] = True
     if DISABLE_USERNAME_PASSWORD_LOGIN:
         info["disable_username_password_login"] = True
+    info["feature_llm_agent"] = True
     return jsonify(info)
 
 

@@ -1,5 +1,6 @@
 from typing import Tuple
 from lark import Lark, Transformer, Tree, Token
+from lark.exceptions import LarkError
 from lark.visitors import Interpreter
 import re
 
@@ -70,7 +71,7 @@ def split(query: str) -> Tuple[str, str]:
     try:
         query = clean(query)
         itemTree = transformer.transform(parser.parse(query))
-    except:
+    except (LarkError, TypeError, ValueError):
         return query, ""
 
     return (itemTree.name or "").strip(), Printer().visit(itemTree)

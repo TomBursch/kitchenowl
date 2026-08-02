@@ -27,6 +27,15 @@ api.household.register_blueprint(
     api.shoppinglistHousehold, url_prefix="/<int:household_id>/shoppinglist"
 )
 api.household.register_blueprint(api.tagHousehold, url_prefix="/<int:household_id>/tag")
+api.household.register_blueprint(
+    api.agentConfigHousehold, url_prefix="/<int:household_id>/agent"
+)
+api.household.register_blueprint(
+    api.agentChatHousehold, url_prefix="/<int:household_id>/agent"
+)
+api.household.register_blueprint(
+    api.agentPersonaHousehold, url_prefix="/<int:household_id>/agent"
+)
 
 apiv1.register_blueprint(
     api.health, url_prefix="/health/8M4F88S8ooi4sMbLBfkkV7ctWwgibW6V"

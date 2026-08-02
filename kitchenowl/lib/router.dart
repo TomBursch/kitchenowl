@@ -16,6 +16,7 @@ import 'package:kitchenowl/pages/expense_page.dart';
 import 'package:kitchenowl/pages/household_page/_export.dart';
 import 'package:kitchenowl/pages/household_list_page.dart';
 import 'package:kitchenowl/pages/household_about_page.dart';
+import 'package:kitchenowl/pages/agent_chat_page.dart';
 import 'package:kitchenowl/pages/login_page.dart';
 import 'package:kitchenowl/pages/login_redirect_page.dart';
 import 'package:kitchenowl/pages/onboarding_page.dart';
@@ -379,6 +380,39 @@ final router = GoRouter(
                               paidById: 0,
                             ),
                   ),
+                ),
+              ],
+            ),
+            GoRoute(
+              path: "agent",
+              pageBuilder: (context, state) => FadeThroughTransitionPage(
+                key: state.pageKey,
+                name: state.name,
+                child: const AgentChatListPage(),
+              ),
+              routes: [
+                GoRoute(
+                  path: ':chatId',
+                  builder: (context, state) {
+                    final chatId =
+                        int.tryParse(state.pathParameters['chatId'] ?? '') ?? 0;
+                    return AgentChatPage(
+                      // Force a fresh State (and thus a fresh
+                      // ``AgentChatCubit``) when navigating between two
+                      // chats via the same route. Without this key Flutter
+                      // would reuse the previous page's State and leak
+                      // attached recipes / files into the next chat.
+                      key: ValueKey('agent-chat-$chatId'),
+                      household: ((state.extra is Household?)
+                              ? (state.extra as Household?)
+                              : null) ??
+                          Household(
+                            id: int.tryParse(state.pathParameters['id'] ?? '') ??
+                                -1,
+                          ),
+                      chatId: chatId,
+                    );
+                  },
                 ),
               ],
             ),

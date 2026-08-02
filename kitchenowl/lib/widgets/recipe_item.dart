@@ -10,6 +10,7 @@ import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/models/recipe.dart';
 import 'package:kitchenowl/pages/recipe_page.dart';
+import 'package:kitchenowl/widgets/open_container_navigator.dart';
 import 'package:tuple/tuple.dart';
 
 class RecipeItemWidget extends StatelessWidget {
@@ -66,9 +67,12 @@ class RecipeItemWidget extends StatelessWidget {
       ) =>
           BlocProvider.value(
         value: BlocProvider.of<HouseholdCubit>(context),
-        child: RecipePage(
-          household: BlocProvider.of<HouseholdCubit>(context).state.household,
-          recipe: recipe,
+        child: OpenContainerNavigator<UpdateEnum>(
+          closeContainer: toggle,
+          child: RecipePage(
+            household: BlocProvider.of<HouseholdCubit>(context).state.household,
+            recipe: recipe,
+          ),
         ),
       ),
     );

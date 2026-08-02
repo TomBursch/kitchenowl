@@ -27,7 +27,7 @@ services:
     networks:
       - default
     environment:
-      JWT_SECRET_KEY: PLEASE_CHANGE_ME
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY:?JWT_SECRET_KEY must be set}
       DB_DRIVER: postgresql
       DB_HOST: db
       DB_NAME: kitchenowl

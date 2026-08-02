@@ -15,7 +15,7 @@ services:
     restart: unless-stopped
     command: --ini wsgi.ini:celery --gevent 100
     environment:
-      - JWT_SECRET_KEY=PLEASE_CHANGE_ME
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY:?JWT_SECRET_KEY must be set}
       - MESSAGE_BROKER="amqp://rabbitmq"
     volumes:
       - kitchenowl_data:/data

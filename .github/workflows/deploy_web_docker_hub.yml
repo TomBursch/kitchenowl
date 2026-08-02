@@ -4,12 +4,12 @@ name: CI deploy web to Docker Hub
 on:
   # Triggers the workflow on push events of tags
   push:
-    branches: [ main ]
-    paths:
-      - kitchenowl/**
     tags:
       - "v*"
       - "beta-v*"
+    # branches: [ main ]
+    # paths:
+    #   - kitchenowl/**
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:

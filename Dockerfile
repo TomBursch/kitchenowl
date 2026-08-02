@@ -1,7 +1,7 @@
 # ------------
 # WEB BUILDER
 # ------------
-FROM --platform=$BUILDPLATFORM debian:latest AS app_builder
+FROM --platform=$BUILDPLATFORM debian:bookworm AS app_builder
 
 # Install dependencies
 RUN apt-get update -y
@@ -22,7 +22,7 @@ RUN apt-get install -y --no-install-recommends \
 RUN apt-get clean
 
 # Clone the flutter repo
-RUN git clone https://github.com/flutter/flutter.git -b stable /usr/local/src/flutter
+RUN git clone --depth 1 https://github.com/flutter/flutter.git -b 3.44.8 /usr/local/src/flutter
 
 # Set flutter path
 ENV PATH="${PATH}:/usr/local/src/flutter/bin"
@@ -30,8 +30,6 @@ ENV PATH="${PATH}:/usr/local/src/flutter/bin"
 # Enable flutter web
 RUN flutter config --enable-web
 RUN flutter config --no-analytics
-RUN flutter upgrade
-
 # Run flutter doctor
 RUN flutter doctor -v
 
@@ -54,7 +52,7 @@ RUN flutter build web --release --no-web-resources-cdn
 # ------------
 # BACKEND BUILDER
 # ------------
-FROM python:3.14-slim AS backend_builder
+FROM python:3.14.0-slim-bookworm AS backend_builder
 
 RUN apt-get update \
     && apt-get install --yes --no-install-recommends \
@@ -76,7 +74,7 @@ RUN python -c "import nltk; nltk.download('averaged_perceptron_tagger_eng', down
 # ------------
 # RUNNER
 # ------------
-FROM python:3.14-slim AS runner
+FROM python:3.14.0-slim-bookworm AS runner
 
 LABEL org.opencontainers.image.source="https://github.com/TomBursch/kitchenowl"
 

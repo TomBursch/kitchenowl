@@ -21,6 +21,7 @@ class HouseholdUpdateCubit
           image: household.image,
           featureExpenses: household.featureExpenses ?? true,
           featurePlanner: household.featurePlanner ?? true,
+          featureAgent: household.featureAgent ?? false,
           viewOrdering: household.viewOrdering ?? ViewsEnum.values,
           language: household.language,
           description: household.description ?? "",
@@ -69,6 +70,7 @@ class HouseholdUpdateCubit
       name: household.name,
       featureExpenses: household.featureExpenses ?? true,
       featurePlanner: household.featurePlanner ?? true,
+      featureAgent: household.featureAgent ?? false,
       viewOrdering: household.viewOrdering ?? ViewsEnum.values,
       language: household.language,
       image: household.image,
@@ -118,6 +120,10 @@ class HouseholdUpdateCubit
       emit(state.copyWith(featureExpenses: value));
       saveHousehold();
     }
+    if (view == ViewsEnum.agent) {
+      emit(state.copyWith(featureAgent: value));
+      saveHousehold();
+    }
   }
 
   @override
@@ -141,6 +147,7 @@ class HouseholdUpdateCubit
       language: state.language,
       featureExpenses: state.featureExpenses,
       featurePlanner: state.featurePlanner,
+      featureAgent: state.featureAgent,
       viewOrdering: state.viewOrdering,
       link: state.link,
       description: state.description,
@@ -324,6 +331,7 @@ class HouseholdUpdateState extends HouseholdAddUpdateState {
     super.language,
     super.featurePlanner = true,
     super.featureExpenses = true,
+    super.featureAgent = false,
     super.viewOrdering = ViewsEnum.values,
     super.supportedLanguages,
     this.shoppingLists = const [],
@@ -338,6 +346,7 @@ class HouseholdUpdateState extends HouseholdAddUpdateState {
     String? language,
     bool? featurePlanner,
     bool? featureExpenses,
+    bool? featureAgent,
     List<ViewsEnum>? viewOrdering,
     Map<String, String>? supportedLanguages,
     List<Member>? member,
@@ -354,6 +363,7 @@ class HouseholdUpdateState extends HouseholdAddUpdateState {
         language: language ?? this.language,
         featurePlanner: featurePlanner ?? this.featurePlanner,
         featureExpenses: featureExpenses ?? this.featureExpenses,
+        featureAgent: featureAgent ?? this.featureAgent,
         viewOrdering: viewOrdering ?? this.viewOrdering,
         supportedLanguages: supportedLanguages ?? this.supportedLanguages,
         shoppingLists: shoppingLists ?? this.shoppingLists,
@@ -384,6 +394,7 @@ class LoadingHouseholdUpdateState extends HouseholdUpdateState {
     super.image,
     super.featureExpenses,
     super.featurePlanner,
+    super.featureAgent,
     super.viewOrdering,
     super.language,
     super.supportedLanguages,
@@ -398,6 +409,7 @@ class LoadingHouseholdUpdateState extends HouseholdUpdateState {
     String? language,
     bool? featurePlanner,
     bool? featureExpenses,
+    bool? featureAgent,
     List<ViewsEnum>? viewOrdering,
     Map<String, String>? supportedLanguages,
     List<Member>? member,
@@ -414,6 +426,7 @@ class LoadingHouseholdUpdateState extends HouseholdUpdateState {
         language: language ?? this.language,
         featurePlanner: featurePlanner ?? this.featurePlanner,
         featureExpenses: featureExpenses ?? this.featureExpenses,
+        featureAgent: featureAgent ?? this.featureAgent,
         viewOrdering: viewOrdering ?? this.viewOrdering,
         supportedLanguages: supportedLanguages ?? this.supportedLanguages,
         link: link ?? this.link,

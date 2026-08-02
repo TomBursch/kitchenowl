@@ -7,10 +7,10 @@ on:
         description: "Fastlane lane to use"
         required: true
         default: "internal"
-  push:
-    tags:
-      - "v*"
-      - "beta-v*"
+#   push:
+#     tags:
+#       - "v*"
+#       - "beta-v*"
 
 jobs:
   fastlane-deploy:
@@ -20,7 +20,7 @@ jobs:
       - name: Clone Flutter repository with stable channel
         uses: subosito/flutter-action@v2
         with:
-          channel: stable
+          flutter-version: 3.44.8
       - run: flutter doctor -v
 
       # Checkout gallery code and get packages.

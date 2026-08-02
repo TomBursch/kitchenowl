@@ -40,6 +40,9 @@ class HouseholdAddCubit extends HouseholdAddUpdateCubit<HouseholdAddState> {
     if (view == ViewsEnum.balances) {
       emit(state.copyWith(featureExpenses: value));
     }
+    if (view == ViewsEnum.agent) {
+      emit(state.copyWith(featureAgent: value));
+    }
   }
 
   @override
@@ -86,6 +89,7 @@ class HouseholdAddCubit extends HouseholdAddUpdateCubit<HouseholdAddState> {
       language: _state.language,
       featurePlanner: _state.featurePlanner,
       featureExpenses: _state.featureExpenses,
+      featureAgent: _state.featureAgent,
       viewOrdering: _state.viewOrdering,
       member: _state.members,
     ));
@@ -109,6 +113,7 @@ class HouseholdAddState extends HouseholdAddUpdateState {
     super.language,
     super.featurePlanner = true,
     super.featureExpenses = true,
+    super.featureAgent = false,
     super.viewOrdering = ViewsEnum.values,
     super.supportedLanguages,
     this.members = const [],
@@ -120,6 +125,7 @@ class HouseholdAddState extends HouseholdAddUpdateState {
     Nullable<String>? language,
     bool? featurePlanner,
     bool? featureExpenses,
+    bool? featureAgent,
     List<ViewsEnum>? viewOrdering,
     Map<String, String>? supportedLanguages,
     List<Member>? members,
@@ -130,6 +136,7 @@ class HouseholdAddState extends HouseholdAddUpdateState {
         language: (language ?? Nullable(this.language)).value,
         featurePlanner: featurePlanner ?? this.featurePlanner,
         featureExpenses: featureExpenses ?? this.featureExpenses,
+        featureAgent: featureAgent ?? this.featureAgent,
         viewOrdering: viewOrdering ?? this.viewOrdering,
         supportedLanguages: supportedLanguages ?? this.supportedLanguages,
         members: members ?? this.members,

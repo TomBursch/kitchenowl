@@ -1,36 +1,38 @@
+import os
 from datetime import timedelta
 from typing import cast
-from celery import Celery, Task
-from flask_socketio import SocketIO
-from sqlalchemy.engine import URL
-from sqlalchemy.event import listen
+
+import sqlite_icu
 from apispec import APISpec
 from apispec.ext.marshmallow import MarshmallowPlugin
 from apispec_webframeworks.flask import FlaskPlugin
-from prometheus_client import multiprocess
-from prometheus_client.core import CollectorRegistry
-from prometheus_flask_exporter import PrometheusMetrics
-from werkzeug.exceptions import MethodNotAllowed
-from app.errors import (
-    NotFoundRequest,
-    UnauthorizedRequest,
-    ForbiddenRequest,
-    InvalidUsage,
-)
-from app.util import KitchenOwlJSONProvider
-from app.helpers.db_model_base import DbModelBase
+from celery import Celery, Task
+from flask import Flask, jsonify, request
+from flask_apscheduler import APScheduler
+from flask_basicauth import BasicAuth
+from flask_bcrypt import Bcrypt
+from flask_jwt_extended import JWTManager
+from flask_migrate import Migrate
+from flask_socketio import SocketIO
+from flask_sqlalchemy import SQLAlchemy
 from oic.oic import Client
 from oic.oic.message import RegistrationResponse
 from oic.utils.authn.client import CLIENT_AUTHN_METHOD
-from flask import Flask, jsonify, request
-from flask_basicauth import BasicAuth
-from flask_migrate import Migrate
-from flask_sqlalchemy import SQLAlchemy
-from flask_bcrypt import Bcrypt
-from flask_jwt_extended import JWTManager
-from flask_apscheduler import APScheduler
-import sqlite_icu
-import os
+from prometheus_client import multiprocess
+from prometheus_client.core import CollectorRegistry
+from prometheus_flask_exporter import PrometheusMetrics
+from sqlalchemy.engine import URL
+from sqlalchemy.event import listen
+from werkzeug.exceptions import MethodNotAllowed
+
+from app.errors import (
+    ForbiddenRequest,
+    InvalidUsage,
+    NotFoundRequest,
+    UnauthorizedRequest,
+)
+from app.helpers.db_model_base import DbModelBase
+from app.util import KitchenOwlJSONProvider
 
 
 def get_secret(env_var: str, default: str = None) -> str | None:
@@ -38,11 +40,24 @@ def get_secret(env_var: str, default: str = None) -> str | None:
     file_path = os.getenv(f"{env_var}_FILE")
     if file_path:
         try:
-            with open(file_path, "r", encoding="utf-8") as f:
+            with open(file_path, encoding="utf-8") as f:
                 return f.read().strip()
         except Exception as e:
             raise RuntimeError(f"Failed to read {env_var}_FILE: {e}")
     return os.getenv(env_var, default)
+
+
+def _validate_jwt_secret(secret: str | None, allow_insecure: bool) -> str:
+    if not secret:
+        raise RuntimeError("JWT_SECRET_KEY must be set")
+    known_defaults = {"super-secret", "please_change_me", "please-change-me"}
+    if not allow_insecure and (
+        secret.lower() in known_defaults or len(secret.encode("utf-8")) < 32
+    ):
+        raise RuntimeError(
+            "JWT_SECRET_KEY must be at least 32 bytes and must not use a known default"
+        )
+    return secret
 
 
 MIN_FRONTEND_VERSION = 71
@@ -54,6 +69,8 @@ PROJECT_DIR = os.path.dirname(APP_DIR)
 STORAGE_PATH = os.getenv("STORAGE_PATH", PROJECT_DIR)
 UPLOAD_FOLDER = STORAGE_PATH + "/upload"
 ALLOWED_FILE_EXTENSIONS = {"txt", "pdf", "png", "jpg", "jpeg", "gif", "webp", "jxl"}
+AGENT_MAX_FILES_PER_MESSAGE = int(os.getenv("AGENT_MAX_FILES_PER_MESSAGE", "10"))
+AGENT_MAX_FILE_SIZE = int(os.getenv("AGENT_MAX_FILE_SIZE", str(20 * 1000 * 1000)))
 
 FRONT_URL = os.getenv("FRONT_URL")
 
@@ -151,7 +168,13 @@ Flask.json_provider_class = KitchenOwlJSONProvider
 
 app = Flask(__name__)
 
-jwt_secret = get_secret("JWT_SECRET_KEY", "super-secret")
+_allow_insecure_secrets = (
+    os.getenv("DEBUG", "False").lower() == "true"
+    or os.getenv("ALLOW_INSECURE_SECRETS", "False").lower() == "true"
+)
+jwt_secret = _validate_jwt_secret(
+    get_secret("JWT_SECRET_KEY", "super-secret"), _allow_insecure_secrets
+)
 
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 app.config["MAX_CONTENT_LENGTH"] = 32 * 1000 * 1000  # 32MB max upload

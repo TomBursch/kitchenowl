@@ -4,14 +4,14 @@
 name: Pytesting
 
 on:
-  push:
-    branches: [ main ]
-    paths:
-      - backend/**
   pull_request:
     branches: [ main ]
     paths:
       - backend/**
+  # push:
+  #   branches: [ main ]
+  #   paths:
+  #     - backend/**
 
 jobs:
   build:
@@ -24,6 +24,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Install uv
         uses: astral-sh/setup-uv@v5
@@ -33,8 +35,17 @@ jobs:
       - name: Install the project
         run: uv sync --all-extras --dev
         
-      #- name: Lint with Ruff
-      #  run: uv run ruff check
+      - name: Lint changed Python files with Ruff
+        shell: bash
+        run: |
+          files=$(git diff --name-only --diff-filter=ACMR "origin/${{ github.base_ref }}...HEAD" -- '*.py' | sed 's#^backend/##')
+          if [ -n "$files" ]; then
+            uv run ruff check --select E,F,SIM --ignore E501,F403 $files
+          fi
+
+      - name: Report Pyright baseline
+        continue-on-error: true
+        run: uv run pyright
 
       - name: Run tests
         # For example, using `pytest`

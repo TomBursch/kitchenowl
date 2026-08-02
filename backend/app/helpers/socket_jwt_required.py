@@ -1,5 +1,7 @@
 from functools import wraps
+
 from flask_jwt_extended import verify_jwt_in_request
+from flask_jwt_extended.exceptions import JWTExtendedException
 from flask_socketio import disconnect
 
 
@@ -13,7 +15,7 @@ def socket_jwt_required(
         def decorator(*args, **kwargs):
             try:
                 verify_jwt_in_request(optional, fresh, refresh)
-            except:
+            except JWTExtendedException:
                 disconnect()
                 return
             return fn(*args, **kwargs)

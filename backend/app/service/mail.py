@@ -1,3 +1,4 @@
+import logging
 import smtplib
 import ssl
 import os
@@ -6,6 +7,8 @@ from email.mime.multipart import MIMEMultipart
 from email.utils import formatdate
 from app.config import app, get_secret, FRONT_URL
 from app.models import User
+
+_logger = logging.getLogger(__name__)
 
 SMTP_HOST = os.getenv("SMTP_HOST")
 SMTP_PORT = int(os.getenv("SMTP_PORT", 465))
@@ -39,8 +42,8 @@ def mailConfigured():
         with _getMailServer() as server:
             server.login(SMTP_USER, SMTP_PASS)
         mail_configured = True
-    except Exception as e:
-        print(e)
+    except (OSError, smtplib.SMTPException, ssl.SSLError):
+        _logger.warning("SMTP configuration check failed", exc_info=True)
         mail_configured = False
     return mail_configured
 

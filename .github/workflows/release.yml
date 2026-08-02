@@ -1,223 +1,198 @@
-name: Draft Github Release
+name: Create Release
+
 on:
   workflow_dispatch:
-    # Enable manual run
-  push:
-    tags:
-      - "v*"
-      - "beta-v*"
+    inputs:
+      branch:
+        description: "Branch to release from"
+        required: true
+        default: "main"
+        type: string
+      release_kind:
+        description: "Release kind"
+        required: true
+        default: "bugfix"
+        type: choice
+        options:
+          - bugfix
+          - feature
+          - major
+      release_channel:
+        description: "Release channel"
+        required: true
+        default: "stable"
+        type: choice
+        options:
+          - stable
+          - beta
+
+permissions:
+  contents: write
+  pull-requests: read
+
+concurrency:
+  group: release-${{ inputs.branch }}-${{ inputs.release_channel }}
+  cancel-in-progress: false
 
 jobs:
-  draft-release:
-    name: Draft Github release
+  create-release:
+    name: Bump version, tag, and publish release
     runs-on: ubuntu-latest
-    outputs:
-      upload_url: ${{ steps.create_release.outputs.upload_url }}
+
     steps:
-      - name: Checkout code
+      - name: Checkout branch
         uses: actions/checkout@v4
-      - name: Get latest published release tag
-        id: get_latest_release
-        uses: pozetroninc/github-action-get-latest-release@master
         with:
-          repository: ${{ github.repository }}
-          excludes: prerelease, draft
-      - name: Build changelog
-        id: github_release
+          ref: ${{ inputs.branch }}
+          fetch-depth: 0
+          token: ${{ secrets.RELEASE_TOKEN }}
+
+      - name: Fail if release token is missing
+        env:
+          RELEASE_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+        run: |
+          if [[ -z "$RELEASE_TOKEN" ]]; then
+            echo "Missing RELEASE_TOKEN secret" >&2
+            exit 1
+          fi
+
+      - name: Parse and bump version
+        id: version
+        shell: bash
+        run: |
+          raw_version="$(sed -n 's/^version:[[:space:]]*//p' kitchenowl/pubspec.yaml | head -n1)"
+          raw_version="${raw_version%$'\r'}"
+
+          version_name_part="${raw_version%%+*}"
+          build_part="${raw_version#*+}"
+
+          if [[ -z "$version_name_part" || "$build_part" == "$raw_version" ]]; then
+            echo "Unsupported pubspec version format: $raw_version" >&2
+            exit 1
+          fi
+
+          IFS='.' read -r major minor patch <<< "$version_name_part"
+          build="$build_part"
+
+          for part_name in major minor patch build; do
+            part_value="${!part_name}"
+            if [[ -z "$part_value" || ! "$part_value" =~ ^[0-9]+$ ]]; then
+              echo "Unsupported pubspec version format: $raw_version" >&2
+              exit 1
+            fi
+          done
+
+          case "${{ inputs.release_kind }}" in
+            major)
+              major=$((major + 1))
+              minor=0
+              patch=0
+              ;;
+            feature)
+              minor=$((minor + 1))
+              patch=0
+              ;;
+            bugfix)
+              patch=$((patch + 1))
+              ;;
+            *)
+              echo "Unsupported release kind: ${{ inputs.release_kind }}" >&2
+              exit 1
+              ;;
+          esac
+
+          build=$((build + 1))
+          version_name="${major}.${minor}.${patch}"
+          pubspec_version="${version_name}+${build}"
+
+          if [[ "${{ inputs.release_channel }}" == "beta" ]]; then
+            tag_name="beta-v${version_name}"
+            prerelease="true"
+          else
+            tag_name="v${version_name}"
+            prerelease="false"
+          fi
+
+          if git rev-parse -q --verify "refs/tags/${tag_name}" >/dev/null; then
+            echo "Tag already exists: ${tag_name}" >&2
+            exit 1
+          fi
+
+          echo "version_name=${version_name}" >> "$GITHUB_OUTPUT"
+          echo "pubspec_version=${pubspec_version}" >> "$GITHUB_OUTPUT"
+          echo "tag_name=${tag_name}" >> "$GITHUB_OUTPUT"
+          echo "prerelease=${prerelease}" >> "$GITHUB_OUTPUT"
+
+      - name: Update pubspec.yaml
+        shell: bash
+        run: |
+          sed -i "s/^version: .*/version: ${{ steps.version.outputs.pubspec_version }}/" kitchenowl/pubspec.yaml
+
+      - name: Commit and push version bump
+        id: version_bump
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add kitchenowl/pubspec.yaml
+          git commit -m "chore: bump version to ${{ steps.version.outputs.version_name }}"
+          git push origin "HEAD:${{ inputs.branch }}"
+          echo "head_sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
+      - name: Determine changelog range
+        id: changelog_range
+        shell: bash
+        run: |
+          if [[ "${{ inputs.release_channel }}" == "beta" ]]; then
+            previous_tag="$(git for-each-ref --sort=-creatordate --format='%(refname:short)' refs/tags/v* refs/tags/beta-v* | head -n1)"
+          else
+            previous_tag="$(git for-each-ref --sort=-creatordate --format='%(refname:short)' refs/tags/v* | head -n1)"
+          fi
+
+          if [[ -n "$previous_tag" ]]; then
+            echo "has_previous_tag=true" >> "$GITHUB_OUTPUT"
+            echo "from_tag=$previous_tag" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_previous_tag=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Build changelog from previous tag
+        if: steps.changelog_range.outputs.has_previous_tag == 'true'
+        id: generated_changelog
         uses: mikepenz/release-changelog-builder-action@v4
         with:
           configuration: "changelog_configuration.json"
-          fromTag: ${{ steps.get_latest_release.outputs.release }}
+          fromTag: ${{ steps.changelog_range.outputs.from_tag }}
+          toTag: ${{ steps.version_bump.outputs.head_sha }}
           token: ${{ secrets.GITHUB_TOKEN }}
-      - name: Draft release with changelog
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build initial release notes
+        if: steps.changelog_range.outputs.has_previous_tag != 'true'
+        id: generated_initial_notes
+        shell: bash
+        run: |
+          {
+            echo "changelog<<EOF"
+            echo "## Initial Release"
+            echo
+            git log --reverse --pretty=format:'- %s (%h)' HEAD
+            echo
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Create and push tag
+        shell: bash
+        run: |
+          git tag "${{ steps.version.outputs.tag_name }}"
+          git push origin "${{ steps.version.outputs.tag_name }}"
+
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ github.ref }}
-          release_name: KitchenOwl ${{ github.ref_name }}
-          body: ${{steps.github_release.outputs.changelog}}
-          draft: true
-          prerelease: ${{ startsWith(github.ref_name,'beta-v') }}
-
-  create-build:
-    name: Create ${{ matrix.target }} build
-    runs-on: ${{ matrix.os }}
-    container: ${{ matrix.container }}
-    strategy:
-      matrix:
-        target: [macOS, Windows, Linux, Android, Debian, Fedora, Web]
-        include:
-          - os: macos-latest
-            target: macOS
-            build_target: macos
-            build_path: kitchenowl/build/macos/Build/Products/Release
-            asset_extension: .zip
-            asset_content_type: application/zip
-          - os: windows-latest
-            target: Windows
-            build_target: windows
-            build_path: kitchenowl\build\windows\x64\runner\Release
-            asset_extension: .zip
-            asset_content_type: application/zip
-          - os: ubuntu-latest
-            target: Linux
-            build_target: linux
-            build_path: kitchenowl/build/linux/x64/release/bundle
-            asset_extension: .tar.gz
-            asset_content_type: application/gzip
-          - os: ubuntu-latest
-            target: Android
-            build_target: apk
-            build_path: kitchenowl/build/app/outputs/flutter-apk
-            asset_extension: .apk
-            asset_content_type: application/vnd.android.package-archive
-          - os: ubuntu-latest
-            target: Debian
-            build_target: linux
-            build_path: kitchenowl/build/debian/release
-            asset_extension: .deb
-            asset_content_type: application/vnd.debian.binary-package
-          - os: ubuntu-latest
-            container:
-              image: fedora:41
-              options: --group-add 135
-            target: Fedora
-            build_target: linux
-            build_path: kitchenowl/build/fedora/release
-            asset_extension: .rpm
-            asset_content_type: application/x-rpm
-          - os: ubuntu-latest
-            target: Web
-            build_target: web --no-web-resources-cdn
-            build_path: kitchenowl/build/web
-            asset_extension: .tar.gz
-            asset_content_type: application/gzip
-      # Disable fail-fast as we want results from all even if one fails.
-      fail-fast: false
-    needs: draft-release
-    steps:
-      - name: Install Linux dependencies
-        if: matrix.target == 'Linux' || matrix.target == 'Debian' || matrix.target == 'Web'
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libgtk-3-dev libx11-dev pkg-config cmake ninja-build libblkid-dev libsecret-1-dev
-      - name: Install Fedora dependencies
-        if: matrix.target == 'Fedora'
-        run: |
-          sudo dnf update -y
-          sudo dnf install -y gcc gcc-c++ clang gtk3-devel libX11-devel pkg-config cmake ninja-build libblkid-devel libsecret-devel fedora-packager fedora-review shyaml which
-      - name: Install Android dependencies
-        if: matrix.target == 'Android'
-        uses: actions/setup-java@v3
-        with:
-          distribution: 'zulu'
-          java-version: '17'
-      - name: Install Debian dependencies
-        if: matrix.target == 'Debian'
-        run: |
-          sudo apt-get install -y python3
-          pip3 install shyaml
-
-
-      # Set up Flutter.
-      - name: Clone Flutter repository with stable channel
-        if: matrix.target != 'Fedora'
-        uses: subosito/flutter-action@v2
-        with:
-          channel: stable
-      - name: Clone Flutter repository with stable channel Fedora
-        if: matrix.target == 'Fedora'
-        run: |
-          git clone https://github.com/flutter/flutter.git -b stable
-          echo "/usr/local/src/flutter/bin" >> $GITHUB_PATH
-          export PATH="$PATH:/usr/local/src/flutter/bin"
-        working-directory: /usr/local/src
-
-
-      - name: Enable desktop support
-        if: matrix.target != 'Android'
-        run: |
-          flutter config --enable-linux-desktop
-          flutter config --enable-macos-desktop
-          flutter config --enable-windows-desktop
-      - run: flutter config --no-analytics
-      - run: flutter doctor -v
-      # Checkout code get packages.
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - run: flutter packages get
-        working-directory: kitchenowl
-
-      - name: Configure Keystore for Android
-        if: matrix.target == 'Android'
-        run: |
-          echo "$PLAY_STORE_UPLOAD_KEY" | base64 --decode > app/upload-keystore.jks
-          echo "storeFile=upload-keystore.jks" >> key.properties
-          echo "keyAlias=$KEYSTORE_KEY_ALIAS" >> key.properties
-          echo "storePassword=$KEYSTORE_STORE_PASSWORD" >> key.properties
-          echo "keyPassword=$KEYSTORE_KEY_PASSWORD" >> key.properties
-        env:
-          PLAY_STORE_UPLOAD_KEY: ${{ secrets.PLAY_STORE_UPLOAD_KEY }}
-          KEYSTORE_KEY_ALIAS: ${{ secrets.KEYSTORE_KEY_ALIAS }}
-          KEYSTORE_KEY_PASSWORD: ${{ secrets.KEYSTORE_KEY_PASSWORD }}
-          KEYSTORE_STORE_PASSWORD: ${{ secrets.KEYSTORE_STORE_PASSWORD }}
-        working-directory: kitchenowl/android
-
-      # Build the application.
-      - run: flutter build -v ${{ matrix.build_target }} --release
-        working-directory: kitchenowl
-
-      # Package the build.
-      - name: Copy VC redistributables to release directory for Windows
-        if: matrix.target == 'Windows'
-        run: |
-          Copy-Item (vswhere -latest -find 'VC\Redist\MSVC\*\x64\*\msvcp140.dll') .
-          Copy-Item (vswhere -latest -find 'VC\Redist\MSVC\*\x64\*\vcruntime140.dll') .
-          Copy-Item (vswhere -latest -find 'VC\Redist\MSVC\*\x64\*\vcruntime140_1.dll') .
-        working-directory: kitchenowl
-      - name: Rename build for Android
-        if: matrix.target == 'Android'
-        run: mv app-release.apk $GITHUB_WORKSPACE/kitchenowl_${{ matrix.target }}.apk
-        working-directory: ${{ matrix.build_path }}
-      - name: Compress build for Linux and Web
-        if: matrix.target == 'Linux' || matrix.target == 'Web'
-        run: tar czf $GITHUB_WORKSPACE/kitchenowl_${{ matrix.target }}.tar.gz *
-        working-directory: ${{ matrix.build_path }}
-      - name: Compress build for macOS
-        if: matrix.target == 'macOS'
-        run: ditto -c -k --sequesterRsrc --keepParent kitchenowl.app $GITHUB_WORKSPACE/kitchenowl_${{ matrix.target }}.zip
-        working-directory: ${{ matrix.build_path }}
-      - name: Compress build for Windows
-        if: matrix.target == 'Windows'
-        run: compress-archive -Path * -DestinationPath ${env:GITHUB_WORKSPACE}\kitchenowl_${{ matrix.target }}.zip
-        working-directory: ${{ matrix.build_path }}
-      - name: Package build for debian
-        if: matrix.target == 'Debian'
-        run: ./build.sh
-        working-directory: kitchenowl/debian
-      - name: Rename build for debian
-        if: matrix.target == 'Debian'
-        run: mv kitchenowl.deb $GITHUB_WORKSPACE/kitchenowl_${{ matrix.target }}.deb
-        working-directory: ${{ matrix.build_path }}
-      - name: Package build for Fedora
-        if: matrix.target == 'Fedora'
-        run: ./build.sh
-        working-directory: kitchenowl/fedora
-      - name: Rename build for fedora
-        if: matrix.target == 'Fedora'
-        run: mv KitchenOwl.x86_64.rpm $GITHUB_WORKSPACE/kitchenowl_${{ matrix.target }}.rpm
-        working-directory: ${{ matrix.build_path }}
-
-      # Upload the build.
-      - name: Add packaged build to release draft
-        id: upload_release_asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ needs.draft-release.outputs.upload_url }}
-          asset_path: ./kitchenowl_${{ matrix.target }}${{ matrix.asset_extension }}
-          asset_name: kitchenowl_${{ matrix.target }}${{ matrix.asset_extension }}
-          asset_content_type: ${{ matrix.asset_content_type }}
+          tag_name: ${{ steps.version.outputs.tag_name }}
+          target_commitish: ${{ inputs.branch }}
+          name: KitchenOwl ${{ steps.version.outputs.tag_name }}
+          body: ${{ steps.generated_changelog.outputs.changelog || steps.generated_initial_notes.outputs.changelog }}
+          draft: false
+          prerelease: ${{ steps.version.outputs.prerelease == 'true' }}
+          token: ${{ secrets.RELEASE_TOKEN }}

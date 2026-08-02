@@ -1,8 +1,9 @@
 name: Release Docs
 on:
-  push:
-    tags:
-      - "v*"
+  workflow_dispatch:
+  # push:
+  #   tags:
+  #     - "v*"
 
 jobs:
   build:

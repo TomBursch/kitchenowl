@@ -26,7 +26,7 @@ def test_mcp_scrape_recipe_tool_success(user_client_with_household, household_id
         'items': [],
     }
 
-    with patch('app.controller.mcp_controller.scrape', return_value=scraped) as mocked:
+    with patch('app.service.agent_tools.scrape', return_value=scraped) as mocked:
         res = _rpc(
             user_client_with_household,
             'tools/call',
@@ -49,7 +49,7 @@ def test_mcp_scrape_recipe_tool_success(user_client_with_household, household_id
 
 
 def test_mcp_scrape_recipe_tool_unsupported(user_client_with_household, household_id):
-    with patch('app.controller.mcp_controller.scrape', return_value=None):
+    with patch('app.service.agent_tools.scrape', return_value=None):
         res = _rpc(
             user_client_with_household,
             'tools/call',

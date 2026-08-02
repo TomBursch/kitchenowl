@@ -21,6 +21,7 @@ export 'tag.dart';
 export 'upload.dart';
 export 'category.dart';
 export 'household.dart';
+export 'agent.dart';
 
 enum Connection {
   disconnected,
@@ -262,6 +263,22 @@ class ApiService {
         ),
       );
 
+  Future<http.Response> patch(
+    String url,
+    dynamic body, {
+    Encoding? encoding,
+    Duration? timeout,
+  }) =>
+      _handleRequest(
+        timeout: timeout,
+        () => _client.patch(
+          Uri.parse(baseUrl + url),
+          body: body,
+          headers: headers,
+          encoding: encoding,
+        ),
+      );
+
   Future<http.Response> delete(
     String url, {
     dynamic body,
@@ -284,6 +301,19 @@ class ApiService {
     bool refreshOnException = true,
     Duration? timeout,
   }) async {
+    // If a token refresh / reconnect is in flight, wait for it to settle
+    // before issuing the request. This avoids a thundering herd of
+    // requests that all hit the server with a stale access token during
+    // an app-lifecycle resume (which would otherwise log a wave of 401s
+    // in the browser console and trigger redundant reconnect cycles).
+    if (refreshOnException && _refreshThread != null) {
+      try {
+        await _refreshThread;
+      } catch (_) {
+        // ignore — the refresh result is checked via isConnected/401 below
+      }
+    }
+
     try {
       http.Response response = await request().timeout(timeout ?? _TIMEOUT);
 

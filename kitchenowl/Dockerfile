@@ -1,7 +1,7 @@
 # ------------
 # BUILDER
 # ------------
-FROM --platform=$BUILDPLATFORM debian:latest AS builder
+FROM --platform=$BUILDPLATFORM debian:bookworm AS builder
 
 # Install dependencies
 RUN apt-get update -y
@@ -22,7 +22,7 @@ RUN apt-get install -y --no-install-recommends \
 RUN apt-get clean
 
 # Clone the flutter repo
-RUN git clone https://github.com/flutter/flutter.git -b stable /usr/local/src/flutter
+RUN git clone --depth 1 https://github.com/flutter/flutter.git -b 3.44.8 /usr/local/src/flutter
 
 # Set flutter path
 ENV PATH="${PATH}:/usr/local/src/flutter/bin"
@@ -30,8 +30,6 @@ ENV PATH="${PATH}:/usr/local/src/flutter/bin"
 # Enable flutter web
 RUN flutter config --enable-web
 RUN flutter config --no-analytics
-RUN flutter upgrade
-
 # Run flutter doctor
 RUN flutter doctor -v
 

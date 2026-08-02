@@ -27,6 +27,7 @@ void main() {
       name: "Name",
       featureExpenses: true,
       featurePlanner: false,
+      featureAgent: true,
       defaultShoppingList: ShoppingList(name: "S"),
       viewOrdering: ViewsEnum.addMissing(ViewsEnum.values.sublist(1, 4)),
       member: [Member(id: 0, name: "M", username: "username")],

@@ -15,6 +15,7 @@ import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/pages/expense_page.dart';
 import 'package:intl/intl.dart';
 import 'package:kitchenowl/widgets/expense_category_icon.dart';
+import 'package:kitchenowl/widgets/open_container_navigator.dart';
 import 'package:tuple/tuple.dart';
 
 class ExpenseItemWidget extends StatelessWidget {
@@ -111,10 +112,13 @@ class ExpenseItemWidget extends StatelessWidget {
         ),
       ),
       onClosed: _handleUpdate,
-      openBuilder: (ctx, toggle) => ExpensePage(
-        household: household ??
-            BlocProvider.of<HouseholdCubit>(context).state.household,
-        expense: expense,
+      openBuilder: (ctx, toggle) => OpenContainerNavigator<UpdateEnum>(
+        closeContainer: toggle,
+        child: ExpensePage(
+          household: household ??
+              BlocProvider.of<HouseholdCubit>(context).state.household,
+          expense: expense,
+        ),
       ),
     );
   }

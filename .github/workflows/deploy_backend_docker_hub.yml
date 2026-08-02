@@ -4,9 +4,9 @@ name: CI deploy backend to Docker Hub
 on:
   # Triggers the workflow on push events but only for tags
   push:
-    branches: [ main ]
-    paths:
-      - backend/**
+    # branches: [ main ]
+    # paths:
+    #   - backend/**
     tags:
       - "v*"
       - "beta-v*"

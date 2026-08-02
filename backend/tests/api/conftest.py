@@ -1,9 +1,6 @@
-import os
-import pytest
-from unittest.mock import patch
 from datetime import datetime, timedelta, timezone
 
-os.environ["KITCHENOWL_MCP_ENABLED"] = "true"
+import pytest
 
 from app import app, db
 
@@ -83,8 +80,7 @@ def recipe_time():
 
 FIX_DATETIME = int(
     (
-        datetime.now(timezone.utc)
-        .replace(hour=0, minute=0, second=0, microsecond=0)
+        datetime.now(timezone.utc).replace(hour=0, minute=0, second=0, microsecond=0)
         + timedelta(days=2)
     ).timestamp()
     * 1000
@@ -102,7 +98,7 @@ def onboarded_client(client, admin_username, admin_name, admin_password):
         "name": admin_name,
         "password": admin_password,
     }
-    response = client.post("/api/onboarding", json=onboard_data)
+    client.post("/api/onboarding", json=onboard_data)
     return client
 
 

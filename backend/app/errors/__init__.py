@@ -1,3 +1,6 @@
+import ipaddress
+import os
+
 from flask import request
 
 
@@ -27,11 +30,22 @@ class NotFoundRequest(Exception):
 
 
 def getClientIp() -> str:
-    """
-    Get the client IP address from the request headers.
-    Potentially unsafe. (We do not have trusted proxies configured).
-    """
-    if "X-Forwarded-For" in request.headers:
-        return request.headers.getlist("X-Forwarded-For")[0].rpartition(" ")[-1]
-    else:
-        return request.remote_addr or "untrackable"
+    """Return the forwarded client address only when the direct peer is trusted."""
+    remote = request.remote_addr or "untrackable"
+    forwarded = request.headers.get("X-Forwarded-For")
+    trusted = os.getenv("TRUSTED_PROXIES", "")
+    if not forwarded or not trusted or remote == "untrackable":
+        return remote
+    try:
+        peer = ipaddress.ip_address(remote)
+        networks = [
+            ipaddress.ip_network(value.strip(), strict=False)
+            for value in trusted.split(",")
+            if value.strip()
+        ]
+        if not any(peer in network for network in networks):
+            return remote
+        client = forwarded.split(",", 1)[0].strip()
+        return str(ipaddress.ip_address(client))
+    except ValueError:
+        return remote

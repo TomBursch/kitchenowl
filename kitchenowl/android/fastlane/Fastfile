@@ -15,11 +15,29 @@
 
 default_platform(:android)
 
+private_lane :build_release_bundle do
+  build_command = ["flutter", "build", "appbundle", "-v"]
+  release_version = ENV["RELEASE_VERSION"]
+  release_build_number = ENV["RELEASE_BUILD_NUMBER"]
+
+  unless release_version.to_s.empty?
+    build_command << "--build-name"
+    build_command << release_version
+  end
+
+  unless release_build_number.to_s.empty?
+    build_command << "--build-number"
+    build_command << release_build_number
+  end
+
+  sh(*build_command)
+end
+
 platform :android do
   
   desc "Submit a new internal build to Google Play"
   lane :internal do
-    sh "flutter build appbundle -v"
+    build_release_bundle
     upload_to_play_store(
       track: 'internal',
       aab: '../build/app/outputs/bundle/release/app-release.aab',
@@ -29,7 +47,7 @@ platform :android do
 
   desc "Submit a new beta build to Google Play"
   lane :beta do
-    sh "flutter build appbundle -v"
+    build_release_bundle
     upload_to_play_store(
       track: 'beta',
       aab: '../build/app/outputs/bundle/release/app-release.aab',
@@ -39,7 +57,7 @@ platform :android do
 
   desc "Submit a new production build to Google Play"
   lane :production do
-    sh "flutter build appbundle -v"
+    build_release_bundle
     upload_to_play_store(
       track: 'production',
       aab: '../build/app/outputs/bundle/release/app-release.aab',

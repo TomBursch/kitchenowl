@@ -107,6 +107,36 @@ You can help translate the App into your language by using [Weblate](https://hos
 
 KitchenOwl is moving fast, to stay updated consider starring and watching the releases of this repository.
 
+## 🏷️ Release Process
+
+Releases are created from tags pushed to `main`.
+
+- Beta release tag: `beta-vX.Y.Z`
+- Stable release tag: `vX.Y.Z`
+
+After pushing one of these tags, GitHub Actions will:
+
+- build and push Docker images to Docker Hub (frontend, backend, web)
+- build the Android release APK
+- publish a GitHub Release and attach `kitchenowl-android-<tag>.apk`
+
+Example commands:
+
+```bash
+git checkout main
+git pull
+
+# Beta
+git tag beta-v1.2.3
+git push origin beta-v1.2.3
+
+# Stable
+git tag v1.2.3
+git push origin v1.2.3
+```
+
+For F-Droid, copy the APK manually from the GitHub Release and trigger your repository scan.
+
 ### 💬 Status
 
 - [x] Public Alpha: Still working on stuff (rarely things might break)

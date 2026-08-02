@@ -7,10 +7,13 @@ on:
         description: "Fastlane lane to use (internal OR beta OR promote_to_production OR production)"
         required: true
         default: "beta"
-  push:
-    tags:
-      - "v*"
-      - "beta-v*"
+      release_version:
+        description: "Optional app version override, for example 0.7.9 or 0.7.9-beta"
+        required: false
+  # push:
+  #   tags:
+  #     - "v*"
+  #     - "beta-v*"
 
 jobs:
   fastlane-deploy:
@@ -24,7 +27,7 @@ jobs:
       - name: Clone Flutter repository with stable channel
         uses: subosito/flutter-action@v2
         with:
-          channel: stable
+          flutter-version: 3.44.8
       - run: flutter config --no-analytics
 
       # Checkout code and get packages.
@@ -32,6 +35,31 @@ jobs:
         uses: actions/checkout@v4
       - run: flutter packages get
         working-directory: kitchenowl
+
+      - name: Resolve Android app version
+        shell: bash
+        run: |
+          release_version='${{ github.event.inputs.release_version || '' }}'
+
+          if [[ -z "$release_version" && "$GITHUB_REF_TYPE" == "tag" ]]; then
+            if [[ "$GITHUB_REF_NAME" == beta-v* ]]; then
+              release_version="${GITHUB_REF_NAME#beta-v}-beta"
+            elif [[ "$GITHUB_REF_NAME" == v* ]]; then
+              release_version="${GITHUB_REF_NAME#v}"
+            else
+              echo "Unsupported tag format: $GITHUB_REF_NAME" >&2
+              exit 1
+            fi
+          fi
+
+          if [[ -z "$release_version" ]]; then
+            release_version="$(sed -n 's/^version:[[:space:]]*\([^+[:space:]]*\).*$/\1/p' kitchenowl/pubspec.yaml)"
+          fi
+
+          build_number="$((GITHUB_RUN_NUMBER * 100 + GITHUB_RUN_ATTEMPT))"
+
+          echo "RELEASE_VERSION=$release_version" >> "$GITHUB_ENV"
+          echo "RELEASE_BUILD_NUMBER=$build_number" >> "$GITHUB_ENV"
 
       # Decide track internal|beta|production (not in use yet)
       - name: Decide track

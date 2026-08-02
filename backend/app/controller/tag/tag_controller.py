@@ -82,9 +82,27 @@ def updateTag(args, id):
 @tag.route("/<int:id>", methods=["DELETE"])
 @jwt_required()
 def deleteTagById(id):
+    from app import db
+    from sqlalchemy.exc import SQLAlchemyError
+
     tag = Tag.find_by_id(id)
     if not tag:
         raise NotFoundRequest()
     tag.checkAuthorized()
-    tag.delete()
+    # Defensively drop any RecipeTags rows pointing at this tag before
+    # deleting the tag itself. The ORM ``cascade="all, delete-orphan"``
+    # on ``Tag.recipes`` handles this for any rows already loaded into
+    # the session, but agent-created tags can end up with stale join
+    # rows on disk that were never loaded; without an ON DELETE CASCADE
+    # at the DB level this leads to FK constraint failures.
+    try:
+        RecipeTags.query.filter(RecipeTags.tag_id == id).delete(
+            synchronize_session=False
+        )
+        tag.delete()
+    except SQLAlchemyError:
+        db.session.rollback()
+        return jsonify(
+            {"msg": "Tag is still referenced and could not be deleted."}
+        ), 409
     return jsonify({"msg": "DONE"})

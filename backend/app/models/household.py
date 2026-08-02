@@ -34,6 +34,7 @@ class Household(Model):
     expenses_feature: Mapped[bool] = db.Column(
         db.Boolean(), nullable=False, default=True
     )
+    agent_feature: Mapped[bool] = db.Column(db.Boolean(), nullable=False, default=False)
     description: Mapped[str | None] = db.Column(db.String())
     link: Mapped[str | None] = db.Column(db.String(255))
     # For households that have verified their authenticity
@@ -149,6 +150,7 @@ class Household(Model):
             "view_ordering": self.view_ordering,
             "planner_feature": self.planner_feature,
             "expenses_feature": self.expenses_feature,
+            "agent_feature": self.agent_feature,
             "member": [m.user.username for m in getattr(self, "member")],
             "shoppinglists": [s.name for s in self.shoppinglists],
             "recipes": [s.obj_to_export_dict() for s in self.recipes],
@@ -171,6 +173,15 @@ class HouseholdMember(Model):
     admin: Mapped[bool] = db.Column(db.Boolean(), default=True, nullable=False)
 
     expense_balance: Mapped[float] = db.Column(db.Float(), default=0, nullable=False)
+
+    # Per-member default agent persona used when the user creates a new chat
+    # without picking one explicitly. NULL falls back to the household's
+    # global default persona.
+    default_persona_id: Mapped[int | None] = db.Column(
+        db.Integer,
+        db.ForeignKey("agent_persona.id", ondelete="SET NULL"),
+        nullable=True,
+    )
 
     household: Mapped["Household"] = cast(
         Mapped["Household"],

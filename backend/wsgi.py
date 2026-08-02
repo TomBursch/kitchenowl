@@ -1,3 +1,5 @@
+# ruff: noqa: E402
+
 import gevent.monkey
 
 gevent.monkey.patch_all()
@@ -25,6 +27,11 @@ def parse_arguments():
         type=bool,
         help="Set the debug flag. Forwarded to flask.",
     )
+    parser.add_argument(
+        "--no-reload",
+        action="store_true",
+        help="Disable the Flask development server reloader.",
+    )
 
     return parser.parse_args()
 
@@ -33,4 +40,9 @@ if __name__ == "__main__":
     arguments = parse_arguments()
     if not os.path.exists(UPLOAD_FOLDER):
         os.makedirs(UPLOAD_FOLDER)
-    socketio.run(app, debug=arguments.debug, host=arguments.host)
+    socketio.run(
+        app,
+        debug=arguments.debug,
+        host=arguments.host,
+        use_reloader=not arguments.no_reload,
+    )

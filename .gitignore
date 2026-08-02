@@ -2,27 +2,36 @@
 *.class
 *.lock
 *.log
-*.pyc
 *.swp
+*.swo
+*~
 .DS_Store
 .atom/
 .buildlog/
 .history
 .svn/
-.env*
+.env
+.env.local
+.env.*.local
 
-# IntelliJ related
-*.iml
-*.ipr
-*.iws
+# IDEs and Editors
 .idea/
-
-# Visual Studio Code related
+.vscode/
+*.code-workspace
 .classpath
 .project
 .settings/
-.vscode/
-*.code-workspace
+*.iml
+*.ipr
+*.iws
+.sublime-project
+.sublime-workspace
+*.swp
+*.swo
+
+# JetBrains
+.idea/
+*.iml
 
 # Flutter repo-specific
 /bin/cache/
@@ -60,6 +69,9 @@ flutter_*.png
 linked_*.ds
 unlinked.ds
 unlinked_spec.ds
+
+# Local.properties for flutter tests
+**/.flutter_test_cache/
 
 # Android related
 **/android/**/gradle-wrapper.jar
@@ -106,30 +118,118 @@ unlinked_spec.ds
 **/macos/Flutter/GeneratedPluginRegistrant.swift
 **/macos/Flutter/ephemeral
 
-# Coverage & Reports
-coverage/
-reports/
+# Linux
+**/linux/flutter/generated_plugin_registrant.cc
+**/linux/flutter/generated_plugin_registrant.h
+**/linux/flutter/generated_plugins.cmake
 
-# Symbols
-app.*.symbols
-
-# Exceptions to above rules.
-!**/ios/**/default.mode1v3
-!**/ios/**/default.mode2v3
-!**/ios/**/default.pbxuser
-!**/ios/**/default.perspectivev3
-!/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
-!/dev/ci/**/Gemfile.lock
-
-# MkDocs
-site/
+# Windows
+**/windows/flutter/generated_plugin_registrant.cc
+**/windows/flutter/generated_plugin_registrant.h
+**/windows/flutter/generated_plugins.cmake
 
 # Python Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
+*.so
 
-# Python Environments
+# C extensions
+*.c
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+!kitchenowl/lib/
+!kitchenowl/lib/**
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+
+# Translations
+*.mo
+*.pot
+
+# Django stuff:
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+
+# Flask stuff:
+instance/
+.webassets-cache
+
+# Scrapy stuff:
+.scrapy
+
+# Sphinx documentation
+docs/_build/
+
+# PyBuilder
+target/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# IPython
+profile_default/
+ipython_config.py
+
+# pyenv
+.python-version
+
+# pipenv
+Pipfile.lock
+
+# PEP 582
+__pypackages__/
+
+# Celery stuff
+celerybeat-schedule
+celerybeat.pid
+
+# SageMath parsed files
+*.sage.py
+
+# Environments
 .env
 .venv
 env/
@@ -137,3 +237,59 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+
+# Spyder project settings
+.spyderproject
+.spyproject
+
+# Rope project settings
+.ropeproject
+
+# mkdocs documentation
+/site
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
+
+# Python Environments (duplicate removal)
+.venv/
+*.venv
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+*.db-journal
+*.db.bak*
+*.sqlite.bak*
+
+# OS-specific
+Thumbs.db
+.directory
+
+# Local development
+*.local.json
+*.local.yaml
+local_settings.py
+.local/
+
+# Generated files
+app.*.symbols
+generated/
+
+# Test reports
+**/reports/
+test-results.json
+
+# Exceptions to above rules
+!**/ios/**/default.mode1v3
+!**/ios/**/default.mode2v3
+!**/ios/**/default.pbxuser
+!**/ios/**/default.perspectivev3
+!/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
+!/dev/ci/**/Gemfile.lock

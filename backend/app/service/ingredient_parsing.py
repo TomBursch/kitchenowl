@@ -1,11 +1,15 @@
+import json
+import logging
+import os
 from typing import cast
+
 import ingredient_parser
 import ingredient_parser.dataclasses
 from litellm import completion
-import json
-import os
 
 from app.config import SUPPORTED_LANGUAGES
+
+_logger = logging.getLogger(__name__)
 
 LLM_MODEL = os.getenv("LLM_MODEL")
 LLM_API_URL = os.getenv("LLM_API_URL")
@@ -113,6 +117,8 @@ def parseIngredients(
     if LLM_MODEL:
         try:
             return parseLLM(ingredients, targetLanguageCode) or parseNLP(ingredients)
-        except Exception as e:
-            print("Error parsing ingredients:", e)
+        except Exception:
+            _logger.warning(
+                "LLM ingredient parsing failed; using NLP fallback", exc_info=True
+            )
     return parseNLP(ingredients)

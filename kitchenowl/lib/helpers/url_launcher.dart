@@ -57,3 +57,12 @@ bool isValidUrl(String url) {
     return false;
   }
 }
+
+final RegExp _urlPattern = RegExp(r'https?://\S+');
+
+/// Returns the URL contained in [text] if there is exactly one, otherwise null.
+String? extractSingleUrl(String text) {
+  final matches = _urlPattern.allMatches(text).map((m) => m.group(0)!).toList();
+
+  return matches.length == 1 ? matches.first : null;
+}

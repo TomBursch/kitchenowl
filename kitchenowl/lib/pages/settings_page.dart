@@ -222,6 +222,16 @@ class _SettingsPageState extends State<SettingsPage> {
                     ),
                   ),
                 ),
+                SwitchListTile(
+                  title:
+                      Text(AppLocalizations.of(context)!.showCategoryIcons),
+                  subtitle: Text(AppLocalizations.of(context)!
+                      .showCategoryIconsDescription),
+                  secondary: const Icon(Icons.category_rounded),
+                  value: state.shoppingListShowCategoryIcon,
+                  onChanged: (value) => BlocProvider.of<SettingsCubit>(context)
+                      .setShoppingListShowCategoryIcon(value),
+                ),
                 if (!state.shoppingListListView)
                   ListTile(
                     title: Text(AppLocalizations.of(context)!.itemSize),

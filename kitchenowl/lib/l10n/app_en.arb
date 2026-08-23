@@ -750,6 +750,8 @@
   "shoppingListEmpty": "The shopping list is empty. Add an item using the search function above.",
   "shoppingListKeepAwake": "Keep screen on while shopping",
   "shoppingListStyle": "Shopping list style",
+  "showCategoryIcons": "Show category icons",
+  "showCategoryIconsDescription": "Show the category emoji on items that don't have their own icon",
   "shoppingLists": "Shopping lists",
   "showPastPlans": "Show all plans",
   "signInWith": "Sign in with {provider}",

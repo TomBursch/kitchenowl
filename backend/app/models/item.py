@@ -170,11 +170,21 @@ class Item(Model, DbModelAuthorizeMixin):
     def create_by_name(
         cls, household_id: int, name: str, default: bool = False
     ) -> Self:
-        return cls(
+        item = cls(
             name=name.strip()[:128],
             default=default,
             household_id=household_id,
         ).save()
+
+        if not item.category:
+            from app.service.item_categorization import suggest_category
+
+            category = suggest_category(household_id, name)
+            if category:
+                item.category = category
+                item.save()
+
+        return item
 
     @classmethod
     def find_by_name(cls, household_id: int, name: str) -> Self | None:

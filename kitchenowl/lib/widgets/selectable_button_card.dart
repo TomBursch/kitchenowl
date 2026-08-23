@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 class SelectableButtonCard extends StatefulWidget {
   final String title;
   final IconData? icon;
+
+  /// Optional emoji (e.g. category emoji) shown when [icon] is null.
+  final String? emojiIcon;
   final String? description;
   final bool selected;
   final void Function()? onPressed;
@@ -12,6 +15,7 @@ class SelectableButtonCard extends StatefulWidget {
   const SelectableButtonCard({
     super.key,
     this.icon,
+    this.emojiIcon,
     required this.title,
     this.description,
     this.onPressed,
@@ -83,6 +87,22 @@ class _SelectableButtonCardState extends State<SelectableButtonCard> {
                           color: widget.selected
                               ? Theme.of(context).colorScheme.onPrimary
                               : null,
+                        ),
+                      ),
+                    )
+                  else if (widget.emojiIcon != null)
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(8, 4, 8, 12),
+                      child: LayoutBuilder(
+                        builder: (context, constraint) => Text(
+                          widget.emojiIcon!,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: constraint.maxWidth / 3,
+                            color: widget.selected
+                                ? Theme.of(context).colorScheme.onPrimary
+                                : null,
+                          ),
                         ),
                       ),
                     ),

@@ -37,15 +37,20 @@ class ShoppingItemWidget<T extends Item> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String? emojiIcon =
-        ItemIcons.get(item) == null && showCategoryIcon
-            ? categoryEmoji(item.category?.name)
-            : null;
+    // When the category-icon setting is on, the category emoji takes
+    // precedence over the item's own icon (most common groceries have
+    // built-in icons that would otherwise mask the emoji entirely).
+    // Selection check / checkbox still win — those are interaction states.
+    final String? emojiIcon = showCategoryIcon
+        ? categoryEmoji(item.category?.name)
+        : null;
+    final IconData? icon =
+        emojiIcon == null ? ItemIcons.get(item) : null;
     return gridStyle
         ? SelectableButtonCard(
             title: item.name,
             selected: selected,
-            icon: ItemIcons.get(item),
+            icon: icon,
             emojiIcon: emojiIcon,
             description: (item is ItemWithDescription)
                 ? (item as ItemWithDescription).description
@@ -58,7 +63,7 @@ class ShoppingItemWidget<T extends Item> extends StatelessWidget {
         : SelectableButtonListTile(
             title: item.name,
             selected: selected,
-            icon: ItemIcons.get(item),
+            icon: icon,
             emojiIcon: emojiIcon,
             listStyle: listStyle,
             raised: raised ??

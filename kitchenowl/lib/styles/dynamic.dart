@@ -21,11 +21,16 @@ class ShoppingListStyle {
   final GridSize gridSize;
   final ListStyle listStyle;
 
+  /// Show the item's category emoji as the leading icon on lines/tiles
+  /// that don't have their own item icon (Listonic-style).
+  final bool showCategoryIcon;
+
   const ShoppingListStyle({
     this.advancedItemView = false,
     this.isList = false,
     this.allRaised,
     this.gridSize = GridSize.normal,
     this.listStyle = ListStyle.cards,
+    this.showCategoryIcon = false,
   });
 }

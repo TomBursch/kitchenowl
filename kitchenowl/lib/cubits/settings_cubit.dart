@@ -25,6 +25,8 @@ class SettingsCubit extends Cubit<SettingsState> {
         PreferenceStorage.getInstance().readInt(key: 'accentColor');
     final shoppingListListView =
         PreferenceStorage.getInstance().readBool(key: 'shoppingListListView');
+    final shoppingListShowCategoryIcon = PreferenceStorage.getInstance()
+        .readBool(key: 'shoppingListShowCategoryIcon');
     final shoppingListTapToRemove = PreferenceStorage.getInstance()
         .readBool(key: 'shoppingListTapToRemove');
     final recentItemsCategorize =
@@ -55,6 +57,8 @@ class SettingsCubit extends Cubit<SettingsState> {
       accentColor:
           (await accentColor) != null ? Color((await accentColor)!) : null,
       shoppingListListView: await shoppingListListView ?? false,
+      shoppingListShowCategoryIcon:
+          await shoppingListShowCategoryIcon ?? false,
       shoppingListTapToRemove: await shoppingListTapToRemove ?? true,
       recentItemsCategorize: await recentItemsCategorize ?? false,
       restoreLastShoppingList: await restoreLastShoppingList ?? false,
@@ -111,6 +115,15 @@ class SettingsCubit extends Cubit<SettingsState> {
     emit(state.copyWith(shoppingListListView: shoppingListListView));
   }
 
+  void setShoppingListShowCategoryIcon(bool showCategoryIcon) {
+    PreferenceStorage.getInstance().writeBool(
+      key: 'shoppingListShowCategoryIcon',
+      value: showCategoryIcon,
+    );
+    emit(state.copyWith(
+        shoppingListShowCategoryIcon: showCategoryIcon));
+  }
+
   void setShoppingListTapToRemove(bool shoppingListTapToRemove) {
     PreferenceStorage.getInstance().writeBool(
       key: 'shoppingListTapToRemove',
@@ -152,6 +165,7 @@ class SettingsState extends Equatable {
   final ListStyle listStyle;
   final Color? accentColor;
   final bool shoppingListListView;
+  final bool shoppingListShowCategoryIcon;
   final bool shoppingListTapToRemove;
   final bool recentItemsCategorize;
   final bool restoreLastShoppingList;
@@ -165,6 +179,7 @@ class SettingsState extends Equatable {
     this.recentItemsCount = 9,
     this.accentColor,
     this.shoppingListListView = false,
+    this.shoppingListShowCategoryIcon = false,
     this.shoppingListTapToRemove = true,
     this.recentItemsCategorize = false,
     this.restoreLastShoppingList = false,
@@ -179,6 +194,7 @@ class SettingsState extends Equatable {
     int? recentItemsCount,
     Nullable<Color>? accentColor,
     bool? shoppingListListView,
+    bool? shoppingListShowCategoryIcon,
     bool? shoppingListTapToRemove,
     bool? recentItemsCategorize,
     bool? restoreLastShoppingList,
@@ -192,6 +208,8 @@ class SettingsState extends Equatable {
         recentItemsCount: recentItemsCount ?? this.recentItemsCount,
         accentColor: (accentColor ?? Nullable(this.accentColor)).value,
         shoppingListListView: shoppingListListView ?? this.shoppingListListView,
+        shoppingListShowCategoryIcon: shoppingListShowCategoryIcon ??
+            this.shoppingListShowCategoryIcon,
         shoppingListTapToRemove:
             shoppingListTapToRemove ?? this.shoppingListTapToRemove,
         recentItemsCategorize:
@@ -211,6 +229,7 @@ class SettingsState extends Equatable {
         recentItemsCount,
         accentColor,
         shoppingListListView,
+        shoppingListShowCategoryIcon,
         shoppingListTapToRemove,
         recentItemsCategorize,
         restoreLastShoppingList,

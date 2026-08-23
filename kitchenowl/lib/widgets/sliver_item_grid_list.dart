@@ -57,6 +57,7 @@ class SliverItemGridList<T extends Item> extends StatelessWidget {
               selected: selected?.call(items[i]) ?? false,
               gridStyle: !shoppingListStyle.isList,
               listStyle: shoppingListStyle.listStyle,
+              showCategoryIcon: shoppingListStyle.showCategoryIcon,
               onPressed:
                   (onPressed ?? Nullable((item) => openMenu(context, item)))
                       .value,

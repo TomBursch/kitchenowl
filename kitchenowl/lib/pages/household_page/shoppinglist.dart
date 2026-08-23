@@ -142,6 +142,8 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                   buildWhen: (previous, current) =>
                       previous.shoppingListListView !=
                           current.shoppingListListView ||
+                      previous.shoppingListShowCategoryIcon !=
+                          current.shoppingListShowCategoryIcon ||
                       previous.listStyle != current.listStyle ||
                       previous.gridSize != current.gridSize,
                   builder: (context, settingsState) => PageTransitionSwitcher(
@@ -168,6 +170,8 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                                     listStyle: settingsState.listStyle,
                                     isList: settingsState.shoppingListListView,
                                     gridSize: settingsState.gridSize,
+                                    showCategoryIcon: settingsState
+                                        .shoppingListShowCategoryIcon,
                                   ),
                                   items: state.result,
                                   categories: state.categories,
@@ -228,6 +232,8 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                                         isList:
                                             settingsState.shoppingListListView,
                                         gridSize: settingsState.gridSize,
+                                        showCategoryIcon: settingsState
+                                            .shoppingListShowCategoryIcon,
                                       ),
                                       categories: state.categories,
                                       isLoading: state

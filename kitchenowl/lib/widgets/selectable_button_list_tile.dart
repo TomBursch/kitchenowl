@@ -4,6 +4,9 @@ import 'package:kitchenowl/styles/dynamic.dart';
 class SelectableButtonListTile extends StatefulWidget {
   final String title;
   final IconData? icon;
+
+  /// Optional emoji (e.g. category emoji) shown when [icon] is null.
+  final String? emojiIcon;
   final String? description;
   final bool selected;
   final bool raised;
@@ -16,6 +19,7 @@ class SelectableButtonListTile extends StatefulWidget {
     super.key,
     required this.title,
     this.icon,
+    this.emojiIcon,
     this.description,
     required this.selected,
     this.onPressed,
@@ -54,7 +58,18 @@ class _SelectableButtonListTileState extends State<SelectableButtonListTile> {
                     color: !widget.raised
                         ? Theme.of(context).iconTheme.color!.withAlpha(85)
                         : Theme.of(context).iconTheme.color!.withAlpha(170))
-                : null,
+                : widget.emojiIcon != null
+                    ? Text(
+                        widget.emojiIcon!,
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Theme.of(context)
+                              .iconTheme
+                              .color!
+                              .withAlpha(widget.raised ? 170 : 85),
+                        ),
+                      )
+                    : null,
         title: Text(
           widget.title,
           maxLines: 1,

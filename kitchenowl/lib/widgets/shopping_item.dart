@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kitchenowl/helpers/category_icon.dart';
 import 'package:kitchenowl/item_icons.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/styles/dynamic.dart';
@@ -18,6 +19,9 @@ class ShoppingItemWidget<T extends Item> extends StatelessWidget {
   final bool gridStyle;
   final ListStyle listStyle;
 
+  /// Show the category emoji as leading icon when the item has no icon.
+  final bool showCategoryIcon;
+
   const ShoppingItemWidget({
     super.key,
     required this.item,
@@ -28,15 +32,26 @@ class ShoppingItemWidget<T extends Item> extends StatelessWidget {
     this.listStyle = ListStyle.cards,
     this.raised,
     this.extraOption,
+    this.showCategoryIcon = false,
   });
 
   @override
   Widget build(BuildContext context) {
+    // When the category-icon setting is on, the category emoji takes
+    // precedence over the item's own icon (most common groceries have
+    // built-in icons that would otherwise mask the emoji entirely).
+    // Selection check / checkbox still win — those are interaction states.
+    final String? emojiIcon = showCategoryIcon
+        ? categoryEmoji(item.category?.name)
+        : null;
+    final IconData? icon =
+        emojiIcon == null ? ItemIcons.get(item) : null;
     return gridStyle
         ? SelectableButtonCard(
             title: item.name,
             selected: selected,
-            icon: ItemIcons.get(item),
+            icon: icon,
+            emojiIcon: emojiIcon,
             description: (item is ItemWithDescription)
                 ? (item as ItemWithDescription).description
                 : null,
@@ -48,7 +63,8 @@ class ShoppingItemWidget<T extends Item> extends StatelessWidget {
         : SelectableButtonListTile(
             title: item.name,
             selected: selected,
-            icon: ItemIcons.get(item),
+            icon: icon,
+            emojiIcon: emojiIcon,
             listStyle: listStyle,
             raised: raised ??
                 item is ShoppinglistItem || item is RecipeItem && selected,

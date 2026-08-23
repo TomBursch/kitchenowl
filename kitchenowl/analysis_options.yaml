@@ -1,6 +1,14 @@
 analyzer:
   errors:
     deprecated_member_use: ignore # Until https://github.com/flutter/flutter/issues/160184 is fixed
+  exclude:
+    - build/**
+    - android/**
+    - ios/**
+    - web/**
+    - windows/**
+    - macos/**
+    - linux/**
 
 formatter:  
   page_width: 80

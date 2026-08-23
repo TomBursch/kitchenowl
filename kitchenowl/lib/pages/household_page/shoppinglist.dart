@@ -142,6 +142,8 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                   buildWhen: (previous, current) =>
                       previous.shoppingListListView !=
                           current.shoppingListListView ||
+                      previous.shoppingListShowCategoryIcon !=
+                          current.shoppingListShowCategoryIcon ||
                       previous.listStyle != current.listStyle ||
                       previous.gridSize != current.gridSize,
                   builder: (context, settingsState) => PageTransitionSwitcher(

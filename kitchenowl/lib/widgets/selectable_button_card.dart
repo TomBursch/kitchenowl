@@ -88,6 +88,7 @@ class _SelectableButtonCardState extends State<SelectableButtonCard> {
                     ),
                   Tooltip(
                     message: widget.title,
+                    waitDuration: const Duration(milliseconds: 500),
                     child: Text(
                       widget.title,
                       style: TextStyle(

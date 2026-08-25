@@ -1,12 +1,13 @@
 from __future__ import annotations
 
 import json
-import time
 import uuid
+from dataclasses import dataclass, field
 from datetime import datetime
+from queue import Empty, Queue
 from typing import Any, Callable
 
-from flask import Blueprint, Response, jsonify, request, stream_with_context
+from flask import Blueprint, Response, jsonify, request, url_for
 from flask_jwt_extended import current_user, jwt_required
 
 from app import db
@@ -30,14 +31,6 @@ from app.models.recipe import RecipeVisibility
 from app.service.recipe_scraping import scrape
 
 mcp = Blueprint("mcp", __name__)
-
-
-def _jsonrpc_ok(id_value: Any, result: Any):
-    return jsonify({"jsonrpc": "2.0", "id": id_value, "result": result})
-
-
-def _jsonrpc_err(id_value: Any, code: int, message: str):
-    return jsonify({"jsonrpc": "2.0", "id": id_value, "error": {"code": code, "message": message}})
 
 
 def _as_tool_result(payload: Any):
@@ -839,86 +832,179 @@ TOOLS: dict[str, tuple[dict[str, Any], Callable[[dict[str, Any]], Any]]] = {
 }
 
 
-def _handle_jsonrpc(body: dict[str, Any]):
+SUPPORTED_PROTOCOL_VERSIONS = ("2025-06-18", "2025-03-26", "2024-11-05")
+LATEST_PROTOCOL_VERSION = SUPPORTED_PROTOCOL_VERSIONS[0]
+
+SERVER_INSTRUCTIONS = (
+    "KitchenOwl manages households, each of which owns shopping lists, items, "
+    "recipes, tags, meal plans and expenses. Nearly every tool is scoped to a "
+    "household, so call list_households first and reuse the id you get back."
+)
+
+SSE_KEEPALIVE_SECONDS = 15
+
+
+def _dispatch(body: Any) -> Any:
+    # Returns the response to send back, or None for notifications, which the
+    # protocol requires be left unanswered.
+    if isinstance(body, list):
+        responses = [r for r in (_dispatch(item) for item in body) if r is not None]
+        return responses or None
+
+    if not isinstance(body, dict):
+        return {
+            "jsonrpc": "2.0",
+            "id": None,
+            "error": {"code": -32600, "message": "Invalid Request"},
+        }
+
     id_value = body.get("id")
     method = body.get("method")
     params = body.get("params") or {}
+    is_notification = "id" not in body
 
     try:
         if method == "initialize":
-            return _jsonrpc_ok(
-                id_value,
-                {
-                    "protocolVersion": "2024-11-05",
-                    "capabilities": {"tools": {}},
-                    "serverInfo": {"name": "kitchenowl-mcp", "version": str(BACKEND_VERSION)},
-                },
+            requested = params.get("protocolVersion")
+            version = (
+                requested
+                if requested in SUPPORTED_PROTOCOL_VERSIONS
+                else LATEST_PROTOCOL_VERSION
             )
-
-        if method == "notifications/initialized":
-            return ("", 204)
-
-        if method == "ping":
-            return _jsonrpc_ok(id_value, {})
-
-        if method == "tools/list":
-            tools = []
-            for name, (schema, _) in TOOLS.items():
-                tools.append(
+            result = {
+                "protocolVersion": version,
+                "capabilities": {"tools": {"listChanged": False}},
+                "serverInfo": {
+                    "name": "kitchenowl-mcp",
+                    "version": str(BACKEND_VERSION),
+                },
+                "instructions": SERVER_INSTRUCTIONS,
+            }
+        elif method is not None and method.startswith("notifications/"):
+            return None
+        elif method == "ping":
+            result = {}
+        elif method == "tools/list":
+            result = {
+                "tools": [
                     {
                         "name": name,
                         "description": f"KitchenOwl tool: {name}",
                         "inputSchema": schema,
                     }
-                )
-            return _jsonrpc_ok(id_value, {"tools": tools})
-
-        if method == "tools/call":
+                    for name, (schema, _) in TOOLS.items()
+                ]
+            }
+        elif method == "tools/call":
             name = params.get("name")
             args = params.get("arguments") or {}
             if name not in TOOLS:
-                return _jsonrpc_err(id_value, -32601, f"Unknown tool: {name}")
+                return None if is_notification else _rpc_error(
+                    id_value, -32602, f"Unknown tool: {name}"
+                )
             _, handler = TOOLS[name]
-            result = handler(args)
+            result = _as_tool_result(handler(args))
             db.session.commit()
-            return _jsonrpc_ok(id_value, _as_tool_result(result))
-
-        return _jsonrpc_err(id_value, -32601, f"Method not found: {method}")
+        else:
+            return None if is_notification else _rpc_error(
+                id_value, -32601, f"Method not found: {method}"
+            )
     except Exception as e:
         db.session.rollback()
-        return _jsonrpc_err(id_value, -32000, str(e))
+        return None if is_notification else _rpc_error(id_value, -32000, str(e))
+
+    return None if is_notification else {"jsonrpc": "2.0", "id": id_value, "result": result}
 
 
-@mcp.route("", methods=["GET"])
-@mcp.route("/sse", methods=["GET"])
-@jwt_required()
-def mcp_sse():
-    session_id = str(uuid.uuid4())
+def _rpc_error(id_value: Any, code: int, message: str) -> dict[str, Any]:
+    return {"jsonrpc": "2.0", "id": id_value, "error": {"code": code, "message": message}}
 
-    def generate():
-        endpoint = request.url_root.rstrip("/") + f"/mcp/messages/{session_id}"
-        yield f"event: endpoint\ndata: {endpoint}\n\n"
-        while True:
-            yield "event: ping\ndata: {}\n\n"
-            time.sleep(15)
 
-    return Response(
-        stream_with_context(generate()),
-        mimetype="text/event-stream",
-        headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"},
-    )
+# Streamable HTTP. Stateless: no session id is issued, so this transport keeps
+# working across multiple uWSGI workers.
 
 
 @mcp.route("", methods=["POST"])
 @jwt_required()
 def mcp_post():
-    body = request.get_json(silent=True) or {}
-    return _handle_jsonrpc(body)
+    response = _dispatch(request.get_json(silent=True))
+    if response is None:
+        return "", 202
+    return jsonify(response)
+
+
+@mcp.route("", methods=["GET", "DELETE"])
+@jwt_required()
+def mcp_stream_unsupported():
+    # Nothing to push outside a request and no session to tear down; the spec
+    # allows 405 for both.
+    return Response(status=405, headers={"Allow": "POST"})
+
+
+# HTTP+SSE. Both halves of a session must be served by the same process, so this
+# registry is deliberately per-worker.
+
+
+@dataclass
+class _SseSession:
+    user_id: int
+    id: str = field(default_factory=lambda: str(uuid.uuid4()))
+    outbox: Queue = field(default_factory=Queue)
+
+
+_sse_sessions: dict[str, _SseSession] = {}
+
+
+@mcp.route("/sse", methods=["GET"])
+@jwt_required()
+def mcp_sse():
+    session = _SseSession(user_id=current_user.id)
+    _sse_sessions[session.id] = session
+
+    # Relative, so it survives a reverse proxy that request.url_root would not.
+    endpoint = f"{url_for('mcp.mcp_messages')}?session_id={session.id}"
+
+    def generate():
+        try:
+            yield f"event: endpoint\ndata: {endpoint}\n\n"
+            while True:
+                try:
+                    message = session.outbox.get(timeout=SSE_KEEPALIVE_SECONDS)
+                except Empty:
+                    yield ": keep-alive\n\n"
+                    continue
+                yield "event: message\ndata: {}\n\n".format(
+                    json.dumps(message, ensure_ascii=False, default=str)
+                )
+        finally:
+            _sse_sessions.pop(session.id, None)
+
+    return Response(
+        generate(),
+        mimetype="text/event-stream",
+        headers={
+            "Cache-Control": "no-cache, no-transform",
+            "Connection": "keep-alive",
+            "X-Accel-Buffering": "no",
+        },
+    )
 
 
 @mcp.route("/messages", methods=["POST"])
 @mcp.route("/messages/<session_id>", methods=["POST"])
 @jwt_required()
 def mcp_messages(session_id: str | None = None):
-    body = request.get_json(silent=True) or {}
-    return _handle_jsonrpc(body)
+    session_id = session_id or request.args.get("session_id")
+    session = _sse_sessions.get(session_id) if session_id else None
+
+    if session is None:
+        return jsonify({"error": "Unknown or expired session"}), 404
+    if session.user_id != current_user.id:
+        return jsonify({"error": "Session belongs to a different user"}), 403
+
+    response = _dispatch(request.get_json(silent=True))
+    if response is not None:
+        session.outbox.put(response)
+
+    # The reply travels over the SSE stream, not this response.
+    return "", 202

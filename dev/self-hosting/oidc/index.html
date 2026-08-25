@@ -1063,23 +1063,23 @@ It is not recommended setting up social logins for self-hosted versions as they 
 <h3 id="example-authelia">Example: Authelia</h3>
 <p><a href="https://www.authelia.com/">Authelia</a> is an open-source authentication and authorization server and portal fulfilling the identity and access management (IAM) role of information security in providing multi-factor authentication and single sign-on (SSO) for your applications via a web portal. It acts as a companion for common reverse proxies.</p>
 <p>Place this in your Authelia <a href="https://www.authelia.com/configuration/prologue/introduction/">configuration.yaml</a> to allow KitchenOwl to use Authelia as an OIDC provider.</p>
-<div class="highlight"><pre><span></span><code>- id: kitchenowl
-    description: KitchenOwl
-    secret: # Same as OIDC_CLIENT_SECRET
-    public: false
-    authorization_policy: two_factor # Can also be one_factor if you need less security
-    pre_configured_consent_duration: 1M # One month - change this to something you desire
-    audience: []
-    scopes:
-        - openid
-        - email
-        - profile
-    redirect_uris:
-        - https://your.domain.here/signin/redirect # Put the same value as FRONT_URL, appended with /signin/redirect
-        - kitchenowl:/signin/redirect
-    response_modes:
-    userinfo_signing_algorithm: none
-    token_endpoint_auth_method: client_secret_post
+<div class="highlight"><pre><span></span><code><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kitchenowl</span>
+<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">KitchenOwl</span>
+<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">secret</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="c1"># Same as OIDC_CLIENT_SECRET</span>
+<span class="w">    </span><span class="nt">public</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="w">    </span><span class="nt">authorization_policy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">two_factor</span><span class="w"> </span><span class="c1"># Can also be one_factor if you need less security</span>
+<span class="w">    </span><span class="nt">pre_configured_consent_duration</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1M</span><span class="w"> </span><span class="c1"># One month - change this to something you desire</span>
+<span class="w">    </span><span class="nt">audience</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span>
+<span class="w">    </span><span class="nt">scopes</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">openid</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">email</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">profile</span>
+<span class="w">    </span><span class="nt">redirect_uris</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://your.domain.here/signin/redirect</span><span class="w"> </span><span class="c1"># The redirect URI should match ${FRONT_URL}/signin/redirect</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kitchenowl:/signin/redirect</span>
+<span class="w">    </span><span class="nt">response_modes</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">userinfo_signing_algorithm</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">none</span>
+<span class="w">    </span><span class="nt">token_endpoint_auth_method</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">client_secret_post</span>
 </code></pre></div>
 
 

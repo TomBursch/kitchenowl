@@ -1012,7 +1012,7 @@ frontend efeu-http
 
   # hsts max-age is mandatory
   # 16000000 seconds is a bit more than 6 months
-  http-response set-header Strict-Transport-Security &quot;max-age=16000000; includeSubDomains; preload;&quot;
+  http-response set-header Strict-Transport-Security "max-age=16000000; includeSubDomains; preload;"
 
   default_backend kitchenowl
 
@@ -1026,54 +1026,54 @@ backend kitchenowl
 <li>Use the entrypoint <code>websecure</code> for HTTPS and have configured it for a wildcard SSL certificate</li>
 <li>Have a security@docker middleware (see below)</li>
 </ul>
-<div class="highlight"><pre><span></span><code>version: &quot;3&quot;
+<div class="highlight"><pre><span></span><code><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s">"3"</span>
 
-services:
-  front:
-    image: tombursch/kitchenowl-web:latest
-    networks:
-      - default
-      - web
-    restart: unless-stopped
-    depends_on:
-      - back
-    labels:
-      - &quot;traefik.enable=true&quot;
-      - &quot;traefik.docker.network=web&quot;
-      - &quot;traefik.http.routers.kitchenowl.rule=Host(`your.domain.here`)&quot;
-      - &quot;traefik.http.routers.kitchenowl.entrypoints=websecure&quot;
-      - &quot;traefik.http.routers.kitchenowl.middlewares=security@docker&quot; # Use to apply security middlewares
+<span class="nt">services</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">front</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tombursch/kitchenowl-web:latest</span>
+<span class="w">    </span><span class="nt">networks</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">default</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">web</span>
+<span class="w">    </span><span class="nt">restart</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">unless-stopped</span>
+<span class="w">    </span><span class="nt">depends_on</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">back</span>
+<span class="w">    </span><span class="nt">labels</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"traefik.enable=true"</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"traefik.docker.network=web"</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"traefik.http.routers.kitchenowl.rule=Host(`your.domain.here`)"</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"traefik.http.routers.kitchenowl.entrypoints=websecure"</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"traefik.http.routers.kitchenowl.middlewares=security@docker"</span><span class="w"> </span><span class="c1"># Use to apply security middlewares</span>
 
-  back:
-    image: tombursch/kitchenowl:latest
-    networks:
-      - default
-    restart: unless-stopped
-    environment:
-      - FRONT_URL=https://your.domain.here
-      - JWT_SECRET_KEY=PLEASE_CHANGE_ME
-    volumes:
-      - kitchenowl_data:/data
+<span class="w">  </span><span class="nt">back</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tombursch/kitchenowl:latest</span>
+<span class="w">    </span><span class="nt">networks</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">default</span>
+<span class="w">    </span><span class="nt">restart</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">unless-stopped</span>
+<span class="w">    </span><span class="nt">environment</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">FRONT_URL=https://your.domain.here</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">JWT_SECRET_KEY=PLEASE_CHANGE_ME</span>
+<span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kitchenowl_data:/data</span>
 
-networks:
-  web:
-    external: true
+<span class="nt">networks</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">web</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">external</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 
-volumes:
-  kitchenowl_data:
+<span class="nt">volumes</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">kitchenowl_data</span><span class="p">:</span>
 </code></pre></div>
 <p>Traefik can add extra security headers to add a level of protection to your KitchenOwl instance. You can specify a middleware in your Traefik docker-compose.yml using labels.</p>
-<div class="highlight"><pre><span></span><code>labels:
-  - &quot;traefik.http.middlewares.security.headers.addvaryheader=true&quot;
-  - &quot;traefik.http.middlewares.security.headers.sslredirect=true&quot;
-  - &quot;traefik.http.middlewares.security.headers.browserxssfilter=true&quot;
-  - &quot;traefik.http.middlewares.security.headers.contenttypenosniff=true&quot;
-  - &quot;traefik.http.middlewares.security.headers.forcestsheader=true&quot;
-  - &quot;traefik.http.middlewares.security.headers.stsincludesubdomains=true&quot;
-  - &quot;traefik.http.middlewares.security.headers.stspreload=true&quot;
-  - &quot;traefik.http.middlewares.security.headers.stsseconds=63072000&quot;
-  - &quot;traefik.http.middlewares.security.headers.customframeoptionsvalue=SAMEORIGIN&quot;
-  - &quot;traefik.http.middlewares.security.headers.referrerpolicy=same-origin&quot;
+<div class="highlight"><pre><span></span><code><span class="nt">labels</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"traefik.http.middlewares.security.headers.addvaryheader=true"</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"traefik.http.middlewares.security.headers.sslredirect=true"</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"traefik.http.middlewares.security.headers.browserxssfilter=true"</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"traefik.http.middlewares.security.headers.contenttypenosniff=true"</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"traefik.http.middlewares.security.headers.forcestsheader=true"</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"traefik.http.middlewares.security.headers.stsincludesubdomains=true"</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"traefik.http.middlewares.security.headers.stspreload=true"</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"traefik.http.middlewares.security.headers.stsseconds=63072000"</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"traefik.http.middlewares.security.headers.customframeoptionsvalue=SAMEORIGIN"</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"traefik.http.middlewares.security.headers.referrerpolicy=same-origin"</span>
 </code></pre></div>
 <h3 id="traefik-ingress">Traefik ingress</h3>
 <p>This example configuration assumes that you are:</p>
@@ -1082,36 +1082,36 @@ volumes:
 <li>you have set up traefik CRDs according to <a href="https://doc.traefik.io/traefik/reference/install-configuration/providers/kubernetes/kubernetes-crd/">https://doc.traefik.io/traefik/reference/install-configuration/providers/kubernetes/kubernetes-crd/</a> (in particular you intend to use the <code>IngressRoute</code> resource instead of the kubernetes-native <code>Ingress</code>.)</li>
 <li>kitchenowl is deployed using a service named <code>kitchenowl-web</code> in the <code>default</code> namespace.</li>
 </ul>
-<div class="highlight"><pre><span></span><code>apiVersion: traefik.io/v1alpha1
-kind: IngressRoute
-metadata:
-  name: kitchenowl-ingressroute
+<div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">traefik.io/v1alpha1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">IngressRoute</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kitchenowl-ingressroute</span>
 
-spec:
-  entryPoints:
-    - websecure
-  routes:
-  - match: Host(`&lt;your.domain.here&gt;`)
-    middlewares:
-      - name: kitchenowl
-    kind: Rule
-    services:
-    - name: kitchenowl-web
-      port: 8080
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">entryPoints</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">websecure</span>
+<span class="w">  </span><span class="nt">routes</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">match</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Host(`&lt;your.domain.here&gt;`)</span>
+<span class="w">    </span><span class="nt">middlewares</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kitchenowl</span>
+<span class="w">    </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Rule</span>
+<span class="w">    </span><span class="nt">services</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kitchenowl-web</span>
+<span class="w">      </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8080</span>
 
-  tls:
-    certResolver: default-tls
----
-apiVersion: traefik.io/v1alpha1
-kind: Middleware
-metadata:
-  name: kitchenowl
-spec:
-  headers:
-    customRequestHeaders:
-      X-Forwarded-Proto: &quot;https&quot;
-      # enable websockets
-      Upgrade: &quot;websocket&quot;
+<span class="w">  </span><span class="nt">tls</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">certResolver</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">default-tls</span>
+<span class="nn">---</span>
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">traefik.io/v1alpha1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Middleware</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kitchenowl</span>
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">headers</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">customRequestHeaders</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">X-Forwarded-Proto</span><span class="p">:</span><span class="w"> </span><span class="s">"https"</span>
+<span class="w">      </span><span class="c1"># enable websockets</span>
+<span class="w">      </span><span class="nt">Upgrade</span><span class="p">:</span><span class="w"> </span><span class="s">"websocket"</span>
 </code></pre></div>
 <p>In this setup a new middleware is added to enable websocket support on this ingress since it is not enabled by default by the ingress controller.</p>
 <h3 id="apache">Apache</h3>
@@ -1137,7 +1137,7 @@ spec:
         ServerAdmin webmaster@example.org
 
         &lt;IfModule mod_headers.c&gt;
-                Header always set Strict-Transport-Security &quot;max-age=15552000; includeSubDomains; preload&quot;
+                Header always set Strict-Transport-Security "max-age=15552000; includeSubDomains; preload"
         &lt;/IfModule&gt;
 
 
@@ -1166,7 +1166,7 @@ Include /etc/letsencrypt/options-ssl-apache.conf
     listen 443 ssl; # managed by Certbot
 
     # https://www.nginx.com/blog/http-strict-transport-security-hsts-and-nginx/
-    add_header Strict-Transport-Security &quot;max-age=31536000; includeSubDomains&quot; always;
+    add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
 
     location / {
         proxy_pass http://localhost:8080;
@@ -1192,17 +1192,17 @@ server {
 </code></pre></div>
 <h3 id="caddy">Caddy</h3>
 <p>Caddy will automatically set up an SSL certificate for the specified hostname.</p>
-<div class="highlight"><pre><span></span><code>kitchenowl.example.org {
-        reverse_proxy localhost:8080 # Set the address of your KitchenOwl frontend here
-        encode gzip
-        header {
-                X-Frame-Options &quot;SAMEORIGIN&quot;
-                X-XSS-Protection &quot;1; mode=block&quot;
-                X-Content-Type-Options &quot;nosniff&quot;
-                Strict-Transport-Security &quot;max-age=31536000; includeSubDomains; preload&quot;
-                Referrer-Policy &quot;strict-origin-when-cross-origin&quot;
-        }
-}
+<div class="highlight"><pre><span></span><code>kitchenowl.example.org<span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">reverse_proxy</span><span class="w"> </span>localhost:8080<span class="w"> </span><span class="c1"># Set the address of your KitchenOwl frontend here</span>
+<span class="w">        </span><span class="k">encode</span><span class="w"> </span>gzip
+<span class="w">        </span><span class="k">header</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span>X-Frame-Options<span class="w"> </span><span class="s2">"SAMEORIGIN"</span>
+<span class="w">                </span>X-XSS-Protection<span class="w"> </span><span class="s2">"1; mode=block"</span>
+<span class="w">                </span>X-Content-Type-Options<span class="w"> </span><span class="s2">"nosniff"</span>
+<span class="w">                </span>Strict-Transport-Security<span class="w"> </span><span class="s2">"max-age=31536000; includeSubDomains; preload"</span>
+<span class="w">                </span>Referrer-Policy<span class="w"> </span><span class="s2">"strict-origin-when-cross-origin"</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="p">}</span>
 </code></pre></div>
 
 

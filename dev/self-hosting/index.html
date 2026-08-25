@@ -945,27 +945,27 @@
 <div class="tabbed-block">
 <ol>
 <li>Download <a href="https://github.com/TomBursch/kitchenowl/blob/main/docker-compose.yml">docker-compose.yml</a>
-<div class="highlight"><pre><span></span><code>version: &quot;3&quot;
-services:
-  front:
-    image: tombursch/kitchenowl-web:latest
-    restart: unless-stopped
-    # environment:
-    #   - BACK_URL=back:5000 # Change this if you rename the containers
-    ports:
-      - &quot;80:80&quot;
-    depends_on:
-      - back
-  back:
-    image: tombursch/kitchenowl-backend:latest
-    restart: unless-stopped
-    environment:
-      - JWT_SECRET_KEY=PLEASE_CHANGE_ME
-    volumes:
-      - kitchenowl_data:/data
+<div class="highlight"><pre><span></span><code><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s">"3"</span>
+<span class="nt">services</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">front</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tombursch/kitchenowl-web:latest</span>
+<span class="w">    </span><span class="nt">restart</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">unless-stopped</span>
+<span class="w">    </span><span class="c1"># environment:</span>
+<span class="w">    </span><span class="c1">#   - BACK_URL=back:5000 # Change this if you rename the containers</span>
+<span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"80:80"</span>
+<span class="w">    </span><span class="nt">depends_on</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">back</span>
+<span class="w">  </span><span class="nt">back</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tombursch/kitchenowl-backend:latest</span>
+<span class="w">    </span><span class="nt">restart</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">unless-stopped</span>
+<span class="w">    </span><span class="nt">environment</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">JWT_SECRET_KEY=PLEASE_CHANGE_ME</span>
+<span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kitchenowl_data:/data</span>
 
-volumes:
-  kitchenowl_data:
+<span class="nt">volumes</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">kitchenowl_data</span><span class="p">:</span>
 </code></pre></div></li>
 <li>Change the default value for <code>JWT_SECRET_KEY</code></li>
 <li>If you want to use PostgreSQL, change the container names, or want to set other settings take a look at the <a href="advanced/">advanced</a> options</li>
@@ -981,20 +981,20 @@ volumes:
 <div class="tabbed-block">
 <ol>
 <li>Download <a href="https://github.com/TomBursch/kitchenowl/blob/main/docker-compose-single.yml">docker-compose.yml</a>
-<div class="highlight"><pre><span></span><code>version: &quot;3&quot;
-services:
-  back:
-    image: tombursch/kitchenowl:latest
-    restart: unless-stopped
-    ports:
-      - &quot;80:8080&quot;
-    environment:
-      - JWT_SECRET_KEY=PLEASE_CHANGE_ME
-    volumes:
-      - kitchenowl_data:/data
+<div class="highlight"><pre><span></span><code><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s">"3"</span>
+<span class="nt">services</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">back</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tombursch/kitchenowl:latest</span>
+<span class="w">    </span><span class="nt">restart</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">unless-stopped</span>
+<span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"80:8080"</span>
+<span class="w">    </span><span class="nt">environment</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">JWT_SECRET_KEY=PLEASE_CHANGE_ME</span>
+<span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kitchenowl_data:/data</span>
 
-volumes:
-  kitchenowl_data:
+<span class="nt">volumes</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">kitchenowl_data</span><span class="p">:</span>
 </code></pre></div></li>
 <li>Change the default value for <code>JWT_SECRET_KEY</code></li>
 <li>If you want to use PostgreSQL, use separate containers for front and backend, or want to set other settings take a look at the <a href="advanced/">advanced</a> options</li>

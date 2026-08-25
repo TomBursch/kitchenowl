@@ -1206,10 +1206,10 @@ Additionally, the releases are tagged, so you can always choose a specific versi
 </table>
 <p>Additionally, to setting these environment variables you can also override the start command to scale the backend up.
 Add the following line or take a look at this exemplary <a href="https://github.com/TomBursch/kitchenowl/blob/main/docker-compose-postgres.yml">docker-compose.yml</a> file:</p>
-<div class="highlight"><pre><span></span><code>back:
-  [...]
-  command: --ini wsgi.ini:web --gevent 2000 # default: 100
-  [...]
+<div class="highlight"><pre><span></span><code><span class="nt">back</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">[</span><span class="nv">...</span><span class="p p-Indicator">]</span>
+<span class="w">  </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">--ini wsgi.ini:web --gevent 2000</span><span class="w"> </span><span class="c1"># default: 100</span>
+<span class="w">  </span><span class="p p-Indicator">[</span><span class="nv">...</span><span class="p p-Indicator">]</span>
 </code></pre></div>
 <p>Overriding the command is not recommended as we might change the underlying process in the future.</p>
 <h3 id="frontend">Frontend</h3>
@@ -1238,25 +1238,25 @@ Add the following line or take a look at this exemplary <a href="https://github.
 <h2 id="multiservice-setup">Multiservice Setup</h2>
 <p>All provided examples can be turned into a multiservice setup with just a few changes. This means separating frontend and backend into multiple docker containers.</p>
 <p>See <a href="https://github.com/TomBursch/kitchenowl/blob/main/docker-compose.yml">docker-compose.yml</a></p>
-<div class="highlight"><pre><span></span><code>version: &quot;3&quot;
-services:
-  front:
-    image: tombursch/kitchenowl-web:latest
-    restart: unless-stopped
-    ports:
-      - &quot;80:80&quot;
-    depends_on:
-      - back
-  back:
-    image: tombursch/kitchenowl-backend:latest
-    restart: unless-stopped
-    environment:
-      - JWT_SECRET_KEY=PLEASE_CHANGE_ME
-    volumes:
-      - kitchenowl_data:/data
+<div class="highlight"><pre><span></span><code><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s">"3"</span>
+<span class="nt">services</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">front</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tombursch/kitchenowl-web:latest</span>
+<span class="w">    </span><span class="nt">restart</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">unless-stopped</span>
+<span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"80:80"</span>
+<span class="w">    </span><span class="nt">depends_on</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">back</span>
+<span class="w">  </span><span class="nt">back</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tombursch/kitchenowl-backend:latest</span>
+<span class="w">    </span><span class="nt">restart</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">unless-stopped</span>
+<span class="w">    </span><span class="nt">environment</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">JWT_SECRET_KEY=PLEASE_CHANGE_ME</span>
+<span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kitchenowl_data:/data</span>
 
-volumes:
-  kitchenowl_data:
+<span class="nt">volumes</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">kitchenowl_data</span><span class="p">:</span>
 </code></pre></div>
 
 

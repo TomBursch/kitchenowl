@@ -30,6 +30,7 @@ def getReport(id):
 
 @reportBlueprint.route("/<int:id>", methods=["DELETE"])
 @jwt_required()
+@server_admin_required()
 def deleteReportById(id):
     report = Report.find_by_id(id)
     if not report:

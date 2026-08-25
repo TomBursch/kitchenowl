@@ -1,6 +1,7 @@
 import os
 import shutil
 import uuid
+import requests
 from requests_hardened import Config, Manager
 import blurhash
 from PIL import Image
@@ -23,7 +24,10 @@ request_manager = Manager(
 
 
 def file_has_access_or_download(
-    newPhoto: str, oldPhoto: str | None = None, user=None
+    newPhoto: str,
+    oldPhoto: str | None = None,
+    user=None,
+    trusted_url: bool = False,
 ) -> str | None:
     """
     Downloads the file if the url is an external URL or checks if the user has access to the file on this server
@@ -37,7 +41,12 @@ def file_has_access_or_download(
     if newPhoto is not None and "/" in newPhoto:
         from mimetypes import guess_extension
 
-        resp = request_manager.send_request("GET", newPhoto)
+        resp = None
+        if trusted_url:
+            resp = requests.get(newPhoto)
+        else:
+            # Use hardened request manager for untrusted URLs
+            resp = request_manager.send_request("GET", newPhoto)
         ext = guess_extension(resp.headers["content-type"])
         if ext and allowed_file("file" + ext):
             filename = secure_filename(str(uuid.uuid4()) + ext)

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/cubits/auth_cubit.dart';
 import 'package:kitchenowl/helpers/url_launcher.dart';
@@ -57,7 +57,7 @@ enum OIDCProivder {
           state: res.$2,
           nonce: res.$3,
         );
-        return BlocProvider.of<AuthCubit>(context).loginOIDC(
+        return await BlocProvider.of<AuthCubit>(context).loginOIDC(
           credential.state!,
           credential.authorizationCode,
           (message) => showSnackbar(

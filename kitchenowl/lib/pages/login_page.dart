@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
@@ -37,7 +37,7 @@ class _LoginPageState extends State<LoginPage> {
         return const SplashPage();
       }
     }
-  
+
     return Scaffold(
       body: Row(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -164,8 +164,9 @@ class _LoginPageState extends State<LoginPage> {
                                     passwordController.text,
                                     () => showSnackbar(
                                       context: context,
-                                      content: Text(AppLocalizations.of(context)!
-                                          .wrongUsernameOrPassword),
+                                      content: Text(
+                                          AppLocalizations.of(context)!
+                                              .wrongUsernameOrPassword),
                                       width: null,
                                     ),
                                   ),
@@ -204,8 +205,7 @@ class _LoginPageState extends State<LoginPage> {
                                       AppLocalizations.of(context)!.signup),
                                 ),
                               ),
-                            if (_displayUsernamePassword())
-                              const Spacer(),
+                            if (_displayUsernamePassword()) const Spacer(),
                             if (App.serverInfo is ConnectedServerInfoState &&
                                 (App.serverInfo as ConnectedServerInfoState)
                                     .emailMandatory)
@@ -269,8 +269,7 @@ class _LoginPageState extends State<LoginPage> {
                             SizedBox(
                                 height:
                                     MediaQuery.paddingOf(context).bottom + 16),
-                            if (!_displayUsernamePassword())
-                              const Spacer(),
+                            if (!_displayUsernamePassword()) const Spacer(),
                           ],
                         ),
                       ),
@@ -297,7 +296,9 @@ class _LoginPageState extends State<LoginPage> {
       (App.serverInfo as ConnectedServerInfoState)
           .oidcProvider
           .contains(provider);
+
   bool _displayUsernamePassword() =>
       App.serverInfo is ConnectedServerInfoState &&
-      !(App.serverInfo as ConnectedServerInfoState).disableUsernamePasswordLogin;
+      !(App.serverInfo as ConnectedServerInfoState)
+          .disableUsernamePasswordLogin;
 }

@@ -1,6 +1,6 @@
 import 'package:animations/animations.dart';
 import 'package:collection/collection.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/app.dart';
 import 'package:kitchenowl/cubits/settings_cubit.dart';
@@ -154,6 +154,7 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                         animation: animation,
                         secondaryAnimation: secondaryAnimation,
                         transitionType: SharedAxisTransitionType.vertical,
+                        fillColor: Colors.transparent,
                         child: child,
                       );
                     },
@@ -215,6 +216,7 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                                     secondaryAnimation: secondaryAnimation,
                                     transitionType:
                                         SharedAxisTransitionType.vertical,
+                                    fillColor: Colors.transparent,
                                     child: child,
                                   );
                                 },

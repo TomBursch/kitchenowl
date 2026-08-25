@@ -1,6 +1,6 @@
 import 'dart:math' as math;
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/recipe.dart';
 import 'package:kitchenowl/widgets/recipe_card.dart';

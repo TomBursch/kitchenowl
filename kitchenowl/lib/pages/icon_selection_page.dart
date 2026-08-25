@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:kitchenowl/item_icons.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/item.dart';

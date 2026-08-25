@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kitchenowl/cubits/household_add_update/household_update_cubit.dart';
@@ -85,7 +85,8 @@ class SliverHouseholdDangerZone extends StatelessWidget {
                             width: null,
                           );
 
-                          return BlocProvider.of<HouseholdUpdateCubit>(context)
+                          return await BlocProvider.of<HouseholdUpdateCubit>(
+                                  context)
                               .importHousehold(
                             content,
                             settings,

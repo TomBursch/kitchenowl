@@ -3,9 +3,9 @@ import 'dart:io';
 
 import 'package:background_fetch/background_fetch.dart';
 import 'package:device_info_plus/device_info_plus.dart';
-import 'package:dynamic_system_colors/dynamic_system_colors.dart';
+import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localized_locales/flutter_localized_locales.dart';

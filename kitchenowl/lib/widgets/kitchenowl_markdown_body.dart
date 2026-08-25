@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:kitchenowl/helpers/markdown_style_sheet_extension.dart';
 import 'package:material_ui/material_ui.dart';
-import 'package:flutter/material.dart' as legacy;
 import 'package:flutter_markdown_plus/flutter_markdown_plus.dart';
 import 'package:markdown/markdown.dart' as md;
 import 'package:kitchenowl/helpers/url_launcher.dart';
@@ -24,8 +24,8 @@ class KitchenOwlMarkdownBody extends StatelessWidget {
     return MarkdownBody(
       data: data,
       shrinkWrap: true,
-      styleSheet: MarkdownStyleSheet.fromTheme(
-        legacy.Theme.of(context),
+      styleSheet: MarkdownStyleSheetMaterialUi.fromMaterialTheme(
+        Theme.of(context),
       )
           .copyWith(
             blockquoteDecoration: BoxDecoration(

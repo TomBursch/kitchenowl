@@ -101,7 +101,7 @@ Place this in your Authelia [configuration.yaml](https://www.authelia.com/config
         - email
         - profile
     redirect_uris:
-        - https://your.domain.here/signin/redirect # Put the same value as FRONT_URL, appended with /signin/redirect
+        - https://your.domain.here/signin/redirect # The redirect URI should match ${FRONT_URL}/signin/redirect
         - kitchenowl:/signin/redirect
     response_modes:
     userinfo_signing_algorithm: none

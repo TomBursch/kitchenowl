@@ -606,6 +606,7 @@ if FRONT_URL and len(oidc_clients) > 0:
                 newUser.photo = file_has_access_or_download(
                     userinfo["picture"],
                     user=newUser,
+                    trusted_url=True,
                 )
                 newUser.save()
 

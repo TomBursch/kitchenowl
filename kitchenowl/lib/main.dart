@@ -17,7 +17,7 @@ Future main() async {
   if (!kIsWeb) await findSystemLocale(); //BUG in package for web?
   runApp(App());
 
-  if (!kIsWeb && (Platform.isAndroid)) {
+  if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
     BackgroundFetch.registerHeadlessTask(backgroundFetchHeadlessTask);
   }
 }

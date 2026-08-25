@@ -80,7 +80,7 @@ class _AppState extends State<App> with WidgetsBindingObserver {
       });
     }
 
-    if (!kIsWeb && (Platform.isAndroid)) {
+    if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
       BackgroundFetch.configure(
         BackgroundFetchConfig(
           minimumFetchInterval: 30,

@@ -75,12 +75,14 @@ Future<NamedByteArray?> selectFile({
       if (i == null) return null;
       if (i == -1) return NamedByteArray.empty;
     }
-    FilePickerResult? result = await FilePicker.pickFiles(
+    PlatformFile? result = await FilePicker.pickFile(
       type: FileType.image,
-      withData: true,
     );
-    if (result != null && result.files.first.name.isNotEmpty) {
-      return NamedByteArray(result.files.first.name, result.files.first.bytes!);
+    if (result != null && result.name.isNotEmpty) {
+      return NamedByteArray(
+        result.name,
+        await result.readAsBytes(),
+      );
     }
   }
 

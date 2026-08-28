@@ -57,17 +57,15 @@ class SliverHouseholdDangerZone extends StatelessWidget {
                 Expanded(
                   child: LoadingElevatedButton(
                     onPressed: () async {
-                      final file = await FilePicker.pickFiles(
-                        allowMultiple: false,
+                      final file = await FilePicker.pickFile(
                         allowedExtensions: ['json'],
                         dialogTitle: 'Please select a file to import:',
                         type: FileType.custom,
-                        withData: true,
                       );
-                      if (file != null && file.files.first.name.isNotEmpty) {
+                      if (file != null && file.name.isNotEmpty) {
                         try {
                           dynamic content = jsonDecode(
-                            String.fromCharCodes(file.files.first.bytes!),
+                            String.fromCharCodes(await file.readAsBytes()),
                           );
                           if (content == null ||
                               content is! Map<String, dynamic>) return;

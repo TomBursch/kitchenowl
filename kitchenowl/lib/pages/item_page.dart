@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:kitchenowl/app.dart';
 import 'package:kitchenowl/cubits/household_cubit.dart';
 import 'package:kitchenowl/cubits/item_edit_cubit.dart';
+import 'package:kitchenowl/cubits/shoppinglist_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/helpers/build_context_extension.dart';
 import 'package:kitchenowl/helpers/item_description_parser.dart';
@@ -220,6 +221,56 @@ class _ItemPageState<T extends Item> extends State<ItemPage<T>> {
                                 ),
                               ],
                             ),
+                            if (widget.shoppingList != null &&
+                                widget.item is! RecipeItem) ...[
+                              const SizedBox(height: 16),
+                              Text(
+                                AppLocalizations.of(context)!.list,
+                                style: Theme.of(context).textTheme.bodySmall,
+                              ),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: BlocBuilder<ShoppinglistCubit,
+                                        ShoppinglistCubitState>(
+                                      builder: (context, state) =>
+                                          DropdownButton<ShoppingList>(
+                                        value: state.shoppinglists.values
+                                            .firstWhereOrNull((e) =>
+                                                e.id ==
+                                                widget.shoppingList!.id),
+                                        isExpanded: true,
+                                        items: [
+                                          for (final list
+                                              in state.shoppinglists.values)
+                                            DropdownMenuItem(
+                                              value: list,
+                                              child: Text(list.name),
+                                            ),
+                                        ],
+                                        onChanged: !App.isOffline
+                                            ? (newList) async {
+                                                if (newList != null &&
+                                                    newList.id !=
+                                                        widget.shoppingList!
+                                                            .id &&
+                                                    newList.id != null) {
+                                                  await cubit.moveItem(newList);
+                                                  if (mounted) {
+                                                    Navigator.of(context).pop(
+                                                        const UpdateValue<Item>(
+                                                            UpdateEnum
+                                                                .deleted));
+                                                  }
+                                                }
+                                              }
+                                            : null,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
                             if (widget.item is ShoppinglistItem)
                               ListTile(
                                 contentPadding: EdgeInsets.zero,

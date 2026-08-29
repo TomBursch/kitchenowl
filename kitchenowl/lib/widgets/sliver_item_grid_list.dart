@@ -17,6 +17,10 @@ class SliverItemGridList<T extends Item> extends StatelessWidget {
   final void Function()? onRefresh;
   final Nullable<void Function(T)>? onPressed;
   final Nullable<void Function(T)>? onLongPressed;
+
+  /// When set (and the list style is a list), an unchecked checkbox is shown
+  /// as the leading widget; tapping it invokes this callback.
+  final Nullable<void Function(T)>? onCheckboxPressed;
   final List<T> items;
   final List<Category>? categories; // forwarded to item page on long press
   final ShoppingList? shoppingList; // forwarded to item page on long press
@@ -30,6 +34,7 @@ class SliverItemGridList<T extends Item> extends StatelessWidget {
     this.onRefresh,
     this.onPressed,
     this.onLongPressed,
+    this.onCheckboxPressed,
     this.items = const [],
     this.categories,
     this.shoppingList,
@@ -65,6 +70,7 @@ class SliverItemGridList<T extends Item> extends StatelessWidget {
               onLongPressed:
                   (onLongPressed ?? Nullable((item) => openMenu(context, item)))
                       .value,
+              onCheckboxPressed: onCheckboxPressed?.value,
               extraOption: extraOption?.call(items[i]),
             ),
     );

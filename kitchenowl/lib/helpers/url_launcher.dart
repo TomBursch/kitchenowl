@@ -58,7 +58,7 @@ bool isValidUrl(String url) {
   }
 }
 
-final RegExp _urlPattern = RegExp(r'https?://\S+');
+final RegExp _urlPattern = RegExp(r'https?://\S+', caseSensitive: false);
 
 /// Returns the URL contained in [text] if there is exactly one, otherwise null.
 String? extractSingleUrl(String text) {

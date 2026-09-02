@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:kitchenowl/router.dart';
 import 'package:url_launcher/url_launcher.dart' as ul;
 import 'package:flutter_custom_tabs/flutter_custom_tabs.dart' as ct;
@@ -56,4 +56,13 @@ bool isValidUrl(String url) {
   } catch (e) {
     return false;
   }
+}
+
+final RegExp _urlPattern = RegExp(r'https?://\S+', caseSensitive: false);
+
+/// Returns the URL contained in [text] if there is exactly one, otherwise null.
+String? extractSingleUrl(String text) {
+  final matches = _urlPattern.allMatches(text).map((m) => m.group(0)!).toList();
+
+  return matches.length == 1 ? matches.first : null;
 }

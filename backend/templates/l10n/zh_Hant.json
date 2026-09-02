@@ -1,0 +1,24 @@
+{
+  "categories": {
+    "bread": "🍞 烘焙食品",
+    "canned": "🥫 罐頭食品",
+    "dairy": "🥛 乳製品",
+    "drinks": "🍹 飲品",
+    "freezer": "❄️ 冷凍食品",
+    "fruits_vegetables": "🥬 蔬果",
+    "grain": "🥟 麵食",
+    "hygiene": "🧼 清潔用品",
+    "refrigerated": "💧 冷藏品",
+    "snacks": "🥜 零食"
+  },
+  "items": {
+    "agave_syrup": "龍舌蘭糖漿",
+    "aioli": "大蒜蛋黃醬",
+    "amaretto": "杏仁酒",
+    "apple": "蘋果",
+    "apple_pulp": "蘋果泥",
+    "applesauce": "蘋果醬",
+    "apricots": "杏桃",
+    "apérol": "Aperol 艾普羅香甜酒"
+  }
+}

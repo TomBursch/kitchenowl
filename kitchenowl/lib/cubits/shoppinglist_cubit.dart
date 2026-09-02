@@ -122,6 +122,9 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
   Future<void> add(Item item) async {
     final _state = state;
     addLocally(ShoppinglistItem.fromItem(item: item));
+    if (_state is SearchShoppinglistCubitState) {
+      emit(_state.toStateWithoutSearch());
+    }
     if (_state.selectedShoppinglist == null) return;
     await TransactionHandler.getInstance()
         .runTransaction(TransactionShoppingListAddItem(
@@ -129,7 +132,7 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
       shoppinglist: _state.selectedShoppinglist!,
       item: item,
     ));
-    await refresh(query: '');
+    await refresh();
   }
 
   void addLocally(ShoppinglistItem item, [int? shoppinglistId]) {
@@ -629,6 +632,15 @@ class SearchShoppinglistCubitState extends ShoppinglistCubitState {
         query: query,
         result: result ?? this.result,
         selectedListItems: selectedListItems ?? this.selectedListItems,
+      );
+
+  ShoppinglistCubitState toStateWithoutSearch() => ShoppinglistCubitState(
+        shoppinglists: shoppinglists,
+        selectedShoppinglistId:
+            selectedShoppinglistId ?? this.selectedShoppinglistId,
+        sorting: sorting,
+        categories: categories,
+        selectedListItems: selectedListItems,
       );
 
   @override

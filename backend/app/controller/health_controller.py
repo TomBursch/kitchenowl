@@ -6,6 +6,7 @@ from app.config import (
     TERMS_URL,
     OPEN_REGISTRATION,
     EMAIL_MANDATORY,
+    DISABLE_USERNAME_PASSWORD_LOGIN,
 )
 from app.config import SUPPORTED_LANGUAGES, oidc_clients
 
@@ -28,6 +29,8 @@ def get_health():
         info["open_registration"] = True
     if EMAIL_MANDATORY:
         info["email_mandatory"] = True
+    if DISABLE_USERNAME_PASSWORD_LOGIN:
+        info["disable_username_password_login"] = True
     return jsonify(info)
 
 

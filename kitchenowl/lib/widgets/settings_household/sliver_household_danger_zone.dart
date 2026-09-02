@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kitchenowl/cubits/household_add_update/household_update_cubit.dart';
@@ -57,17 +57,15 @@ class SliverHouseholdDangerZone extends StatelessWidget {
                 Expanded(
                   child: LoadingElevatedButton(
                     onPressed: () async {
-                      final file = await FilePicker.platform.pickFiles(
-                        allowMultiple: false,
+                      final file = await FilePicker.pickFile(
                         allowedExtensions: ['json'],
                         dialogTitle: 'Please select a file to import:',
                         type: FileType.custom,
-                        withData: true,
                       );
-                      if (file != null && file.files.first.name.isNotEmpty) {
+                      if (file != null && file.name.isNotEmpty) {
                         try {
                           dynamic content = jsonDecode(
-                            String.fromCharCodes(file.files.first.bytes!),
+                            String.fromCharCodes(await file.readAsBytes()),
                           );
                           if (content == null ||
                               content is! Map<String, dynamic>) return;
@@ -85,7 +83,8 @@ class SliverHouseholdDangerZone extends StatelessWidget {
                             width: null,
                           );
 
-                          return BlocProvider.of<HouseholdUpdateCubit>(context)
+                          return await BlocProvider.of<HouseholdUpdateCubit>(
+                                  context)
                               .importHousehold(
                             content,
                             settings,

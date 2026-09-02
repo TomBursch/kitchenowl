@@ -13,6 +13,7 @@ services:
     restart: unless-stopped
     environment:
       - JWT_SECRET_KEY=PLEASE_CHANGE_ME
+      # - KITCHENOWL_MCP_ENABLED=true # Optional: enable MCP endpoint at /mcp
       # - FRONT_URL=http://localhost # Optional take a look at https://docs.kitchenowl.org/latest/self-hosting/advanced/ for more info
     volumes:
       - kitchenowl_data:/data

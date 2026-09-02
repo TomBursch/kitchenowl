@@ -14,6 +14,13 @@ server {
     location /api/ {
         include uwsgi_params;
         uwsgi_pass ${BACK_URL};
+        client_max_body_size 32M;
+    }
+    location /mcp {
+        include uwsgi_params;
+        proxy_buffering off;
+        uwsgi_buffering off;
+        uwsgi_pass ${BACK_URL};
     }
     location /socket.io/ {
         include uwsgi_params;

@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:kitchenowl/helpers/named_bytearray.dart';
 import 'package:kitchenowl/kitchenowl.dart';
@@ -75,12 +75,14 @@ Future<NamedByteArray?> selectFile({
       if (i == null) return null;
       if (i == -1) return NamedByteArray.empty;
     }
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
+    PlatformFile? result = await FilePicker.pickFile(
       type: FileType.image,
-      withData: true,
     );
-    if (result != null && result.files.first.name.isNotEmpty) {
-      return NamedByteArray(result.files.first.name, result.files.first.bytes!);
+    if (result != null && result.name.isNotEmpty) {
+      return NamedByteArray(
+        result.name,
+        await result.readAsBytes(),
+      );
     }
   }
 

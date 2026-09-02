@@ -6,7 +6,7 @@ import 'package:universal_html/html.dart' as html;
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:share_plus/share_plus.dart' as SharePlus;
 
 abstract class Share {
@@ -32,17 +32,13 @@ abstract class Share {
       html.document.body?.children.remove(anchor);
       html.Url.revokeObjectUrl(url.toString());
     } else if (Platform.isLinux || Platform.isMacOS || Platform.isWindows) {
-      String? outputPath = await FilePicker.platform.saveFile(
+      await FilePicker.saveFile(
         dialogTitle: 'Please select an output file:',
         allowedExtensions: ['json'],
         type: FileType.custom,
         fileName: filename,
+        bytes: Uint8List.fromList(content.codeUnits),
       );
-      if (outputPath == null) return;
-
-      try {
-        await File(outputPath).writeAsString(content);
-      } catch (_) {}
     } else {
       final box = context.findRenderObject() as RenderBox?;
       SharePlus.Share.shareXFiles(

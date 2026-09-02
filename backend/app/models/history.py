@@ -35,6 +35,7 @@ class History(Model):
             "Item",
             uselist=False,
             back_populates="history",
+            lazy="joined",
         ),
     )
     shoppinglist: Mapped["Shoppinglist"] = cast(

@@ -46,7 +46,7 @@ def get_secret(env_var: str, default: str = None) -> str | None:
 
 
 MIN_FRONTEND_VERSION = 71
-BACKEND_VERSION = 120
+BACKEND_VERSION = 124
 
 APP_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_DIR = os.path.dirname(APP_DIR)
@@ -76,6 +76,11 @@ DB_URL = URL.create(
     port=int(cast(str, os.getenv("DB_PORT"))) if os.getenv("DB_PORT") else None,
     database=os.getenv("DB_NAME", STORAGE_PATH + "/database.db"),
 )
+_SQLITE_SYNCHRONOUS_MODES = {"OFF", "NORMAL", "FULL", "EXTRA"}
+DB_SQLITE_SYNCHRONOUS = os.getenv("DB_SQLITE_SYNCHRONOUS", "FULL").upper()
+if DB_SQLITE_SYNCHRONOUS not in _SQLITE_SYNCHRONOUS_MODES:
+    DB_SQLITE_SYNCHRONOUS = "FULL"
+
 MESSAGE_BROKER = os.getenv("MESSAGE_BROKER")
 
 JWT_ACCESS_TOKEN_EXPIRES = timedelta(minutes=15)
@@ -102,6 +107,7 @@ SUPPORTED_LANGUAGES = {
     "ar": "اَلْعَرَبِيَّةُ",
     "bg": "български език",
     "bn": "বাংলা",
+    "br": "Brezhoneg",
     "ca": "Catalan",
     "cs": "čeština",
     "da": "Dansk",
@@ -109,6 +115,8 @@ SUPPORTED_LANGUAGES = {
     "de_CH": "Deutsch (Schweiz)",
     "el": "Ελληνικά",
     "es": "Español",
+    "et": "Eesti keel",
+    "eu": "Euskara",
     "fa": "فارسی",
     "fi": "Suomi",
     "fr": "Français",
@@ -129,12 +137,14 @@ SUPPORTED_LANGUAGES = {
     "ru": "Русский язык",
     "sk": "Slovenčina",
     "sl": "Slovenščina",
+    "sr": "Српски",
     "sv": "Svenska",
     "ta": "தமிழ்",
     "te": "తెలుగు",
     "tr": "Türkçe",
     "uk": "Українська",
     "zh_Hans": "简化字",
+    "zh_Hant": "繁體字",
 }
 
 Flask.json_provider_class = KitchenOwlJSONProvider
@@ -149,10 +159,15 @@ app.config["SECRET_KEY"] = jwt_secret
 # SQLAlchemy
 app.config["SQLALCHEMY_DATABASE_URI"] = DB_URL
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
+    "pool_size": int(os.getenv("DB_POOL_SIZE", 5)),
+    "max_overflow": int(os.getenv("DB_MAX_OVERFLOW", 10)),
+}
 # JWT
 app.config["JWT_SECRET_KEY"] = jwt_secret
 app.config["JWT_ACCESS_TOKEN_EXPIRES"] = JWT_ACCESS_TOKEN_EXPIRES
 app.config["JWT_REFRESH_TOKEN_EXPIRES"] = JWT_REFRESH_TOKEN_EXPIRES
+app.config["JWT_VERIFY_SUB"] = False
 if COLLECT_METRICS:
     # BASIC_AUTH
     app.config["BASIC_AUTH_USERNAME"] = os.getenv("METRICS_USER", "kitchenowl")
@@ -284,16 +299,22 @@ else:
     app.extensions["celery"] = celery_app
 
 
-# Load ICU extension for sqlite
+# Load ICU extension and enable WAL for sqlite
 if DB_URL.drivername == "sqlite":
 
-    def load_extension(conn, unused):
+    def on_sqlite_connect(conn, unused):
         conn.enable_load_extension(True)
         conn.load_extension(cast(str, sqlite_icu.extension_path()).replace(".so", ""))
         conn.enable_load_extension(False)
 
+        cursor = conn.cursor()
+        cursor.execute("PRAGMA journal_mode=WAL")
+        cursor.execute(f"PRAGMA synchronous={DB_SQLITE_SYNCHRONOUS}")
+        cursor.execute("PRAGMA busy_timeout=5000")
+        cursor.close()
+
     with app.app_context():
-        listen(db.engine, "connect", load_extension)
+        listen(db.engine, "connect", on_sqlite_connect)
 
 
 @app.after_request

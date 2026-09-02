@@ -25,10 +25,16 @@ class Token(Model):
     name: Mapped[str] = db.Column(db.String(), nullable=False)
     last_used_at: Mapped[datetime | None] = db.Column(db.DateTime)
     refresh_token_id: Mapped[Optional[int]] = db.Column(
-        db.Integer, db.ForeignKey("token.id"), nullable=True
+        db.Integer,
+        db.ForeignKey("token.id"),
+        nullable=True,
+        index=True,
     )
     user_id: Mapped[int] = db.Column(
-        db.Integer, db.ForeignKey("user.id"), nullable=False
+        db.Integer,
+        db.ForeignKey("user.id"),
+        nullable=False,
+        index=True,
     )
 
     created_tokens: Mapped[List["Token"]] = cast(

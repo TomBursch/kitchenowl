@@ -1,9 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_markdown_plus/flutter_markdown_plus.dart';
 import 'package:kitchenowl/helpers/url_launcher.dart';
 import 'package:markdown/markdown.dart' as md;
+import 'package:kitchenowl/helpers/markdown_style_sheet_extension.dart';
 
 class KitchenOwlMarkdownBuilder extends StatefulWidget {
   /// Creates a widget that parses and displays Markdown.
@@ -175,7 +176,7 @@ class _KitchenOwlMarkdownBuilderState extends State<KitchenOwlMarkdownBuilder>
       delegate: this,
       selectable: widget.selectable,
       styleSheet: widget.styleSheet ??
-          MarkdownStyleSheet.fromTheme(
+          MarkdownStyleSheetMaterialUi.fromMaterialTheme(
             Theme.of(context),
           ).copyWith(
             blockquoteDecoration: BoxDecoration(
@@ -184,6 +185,7 @@ class _KitchenOwlMarkdownBuilderState extends State<KitchenOwlMarkdownBuilder>
               borderRadius: BorderRadius.circular(2.0),
             ),
             textScaler: widget.textScaler,
+            pPadding: const EdgeInsets.only(bottom: 12),
           ),
       imageDirectory: widget.imageDirectory,
       imageBuilder: widget.imageBuilder ??

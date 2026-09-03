@@ -55,6 +55,72 @@ class Shoppinglist(Model, DbModelAuthorizeMixin):
     def isDefault(self) -> bool:
         return self.id == self.getDefault(self.household_id).id
 
+    @classmethod
+    def get_items_sorted(cls, household_id: int, shoppinglist_id: int) -> list:
+        """
+        Gibt Einkaufslisten-Items basierend auf Haushalt-Sortiereinstellungen zurück
+        """
+        from app.models import Item, Category, Household
+        
+        household = Household.find_by_id(household_id)
+        if not household:
+            raise Exception("Household not found")
+        
+        query = ShoppinglistItems.query.filter(
+            ShoppinglistItems.shoppinglist_id == shoppinglist_id
+        ).join(ShoppinglistItems.item)
+        
+        # Sortierung anwenden basierend auf Household-Einstellungen
+        sort_type = household.shopping_list_sort_type
+        sort_order = household.shopping_list_sort_order
+        
+        if sort_type == 1:  # BY_CATEGORY
+            query = query.join(Item.category, isouter=True).order_by(
+                Category.ordering.asc() if sort_order == 0 else Category.ordering.desc(),
+                Item.name.asc() if sort_order == 0 else Item.name.desc()
+            )
+        elif sort_type == 2:  # BY_FREQUENCY
+            query = query.order_by(
+                Item.support.desc() if sort_order == 0 else Item.support.asc(),
+                Item.name.asc()
+            )
+        elif sort_type == 3:  # CUSTOM (nach manueller Ordnung)
+            query = query.order_by(
+                Item.ordering.asc() if sort_order == 0 else Item.ordering.desc()
+            )
+        else:  # BY_NAME (default)
+            query = query.order_by(
+                Item.name.asc() if sort_order == 0 else Item.name.desc()
+            )
+        
+        return query.all()
+
+    @classmethod
+    def all_from_household_sorted(cls, household_id: int) -> list:
+        """Gibt alle Einkaufslisten eines Haushalts in der Reihenfolge aus view_ordering zurück"""
+        from app.models import Household
+        
+        household = Household.find_by_id(household_id)
+        if not household:
+            return []
+        
+        all_lists = cls.query.filter(cls.household_id == household_id).all()
+        
+        # Sortiere nach view_ordering
+        if household.view_ordering:
+            sorted_ids = [int(x) for x in household.view_ordering if x.isdigit()]
+            id_to_list = {sl.id: sl for sl in all_lists}
+            
+            # Zuerst die in view_ordering geordneten Listen
+            result = [id_to_list[id] for id in sorted_ids if id in id_to_list]
+            
+            # Dann die nicht geordneten (neu hinzugefügte)
+            result += [sl for sl in all_lists if sl.id not in sorted_ids]
+            
+            return result
+        
+        return all_lists
+
 
 class ShoppinglistItems(Model):
     __tablename__ = "shoppinglist_items"

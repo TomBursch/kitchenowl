@@ -1,77 +1,42 @@
-from marshmallow import fields, Schema
+from typing import Annotated
+from pydantic import AfterValidator, BaseModel, EmailStr, StringConstraints
 
 from app.config import EMAIL_MANDATORY
+from app.helpers.validators import validate_non_emty_no_at
 
 
-class Login(Schema):
-    username = fields.String(required=True, validate=lambda a: a and not a.isspace())
-    password = fields.String(
-        required=True,
-        validate=lambda a: a and not a.isspace(),
-        load_only=True,
-    )
-    device = fields.String(
-        required=False,
-        validate=lambda a: a and not a.isspace(),
-        load_only=True,
-    )
+class Login(BaseModel):
+    username: Annotated[str, StringConstraints(min_length=1, strip_whitespace=True)]
+    password: Annotated[str, StringConstraints(min_length=1, strip_whitespace=True)]
+    device: Annotated[
+        str | None, StringConstraints(min_length=1, strip_whitespace=True)
+    ] = None
 
 
-class Signup(Schema):
-    username = fields.String(
-        required=True, validate=lambda a: a and not a.isspace() and "@" not in a
-    )
-    email = fields.String(
-        required=EMAIL_MANDATORY,
-        validate=lambda a: a and not a.isspace() and "@" in a,
-        load_only=True,
-    )
-    name = fields.String(required=True, validate=lambda a: a and not a.isspace())
-    password = fields.String(
-        required=True,
-        validate=lambda a: a and not a.isspace(),
-        load_only=True,
-    )
-    device = fields.String(
-        required=False,
-        validate=lambda a: a and not a.isspace(),
-        load_only=True,
-    )
+class Signup(BaseModel):
+    username: Annotated[str, AfterValidator(validate_non_emty_no_at)]
+    email: Annotated[
+        EmailStr | None, AfterValidator(lambda x: EMAIL_MANDATORY or x is not None)
+    ] = None
+    name: Annotated[str, StringConstraints(min_length=1, strip_whitespace=True)]
+    password: Annotated[str, StringConstraints(min_length=1, strip_whitespace=True)]
+    device: Annotated[
+        str | None, StringConstraints(min_length=1, strip_whitespace=True)
+    ] = None
 
 
-class CreateLongLivedToken(Schema):
-    device = fields.String(
-        required=True,
-        validate=lambda a: a and not a.isspace(),
-        load_only=True,
-    )
+class CreateLongLivedToken(BaseModel):
+    device: Annotated[str, StringConstraints(min_length=1, strip_whitespace=True)]
 
 
-class GetOIDCLoginUrl(Schema):
-    provider = fields.String(
-        validate=lambda a: a and not a.isspace(),
-        load_only=True,
-    )
-    kitchenowl_scheme = fields.Boolean(
-        required=False,
-        load_default=False,
-        load_only=True,
-    )
+class GetOIDCLoginUrl(BaseModel):
+    provider: Annotated[str, StringConstraints(min_length=1, strip_whitespace=True)]
+    kitchenowl_scheme: bool = False
 
 
-class LoginOIDC(Schema):
-    state = fields.String(
-        validate=lambda a: a and not a.isspace(),
-        required=True,
-        load_only=True,
-    )
-    code = fields.String(
-        validate=lambda a: a and not a.isspace(),
-        required=True,
-        load_only=True,
-    )
-    device = fields.String(
-        validate=lambda a: a and not a.isspace(),
-        required=False,
-        load_only=True,
-    )
+class LoginOIDC(BaseModel):
+    state: Annotated[str, StringConstraints(min_length=1, strip_whitespace=True)]
+    code: Annotated[str, StringConstraints(min_length=1, strip_whitespace=True)]
+    device: Annotated[
+        str | None, StringConstraints(min_length=1, strip_whitespace=True)
+    ] = None

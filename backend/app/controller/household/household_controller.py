@@ -42,23 +42,23 @@ def getHousehold(household_id):
 @household.route("", methods=["POST"])
 @jwt_required()
 @validate_args(AddHousehold)
-def addHousehold(args):
+def addHousehold(args: AddHousehold):
     household = Household()
-    household.name = args["name"]
-    if "photo" in args and args["photo"] != household.photo:
-        household.photo = file_has_access_or_download(args["photo"], household.photo)
-    if "language" in args and args["language"] in SUPPORTED_LANGUAGES:
-        household.language = args["language"]
-    if "planner_feature" in args:
-        household.planner_feature = args["planner_feature"]
-    if "expenses_feature" in args:
-        household.expenses_feature = args["expenses_feature"]
-    if "view_ordering" in args:
-        household.view_ordering = args["view_ordering"]
-    if "link" in args:
-        household.link = args["link"]
-    if "description" in args:
-        household.link = args["description"]
+    household.name = args.name
+    if args.photo != household.photo:
+        household.photo = file_has_access_or_download(args.photo, household.photo)
+    if args.language and args.language in SUPPORTED_LANGUAGES:
+        household.language = args.language
+    if args.planner_feature is not None:
+        household.planner_feature = args.planner_feature
+    if args.expenses_feature is not None:
+        household.expenses_feature = args.expenses_feature
+    if args.view_ordering is not None:
+        household.view_ordering = args.view_ordering
+    if args.link is not None:
+        household.link = args.link
+    if args.description is not None:
+        household.description = args.description
 
     household.save()
 
@@ -68,8 +68,8 @@ def addHousehold(args):
     member.owner = True
     member.save()
 
-    if "member" in args:
-        for uid in args["member"]:
+    if args.member:
+        for uid in args.member:
             if uid == current_user.id:
                 continue
             if not User.find_by_id(uid):
@@ -91,32 +91,32 @@ def addHousehold(args):
 @jwt_required()
 @authorize_household(required=RequiredRights.ADMIN)
 @validate_args(UpdateHousehold)
-def updateHousehold(args, household_id):
+def updateHousehold(args: UpdateHousehold, household_id):
     household = Household.find_by_id(household_id)
     if not household:
         raise NotFoundRequest()
 
-    if "name" in args:
-        household.name = args["name"]
-    if "photo" in args and args["photo"] != household.photo:
-        household.photo = file_has_access_or_download(args["photo"], household.photo)
+    if args.name:
+        household.name = args.name
+    if args.photo and args.photo != household.photo:
+        household.photo = file_has_access_or_download(args.photo, household.photo)
     if (
-        "language" in args
+        args.language
         and not household.language
-        and args["language"] in SUPPORTED_LANGUAGES
+        and args.language in SUPPORTED_LANGUAGES
     ):
-        household.language = args["language"]
+        household.language = args.language
         gevent.spawn(importLanguage, household.id, household.language)
-    if "planner_feature" in args:
-        household.planner_feature = args["planner_feature"]
-    if "expenses_feature" in args:
-        household.expenses_feature = args["expenses_feature"]
-    if "view_ordering" in args:
-        household.view_ordering = args["view_ordering"]
-    if "link" in args:
-        household.link = args["link"].strip()[:255]
-    if "description" in args:
-        household.description = args["description"].strip()[:255]
+    if args.planner_feature is not None:
+        household.planner_feature = args.planner_feature
+    if args.expenses_feature is not None:
+        household.expenses_feature = args.expenses_feature
+    if args.view_ordering is not None:
+        household.view_ordering = args.view_ordering
+    if args.link is not None:
+        household.link = args.link.strip()[:255]
+    if args.description is not None:
+        household.description = args.description.strip()[:255]
 
     household.save()
     return jsonify(household.obj_to_dict())
@@ -138,7 +138,7 @@ def deleteHouseholdById(household_id: int):
 @jwt_required()
 @authorize_household(required=RequiredRights.ADMIN)
 @validate_args(UpdateHouseholdMember)
-def putHouseholdMember(args, household_id: int, user_id: int):
+def putHouseholdMember(args: UpdateHouseholdMember, household_id: int, user_id: int):
     hm = HouseholdMember.find_by_ids(household_id, user_id)
     if not hm:
         household = Household.find_by_id(household_id)
@@ -148,8 +148,8 @@ def putHouseholdMember(args, household_id: int, user_id: int):
         hm.household_id = household_id
         hm.user_id = user_id
 
-    if "admin" in args:
-        hm.admin = args["admin"]
+    if args.admin is not None:
+        hm.admin = args.admin
 
     hm.save()
 

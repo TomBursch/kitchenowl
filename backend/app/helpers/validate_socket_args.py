@@ -1,9 +1,9 @@
-from marshmallow.exceptions import ValidationError
+from pydantic import BaseModel, ValidationError
 from app.errors import InvalidUsage
 from functools import wraps
 
 
-def validate_socket_args(schema_cls):
+def validate_socket_args(schema_cls: type[BaseModel]):
     def validate(func):
         @wraps(func)
         def func_wrapper(*args, **kwargs):
@@ -11,7 +11,7 @@ def validate_socket_args(schema_cls):
                 raise Exception("Invalid usage. Schema class missing")
 
             try:
-                arguments = schema_cls().load(args[0])
+                arguments = schema_cls.model_validate_json(args[0])
             except ValidationError as exc:
                 raise InvalidUsage("{}".format(exc))
 

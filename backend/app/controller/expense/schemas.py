@@ -1,87 +1,74 @@
-from marshmallow import fields, Schema
+from typing import Annotated
 
-from app.util import MultiDictList
-
-
-class CustomInteger(fields.Integer):
-    def _deserialize(self, value, attr, data, **kwargs):
-        if not value:
-            return None
-        return super()._deserialize(value, attr, data, **kwargs)
+from pydantic import BaseModel, Field, PositiveInt, StringConstraints
 
 
-class GetExpenses(Schema):
-    view = fields.Integer()
-    startAfterId = fields.Integer(validate=lambda a: a >= 0)
-    startAfterDate = fields.Integer(validate=lambda a: a >= 0)
-    endBeforeDate = fields.Integer(validate=lambda a: a >= 0)
-    filter = MultiDictList(CustomInteger(allow_none=True))
-    search = fields.String(allow_none=True)
+class GetExpenses(BaseModel):
+    view: int
+    startAfterId: PositiveInt | None = None
+    startAfterDate: PositiveInt | None = None
+    endBeforeDate: PositiveInt | None = None
+    filter: list[int | None] = []
+    search: str | None = None
 
 
-class AddExpense(Schema):
-    class User(Schema):
-        id = fields.Integer(required=True, validate=lambda a: a > 0)
-        name = fields.String(validate=lambda a: a and not a.isspace())
-        factor = fields.Integer(load_default=1)
+class AddExpense(BaseModel):
+    class User(BaseModel):
+        id: PositiveInt
+        name: Annotated[str, StringConstraints(min_length=1, strip_whitespace=True)]
+        factor: int = 1
 
-    name = fields.String(required=True)
-    amount = fields.Float(required=True)
-    description = fields.String()
-    date = fields.Integer()
-    photo = fields.String()
-    category = fields.Integer(allow_none=True)
-    paid_by = fields.Nested(User(), required=True)
-    paid_for = fields.List(
-        fields.Nested(User()), required=True, validate=lambda a: len(a) > 0
-    )
-    exclude_from_statistics = fields.Boolean()
+    name: str
+    amount: float
+    description: str | None = None
+    date: int | None = None
+    photo: str | None = None
+    category: int | None = None
+    paid_by: User
+    paid_for: list[User] = Field(min_length=1)
+    exclude_from_statistics: bool = False
 
 
-class UpdateExpense(Schema):
-    class User(Schema):
-        id = fields.Integer(required=True, validate=lambda a: a > 0)
-        name = fields.String(validate=lambda a: a and not a.isspace())
-        factor = fields.Integer(load_default=1)
+class UpdateExpense(BaseModel):
+    class User(BaseModel):
+        id: PositiveInt
+        name: Annotated[
+            str | None, StringConstraints(min_length=1, strip_whitespace=True)
+        ] = None
+        factor: int = 1
 
-    name = fields.String()
-    amount = fields.Float()
-    description = fields.String()
-    date = fields.Integer()
-    photo = fields.String()
-    category = fields.Integer(allow_none=True)
-    paid_by = fields.Nested(User())
-    paid_for = fields.List(fields.Nested(User()))
-    exclude_from_statistics = fields.Boolean()
-
-
-class AddExpenseCategory(Schema):
-    name = fields.String(required=True, validate=lambda a: a and not a.isspace())
-    color = fields.Integer(validate=lambda i: i >= 0, allow_none=True)
-    budget = fields.Float(allow_none=True)
+    name: str | None = None
+    amount: float | None = None
+    description: str | None = None
+    date: int | None = None
+    photo: str | None = None
+    category: int | None = None
+    paid_by: User | None = None
+    paid_for: list[User] | None = None
+    exclude_from_statistics: bool | None = None
 
 
-class UpdateExpenseCategory(Schema):
-    name = fields.String(validate=lambda a: a and not a.isspace())
-    color = fields.Integer(validate=lambda i: i >= 0, allow_none=True)
-    budget = fields.Float(allow_none=True)
+class AddExpenseCategory(BaseModel):
+    name: Annotated[str, StringConstraints(min_length=1, strip_whitespace=True)]
+    color: int | None = Field(ge=0)
+    budget: float | None = None
+
+
+class UpdateExpenseCategory(BaseModel):
+    name: Annotated[str, StringConstraints(min_length=1, strip_whitespace=True)]
+    color: int | None = Field(ge=0, default=None)
+    budget: float | None = None
 
     # if set this merges the specified category into this category thus combining them to one
-    merge_category_id = fields.Integer(
-        validate=lambda a: a > 0,
-        allow_none=True,
-    )
+    merge_category_id: int | None = Field(gt=0, default=None)
 
 
-class GetExpenseOverview(Schema):
+class GetExpenseOverview(BaseModel):
     # household = 0, personal = 1
-    view = fields.Integer()
+    view: int
     # daily = 0, weekly = 1, montly = 2, yearly = 3
-    frame = fields.Integer(validate=lambda a: a >= 0 and a <= 3)
+    frame: int = Field(ge=0, le=3)
     # how many frames are looked at
-    steps = fields.Integer(validate=lambda a: a > 0)
+    steps: int = Field(gt=0)
     # used for pagination (i.e. start of steps, now=0)
-    page = fields.Integer(
-        validate=lambda a: a >= 0,
-        allow_none=True,
-    )
+    page: int | None = Field(ge=0, default=None)

@@ -1,85 +1,78 @@
-from marshmallow import EXCLUDE, fields, Schema
+from typing import Annotated
+from pydantic import BaseModel, PositiveInt, StringConstraints
 
 
-class AddRecipe(Schema):
-    class Meta:
-        unknown = EXCLUDE
+class AddRecipe(BaseModel):
+    class RecipeItem(BaseModel):
+        name: Annotated[str, StringConstraints(min_length=1, strip_whitespace=True)]
+        description: str = ""
+        optional: bool = True
 
-    class RecipeItem(Schema):
-        name = fields.String(required=True, validate=lambda a: a and not a.isspace())
-        description = fields.String(load_default="")
-        optional = fields.Boolean(load_default=True)
-
-    name = fields.String(required=True, validate=lambda a: a and not a.isspace())
-    description = fields.String(validate=lambda a: a is not None)
-    time = fields.Integer(validate=lambda a: a >= 0)
-    cook_time = fields.Integer(validate=lambda a: a >= 0)
-    prep_time = fields.Integer(validate=lambda a: a >= 0)
-    yields = fields.Integer(validate=lambda a: a >= 0)
-    source = fields.String()
-    server_curated = fields.Boolean()
-    photo = fields.String()
-    visibility = fields.Integer(validate=lambda a: a >= 0)
-    items = fields.List(fields.Nested(RecipeItem()))
-    tags = fields.List(fields.String())
+    name: Annotated[str, StringConstraints(min_length=1, strip_whitespace=True)]
+    description: str
+    time: PositiveInt | None = None
+    cook_time: PositiveInt | None = None
+    prep_time: PositiveInt | None = None
+    yields: PositiveInt | None = None
+    source: str | None = None
+    server_curated: bool | None = None
+    photo: str | None = None
+    visibility: PositiveInt | None = None
+    items: list[RecipeItem] = []
+    tags: list[str] = []
 
 
-class UpdateRecipe(Schema):
-    class Meta:
-        unknown = EXCLUDE
+class UpdateRecipe(BaseModel):
+    class RecipeItem(BaseModel):
+        name: Annotated[str, StringConstraints(min_length=1, strip_whitespace=True)]
+        description: str
+        optional: bool = True
 
-    class RecipeItem(Schema):
-        name = fields.String(required=True, validate=lambda a: a and not a.isspace())
-        description = fields.String()
-        optional = fields.Boolean(load_default=True)
-
-    name = fields.String(validate=lambda a: a and not a.isspace())
-    description = fields.String(validate=lambda a: a is not None)
-    time = fields.Integer(validate=lambda a: a >= 0)
-    cook_time = fields.Integer(validate=lambda a: a >= 0)
-    prep_time = fields.Integer(validate=lambda a: a >= 0)
-    yields = fields.Integer(validate=lambda a: a >= 0)
-    source = fields.String()
-    server_curated = fields.Boolean()
-    photo = fields.String()
-    visibility = fields.Integer(validate=lambda a: a >= 0)
-    items = fields.List(fields.Nested(RecipeItem()))
-    tags = fields.List(fields.String())
-
-
-class SearchByNameRequest(Schema):
-    query = fields.String(required=True, validate=lambda a: a and not a.isspace())
-    page = fields.Integer(validate=lambda a: a >= 0, load_default=0)
-    language = fields.String()
-    only_ids = fields.Boolean(
-        load_default=False,
-    )
+    name: Annotated[
+        str | None, StringConstraints(min_length=1, strip_whitespace=True)
+    ] = None
+    description: str | None = None
+    time: PositiveInt | None = None
+    cook_time: PositiveInt | None = None
+    prep_time: PositiveInt | None = None
+    yields: PositiveInt | None = None
+    source: str | None = None
+    server_curated: bool | None = None
+    photo: str | None = None
+    visibility: PositiveInt | None = None
+    items: list[RecipeItem] | None = None
+    tags: list[str] | None = None
 
 
-class SearchByTagRequest(Schema):
-    tag = fields.String(required=True, validate=lambda a: a and not a.isspace())
-    page = fields.Integer(validate=lambda a: a >= 0, load_default=0)
-    language = fields.String()
+class SearchByNameRequest(BaseModel):
+    query: Annotated[str, StringConstraints(min_length=1, strip_whitespace=True)]
+    page: PositiveInt = 0
+    language: str | None = None
+    only_ids: bool = False
 
 
-class GetAllFilterRequest(Schema):
-    filter = fields.List(fields.String())
+class SearchByTagRequest(BaseModel):
+    tag: Annotated[str, StringConstraints(min_length=1, strip_whitespace=True)]
+    page: PositiveInt = 0
+    language: str | None
 
 
-class AddItemByName(Schema):
-    name = fields.String(required=True)
-    description = fields.String()
+class GetAllFilterRequest(BaseModel):
+    filter: list[str]
 
 
-class RemoveItem(Schema):
-    item_id = fields.Integer(
-        required=True,
-    )
+class AddItemByName(BaseModel):
+    name: str
+    description: str | None
 
 
-class ScrapeRecipe(Schema):
-    url = fields.String(required=True, validate=lambda a: a and not a.isspace())
+class RemoveItem(BaseModel):
+    item_id: int
 
 
-class SuggestionsRecipe(Schema):
-    language = fields.String()
+class ScrapeRecipe(BaseModel):
+    url: Annotated[str, StringConstraints(min_length=1, strip_whitespace=True)]
+
+
+class SuggestionsRecipe(BaseModel):
+    language: str | None

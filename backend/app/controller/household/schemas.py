@@ -1,37 +1,32 @@
-from marshmallow import fields, Schema, EXCLUDE
+from typing import Annotated
+
+from pydantic import BaseModel, StringConstraints
 
 
-class AddHousehold(Schema):
-    class Meta:
-        unknown = EXCLUDE
-
-    name = fields.String(required=True, validate=lambda a: a and not a.isspace())
-    photo = fields.String()
-    link = fields.String()
-    description = fields.String()
-    language = fields.String()
-    planner_feature = fields.Boolean()
-    expenses_feature = fields.Boolean()
-    view_ordering = fields.List(fields.String)
-    member = fields.List(fields.Integer)
+class AddHousehold(BaseModel):
+    name: Annotated[str, StringConstraints(min_length=1, strip_whitespace=True)]
+    photo: str | None = None
+    link: str | None = None
+    description: str | None = None
+    language: str | None = None
+    planner_feature: bool | None = None
+    expenses_feature: bool | None = None
+    view_ordering: list[str] = []
+    member: list[int] = []
 
 
-class UpdateHousehold(Schema):
-    class Meta:
-        unknown = EXCLUDE
+class UpdateHousehold(BaseModel):
+    name: Annotated[
+        str | None, StringConstraints(min_length=1, strip_whitespace=True)
+    ] = None
+    photo: str | None = None
+    link: str | None = None
+    description: str | None = None
+    language: str | None = None
+    planner_feature: bool | None = None
+    expenses_feature: bool | None = None
+    view_ordering: list[str] | None = None
 
-    name = fields.String(validate=lambda a: a and not a.isspace())
-    photo = fields.String()
-    link = fields.String()
-    description = fields.String()
-    language = fields.String()
-    planner_feature = fields.Boolean()
-    expenses_feature = fields.Boolean()
-    view_ordering = fields.List(fields.String)
 
-
-class UpdateHouseholdMember(Schema):
-    class Meta:
-        unknown = EXCLUDE
-
-    admin = fields.Boolean()
+class UpdateHouseholdMember(BaseModel):
+    admin: bool

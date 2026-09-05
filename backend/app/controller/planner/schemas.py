@@ -1,26 +1,13 @@
-from marshmallow import fields, Schema, EXCLUDE
-from marshmallow.validate import Range
+from pydantic import BaseModel, Field, PositiveInt
 
 
-class AddPlannedRecipe(Schema):
-    class Meta:
-        unknown = EXCLUDE
-
-    recipe_id = fields.Integer(
-        required=True,
-    )
-    cooking_date = fields.Integer()
-    day = fields.Integer(
-        validate=Range(min=0, min_inclusive=True, max=6, max_inclusive=True)
-    )
-    yields = fields.Integer()
+class AddPlannedRecipe(BaseModel):
+    recipe_id: int
+    cooking_date: int
+    day: int | None = Field(ge=0, le=6, default=None)
+    yields: PositiveInt | None = None
 
 
-class RemovePlannedRecipe(Schema):
-    class Meta:
-        unknown = EXCLUDE
-
-    cooking_date = fields.Integer()
-    day = fields.Integer(
-        validate=Range(min=0, min_inclusive=True, max=6, max_inclusive=True)
-    )
+class RemovePlannedRecipe(BaseModel):
+    cooking_date: int
+    day: int | None = Field(ge=0, le=6, default=None)

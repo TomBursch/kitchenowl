@@ -1,5 +1,5 @@
-from marshmallow import Schema
+from pydantic import BaseModel
 
 
-class SetSettingsSchema(Schema):
+class SetSettingsSchema(BaseModel):
     pass

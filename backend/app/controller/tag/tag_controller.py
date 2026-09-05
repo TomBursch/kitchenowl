@@ -49,9 +49,9 @@ def getTagRecipes(id):
 @jwt_required()
 @authorize_household()
 @validate_args(AddTag)
-def addTag(args, household_id):
+def addTag(args: AddTag, household_id):
     tag = Tag()
-    tag.name = args["name"]
+    tag.name = args.name
     tag.household_id = household_id
     tag.save()
     return jsonify(tag.obj_to_dict())
@@ -60,19 +60,19 @@ def addTag(args, household_id):
 @tag.route("/<int:id>", methods=["POST"])
 @jwt_required()
 @validate_args(UpdateTag)
-def updateTag(args, id):
+def updateTag(args: UpdateTag, id: int):
     tag = Tag.find_by_id(id)
     if not tag:
         raise NotFoundRequest()
     tag.checkAuthorized()
 
-    if "name" in args:
-        tag.name = args["name"]
+    if args.name is not None:
+        tag.name = args.name
 
     tag.save()
 
-    if "merge_tag_id" in args and args["merge_tag_id"] != id:
-        mergeTag = Tag.find_by_id(args["merge_tag_id"])
+    if args.merge_tag_id is not None and args.merge_tag_id != id:
+        mergeTag = Tag.find_by_id(args.merge_tag_id)
         if mergeTag:
             tag.merge(mergeTag)
 

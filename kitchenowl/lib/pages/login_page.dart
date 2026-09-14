@@ -142,12 +142,17 @@ class _LoginPageState extends State<LoginPage> {
                                     BlocProvider.of<AuthCubit>(context).login(
                                   usernameController.text,
                                   passwordController.text,
-                                  () => showSnackbar(
-                                    context: context,
-                                    content: Text(AppLocalizations.of(context)!
-                                        .wrongUsernameOrPassword),
-                                    width: null,
-                                  ),
+                                  () {
+                                    if (!context.mounted) return;
+                                    showSnackbar(
+                                      context: context,
+                                      content: Text(
+                                        AppLocalizations.of(context)!
+                                            .wrongUsernameOrPassword,
+                                      ),
+                                      width: null,
+                                    );
+                                  },
                                 ),
                                 decoration: InputDecoration(
                                   labelText:
@@ -162,13 +167,17 @@ class _LoginPageState extends State<LoginPage> {
                                       BlocProvider.of<AuthCubit>(context).login(
                                     usernameController.text,
                                     passwordController.text,
-                                    () => showSnackbar(
-                                      context: context,
-                                      content: Text(
+                                    () {
+                                      if (!context.mounted) return;
+                                      showSnackbar(
+                                        context: context,
+                                        content: Text(
                                           AppLocalizations.of(context)!
-                                              .wrongUsernameOrPassword),
-                                      width: null,
-                                    ),
+                                              .wrongUsernameOrPassword,
+                                        ),
+                                        width: null,
+                                      );
+                                    },
                                   ),
                                   child:
                                       Text(AppLocalizations.of(context)!.login),

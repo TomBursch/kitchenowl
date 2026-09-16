@@ -84,7 +84,10 @@ def addItem(args, household_id):
         if not args["category"]:
             item.category = None
         elif "id" in args["category"]:
-            item.category = Category.find_by_id(args["category"]["id"])
+            category = Category.find_by_id(args["category"]["id"])
+            if not category or category.household_id != household_id:
+                raise InvalidUsage()
+            item.category = category
         else:
             raise InvalidUsage()
     if "icon" in args:
@@ -107,7 +110,10 @@ def updateItem(args, id):
         if not args["category"]:
             item.category = None
         elif "id" in args["category"]:
-            item.category = Category.find_by_id(args["category"]["id"])
+            category = Category.find_by_id(args["category"]["id"])
+            if not category or category.household_id != item.household_id:
+                raise InvalidUsage()
+            item.category = category
         else:
             raise InvalidUsage()
     if "icon" in args:

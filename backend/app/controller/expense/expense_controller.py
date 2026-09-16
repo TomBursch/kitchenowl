@@ -114,6 +114,8 @@ def addExpense(args, household_id):
     if "category" in args:
         if args["category"] is not None:
             category = ExpenseCategory.find_by_id(args["category"])
+            if not category or category.household_id != household_id:
+                raise NotFoundRequest()
             expense.category = category
     if "exclude_from_statistics" in args:
         expense.exclude_from_statistics = args["exclude_from_statistics"]
@@ -163,6 +165,8 @@ def updateExpense(args, id):  # noqa: C901
     if "category" in args:
         if args["category"] is not None:
             category = ExpenseCategory.find_by_id(args["category"])
+            if not category or category.household_id != expense.household_id:
+                raise NotFoundRequest()
             expense.category = category
         else:
             expense.category = None

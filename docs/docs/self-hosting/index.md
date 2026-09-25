@@ -84,6 +84,7 @@ docker compose up -d
 ## Community Installation Methods
 Here is a list of community maintained install methods:
 
+- [Easypanel](https://easypanel.io/templates/kitchenowl) - a self-hosted Docker deployment platform with a one-click template
 - Unraid ([Source](https://codeberg.org/HanSolo97/unraid-templates) AGPL-3.0)
 - [Cosmos](https://cosmos-cloud.io/proxy#cosmos-ui/market-listing/cosmos-cloud/KitchenOwl) ([Source](https://github.com/azukaar/cosmos-servapps-official/tree/master/servapps/Kitchenowl) AGPL-3.0)
 - TrueNAS SCALE ([Source](https://github.com/truecharts/charts/tree/master/charts/stable/kitchenowl) BSD-3-Clause)

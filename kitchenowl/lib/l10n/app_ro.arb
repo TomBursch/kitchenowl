@@ -26,6 +26,9 @@
   "@addRecipeToPlannerShort": {
     "description": "A shorter title/button text used wherever the space is limited. Excludes the number of yields."
   },
+  "@addShoppingList": {},
+  "@addStore": {},
+  "@addTag": {},
   "@addedBy": {
     "placeholders": {
       "name": {
@@ -210,6 +213,29 @@
       }
     }
   },
+  "@signup": {},
+  "@skip": {},
+  "@smaller": {},
+  "@sortingAlgorithmic": {},
+  "@sortingAlphabetical": {},
+  "@start": {},
+  "@store": {},
+  "@storeDelete": {},
+  "@storeDeleteConfirmation": {
+    "placeholders": {
+      "store": {
+        "example": "Supermarket",
+        "type": "String"
+      }
+    }
+  },
+  "@storeEdit": {},
+  "@stores": {},
+  "@supportDevelopment": {},
+  "@swipeToDelete": {},
+  "@swipeToDeleteAndLongPressToReorder": {},
+  "@swipeToRemove": {},
+  "@tagDelete": {},
   "@tagDeleteConfirmation": {
     "placeholders": {
       "tag": {
@@ -255,6 +281,7 @@
   "addRecipeToPlanner": "Adăugați la planul de masă ({number}servers)",
   "addRecipeToPlannerShort": "Adaugă un plan de mese",
   "addShoppingList": "Adaugă listă de cumpărături",
+  "addStore": "Adaugă magazin",
   "addTag": "Adaugă etichetă",
   "addedBy": "Adăugat de {name}",
   "address": "Adresă",
@@ -486,6 +513,11 @@
   "sortingAlgorithmic": "Algoritmic",
   "sortingAlphabetical": "Alfabetic",
   "start": "Start",
+  "store": "Magazin",
+  "storeDelete": "Șterge magazin",
+  "storeDeleteConfirmation": "Ești sigur că vrei să ștergi {store}? Vei șterge magazinul de la toate articolele.",
+  "storeEdit": "Editează magazinul",
+  "stores": "Magazine",
   "supportDevelopment": "Susțineți dezvoltarea",
   "swipeToDelete": "Glisați pentru a șterge",
   "swipeToDeleteAndLongPressToReorder": "Glisați pentru a șterge și apăsați lung pentru rearanjare",

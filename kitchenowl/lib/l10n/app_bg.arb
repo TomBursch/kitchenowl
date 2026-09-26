@@ -40,6 +40,7 @@
     "description": "A shorter title/button text used wherever the space is limited. Excludes the number of yields."
   },
   "@addShoppingList": {},
+  "@addStore": {},
   "@addTag": {},
   "@addedBy": {
     "placeholders": {
@@ -357,6 +358,18 @@
   "@remove": {},
   "@rename": {},
   "@reportIssue": {},
+  "@store": {},
+  "@storeDelete": {},
+  "@storeDeleteConfirmation": {
+    "placeholders": {
+      "store": {
+        "example": "Supermarket",
+        "type": "String"
+      }
+    }
+  },
+  "@storeEdit": {},
+  "@stores": {},
   "about": "За нас",
   "accountCreate": "Създайте акаунт",
   "accountCreateHint": "Вашето потребителско име и име са публични, така че изберете нещо, което бихте споделили с останалите потребители.",
@@ -375,6 +388,7 @@
   "addRecipeToPlanner": "Добави към хранителния план ({number} порци)",
   "addRecipeToPlannerShort": "Добави към хранителния план",
   "addShoppingList": "Добави към списъка за пазаруване",
+  "addStore": "Добави магазин",
   "addTag": "Добави етикет",
   "addedBy": "Добавено от {name}",
   "address": "Адрес",
@@ -560,5 +574,10 @@
   "rememberLastShoppingList": "Запомни последно използвания списък за пазаруване",
   "remove": "Премахни",
   "rename": "Преименувай",
-  "reportIssue": "Докладвай проблем"
+  "reportIssue": "Докладвай проблем",
+  "store": "Магазин",
+  "storeDelete": "Изтрий магазин",
+  "storeDeleteConfirmation": "Сигурен ли си, че искаш да изтриеш {store}? Това ще изтрие магазина от всички артикули.",
+  "storeEdit": "Редактирай магазин",
+  "stores": "Магазини"
 }

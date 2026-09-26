@@ -1,5 +1,5 @@
 from .user import User
-from .item import Item
+from .item import Item, ItemStores
 from .association import Association
 from .expense import Expense, ExpensePaidFor
 from .settings import Settings
@@ -11,6 +11,7 @@ from .shoppinglist import ShoppinglistItems, Shoppinglist
 from .recipe_history import RecipeHistory
 from .expense_category import ExpenseCategory
 from .category import Category
+from .store import Store
 from .token import Token
 from .household import Household, HouseholdMember
 from .file import File

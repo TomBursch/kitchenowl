@@ -10,7 +10,7 @@ from sqlalchemy.orm import Mapped
 
 Model = db.Model
 if TYPE_CHECKING:
-    from app.models import Household, RecipeItems, ShoppinglistItems
+    from app.models import Household, RecipeItems, ShoppinglistItems, Store
     from app.helpers.db_model_base import DbModelBase
 
     Model = DbModelBase
@@ -61,6 +61,14 @@ class Item(Model, DbModelAuthorizeMixin):
             cascade="all, delete-orphan",
         ),
     )
+    stores: Mapped[List["ItemStores"]] = cast(
+        Mapped[List["ItemStores"]],
+        db.relationship(
+            "ItemStores",
+            back_populates="item",
+            cascade="all, delete-orphan",
+        ),
+    )
 
     # determines order of items in the shoppinglist
     ordering = db.Column(db.Integer, server_default="0")
@@ -92,6 +100,8 @@ class Item(Model, DbModelAuthorizeMixin):
         if self.category_id:
             category = cast(Category, Category.find_by_id(self.category_id))
             res["category"] = category.obj_to_dict()
+        if self.stores:
+            res["stores"] = [s.store.obj_to_dict() for s in self.stores]
         return res
 
     def obj_to_export_dict(self) -> dict[str, Any]:
@@ -102,6 +112,8 @@ class Item(Model, DbModelAuthorizeMixin):
             res["icon"] = self.icon
         if self.category:
             res["category"] = self.category.name
+        if self.stores:
+            res["stores"] = [s.store.name for s in self.stores]
         return res
 
     def save(self, keepDefault: bool = False) -> Self:
@@ -116,6 +128,7 @@ class Item(Model, DbModelAuthorizeMixin):
         from app.models import RecipeItems
         from app.models import History
         from app.models import ShoppinglistItems
+        from app.models import ItemStores
 
         if not self.default_key and other.default_key:
             self.default_key = other.default_key
@@ -153,6 +166,14 @@ class Item(Model, DbModelAuthorizeMixin):
                 )
                 db.session.delete(si)
                 db.session.add(existingSi)
+
+        for istore in ItemStores.query.filter(ItemStores.item_id == other.id).all():
+            istore: ItemStores
+            if not ItemStores.find_by_ids(self.id, istore.store_id):
+                istore.item_id = self.id
+                db.session.add(istore)
+            else:
+                db.session.delete(istore)
 
         for history in History.query.filter(History.item_id == other.id).all():
             history.item_id = self.id
@@ -192,12 +213,14 @@ class Item(Model, DbModelAuthorizeMixin):
     @classmethod
     def find_name_starts_with(cls, household_id: int, starts_with: str) -> Self | None:
         starts_with = starts_with.strip()
-        return (cls.query.filter(
-            cls.household_id == household_id,
-            func.lower(cls.name).like(func.lower(starts_with) + "%"),
+        return (
+            cls.query.filter(
+                cls.household_id == household_id,
+                func.lower(cls.name).like(func.lower(starts_with) + "%"),
+            )
+            .order_by(cls.name)
+            .first()
         )
-        .order_by(cls.name)
-        .first())
 
     @classmethod
     def search_name(cls, name: str, household_id: int) -> list[Self]:
@@ -261,3 +284,36 @@ class Item(Model, DbModelAuthorizeMixin):
                     if item_count <= 0:
                         return found
         return found
+
+
+class ItemStores(Model):
+    __tablename__ = "item_stores"
+
+    item_id: Mapped[int] = db.Column(
+        db.Integer, db.ForeignKey("item.id"), primary_key=True
+    )
+    store_id: Mapped[int] = db.Column(
+        db.Integer, db.ForeignKey("store.id"), primary_key=True
+    )
+
+    item: Mapped["Item"] = cast(
+        Mapped["Item"],
+        db.relationship(
+            "Item",
+            back_populates="stores",
+        ),
+    )
+    store: Mapped["Store"] = cast(
+        Mapped["Store"],
+        db.relationship(
+            "Store",
+            back_populates="items",
+            lazy="joined",
+        ),
+    )
+
+    @classmethod
+    def find_by_ids(cls, item_id: int, store_id: int) -> Self | None:
+        return cls.query.filter(
+            cls.item_id == item_id, cls.store_id == store_id
+        ).first()

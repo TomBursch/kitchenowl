@@ -9,6 +9,7 @@ class ImportSchema(Schema):
         name = fields.String(required=True, validate=lambda a: a and not a.isspace())
         category = fields.String(validate=lambda a: a and not a.isspace())
         icon = fields.String()
+        stores = fields.List(fields.String())
 
     class Recipe(Schema):
         class Meta:

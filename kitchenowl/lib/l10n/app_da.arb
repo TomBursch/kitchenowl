@@ -207,6 +207,14 @@
       }
     }
   },
+  "@storeDeleteConfirmation": {
+    "placeholders": {
+      "store": {
+        "example": "Supermarket",
+        "type": "String"
+      }
+    }
+  },
   "@tagDeleteConfirmation": {
     "placeholders": {
       "tag": {
@@ -252,6 +260,7 @@
   "addRecipeToPlanner": "Føj til måltidsplan ({number} portioner)",
   "addRecipeToPlannerShort": "Føj til madplan",
   "addShoppingList": "Tilføj indkøbsliste",
+  "addStore": "Tilføj butik",
   "addTag": "Tilføj etiket",
   "addedBy": "Tilføjet af {name}",
   "address": "Adresse",
@@ -483,6 +492,11 @@
   "sortingAlgorithmic": "Algoritmisk",
   "sortingAlphabetical": "Alfabetisk",
   "start": "Start",
+  "store": "Butik",
+  "storeDelete": "Slet butik",
+  "storeDeleteConfirmation": "Er du sikker på, at du vil slette {store}? Dette fjerner butikken fra alle varer.",
+  "storeEdit": "Rediger butik",
+  "stores": "Butikker",
   "supportDevelopment": "Støt udviklingen",
   "swipeToDelete": "Stryg for at slette",
   "swipeToDeleteAndLongPressToReorder": "Stryg for at slette, og hold nede for at omarrangere",

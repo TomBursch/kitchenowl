@@ -172,6 +172,7 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                                   ),
                                   items: state.result,
                                   categories: state.categories,
+                                  stores: state.stores,
                                   shoppingList: state.selectedShoppinglist,
                                   onRefresh: () => cubit.refresh(),
                                   selected: (item) =>
@@ -232,6 +233,7 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                                         gridSize: settingsState.gridSize,
                                       ),
                                       categories: state.categories,
+                                      stores: state.stores,
                                       isLoading: state
                                           is LoadingShoppinglistCubitState,
                                       selectedListItems:

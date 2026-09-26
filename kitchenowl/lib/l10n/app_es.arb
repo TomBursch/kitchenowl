@@ -207,6 +207,14 @@
       }
     }
   },
+  "@storeDeleteConfirmation": {
+    "placeholders": {
+      "store": {
+        "example": "Supermarket",
+        "type": "String"
+      }
+    }
+  },
   "@tagDeleteConfirmation": {
     "placeholders": {
       "tag": {
@@ -252,6 +260,7 @@
   "addRecipeToPlanner": "Añadir al plan de comidas ({number} porciones)",
   "addRecipeToPlannerShort": "Agregar al plan de comidas",
   "addShoppingList": "Agregar a la lista de compras",
+  "addStore": "Añadir tienda",
   "addTag": "Añadir etiqueta",
   "addedBy": "Añadido por {name}",
   "address": "Dirección",
@@ -480,6 +489,11 @@
   "sortingAlgorithmic": "Algorítmico",
   "sortingAlphabetical": "Alfabetico",
   "start": "Comenzar",
+  "store": "Tienda",
+  "storeDelete": "Borrar tienda",
+  "storeDeleteConfirmation": "¿Está seguro de que desea eliminar {store}? Esto eliminará la tienda de todos los artículos.",
+  "storeEdit": "Editar tienda",
+  "stores": "Tiendas",
   "supportDevelopment": "Apoyar el desarrollo",
   "swipeToDelete": "Desliza para borrar",
   "swipeToDeleteAndLongPressToReorder": "Desliza para borrar y pulsación larga para reordenar",

@@ -57,6 +57,7 @@ class _HouseholdSettingsItemsPageState
                 isLoading: state is LoadingHouseholdSettingsItemsState,
                 items: state.items,
                 categories: state.categories,
+                stores: state.stores,
                 onRefresh: cubit.refresh,
                 extraOption: _itemPopmenuBuilder,
                 shoppingListStyle: const ShoppingListStyle(
@@ -79,6 +80,7 @@ class _HouseholdSettingsItemsPageState
                       AppLocalizations.of(context)!.uncategorized,
                   isLoading: state is LoadingHouseholdSettingsItemsState,
                   categories: state.categories,
+                  stores: state.stores,
                   onRefresh: cubit.refresh,
                   items: items,
                   extraOption: _itemPopmenuBuilder,

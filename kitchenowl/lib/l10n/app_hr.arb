@@ -214,6 +214,14 @@
       }
     }
   },
+  "@storeDeleteConfirmation": {
+    "placeholders": {
+      "store": {
+        "example": "Supermarket",
+        "type": "String"
+      }
+    }
+  },
   "@tagDeleteConfirmation": {
     "placeholders": {
       "tag": {
@@ -259,6 +267,7 @@
   "addRecipeToPlanner": "Dodaj u prehrambeni plan ({number} porcija)",
   "addRecipeToPlannerShort": "Dodaj u prehrambeni plan",
   "addShoppingList": "Dodaj popis za kupnju",
+  "addStore": "Dodaj trgovinu",
   "addTag": "Dodaj oznaku",
   "addedBy": "Dodao {name}",
   "address": "Adresa",
@@ -487,6 +496,11 @@
   "sortingAlgorithmic": "Algoritmično",
   "sortingAlphabetical": "Abecedno",
   "start": "Kreni",
+  "store": "Trgovina",
+  "storeDelete": "Obriši trgovinu",
+  "storeDeleteConfirmation": "Jeste li sigurni da želite obrisati {store}? Trgovina će biti uklonjena iz svih stavki.",
+  "storeEdit": "Uredi trgovinu",
+  "stores": "Trgovine",
   "supportDevelopment": "Podržite razvoj",
   "swipeToDelete": "Povucite za brisanje",
   "swipeToDeleteAndLongPressToReorder": "Povucite za brisanje ili dugo držite za promjenu položaja",

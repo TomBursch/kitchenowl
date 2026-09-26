@@ -32,6 +32,11 @@ class ShoppingItemWidget<T extends Item> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final storesLabel = (item is ShoppinglistItem &&
+            (item as ShoppinglistItem).stores.isNotEmpty)
+        ? (item as ShoppinglistItem).stores.map((e) => e.name).join(', ')
+        : null;
+
     return gridStyle
         ? SelectableButtonCard(
             title: item.name,
@@ -40,6 +45,7 @@ class ShoppingItemWidget<T extends Item> extends StatelessWidget {
             description: (item is ItemWithDescription)
                 ? (item as ItemWithDescription).description
                 : null,
+            storesLabel: storesLabel,
             onPressed: onPressed != null ? () => onPressed!(item) : null,
             onLongPressed:
                 onLongPressed != null ? () => onLongPressed!(item) : null,
@@ -55,6 +61,7 @@ class ShoppingItemWidget<T extends Item> extends StatelessWidget {
             description: (item is ItemWithDescription)
                 ? (item as ItemWithDescription).description
                 : null,
+            storesLabel: storesLabel,
             onPressed: onPressed != null ? () => onPressed!(item) : null,
             onLongPressed:
                 onLongPressed != null ? () => onLongPressed!(item) : null,

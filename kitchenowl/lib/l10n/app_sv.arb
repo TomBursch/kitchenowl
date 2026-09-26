@@ -207,6 +207,14 @@
       }
     }
   },
+  "@storeDeleteConfirmation": {
+    "placeholders": {
+      "store": {
+        "example": "Supermarket",
+        "type": "String"
+      }
+    }
+  },
   "@tagDeleteConfirmation": {
     "placeholders": {
       "tag": {
@@ -252,6 +260,7 @@
   "addRecipeToPlanner": "Lägg till i måltidsplanen ({number} serveringar)",
   "addRecipeToPlannerShort": "Lägg till måltidsplanen",
   "addShoppingList": "Lägg till inköpslista",
+  "addStore": "Lägg till butik",
   "addTag": "Lägg till tagg",
   "addedBy": "Tillagd av {name}",
   "address": "Adress",
@@ -483,6 +492,11 @@
   "sortingAlgorithmic": "Algoritmisk",
   "sortingAlphabetical": "Alfabetisk",
   "start": "Start",
+  "store": "Butik",
+  "storeDelete": "Ta bort butik",
+  "storeDeleteConfirmation": "Är du säker på att du vill ta bort {store}? Detta tar bort butiken från alla objekt.",
+  "storeEdit": "Ändra butik",
+  "stores": "Butiker",
   "supportDevelopment": "Supportera utvecklingen",
   "swipeToDelete": "Swipe för att ta bort",
   "swipeToDeleteAndLongPressToReorder": "Swipe för att ta bort och tryck länge för att beställa på nytt",

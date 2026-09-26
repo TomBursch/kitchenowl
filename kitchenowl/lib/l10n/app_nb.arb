@@ -424,6 +424,18 @@
   "@sortingAlgorithmic": {},
   "@sortingAlphabetical": {},
   "@start": {},
+  "@store": {},
+  "@storeDelete": {},
+  "@storeDeleteConfirmation": {
+    "placeholders": {
+      "store": {
+        "example": "Supermarket",
+        "type": "String"
+      }
+    }
+  },
+  "@storeEdit": {},
+  "@stores": {},
   "@supportDevelopment": {},
   "@swipeToDelete": {},
   "@swipeToDeleteAndLongPressToReorder": {},
@@ -519,6 +531,7 @@
   "addRecipeToPlanner": "Legg til i måltidsplan ({number} serveringer)",
   "addRecipeToPlannerShort": "Legg til i måltidsplan",
   "addShoppingList": "Legg til i handleliste",
+  "addStore": "Legg til butikk",
   "addTag": "Legg til etikett",
   "addedBy": "Lagt til av {name}",
   "address": "Adresse",
@@ -745,6 +758,11 @@
   "sortingAlgorithmic": "Algoritmisk",
   "sortingAlphabetical": "A-Å",
   "start": "Start",
+  "store": "Butikk",
+  "storeDelete": "Slett butikk",
+  "storeDeleteConfirmation": "Er du sikker på at du vil slette {store}? Dette vil fjerne butikken fra alle varer.",
+  "storeEdit": "Rediger butikk",
+  "stores": "Butikker",
   "supportDevelopment": "Støtt utviklingen",
   "swipeToDelete": "Dra for å slette",
   "swipeToDeleteAndLongPressToReorder": "Dra for å slette og lang-trykk for å endre rekkefølge",

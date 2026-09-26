@@ -28,6 +28,7 @@
       }
     }
   },
+  "@addStore": {},
   "@addedBy": {
     "placeholders": {
       "name": {
@@ -232,6 +233,18 @@
   "@signup": {},
   "@sortingAlphabetical": {},
   "@start": {},
+  "@store": {},
+  "@storeDelete": {},
+  "@storeDeleteConfirmation": {
+    "placeholders": {
+      "store": {
+        "example": "Supermarket",
+        "type": "String"
+      }
+    }
+  },
+  "@storeEdit": {},
+  "@stores": {},
   "@supportDevelopment": {},
   "@themeDark": {},
   "@themeLight": {},
@@ -279,6 +292,7 @@
   "addLanguage": "إضافة لغة",
   "addLanguageConfirm": "هل أنت متأكد من أنك تريد تعيين اللغة إلى '{lang}'؟ لا يمكن التراجع عن هذا الإجراء وسيؤدي إلى إضافة عناصر وفئات إلى منزلك.",
   "addNumberIngredients": "أضف {number} المكونات",
+  "addStore": "إضافة متجر",
   "addedBy": "أضيفت من قبل {name}",
   "address": "العنوان",
   "appTitle": "كيتشن آول",
@@ -405,6 +419,11 @@
   "signup": "التسجيل",
   "sortingAlphabetical": "أبجدي",
   "start": "إبدأ",
+  "store": "متجر",
+  "storeDelete": "حذف متجر",
+  "storeDeleteConfirmation": "هل أنت متأكد من حذف {store}؟ سيؤدي هذا إلى إزالة المتجر من جميع العناصر.",
+  "storeEdit": "تعديل متجر",
+  "stores": "متاجر",
   "supportDevelopment": "إدعم التطوير",
   "themeDark": "مظلم",
   "themeLight": "مضيء",

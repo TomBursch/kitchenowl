@@ -6,6 +6,7 @@ import 'package:kitchenowl/models/category.dart';
 import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/models/recipe.dart';
 import 'package:kitchenowl/models/shoppinglist.dart';
+import 'package:kitchenowl/models/store.dart';
 import 'package:kitchenowl/models/tag.dart';
 import 'package:kitchenowl/models/user.dart';
 import 'package:path_provider/path_provider.dart' as pathProvider;
@@ -60,6 +61,12 @@ class TempStorage {
     return File('$path/${household.id}-tags.json');
   }
 
+  Future<File> _localStoresFile(Household household) async {
+    final path = await _localPath;
+
+    return File('$path/${household.id}-stores.json');
+  }
+
   Future<void> clearAll() async {
     await readHouseholds().then(
       (value) => Future.wait(
@@ -69,6 +76,7 @@ class TempStorage {
                 clearRecipes(household),
                 clearCategories(household),
                 clearTags(household),
+                clearStores(household),
               ]);
             }).toList() ??
             [],
@@ -245,6 +253,42 @@ class TempStorage {
     if (!foundation.kIsWeb) {
       try {
         final file = await _localTagsFile(household);
+        if (await file.exists()) await file.delete();
+      } catch (_) {}
+    }
+  }
+
+  Future<List<Store>?> readStores(Household household) async {
+    if (!foundation.kIsWeb) {
+      try {
+        final file = await _localStoresFile(household);
+        final String content = await file.readAsString();
+
+        return List<Store>.from(
+          json.decode(content).map((e) => Store.fromJson(e)),
+        );
+      } catch (_) {}
+    }
+
+    return null;
+  }
+
+  Future<void> writeStores(
+    Household household,
+    List<Store> stores,
+  ) async {
+    if (!foundation.kIsWeb) {
+      final file = await _localStoresFile(household);
+      await file.writeAsString(
+        json.encode(stores.map((e) => e.toJsonWithId()).toList()),
+      );
+    }
+  }
+
+  Future<void> clearStores(Household household) async {
+    if (!foundation.kIsWeb) {
+      try {
+        final file = await _localStoresFile(household);
         if (await file.exists()) await file.delete();
       } catch (_) {}
     }

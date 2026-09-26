@@ -192,6 +192,14 @@
       }
     }
   },
+  "@storeDeleteConfirmation": {
+    "placeholders": {
+      "store": {
+        "example": "Supermarket",
+        "type": "String"
+      }
+    }
+  },
   "@tagDeleteConfirmation": {
     "placeholders": {
       "tag": {
@@ -229,6 +237,7 @@
   "addRecipeToPlanner": "Yemek planına ekle ({number})",
   "addRecipeToPlannerShort": "Yemek planına ekle",
   "addShoppingList": "Alışveriş listesi ekle",
+  "addStore": "Mağaza ekle",
   "addTag": "Etiket ekle",
   "addedBy": "{name} tarafından eklendi",
   "address": "Adres",
@@ -436,6 +445,11 @@
   "sortingAlgorithmic": "Algoritmik",
   "sortingAlphabetical": "Alfabetik",
   "start": "Başlat",
+  "store": "Mağaza",
+  "storeDelete": "Mağaza sil",
+  "storeDeleteConfirmation": "{store} mağazasını silmek istediğinizden emin misiniz? Bu, mağazayı tüm ögelerden kaldıracaktır.",
+  "storeEdit": "Mağaza düzenle",
+  "stores": "Mağazalar",
   "supportDevelopment": "Geliştirmeyi destekle",
   "swipeToDelete": "Silmek için kaydırın",
   "swipeToDeleteAndLongPressToReorder": "Silmek için kaydırın ve yeniden sıralamak için uzun basın",

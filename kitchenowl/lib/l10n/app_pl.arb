@@ -207,6 +207,14 @@
       }
     }
   },
+  "@storeDeleteConfirmation": {
+    "placeholders": {
+      "store": {
+        "example": "Supermarket",
+        "type": "String"
+      }
+    }
+  },
   "@tagDeleteConfirmation": {
     "placeholders": {
       "tag": {
@@ -252,6 +260,7 @@
   "addRecipeToPlanner": "Dodaj do jadłospisu ({number} porcji)",
   "addRecipeToPlannerShort": "Dodaj do jadłospisu",
   "addShoppingList": "Dodaj listę zakupów",
+  "addStore": "Dodaj sklep",
   "addTag": "Dodaj tagi",
   "addedBy": "Dodane przez {name}",
   "address": "Adres",
@@ -480,6 +489,11 @@
   "sortingAlgorithmic": "Kolejność algorytmiczna",
   "sortingAlphabetical": "Kolejność alfabetyczna",
   "start": "Start",
+  "store": "Sklep",
+  "storeDelete": "Usuń sklep",
+  "storeDeleteConfirmation": "Czy jesteś pewien, że chcesz usunąć {store}? To działanie usunie go ze wszystkich elementów.",
+  "storeEdit": "Edytuj sklep",
+  "stores": "Sklepy",
   "supportDevelopment": "Wesprzyj rozwój",
   "swipeToDelete": "Przesuń aby usunąć",
   "swipeToDeleteAndLongPressToReorder": "Przesuń aby usunąć i przytrzymaj by zmienić kolejność",

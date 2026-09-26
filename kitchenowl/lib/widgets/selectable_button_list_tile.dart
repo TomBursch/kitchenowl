@@ -5,6 +5,7 @@ class SelectableButtonListTile extends StatefulWidget {
   final String title;
   final IconData? icon;
   final String? description;
+  final String? storesLabel;
   final bool selected;
   final bool raised;
   final void Function()? onPressed;
@@ -17,6 +18,7 @@ class SelectableButtonListTile extends StatefulWidget {
     required this.title,
     this.icon,
     this.description,
+    this.storesLabel,
     required this.selected,
     this.onPressed,
     this.onLongPressed,
@@ -69,25 +71,7 @@ class _SelectableButtonListTileState extends State<SelectableButtonListTile> {
                       .withAlpha(170)),
         ),
         selected: widget.selected,
-        subtitle: (widget.description?.isNotEmpty ?? false)
-            ? Text(
-                widget.description!,
-                maxLines: 3,
-                overflow: TextOverflow.ellipsis,
-                style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                    color: !widget.raised
-                        ? Theme.of(context)
-                            .textTheme
-                            .bodySmall!
-                            .color!
-                            .withAlpha(85)
-                        : Theme.of(context)
-                            .textTheme
-                            .bodySmall!
-                            .color!
-                            .withAlpha(170)),
-              )
-            : null,
+        subtitle: _buildSubtitle(context),
         onTap: widget.onPressed,
         onLongPress: widget.onLongPressed,
         contentPadding: const EdgeInsets.only(left: 16, right: 8),
@@ -105,6 +89,44 @@ class _SelectableButtonListTileState extends State<SelectableButtonListTile> {
       ),
     );
 
+    return _wrapInCard(listItem);
+  }
+
+  Widget? _buildSubtitle(BuildContext context) {
+    final hasDescription = widget.description?.isNotEmpty ?? false;
+    final hasStoresLabel = widget.storesLabel?.isNotEmpty ?? false;
+    if (!hasDescription && !hasStoresLabel) return null;
+
+    final color = !widget.raised
+        ? Theme.of(context).textTheme.bodySmall!.color!.withAlpha(85)
+        : Theme.of(context).textTheme.bodySmall!.color!.withAlpha(170);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (hasDescription)
+          Text(
+            widget.description!,
+            maxLines: 3,
+            overflow: TextOverflow.ellipsis,
+            style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                  color: color,
+                ),
+          ),
+        if (hasStoresLabel)
+          Text(
+            widget.storesLabel!,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                  color: color,
+                ),
+          ),
+      ],
+    );
+  }
+
+  Widget _wrapInCard(Widget listItem) {
     return (widget.listStyle == ListStyle.cards)
         ? Card(
             margin: const EdgeInsets.symmetric(vertical: 4),

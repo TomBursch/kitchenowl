@@ -5,9 +5,11 @@ import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/category.dart';
 import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/models/item.dart';
+import 'package:kitchenowl/models/store.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
 import 'package:kitchenowl/services/transaction_handler.dart';
 import 'package:kitchenowl/services/transactions/category.dart';
+import 'package:kitchenowl/services/transactions/store.dart';
 
 class HouseholdSettingsItemsCubit extends Cubit<HouseholdSettingsItemsState> {
   final Household household;
@@ -22,11 +24,15 @@ class HouseholdSettingsItemsCubit extends Cubit<HouseholdSettingsItemsState> {
     final categories = TransactionHandler.getInstance().runTransaction(
       TransactionCategoriesGet(household: household),
     );
+    final stores = TransactionHandler.getInstance().runTransaction(
+      TransactionStoresGet(household: household),
+    );
     if (await items != null) {
       ShoppinglistSorting.sortShoppinglistItems(state.items, state.sorting);
       emit(HouseholdSettingsItemsState(
         items: (await items)!,
         categories: await categories,
+        stores: await stores,
         sorting: state.sorting,
       ));
     }
@@ -75,11 +81,13 @@ class HouseholdSettingsItemsCubit extends Cubit<HouseholdSettingsItemsState> {
 class HouseholdSettingsItemsState extends Equatable {
   final List<Item> items;
   final List<Category> categories;
+  final List<Store> stores;
   final ShoppinglistSorting sorting;
 
   const HouseholdSettingsItemsState({
     this.items = const [],
     this.categories = const [],
+    this.stores = const [],
     this.sorting = ShoppinglistSorting.alphabetical,
   });
 
@@ -89,11 +97,12 @@ class HouseholdSettingsItemsState extends Equatable {
       HouseholdSettingsItemsState(
         items: this.items,
         categories: this.categories,
+        stores: this.stores,
         sorting: sorting ?? this.sorting,
       );
 
   @override
-  List<Object?> get props => [items, categories, sorting];
+  List<Object?> get props => [items, categories, stores, sorting];
 }
 
 class LoadingHouseholdSettingsItemsState extends HouseholdSettingsItemsState {

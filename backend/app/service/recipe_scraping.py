@@ -109,7 +109,9 @@ def scrapePublic(url: str, html: str, household: Household) -> dict[str, Any] | 
     recipe.photo = scraper.image()
     recipe.source = url
     items = {}
-    for ingredient in parseIngredients(scraper.ingredients(), household.language):
+    # Relies on site meta data to detect language. Possible mismatch if there is a spanish recipe on a english website
+    sourceLanguageCode = scraper.language() or "" # Fallback to handle None cases and default to LLM if in use
+    for ingredient in parseIngredients(scraper.ingredients(), household.language, sourceLanguageCode):
         name = ingredient.name if ingredient.name else ingredient.originalText or ""
         item = Item.find_name_starts_with(household.id, name)
         if item:

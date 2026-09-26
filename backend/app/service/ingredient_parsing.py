@@ -4,11 +4,13 @@ import ingredient_parser.dataclasses
 from litellm import completion
 import json
 import os
+import re
 
 from app.config import SUPPORTED_LANGUAGES
 
 LLM_MODEL = os.getenv("LLM_MODEL")
 LLM_API_URL = os.getenv("LLM_API_URL")
+NLP_IF_EN = os.getenv("NLP_IF_EN")
 
 
 class IngredientParsingResult:
@@ -109,10 +111,14 @@ Return only JSON and nothing else.
 def parseIngredients(
     ingredients: list[str],
     targetLanguageCode=None,
+    sourceLanguageCode=None,
 ) -> list[IngredientParsingResult]:
+    en_pattern = r"^en"
+    
     if LLM_MODEL:
-        try:
-            return parseLLM(ingredients, targetLanguageCode) or parseNLP(ingredients)
-        except Exception as e:
-            print("Error parsing ingredients:", e)
+        if not NLP_IF_EN and not re.match(sourceLanguageCode, en_pattern):
+            try:
+                return parseLLM(ingredients, targetLanguageCode) or parseNLP(ingredients)
+            except Exception as e:
+                print("Error parsing ingredients:", e)
     return parseNLP(ingredients)

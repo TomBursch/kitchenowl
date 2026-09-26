@@ -13,6 +13,10 @@ class SliverCategoryItemGridList<T extends Item> extends StatefulWidget {
   final void Function()? onRefresh;
   final Nullable<void Function(T)>? onPressed;
   final Nullable<void Function(T)>? onLongPressed;
+
+  /// Forwarded to [SliverItemGridList]: when set (and the list style is a
+  /// list), an unchecked checkbox is shown as the leading widget.
+  final Nullable<void Function(T)>? onCheckboxPressed;
   final List<T> items;
   final List<Category>? categories; // forwarded to item page on long press
   final ShoppingList? shoppingList; // forwarded to item page on long press
@@ -29,6 +33,7 @@ class SliverCategoryItemGridList<T extends Item> extends StatefulWidget {
     this.onRefresh,
     this.onPressed,
     this.onLongPressed,
+    this.onCheckboxPressed,
     this.items = const [],
     this.categories,
     this.shoppingList,
@@ -73,6 +78,7 @@ class _SliverCategoryItemGridListState<T extends Item>
           isLoading: widget.isLoading,
           onRefresh: widget.onRefresh,
           onPressed: widget.onPressed,
+          onCheckboxPressed: widget.onCheckboxPressed,
           isSubTitle: true,
           extraOption: widget.extraOption,
           shoppingListStyle: widget.shoppingListStyle,
@@ -83,6 +89,7 @@ class _SliverCategoryItemGridListState<T extends Item>
         onRefresh: widget.onRefresh,
         onPressed: widget.onPressed,
         onLongPressed: widget.onLongPressed,
+        onCheckboxPressed: widget.onCheckboxPressed,
         items: widget.items,
         categories: widget.categories,
         shoppingList: widget.shoppingList,

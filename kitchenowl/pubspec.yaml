@@ -19,7 +19,7 @@ version: 0.7.10+124
 
 environment:
   sdk: ">=3.0.0 <4.0.0"
-  flutter: ">=3.47.2"
+  flutter: ">=3.47.5"
 
 dependencies:
   flutter:
@@ -60,7 +60,7 @@ dependencies:
   cached_network_image: ^4.0.0
   flutter_svg: ^2.0.10+1
   image_picker: ^1.2.2
-  file_picker: ^12.1.2
+  file_picker: ^13.1.0
   photo_view: ^0.15.0
   share_handler: ^0.0.19
   share_plus: ^13.1.0

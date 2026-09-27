@@ -114,6 +114,8 @@ def addExpense(args, household_id):
     if "category" in args:
         if args["category"] is not None:
             category = ExpenseCategory.find_by_id(args["category"])
+            if not category or category.household_id != household_id:
+                raise NotFoundRequest()
             expense.category = category
     if "exclude_from_statistics" in args:
         expense.exclude_from_statistics = args["exclude_from_statistics"]
@@ -150,9 +152,13 @@ def updateExpense(args, id):  # noqa: C901
         raise NotFoundRequest()
     expense.checkAuthorized()
 
+    needsRecalculate = False
+
     if "name" in args:
         expense.name = args["name"]
     if "amount" in args:
+        if args["amount"] != expense.amount:
+            needsRecalculate = True
         expense.amount = args["amount"]
     if "description" in args:
         expense.description = args["description"]
@@ -163,6 +169,8 @@ def updateExpense(args, id):  # noqa: C901
     if "category" in args:
         if args["category"] is not None:
             category = ExpenseCategory.find_by_id(args["category"])
+            if not category or category.household_id != expense.household_id:
+                raise NotFoundRequest()
             expense.category = category
         else:
             expense.category = None
@@ -173,12 +181,15 @@ def updateExpense(args, id):  # noqa: C901
             expense.household_id, args["paid_by"]["id"]
         )
         if member:
+            if member.user_id != expense.paid_by_id:
+                needsRecalculate = True
             expense.paid_by_id = member.user_id
     expense.save()
     if "paid_for" in args:
         for con in expense.paid_for:
             user_ids = [e["id"] for e in args["paid_for"]]
             if con.user.id not in user_ids:
+                needsRecalculate = True
                 con.delete()
         for user_data in args["paid_for"]:
             member = HouseholdMember.find_by_ids(expense.household_id, user_data["id"])
@@ -186,15 +197,19 @@ def updateExpense(args, id):  # noqa: C901
                 con = ExpensePaidFor.find_by_ids(expense.id, member.user_id)
                 if con:
                     if "factor" in user_data and user_data["factor"]:
+                        if con.factor != user_data["factor"]:
+                            needsRecalculate = True
                         con.factor = user_data["factor"]
                 else:
+                    needsRecalculate = True
                     con = ExpensePaidFor(
                         factor=user_data["factor"],
                     )
                     con.expense = expense
                     con.user_id = member.user_id
                 con.save()
-    recalculateBalances(expense.household_id)
+    if needsRecalculate:
+        recalculateBalances(expense.household_id)
     return jsonify(expense.obj_to_dict())
 
 

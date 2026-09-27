@@ -143,6 +143,7 @@ SUPPORTED_LANGUAGES = {
     "te": "తెలుగు",
     "tr": "Türkçe",
     "uk": "Українська",
+    "zbl": "Blissymbols",
     "zh_Hans": "简化字",
     "zh_Hant": "繁體字",
 }

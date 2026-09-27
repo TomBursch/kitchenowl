@@ -42,11 +42,14 @@ def file_has_access_or_download(
         from mimetypes import guess_extension
 
         resp = None
-        if trusted_url:
-            resp = requests.get(newPhoto)
-        else:
-            # Use hardened request manager for untrusted URLs
-            resp = request_manager.send_request("GET", newPhoto)
+        try:
+            if trusted_url:
+                resp = requests.get(newPhoto)
+            else:
+                # Use hardened request manager for untrusted URLs
+                resp = request_manager.send_request("GET", newPhoto)
+        except requests.RequestException:
+            return None
         ext = guess_extension(resp.headers["content-type"])
         if ext and allowed_file("file" + ext):
             filename = secure_filename(str(uuid.uuid4()) + ext)

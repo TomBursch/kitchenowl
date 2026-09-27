@@ -1,4 +1,4 @@
-from marshmallow import EXCLUDE, fields, Schema
+from marshmallow import EXCLUDE, fields, Schema, validate
 
 
 class AddRecipe(Schema):
@@ -79,6 +79,18 @@ class RemoveItem(Schema):
 
 class ScrapeRecipe(Schema):
     url = fields.String(required=True, validate=lambda a: a and not a.isspace())
+
+
+class GenerateRecipe(Schema):
+    class Message(Schema):
+        role = fields.String(
+            required=True, validate=validate.OneOf(["user", "assistant"])
+        )
+        content = fields.String(required=True, validate=validate.Length(1, 20000))
+
+    messages = fields.List(
+        fields.Nested(Message()), required=True, validate=validate.Length(1, 50)
+    )
 
 
 class SuggestionsRecipe(Schema):

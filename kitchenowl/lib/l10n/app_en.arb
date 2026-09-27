@@ -358,6 +358,27 @@
     }
   },
   "@recipeEdit": {},
+  "@recipeGenerate": {},
+  "@recipeGenerateAbort": {},
+  "@recipeGenerateAdd": {},
+  "@recipeGenerateFollowUpAnother": {},
+  "@recipeGenerateFollowUpDetailed": {},
+  "@recipeGenerateFollowUpVegetarian": {},
+  "@recipeGenerateHint": {},
+  "@recipeGenerateQuestion": {},
+  "@recipeGenerateSuggestionFewIngredients": {},
+  "@recipeGenerateSuggestionFridge": {},
+  "@recipeGenerateSuggestionQuick": {},
+  "@recipeGenerateSuggestionMealPrep": {},
+  "@recipeGenerateSuggestions": {},
+  "@recipeGenerateTokens": {
+    "placeholders": {
+      "count": {
+        "example": "1250",
+        "type": "int"
+      }
+    }
+  },
   "@recipeEmpty": {},
   "@recipeEmptySearch": {},
   "@recipeGoToInHousehold": {
@@ -713,6 +734,20 @@
   "recipeEdit": "Edit recipe",
   "recipeEmpty": "No recipes, start by adding one!",
   "recipeEmptySearch": "No recipes found :(",
+  "recipeGenerate": "Generate recipe with AI",
+  "recipeGenerateAbort": "Stop",
+  "recipeGenerateAdd": "Add recipe",
+  "recipeGenerateFollowUpAnother": "Suggest a different recipe",
+  "recipeGenerateFollowUpDetailed": "Explain the steps in more detail",
+  "recipeGenerateFollowUpVegetarian": "Make it vegetarian",
+  "recipeGenerateHint": "Describe a dish or list your ingredients…",
+  "recipeGenerateQuestion": "What would you like to cook today?",
+  "recipeGenerateSuggestionFewIngredients": "Suggest a Mediterranean main dish with no more than 5 ingredients (not counting staples like salt, pepper, oil, broth).",
+  "recipeGenerateSuggestionFridge": "I only have potatoes, tomatoes, cheese, yoghurt and eggs in my fridge. What can I cook?",
+  "recipeGenerateSuggestionQuick": "A vegetarian weeknight dinner for 2 that is ready in under 30 minutes.",
+  "recipeGenerateSuggestionMealPrep": "A high-protein lunch I can meal-prep for the whole work week.",
+  "recipeGenerateSuggestions": "Suggested prompts",
+  "recipeGenerateTokens": "{count} tokens",
   "recipeGoToInHousehold": "Already added, go to recipe in {householdName}",
   "recipeImageSelect": "Select a recipe image",
   "recipeNew": "New recipe",

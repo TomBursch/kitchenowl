@@ -62,6 +62,7 @@ Environment variables for `tombursch/kitchenowl` and `tombursch/kitchenowl-backe
 | `GOOGLE_CLIENT_SECRET_FILE`                |                            | Allows setting GOOGLE_CLIENT_SECRET from a file path, will override GOOGLE_CLIENT_SECRET                                                              |
 | `LLM_MODEL`                                |                            | Set a custom ingredient detection strategy for scraped recipes from the web. More at [Ingredient Parsing](./ingredient_parsing.md)                    |
 | `LLM_API_URL`                              |                            |                                                                                                                                                       |
+| `LLM_RECIPE_GENERATION`                    | `true` if `LLM_MODEL` set  | Enables the AI recipe generator ("AI" button when adding recipes). Requires `LLM_MODEL`                                                             |
 | `OPENAI_API_KEY`/`OPENROUTER_API_KEY`/etc. |                            | Depends on which provider you choose. See [LiteLLM docs](https://docs.litellm.ai/docs/providers)                                                      |
 | `BASE_HREF`                                |                            | Sets the subdirectory KitchenOwl is hosted at. Must begin and end with a slash `/`. Only applicable to `tombursch/kitchenowl`                         |
 

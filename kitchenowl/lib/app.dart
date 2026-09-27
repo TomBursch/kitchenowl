@@ -220,8 +220,7 @@ class _AppState extends State<App> with WidgetsBindingObserver {
                   onGenerateTitle: (BuildContext context) =>
                       AppLocalizations.of(context)!.appTitle,
                   localizationsDelegates:
-                      GlobalMaterialLocalizations.delegates +
-                          AppLocalizations.localizationsDelegates +
+                      AppLocalizations.localizationsDelegates +
                           [
                             LocaleNamesLocalizationsDelegate(),
                           ],

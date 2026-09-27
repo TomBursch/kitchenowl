@@ -29,12 +29,6 @@ class AuthCubit extends Cubit<AuthState> {
     setup();
   }
 
-  @override
-  Future<void> close() {
-    ApiService.getInstance().removeListener(updateState);
-    return super.close();
-  }
-
   void setup() async {
     String? url;
     url = kIsWeb

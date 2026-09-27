@@ -3,7 +3,7 @@ from sqlalchemy import desc, func
 from app.config import FRONT_URL
 from app.errors import NotFoundRequest
 from app.models import Household, RecipeItems, RecipeTags
-from flask import jsonify, Blueprint
+from flask import current_app, jsonify, Blueprint
 from flask_jwt_extended import current_user, jwt_required
 from app import db
 from app.helpers import validate_args, authorize_household
@@ -11,6 +11,7 @@ from app.models import Recipe, Item, Tag
 from app.models.recipe import RecipeVisibility
 from app.service.file_has_access_or_download import file_has_access_or_download
 from app.service.recipe_scraping import scrape
+from app.service.recipe_generation import LLM_RECIPE_GENERATION, generateRecipe
 from .schemas import (
     SearchByNameRequest,
     AddRecipe,
@@ -18,6 +19,7 @@ from .schemas import (
     UpdateRecipe,
     GetAllFilterRequest,
     ScrapeRecipe,
+    GenerateRecipe,
     SuggestionsRecipe,
 )
 
@@ -249,6 +251,24 @@ def scrapeRecipe(args, household_id):
     if res:
         return jsonify(res)
     return "Unsupported website", 400
+
+
+@recipeHousehold.route("/generate", methods=["POST"])
+@jwt_required()
+@authorize_household()
+@validate_args(GenerateRecipe)
+def generateRecipeWithLLM(args, household_id):
+    if not LLM_RECIPE_GENERATION:
+        raise NotFoundRequest()
+    household = Household.find_by_id(household_id)
+    if not household:
+        raise NotFoundRequest()
+
+    try:
+        return jsonify(generateRecipe(args["messages"], household))
+    except Exception:
+        current_app.logger.exception("Recipe generation failed")
+        return "Recipe generation failed", 400
 
 
 @recipe.route("/discover", methods=["GET"])

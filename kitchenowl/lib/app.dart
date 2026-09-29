@@ -219,8 +219,18 @@ class _AppState extends State<App> with WidgetsBindingObserver {
                   ),
                   onGenerateTitle: (BuildContext context) =>
                       AppLocalizations.of(context)!.appTitle,
+                  // `material_ui` (used throughout this app instead of
+                  // `flutter/material`) ships its own MaterialLocalizations
+                  // implementation, separate from flutter_localizations'.
+                  // AppLocalizations.localizationsDelegates only registers
+                  // the latter, so material_ui's TextField can't find a
+                  // MaterialLocalizations for any non-English locale and
+                  // crashes with "Null check operator used on a null value"
+                  // in _TextFieldState._getEffectiveDecoration. Register
+                  // material_ui's own delegates too.
                   localizationsDelegates:
                       AppLocalizations.localizationsDelegates +
+                          GlobalMaterialLocalizations.delegates +
                           [
                             LocaleNamesLocalizationsDelegate(),
                           ],

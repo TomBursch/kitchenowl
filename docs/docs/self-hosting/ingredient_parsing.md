@@ -7,6 +7,7 @@ The default method is to use a local [natural language processing (NLP) model](h
 
 Alternatively, you can use a [Large Language Model (LLM)](https://github.com/BerriAI/litellm), multiple models are supported. Using an LLM uses more resources but can provide better results, especially for languages other than English.
 It can automatically translate the ingredient names to the household language for better item detection.
+The same configuration also enables the AI recipe generator, which can be turned off with `LLM_RECIPE_GENERATION=false`.
 
 ### OpenAI
 

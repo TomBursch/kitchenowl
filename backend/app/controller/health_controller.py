@@ -9,6 +9,7 @@ from app.config import (
     DISABLE_USERNAME_PASSWORD_LOGIN,
 )
 from app.config import SUPPORTED_LANGUAGES, oidc_clients
+from app.service.recipe_generation import LLM_RECIPE_GENERATION
 
 health = Blueprint("health", __name__)
 
@@ -31,6 +32,8 @@ def get_health():
         info["email_mandatory"] = True
     if DISABLE_USERNAME_PASSWORD_LOGIN:
         info["disable_username_password_login"] = True
+    if LLM_RECIPE_GENERATION:
+        info["llm_recipe_generation"] = True
     return jsonify(info)
 
 

@@ -113,6 +113,27 @@ extension RecipeApi on ApiService {
     return (RecipeScrape.fromJson(body), 200);
   }
 
+  /// Returns the generated recipe with its prompt and completion token usage
+  Future<(Recipe, int, int)?> generateRecipe(
+    Household household,
+    List<Map<String, String>> messages,
+  ) async {
+    final res = await post(
+      '${householdPath(household)}$baseRoute/generate',
+      jsonEncode({'messages': messages}),
+      timeout: _TIMEOUT_SCRAPE,
+    );
+    if (res.statusCode != 200) return null;
+
+    final body = jsonDecode(res.body);
+
+    return (
+      Recipe.fromJson(body['recipe']),
+      body['usage']['prompt_tokens'] as int,
+      body['usage']['completion_tokens'] as int,
+    );
+  }
+
   Future<List<Recipe>?> searchAllRecipes(String query,
       [int page = 0, String? language]) async {
     final res = await get(

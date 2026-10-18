@@ -40,6 +40,7 @@
     "description": "A shorter title/button text used wherever the space is limited. Excludes the number of yields."
   },
   "@addShoppingList": {},
+  "@addStore": {},
   "@addTag": {},
   "@addedBy": {
     "placeholders": {
@@ -426,6 +427,18 @@
   "@sortingAlgorithmic": {},
   "@sortingAlphabetical": {},
   "@start": {},
+  "@store": {},
+  "@storeDelete": {},
+  "@storeDeleteConfirmation": {
+    "placeholders": {
+      "store": {
+        "example": "Supermarket",
+        "type": "String"
+      }
+    }
+  },
+  "@storeEdit": {},
+  "@stores": {},
   "@supportDevelopment": {},
   "@swipeToDelete": {},
   "@swipeToDeleteAndLongPressToReorder": {},
@@ -521,6 +534,7 @@
   "addRecipeToPlanner": "Додати до плану харчування ({number} подач)",
   "addRecipeToPlannerShort": "Додати до плану харчування",
   "addShoppingList": "Додати список покупок",
+  "addStore": "Додати магазин",
   "addTag": "Додати тег",
   "addedBy": "Додано {name}",
   "address": "Адреса",
@@ -747,6 +761,11 @@
   "sortingAlgorithmic": "Алгоритмічно",
   "sortingAlphabetical": "Алфавітно",
   "start": "Початок",
+  "store": "Магазин",
+  "storeDelete": "Видалити магазин",
+  "storeDeleteConfirmation": "Ви впевнені, що хочете видалити {store}? Це видалить магазин з усіх елементів.",
+  "storeEdit": "Змінити магазин",
+  "stores": "Магазини",
   "supportDevelopment": "Підтримати розробку",
   "swipeToDelete": "Прогорнути щоб видалити",
   "swipeToDeleteAndLongPressToReorder": "Прогорнути, щоб видалити та довгий дотик для перетягування",

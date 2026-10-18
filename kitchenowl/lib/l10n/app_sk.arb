@@ -26,6 +26,9 @@
   "@addRecipeToPlannerShort": {
     "description": "A shorter title/button text used wherever the space is limited. Excludes the number of yields."
   },
+  "@addShoppingList": {},
+  "@addStore": {},
+  "@addTag": {},
   "@addedBy": {
     "placeholders": {
       "name": {
@@ -210,6 +213,29 @@
       }
     }
   },
+  "@signup": {},
+  "@skip": {},
+  "@smaller": {},
+  "@sortingAlgorithmic": {},
+  "@sortingAlphabetical": {},
+  "@start": {},
+  "@store": {},
+  "@storeDelete": {},
+  "@storeDeleteConfirmation": {
+    "placeholders": {
+      "store": {
+        "example": "Supermarket",
+        "type": "String"
+      }
+    }
+  },
+  "@storeEdit": {},
+  "@stores": {},
+  "@supportDevelopment": {},
+  "@swipeToDelete": {},
+  "@swipeToDeleteAndLongPressToReorder": {},
+  "@swipeToRemove": {},
+  "@tagDelete": {},
   "@tagDeleteConfirmation": {
     "placeholders": {
       "tag": {
@@ -255,6 +281,7 @@
   "addRecipeToPlanner": "Pridať do jedálneho lístka ({number} porcií)",
   "addRecipeToPlannerShort": "Pridať do jedálneho lístka",
   "addShoppingList": "Pridať nákupný zoznam",
+  "addStore": "Pridať obchod",
   "addTag": "Pridať tag",
   "addedBy": "Pridal(a) {name}",
   "address": "Adresa",
@@ -486,6 +513,11 @@
   "sortingAlgorithmic": "Algoritmicky",
   "sortingAlphabetical": "Abecedne",
   "start": "Začať",
+  "store": "Obchod",
+  "storeDelete": "Odstrániť obchod",
+  "storeDeleteConfirmation": "Ste si istí, že chcete zmazať {store}? Tento obchod bude odstránený zo všetkých položiek.",
+  "storeEdit": "Upraviť obchod",
+  "stores": "Obchody",
   "supportDevelopment": "Podporiť vývoj",
   "swipeToDelete": "Potiahnite pre zmazanie",
   "swipeToDeleteAndLongPressToReorder": "Potiahnite pre zmazanie a podržte pre zmenu poradia",

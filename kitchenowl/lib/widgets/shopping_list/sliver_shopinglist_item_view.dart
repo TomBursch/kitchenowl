@@ -5,11 +5,13 @@ import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/category.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/models/shoppinglist.dart';
+import 'package:kitchenowl/models/store.dart';
 import 'package:kitchenowl/widgets/home_page/sliver_category_item_grid_list.dart';
 
 class SliverShopinglistItemView extends StatelessWidget {
   final ShoppingList? shoppingList;
   final List<Category> categories;
+  final List<Store> stores;
   final void Function()? onRefresh;
   final Nullable<void Function(ShoppinglistItem)>? onPressed;
   final Nullable<void Function(ItemWithDescription)>? onRecentPressed;
@@ -22,6 +24,7 @@ class SliverShopinglistItemView extends StatelessWidget {
     super.key,
     this.shoppingList,
     required this.categories,
+    this.stores = const [],
     this.onRefresh,
     this.onPressed,
     this.onRecentPressed,
@@ -39,6 +42,7 @@ class SliverShopinglistItemView extends StatelessWidget {
       main = SliverItemGridList<ShoppinglistItem>(
         items: shoppingList?.items ?? [],
         categories: categories,
+        stores: stores,
         shoppingList: shoppingList,
         selected: (item) =>
             App.settings.shoppingListTapToRemove &&
@@ -65,6 +69,7 @@ class SliverShopinglistItemView extends StatelessWidget {
           name: category?.name ?? AppLocalizations.of(context)!.uncategorized,
           items: items,
           categories: categories,
+          stores: stores,
           shoppingList: shoppingList,
           selected: (item) =>
               App.settings.shoppingListTapToRemove &&
@@ -94,6 +99,7 @@ class SliverShopinglistItemView extends StatelessWidget {
               [],
           onPressed: onRecentPressed,
           categories: categories,
+          stores: stores,
           shoppingList: shoppingList,
           onRefresh: onRefresh,
           isLoading: isLoading,

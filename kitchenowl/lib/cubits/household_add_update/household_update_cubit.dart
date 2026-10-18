@@ -6,6 +6,7 @@ import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/models/import_settings.dart';
 import 'package:kitchenowl/models/member.dart';
 import 'package:kitchenowl/models/shoppinglist.dart';
+import 'package:kitchenowl/models/store.dart';
 import 'package:kitchenowl/models/tag.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
 
@@ -62,6 +63,8 @@ class HouseholdUpdateCubit
         ApiService.getInstance().getCategories(this.household);
     Future<List<ExpenseCategory>?> expenseCategories =
         ApiService.getInstance().getExpenseCategories(this.household);
+    Future<Set<Store>?> stores =
+        ApiService.getInstance().getAllStores(this.household);
 
     Household household = await fHousehold ?? this.household;
 
@@ -76,6 +79,7 @@ class HouseholdUpdateCubit
       tags: await tags ?? {},
       categories: await categories ?? const [],
       expenseCategories: await expenseCategories ?? const [],
+      stores: await stores ?? {},
       supportedLanguages: state.supportedLanguages,
       link: household.link ?? "",
       description: household.description ?? "",
@@ -264,6 +268,35 @@ class HouseholdUpdateCubit
     return res;
   }
 
+  Future<bool> deleteStore(Store store) async {
+    final res = await ApiService.getInstance().deleteStore(store);
+    refresh();
+
+    return res;
+  }
+
+  Future<bool> addStore(String name) async {
+    final res = await ApiService.getInstance()
+        .addStore(household, Store(name: name));
+    refresh();
+
+    return res;
+  }
+
+  Future<bool> updateStore(Store store) async {
+    final res = await ApiService.getInstance().updateStore(store);
+    refresh();
+
+    return res;
+  }
+
+  Future<bool> mergeStore(Store store, Store other) async {
+    final res = await ApiService.getInstance().mergeStore(store, other);
+    refresh();
+
+    return res;
+  }
+
   Future<bool> mergeExpenseCategory(
     ExpenseCategory category,
     ExpenseCategory other,
@@ -313,6 +346,7 @@ class HouseholdUpdateState extends HouseholdAddUpdateState {
   final Set<Tag> tags;
   final List<Category> categories;
   final List<ExpenseCategory> expenseCategories;
+  final Set<Store> stores;
   final String link;
   final String description;
 
@@ -330,6 +364,7 @@ class HouseholdUpdateState extends HouseholdAddUpdateState {
     this.tags = const {},
     this.categories = const [],
     this.expenseCategories = const [],
+    this.stores = const {},
   });
 
   HouseholdUpdateState copyWith({
@@ -345,6 +380,7 @@ class HouseholdUpdateState extends HouseholdAddUpdateState {
     Set<Tag>? tags,
     List<Category>? categories,
     List<ExpenseCategory>? expenseCategories,
+    Set<Store>? stores,
     String? link,
     String? description,
   }) =>
@@ -360,6 +396,7 @@ class HouseholdUpdateState extends HouseholdAddUpdateState {
         tags: tags ?? this.tags,
         categories: categories ?? this.categories,
         expenseCategories: expenseCategories ?? this.expenseCategories,
+        stores: stores ?? this.stores,
         link: link ?? this.link,
         description: description ?? this.description,
       );
@@ -373,6 +410,7 @@ class HouseholdUpdateState extends HouseholdAddUpdateState {
         tags,
         categories,
         expenseCategories,
+        stores,
         link,
         description,
       ];
@@ -405,6 +443,7 @@ class LoadingHouseholdUpdateState extends HouseholdUpdateState {
     Set<Tag>? tags,
     List<Category>? categories,
     List<ExpenseCategory>? expenseCategories,
+    Set<Store>? stores,
     String? link,
     String? description,
   }) =>

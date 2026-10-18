@@ -26,6 +26,9 @@
   "@addRecipeToPlannerShort": {
     "description": "A shorter title/button text used wherever the space is limited. Excludes the number of yields."
   },
+  "@addShoppingList": {},
+  "@addStore": {},
+  "@addTag": {},
   "@addedBy": {
     "placeholders": {
       "name": {
@@ -210,6 +213,29 @@
       }
     }
   },
+  "@signup": {},
+  "@skip": {},
+  "@smaller": {},
+  "@sortingAlgorithmic": {},
+  "@sortingAlphabetical": {},
+  "@start": {},
+  "@store": {},
+  "@storeDelete": {},
+  "@storeDeleteConfirmation": {
+    "placeholders": {
+      "store": {
+        "example": "Supermarket",
+        "type": "String"
+      }
+    }
+  },
+  "@storeEdit": {},
+  "@stores": {},
+  "@supportDevelopment": {},
+  "@swipeToDelete": {},
+  "@swipeToDeleteAndLongPressToReorder": {},
+  "@swipeToRemove": {},
+  "@tagDelete": {},
   "@tagDeleteConfirmation": {
     "placeholders": {
       "tag": {
@@ -255,6 +281,7 @@
   "addRecipeToPlanner": "添加到膳食计划（{number}份）",
   "addRecipeToPlannerShort": "添加到膳食计划",
   "addShoppingList": "新增购物清单",
+  "addStore": "新增商店",
   "addTag": "新增标签",
   "addedBy": "由 {name} 添加",
   "address": "地址",
@@ -486,6 +513,11 @@
   "sortingAlgorithmic": "算法",
   "sortingAlphabetical": "按字母顺序",
   "start": "开始",
+  "store": "商店",
+  "storeDelete": "删除商店",
+  "storeDeleteConfirmation": "确定要删除 {store}？所有物品中的这个商店都会被移除。",
+  "storeEdit": "编辑商店",
+  "stores": "商店",
   "supportDevelopment": "支持开发",
   "swipeToDelete": "滑动以删除",
   "swipeToDeleteAndLongPressToReorder": "滑动删除，长按重新排序",

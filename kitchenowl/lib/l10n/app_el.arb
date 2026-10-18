@@ -38,6 +38,7 @@
   },
   "@addRecipeToPlannerShort": {},
   "@addShoppingList": {},
+  "@addStore": {},
   "@addTag": {},
   "@addedBy": {
     "placeholders": {
@@ -424,6 +425,18 @@
   "@sortingAlgorithmic": {},
   "@sortingAlphabetical": {},
   "@start": {},
+  "@store": {},
+  "@storeDelete": {},
+  "@storeDeleteConfirmation": {
+    "placeholders": {
+      "store": {
+        "example": "Supermarket",
+        "type": "String"
+      }
+    }
+  },
+  "@storeEdit": {},
+  "@stores": {},
   "@supportDevelopment": {},
   "@swipeToDelete": {},
   "@swipeToDeleteAndLongPressToReorder": {},
@@ -519,6 +532,7 @@
   "addRecipeToPlanner": "Προσθήκη στο πρόγραμμα γευμάτων ({number} Σερβιρίσματα)",
   "addRecipeToPlannerShort": "Προσθήκη στο πρόγραμμα γευμάτων",
   "addShoppingList": "Προσθήκη λίστας αγορών",
+  "addStore": "Προσθήκη καταστήματος",
   "addTag": "Προσθήκη ετικέτας",
   "addedBy": "Προστέθηκε από {name}",
   "address": "Διεύθυνση",
@@ -745,6 +759,11 @@
   "sortingAlgorithmic": "Αλγοριθμικά",
   "sortingAlphabetical": "Αλφαβητικά",
   "start": "Έναρξη",
+  "store": "Κατάστημα",
+  "storeDelete": "Διαγραφή καταστήματος",
+  "storeDeleteConfirmation": "Είστε σίγουροι πως θέλετε να διαγράψετε το κατάστημα {store}; Αυτό θα αφαιρέσει το κατάστημα από όλα τα είδη.",
+  "storeEdit": "Επεξεργασία Καταστήματος",
+  "stores": "Καταστήματα",
   "supportDevelopment": "Υποστηρίξτε την ανάπτυξη",
   "swipeToDelete": "Σύρετε για διαγραφή",
   "swipeToDeleteAndLongPressToReorder": "Σύρετε για διαγραφή και πατήστε παρατεταμένα για ανακατανομή",

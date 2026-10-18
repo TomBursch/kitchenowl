@@ -38,6 +38,7 @@
   },
   "@addRecipeToPlannerShort": {},
   "@addShoppingList": {},
+  "@addStore": {},
   "@addTag": {},
   "@addedBy": {
     "placeholders": {
@@ -414,6 +415,18 @@
   "@sortingAlgorithmic": {},
   "@sortingAlphabetical": {},
   "@start": {},
+  "@store": {},
+  "@storeDelete": {},
+  "@storeDeleteConfirmation": {
+    "placeholders": {
+      "store": {
+        "example": "Supermarket",
+        "type": "String"
+      }
+    }
+  },
+  "@storeEdit": {},
+  "@stores": {},
   "@supportDevelopment": {},
   "@swipeToDelete": {},
   "@swipeToDeleteAndLongPressToReorder": {},
@@ -507,6 +520,7 @@
   "addRecipeToPlanner": "Přidat do jídelníčku ({number})",
   "addRecipeToPlannerShort": "Přidat jídlo do plánu",
   "addShoppingList": "Přidat nákupní seznam",
+  "addStore": "Přidat obchod",
   "addTag": "Přidat Tag",
   "addedBy": "Přidáno {name}",
   "address": "Adresa",
@@ -730,6 +744,11 @@
   "sortingAlgorithmic": "Algoritmické",
   "sortingAlphabetical": "Abecedně",
   "start": "Začít",
+  "store": "Obchod",
+  "storeDelete": "Smazat obchod",
+  "storeDeleteConfirmation": "Jste si jistí že chcete smazat {store}? Tento obchod bude odstraněn ze všech položek.",
+  "storeEdit": "Upravit obchod",
+  "stores": "Obchody",
   "supportDevelopment": "Podpořit vývoj",
   "swipeToDelete": "Přejetí prstem pro smazání",
   "swipeToDeleteAndLongPressToReorder": "Přejetí prstem pro smazání a dlouhé zmáčknutí pro změnu pořadí",

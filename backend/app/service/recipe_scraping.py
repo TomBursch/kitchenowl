@@ -167,7 +167,10 @@ def scrapeLocal(recipe_id: int, household: Household):
 def scrapeKitchenOwl(
     original_url: str, api_url: str, recipe_id: int
 ) -> dict[str, Any] | None:
-    res = requests.get(api_url + "/recipe/" + str(recipe_id))
+    try:
+        res = request_manager.send_request("GET", f"{api_url}/recipe/{recipe_id}")
+    except Exception:
+        return None
     if res.status_code != requests.codes.ok:
         if res.status_code == requests.codes.unauthorized:
             raise ForbiddenRequest()

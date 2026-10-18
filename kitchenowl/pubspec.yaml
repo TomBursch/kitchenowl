@@ -76,6 +76,7 @@ dependencies:
   sign_in_with_apple: ^8.0.0
   wakelock_plus: ^1.2.10
   fuzzywuzzy: ^1.2.0
+  diacritic: ^0.1.6
 
 dev_dependencies:
   flutter_test:

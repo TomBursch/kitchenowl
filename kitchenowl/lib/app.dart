@@ -219,11 +219,11 @@ class _AppState extends State<App> with WidgetsBindingObserver {
                   ),
                   onGenerateTitle: (BuildContext context) =>
                       AppLocalizations.of(context)!.appTitle,
-                  localizationsDelegates:
-                      AppLocalizations.localizationsDelegates +
-                          [
-                            LocaleNamesLocalizationsDelegate(),
-                          ],
+                  localizationsDelegates: [
+                    AppLocalizations.delegate,
+                    ...GlobalMaterialLocalizations.delegates,
+                    LocaleNamesLocalizationsDelegate(),
+                  ],
                   supportedLocales:
                       const [Locale('en')] + AppLocalizations.supportedLocales,
                   theme: AppThemes.light(lightColorScheme),

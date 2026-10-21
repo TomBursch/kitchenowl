@@ -231,22 +231,30 @@ class _SettingsPageState extends State<SettingsPage> {
                       padding: const EdgeInsets.only(top: 6),
                       child: SegmentedButton(
                         selected: {state.gridSize},
+                        style: SegmentedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(horizontal: 4),
+                          textStyle: Theme.of(context).textTheme.labelMedium,
+                        ),
                         segments: [
                           ButtonSegment(
                             value: GridSize.small,
                             icon: const Icon(Icons.grid_4x4_rounded),
-                            label: Text(AppLocalizations.of(context)!.smaller),
+                            label: Text(AppLocalizations.of(context)!.smaller,
+                                maxLines: 1, softWrap: false),
                           ),
                           ButtonSegment(
                             value: GridSize.normal,
                             icon: const Icon(Icons.grid_3x3_rounded),
-                            label:
-                                Text(AppLocalizations.of(context)!.defaultWord),
+                            label: Text(
+                                AppLocalizations.of(context)!.defaultWord,
+                                maxLines: 1,
+                                softWrap: false),
                           ),
                           ButtonSegment(
                             value: GridSize.large,
                             icon: const Icon(Icons.crop_square_rounded),
-                            label: Text(AppLocalizations.of(context)!.larger),
+                            label: Text(AppLocalizations.of(context)!.larger,
+                                maxLines: 1, softWrap: false),
                           ),
                         ],
                         onSelectionChanged: (Set<GridSize> value) {
@@ -265,16 +273,28 @@ class _SettingsPageState extends State<SettingsPage> {
                       padding: const EdgeInsets.only(top: 6),
                       child: SegmentedButton(
                         selected: {state.listStyle},
+                        style: SegmentedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(horizontal: 4),
+                          textStyle: Theme.of(context).textTheme.labelMedium,
+                        ),
                         segments: [
                           ButtonSegment(
                             value: ListStyle.cards,
                             icon: const Icon(Icons.view_agenda_rounded),
-                            label: Text(AppLocalizations.of(context)!.cards),
+                            label: Text(AppLocalizations.of(context)!.cards,
+                                maxLines: 1, softWrap: false),
                           ),
                           ButtonSegment(
                             value: ListStyle.minimalist,
                             icon: const Icon(Icons.density_small_rounded),
-                            label: Text(AppLocalizations.of(context)!.compact),
+                            label: Text(AppLocalizations.of(context)!.compact,
+                                maxLines: 1, softWrap: false),
+                          ),
+                          ButtonSegment(
+                            value: ListStyle.slim,
+                            icon: const Icon(Icons.reorder_rounded),
+                            label: Text(AppLocalizations.of(context)!.slim,
+                                maxLines: 1, softWrap: false),
                           ),
                         ],
                         onSelectionChanged: (Set<ListStyle> value) {

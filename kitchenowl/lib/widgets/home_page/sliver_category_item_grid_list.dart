@@ -49,10 +49,16 @@ class _SliverCategoryItemGridListState<T extends Item>
     extends State<SliverCategoryItemGridList<T>> {
   @override
   Widget build(BuildContext context) {
+    final bool slim = widget.shoppingListStyle.isList &&
+        widget.shoppingListStyle.listStyle == ListStyle.slim;
+
     TextStyle? titleTextStyle = Theme.of(context).textTheme.titleLarge;
     if (widget.isSubTitle)
       titleTextStyle = titleTextStyle?.apply(
           fontStyle: FontStyle.italic, fontWeightDelta: -1);
+    if (slim)
+      titleTextStyle =
+          titleTextStyle?.copyWith(fontSize: DynamicStyling.slimFontSize);
 
     List<Widget> list = [];
     final categoryLength = widget.categories?.length ?? 0;
@@ -92,13 +98,45 @@ class _SliverCategoryItemGridListState<T extends Item>
         shoppingListStyle: widget.shoppingListStyle,
       ));
 
+    Widget title = Text(
+      widget.name,
+      style: titleTextStyle,
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
+    );
+
+    if (slim) {
+      // Leader line running from the label to the collapse chevron. The rule is
+      // painted behind and masked by the label's own background, so it always
+      // starts right after the text no matter how long the category name is.
+      title = Stack(
+        alignment: Alignment.centerLeft,
+        children: [
+          Positioned.fill(
+            child: Center(
+              child: Container(
+                height: 0.5,
+                width: double.infinity,
+                color: Theme.of(context).colorScheme.onSurface.withAlpha(36),
+              ),
+            ),
+          ),
+          ColoredBox(
+            color: Theme.of(context).scaffoldBackgroundColor,
+            child: Padding(
+              padding: const EdgeInsets.only(right: 8),
+              child: title,
+            ),
+          ),
+        ],
+      );
+    }
+
     return SliverExpansionTile(
+      slim: slim,
       title: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Text(
-          widget.name,
-          style: titleTextStyle,
-        ),
+        padding: EdgeInsets.symmetric(horizontal: slim ? 8 : 16),
+        child: title,
       ),
       sliver: MultiSliver(children: list),
     );

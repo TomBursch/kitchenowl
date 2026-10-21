@@ -401,6 +401,8 @@
   "@setupTitle": {},
   "@share": {},
   "@shoppingList": {},
+  "@shoppingListCheckboxMode": {},
+  "@shoppingListCheckboxModeDescription": {},
   "@shoppingListContainsEntries": {
     "placeholders": {
       "entriesCount": {
@@ -747,6 +749,8 @@
   "setupTitle": "Hey there! Ready to shop?",
   "share": "Share",
   "shoppingList": "Shopping list",
+  "shoppingListCheckboxMode": "Checkboxes in list view",
+  "shoppingListCheckboxModeDescription": "Show a checkbox next to each item. Tapping the checkbox removes the item; tapping the row opens the item details.",
   "shoppingListContainsEntries": "{entriesCount, plural, =0{The shopping list contains no items.} =1{The shopping list contains 1 item.} other{The shopping list contains {entriesCount} items.}}",
   "shoppingListDelete": "Delete shopping list",
   "shoppingListDeleteConfirmation": "Are you sure you want to delete {shoppingList}?",

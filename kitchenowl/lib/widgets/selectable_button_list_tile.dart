@@ -9,6 +9,11 @@ class SelectableButtonListTile extends StatefulWidget {
   final bool raised;
   final void Function()? onPressed;
   final void Function()? onLongPressed;
+
+  /// When set, an unchecked checkbox is shown as the leading widget and
+  /// tapping it invokes this callback (e.g. to remove the item from the
+  /// shopping list).
+  final void Function()? onCheckboxPressed;
   final Widget? extraOption;
   final ListStyle listStyle;
 
@@ -20,6 +25,7 @@ class SelectableButtonListTile extends StatefulWidget {
     required this.selected,
     this.onPressed,
     this.onLongPressed,
+    this.onCheckboxPressed,
     this.raised = true,
     this.extraOption,
     this.listStyle = ListStyle.cards,
@@ -49,12 +55,17 @@ class _SelectableButtonListTileState extends State<SelectableButtonListTile> {
       child: ListTile(
         leading: widget.selected
             ? const Icon(Icons.check_rounded)
-            : widget.icon != null
-                ? Icon(widget.icon,
-                    color: !widget.raised
-                        ? Theme.of(context).iconTheme.color!.withAlpha(85)
-                        : Theme.of(context).iconTheme.color!.withAlpha(170))
-                : null,
+            : widget.onCheckboxPressed != null
+                ? Checkbox(
+                    value: false,
+                    onChanged: (_) => widget.onCheckboxPressed!(),
+                  )
+                : widget.icon != null
+                    ? Icon(widget.icon,
+                        color: !widget.raised
+                            ? Theme.of(context).iconTheme.color!.withAlpha(85)
+                            : Theme.of(context).iconTheme.color!.withAlpha(170))
+                    : null,
         title: Text(
           widget.title,
           maxLines: 1,

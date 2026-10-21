@@ -27,6 +27,8 @@ class SettingsCubit extends Cubit<SettingsState> {
         PreferenceStorage.getInstance().readBool(key: 'shoppingListListView');
     final shoppingListTapToRemove = PreferenceStorage.getInstance()
         .readBool(key: 'shoppingListTapToRemove');
+    final shoppingListCheckboxMode = PreferenceStorage.getInstance()
+        .readBool(key: 'shoppingListCheckboxMode');
     final recentItemsCategorize =
         PreferenceStorage.getInstance().readBool(key: 'recentItemsCategorize');
     final restoreLastShoppingList = PreferenceStorage.getInstance()
@@ -56,6 +58,7 @@ class SettingsCubit extends Cubit<SettingsState> {
           (await accentColor) != null ? Color((await accentColor)!) : null,
       shoppingListListView: await shoppingListListView ?? false,
       shoppingListTapToRemove: await shoppingListTapToRemove ?? true,
+      shoppingListCheckboxMode: await shoppingListCheckboxMode ?? false,
       recentItemsCategorize: await recentItemsCategorize ?? false,
       restoreLastShoppingList: await restoreLastShoppingList ?? false,
       shoppingListKeepAwake: await shoppingListKeepAwake ?? false,
@@ -119,6 +122,14 @@ class SettingsCubit extends Cubit<SettingsState> {
     emit(state.copyWith(shoppingListTapToRemove: shoppingListTapToRemove));
   }
 
+  void setShoppingListCheckboxMode(bool shoppingListCheckboxMode) {
+    PreferenceStorage.getInstance().writeBool(
+      key: 'shoppingListCheckboxMode',
+      value: shoppingListCheckboxMode,
+    );
+    emit(state.copyWith(shoppingListCheckboxMode: shoppingListCheckboxMode));
+  }
+
   void setRecentItemsCategorize(bool recentItemsCategorize) {
     PreferenceStorage.getInstance().writeBool(
       key: 'recentItemsCategorize',
@@ -153,6 +164,7 @@ class SettingsState extends Equatable {
   final Color? accentColor;
   final bool shoppingListListView;
   final bool shoppingListTapToRemove;
+  final bool shoppingListCheckboxMode;
   final bool recentItemsCategorize;
   final bool restoreLastShoppingList;
   final bool shoppingListKeepAwake;
@@ -166,6 +178,7 @@ class SettingsState extends Equatable {
     this.accentColor,
     this.shoppingListListView = false,
     this.shoppingListTapToRemove = true,
+    this.shoppingListCheckboxMode = false,
     this.recentItemsCategorize = false,
     this.restoreLastShoppingList = false,
     this.shoppingListKeepAwake = false,
@@ -180,6 +193,7 @@ class SettingsState extends Equatable {
     Nullable<Color>? accentColor,
     bool? shoppingListListView,
     bool? shoppingListTapToRemove,
+    bool? shoppingListCheckboxMode,
     bool? recentItemsCategorize,
     bool? restoreLastShoppingList,
     bool? shoppingListKeepAwake,
@@ -194,6 +208,8 @@ class SettingsState extends Equatable {
         shoppingListListView: shoppingListListView ?? this.shoppingListListView,
         shoppingListTapToRemove:
             shoppingListTapToRemove ?? this.shoppingListTapToRemove,
+        shoppingListCheckboxMode:
+            shoppingListCheckboxMode ?? this.shoppingListCheckboxMode,
         recentItemsCategorize:
             recentItemsCategorize ?? this.recentItemsCategorize,
         restoreLastShoppingList:
@@ -212,6 +228,7 @@ class SettingsState extends Equatable {
         accentColor,
         shoppingListListView,
         shoppingListTapToRemove,
+        shoppingListCheckboxMode,
         recentItemsCategorize,
         restoreLastShoppingList,
         shoppingListKeepAwake,

@@ -5,7 +5,7 @@ OIDC allow users to sign in with social logins or third party issuer. KitchenOwl
 For self-hosted instances the custom provider is the most interesting one.
 
 ### Setup
-Inside your OIDC you need to configure a new client, with the following to redirect URIs:
+Inside your OIDC you need to configure a new client, with the following two redirect URIs:
 
 <div class="annotate" markdown>
 - `FRONT_URL(1)/signin/redirect` 

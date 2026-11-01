@@ -6,12 +6,14 @@ class KitchenOwlFab extends StatelessWidget {
       openBuilder;
   final Function(Object?)? onClosed;
   final IconData? icon;
+  final String? tooltip;
 
   const KitchenOwlFab({
     super.key,
     required this.openBuilder,
     this.onClosed,
     this.icon = Icons.add,
+    this.tooltip,
   });
 
   @override
@@ -35,13 +37,16 @@ class KitchenOwlFab extends StatelessWidget {
         BuildContext context,
         VoidCallback openContainer,
       ) {
-        return SizedBox(
-          height: 56,
-          width: 56,
-          child: Center(
-            child: Icon(
-              icon,
-              color: Theme.of(context).colorScheme.onSecondary,
+        return Tooltip(
+          message: tooltip ?? "",
+          child: SizedBox(
+            height: 56,
+            width: 56,
+            child: Center(
+              child: Icon(
+                icon,
+                color: Theme.of(context).colorScheme.onSecondary,
+              ),
             ),
           ),
         );

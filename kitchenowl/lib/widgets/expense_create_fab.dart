@@ -1,3 +1,4 @@
+import 'package:kitchenowl/gen/l10n/app_localizations.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/cubits/expense_list_cubit.dart';
@@ -12,6 +13,7 @@ class ExpenseCreateFab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return KitchenOwlFab(
+      tooltip: AppLocalizations.of(context)!.expenseAdd,
       openBuilder: (BuildContext ctx, VoidCallback _) {
         return AddUpdateExpensePage(
           household: BlocProvider.of<HouseholdCubit>(context).state.household,

@@ -26,8 +26,10 @@ class RecipeCreateFab extends StatelessWidget {
       key: _fabKey,
       distance: llmRecipeGeneration ? 100 : 70,
       openIcon: const Icon(Icons.add),
+      tooltip: AppLocalizations.of(context)!.recipeAdd,
       children: [
         KitchenOwlFab(
+          tooltip: AppLocalizations.of(context)!.recipeAdd,
           openBuilder: (BuildContext ctx, VoidCallback _) {
             return AddUpdateRecipePage(
               household: BlocProvider.of<RecipeListCubit>(context).household,
@@ -44,6 +46,7 @@ class RecipeCreateFab extends StatelessWidget {
         ),
         FloatingActionButton(
           heroTag: null,
+          tooltip: AppLocalizations.of(context)!.recipeAddUrl,
           onPressed: () async {
             final url = await showDialog<String>(
               context: context,
@@ -74,6 +77,7 @@ class RecipeCreateFab extends StatelessWidget {
         ),
         if (llmRecipeGeneration)
           KitchenOwlFab(
+            tooltip: AppLocalizations.of(context)!.recipeGenerate,
             openBuilder: (BuildContext ctx, VoidCallback _) {
               return RecipeGeneratePage(
                 household: BlocProvider.of<RecipeListCubit>(context).household,

@@ -18,6 +18,9 @@ class ShoppingItemWidget<T extends Item> extends StatelessWidget {
   final bool gridStyle;
   final ListStyle listStyle;
 
+  /// Forwarded to the list tile; false on the last row of a category.
+  final bool showDivider;
+
   const ShoppingItemWidget({
     super.key,
     required this.item,
@@ -26,6 +29,7 @@ class ShoppingItemWidget<T extends Item> extends StatelessWidget {
     this.selected = false,
     this.gridStyle = true,
     this.listStyle = ListStyle.cards,
+    this.showDivider = true,
     this.raised,
     this.extraOption,
   });
@@ -50,6 +54,7 @@ class ShoppingItemWidget<T extends Item> extends StatelessWidget {
             selected: selected,
             icon: ItemIcons.get(item),
             listStyle: listStyle,
+            showDivider: showDivider,
             raised: raised ??
                 item is ShoppinglistItem || item is RecipeItem && selected,
             description: (item is ItemWithDescription)

@@ -45,6 +45,9 @@ class SliverItemGridList<T extends Item> extends StatelessWidget {
       return const SliverToBoxAdapter(child: SizedBox(height: 0));
     }
 
+    final bool slim = shoppingListStyle.isList &&
+        shoppingListStyle.listStyle == ListStyle.slim;
+
     final delegate = SliverChildBuilderDelegate(
       childCount: items.length + (isLoading ? 1 : 0),
       (context, i) => i >= items.length
@@ -58,6 +61,7 @@ class SliverItemGridList<T extends Item> extends StatelessWidget {
               selected: selected?.call(items[i]) ?? false,
               gridStyle: !shoppingListStyle.isList,
               listStyle: shoppingListStyle.listStyle,
+              showDivider: i < items.length - 1 || isLoading,
               onPressed:
                   (onPressed ?? Nullable((item) => openMenu(context, item)))
                       .value,
@@ -70,7 +74,7 @@ class SliverItemGridList<T extends Item> extends StatelessWidget {
     );
 
     return SliverPadding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: EdgeInsets.symmetric(horizontal: slim ? 8 : 16),
       sliver: !shoppingListStyle.isList
           ? SliverLayoutBuilder(
               builder: (context, constraints) => SliverGrid(

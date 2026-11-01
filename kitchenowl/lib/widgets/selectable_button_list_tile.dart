@@ -12,6 +12,10 @@ class SelectableButtonListTile extends StatefulWidget {
   final Widget? extraOption;
   final ListStyle listStyle;
 
+  /// Separator below the row (slim style only). Suppressed on the last row of
+  /// a group so the category break stays the stronger visual boundary.
+  final bool showDivider;
+
   const SelectableButtonListTile({
     super.key,
     required this.title,
@@ -23,6 +27,7 @@ class SelectableButtonListTile extends StatefulWidget {
     this.raised = true,
     this.extraOption,
     this.listStyle = ListStyle.cards,
+    this.showDivider = true,
   });
 
   @override
@@ -35,6 +40,9 @@ class _SelectableButtonListTileState extends State<SelectableButtonListTile> {
 
   @override
   Widget build(BuildContext context) {
+    final bool slim = widget.listStyle == ListStyle.slim;
+    final Color onSurface = Theme.of(context).colorScheme.onSurface;
+
     final Widget listItem = MouseRegion(
       onEnter: (event) {
         setState(() {
@@ -47,10 +55,16 @@ class _SelectableButtonListTileState extends State<SelectableButtonListTile> {
         });
       },
       child: ListTile(
+        visualDensity:
+            slim ? const VisualDensity(horizontal: -4, vertical: -4) : null,
+        minVerticalPadding: slim ? 1 : null,
+        minTileHeight: slim ? 30 : null,
+        horizontalTitleGap: slim ? 8 : null,
         leading: widget.selected
-            ? const Icon(Icons.check_rounded)
+            ? Icon(Icons.check_rounded, size: slim ? 20 : null)
             : widget.icon != null
                 ? Icon(widget.icon,
+                    size: slim ? 20 : null,
                     color: !widget.raised
                         ? Theme.of(context).iconTheme.color!.withAlpha(85)
                         : Theme.of(context).iconTheme.color!.withAlpha(170))
@@ -60,6 +74,7 @@ class _SelectableButtonListTileState extends State<SelectableButtonListTile> {
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
           style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+              fontSize: slim ? DynamicStyling.slimFontSize : null,
               color: !widget.raised
                   ? Theme.of(context).textTheme.bodyMedium!.color!.withAlpha(85)
                   : Theme.of(context)
@@ -72,7 +87,7 @@ class _SelectableButtonListTileState extends State<SelectableButtonListTile> {
         subtitle: (widget.description?.isNotEmpty ?? false)
             ? Text(
                 widget.description!,
-                maxLines: 3,
+                maxLines: slim ? 1 : 3,
                 overflow: TextOverflow.ellipsis,
                 style: Theme.of(context).textTheme.bodySmall!.copyWith(
                     color: !widget.raised
@@ -90,7 +105,9 @@ class _SelectableButtonListTileState extends State<SelectableButtonListTile> {
             : null,
         onTap: widget.onPressed,
         onLongPress: widget.onLongPressed,
-        contentPadding: const EdgeInsets.only(left: 16, right: 8),
+        contentPadding: slim
+            ? const EdgeInsets.only(left: 12, right: 4)
+            : const EdgeInsets.only(left: 16, right: 8),
         trailing: (widget.extraOption != null && mouseHover)
             ? widget.extraOption
             : (widget.onLongPressed != null && mouseHover)
@@ -99,11 +116,31 @@ class _SelectableButtonListTileState extends State<SelectableButtonListTile> {
                     color: widget.selected
                         ? Theme.of(context).colorScheme.onPrimary
                         : null,
+                    // Keep the hover button from stretching a slim row
+                    padding: slim ? EdgeInsets.zero : null,
+                    visualDensity: slim ? VisualDensity.compact : null,
+                    constraints: slim
+                        ? const BoxConstraints(minWidth: 24, minHeight: 24)
+                        : null,
+                    iconSize: slim ? 18 : null,
                     icon: const Icon(Icons.more_horiz_rounded),
                   )
                 : null,
       ),
     );
+
+    if (slim) {
+      if (!widget.showDivider) return listItem;
+
+      return DecoratedBox(
+        decoration: BoxDecoration(
+          border: Border(
+            bottom: BorderSide(color: onSurface.withAlpha(36), width: 0.5),
+          ),
+        ),
+        child: listItem,
+      );
+    }
 
     return (widget.listStyle == ListStyle.cards)
         ? Card(

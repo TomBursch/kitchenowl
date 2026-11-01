@@ -32,9 +32,9 @@ android {
         resourceConfigurations += listOf(
             "en", "ar", "be", "bg", "br", "ca", "ca_valencia", "cs", "da", "de",
             "de_CH", "efi", "el", "es", "et", "eu", "fa", "fi", "fr", "he", "hi",
-            "hr", "hu", "id", "it", "ja", "kab", "kk", "ko", "lt", "nb", "nl",
-            "pa", "pl", "pt", "pt_BR", "ro", "ru", "sk", "sl", "sr", "sv", "ta",
-            "te", "tr", "uk", "vi", "zh", "zh_HANT"
+            "hr", "hu", "id", "it", "ja", "kab", "kk", "ko", "lt", "lv", "nb",
+            "nl", "pa", "pl", "pt", "pt_BR", "ro", "ru", "sk", "sl", "sr", "sv",
+            "ta", "te", "tr", "uk", "vi", "zh", "zh_HANT"
         )
     }
 

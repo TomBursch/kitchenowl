@@ -128,6 +128,7 @@ SUPPORTED_LANGUAGES = {
     "kab": "Taqbaylit",
     "ko": "한국어",
     "lt": "Lietuvių kalba",
+    "lv": "Latviešu valoda",
     "nb_NO": "Bokmål",
     "nl": "Nederlands",
     "pl": "Polski",

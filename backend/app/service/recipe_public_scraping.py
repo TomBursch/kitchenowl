@@ -1,6 +1,7 @@
 import json
 import re
 import os
+from collections.abc import Generator
 from typing import Any, cast
 from urllib.parse import urljoin, urlparse
 from flask import current_app
@@ -9,7 +10,7 @@ from litellm import completion
 from recipe_scrapers import scrape_html
 from recipe_scrapers._exceptions import SchemaOrgException
 from app.models.tag import Tag
-from app.service.ingredient_parsing import parseIngredients
+from app.service.ingredient_parsing import parseIngredientsStream
 from app.models import Recipe, Item, Household
 from app.config import SUPPORTED_LANGUAGES
 
@@ -66,7 +67,9 @@ def fixRelativeUrl(url: str, baseUrl: str) -> str:
     return urljoin(baseUrl, url)
 
 
-def scrapeHTML(url: str, html: str, household: Household) -> dict[str, Any] | None:
+def scrapeHTMLStream(
+    url: str, html: str, household: Household
+) -> Generator[dict[str, Any], None, dict[str, Any] | None]:
     try:
         scraper = scrape_html(html, url, supported_only=False)
     except Exception:
@@ -153,15 +156,16 @@ def scrapeHTML(url: str, html: str, household: Household) -> dict[str, Any] | No
     sourceLanguageCode = (
         scraper.language() or ""
     )  # Fallback to handle None cases and default to LLM if in use
-    for ingredient in parseIngredients(
-        scraper.ingredients(), household.language, sourceLanguageCode
-    ):
+    parsed_ingredients = yield from parseIngredientsStream(
+        scraper.ingredients(), household.language, sourceLanguageCode, household
+    )
+    for ingredient in parsed_ingredients:
         name = ingredient.name if ingredient.name else ingredient.originalText or ""
         item = Item.find_name_starts_with(household.id, name)
         if item:
             items[ingredient.originalText] = item.obj_to_dict() | {
                 "description": ingredient.description,
-                "optional": False,
+                "optional": ingredient.optional,
             }
         else:
             items[ingredient.originalText] = None
@@ -171,15 +175,29 @@ def scrapeHTML(url: str, html: str, household: Household) -> dict[str, Any] | No
     }
 
 
-def scrapeHTMLLLM(url: str, html: str, household: Household) -> dict | None:
+def scrapeHTML(url: str, html: str, household: Household) -> dict[str, Any] | None:
+    gen = scrapeHTMLStream(url, html, household)
+    try:
+        while True:
+            next(gen)
+    except StopIteration as e:
+        return e.value
+
+
+def scrapeHTMLLLMStream(
+    url: str, html: str, household: Household
+) -> Generator[dict[str, Any], None, dict[str, Any] | None]:
     if not LLM_MODEL:
         return None
+
+    yield {"status": "using_ai"}
 
     language = SUPPORTED_LANGUAGES.get(
         household.language, "the same language as the user's messages"
     )
 
     existing = [e.name for e in Item.all_from_household_by_name(household.id)]
+    household_tags = Tag.all_from_household(household.id)
     systemMessage = f"""
 You are a recipe creator for the recipe app KitchenOwl. Create the recipe the scraped website describes and return only JSON matching this schema:
 {json.dumps(RECIPE_SCHEMA)}
@@ -188,7 +206,7 @@ You are a recipe creator for the recipe app KitchenOwl. Create the recipe the sc
 - description: markdown, a short introduction followed by a numbered list of preparation steps. It supports following additional markdown: ingredient pills allow you to reference ingredients from inside your recipes' description and automatically add amounts to it. It's case-insensitive and uses underscores for spaces. `@ingredient_name` You can also override the item description for that text occurrence by using curly braces: `@ingredient_name{{300g}}`
 - time, prep_time, cook_time: minutes (time is the total time)
 - yields: number of servings
-- tags: optional, a list of tags for the recipe from the following list: {", ".join(tag.name for tag in household.tags)}
+- tags: optional, a list of tags for the recipe from the following list: {", ".join(tag.name for tag in household_tags)}
 - items: the ingredients. name is the singular ingredient name without amounts, description is the amount and unit (e.g. "200 g" or "2"), optional is true only for garnishes or optional extras, original_text is the original text of the ingredient as scraped from the website
 - If an ingredient matches one of the existing ingredients, use the existing name exactly. Existing ingredients: {json.dumps(existing, ensure_ascii=False)}
 - Write all ingredients in {language} keep the original description and steps in the source language
@@ -271,3 +289,12 @@ Return only JSON and nothing else.
         },
         "items": items,
     }
+
+
+def scrapeHTMLLLM(url: str, html: str, household: Household) -> dict | None:
+    gen = scrapeHTMLLLMStream(url, html, household)
+    try:
+        while True:
+            next(gen)
+    except StopIteration as e:
+        return e.value

@@ -79,6 +79,7 @@ class RemoveItem(Schema):
 
 class ScrapeRecipe(Schema):
     url = fields.String(required=True, validate=lambda a: a and not a.isspace())
+    stream = fields.Boolean(load_default=False)
 
 
 class GenerateRecipe(Schema):

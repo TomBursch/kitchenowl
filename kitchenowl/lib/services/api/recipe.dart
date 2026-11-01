@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/models/recipe.dart';
 import 'package:kitchenowl/models/recipe_scrape.dart';
@@ -111,6 +112,63 @@ extension RecipeApi on ApiService {
     final body = jsonDecode(res.body);
 
     return (RecipeScrape.fromJson(body), 200);
+  }
+
+  Stream<RecipeScrapeEvent> scrapeRecipeStream(
+    Household household,
+    String url,
+  ) async* {
+    final res = await postStream(
+      '${householdPath(household)}$baseRoute/scrape',
+      jsonEncode({'url': url, 'stream': true}),
+      extraHeaders: {'Accept': 'application/x-ndjson'},
+      timeout: _TIMEOUT_SCRAPE,
+    );
+    if (res.statusCode != 200) {
+      yield RecipeScrapeErrorEvent(res.statusCode);
+      return;
+    }
+
+    try {
+      final lines = res.stream
+          .timeout(_TIMEOUT_SCRAPE)
+          .transform(utf8.decoder)
+          .transform(const LineSplitter());
+      await for (var line in lines) {
+        line = line.trim();
+        if (line.isEmpty) continue;
+        if (line.startsWith('data:')) {
+          line = line.substring(5).trim();
+          if (line.isEmpty) continue;
+        }
+        final body = jsonDecode(line) as Map<String, dynamic>;
+        final statusStr = body['status'] as String?;
+        if (statusStr == 'done') {
+          final data = body['data'] as Map<String, dynamic>;
+          yield RecipeScrapeDoneEvent(RecipeScrape.fromJson(data));
+          return;
+        } else if (statusStr == 'error') {
+          final msg = body['msg'] as String?;
+          yield RecipeScrapeErrorEvent(
+            msg == 'Unsupported website' ? 400 : 500,
+            msg,
+          );
+          return;
+        } else if (statusStr != null) {
+          final status = RecipeScrapeStatus.fromString(statusStr);
+          if (status != null) {
+            yield RecipeScrapeStatusEvent(status);
+          }
+        } else if (body.containsKey('recipe') && body.containsKey('items')) {
+          yield RecipeScrapeDoneEvent(RecipeScrape.fromJson(body));
+          return;
+        }
+      }
+      yield const RecipeScrapeErrorEvent(500);
+    } catch (e) {
+      debugPrint(e.toString());
+      yield const RecipeScrapeErrorEvent(500);
+    }
   }
 
   /// Returns the generated recipe with its prompt and completion token usage

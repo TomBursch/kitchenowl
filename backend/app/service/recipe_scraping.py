@@ -1,3 +1,4 @@
+from collections.abc import Generator
 import re
 from typing import Any
 from recipe_scrapers.__version__ import __version__ as recipe_scrapers_version
@@ -7,7 +8,12 @@ from app.config import FRONT_URL
 from app.errors import ForbiddenRequest
 from app.models.recipe import RecipeVisibility
 from app.models import Recipe, Household
-from app.service.recipe_public_scraping import scrapeHTML, scrapeHTMLLLM
+from app.service.recipe_public_scraping import (
+    scrapeHTML,
+    scrapeHTMLLLM,
+    scrapeHTMLLLMStream,
+    scrapeHTMLStream,
+)
 
 # taken from the recipe-scrapers library to circumvent anti-scraping measures that block requests with the default user agent
 USER_AGENT = f"Mozilla/5.0 (compatible; Windows NT 10.0; Win64; x64; rv:{recipe_scrapers_version}) recipe-scrapers/{recipe_scrapers_version}"
@@ -21,6 +27,15 @@ request_manager = Manager(
         user_agent_override=USER_AGENT,
     )
 )
+
+
+def scrapePublicStream(
+    url: str, html: str, household: Household
+) -> Generator[dict[str, Any], None, dict[str, Any] | None]:
+    res = yield from scrapeHTMLStream(url, html, household)
+    if not res:
+        res = yield from scrapeHTMLLLMStream(url, html, household)
+    return res
 
 
 def scrapePublic(url: str, html: str, household: Household) -> dict | None:
@@ -83,7 +98,9 @@ def scrapeKitchenOwl(
     return {"recipe": recipe, "items": items}
 
 
-def scrape(url: str, household: Household) -> dict[str, Any] | None:
+def scrapeStream(
+    url: str, household: Household
+) -> Generator[dict[str, Any], None, dict[str, Any] | None]:
     localMatch = re.match(
         r"(kitchenowl:\/\/|"
         + re.escape((FRONT_URL or "").removesuffix("/"))
@@ -97,12 +114,14 @@ def scrape(url: str, household: Household) -> dict[str, Any] | None:
         r"((https?:\/\/)?app\.kitchenowl\.org|.+)\/recipe\/(\d+)", url
     )
     if kitchenowlMatch and url.startswith("https://app.kitchenowl.org/"):
+        yield {"status": "fetching_website"}
         return scrapeKitchenOwl(
             url, "https://app.kitchenowl.org/api", int(kitchenowlMatch.group(3))
         )
     if "http" not in url:
         url = "http://" + url
 
+    yield {"status": "fetching_website"}
     try:
         res = request_manager.send_request("GET", url)
     except Exception:
@@ -115,4 +134,14 @@ def scrape(url: str, household: Household) -> dict[str, Any] | None:
             url, kitchenowlMatch.group(1) + "/api", int(kitchenowlMatch.group(3))
         )
 
-    return scrapePublic(url, res.text, household)
+    yield {"status": "scraping_recipe"}
+    return (yield from scrapePublicStream(url, res.text, household))
+
+
+def scrape(url: str, household: Household) -> dict[str, Any] | None:
+    gen = scrapeStream(url, household)
+    try:
+        while True:
+            next(gen)
+    except StopIteration as e:
+        return e.value

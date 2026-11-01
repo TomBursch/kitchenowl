@@ -12,6 +12,11 @@ class SliverShopinglistItemView extends StatelessWidget {
   final List<Category> categories;
   final void Function()? onRefresh;
   final Nullable<void Function(ShoppinglistItem)>? onPressed;
+
+  /// When set and the list is rendered as a list (not grid), each shopping
+  /// list item row shows a leading checkbox; tapping it invokes this
+  /// callback (typically removing the item from the list).
+  final Nullable<void Function(ShoppinglistItem)>? onCheckboxPressed;
   final Nullable<void Function(ItemWithDescription)>? onRecentPressed;
   final ShoppinglistSorting sorting;
   final bool isLoading;
@@ -24,6 +29,7 @@ class SliverShopinglistItemView extends StatelessWidget {
     required this.categories,
     this.onRefresh,
     this.onPressed,
+    this.onCheckboxPressed,
     this.onRecentPressed,
     required this.sorting,
     required this.isLoading,
@@ -49,6 +55,7 @@ class SliverShopinglistItemView extends StatelessWidget {
         isLoading: isLoading,
         onRefresh: onRefresh,
         onPressed: onPressed,
+        onCheckboxPressed: onCheckboxPressed,
         shoppingListStyle: shoppingListStyle,
       );
     } else {
@@ -75,6 +82,7 @@ class SliverShopinglistItemView extends StatelessWidget {
           isLoading: isLoading,
           onRefresh: onRefresh,
           onPressed: onPressed,
+          onCheckboxPressed: onCheckboxPressed,
           shoppingListStyle: shoppingListStyle,
         ));
       }

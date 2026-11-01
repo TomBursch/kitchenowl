@@ -164,3 +164,55 @@ def deleteHouseholdMember(household_id: int, user_id: int):
     if hm:
         hm.delete()
     return jsonify({"msg": "DONE"})
+
+@household.route("/<int:household_id>/shoppinglist/sort", methods=["GET"])
+@jwt_required()
+@authorize_household()
+def getShoppingListSortConfig(household_id):
+    """Hole Sortiereinstellung für Einkaufslisten"""
+    household = Household.find_by_id(household_id)
+    if not household:
+        raise NotFoundRequest()
+    
+    return jsonify({
+        "sort_type": household.shopping_list_sort_type,
+        "sort_order": household.shopping_list_sort_order,
+    })
+
+
+@household.route("/<int:household_id>/shoppinglist/sort", methods=["POST"])
+@jwt_required()
+@authorize_household(required=RequiredRights.ADMIN)
+@validate_args(UpdateShoppingListSort)
+def updateShoppingListSortConfig(args, household_id):
+    """Aktualisiere Sortiereinstellung für Einkaufslisten"""
+    household = Household.find_by_id(household_id)
+    if not household:
+        raise NotFoundRequest()
+    
+    household.shopping_list_sort_type = args["sort_type"]
+    household.shopping_list_sort_order = args["sort_order"]
+    household.save()
+    
+    return jsonify({
+        "sort_type": household.shopping_list_sort_type,
+        "sort_order": household.shopping_list_sort_order,
+    })
+
+
+@household.route("/<int:household_id>/shoppinglist/reorder", methods=["POST"])
+@jwt_required()
+@authorize_household(required=RequiredRights.ADMIN)
+@validate_args(ReorderShoppingList)
+def reorderShoppingList(args, household_id):
+    """Reordne Einkaufsliste per Drag & Drop"""
+    household = Household.find_by_id(household_id)
+    if not household:
+        raise NotFoundRequest()
+    
+    shoppinglist_id = args["shoppinglist_id"]
+    new_index = args["new_index"]
+    
+    household.reorder_shopping_lists(new_index, shoppinglist_id)
+    
+    return jsonify({"msg": "DONE"})

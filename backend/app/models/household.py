@@ -40,6 +40,9 @@ class Household(Model):
     verified: Mapped[bool | None] = db.Column(db.Boolean, default=False)
 
     view_ordering: Mapped[List[str]] = db.Column(DbListType(), default=list())
+    
+    shopping_list_sort_type: Mapped[int] = db.Column(db.Integer, default=0)
+    shopping_list_sort_order: Mapped[int] = db.Column(db.Integer, default=0)
 
     items: Mapped[List["Item"]] = cast(
         Mapped[List["Item"]],
@@ -155,6 +158,37 @@ class Household(Model):
             "items": [s.obj_to_export_dict() for s in self.items],
             "expenses": [s.obj_to_export_dict() for s in self.expenses],
         }
+        
+    def reorder_shopping_lists(self, newIndex: int, shoppinglist_id: int):
+        """Reordne Einkaufsliste innerhalb des Haushalts (Drag & Drop)"""
+        from app.models import Shoppinglist
+        
+        l: list[Shoppinglist] = (
+            Shoppinglist.query.filter(Shoppinglist.household_id == self.id)
+            .order_by(Shoppinglist.id)
+            .all()
+        )
+
+        shopping_list = Shoppinglist.find_by_id(shoppinglist_id)
+        if not shopping_list:
+            raise Exception("Shopping list not found")
+
+        self.view_ordering = [str(s.id) for s in l]
+        
+        # Alte Position entfernen
+        if str(shoppinglist_id) in self.view_ordering:
+            self.view_ordering.remove(str(shoppinglist_id))
+        
+        # An neue Position einfügen
+        newIndex = min(newIndex, len(self.view_ordering))
+        self.view_ordering.insert(newIndex, str(shoppinglist_id))
+
+        try:
+            db.session.add(self)
+            db.session.commit()
+        except Exception as e:
+            db.session.rollback()
+            raise e
 
 
 class HouseholdMember(Model):

@@ -183,7 +183,7 @@ class _RecipeScraperPageState extends State<RecipeScraperPage> {
                           RecipeScrapeStatus.fetchingWebsite =>
                             AppLocalizations.of(context)!.fetchingWebsite,
                           RecipeScrapeStatus.scrapingRecipe =>
-                            AppLocalizations.of(context)!.scrapingRecipe,
+                            AppLocalizations.of(context)!.analysingWebsite,
                           RecipeScrapeStatus.detectingIngredients =>
                             AppLocalizations.of(context)!.detectingIngredients,
                           RecipeScrapeStatus.detectingIngredientsAi =>
@@ -191,8 +191,7 @@ class _RecipeScraperPageState extends State<RecipeScraperPage> {
                                 .detectingIngredientsAi,
                           RecipeScrapeStatus.usingAi =>
                             AppLocalizations.of(context)!.scrapingUsingAi,
-                          null =>
-                            AppLocalizations.of(context)!.analysingWebsite,
+                          null => AppLocalizations.of(context)!.fetchingWebsite,
                         },
                         style: Theme.of(context).textTheme.headlineSmall,
                         textAlign: TextAlign.center,

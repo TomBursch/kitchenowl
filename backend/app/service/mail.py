@@ -26,18 +26,13 @@ def mailConfigured():
     global mail_configured
     if mail_configured is not None:
         return mail_configured
-    if (
-        not SMTP_HOST
-        or not SMTP_PORT
-        or not SMTP_USER
-        or not SMTP_PASS
-        or not SMTP_FROM
-    ):
+    if not SMTP_HOST or not SMTP_PORT or not SMTP_FROM:
         mail_configured = False
         return mail_configured
     try:
         with _getMailServer() as server:
-            server.login(SMTP_USER, SMTP_PASS)
+            if SMTP_USER and SMTP_PASS:
+                server.login(SMTP_USER, SMTP_PASS)
         mail_configured = True
     except Exception as e:
         print(e)
@@ -47,7 +42,8 @@ def mailConfigured():
 
 def sendMail(to: str, message: MIMEMultipart):
     with _getMailServer() as server:
-        server.login(SMTP_USER, SMTP_PASS)
+        if SMTP_USER and SMTP_PASS:
+            server.login(SMTP_USER, SMTP_PASS)
         message["Date"] = formatdate(localtime=True)
         message["From"] = SMTP_FROM
         message["To"] = to

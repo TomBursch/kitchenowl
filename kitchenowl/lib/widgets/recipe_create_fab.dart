@@ -1,10 +1,13 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:kitchenowl/app.dart';
+import 'package:kitchenowl/cubits/server_info_cubit.dart';
 import 'package:kitchenowl/cubits/recipe_list_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/pages/recipe_add_update_page.dart';
+import 'package:kitchenowl/pages/recipe_generate_page.dart';
 
 class RecipeCreateFab extends StatelessWidget {
   final _fabKey = GlobalKey<ExpandableFabState>();
@@ -15,9 +18,13 @@ class RecipeCreateFab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final serverInfo = App.serverInfo;
+    final llmRecipeGeneration = serverInfo is ConnectedServerInfoState &&
+        serverInfo.llmRecipeGeneration;
+
     return ExpandableFab(
       key: _fabKey,
-      distance: 70,
+      distance: llmRecipeGeneration ? 100 : 70,
       openIcon: const Icon(Icons.add),
       children: [
         KitchenOwlFab(
@@ -65,6 +72,21 @@ class RecipeCreateFab extends StatelessWidget {
           },
           child: const Icon(Icons.link_rounded),
         ),
+        if (llmRecipeGeneration)
+          KitchenOwlFab(
+            openBuilder: (BuildContext ctx, VoidCallback _) {
+              return RecipeGeneratePage(
+                household: BlocProvider.of<RecipeListCubit>(context).household,
+              );
+            },
+            onClosed: (data) {
+              _fabKey.currentState?.reset();
+              if (data == UpdateEnum.updated) {
+                BlocProvider.of<RecipeListCubit>(context).refresh();
+              }
+            },
+            icon: Icons.auto_awesome_rounded,
+          ),
       ],
     );
   }

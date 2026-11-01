@@ -163,6 +163,8 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
     "pool_size": int(os.getenv("DB_POOL_SIZE", 5)),
     "max_overflow": int(os.getenv("DB_MAX_OVERFLOW", 10)),
+    # Check connections before use so a database restart doesn't cause errors
+    "pool_pre_ping": True,
 }
 # JWT
 app.config["JWT_SECRET_KEY"] = jwt_secret

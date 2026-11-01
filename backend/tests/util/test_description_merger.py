@@ -38,6 +38,15 @@ import app.util.description_merger as description_merger
         ("", "1 2 3", "1x, 1 2 3"),
         ("1 2 3", "", "1 2 3, 1x"),
         ("0.2 500g pk", "0.2 500g pk", "0.4 500g pk"),
+        # Singular and plural spellings of a unit are the same unit.
+        ("1tin", "2tins", "3 tin"),
+        ("2 cups", "1 cup", "3 cups"),
+        ("1 bottle", "3 bottles", "4 bottle"),
+        ("2tbsp", "3tbsp", "5 tbsp"),
+        ("1lb", "2lbs", "3 lb"),
+        # Units that do not convert exactly must stay apart.
+        ("2tbsp", "100ml", "2 tbsp, 100ml"),
+        ("1 tin", "1 jar", "1 tin, 1 jar"),
     ],
 )
 def testDescriptionMerge(des, added, result):

@@ -1,6 +1,9 @@
+import 'package:kitchenowl/helpers/recipe_item_markdown_extension.dart';
+import 'package:kitchenowl/models/item.dart';
+import 'package:kitchenowl/widgets/recipe_markdown_body.dart';
+import 'package:kitchenowl/widgets/recipe_source_chip.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_markdown_plus/flutter_markdown_plus.dart';
 import 'package:kitchenowl/cubits/recipe_generate_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/kitchenowl.dart';
@@ -266,7 +269,7 @@ class _EmptyChat extends StatelessWidget {
                                   Expanded(
                                     child: Text(
                                       prompt,
-                                      style: theme.textTheme.bodySmall,
+                                      style: theme.textTheme.bodyMedium,
                                     ),
                                   ),
                                 ],
@@ -299,13 +302,18 @@ class _UserMessage extends StatelessWidget {
         margin: const EdgeInsets.fromLTRB(48, 8, 0, 8),
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.primaryContainer,
-          borderRadius: BorderRadius.circular(16),
+          color: Theme.of(context).colorScheme.primary,
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(16),
+            topRight: Radius.circular(16),
+            bottomLeft: Radius.circular(16),
+            bottomRight: Radius.zero,
+          ),
         ),
         child: Text(
           text,
           style: TextStyle(
-            color: Theme.of(context).colorScheme.onPrimaryContainer,
+            color: Theme.of(context).colorScheme.onPrimary,
           ),
         ),
       ),
@@ -325,56 +333,127 @@ class _RecipePreview extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     final textTheme = Theme.of(context).textTheme;
 
-    return Card(
-      margin: const EdgeInsets.symmetric(vertical: 8),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(recipe.name, style: textTheme.titleLarge),
-            if (recipe.time > 0 || recipe.yields > 0)
-              Text([
-                if (recipe.time > 0)
-                  '${l10n.totalTime}: ${recipe.time} ${l10n.minutesAbbrev}',
-                if (recipe.yields > 0) '${l10n.yields}: ${recipe.yields}',
-              ].join(' · ')),
-            for (final (title, items) in [
-              (l10n.ingredients, recipe.mandatoryItems),
-              (l10n.ingredientsOptional, recipe.optionalItems),
-            ])
-              if (items.isNotEmpty) ...[
-                const SizedBox(height: 12),
-                Text('$title:', style: textTheme.titleMedium),
-                for (final item in items)
-                  Text(
-                    '• ${[
-                      item.description,
-                      item.name
-                    ].where((e) => e.isNotEmpty).join(' ')}',
+    return Container(
+      margin: const EdgeInsets.fromLTRB(0, 8, 48, 8),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surfaceContainer,
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(16),
+          topRight: Radius.circular(16),
+          bottomLeft: Radius.zero,
+          bottomRight: Radius.circular(16),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(recipe.name, style: textTheme.displaySmall),
+          const SizedBox(height: 8),
+          Wrap(
+            runSpacing: 8,
+            spacing: 5,
+            children: [
+              if (recipe.source.isNotEmpty)
+                RecipeSourceChip(
+                  source: recipe.source,
+                ),
+              if ((recipe.time) > 0)
+                Chip(
+                  avatar: Icon(
+                    Icons.alarm_rounded,
+                    color: Theme.of(context).colorScheme.onPrimary,
                   ),
-              ],
-            const SizedBox(height: 12),
-            MarkdownBody(data: recipe.description),
-            const SizedBox(height: 12),
-            Row(
-              children: [
-                Expanded(
+                  label: Text(
+                    "${recipe.time} ${AppLocalizations.of(context)!.minutesAbbrev}",
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onPrimary,
+                    ),
+                  ),
+                  backgroundColor: Theme.of(context).colorScheme.primary,
+                  elevation: 3,
+                ),
+              ...recipe.tags.map((e) => Chip(
+                    key: Key(e.name),
+                    label: Text(e.name),
+                  )),
+            ],
+          ),
+          const SizedBox(height: 8),
+          if (recipe.prepTime > 0)
+            Text(
+              "${AppLocalizations.of(context)!.preparationTime}: ${recipe.prepTime} ${AppLocalizations.of(context)!.minutesAbbrev}",
+              style: Theme.of(context).textTheme.labelMedium,
+            ),
+          if (recipe.cookTime > 0)
+            Text(
+              "${AppLocalizations.of(context)!.cookingTime}: ${recipe.cookTime} ${AppLocalizations.of(context)!.minutesAbbrev}",
+              style: Theme.of(context).textTheme.labelMedium,
+            ),
+          if (recipe.prepTime + recipe.cookTime > 0) const SizedBox(height: 16),
+          RecipeMarkdownBody(
+            recipeItemBuilder: RecipeItemMarkdownBuilder(
+              items: recipe.items,
+            ),
+            recipe: recipe,
+          ),
+          const SizedBox(height: 12),
+          CustomScrollView(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            slivers: [
+              if (recipe.items.where((e) => !e.optional).isNotEmpty)
+                SliverToBoxAdapter(
                   child: Text(
-                    '${l10n.recipeGenerateTokens(reply.promptTokens + reply.completionTokens)}'
-                    ' (↑${reply.promptTokens} ↓${reply.completionTokens})',
-                    style: textTheme.bodySmall,
+                    '${AppLocalizations.of(context)!.ingredients}:',
+                    style: Theme.of(context).textTheme.titleLarge,
                   ),
                 ),
-                if (onAdd != null)
-                  ElevatedButton(
-                    onPressed: onAdd,
-                    child: Text(l10n.recipeGenerateAdd),
+              if (recipe.items.where((e) => !e.optional).isNotEmpty)
+                SliverItemGridList<RecipeItem>(
+                  padding: EdgeInsetsGeometry.only(top: 8),
+                  items: recipe.items.where((e) => !e.optional).toList(),
+                  selected: (item) => true,
+                  onPressed: Nullable.empty(),
+                  onLongPressed:
+                      const Nullable<void Function(RecipeItem)>.empty(),
+                ),
+              if (recipe.items.where((e) => e.optional).isNotEmpty)
+                SliverToBoxAdapter(
+                  child: Text(
+                    '${AppLocalizations.of(context)!.ingredientsOptional}:',
+                    style: Theme.of(context).textTheme.titleLarge,
                   ),
-              ],
-            ),
-          ],
-        ),
+                ),
+              if (recipe.items.where((e) => e.optional).isNotEmpty)
+                SliverItemGridList<RecipeItem>(
+                  padding: EdgeInsetsGeometry.only(top: 8),
+                  items: recipe.items.where((e) => e.optional).toList(),
+                  onPressed: Nullable.empty(),
+                  onLongPressed:
+                      const Nullable<void Function(RecipeItem)>.empty(),
+                ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Expanded(
+                child: Text(
+                  '${l10n.recipeGenerateTokens(reply.promptTokens + reply.completionTokens)}'
+                  ' (↑${reply.promptTokens} ↓${reply.completionTokens})',
+                  style: textTheme.bodySmall,
+                ),
+              ),
+              if (onAdd != null)
+                FilledButton(
+                  onPressed: onAdd,
+                  child: Text(l10n.recipeGenerateAdd),
+                ),
+            ],
+          ),
+        ],
       ),
     );
   }

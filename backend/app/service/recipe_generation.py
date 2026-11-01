@@ -6,6 +6,7 @@ from litellm import completion
 
 from app.config import SUPPORTED_LANGUAGES
 from app.models import Household, Item
+from app.models.tag import Tag
 from app.service.ingredient_parsing import LLM_API_URL, LLM_MODEL
 
 LLM_RECIPE_GENERATION = (
@@ -21,6 +22,7 @@ RECIPE_SCHEMA = {
         "prep_time": {"type": "integer"},
         "cook_time": {"type": "integer"},
         "yields": {"type": "integer"},
+        "tags": {"type": "array", "items": {"type": "string"}},
         "items": {
             "type": "array",
             "items": {
@@ -61,9 +63,10 @@ You are a recipe creator for the recipe app KitchenOwl. Create the recipe the us
 {json.dumps(RECIPE_SCHEMA)}
 
 - name: the recipe title
-- description: markdown, a short introduction followed by a numbered list of preparation steps
+- description: markdown, a short introduction followed by a numbered list of preparation steps. It supports following additional markdown: ingredient pills allow you to reference ingredients from inside your recipes' description and automatically add amounts to it. It's case-insensitive and uses underscores for spaces. `@ingredient_name` You can also override the item description for that text occurrence by using curly braces: `@ingredient_name{{300g}}`
 - time, prep_time, cook_time: minutes (time is the total time)
 - yields: number of servings
+- tags: optional, a list of tags for the recipe from the following list: {", ".join(tag.name for tag in household.tags)}
 - items: the ingredients. name is the singular ingredient name without amounts, description is the amount and unit (e.g. "200 g" or "2"), optional is true only for garnishes or optional extras
 - If an ingredient matches one of the existing ingredients, use the existing name exactly. Existing ingredients: {json.dumps(existing, ensure_ascii=False)}
 - When the user asks for changes, return the complete updated recipe
@@ -86,6 +89,12 @@ Return only JSON and nothing else.
     # tolerate providers that ignore response_format and wrap the JSON in text or code fences
     data = json.loads(content[content.find("{") : content.rfind("}") + 1])
 
+    tags = []
+    for tag in data.get("tags") or []:
+        t = Tag.find_by_name(household.id, tag)
+        if t:
+            tags.append(t.obj_to_dict())
+
     items: dict[str, dict[str, Any]] = {}
     for ingredient in data.get("items") or []:
         name = str(ingredient.get("name") or "").strip()[:128]
@@ -106,6 +115,7 @@ Return only JSON and nothing else.
             "prep_time": int(data.get("prep_time") or 0),
             "cook_time": int(data.get("cook_time") or 0),
             "yields": int(data.get("yields") or 0),
+            "tags": tags,
             "items": list(items.values()),
         },
         "usage": {

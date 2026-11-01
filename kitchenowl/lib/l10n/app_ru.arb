@@ -207,6 +207,14 @@
       }
     }
   },
+  "@storeDeleteConfirmation": {
+    "placeholders": {
+      "store": {
+        "example": "Supermarket",
+        "type": "String"
+      }
+    }
+  },
   "@tagDeleteConfirmation": {
     "placeholders": {
       "tag": {
@@ -252,6 +260,7 @@
   "addRecipeToPlanner": "Добавить в план питания (порций: {number})",
   "addRecipeToPlannerShort": "Добавить в план питания",
   "addShoppingList": "Добавить список покупок",
+  "addStore": "Добавить магазин",
   "addTag": "Добавить тег",
   "addedBy": "Добавил {name}",
   "address": "Адрес",
@@ -482,6 +491,11 @@
   "sortingAlgorithmic": "Алгоритмически",
   "sortingAlphabetical": "По алфавиту",
   "start": "Начать",
+  "store": "Магазин",
+  "storeDelete": "Удалить магазин",
+  "storeDeleteConfirmation": "Вы уверены, что хотите удалить {store}? Это действие уберёт магазин из всех предметов.",
+  "storeEdit": "Редактировать магазин",
+  "stores": "Магазины",
   "supportDevelopment": "Поддержать разработчика",
   "swipeToDelete": "Смахните, чтобы удалить",
   "swipeToDeleteAndLongPressToReorder": "Смахните в сторону для удаления или удерживайте для изменения порядка",

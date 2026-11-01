@@ -4,6 +4,7 @@ class SelectableButtonCard extends StatefulWidget {
   final String title;
   final IconData? icon;
   final String? description;
+  final String? storesLabel;
   final bool selected;
   final void Function()? onPressed;
   final void Function()? onLongPressed;
@@ -14,6 +15,7 @@ class SelectableButtonCard extends StatefulWidget {
     this.icon,
     required this.title,
     this.description,
+    this.storesLabel,
     this.onPressed,
     this.onLongPressed,
     this.selected = false,
@@ -105,6 +107,22 @@ class _SelectableButtonCardState extends State<SelectableButtonCard> {
                   if (widget.description?.isNotEmpty ?? false)
                     Text(
                       widget.description!,
+                      style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                            color: widget.selected
+                                ? Theme.of(context)
+                                    .colorScheme
+                                    .onPrimary
+                                    .withAlpha(178)
+                                : null,
+                          ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      softWrap: true,
+                      textAlign: TextAlign.center,
+                    ),
+                  if (widget.storesLabel?.isNotEmpty ?? false)
+                    Text(
+                      widget.storesLabel!,
                       style: Theme.of(context).textTheme.bodySmall!.copyWith(
                             color: widget.selected
                                 ? Theme.of(context)

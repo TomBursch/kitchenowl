@@ -20,6 +20,7 @@ export 'expense.dart';
 export 'tag.dart';
 export 'upload.dart';
 export 'category.dart';
+export 'store.dart';
 export 'household.dart';
 
 enum Connection {

@@ -38,6 +38,7 @@
   },
   "@addRecipeToPlannerShort": {},
   "@addShoppingList": {},
+  "@addStore": {},
   "@addTag": {},
   "@addedBy": {
     "placeholders": {
@@ -424,6 +425,18 @@
   "@sortingAlgorithmic": {},
   "@sortingAlphabetical": {},
   "@start": {},
+  "@store": {},
+  "@storeDelete": {},
+  "@storeDeleteConfirmation": {
+    "placeholders": {
+      "store": {
+        "example": "Supermarket",
+        "type": "String"
+      }
+    }
+  },
+  "@storeEdit": {},
+  "@stores": {},
   "@supportDevelopment": {},
   "@swipeToDelete": {},
   "@swipeToDeleteAndLongPressToReorder": {},
@@ -519,6 +532,7 @@
   "addRecipeToPlanner": "Hozzáadás az étkezési tervhez ({number})",
   "addRecipeToPlannerShort": "Hozzáadás az étkezési tervhez",
   "addShoppingList": "Bevásárló listához adás",
+  "addStore": "Bolt hozzáadása",
   "addTag": "Címke hozzáadása",
   "addedBy": "Létrehozta: {name}",
   "address": "Cím",
@@ -745,6 +759,11 @@
   "sortingAlgorithmic": "Algoritmikus",
   "sortingAlphabetical": "ABC sorrend",
   "start": "Kezdés",
+  "store": "Bolt",
+  "storeDelete": "Bolt törlése",
+  "storeDeleteConfirmation": "Biztosan törli a következőt: {store}? Ezzel eltávolítja a boltot az összes elemből.",
+  "storeEdit": "Bolt szerkesztése",
+  "stores": "Boltok",
   "supportDevelopment": "Támogasd a fejlesztést",
   "swipeToDelete": "Suhintás a törléshez",
   "swipeToDeleteAndLongPressToReorder": "Suhintás a törléshez és hosszú lenyomás az átrendezéshez",

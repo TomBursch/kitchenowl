@@ -37,6 +37,25 @@
   "@addDescriptionFromSource": {},
   "addTag": "Дадаць тэг",
   "@addTag": {},
+  "addStore": "Дадаць магазін",
+  "@addStore": {},
+  "store": "Магазін",
+  "@store": {},
+  "storeDelete": "Выдаліць магазін",
+  "@storeDelete": {},
+  "storeDeleteConfirmation": "Вы ўпэўнены, што хочаце выдаліць {store}? Гэта дзеянне выдаліць магазін з усіх прадметаў.",
+  "@storeDeleteConfirmation": {
+    "placeholders": {
+      "store": {
+        "type": "String",
+        "example": "Supermarket"
+      }
+    }
+  },
+  "storeEdit": "Рэдагаваць магазін",
+  "@storeEdit": {},
+  "stores": "Магазіны",
+  "@stores": {},
   "addRecipeToPlanner": "Дадаць у план страў ({number})",
   "@addRecipeToPlanner": {
     "placeholders": {

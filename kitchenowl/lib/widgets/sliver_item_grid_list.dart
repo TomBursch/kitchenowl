@@ -8,6 +8,7 @@ import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/category.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/models/shoppinglist.dart';
+import 'package:kitchenowl/models/store.dart';
 import 'package:kitchenowl/models/update_value.dart';
 import 'package:kitchenowl/pages/item_page.dart';
 import 'package:kitchenowl/widgets/shopping_item.dart';
@@ -19,6 +20,7 @@ class SliverItemGridList<T extends Item> extends StatelessWidget {
   final Nullable<void Function(T)>? onLongPressed;
   final List<T> items;
   final List<Category>? categories; // forwarded to item page on long press
+  final List<Store>? stores; // forwarded to item page on long press
   final ShoppingList? shoppingList; // forwarded to item page on long press
   final bool Function(T)? selected;
   final bool isLoading;
@@ -32,6 +34,7 @@ class SliverItemGridList<T extends Item> extends StatelessWidget {
     this.onLongPressed,
     this.items = const [],
     this.categories,
+    this.stores,
     this.shoppingList,
     this.selected,
     this.isLoading = false,
@@ -132,6 +135,7 @@ class SliverItemGridList<T extends Item> extends StatelessWidget {
           item: item,
           shoppingList: shoppingList,
           categories: categories ?? const [],
+          stores: stores ?? const [],
           advancedView: shoppingListStyle.advancedItemView,
         );
         final householdCubit = context.readOrNull<HouseholdCubit>();

@@ -207,6 +207,14 @@
       }
     }
   },
+  "@storeDeleteConfirmation": {
+    "placeholders": {
+      "store": {
+        "example": "Supermarket",
+        "type": "String"
+      }
+    }
+  },
   "@tagDeleteConfirmation": {
     "placeholders": {
       "tag": {
@@ -252,6 +260,7 @@
   "addRecipeToPlanner": "Lisää ateriasuunnitelmaan ({number})",
   "addRecipeToPlannerShort": "Lisää ateriasuunnitelmaan",
   "addShoppingList": "Lisää ostoslista",
+  "addStore": "Lisää kauppa",
   "addTag": "Lisää avainsana",
   "addedBy": "{name} lisäsi",
   "address": "Osoite",
@@ -483,6 +492,11 @@
   "sortingAlgorithmic": "Algoritmi",
   "sortingAlphabetical": "Aakkosjärjestys",
   "start": "Aloita",
+  "store": "Kauppa",
+  "storeDelete": "Poista kauppa",
+  "storeDeleteConfirmation": "Haluatko varmasti poistaa kaupan {store}? Kauppa poistetaan kaikilta kohteilta.",
+  "storeEdit": "Muokkaa kauppaa",
+  "stores": "Kaupat",
   "supportDevelopment": "Tue sovelluskehitystä",
   "swipeToDelete": "Pyyhkäise poistaaksesi",
   "swipeToDeleteAndLongPressToReorder": "Pyyhkäise poistaaksesi ja paina pitkään järjestelläksesi uudelleen",

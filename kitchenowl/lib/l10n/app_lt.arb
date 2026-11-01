@@ -39,6 +39,7 @@
     "description": "A shorter title/button text used wherever the space is limited. Excludes the number of yields."
   },
   "@addShoppingList": {},
+  "@addStore": {},
   "@addTag": {},
   "@addedBy": {
     "placeholders": {
@@ -354,6 +355,18 @@
   "@sortingAlgorithmic": {},
   "@sortingAlphabetical": {},
   "@start": {},
+  "@store": {},
+  "@storeDelete": {},
+  "@storeDeleteConfirmation": {
+    "placeholders": {
+      "store": {
+        "example": "Supermarket",
+        "type": "String"
+      }
+    }
+  },
+  "@storeEdit": {},
+  "@stores": {},
   "@supportDevelopment": {},
   "@swipeToDelete": {},
   "@swipeToDeleteAndLongPressToReorder": {},
@@ -428,6 +441,7 @@
   "addRecipeToPlanner": "Pridėti prie patiekalo planų ({number} patiekimų)",
   "addRecipeToPlannerShort": "Pridėti prie patiekalo planų",
   "addShoppingList": "Pridėti apsipirkimo sąrašą",
+  "addStore": "Pridėti parduotuvę",
   "addTag": "Pridėti žymą",
   "addedBy": "{name} pridėjo šią informaciją",
   "address": "Adresas",
@@ -612,6 +626,11 @@
   "sortingAlgorithmic": "Algoritmas",
   "sortingAlphabetical": "Pagal abėcėlę",
   "start": "Pradėti",
+  "store": "Parduotuvė",
+  "storeDelete": "Ištrinti parduotuvę",
+  "storeDeleteConfirmation": "Ar Jūs tikri, kad norite ištrinti {store}? Tai ištrins parduotuvę iš visų elementų.",
+  "storeEdit": "Koreguoti parduotuvę",
+  "stores": "Parduotuvės",
   "supportDevelopment": "Paremkit kurėjus",
   "swipeToDelete": "Brauk kad ištrintum",
   "swipeToDeleteAndLongPressToReorder": "Brauk kad ištrintum ir ilgai paspausk kad pertvarkytum",

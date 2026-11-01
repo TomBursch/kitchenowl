@@ -207,6 +207,14 @@
       }
     }
   },
+  "@storeDeleteConfirmation": {
+    "placeholders": {
+      "store": {
+        "example": "Supermarket",
+        "type": "String"
+      }
+    }
+  },
   "@tagDeleteConfirmation": {
     "placeholders": {
       "tag": {
@@ -252,6 +260,7 @@
   "addRecipeToPlanner": "Toevoegen aan maaltijdplan ({number} porties)",
   "addRecipeToPlannerShort": "Toevoegen aan maaltijdplan",
   "addShoppingList": "Boodschappenlijst toevoegen",
+  "addStore": "Winkel toevoegen",
   "addTag": "Tag toevoegen",
   "addedBy": "Toegevoegd door {name}",
   "address": "Adres",
@@ -483,6 +492,11 @@
   "sortingAlgorithmic": "Algoritmische",
   "sortingAlphabetical": "Alfabetisch",
   "start": "Begin",
+  "store": "Winkel",
+  "storeDelete": "Verwijder winkel",
+  "storeDeleteConfirmation": "Weet je zeker dat je {store} wilt verwijderen? Dit zal de winkel van alle items verwijderen.",
+  "storeEdit": "Bewerk winkel",
+  "stores": "Winkels",
   "supportDevelopment": "Ondersteun de ontwikkeling",
   "swipeToDelete": "Vegen om te verwijderen",
   "swipeToDeleteAndLongPressToReorder": "Vegen om te verwijderen en lang drukken om opnieuw te rangschikken",

@@ -1,4 +1,4 @@
-from app.models import Household, Item, Category
+from app.models import Household, Item, Category, Store, ItemStores
 
 
 def importItem(household: Household, args: dict):
@@ -14,4 +14,10 @@ def importItem(household: Household, args: dict):
         if not category:
             category = Category.create_by_name(household.id, args["category"])
         item.category = category
+    if "stores" in args and not item.stores:
+        for name in args["stores"]:
+            store = Store.find_by_name(household.id, name)
+            if not store:
+                store = Store.create_by_name(household.id, name)
+            item.stores.append(ItemStores(store=store))
     item.save()

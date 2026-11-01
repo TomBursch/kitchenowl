@@ -40,6 +40,7 @@
     "description": "A shorter title/button text used wherever the space is limited. Excludes the number of yields."
   },
   "@addShoppingList": {},
+  "@addStore": {},
   "@addTag": {},
   "@addedBy": {
     "placeholders": {
@@ -426,6 +427,18 @@
   "@sortingAlgorithmic": {},
   "@sortingAlphabetical": {},
   "@start": {},
+  "@store": {},
+  "@storeDelete": {},
+  "@storeDeleteConfirmation": {
+    "placeholders": {
+      "store": {
+        "example": "Supermarket",
+        "type": "String"
+      }
+    }
+  },
+  "@storeEdit": {},
+  "@stores": {},
   "@supportDevelopment": {},
   "@swipeToDelete": {},
   "@swipeToDeleteAndLongPressToReorder": {},
@@ -521,6 +534,7 @@
   "addRecipeToPlanner": "הוספה לתוכנית תזונה ({number} הגשות)",
   "addRecipeToPlannerShort": "הוספה לתוכנית תזונה",
   "addShoppingList": "הוספה לרשימת קניות",
+  "addStore": "הוספת חנות",
   "addTag": "הוספת תגית",
   "addedBy": "הוסף על ידי {name}",
   "address": "כתובת",
@@ -747,6 +761,11 @@
   "sortingAlgorithmic": "אַלְגּוֹרִיתְמִי",
   "sortingAlphabetical": "אלפבתי",
   "start": "התחל",
+  "store": "חנות",
+  "storeDelete": "מחק חנות",
+  "storeDeleteConfirmation": "האם אתה בטוח שתרצה למחוק את {store}? חנות זו תוסר מכל המצרכים.",
+  "storeEdit": "ערוך חנות",
+  "stores": "חנויות",
   "supportDevelopment": "תמוך בפיתוח",
   "swipeToDelete": "החלק למחיקה",
   "swipeToDeleteAndLongPressToReorder": "החלק למחיקה והחלק לחיצה כדי להקליט",

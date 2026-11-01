@@ -1,3 +1,4 @@
+import 'package:kitchenowl/gen/l10n/app_localizations.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/cubits/shoppinglist_cubit.dart';
@@ -13,6 +14,7 @@ class ShoppingListConfirmRememoveFab extends StatelessWidget {
             state is SearchShoppinglistCubitState) return const SizedBox();
 
         return FloatingActionButton(
+          tooltip: AppLocalizations.of(context)!.confirm,
           onPressed: context.read<ShoppinglistCubit>().confirmRemove,
           child: const Icon(Icons.done_all_rounded),
         );

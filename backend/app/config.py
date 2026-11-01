@@ -128,6 +128,7 @@ SUPPORTED_LANGUAGES = {
     "kab": "Taqbaylit",
     "ko": "한국어",
     "lt": "Lietuvių kalba",
+    "lv": "Latviešu valoda",
     "nb_NO": "Bokmål",
     "nl": "Nederlands",
     "pl": "Polski",
@@ -163,6 +164,8 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
     "pool_size": int(os.getenv("DB_POOL_SIZE", 5)),
     "max_overflow": int(os.getenv("DB_MAX_OVERFLOW", 10)),
+    # Check connections before use so a database restart doesn't cause errors
+    "pool_pre_ping": True,
 }
 # JWT
 app.config["JWT_SECRET_KEY"] = jwt_secret
@@ -187,11 +190,31 @@ db = SQLAlchemy(app, model_class=DbModelBase)
 migrate = Migrate(app, db, render_as_batch=True)
 bcrypt = Bcrypt(app)
 jwt = JWTManager(app)
+
+
+def is_allowed_socketio_origin(origin: str | None, environ: dict) -> bool:
+    """Allow same-origin requests and the FRONT_URL origin."""
+    if FRONT_URL and origin == FRONT_URL.removesuffix("/"):
+        return True
+    # Same-origin check as in python-engineio's default when
+    # cors_allowed_origins is unset.
+    if "wsgi.url_scheme" not in environ or "HTTP_HOST" not in environ:
+        return False
+    allowed_origins = [f"{environ['wsgi.url_scheme']}://{environ['HTTP_HOST']}"]
+    if "HTTP_X_FORWARDED_PROTO" in environ or "HTTP_X_FORWARDED_HOST" in environ:
+        scheme = environ.get("HTTP_X_FORWARDED_PROTO", environ["wsgi.url_scheme"])
+        host = environ.get("HTTP_X_FORWARDED_HOST", environ["HTTP_HOST"])
+        allowed_origins.append(
+            f"{scheme.split(',')[0].strip()}://{host.split(',')[0].strip()}"
+        )
+    return origin in allowed_origins
+
+
 socketio = SocketIO(
     app,
     json=app.json,
     logger=app.logger,
-    cors_allowed_origins=FRONT_URL,
+    cors_allowed_origins=is_allowed_socketio_origin,
     message_queue=MESSAGE_BROKER,
 )
 api_spec = APISpec(

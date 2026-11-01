@@ -41,6 +41,7 @@ class ConnectedServerInfoState extends ServerInfoState {
   final bool openRegistration;
   final bool emailMandatory;
   final bool disableUsernamePasswordLogin;
+  final bool llmRecipeGeneration;
   final List<OIDCProivder> oidcProvider;
 
   const ConnectedServerInfoState({
@@ -51,6 +52,7 @@ class ConnectedServerInfoState extends ServerInfoState {
     this.openRegistration = false,
     this.emailMandatory = false,
     this.disableUsernamePasswordLogin = false,
+    this.llmRecipeGeneration = false,
     this.oidcProvider = const [],
   });
 
@@ -68,7 +70,9 @@ class ConnectedServerInfoState extends ServerInfoState {
       termsUrl: data["terms"],
       openRegistration: data["open_registration"] ?? false,
       emailMandatory: data["email_mandatory"] ?? false,
-      disableUsernamePasswordLogin: data["disable_username_password_login"] ?? false,
+      disableUsernamePasswordLogin:
+          data["disable_username_password_login"] ?? false,
+      llmRecipeGeneration: data["llm_recipe_generation"] ?? false,
       oidcProvider: oidcProvider,
     );
   }
@@ -82,5 +86,6 @@ class ConnectedServerInfoState extends ServerInfoState {
         openRegistration,
         emailMandatory,
         disableUsernamePasswordLogin,
+        llmRecipeGeneration,
       ];
 }

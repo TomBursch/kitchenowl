@@ -9,12 +9,14 @@ class ExpandableFab extends StatefulWidget {
     required this.distance,
     required this.children,
     required this.openIcon,
+    this.tooltip,
   });
 
   final bool? initialOpen;
   final double distance;
   final List<Widget> children;
   final Widget openIcon;
+  final String? tooltip;
 
   @override
   ExpandableFabState createState() => ExpandableFabState();
@@ -144,6 +146,7 @@ class ExpandableFabState extends State<ExpandableFab>
           curve: const Interval(0.25, 1.0, curve: Curves.easeInOut),
           duration: const Duration(milliseconds: 250),
           child: FloatingActionButton(
+            tooltip: widget.tooltip ?? "",
             onPressed: _toggle,
             child: widget.openIcon,
           ),

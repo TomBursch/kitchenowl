@@ -57,6 +57,7 @@ class _HouseholdListPageState extends State<HouseholdListPage> with RouteAware {
         floatingActionButton: App.isOffline
             ? null
             : KitchenOwlFab(
+                tooltip: AppLocalizations.of(context)!.householdNew,
                 openBuilder: (context, _) => HouseholdAddPage(
                   locale: AppLocalizations.of(context)!.localeName,
                 ),

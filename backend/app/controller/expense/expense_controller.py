@@ -116,6 +116,7 @@ def addExpense(args, household_id):
             category = ExpenseCategory.find_by_id(args["category"])
             if not category or category.household_id != household_id:
                 raise NotFoundRequest()
+            category.checkAuthorized()
             expense.category = category
     if "exclude_from_statistics" in args:
         expense.exclude_from_statistics = args["exclude_from_statistics"]
@@ -415,6 +416,7 @@ def updateExpenseCategory(args, id):
     if "merge_category_id" in args and args["merge_category_id"] != id:
         mergeCategory = ExpenseCategory.find_by_id(args["merge_category_id"])
         if mergeCategory:
+            mergeCategory.checkAuthorized()
             category.merge(mergeCategory)
 
     return jsonify(category.obj_to_dict())

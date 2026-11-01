@@ -24,6 +24,7 @@ class SliverItemGridList<T extends Item> extends StatelessWidget {
   final bool isLoading;
   final Widget Function(T)? extraOption;
   final ShoppingListStyle shoppingListStyle;
+  final EdgeInsetsGeometry padding;
 
   const SliverItemGridList({
     super.key,
@@ -37,6 +38,7 @@ class SliverItemGridList<T extends Item> extends StatelessWidget {
     this.isLoading = false,
     this.extraOption,
     this.shoppingListStyle = const ShoppingListStyle(),
+    this.padding = const EdgeInsets.symmetric(horizontal: 16),
   });
 
   @override
@@ -70,7 +72,7 @@ class SliverItemGridList<T extends Item> extends StatelessWidget {
     );
 
     return SliverPadding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: padding,
       sliver: !shoppingListStyle.isList
           ? SliverLayoutBuilder(
               builder: (context, constraints) => SliverGrid(

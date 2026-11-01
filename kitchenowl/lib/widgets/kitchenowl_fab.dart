@@ -24,7 +24,8 @@ class KitchenOwlFab extends StatelessWidget {
       openBuilder: openBuilder,
       openColor: Theme.of(context).scaffoldBackgroundColor,
       onClosed: onClosed,
-      closedElevation: 4.0,
+      tappable: false,
+      clipBehavior: Clip.none,
       closedShape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(
           Radius.circular(14),
@@ -37,17 +38,12 @@ class KitchenOwlFab extends StatelessWidget {
         BuildContext context,
         VoidCallback openContainer,
       ) {
-        return Tooltip(
-          message: tooltip ?? "",
-          child: SizedBox(
-            height: 56,
-            width: 56,
-            child: Center(
-              child: Icon(
-                icon,
-                color: Theme.of(context).colorScheme.onSecondary,
-              ),
-            ),
+        return FloatingActionButton(
+          tooltip: tooltip,
+          onPressed: openContainer,
+          child: Icon(
+            icon,
+            color: Theme.of(context).colorScheme.onSecondary,
           ),
         );
       },

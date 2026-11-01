@@ -170,8 +170,7 @@ class _RecipeGeneratePageState extends State<RecipeGeneratePage> {
                         state.loading
                             ? IconButton(
                                 icon: const Icon(Icons.stop_rounded),
-                                tooltip: AppLocalizations.of(context)!
-                                    .recipeGenerateAbort,
+                                tooltip: AppLocalizations.of(context)!.cancel,
                                 onPressed: _abort,
                               )
                             : IconButton(
@@ -449,7 +448,7 @@ class _RecipePreview extends StatelessWidget {
               if (onAdd != null)
                 FilledButton(
                   onPressed: onAdd,
-                  child: Text(l10n.recipeGenerateAdd),
+                  child: Text(l10n.recipeAdd),
                 ),
             ],
           ),

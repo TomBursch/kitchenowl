@@ -735,8 +735,6 @@
   "recipeEmpty": "No recipes, start by adding one!",
   "recipeEmptySearch": "No recipes found :(",
   "recipeGenerate": "Generate recipe with AI",
-  "recipeGenerateAbort": "Stop",
-  "recipeGenerateAdd": "Add recipe",
   "recipeGenerateFollowUpAnother": "Suggest a different recipe",
   "recipeGenerateFollowUpDetailed": "Explain the steps in more detail",
   "recipeGenerateFollowUpVegetarian": "Make it vegetarian",

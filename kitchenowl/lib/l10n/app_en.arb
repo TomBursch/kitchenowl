@@ -503,6 +503,15 @@
   "@unlink": {
     "description": "As in remove link to social account (e.g. Google)"
   },
+  "@unlinkConfirm": {
+    "placeholders": {
+      "provider": {
+        "example": "OIDC",
+        "type": "String"
+      }
+    }
+  },
+  "@unlinkLastLoginMethod": {},
   "@unreachableMessage": {},
   "@unsavedChangesBody": {},
   "@unsavedChangesTitle": {},
@@ -831,6 +840,8 @@
   "underConstruction": "Under construction",
   "undo": "Undo",
   "unlink": "Unlink",
+  "unlinkConfirm": "Do you really want to unlink your {provider} account? You will no longer be able to sign in with it.",
+  "unlinkLastLoginMethod": "This is your only way to sign in. Set a password or link another account first.",
   "unreachableMessage": "Hmmmm… couldn't reach server",
   "unsavedChangesBody": "Are you sure you want to go back?",
   "unsavedChangesTitle": "You have unsaved changes",

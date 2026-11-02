@@ -373,6 +373,62 @@ def deleteLongLivedToken(id):
     return jsonify({"msg": "DONE"})
 
 
+@auth.route("oidc/<provider>", methods=["DELETE"])
+@jwt_required()
+def unlinkOIDC(provider: str):
+    """Unlink an OIDC provider from the current user.
+    ---
+    delete:
+      summary: Unlink OIDC account
+      description: >
+        Removes the link between the current user and the given OIDC provider.
+        Refused if it would leave the user without any way to log in
+        (no password, or password login disabled, and no other linked provider).
+      parameters:
+        - in: path
+          name: provider
+          schema:
+            type: string
+          required: true
+          description: OIDC provider name (custom, google, apple)
+      responses:
+        200:
+          description: Provider unlinked
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+        400:
+          description: Unlinking would remove the last login method
+        401:
+          description: Unauthorized
+        404:
+          description: Provider not linked
+      security:
+        - bearerAuth: []
+    """
+    user: User = current_user
+    if not user:
+        raise UnauthorizedRequest(message="Unauthorized: IP {}".format(getClientIp()))
+
+    links = [link for link in user.oidc_links if link.provider == provider]
+    if not links:
+        raise NotFoundRequest()
+
+    remaining_links = [link for link in user.oidc_links if link.provider != provider]
+    can_use_password = bool(user.password) and not DISABLE_USERNAME_PASSWORD_LOGIN
+    if not can_use_password and not remaining_links:
+        return "Request invalid: last login method", 400
+
+    for link in links:
+        link.delete()
+
+    return jsonify({"msg": "DONE"})
+
+
 if FRONT_URL and len(oidc_clients) > 0:
 
     @auth.route("oidc", methods=["GET"])

@@ -35,6 +35,7 @@ class SettingsLinkedAccountsPage extends StatelessWidget {
                                 .contains(oidcProvider[i]) ??
                             false)
                         ? LoadingElevatedButton(
+                            onPressed: () => _unlink(context, oidcProvider[i]),
                             child: Text(AppLocalizations.of(context)!.unlink),
                           )
                         : LoadingElevatedButton(
@@ -53,6 +54,28 @@ class SettingsLinkedAccountsPage extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  Future<void> _unlink(BuildContext context, OIDCProivder provider) async {
+    final confirm = await askForConfirmation(
+      context: context,
+      title: Text(AppLocalizations.of(context)!.unlink),
+      content: Text(AppLocalizations.of(context)!
+          .unlinkConfirm(provider.toLocalizedString())),
+      confirmText: AppLocalizations.of(context)!.unlink,
+    );
+    if (!confirm || !context.mounted) return;
+
+    final error = await cubit.unlinkOIDC(provider);
+    if (error == null || !context.mounted) return;
+
+    showSnackbar(
+      context: context,
+      content: Text(error.contains("last login method")
+          ? AppLocalizations.of(context)!.unlinkLastLoginMethod
+          : AppLocalizations.of(context)!.error),
+      width: null,
     );
   }
 }

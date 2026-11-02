@@ -589,4 +589,13 @@ class ApiService {
 
     return (null, null, null);
   }
+
+  /// Unlinks the given OIDC provider from the current user.
+  /// Returns null on success, otherwise the error message from the server.
+  Future<String?> unlinkOIDC(String provider) async {
+    final res = await delete('/auth/oidc/$provider');
+    if (res.statusCode == 200) return null;
+
+    return res.body;
+  }
 }

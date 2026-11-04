@@ -436,7 +436,7 @@
   "recipeDelete": "Rezept löschen",
   "recipeDeleteConfirmation": "Bist du dir sicher, dass du {recipe} löschen möchtest?",
   "recipeEdit": "Rezept bearbeiten",
-  "recipeEmpty": "Keine Rezepte, fange and welche zu erstellen!",
+  "recipeEmpty": "Keine Rezepte, fange an, welche zu erstellen!",
   "recipeEmptySearch": "Keine Rezepte gefunden :(",
   "recipeGenerate": "Generiere Rezept mit KI",
   "recipeGenerateFollowUpAnother": "Schlage ein anderes Rezept vor",

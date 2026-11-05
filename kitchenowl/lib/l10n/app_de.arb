@@ -425,7 +425,7 @@
   "recipeDelete": "Rezept löschen",
   "recipeDeleteConfirmation": "Bist du dir sicher, dass du {recipe} löschen möchtest?",
   "recipeEdit": "Rezept bearbeiten",
-  "recipeEmpty": "Keine Rezepte, fange and welche zu erstellen!",
+  "recipeEmpty": "Noch keine Rezepte. Fange an, welche zu erstellen!",
   "recipeEmptySearch": "Keine Rezepte gefunden :(",
   "recipeGoToInHousehold": "Bereits hinzugefügt, gehe zum Rezept in {householdName}",
   "recipeImageSelect": "Wähle ein Rezeptbild",

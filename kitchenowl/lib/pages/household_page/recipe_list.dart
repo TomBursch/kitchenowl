@@ -136,12 +136,13 @@ class _RecipeListPageState extends State<RecipeListPage> {
                             children: state.tags
                                 .sorted((a, b) =>
                                     (state is FilteredListRecipeListState)
-                                        ? state.selectedTags
-                                            .contains(a)
-                                            .hashCode
-                                            .compareTo(state.selectedTags
-                                                .contains(b)
-                                                .hashCode)
+                                        ? (state.selectedTags.contains(a)
+                                                ? 0
+                                                : 1)
+                                            .compareTo(
+                                                state.selectedTags.contains(b)
+                                                    ? 0
+                                                    : 1)
                                         : 0)
                                 .map((tag) {
                           return Padding(

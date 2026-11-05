@@ -131,11 +131,12 @@ class _ExpensePageState extends State<ExpenseListPage> {
                                   searchAnchor,
                                 ],
                                 children: state.categories
-                                    .sorted((a, b) => state.filter
-                                        .contains(a)
-                                        .hashCode
-                                        .compareTo(
-                                            state.filter.contains(b).hashCode))
+                                    .sorted((a, b) =>
+                                        (state.filter.contains(a) ? 0 : 1)
+                                            .compareTo(
+                                                state.filter.contains(b)
+                                                    ? 0
+                                                    : 1))
                                     .map((category) {
                                   return Padding(
                                     key: ValueKey(category.id),

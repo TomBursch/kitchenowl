@@ -8,7 +8,7 @@ from flask import current_app
 from html_text import extract_text
 from litellm import completion
 from recipe_scrapers import scrape_html
-from recipe_scrapers._exceptions import SchemaOrgException
+from recipe_scrapers._exceptions import RecipeScrapersExceptions
 from app.models.tag import Tag
 from app.service.ingredient_parsing import parseIngredientsStream
 from app.models import Recipe, Item, Household
@@ -82,7 +82,7 @@ def scrapeHTMLStream(
         ValueError,
         TypeError,
         AttributeError,
-        SchemaOrgException,
+        RecipeScrapersExceptions,
     ):
         return None  # Unsupported if title cannot be scraped
     try:
@@ -92,7 +92,7 @@ def scrapeHTMLStream(
         ValueError,
         TypeError,
         AttributeError,
-        SchemaOrgException,
+        RecipeScrapersExceptions,
     ):
         pass
     try:
@@ -102,7 +102,7 @@ def scrapeHTMLStream(
         ValueError,
         TypeError,
         AttributeError,
-        SchemaOrgException,
+        RecipeScrapersExceptions,
     ):
         pass
     try:
@@ -112,7 +112,7 @@ def scrapeHTMLStream(
         ValueError,
         TypeError,
         AttributeError,
-        SchemaOrgException,
+        RecipeScrapersExceptions,
     ):
         pass
     try:
@@ -124,7 +124,7 @@ def scrapeHTMLStream(
         ValueError,
         TypeError,
         AttributeError,
-        SchemaOrgException,
+        RecipeScrapersExceptions,
     ):
         pass
     description = ""
@@ -135,7 +135,7 @@ def scrapeHTMLStream(
         ValueError,
         TypeError,
         AttributeError,
-        SchemaOrgException,
+        RecipeScrapersExceptions,
     ):
         pass
     try:
@@ -145,7 +145,7 @@ def scrapeHTMLStream(
         ValueError,
         TypeError,
         AttributeError,
-        SchemaOrgException,
+        RecipeScrapersExceptions,
     ):
         pass
     recipe.description = description

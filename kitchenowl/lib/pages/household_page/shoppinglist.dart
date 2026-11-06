@@ -1,6 +1,5 @@
 import 'package:animations/animations.dart';
 import 'package:collection/collection.dart';
-import 'package:flutter/foundation.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/app.dart';
@@ -287,11 +286,9 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                                       cubit.add(item);
                                     }
                                   }),
-                                  onLongPressed: kIsWeb
-                                      ? Nullable((Item item) => _showItemMenu(
-                                          context, cubit, item,
-                                          settingsState: settingsState))
-                                      : null,
+                                  onLongPressed: Nullable((Item item) =>
+                                      _showItemMenu(context, cubit, item,
+                                          settingsState: settingsState)),
                                 ),
                               ],
                             ),
@@ -349,11 +346,9 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                                           cubit.add(item);
                                         }
                                       }),
-                                      onLongPressed: kIsWeb
-                                          ? Nullable((item) => _showItemMenu(
-                                              context, cubit, item,
-                                              settingsState: settingsState))
-                                          : null,
+                                      onLongPressed: Nullable((item) =>
+                                          _showItemMenu(context, cubit, item,
+                                              settingsState: settingsState)),
                                       onRecentPressed: Nullable(cubit.add),
                                       onRefresh: cubit.refresh,
                                     ),

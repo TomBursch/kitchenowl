@@ -109,12 +109,14 @@ extension ShoppinglistApi on ApiService {
     ShoppingList shoppinglist,
     ShoppinglistItem item, [
     DateTime? time,
+    bool hard = false,
   ]) async {
     final res = await delete(
       '${route(shoppinglist: shoppinglist)}/item',
       body: jsonEncode({
         'item_id': item.id,
         if (time != null) 'removed_at': time.toUtc().millisecondsSinceEpoch,
+        if (hard) 'hard': true,
       }),
     );
 
@@ -125,6 +127,7 @@ extension ShoppinglistApi on ApiService {
     ShoppingList shoppinglist,
     List<ShoppinglistItem> items, [
     DateTime? time,
+    bool hard = false,
   ]) async {
     final res = await delete(
       '${route(shoppinglist: shoppinglist)}/items',
@@ -135,6 +138,7 @@ extension ShoppinglistApi on ApiService {
                 'item_id': item.id,
                 if (time != null)
                   'removed_at': time.toUtc().millisecondsSinceEpoch,
+                if (hard) 'hard': true,
               },
             )
             .toList(),

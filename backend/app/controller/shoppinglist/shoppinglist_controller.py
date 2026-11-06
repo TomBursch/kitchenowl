@@ -325,10 +325,12 @@ def removeShoppinglistItem(args, id: int):
         raise NotFoundRequest()
     shoppinglist.checkAuthorized()
 
+    hard = args["hard"]
     con = removeShoppinglistItemFunc(
         shoppinglist,
         args["item_id"],
         args["removed_at"] if "removed_at" in args else None,
+        hard=hard,
     )
     if con:
         socketio.emit(
@@ -336,6 +338,7 @@ def removeShoppinglistItem(args, id: int):
             {
                 "item": con.obj_to_item_dict(),
                 "shoppinglist": shoppinglist.obj_to_dict(),
+                "hard": hard,
             },
             to="household/" + str(shoppinglist.household_id),
         )
@@ -353,10 +356,12 @@ def removeShoppinglistItems(args, id: int):
     shoppinglist.checkAuthorized()
 
     for arg in args["items"]:
+        hard = arg["hard"]
         con = removeShoppinglistItemFunc(
             shoppinglist,
             arg["item_id"],
             arg["removed_at"] if "removed_at" in arg else None,
+            hard=hard,
         )
         if con:
             socketio.emit(
@@ -364,6 +369,7 @@ def removeShoppinglistItems(args, id: int):
                 {
                     "item": con.obj_to_item_dict(),
                     "shoppinglist": shoppinglist.obj_to_dict(),
+                    "hard": hard,
                 },
                 to="household/" + str(shoppinglist.household_id),
             )
@@ -372,7 +378,10 @@ def removeShoppinglistItems(args, id: int):
 
 
 def removeShoppinglistItemFunc(
-    shoppinglist: Shoppinglist, item_id: int, removed_at: int | None = None
+    shoppinglist: Shoppinglist,
+    item_id: int,
+    removed_at: int | None = None,
+    hard: bool = False,
 ) -> ShoppinglistItems | None:
     item = Item.find_by_id(item_id)
     if not item:
@@ -382,6 +391,11 @@ def removeShoppinglistItemFunc(
         return None
     description = con.description
     con.delete()
+
+    # Hard removals are not recorded in the history, so the item does not
+    # show up in the recently removed items of the shopping list
+    if hard:
+        return con
 
     removed_at_datetime = None
     if removed_at:

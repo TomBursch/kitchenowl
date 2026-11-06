@@ -444,6 +444,7 @@
   },
   "@shoppingListEdit": {},
   "@shoppingListEmpty": {},
+  "@shoppingListRemoveAndForget": {},
   "@shoppingListStyle": {},
   "@shoppingLists": {},
   "@signInWith": {
@@ -794,6 +795,7 @@
   "shoppingListEdit": "Edit shopping list",
   "shoppingListEmpty": "The shopping list is empty. Add an item using the search function above.",
   "shoppingListKeepAwake": "Keep screen on while shopping",
+  "shoppingListRemoveAndForget": "Remove and forget",
   "shoppingListStyle": "Shopping list style",
   "shoppingLists": "Shopping lists",
   "showPastPlans": "Show all plans",

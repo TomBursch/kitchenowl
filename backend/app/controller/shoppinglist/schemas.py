@@ -50,6 +50,7 @@ class RemoveItem(Schema):
         required=True,
     )
     removed_at = fields.Integer()
+    hard = fields.Boolean(load_default=False)
 
 
 class RemoveItems(Schema):
@@ -61,5 +62,6 @@ class RemoveItems(Schema):
             required=True,
         )
         removed_at = fields.Integer()
+        hard = fields.Boolean(load_default=False)
 
     items = fields.List(fields.Nested(RecipeItem))

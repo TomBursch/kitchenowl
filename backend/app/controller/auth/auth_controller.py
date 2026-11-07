@@ -3,7 +3,7 @@ import uuid
 import gevent
 
 from oic import rndstr
-from oic.oic.message import AuthorizationResponse
+from oic.oic.message import AuthorizationResponse, UserInfoErrorResponse
 from oic.oauth2.message import ErrorResponse
 from app.helpers import validate_args
 from flask import jsonify, Blueprint
@@ -625,6 +625,20 @@ if FRONT_URL and len(oidc_clients) > 0:
             ).save()
             oidcLink.user = current_user
         if not oidcLink:
+            if getattr(client, "userinfo_endpoint", None):
+                try:
+                    userinfo_resp = client.do_user_info_request(
+                        method="GET",
+                        state=oidc_request.state,
+                        behavior="use_authorization_header",
+                    )
+                    if not isinstance(
+                        userinfo_resp, (ErrorResponse, UserInfoErrorResponse)
+                    ):
+                        userinfo.update(userinfo_resp)
+                except Exception:
+                    pass
+
             if "email" in userinfo:
                 if User.find_by_email(userinfo["email"].strip()):
                     return "Request invalid: email", 400

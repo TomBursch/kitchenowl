@@ -14,6 +14,7 @@ class ShoppingListConfirmRememoveFab extends StatelessWidget {
             state is SearchShoppinglistCubitState) return const SizedBox();
 
         return FloatingActionButton(
+          heroTag: null,
           tooltip: AppLocalizations.of(context)!.confirm,
           onPressed: context.read<ShoppinglistCubit>().confirmRemove,
           child: const Icon(Icons.done_all_rounded),

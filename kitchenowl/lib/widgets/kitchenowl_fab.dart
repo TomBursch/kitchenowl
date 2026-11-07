@@ -39,6 +39,7 @@ class KitchenOwlFab extends StatelessWidget {
         VoidCallback openContainer,
       ) {
         return FloatingActionButton(
+          heroTag: null,
           tooltip: tooltip,
           onPressed: openContainer,
           child: Icon(

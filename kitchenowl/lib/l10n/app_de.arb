@@ -528,6 +528,8 @@
   "underConstruction": "Baustelle",
   "undo": "Rückgängig machen",
   "unlink": "Verknüpfung aufheben",
+  "unlinkConfirm": "Möchtest du die Verknüpfung mit deinem {provider}-Konto wirklich aufheben? Du kannst dich dann nicht mehr damit anmelden.",
+  "unlinkLastLoginMethod": "Dies ist deine einzige Anmeldemöglichkeit. Lege zuerst ein Passwort fest oder verknüpfe ein anderes Konto.",
   "unreachableMessage": "Hmmmm… der Server konnte nicht erreicht werden",
   "unsavedChangesBody": "Bist du sicher, dass du zurückgehen möchtest?",
   "unsavedChangesTitle": "Du hast ungespeicherte Änderungen",

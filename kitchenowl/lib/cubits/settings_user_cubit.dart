@@ -4,6 +4,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/cubits/auth_cubit.dart';
+import 'package:kitchenowl/enums/oidc_provider.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/helpers/named_bytearray.dart';
 import 'package:kitchenowl/models/token.dart';
@@ -99,6 +100,15 @@ class SettingsUserCubit extends Cubit<SettingsUserState> {
   Future<void> deleteLongLivedToken(Token token) async {
     final success = await ApiService.getInstance().deleteLongLivedToken(token);
     if (success) refresh();
+  }
+
+  /// Returns null on success, otherwise the error message from the server.
+  Future<String?> unlinkOIDC(OIDCProivder provider) async {
+    final error =
+        await ApiService.getInstance().unlinkOIDC(provider.toString());
+    if (error == null) await refresh();
+
+    return error;
   }
 
   Future<bool> deleteUser() async {

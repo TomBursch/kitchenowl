@@ -30,18 +30,21 @@ LABEL org.opencontainers.image.source="https://github.com/TomBursch/kitchenowl"
 RUN apt-get update \
     && apt-get install --yes --no-install-recommends \
         libxml2 libpcre2-dev libre2-dev libexpat1 curl \
-        media-types libicu-dev \
-    && rm -rf /var/lib/apt/lists/*
+        media-types libicu-dev gosu \
+    && rm -rf /var/lib/apt/lists/* \
+    && groupadd -g 1000 kitchenowl \
+    && useradd -u 1000 -g kitchenowl -d /usr/src/kitchenowl -s /sbin/nologin kitchenowl
 
 # Use virtual enviroment
 COPY --from=builder /opt/venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
 
 # Setup KitchenOwl
-COPY wsgi.ini wsgi.py entrypoint.sh manage.py manage_default_items.py upgrade_default_items.py /usr/src/kitchenowl/
-COPY app /usr/src/kitchenowl/app
-COPY templates /usr/src/kitchenowl/templates
-COPY migrations /usr/src/kitchenowl/migrations
+RUN mkdir -p /usr/src/kitchenowl /data && chown kitchenowl:kitchenowl /usr/src/kitchenowl /data
+COPY --chown=kitchenowl:kitchenowl wsgi.ini wsgi.py entrypoint.sh manage.py manage_default_items.py upgrade_default_items.py /usr/src/kitchenowl/
+COPY --chown=kitchenowl:kitchenowl app /usr/src/kitchenowl/app
+COPY --chown=kitchenowl:kitchenowl templates /usr/src/kitchenowl/templates
+COPY --chown=kitchenowl:kitchenowl migrations /usr/src/kitchenowl/migrations
 WORKDIR /usr/src/kitchenowl
 VOLUME ["/data"]
 

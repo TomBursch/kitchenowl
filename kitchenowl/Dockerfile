@@ -54,15 +54,20 @@ RUN flutter build web --release --no-web-resources-cdn
 # ------------
 # RUNNER
 # ------------
-FROM nginx:stable-alpine
+FROM nginx/nginx-unprivileged:stable-alpine
 
 LABEL org.opencontainers.image.source="https://github.com/TomBursch/kitchenowl"
 
-RUN apk add --no-cache bash
-RUN mkdir -p /var/www/web/kitchenowl
-COPY --from=builder /usr/local/src/app/build/web /var/www/web/kitchenowl
-COPY docker-entrypoint-custom.sh /docker-entrypoint.d/01-kitchenowl-customization.sh
-COPY default.conf.template /etc/nginx/templates/
+USER root
+RUN apk add --no-cache bash \
+    && mkdir -p /var/www/web/kitchenowl \
+    && chown -R nginx:nginx /var/www/web/kitchenowl /etc/nginx/templates /etc/nginx/conf.d
+
+COPY --from=builder --chown=nginx:nginx /usr/local/src/app/build/web /var/www/web/kitchenowl
+COPY --chown=nginx:nginx docker-entrypoint-custom.sh /docker-entrypoint.d/01-kitchenowl-customization.sh
+COPY --chown=nginx:nginx default.conf.template /etc/nginx/templates/
+
+USER nginx
 
 HEALTHCHECK --interval=30s --timeout=3s CMD curl -f http://localhost/ || exit 1
 

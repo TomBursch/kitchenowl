@@ -1,8 +1,16 @@
 #!/bin/bash
 set -e
 
+ME=$(basename "$0")
+
+# If running as root, ensure storage directory is owned by kitchenowl and drop privileges
+if [ "$(id -u)" = "0" ]; then
+    mkdir -p "$STORAGE_PATH/upload"
+    chown -R kitchenowl:kitchenowl "$STORAGE_PATH"
+    exec gosu kitchenowl "$0" "$@"
+fi
+
 # if ipv6 is unavailable, remove it from the wsgi config
-ME=$(basename $0)
 if [ ! -f "/proc/net/if_inet6" ]; then
     echo "$ME: info: ipv6 not available"
     sed -i 's/\[::\]//g' /usr/src/kitchenowl/wsgi.ini
@@ -24,9 +32,9 @@ if [ ! -z $BASE_HREF ] && [ -f "$INDEX_HTML" ]; then
     sed -i "s#<base href=\"/\">#<base href=\"${BASE_HREF}\">#g" "$INDEX_HTML"
 fi
 
-mkdir -p $STORAGE_PATH/upload
+mkdir -p "$STORAGE_PATH/upload"
 flask db upgrade
 if [ "${SKIP_UPGRADE_DEFAULT_ITEMS}" != "true" ] && [ "${SKIP_UPGRADE_DEFAULT_ITEMS}" != "True" ]; then
     python upgrade_default_items.py
 fi
-uwsgi "$@"
+exec uwsgi "$@"

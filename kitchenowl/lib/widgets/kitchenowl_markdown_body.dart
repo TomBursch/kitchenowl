@@ -28,6 +28,7 @@ class KitchenOwlMarkdownBody extends StatelessWidget {
         Theme.of(context),
       )
           .copyWith(
+            p: Theme.of(context).textTheme.bodyMedium,
             blockquoteDecoration: BoxDecoration(
               color: Theme.of(context).cardTheme.color ??
                   Theme.of(context).cardColor,

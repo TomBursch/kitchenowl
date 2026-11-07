@@ -23,6 +23,7 @@ class HouseholdUpdateCubit
           featurePlanner: household.featurePlanner ?? true,
           viewOrdering: household.viewOrdering ?? ViewsEnum.values,
           language: household.language,
+          currency: household.currency,
           description: household.description ?? "",
           link: household.link ?? "",
         )) {
@@ -71,6 +72,7 @@ class HouseholdUpdateCubit
       featurePlanner: household.featurePlanner ?? true,
       viewOrdering: household.viewOrdering ?? ViewsEnum.values,
       language: household.language,
+      currency: household.currency,
       image: household.image,
       shoppingLists: await shoppingLists ?? const [],
       tags: await tags ?? {},
@@ -139,6 +141,7 @@ class HouseholdUpdateCubit
       name: state.name,
       image: state.image,
       language: state.language,
+      currency: state.currency,
       featureExpenses: state.featureExpenses,
       featurePlanner: state.featurePlanner,
       viewOrdering: state.viewOrdering,
@@ -279,7 +282,17 @@ class HouseholdUpdateCubit
   Future<void> setLanguage(String? langCode) {
     if (state.language?.isNotEmpty ?? false) return Future.value();
 
-    emit(state.copyWith(language: langCode));
+    emit(state.copyWith(
+      language: langCode,
+      currency: langCode,
+    ));
+
+    return saveHousehold();
+  }
+
+  @override
+  Future<void> setCurrency(String? currency) {
+    emit(state.copyWith(currency: currency));
 
     return saveHousehold();
   }
@@ -322,6 +335,7 @@ class HouseholdUpdateState extends HouseholdAddUpdateState {
     this.description = "",
     this.image,
     super.language,
+    super.currency,
     super.featurePlanner = true,
     super.featureExpenses = true,
     super.viewOrdering = ViewsEnum.values,
@@ -336,6 +350,7 @@ class HouseholdUpdateState extends HouseholdAddUpdateState {
     String? name,
     String? image,
     String? language,
+    String? currency,
     bool? featurePlanner,
     bool? featureExpenses,
     List<ViewsEnum>? viewOrdering,
@@ -352,6 +367,7 @@ class HouseholdUpdateState extends HouseholdAddUpdateState {
         name: name ?? this.name,
         image: image ?? this.image,
         language: language ?? this.language,
+        currency: currency ?? this.currency,
         featurePlanner: featurePlanner ?? this.featurePlanner,
         featureExpenses: featureExpenses ?? this.featureExpenses,
         viewOrdering: viewOrdering ?? this.viewOrdering,
@@ -386,6 +402,7 @@ class LoadingHouseholdUpdateState extends HouseholdUpdateState {
     super.featurePlanner,
     super.viewOrdering,
     super.language,
+    super.currency,
     super.supportedLanguages,
     super.link,
     super.description,
@@ -396,6 +413,7 @@ class LoadingHouseholdUpdateState extends HouseholdUpdateState {
     String? name,
     String? image,
     String? language,
+    String? currency,
     bool? featurePlanner,
     bool? featureExpenses,
     List<ViewsEnum>? viewOrdering,
@@ -412,6 +430,7 @@ class LoadingHouseholdUpdateState extends HouseholdUpdateState {
         name: name ?? this.name,
         image: image ?? this.image,
         language: language ?? this.language,
+        currency: currency ?? this.currency,
         featurePlanner: featurePlanner ?? this.featurePlanner,
         featureExpenses: featureExpenses ?? this.featureExpenses,
         viewOrdering: viewOrdering ?? this.viewOrdering,

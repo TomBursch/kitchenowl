@@ -7,6 +7,7 @@ import 'package:kitchenowl/enums/views_enum.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/widgets/language_bottom_sheet.dart';
 import 'package:reorderables/reorderables.dart';
+import 'package:world_countries/world_countries.dart';
 
 import 'view_settings_list_tile.dart';
 
@@ -130,6 +131,56 @@ class SliverHouseholdFeatureSettings<
               );
             },
           ),
+        ),
+        BlocBuilder<Cubit, State>(
+          buildWhen: (previous, current) =>
+              previous.featureExpenses != current.featureExpenses ||
+              previous.currency != current.currency ||
+              previous.language != current.language,
+          builder: (context, state) {
+            if (!state.featureExpenses) return const SizedBox();
+            final selectedCurrency =
+                LocalizedLanguage.currencyOf(state.currency ?? state.language);
+
+            return ListTile(
+              title: Text(AppLocalizations.of(context)!.currency),
+              leading: const Icon(Icons.currency_exchange_rounded),
+              contentPadding: const EdgeInsets.only(left: 16, right: 21),
+              trailing: LoadingElevatedButton(
+                child: Text(
+                  LocalizedLanguage.currencyNameOf(context, selectedCurrency) ??
+                      AppLocalizations.of(context)!.set,
+                ),
+                onPressed: () async {
+                  final currency = await CurrencyPicker(
+                    currencies: LocalizedLanguage.supportedCurrencies(context),
+                    chosen: [if (selectedCurrency != null) selectedCurrency],
+                    searchBar: TextField(
+                      decoration: InputDecoration(
+                        isDense: true,
+                        border: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(14)),
+                        ),
+                        prefixIcon: const Icon(Icons.search),
+                        labelText: AppLocalizations.of(context)!.searchHint,
+                      ),
+                    ),
+                    itemBuilder: (props, tile) => tile?.copyWith(
+                      chosenIcon: const Icon(Icons.check_circle_rounded),
+                    ),
+                  ).showInModalBottomSheet(
+                    context,
+                    showDragHandle: true,
+                    shape: null,
+                  );
+                  if (currency == null || !context.mounted) return;
+                  final locale = LocalizedLanguage.localeForCurrency(currency);
+                  if (locale == null) return;
+                  await BlocProvider.of<Cubit>(context).setCurrency(locale);
+                },
+              ),
+            );
+          },
         ),
       ]),
     );

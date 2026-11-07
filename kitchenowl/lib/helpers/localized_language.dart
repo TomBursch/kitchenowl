@@ -1,4 +1,7 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/widgets.dart';
+import 'package:intl/intl.dart';
+import 'package:intl/number_symbols_data.dart';
 import 'package:world_countries/world_countries.dart';
 
 sealed class LocalizedLanguage {
@@ -34,5 +37,44 @@ sealed class LocalizedLanguage {
     }
 
     return langName;
+  }
+
+  static FiatCurrency? currencyOf(String? locale) {
+    if (locale == null || locale.isEmpty) return null;
+    return FiatCurrency.maybeFromAnyCode(
+      NumberFormat.simpleCurrency(locale: locale).currencyName,
+    );
+  }
+
+  static String? currencyNameOf(
+    BuildContext context,
+    FiatCurrency? currency,
+  ) {
+    if (currency == null) return null;
+    return context.maybeLocale?.currencyTranslations[currency] ?? currency.name;
+  }
+
+  static Iterable<FiatCurrency> supportedCurrencies([BuildContext? context]) {
+    final supportedCodes =
+        numberFormatSymbols.values.map((s) => s.DEF_CURRENCY_CODE).toSet();
+    return (context?.maybeLocale?.currencyTranslations.keys ??
+            FiatCurrency.list)
+        .where((c) => supportedCodes.contains(c.code));
+  }
+
+  static String? localeForCurrency(FiatCurrency currency) {
+    for (final country
+        in [currency].byCountryMap()[currency] ?? const <WorldCountry>[]) {
+      for (final lang in country.languages) {
+        final candidate = country.toLocale(language: lang).toString();
+        if (numberFormatSymbols[candidate]?.DEF_CURRENCY_CODE ==
+            currency.code) {
+          return candidate;
+        }
+      }
+    }
+    return numberFormatSymbols.entries
+        .firstWhereOrNull((e) => e.value.DEF_CURRENCY_CODE == currency.code)
+        ?.key;
   }
 }

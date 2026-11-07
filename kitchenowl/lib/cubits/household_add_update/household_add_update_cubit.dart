@@ -18,6 +18,8 @@ abstract class HouseholdAddUpdateCubit<State extends HouseholdAddUpdateState>
   void resetViewOrder();
 
   Future<void> setLanguage(String? langCode);
+
+  Future<void> setCurrency(String? currency);
 }
 
 abstract class HouseholdAddUpdateState extends Equatable {

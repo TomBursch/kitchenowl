@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/widgets/image_provider.dart';
 

@@ -1,17 +1,4 @@
 {
-  "@about": {},
-  "@accountCreate": {},
-  "@accountCreateHint": {},
-  "@accountCreateTitle": {},
-  "@accountDelete": {},
-  "@accountDeleteConfirmation": {},
-  "@accountLinkedWithOtherUser": {},
-  "@accountsLinked": {},
-  "@add": {},
-  "@addCategory": {},
-  "@addDescriptionFromSource": {},
-  "@addItemTitle": {},
-  "@addLanguage": {},
   "@addLanguageConfirm": {
     "placeholders": {
       "lang": {
@@ -39,8 +26,6 @@
   "@addRecipeToPlannerShort": {
     "description": "A shorter title/button text used wherever the space is limited. Excludes the number of yields."
   },
-  "@addShoppingList": {},
-  "@addTag": {},
   "@addedBy": {
     "placeholders": {
       "name": {
@@ -49,25 +34,9 @@
       }
     }
   },
-  "@address": {},
-  "@admin": {},
-  "@analysingWebsite": {},
-  "@appDescription": {},
   "@appTitle": {
     "description": "The title of the app"
   },
-  "@automaticIngredientDetection": {},
-  "@back": {},
-  "@balances": {},
-  "@budget": {},
-  "@budgetSet": {},
-  "@camera": {},
-  "@cancel": {},
-  "@cards": {},
-  "@categories": {},
-  "@categoriesMerge": {},
-  "@category": {},
-  "@categoryDelete": {},
   "@categoryDeleteConfirmation": {
     "placeholders": {
       "category": {
@@ -76,7 +45,6 @@
       }
     }
   },
-  "@categoryEdit": {},
   "@categoryExpenseDeleteConfirmation": {
     "placeholders": {
       "category": {
@@ -85,42 +53,6 @@
       }
     }
   },
-  "@changeIcon": {},
-  "@clear": {},
-  "@colorSelect": {},
-  "@compact": {},
-  "@confirm": {},
-  "@cookingTime": {},
-  "@copied": {},
-  "@daily": {},
-  "@dangerZone": {},
-  "@darkmode": {},
-  "@date": {},
-  "@defaultKey": {},
-  "@defaultWord": {},
-  "@delete": {},
-  "@description": {},
-  "@discover": {},
-  "@done": {},
-  "@dynamicAccentColor": {},
-  "@email": {},
-  "@emailInvalid": {},
-  "@emailNotVerified": {},
-  "@emailResendVerification": {},
-  "@emailSuccessfullyVerified": {},
-  "@emailUpdate": {},
-  "@emailUsed": {},
-  "@error": {},
-  "@excludeFromStatistics": {},
-  "@expense": {},
-  "@expenseAdd": {},
-  "@expenseAmount": {},
-  "@expenseCategories": {},
-  "@expenseEdit": {},
-  "@expenseEmpty": {},
-  "@expenseFactor": {},
-  "@expenseOverviewComparedToPreviousMonth": {},
-  "@expenseOverviewExpenses": {},
   "@expenseOverviewTotalTitle": {
     "placeholders": {
       "month": {
@@ -129,12 +61,6 @@
       }
     }
   },
-  "@expensePaidBy": {},
-  "@expensePaidFor": {},
-  "@expenseReceivedBy": {},
-  "@expenseReceivedFor": {},
-  "@export": {},
-  "@features": {},
   "@fieldCannotBeEmpty": {
     "placeholders": {
       "field": {
@@ -143,12 +69,6 @@
       }
     }
   },
-  "@forceOfflineMode": {},
-  "@gallery": {},
-  "@general": {},
-  "@go": {},
-  "@grid": {},
-  "@helpTranslate": {},
   "@hi": {
     "placeholders": {
       "name": {
@@ -157,8 +77,6 @@
       }
     }
   },
-  "@household": {},
-  "@householdDelete": {},
   "@householdDeleteConfirmation": {
     "placeholders": {
       "household": {
@@ -167,8 +85,6 @@
       }
     }
   },
-  "@householdEmpty": {},
-  "@householdLeave": {},
   "@householdLeaveConfirmation": {
     "placeholders": {
       "household": {
@@ -177,17 +93,6 @@
       }
     }
   },
-  "@householdNew": {},
-  "@householdSwitch": {},
-  "@households": {},
-  "@icon": {},
-  "@imageSelect": {},
-  "@import": {},
-  "@importStartedHint": {},
-  "@income": {},
-  "@ingredients": {},
-  "@ingredientsOptional": {},
-  "@itemDelete": {},
   "@itemDeleteConfirmation": {
     "placeholders": {
       "item": {
@@ -196,11 +101,6 @@
       }
     }
   },
-  "@itemRemoveInteraction": {},
-  "@itemSize": {},
-  "@items": {},
-  "@itemsAdd": {},
-  "@itemsMerge": {},
   "@itemsMergeConfirmation": {
     "placeholders": {
       "item": {
@@ -213,22 +113,12 @@
       }
     }
   },
-  "@itemsOptional": {},
-  "@itemsRecent": {},
-  "@language": {},
-  "@languageSelect": {},
-  "@larger": {},
-  "@lastUsed": {},
   "@link": {
     "description": "As in link social account (e.g. Google)"
   },
   "@linkNoun": {
     "description": "The noun, as in share using a link (URL)"
   },
-  "@linkRecipeDescription": {},
-  "@list": {},
-  "@lltCreate": {},
-  "@lltDelete": {},
   "@lltDeleteConfirmation": {
     "placeholders": {
       "token": {
@@ -237,14 +127,6 @@
       }
     }
   },
-  "@lltNotShownAgain": {},
-  "@lltWarningContent": {},
-  "@lltWarningTitle": {},
-  "@llts": {},
-  "@login": {},
-  "@loginTo": {},
-  "@loginToAddToShoppingList": {},
-  "@logout": {},
   "@logoutName": {
     "placeholders": {
       "name": {
@@ -253,27 +135,6 @@
       }
     }
   },
-  "@longPressToReorder": {},
-  "@longerThanExpected": {},
-  "@markAsPaid": {},
-  "@mealPlanner": {},
-  "@member": {},
-  "@memberAdd": {},
-  "@memberRemove": {},
-  "@members": {},
-  "@merge": {},
-  "@minutesAbbrev": {},
-  "@moneyTransfer": {},
-  "@monthly": {},
-  "@more": {},
-  "@name": {},
-  "@next": {},
-  "@noTags": {},
-  "@none": {},
-  "@now": {},
-  "@offlineMessage": {},
-  "@okay": {},
-  "@onboardingLoading": {},
   "@onboardingSettingsTitle": {
     "placeholders": {
       "name": {
@@ -282,12 +143,6 @@
       }
     }
   },
-  "@onboardingTitle": {},
-  "@optional": {},
-  "@or": {},
-  "@ordering": {},
-  "@other": {},
-  "@overview": {},
   "@owesAB": {
     "placeholders": {
       "nameA": {
@@ -300,22 +155,6 @@
       }
     }
   },
-  "@pageNotFound": {},
-  "@parent": {},
-  "@parentRights": {},
-  "@password": {},
-  "@passwordFieldTooShort": {},
-  "@passwordForgot": {},
-  "@passwordRepeat": {},
-  "@passwordRepeatNoMatch": {},
-  "@passwordReset": {},
-  "@passwordSave": {},
-  "@personal": {},
-  "@planner": {},
-  "@plannerEmpty": {},
-  "@plannerTitle": {},
-  "@preparationTime": {},
-  "@privacyPolicy": {},
   "@privacyPolicyAgree": {
     "placeholders": {
       "privacyPolicy": {
@@ -324,14 +163,6 @@
       }
     }
   },
-  "@private": {},
-  "@privateRecipeDescription": {},
-  "@profile": {},
-  "@public": {},
-  "@publicRecipeDescription": {},
-  "@reason": {},
-  "@recentItemsCategorize": {},
-  "@recipeAdd": {},
   "@recipeAddToHousehold": {
     "placeholders": {
       "householdName": {
@@ -340,8 +171,6 @@
       }
     }
   },
-  "@recipeAddUrl": {},
-  "@recipeDelete": {},
   "@recipeDeleteConfirmation": {
     "placeholders": {
       "recipe": {
@@ -350,9 +179,6 @@
       }
     }
   },
-  "@recipeEdit": {},
-  "@recipeEmpty": {},
-  "@recipeEmptySearch": {},
   "@recipeGoToInHousehold": {
     "placeholders": {
       "householdName": {
@@ -361,39 +187,6 @@
       }
     }
   },
-  "@recipeImageSelect": {},
-  "@recipeNew": {},
-  "@recipeSource": {},
-  "@recipes": {},
-  "@recipesCurated": {},
-  "@recipesDiscover": {},
-  "@recipesNewestCommunity": {},
-  "@recipesOverwrite": {},
-  "@recipesOverwriteDescription": {},
-  "@recipesPopular": {},
-  "@recipesRecent": {},
-  "@recipesSuggested": {},
-  "@redo": {},
-  "@refresh": {},
-  "@rememberLastShoppingList": {},
-  "@remove": {},
-  "@rename": {},
-  "@reportIssue": {},
-  "@reportRecipe": {},
-  "@reportUser": {},
-  "@reset": {},
-  "@save": {},
-  "@search": {},
-  "@searchHint": {},
-  "@send": {},
-  "@server": {},
-  "@serverChange": {},
-  "@sessions": {},
-  "@set": {},
-  "@settings": {},
-  "@setupTitle": {},
-  "@share": {},
-  "@shoppingList": {},
   "@shoppingListContainsEntries": {
     "placeholders": {
       "entriesCount": {
@@ -401,7 +194,6 @@
       }
     }
   },
-  "@shoppingListDelete": {},
   "@shoppingListDeleteConfirmation": {
     "placeholders": {
       "shoppingList": {
@@ -410,10 +202,6 @@
       }
     }
   },
-  "@shoppingListEdit": {},
-  "@shoppingListEmpty": {},
-  "@shoppingListStyle": {},
-  "@shoppingLists": {},
   "@signInWith": {
     "placeholders": {
       "provider": {
@@ -422,17 +210,6 @@
       }
     }
   },
-  "@signup": {},
-  "@skip": {},
-  "@smaller": {},
-  "@sortingAlgorithmic": {},
-  "@sortingAlphabetical": {},
-  "@start": {},
-  "@supportDevelopment": {},
-  "@swipeToDelete": {},
-  "@swipeToDeleteAndLongPressToReorder": {},
-  "@swipeToRemove": {},
-  "@tagDelete": {},
   "@tagDeleteConfirmation": {
     "placeholders": {
       "tag": {
@@ -441,22 +218,6 @@
       }
     }
   },
-  "@tagEdit": {},
-  "@tags": {},
-  "@tagsPopular": {},
-  "@tap": {},
-  "@terms": {},
-  "@themeDark": {},
-  "@themeLight": {},
-  "@themeMode": {},
-  "@themeSystem": {},
-  "@today": {},
-  "@tomorrow": {},
-  "@total": {},
-  "@totalTime": {},
-  "@tutorialItemDescription1": {},
-  "@tutorialItemDescription2": {},
-  "@tutorialRecipeDescription": {},
   "@tutorialRecipeMore": {
     "placeholders": {
       "url": {
@@ -465,22 +226,9 @@
       }
     }
   },
-  "@uncategorized": {},
-  "@underConstruction": {},
-  "@undo": {},
   "@unlink": {
     "description": "As in remove link to social account (e.g. Google)"
   },
-  "@unreachableMessage": {},
-  "@unsavedChangesBody": {},
-  "@unsavedChangesTitle": {},
-  "@unsupportedBackendMessage": {},
-  "@unsupportedFrontendMessage": {},
-  "@unsupportedScrapeMessage": {},
-  "@usedIn": {},
-  "@user": {},
-  "@userAdd": {},
-  "@userDelete": {},
   "@userDeleteConfirmation": {
     "placeholders": {
       "user": {
@@ -489,22 +237,6 @@
       }
     }
   },
-  "@userNotSignedIn": {},
-  "@userSearchHint": {},
-  "@username": {},
-  "@usernameInvalid": {},
-  "@usernameUnavailable": {},
-  "@users": {},
-  "@website": {},
-  "@weekly": {},
-  "@welcomeBack": {},
-  "@writeMarkdownHere": {},
-  "@wrongUsernameOrPassword": {},
-  "@yearly": {},
-  "@yes": {},
-  "@yesterday": {},
-  "@yields": {},
-  "@you": {},
   "about": "O",
   "accountCreate": "Vytvoriť účet",
   "accountCreateHint": "Vaše meno a prihlasovacie meno sú verejné, vyberajte preto náležite.",
@@ -515,7 +247,7 @@
   "accountsLinked": "Prepojené účty",
   "add": "Pridať",
   "addCategory": "Pridať kategóriu",
-  "addDescriptionFromSource": "Pridať opis zo zdroja",
+  "addDescriptionFromSource": "Pridať popis zo zdroja",
   "addItemTitle": "Pridať položky",
   "addLanguage": "Pridať jazyk",
   "addLanguageConfirm": "Ste si istý, že chcete prepnúť do jazyka '{lang}'? Túto zmenu nejde zvrátiť a pridá položky a kategórie do Vašej domácnosti.",
@@ -524,13 +256,13 @@
   "addRecipeToPlannerShort": "Pridať do jedálneho lístka",
   "addShoppingList": "Pridať nákupný zoznam",
   "addTag": "Pridať tag",
-  "addedBy": "Pridané {name}",
+  "addedBy": "Pridal(a) {name}",
   "address": "Adresa",
   "admin": "Admin",
-  "analysingWebsite": "Analyzujem webovú stránku...",
-  "appDescription": "KitchenOwl Vám pomôže zorganizovať vaše nakupovanie.",
+  "analysingWebsite": "Analyzujem webstránku...",
+  "appDescription": "KitchenOwl Vám pomôže zorganizovať vaše nákupy.",
   "appTitle": "KitchenOwl",
-  "automaticIngredientDetection": "Automatická detekcia ingredienci",
+  "automaticIngredientDetection": "Automaticky detekovať ingrediencie",
   "back": "Späť",
   "balances": "Zostatok",
   "budget": "Rozpočet",
@@ -547,13 +279,13 @@
   "categoryExpenseDeleteConfirmation": "Ste si istí, že chcete zmazať {category}? Toto odstráni kategóriu zo všetkých výdajov.",
   "changeIcon": "Zmeniť ikonu",
   "clear": "Vymazať",
-  "colorSelect": "Zvoliť farbu",
+  "colorSelect": "Vybrať farbu",
   "compact": "Kompaktný",
   "confirm": "Potvrdiť",
-  "cookingTime": "Dĺžka prípravy",
+  "cookingTime": "Čas varenia",
   "copied": "Skopírované",
   "daily": "Denne",
-  "dangerZone": "Zóna nebezpečia",
+  "dangerZone": "Nebezpečná zóna",
   "darkmode": "Tmavý režim",
   "date": "Dátum",
   "defaultKey": "Predvolená klávesa",
@@ -580,7 +312,7 @@
   "expenseEmpty": "Žiadne výdaje, začnite vytvorením prvého!",
   "expenseFactor": "Faktor",
   "expenseOverviewComparedToPreviousMonth": "Porovnanie s predchádzajúcimi mesiacmi",
-  "expenseOverviewExpenses": "Výdaje",
+  "expenseOverviewExpenses": "Výdavky",
   "expenseOverviewTotalTitle": "Celkovo za {month}:",
   "expensePaidBy": "Zaplatené",
   "expensePaidFor": "Zaplatené pre",
@@ -591,14 +323,15 @@
   "fieldCannotBeEmpty": "{field} nesmie byť prázdne.",
   "forceOfflineMode": "Vynútiť offline mód",
   "gallery": "Galéria",
-  "general": "Obecné",
+  "general": "Všeobecné",
   "go": "Ísť",
   "grid": "Mriežka",
   "helpTranslate": "Pomôcť s prekladom",
   "hi": "Ahoj {name}!",
+  "hidePastPlans": "Skryť minulé plány",
   "household": "Domácnosť",
   "householdDelete": "Zmazať domácnosť",
-  "householdDeleteConfirmation": "Ste si istý, že chcete zmazať {household}? Odoberiete tým všetky súvisiace položky, recepty a výdaje.",
+  "householdDeleteConfirmation": "Ste si istý, že chcete zmazať {household}? Vymažete tým všetky súvisiace položky, recepty a výdaje.",
   "householdEmpty": "Žiadna domácnosť, vytvorte novú!",
   "householdLeave": "Opustiť domácnosť",
   "householdLeaveConfirmation": "Ste si istý, že chcete opustiť {household}?",
@@ -606,14 +339,14 @@
   "householdSwitch": "Prepnúť domácnosť",
   "households": "Domácnosti",
   "icon": "Ikona",
-  "imageSelect": "Zvoliť obrázok",
+  "imageSelect": "Vybrať obrázok",
   "import": "Importovať",
-  "importStartedHint": "Import prebieha, toto môže trvať niekoľko minút.",
+  "importStartedHint": "Import prebieha, môže to trvať niekoľko minút.",
   "income": "Príjem",
   "ingredients": "Ingrediencie",
-  "ingredientsOptional": "Nepovinné ingrediencie",
+  "ingredientsOptional": "Voliteľné ingrediencie",
   "itemDelete": "Zmazať položku",
-  "itemDeleteConfirmation": "Ste si istý, že chcete zmazať {item}? Odoberiete tým všetky položky zo všetkých receptov, ktoré ich obsahujú.",
+  "itemDeleteConfirmation": "Ste si istý, že chcete zmazať {item}? Vymažete tým všetky položky zo všetkých receptov, ktoré ich obsahujú.",
   "itemRemoveInteraction": "Odstrániť interakciu medzi položkami",
   "itemSize": "Veľkosť položky",
   "items": "Položky",
@@ -627,8 +360,8 @@
   "larger": "Väčší",
   "lastUsed": "Naposledy použité",
   "link": "Prepojiť",
-  "linkNoun": "Link",
-  "linkRecipeDescription": "Každý s linkom na tento recept ho môže vidieť.",
+  "linkNoun": "Odkaz",
+  "linkRecipeDescription": "Každý s odkazom na tento recept ho môže vidieť.",
   "list": "Zoznam",
   "lltCreate": "Vytvoriť dlhodobý token",
   "lltDelete": "Zmazať dlhodobý token",
@@ -657,7 +390,7 @@
   "more": "Viac",
   "name": "Meno",
   "next": "Ďalej",
-  "noTags": "Žiadne štítky",
+  "noTags": "Žiadne tagy",
   "none": "Nič",
   "now": "Teraz",
   "offlineMessage": "Ste offline",
@@ -742,8 +475,10 @@
   "shoppingListDeleteConfirmation": "Ste si istý, že chcete zmazať {shoppingList}?",
   "shoppingListEdit": "Upraviť nákupný zoznam",
   "shoppingListEmpty": "Nákupný zoznam je prázdny. Pridajte položku s využitím funkcie hľadania vyššie.",
+  "shoppingListKeepAwake": "Nevypínať displej počas nakupovania",
   "shoppingListStyle": "Štýl nákupného zoznamu",
   "shoppingLists": "Nákupné zoznamy",
+  "showPastPlans": "Ukázať všetky plány",
   "signInWith": "Prihlásiť sa pomocou {provider}",
   "signup": "Zaregistrovať sa",
   "skip": "Preskočiť",
@@ -752,14 +487,14 @@
   "sortingAlphabetical": "Abecedne",
   "start": "Začať",
   "supportDevelopment": "Podporiť vývoj",
-  "swipeToDelete": "Prejdite prstom pre zmazanie",
-  "swipeToDeleteAndLongPressToReorder": "Prejdite prstom pre zmazanie a podržte pre zmenu poradia",
-  "swipeToRemove": "Prejdite prstom pre odstránenie",
+  "swipeToDelete": "Potiahnite pre zmazanie",
+  "swipeToDeleteAndLongPressToReorder": "Potiahnite pre zmazanie a podržte pre zmenu poradia",
+  "swipeToRemove": "Potiahnite pre odstránenie",
   "tagDelete": "Zmazať štítok",
   "tagDeleteConfirmation": "Ste si istý že chcete zmazať {tag}? Tento štítok bude odstránený zo všetkých receptov, ktoré ho obsahujú.",
   "tagEdit": "Upraviť štítok",
   "tags": "Štítky",
-  "tagsPopular": "Populárne tagy",
+  "tagsPopular": "Populárne štítky",
   "tap": "Ťuknite",
   "terms": "Podmienky používania",
   "themeDark": "Tmavý",
@@ -795,7 +530,7 @@
   "usernameInvalid": "Užívateľské meno nesmie obsahovať '@'",
   "usernameUnavailable": "Toto užívateľské meno nie je k dispozícii",
   "users": "Používatelia",
-  "website": "Webová stránka",
+  "website": "Webstránka",
   "weekly": "Týždenne",
   "welcomeBack": "Vitajte späť",
   "writeMarkdownHere": "Tu môžete používať markdown!",
@@ -803,6 +538,6 @@
   "yearly": "Ročne",
   "yes": "Áno",
   "yesterday": "Včera",
-  "yields": "Výnosy",
+  "yields": "Porcie",
   "you": "Vy"
 }

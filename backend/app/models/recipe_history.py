@@ -43,6 +43,7 @@ class RecipeHistory(Model):
             "Recipe",
             uselist=False,
             back_populates="recipe_history",
+            lazy="joined",
         ),
     )
 

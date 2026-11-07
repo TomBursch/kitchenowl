@@ -1,5 +1,7 @@
 *.db
 *.db-journal
+*.db-shm
+*.db-wal
 upload/
 
 # Visual Studio Code related

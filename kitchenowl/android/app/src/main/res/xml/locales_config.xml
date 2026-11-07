@@ -10,6 +10,7 @@
    <locale android:name="da"/>
    <locale android:name="de"/>
    <locale android:name="de-CH"/>
+   <locale android:name="efi"/>
    <locale android:name="el"/>
    <locale android:name="en"/>
    <locale android:name="es"/>
@@ -29,6 +30,7 @@
    <locale android:name="kk"/>
    <locale android:name="ko"/>
    <locale android:name="lt"/>
+   <locale android:name="lv"/>
    <locale android:name="nb"/>
    <locale android:name="nl"/>
    <locale android:name="pa"/>

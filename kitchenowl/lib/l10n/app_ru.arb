@@ -474,6 +474,7 @@
   "shoppingListKeepAwake": "Не выключать экран при покупках",
   "shoppingListStyle": "Стиль списка покупок",
   "shoppingLists": "Списки покупок",
+  "showPastPlans": "Показать все планы",
   "signInWith": "Войти через {provider}",
   "signup": "Зарегистрироваться",
   "skip": "Пропустить",

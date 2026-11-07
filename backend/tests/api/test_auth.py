@@ -431,3 +431,74 @@ def test_complex_token_chain2(user_client, username, password):
         "/api/auth/refresh", headers={"Authorization": f"Bearer {rt5}"}
     )
     assert response.status_code == 401
+
+
+def _add_oidc_link(username, provider, sub):
+    from app.models import User, OIDCLink
+
+    user = User.find_by_username(username)
+    OIDCLink(sub=sub, provider=provider, user_id=user.id).save()
+    return user
+
+
+def _oidc_links(user_client):
+    response = user_client.get("/api/user")
+    assert response.status_code == 200
+    return response.get_json()["oidc_links"]
+
+
+def test_unlink_oidc(user_client, username):
+    """User with a password can unlink an OIDC provider."""
+    _add_oidc_link(username, "custom", "keycloak-sub")
+    assert _oidc_links(user_client) == ["custom"]
+
+    response = user_client.delete("/api/auth/oidc/custom")
+    assert response.status_code == 200
+    assert _oidc_links(user_client) == []
+
+    # Unlinking again: not linked anymore
+    response = user_client.delete("/api/auth/oidc/custom")
+    assert response.status_code == 404
+
+
+def test_unlink_oidc_not_linked(user_client):
+    response = user_client.delete("/api/auth/oidc/google")
+    assert response.status_code == 404
+
+
+def test_unlink_oidc_last_login_method(user_client, username):
+    """Without a password the only OIDC link must not be removed."""
+    from app import db
+
+    user = _add_oidc_link(username, "custom", "keycloak-sub")
+    user.password = None
+    db.session.commit()
+
+    response = user_client.delete("/api/auth/oidc/custom")
+    assert response.status_code == 400
+    assert _oidc_links(user_client) == ["custom"]
+
+    # With another provider linked it is allowed
+    _add_oidc_link(username, "google", "google-sub")
+    response = user_client.delete("/api/auth/oidc/custom")
+    assert response.status_code == 200
+    assert _oidc_links(user_client) == ["google"]
+
+
+def test_unlink_oidc_only_own_links(user_client, username, admin_username):
+    """Unlinking only affects the current user's links."""
+    _add_oidc_link(admin_username, "custom", "admin-sub")
+    _add_oidc_link(username, "custom", "user-sub")
+
+    response = user_client.delete("/api/auth/oidc/custom")
+    assert response.status_code == 200
+
+    from app.models import OIDCLink
+
+    assert OIDCLink.find_by_ids("admin-sub", "custom") is not None
+    assert OIDCLink.find_by_ids("user-sub", "custom") is None
+
+
+def test_unlink_oidc_requires_auth(client):
+    response = client.delete("/api/auth/oidc/custom")
+    assert response.status_code == 401

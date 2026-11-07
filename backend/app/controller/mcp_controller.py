@@ -1,43 +1,76 @@
 from __future__ import annotations
 
 import json
-import time
 import uuid
+from collections.abc import Callable
+from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Any, Callable
+from queue import Empty, Queue
+from typing import Any
 
-from flask import Blueprint, Response, jsonify, request, stream_with_context
+from flask import Blueprint, Response, jsonify, request, url_for
 from flask_jwt_extended import current_user, jwt_required
 
 from app import db
 from app.config import BACKEND_VERSION
 from app.errors import NotFoundRequest
 from app.models import (
+    Expense,
+    File,
     History,
     Household,
     HouseholdMember,
     Item,
+    Planner,
     Recipe,
     RecipeItems,
     RecipeTags,
     Shoppinglist,
     ShoppinglistItems,
-    Expense,
-    Planner,
     Tag,
 )
-from app.models.recipe import RecipeVisibility
+from app.models.recipe import (
+    RecipeVisibility,
+    is_within_next_7_days,
+    transform_cooking_date_to_day,
+)
 from app.service.recipe_scraping import scrape
 
 mcp = Blueprint("mcp", __name__)
 
-
-def _jsonrpc_ok(id_value: Any, result: Any):
-    return jsonify({"jsonrpc": "2.0", "id": id_value, "result": result})
-
-
-def _jsonrpc_err(id_value: Any, code: int, message: str):
-    return jsonify({"jsonrpc": "2.0", "id": id_value, "error": {"code": code, "message": message}})
+RECIPE_ADDITIONAL_FIELDS = (
+    "description",
+    "photo",
+    "photo_hash",
+    "time",
+    "cook_time",
+    "prep_time",
+    "yields",
+    "source",
+    "visibility",
+    "created_at",
+    "updated_at",
+    "planned",
+    "planned_days",
+    "planned_cooking_dates",
+    "items",
+    "tags",
+)
+RECIPE_DISCOVERY_ARGUMENTS = {
+    "offset": {"type": "integer", "minimum": 0, "default": 0},
+    "limit": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 100,
+        "default": 50,
+    },
+    "additional_fields": {
+        "type": "array",
+        "items": {"type": "string", "enum": list(RECIPE_ADDITIONAL_FIELDS)},
+        "uniqueItems": True,
+        "default": [],
+    },
+}
 
 
 def _as_tool_result(payload: Any):
@@ -105,11 +138,164 @@ def _tool_add_item_by_name(args: dict[str, Any]) -> Any:
     return item.obj_to_dict()
 
 
+def _recipe_discovery_page(query, args: dict[str, Any]) -> dict[str, Any]:
+    offset = int(args.get("offset", 0))
+    limit = int(args.get("limit", 50))
+    if offset < 0:
+        raise ValueError("offset must be non-negative")
+    if limit < 1 or limit > 100:
+        raise ValueError("limit must be between 1 and 100")
+
+    raw_additional_fields = args.get("additional_fields", [])
+    if not isinstance(raw_additional_fields, list) or not all(
+        isinstance(field, str) for field in raw_additional_fields
+    ):
+        raise ValueError("additional_fields must be an array of strings")
+    additional_fields = list(raw_additional_fields)
+    if len(additional_fields) != len(set(additional_fields)):
+        raise ValueError("additional_fields must not contain duplicates")
+    unsupported_fields = sorted(
+        set(additional_fields).difference(RECIPE_ADDITIONAL_FIELDS)
+    )
+    if unsupported_fields:
+        raise ValueError(
+            "Unsupported additional_fields: " + ", ".join(unsupported_fields)
+        )
+
+    scalar_fields = {
+        "description": Recipe.description,
+        "photo": Recipe.photo,
+        "time": Recipe.time,
+        "cook_time": Recipe.cook_time,
+        "prep_time": Recipe.prep_time,
+        "yields": Recipe.yields,
+        "source": Recipe.source,
+        "visibility": Recipe.visibility,
+        "created_at": Recipe.created_at,
+        "updated_at": Recipe.updated_at,
+    }
+    total = query.count()
+    columns = [Recipe.id, Recipe.name]
+    columns.extend(
+        scalar_fields[field]
+        for field in additional_fields
+        if field in scalar_fields
+    )
+    rows = (
+        query.with_entities(*columns)
+        .order_by(Recipe.name, Recipe.id)
+        .offset(offset)
+        .limit(limit)
+        .all()
+    )
+    items = [dict(row._mapping) for row in rows]
+    items_by_id = {item["id"]: item for item in items}
+
+    if "photo_hash" in additional_fields:
+        for item in items:
+            item["photo_hash"] = None
+        if items_by_id:
+            photo_hashes = (
+                db.session.query(Recipe.id, File.blur_hash)
+                .outerjoin(File, Recipe.photo == File.filename)
+                .filter(Recipe.id.in_(items_by_id))
+                .all()
+            )
+            for recipe_id, photo_hash in photo_hashes:
+                items_by_id[recipe_id]["photo_hash"] = photo_hash
+
+    planning_fields = {
+        "planned",
+        "planned_days",
+        "planned_cooking_dates",
+    }
+    requested_planning_fields = planning_fields.intersection(additional_fields)
+    if requested_planning_fields:
+        for item in items:
+            if "planned" in requested_planning_fields:
+                item["planned"] = False
+            if "planned_days" in requested_planning_fields:
+                item["planned_days"] = []
+            if "planned_cooking_dates" in requested_planning_fields:
+                item["planned_cooking_dates"] = []
+        if items_by_id:
+            plans = (
+                db.session.query(Planner.recipe_id, Planner.cooking_date)
+                .filter(Planner.recipe_id.in_(items_by_id))
+                .order_by(Planner.recipe_id, Planner.cooking_date)
+                .all()
+            )
+            for recipe_id, cooking_date in plans:
+                item = items_by_id[recipe_id]
+                if "planned" in requested_planning_fields:
+                    item["planned"] = True
+                if cooking_date <= datetime.min.replace(tzinfo=cooking_date.tzinfo):
+                    continue
+                if "planned_cooking_dates" in requested_planning_fields:
+                    item["planned_cooking_dates"].append(cooking_date)
+                if (
+                    "planned_days" in requested_planning_fields
+                    and is_within_next_7_days(cooking_date)
+                ):
+                    item["planned_days"].append(
+                        transform_cooking_date_to_day(cooking_date)
+                    )
+
+    if "items" in additional_fields:
+        for item in items:
+            item["items"] = []
+        if items_by_id:
+            recipe_items = (
+                db.session.query(
+                    RecipeItems.recipe_id,
+                    Item.id.label("id"),
+                    Item.name.label("name"),
+                    RecipeItems.description.label("description"),
+                    RecipeItems.optional.label("optional"),
+                )
+                .join(RecipeItems.item)
+                .filter(RecipeItems.recipe_id.in_(items_by_id))
+                .order_by(RecipeItems.recipe_id, Item.name, Item.id)
+                .all()
+            )
+            for recipe_item in recipe_items:
+                values = dict(recipe_item._mapping)
+                recipe_id = values.pop("recipe_id")
+                items_by_id[recipe_id]["items"].append(values)
+
+    if "tags" in additional_fields:
+        for item in items:
+            item["tags"] = []
+        if items_by_id:
+            recipe_tags = (
+                db.session.query(
+                    RecipeTags.recipe_id,
+                    Tag.id.label("id"),
+                    Tag.name.label("name"),
+                )
+                .join(RecipeTags.tag)
+                .filter(RecipeTags.recipe_id.in_(items_by_id))
+                .order_by(RecipeTags.recipe_id, Tag.name, Tag.id)
+                .all()
+            )
+            for recipe_tag in recipe_tags:
+                values = dict(recipe_tag._mapping)
+                recipe_id = values.pop("recipe_id")
+                items_by_id[recipe_id]["tags"].append(values)
+
+    returned_until = offset + len(items)
+    return {
+        "items": items,
+        "total": total,
+        "next_offset": returned_until if returned_until < total else None,
+    }
+
+
 def _tool_list_recipes(args: dict[str, Any]) -> Any:
     household_id = int(args["household_id"])
     _require_household_access(household_id)
-    recipes = Recipe.query.filter(Recipe.household_id == household_id).order_by(Recipe.name).all()
-    return {"items": [r.obj_to_full_dict() for r in recipes]}
+    query = Recipe.query.filter(Recipe.household_id == household_id)
+    return _recipe_discovery_page(query, args)
 
 
 def _tool_search_recipes(args: dict[str, Any]) -> Any:
@@ -119,11 +305,8 @@ def _tool_search_recipes(args: dict[str, Any]) -> Any:
     recipes = (
         Recipe.query.filter(Recipe.household_id == household_id)
         .filter(Recipe.name.ilike(f"%{query}%"))
-        .order_by(Recipe.name)
-        .limit(50)
-        .all()
     )
-    return {"items": [r.obj_to_full_dict() for r in recipes]}
+    return _recipe_discovery_page(recipes, args)
 
 
 def _tool_create_recipe(args: dict[str, Any]) -> Any:
@@ -565,7 +748,10 @@ TOOLS: dict[str, tuple[dict[str, Any], Callable[[dict[str, Any]], Any]]] = {
     "list_recipes": (
         {
             "type": "object",
-            "properties": {"household_id": {"type": "integer"}},
+            "properties": {
+                "household_id": {"type": "integer"},
+                **RECIPE_DISCOVERY_ARGUMENTS,
+            },
             "required": ["household_id"],
         },
         _tool_list_recipes,
@@ -576,6 +762,7 @@ TOOLS: dict[str, tuple[dict[str, Any], Callable[[dict[str, Any]], Any]]] = {
             "properties": {
                 "household_id": {"type": "integer"},
                 "query": {"type": "string"},
+                **RECIPE_DISCOVERY_ARGUMENTS,
             },
             "required": ["household_id", "query"],
         },
@@ -838,87 +1025,193 @@ TOOLS: dict[str, tuple[dict[str, Any], Callable[[dict[str, Any]], Any]]] = {
     ),
 }
 
+TOOL_DESCRIPTIONS = {
+    "list_recipes": (
+        "List household recipes as paginated id and name references. Use "
+        "additional_fields for selected bulk data, or get_recipe for one full recipe."
+    ),
+    "search_recipes": (
+        "Search household recipe names and return paginated id and name references. "
+        "Use additional_fields for selected bulk data, or get_recipe for one full recipe."
+    ),
+}
 
-def _handle_jsonrpc(body: dict[str, Any]):
+
+SUPPORTED_PROTOCOL_VERSIONS = ("2025-06-18", "2025-03-26", "2024-11-05")
+LATEST_PROTOCOL_VERSION = SUPPORTED_PROTOCOL_VERSIONS[0]
+
+SERVER_INSTRUCTIONS = (
+    "KitchenOwl manages households, each of which owns shopping lists, items, "
+    "recipes, tags, meal plans and expenses. Nearly every tool is scoped to a "
+    "household, so call list_households first and reuse the id you get back."
+)
+
+SSE_KEEPALIVE_SECONDS = 15
+
+
+def _dispatch(body: Any) -> Any:
+    # Returns the response to send back, or None for notifications, which the
+    # protocol requires be left unanswered.
+    if isinstance(body, list):
+        responses = [r for r in (_dispatch(item) for item in body) if r is not None]
+        return responses or None
+
+    if not isinstance(body, dict):
+        return {
+            "jsonrpc": "2.0",
+            "id": None,
+            "error": {"code": -32600, "message": "Invalid Request"},
+        }
+
     id_value = body.get("id")
     method = body.get("method")
     params = body.get("params") or {}
+    is_notification = "id" not in body
 
     try:
         if method == "initialize":
-            return _jsonrpc_ok(
-                id_value,
-                {
-                    "protocolVersion": "2024-11-05",
-                    "capabilities": {"tools": {}},
-                    "serverInfo": {"name": "kitchenowl-mcp", "version": str(BACKEND_VERSION)},
-                },
+            requested = params.get("protocolVersion")
+            version = (
+                requested
+                if requested in SUPPORTED_PROTOCOL_VERSIONS
+                else LATEST_PROTOCOL_VERSION
             )
-
-        if method == "notifications/initialized":
-            return ("", 204)
-
-        if method == "ping":
-            return _jsonrpc_ok(id_value, {})
-
-        if method == "tools/list":
-            tools = []
-            for name, (schema, _) in TOOLS.items():
-                tools.append(
+            result = {
+                "protocolVersion": version,
+                "capabilities": {"tools": {"listChanged": False}},
+                "serverInfo": {
+                    "name": "kitchenowl-mcp",
+                    "version": str(BACKEND_VERSION),
+                },
+                "instructions": SERVER_INSTRUCTIONS,
+            }
+        elif method is not None and method.startswith("notifications/"):
+            return None
+        elif method == "ping":
+            result = {}
+        elif method == "tools/list":
+            result = {
+                "tools": [
                     {
                         "name": name,
-                        "description": f"KitchenOwl tool: {name}",
+                        "description": TOOL_DESCRIPTIONS.get(
+                            name, f"KitchenOwl tool: {name}"
+                        ),
                         "inputSchema": schema,
                     }
-                )
-            return _jsonrpc_ok(id_value, {"tools": tools})
-
-        if method == "tools/call":
+                    for name, (schema, _) in TOOLS.items()
+                ]
+            }
+        elif method == "tools/call":
             name = params.get("name")
             args = params.get("arguments") or {}
             if name not in TOOLS:
-                return _jsonrpc_err(id_value, -32601, f"Unknown tool: {name}")
+                return None if is_notification else _rpc_error(
+                    id_value, -32602, f"Unknown tool: {name}"
+                )
             _, handler = TOOLS[name]
-            result = handler(args)
+            result = _as_tool_result(handler(args))
             db.session.commit()
-            return _jsonrpc_ok(id_value, _as_tool_result(result))
-
-        return _jsonrpc_err(id_value, -32601, f"Method not found: {method}")
+        else:
+            return None if is_notification else _rpc_error(
+                id_value, -32601, f"Method not found: {method}"
+            )
     except Exception as e:
         db.session.rollback()
-        return _jsonrpc_err(id_value, -32000, str(e))
+        return None if is_notification else _rpc_error(id_value, -32000, str(e))
+
+    return None if is_notification else {"jsonrpc": "2.0", "id": id_value, "result": result}
 
 
-@mcp.route("", methods=["GET"])
-@mcp.route("/sse", methods=["GET"])
-@jwt_required()
-def mcp_sse():
-    session_id = str(uuid.uuid4())
+def _rpc_error(id_value: Any, code: int, message: str) -> dict[str, Any]:
+    return {"jsonrpc": "2.0", "id": id_value, "error": {"code": code, "message": message}}
 
-    def generate():
-        endpoint = request.url_root.rstrip("/") + f"/mcp/messages/{session_id}"
-        yield f"event: endpoint\ndata: {endpoint}\n\n"
-        while True:
-            yield "event: ping\ndata: {}\n\n"
-            time.sleep(15)
 
-    return Response(
-        stream_with_context(generate()),
-        mimetype="text/event-stream",
-        headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"},
-    )
+# Streamable HTTP. Stateless: no session id is issued, so this transport keeps
+# working across multiple uWSGI workers.
 
 
 @mcp.route("", methods=["POST"])
 @jwt_required()
 def mcp_post():
-    body = request.get_json(silent=True) or {}
-    return _handle_jsonrpc(body)
+    response = _dispatch(request.get_json(silent=True))
+    if response is None:
+        return "", 202
+    return jsonify(response)
+
+
+@mcp.route("", methods=["GET", "DELETE"])
+@jwt_required()
+def mcp_stream_unsupported():
+    # Nothing to push outside a request and no session to tear down; the spec
+    # allows 405 for both.
+    return Response(status=405, headers={"Allow": "POST"})
+
+
+# HTTP+SSE. Both halves of a session must be served by the same process, so this
+# registry is deliberately per-worker.
+
+
+@dataclass
+class _SseSession:
+    user_id: int
+    id: str = field(default_factory=lambda: str(uuid.uuid4()))
+    outbox: Queue = field(default_factory=Queue)
+
+
+_sse_sessions: dict[str, _SseSession] = {}
+
+
+@mcp.route("/sse", methods=["GET"])
+@jwt_required()
+def mcp_sse():
+    session = _SseSession(user_id=current_user.id)
+    _sse_sessions[session.id] = session
+
+    # Relative, so it survives a reverse proxy that request.url_root would not.
+    endpoint = f"{url_for('mcp.mcp_messages')}?session_id={session.id}"
+
+    def generate():
+        try:
+            yield f"event: endpoint\ndata: {endpoint}\n\n"
+            while True:
+                try:
+                    message = session.outbox.get(timeout=SSE_KEEPALIVE_SECONDS)
+                except Empty:
+                    yield ": keep-alive\n\n"
+                    continue
+                yield "event: message\ndata: {}\n\n".format(
+                    json.dumps(message, ensure_ascii=False, default=str)
+                )
+        finally:
+            _sse_sessions.pop(session.id, None)
+
+    return Response(
+        generate(),
+        mimetype="text/event-stream",
+        headers={
+            "Cache-Control": "no-cache, no-transform",
+            "Connection": "keep-alive",
+            "X-Accel-Buffering": "no",
+        },
+    )
 
 
 @mcp.route("/messages", methods=["POST"])
 @mcp.route("/messages/<session_id>", methods=["POST"])
 @jwt_required()
 def mcp_messages(session_id: str | None = None):
-    body = request.get_json(silent=True) or {}
-    return _handle_jsonrpc(body)
+    session_id = session_id or request.args.get("session_id")
+    session = _sse_sessions.get(session_id) if session_id else None
+
+    if session is None:
+        return jsonify({"error": "Unknown or expired session"}), 404
+    if session.user_id != current_user.id:
+        return jsonify({"error": "Session belongs to a different user"}), 403
+
+    response = _dispatch(request.get_json(silent=True))
+    if response is not None:
+        session.outbox.put(response)
+
+    # The reply travels over the SSE stream, not this response.
+    return "", 202

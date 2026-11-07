@@ -46,7 +46,7 @@ def get_secret(env_var: str, default: str = None) -> str | None:
 
 
 MIN_FRONTEND_VERSION = 71
-BACKEND_VERSION = 122
+BACKEND_VERSION = 124
 
 APP_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_DIR = os.path.dirname(APP_DIR)
@@ -76,6 +76,11 @@ DB_URL = URL.create(
     port=int(cast(str, os.getenv("DB_PORT"))) if os.getenv("DB_PORT") else None,
     database=os.getenv("DB_NAME", STORAGE_PATH + "/database.db"),
 )
+_SQLITE_SYNCHRONOUS_MODES = {"OFF", "NORMAL", "FULL", "EXTRA"}
+DB_SQLITE_SYNCHRONOUS = os.getenv("DB_SQLITE_SYNCHRONOUS", "FULL").upper()
+if DB_SQLITE_SYNCHRONOUS not in _SQLITE_SYNCHRONOUS_MODES:
+    DB_SQLITE_SYNCHRONOUS = "FULL"
+
 MESSAGE_BROKER = os.getenv("MESSAGE_BROKER")
 
 JWT_ACCESS_TOKEN_EXPIRES = timedelta(minutes=15)
@@ -123,6 +128,7 @@ SUPPORTED_LANGUAGES = {
     "kab": "Taqbaylit",
     "ko": "한국어",
     "lt": "Lietuvių kalba",
+    "lv": "Latviešu valoda",
     "nb_NO": "Bokmål",
     "nl": "Nederlands",
     "pl": "Polski",
@@ -138,7 +144,9 @@ SUPPORTED_LANGUAGES = {
     "te": "తెలుగు",
     "tr": "Türkçe",
     "uk": "Українська",
+    "zbl": "Blissymbols",
     "zh_Hans": "简化字",
+    "zh_Hant": "繁體字",
 }
 
 Flask.json_provider_class = KitchenOwlJSONProvider
@@ -153,6 +161,12 @@ app.config["SECRET_KEY"] = jwt_secret
 # SQLAlchemy
 app.config["SQLALCHEMY_DATABASE_URI"] = DB_URL
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
+    "pool_size": int(os.getenv("DB_POOL_SIZE", 5)),
+    "max_overflow": int(os.getenv("DB_MAX_OVERFLOW", 10)),
+    # Check connections before use so a database restart doesn't cause errors
+    "pool_pre_ping": True,
+}
 # JWT
 app.config["JWT_SECRET_KEY"] = jwt_secret
 app.config["JWT_ACCESS_TOKEN_EXPIRES"] = JWT_ACCESS_TOKEN_EXPIRES
@@ -176,11 +190,31 @@ db = SQLAlchemy(app, model_class=DbModelBase)
 migrate = Migrate(app, db, render_as_batch=True)
 bcrypt = Bcrypt(app)
 jwt = JWTManager(app)
+
+
+def is_allowed_socketio_origin(origin: str | None, environ: dict) -> bool:
+    """Allow same-origin requests and the FRONT_URL origin."""
+    if FRONT_URL and origin == FRONT_URL.removesuffix("/"):
+        return True
+    # Same-origin check as in python-engineio's default when
+    # cors_allowed_origins is unset.
+    if "wsgi.url_scheme" not in environ or "HTTP_HOST" not in environ:
+        return False
+    allowed_origins = [f"{environ['wsgi.url_scheme']}://{environ['HTTP_HOST']}"]
+    if "HTTP_X_FORWARDED_PROTO" in environ or "HTTP_X_FORWARDED_HOST" in environ:
+        scheme = environ.get("HTTP_X_FORWARDED_PROTO", environ["wsgi.url_scheme"])
+        host = environ.get("HTTP_X_FORWARDED_HOST", environ["HTTP_HOST"])
+        allowed_origins.append(
+            f"{scheme.split(',')[0].strip()}://{host.split(',')[0].strip()}"
+        )
+    return origin in allowed_origins
+
+
 socketio = SocketIO(
     app,
     json=app.json,
     logger=app.logger,
-    cors_allowed_origins=FRONT_URL,
+    cors_allowed_origins=is_allowed_socketio_origin,
     message_queue=MESSAGE_BROKER,
 )
 api_spec = APISpec(
@@ -289,16 +323,22 @@ else:
     app.extensions["celery"] = celery_app
 
 
-# Load ICU extension for sqlite
+# Load ICU extension and enable WAL for sqlite
 if DB_URL.drivername == "sqlite":
 
-    def load_extension(conn, unused):
+    def on_sqlite_connect(conn, unused):
         conn.enable_load_extension(True)
         conn.load_extension(cast(str, sqlite_icu.extension_path()).replace(".so", ""))
         conn.enable_load_extension(False)
 
+        cursor = conn.cursor()
+        cursor.execute("PRAGMA journal_mode=WAL")
+        cursor.execute(f"PRAGMA synchronous={DB_SQLITE_SYNCHRONOUS}")
+        cursor.execute("PRAGMA busy_timeout=5000")
+        cursor.close()
+
     with app.app_context():
-        listen(db.engine, "connect", load_extension)
+        listen(db.engine, "connect", on_sqlite_connect)
 
 
 @app.after_request

@@ -4,14 +4,19 @@ import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/models/planner.dart';
 
 class ItemSelectionCubit extends Cubit<ItemSelectionState> {
-  ItemSelectionCubit(List<RecipePlan> plans)
-      : super(
-          ItemSelectionState(
-            Map.fromEntries(plans.map(
-              (e) => MapEntry(e, e.recipeWithYields.items),
-            )),
-          ),
-        );
+  ItemSelectionCubit(List<RecipePlan> plans) : super(ItemSelectionState(plans));
+
+  bool _isPastPlan(RecipePlan plan) {
+    if (plan.cookingDate == null || plan.isWithoutPlannedDay) return false;
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final planDay = DateTime(
+      plan.cookingDate!.year,
+      plan.cookingDate!.month,
+      plan.cookingDate!.day,
+    );
+    return planDay.isBefore(today);
+  }
 
   void toggleItem(RecipePlan recipe, RecipeItem item) {
     final s = Map.of(state.selectedItems);
@@ -40,35 +45,90 @@ class ItemSelectionCubit extends Cubit<ItemSelectionState> {
     emit(state.copyWith(selectedItems: s));
   }
 
+  void toggleHidePastPlans() {
+    final newHide = !state.hidePastPlans;
+    if (newHide) {
+      final s = Map.of(state.selectedItems);
+      for (final plan in s.keys) {
+        if (_isPastPlan(plan)) s[plan] = {};
+      }
+      emit(state.copyWith(hidePastPlans: newHide, selectedItems: s));
+    } else {
+      emit(state.copyWith(hidePastPlans: newHide));
+    }
+  }
+
   List<RecipeItem> getResult() {
     return state.getResult();
   }
 }
 
 class ItemSelectionState extends Equatable {
+  final List<RecipePlan> plans;
   final Map<RecipePlan, Set<RecipeItem>> selectedItems;
+  final bool hidePastPlans;
 
-  ItemSelectionState(Map<RecipePlan, List<RecipeItem>> items)
-      : this.withSelection(
-          items.map((key, value) =>
-              MapEntry(key, value.where((e) => !e.optional).toSet())),
+  ItemSelectionState(
+    this.plans, {
+    this.hidePastPlans = true,
+  }) : selectedItems = Map.fromEntries(
+          plans.map((plan) {
+            final now = DateTime.now();
+            final today = DateTime(now.year, now.month, now.day);
+            var isPast = false;
+            if (plan.cookingDate != null && !plan.isWithoutPlannedDay) {
+              final planDay = DateTime(
+                plan.cookingDate!.year,
+                plan.cookingDate!.month,
+                plan.cookingDate!.day,
+              );
+              isPast = planDay.isBefore(today);
+            }
+            return MapEntry(
+              plan,
+              isPast
+                  ? <RecipeItem>{}
+                  : plan.recipeWithYields.mandatoryItems.toSet(),
+            );
+          }),
         );
 
-  const ItemSelectionState.withSelection(this.selectedItems);
-
-  const ItemSelectionState._all({
+  const ItemSelectionState._({
+    required this.plans,
     required this.selectedItems,
+    required this.hidePastPlans,
   });
 
   ItemSelectionState copyWith({
+    List<RecipePlan>? plans,
     Map<RecipePlan, Set<RecipeItem>>? selectedItems,
+    bool? hidePastPlans,
   }) =>
-      ItemSelectionState._all(
+      ItemSelectionState._(
+        plans: plans ?? this.plans,
         selectedItems: selectedItems ?? this.selectedItems,
+        hidePastPlans: hidePastPlans ?? this.hidePastPlans,
       );
 
+  List<RecipePlan> get filteredPlans {
+    if (!hidePastPlans) return plans;
+
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+
+    return plans.where((plan) {
+      if (plan.cookingDate == null || plan.isWithoutPlannedDay) return true;
+      final planDay = DateTime(
+        plan.cookingDate!.year,
+        plan.cookingDate!.month,
+        plan.cookingDate!.day,
+      );
+      return !planDay.isBefore(today);
+    }).toList();
+  }
+
   @override
-  List<Object?> get props => selectedItems.values.toList();
+  List<Object?> get props => [plans, selectedItems, hidePastPlans];
 
   List<RecipeItem> getResult() {
     return selectedItems.values.expand((e) => e).toList();

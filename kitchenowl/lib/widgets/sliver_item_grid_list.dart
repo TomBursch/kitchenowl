@@ -1,8 +1,9 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/cubits/household_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/helpers/build_context_extension.dart';
+import 'package:kitchenowl/helpers/url_launcher.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/category.dart';
 import 'package:kitchenowl/models/item.dart';
@@ -23,6 +24,7 @@ class SliverItemGridList<T extends Item> extends StatelessWidget {
   final bool isLoading;
   final Widget Function(T)? extraOption;
   final ShoppingListStyle shoppingListStyle;
+  final EdgeInsetsGeometry padding;
 
   const SliverItemGridList({
     super.key,
@@ -36,6 +38,7 @@ class SliverItemGridList<T extends Item> extends StatelessWidget {
     this.isLoading = false,
     this.extraOption,
     this.shoppingListStyle = const ShoppingListStyle(),
+    this.padding = const EdgeInsets.symmetric(horizontal: 16),
   });
 
   @override
@@ -69,7 +72,7 @@ class SliverItemGridList<T extends Item> extends StatelessWidget {
     );
 
     return SliverPadding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: padding,
       sliver: !shoppingListStyle.isList
           ? SliverLayoutBuilder(
               builder: (context, constraints) => SliverGrid(
@@ -88,6 +91,42 @@ class SliverItemGridList<T extends Item> extends StatelessWidget {
   }
 
   Future<void> openMenu(BuildContext context, Item item) async {
+    final url =
+        item is ItemWithDescription ? extractSingleUrl(item.description) : null;
+    if (url == null) return _openItemPage(context, item);
+
+    await showModalBottomSheet<void>(
+      context: context,
+      showDragHandle: true,
+      useRootNavigator: true,
+      builder: (ctx) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              leading: const Icon(Icons.edit_outlined),
+              title: Text(AppLocalizations.of(ctx)!.edit),
+              onTap: () {
+                Navigator.of(ctx).pop();
+                _openItemPage(context, item);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.open_in_new_rounded),
+              title: Text(AppLocalizations.of(ctx)!.openUrl),
+              onTap: () {
+                Navigator.of(ctx).pop();
+                openUrl(context, url);
+              },
+            ),
+            const SizedBox(height: 8),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<void> _openItemPage(BuildContext context, Item item) async {
     final res = await Navigator.of(context, rootNavigator: true)
         .push<UpdateValue<Item>>(
       MaterialPageRoute(builder: (ctx) {

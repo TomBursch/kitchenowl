@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:diffutil_dart/diffutil.dart' as diffutil;
 
 class SliverImplicitAnimatedList<T> extends StatefulWidget {

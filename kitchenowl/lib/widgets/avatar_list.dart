@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/user.dart';
 import 'package:kitchenowl/widgets/user_circle_avatar.dart';

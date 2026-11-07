@@ -60,7 +60,7 @@ LABEL org.opencontainers.image.source="https://github.com/TomBursch/kitchenowl"
 
 USER root
 RUN apk add --no-cache bash \
-    && mkdir -p /var/www/web/kitchenowl \
+    && mkdir -p /var/www/web/kitchenowl /etc/nginx/templates \
     && chown -R nginx:nginx /var/www/web/kitchenowl /etc/nginx/templates /etc/nginx/conf.d
 
 COPY --from=builder --chown=nginx:nginx /usr/local/src/app/build/web /var/www/web/kitchenowl

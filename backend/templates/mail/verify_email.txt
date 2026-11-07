@@ -1,0 +1,6 @@
+Hey {name} (@{username}),
+
+Verify your email so we know it's really you, and you don't lose access to your account.
+Verify email address: {link}
+
+Have any questions? Check out {privacy_link}

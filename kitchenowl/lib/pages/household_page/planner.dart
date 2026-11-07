@@ -200,6 +200,9 @@ class _PlannerPageState extends State<PlannerPage> {
                                     title: plan.recipe.name,
                                     selected: true,
                                     description: plan.yields?.toString(),
+                                    onLongPressedIcon: const Icon(
+                                      Icons.done_rounded,
+                                    ),
                                     onLongPressed: () {
                                       cubit.remove(plan.recipe);
                                     },
@@ -255,6 +258,9 @@ class _PlannerPageState extends State<PlannerPage> {
                                               !_toDate(plan.cookingDate!)
                                                   .isBefore(
                                                       _toDate(DateTime.now())),
+                                          onLongPressedIcon: const Icon(
+                                            Icons.done_rounded,
+                                          ),
                                           onLongPressed: () {
                                             cubit.remove(
                                               plan.recipe,

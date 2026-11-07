@@ -200,10 +200,10 @@ class _PlannerPageState extends State<PlannerPage> {
                                     title: plan.recipe.name,
                                     selected: true,
                                     description: plan.yields?.toString(),
-                                    onPressed: () {
+                                    onLongPressed: () {
                                       cubit.remove(plan.recipe);
                                     },
-                                    onLongPressed: () => _openRecipePage(
+                                    onPressed: () => _openRecipePage(
                                       context,
                                       cubit,
                                       plan.recipe,
@@ -255,13 +255,13 @@ class _PlannerPageState extends State<PlannerPage> {
                                               !_toDate(plan.cookingDate!)
                                                   .isBefore(
                                                       _toDate(DateTime.now())),
-                                          onPressed: () {
+                                          onLongPressed: () {
                                             cubit.remove(
                                               plan.recipe,
                                               plan.cookingDate,
                                             );
                                           },
-                                          onLongPressed: () => _openRecipePage(
+                                          onPressed: () => _openRecipePage(
                                             context,
                                             cubit,
                                             plan.recipe,

@@ -8,14 +8,14 @@ import 'package:kitchenowl/models/expense_overview.dart';
 class ChartPieCurrentMonth extends StatefulWidget {
   final ExpenseOverview data;
   final double availableHeight;
-  final String? locale;
+  final String? currency;
   final Map<int, ExpenseCategory> categoriesById;
 
   ChartPieCurrentMonth({
     super.key,
     required this.data,
     required List<ExpenseCategory> categories,
-    this.locale,
+    this.currency,
     this.availableHeight = 270,
   }) : categoriesById =
             Map.fromEntries(categories.map((e) => MapEntry(e.id!, e)));
@@ -102,8 +102,9 @@ class _ChartPieCurrentMonthState extends State<ChartPieCurrentMonth> {
                           Text(
                             '${widget.categoriesById[e.key]?.name.characters.first ?? '🪙'}: ',
                           ),
-                        Text(NumberFormat.simpleCurrency(locale: widget.locale)
-                            .format(e.value)),
+                        Text(
+                            NumberFormat.simpleCurrency(locale: widget.currency)
+                                .format(e.value)),
                       ],
                     ),
                   ),

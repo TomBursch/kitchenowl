@@ -131,12 +131,11 @@ class _ExpensePageState extends State<ExpenseListPage> {
                                   searchAnchor,
                                 ],
                                 children: state.categories
-                                    .sorted((a, b) =>
-                                        (state.filter.contains(a) ? 0 : 1)
-                                            .compareTo(
-                                                state.filter.contains(b)
-                                                    ? 0
-                                                    : 1))
+                                    .sorted((a, b) => (state.filter.contains(a)
+                                            ? 0
+                                            : 1)
+                                        .compareTo(
+                                            state.filter.contains(b) ? 0 : 1))
                                     .map((category) {
                                   return Padding(
                                     key: ValueKey(category.id),
@@ -218,7 +217,8 @@ class _ExpensePageState extends State<ExpenseListPage> {
                               onUpdated: cubit.refresh,
                               displayPersonalAmount:
                                   state.sorting == ExpenselistSorting.personal,
-                              locale: householdState.household.language,
+                              currency: householdState.household.currency ??
+                                  householdState.household.language,
                             ),
                           ),
                           removeItemBuilder: (context, expense, animation) =>
@@ -230,7 +230,8 @@ class _ExpensePageState extends State<ExpenseListPage> {
                               onUpdated: cubit.refresh,
                               displayPersonalAmount:
                                   state.sorting == ExpenselistSorting.personal,
-                              locale: householdState.household.language,
+                              currency: householdState.household.currency ??
+                                  householdState.household.language,
                             ),
                           ),
                           items: state.expenses,
@@ -316,7 +317,8 @@ class _ExpensePageState extends State<ExpenseListPage> {
                                         data: state
                                             .expenseOverview[state.sorting]!,
                                         categories: state.categories,
-                                        locale:
+                                        currency: householdState
+                                                .household.currency ??
                                             householdState.household.language,
                                       ),
                                     ),
@@ -337,7 +339,9 @@ class _ExpensePageState extends State<ExpenseListPage> {
                                         Text(
                                           NumberFormat.simpleCurrency(
                                                   locale: householdState
-                                                      .household.language)
+                                                          .household.currency ??
+                                                      householdState
+                                                          .household.language)
                                               .format(
                                             state
                                                 .expenseOverview[state.sorting]!
@@ -402,7 +406,9 @@ class _ExpensePageState extends State<ExpenseListPage> {
                                       data: state.expenseOverview[
                                           ExpenselistSorting.personal]!,
                                       categories: state.categories,
-                                      locale: householdState.household.language,
+                                      currency:
+                                          householdState.household.currency ??
+                                              householdState.household.language,
                                     ),
                                   ),
                                 Expanded(
@@ -422,7 +428,9 @@ class _ExpensePageState extends State<ExpenseListPage> {
                                       Text(
                                         NumberFormat.simpleCurrency(
                                                 locale: householdState
-                                                    .household.language)
+                                                        .household.currency ??
+                                                    householdState
+                                                        .household.language)
                                             .format(
                                           state
                                               .expenseOverview[

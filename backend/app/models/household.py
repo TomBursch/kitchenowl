@@ -1,7 +1,9 @@
-from typing import Any, Self, List, TYPE_CHECKING, cast
+from typing import TYPE_CHECKING, Any, List, Self, cast
+
+from sqlalchemy.orm import Mapped
+
 from app import db
 from app.helpers.db_list_type import DbListType
-from sqlalchemy.orm import Mapped
 
 Model = db.Model
 if TYPE_CHECKING:
@@ -28,6 +30,7 @@ class Household(Model):
     name: Mapped[str] = db.Column(db.String(128), nullable=False)
     photo: Mapped[str | None] = db.Column(db.String(), db.ForeignKey("file.filename"))
     language: Mapped[str] = db.Column(db.String())
+    currency: Mapped[str] = db.Column(db.String(), nullable=True)
     planner_feature: Mapped[bool] = db.Column(
         db.Boolean(), nullable=False, default=True
     )
@@ -146,6 +149,7 @@ class Household(Model):
         return {
             "name": self.name,
             "language": self.language,
+            "currency": self.currency,
             "view_ordering": self.view_ordering,
             "planner_feature": self.planner_feature,
             "expenses_feature": self.expenses_feature,

@@ -35,7 +35,7 @@ class ChartBarMemberDistribution extends StatelessWidget {
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 10),
                               child: Text(
-                                " ${member.name}: ${NumberFormat.simpleCurrency(locale: household.language).format(member.balance)}",
+                                " ${member.name}: ${NumberFormat.simpleCurrency(locale: household.currency ?? household.language).format(member.balance)}",
                               ),
                             ),
                           ),
@@ -109,7 +109,10 @@ class ChartBarMemberDistribution extends StatelessWidget {
         quarterTurns: -1,
         child: Text(
           showText
-              ? NumberFormat.simpleCurrency(decimalDigits: 0).format(value)
+              ? NumberFormat.simpleCurrency(
+                      locale: household.currency ?? household.language,
+                      decimalDigits: 0)
+                  .format(value)
               : "",
           style: const TextStyle(fontSize: 10),
           textAlign: TextAlign.center,

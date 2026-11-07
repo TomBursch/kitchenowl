@@ -9,12 +9,14 @@ class ChartLineCurrentMonth extends StatefulWidget {
   final ExpenseOverview data;
   final bool incomplete;
   final double? average;
+  final String? currency;
 
   const ChartLineCurrentMonth({
     super.key,
     required this.data,
     this.incomplete = false,
     this.average,
+    this.currency,
   });
 
   @override
@@ -92,7 +94,8 @@ class _ChartLineCurrentMonthState extends State<ChartLineCurrentMonth> {
             getTooltipItems: (touchedSpots) =>
                 touchedSpots.map((LineBarSpot touchedSpot) {
               return LineTooltipItem(
-                NumberFormat.simpleCurrency(decimalDigits: 0)
+                NumberFormat.simpleCurrency(
+                        locale: widget.currency, decimalDigits: 0)
                     .format(touchedSpot.y),
                 const TextStyle(),
               );
@@ -187,7 +190,9 @@ class _ChartLineCurrentMonthState extends State<ChartLineCurrentMonth> {
       meta: meta,
       child: Text(
         showText
-            ? NumberFormat.simpleCurrency(decimalDigits: 0).format(value)
+            ? NumberFormat.simpleCurrency(
+                    locale: widget.currency, decimalDigits: 0)
+                .format(value)
             : "",
         style: const TextStyle(fontSize: 10),
         textAlign: TextAlign.center,

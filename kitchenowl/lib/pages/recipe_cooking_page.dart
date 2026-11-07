@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:animations/animations.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_markdown_plus/flutter_markdown_plus.dart';
 import 'package:fraction/fraction.dart';
 import 'package:kitchenowl/helpers/markdown_extract_item.dart';
@@ -165,6 +165,7 @@ class _RecipeCookingPageState extends State<RecipeCookingPage> {
                                   transitionType:
                                       SharedAxisTransitionType.horizontal,
                                   child: child,
+                                  fillColor: Colors.transparent,
                                 );
                               },
                               child: KitchenOwlMarkdownBuilder(

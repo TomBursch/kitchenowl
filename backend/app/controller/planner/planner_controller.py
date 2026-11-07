@@ -77,6 +77,7 @@ def addPlannedRecipe(args, household_id):
     recipe = Recipe.find_by_id(args["recipe_id"])
     if not recipe:
         raise NotFoundRequest()
+    recipe.checkAuthorized()
     cooking_date = (
         datetime.fromtimestamp(args["cooking_date"] / 1000, timezone.utc).date()
         if "cooking_date" in args

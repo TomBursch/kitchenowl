@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
@@ -47,6 +47,8 @@ String formatDateAsWeekday(
     return DateFormat(default_format).format(date);
   }
 }
+
+DateTime _toDate(DateTime dt) => DateTime(dt.year, dt.month, dt.day);
 
 String _formatDate(BuildContext context, int daysToAdd) {
   DateTime date = DateTime.now().add(Duration(days: daysToAdd));
@@ -198,10 +200,13 @@ class _PlannerPageState extends State<PlannerPage> {
                                     title: plan.recipe.name,
                                     selected: true,
                                     description: plan.yields?.toString(),
-                                    onPressed: () {
+                                    onLongPressedIcon: const Icon(
+                                      Icons.done_rounded,
+                                    ),
+                                    onLongPressed: () {
                                       cubit.remove(plan.recipe);
                                     },
-                                    onLongPressed: () => _openRecipePage(
+                                    onPressed: () => _openRecipePage(
                                       context,
                                       cubit,
                                       plan.recipe,
@@ -249,14 +254,20 @@ class _PlannerPageState extends State<PlannerPage> {
                                           ),
                                           title: plan.recipe.name,
                                           description: plan.yields?.toString(),
-                                          selected: true,
-                                          onPressed: () {
+                                          selected: plan.cookingDate == null ||
+                                              !_toDate(plan.cookingDate!)
+                                                  .isBefore(
+                                                      _toDate(DateTime.now())),
+                                          onLongPressedIcon: const Icon(
+                                            Icons.done_rounded,
+                                          ),
+                                          onLongPressed: () {
                                             cubit.remove(
                                               plan.recipe,
                                               plan.cookingDate,
                                             );
                                           },
-                                          onLongPressed: () => _openRecipePage(
+                                          onPressed: () => _openRecipePage(
                                             context,
                                             cubit,
                                             plan.recipe,

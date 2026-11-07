@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 class SelectableButtonCard extends StatefulWidget {
   final String title;
@@ -8,6 +8,7 @@ class SelectableButtonCard extends StatefulWidget {
   final void Function()? onPressed;
   final void Function()? onLongPressed;
   final Widget? extraOption;
+  final Widget onLongPressedIcon;
 
   const SelectableButtonCard({
     super.key,
@@ -18,6 +19,7 @@ class SelectableButtonCard extends StatefulWidget {
     this.onLongPressed,
     this.selected = false,
     this.extraOption,
+    this.onLongPressedIcon = const Icon(Icons.more_horiz_rounded),
   });
 
   @override
@@ -66,7 +68,7 @@ class _SelectableButtonCardState extends State<SelectableButtonCard> {
                   color: widget.selected
                       ? Theme.of(context).colorScheme.onPrimary
                       : null,
-                  icon: const Icon(Icons.more_horiz_rounded),
+                  icon: widget.onLongPressedIcon,
                 ),
               Column(
                 mainAxisSize: MainAxisSize.max,
@@ -86,17 +88,21 @@ class _SelectableButtonCardState extends State<SelectableButtonCard> {
                         ),
                       ),
                     ),
-                  Text(
-                    widget.title,
-                    style: TextStyle(
-                      color: widget.selected
-                          ? Theme.of(context).colorScheme.onPrimary
-                          : null,
+                  Tooltip(
+                    message: widget.title,
+                    waitDuration: const Duration(milliseconds: 500),
+                    child: Text(
+                      widget.title,
+                      style: TextStyle(
+                        color: widget.selected
+                            ? Theme.of(context).colorScheme.onPrimary
+                            : null,
+                      ),
+                      maxLines: widget.icon != null ? 2 : 3,
+                      overflow: TextOverflow.ellipsis,
+                      softWrap: true,
+                      textAlign: TextAlign.center,
                     ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    softWrap: true,
-                    textAlign: TextAlign.center,
                   ),
                   if (widget.description?.isNotEmpty ?? false)
                     Text(
@@ -109,7 +115,7 @@ class _SelectableButtonCardState extends State<SelectableButtonCard> {
                                     .withAlpha(178)
                                 : null,
                           ),
-                      maxLines: 2,
+                      maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       softWrap: true,
                       textAlign: TextAlign.center,

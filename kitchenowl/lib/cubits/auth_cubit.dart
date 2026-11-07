@@ -39,6 +39,12 @@ class AuthCubit extends Cubit<AuthState> {
     _newConnection(url, token: token, storeData: false);
   }
 
+  @override
+  Future<void> close() {
+    ApiService.getInstance().removeListener(updateState);
+    return super.close();
+  }
+
   Future<void> updateState() async {
     switch (ApiService.getInstance().connectionStatus) {
       case Connection.authenticated:

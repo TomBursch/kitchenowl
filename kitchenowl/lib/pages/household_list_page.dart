@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kitchenowl/app.dart';
@@ -57,6 +57,7 @@ class _HouseholdListPageState extends State<HouseholdListPage> with RouteAware {
         floatingActionButton: App.isOffline
             ? null
             : KitchenOwlFab(
+                tooltip: AppLocalizations.of(context)!.householdNew,
                 openBuilder: (context, _) => HouseholdAddPage(
                   locale: AppLocalizations.of(context)!.localeName,
                 ),

@@ -1,7 +1,8 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kitchenowl/cubits/auth_cubit.dart';
+import 'package:kitchenowl/helpers/url_launcher.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/pages/splash_page.dart';
 
@@ -18,6 +19,7 @@ class _LoginRedirectPageState extends State<LoginRedirectPage> {
   @override
   void initState() {
     super.initState();
+    closeUrl();
     if (widget.state == null || widget.code == null) {
       context.go("/");
       showSnackbar(

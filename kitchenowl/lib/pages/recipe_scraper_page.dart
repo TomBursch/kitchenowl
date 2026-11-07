@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:kitchenowl/app.dart';
@@ -8,6 +8,7 @@ import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/helpers/url_launcher.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/household.dart';
+import 'package:kitchenowl/models/recipe_scrape.dart';
 import 'package:kitchenowl/pages/recipe_add_update_page.dart';
 import 'package:kitchenowl/styles/color_mapper.dart';
 import 'package:kitchenowl/widgets/string_item_match.dart';
@@ -169,6 +170,8 @@ class _RecipeScraperPageState extends State<RecipeScraperPage> {
                   ),
                 );
               } else {
+                final status =
+                    state is RecipeScraperLoadingState ? state.status : null;
                 body = Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -176,13 +179,31 @@ class _RecipeScraperPageState extends State<RecipeScraperPage> {
                       CircularProgressIndicator(),
                       const SizedBox(height: 32),
                       Text(
-                        AppLocalizations.of(context)!.analysingWebsite,
+                        switch (status) {
+                          RecipeScrapeStatus.fetchingWebsite =>
+                            AppLocalizations.of(context)!.fetchingWebsite,
+                          RecipeScrapeStatus.scrapingRecipe =>
+                            AppLocalizations.of(context)!.analysingWebsite,
+                          RecipeScrapeStatus.detectingIngredients =>
+                            AppLocalizations.of(context)!.detectingIngredients,
+                          RecipeScrapeStatus.detectingIngredientsAi =>
+                            AppLocalizations.of(context)!
+                                .detectingIngredientsAi,
+                          RecipeScrapeStatus.usingAi =>
+                            AppLocalizations.of(context)!.scrapingUsingAi,
+                          null => AppLocalizations.of(context)!.fetchingWebsite,
+                        },
                         style: Theme.of(context).textTheme.headlineSmall,
                         textAlign: TextAlign.center,
                       ),
                       const SizedBox(height: 8),
                       FutureBuilder(
-                        future: Future.delayed(const Duration(seconds: 15)),
+                        key: ValueKey(status),
+                        future: Future.delayed(
+                          Duration(
+                            seconds: (status?.isUsingAi ?? false) ? 45 : 15,
+                          ),
+                        ),
                         builder: (context, snapshot) =>
                             snapshot.connectionState == ConnectionState.done
                                 ? Text(

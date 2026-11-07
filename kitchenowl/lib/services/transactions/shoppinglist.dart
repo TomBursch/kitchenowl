@@ -1,5 +1,6 @@
 import 'package:kitchenowl/app.dart';
 import 'package:kitchenowl/enums/shoppinglist_sorting.dart';
+import 'package:kitchenowl/helpers/item_name.dart';
 import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/models/shoppinglist.dart';
@@ -55,6 +56,7 @@ class TransactionShoppingListSearchItem extends Transaction<List<Item>> {
 
   @override
   Future<List<Item>> runLocal() async {
+    final normalizedQuery = normalizeItemName(query);
     final shoppingLists =
         await MemStorage.getInstance().readShoppingLists(household);
     return (shoppingLists
@@ -68,7 +70,7 @@ class TransactionShoppingListSearchItem extends Transaction<List<Item>> {
           (p, e) => p + e,
         ) ??
         [])
-      ..retainWhere((e) => e.name.toLowerCase().contains(query.toLowerCase()));
+      ..retainWhere((e) => normalizeItemName(e.name).contains(normalizedQuery));
   }
 
   @override

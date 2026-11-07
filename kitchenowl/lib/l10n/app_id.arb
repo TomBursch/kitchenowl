@@ -184,6 +184,13 @@
       }
     }
   },
+  "@shoppingListContainsEntries": {
+    "placeholders": {
+      "entriesCount": {
+        "type": "num"
+      }
+    }
+  },
   "@shoppingListDeleteConfirmation": {
     "placeholders": {
       "shoppingList": {
@@ -318,6 +325,7 @@
   "grid": "Tabel",
   "helpTranslate": "Bantu menerjemahkan",
   "hi": "Hai {name}!",
+  "hidePastPlans": "Sembunyikan rencana yang lalu",
   "household": "Rumah tangga",
   "householdDelete": "Hapus Rumah tangga",
   "householdDeleteConfirmation": "Apakah Anda yakin ingin menghapus {household}? Ini akan menghapus semua barang, resep, dan pengeluaran yang terkait dengan rumah tangga tersebut.",
@@ -367,7 +375,7 @@
   "longPressToReorder": "Tekan lama untuk menyusun ulang",
   "longerThanExpected": "Ini memakan waktu lebih lama dari yang diperkirakan",
   "markAsPaid": "Tandai sebagai berbayar",
-  "mealPlanner": "Perencana Makan",
+  "mealPlanner": "Perencana makanan",
   "member": "Anggota",
   "memberAdd": "Tambah Anggota",
   "memberRemove": "Hapus Anggota",
@@ -409,7 +417,7 @@
   "plannerTitle": "Makan terencanamu",
   "preparationTime": "Waktu penyiapan",
   "privacyPolicy": "Kebijakan Privasi",
-  "privacyPolicyAgree": "Dengan membuat akun kamu setuju pada {privacyPolicy} kami",
+  "privacyPolicyAgree": "Dengan membuat akun, Anda menyetujui {privacyPolicy} dan {terms} kami",
   "private": "Pribadi",
   "privateRecipeDescription": "Hanya anggota rumah tangga yang dapat melihat resepnya.",
   "profile": "Profil",
@@ -430,7 +438,7 @@
   "recipeNew": "Resep Baru",
   "recipeSource": "Sumber Resep",
   "recipes": "Resep",
-  "recipesCurated": "Resep yang dikurasi",
+  "recipesCurated": "Resep pilihan",
   "recipesDiscover": "Temukan resep",
   "recipesNewestCommunity": "Resep komunitas terbaru",
   "recipesOverwrite": "Timpa resep",
@@ -446,26 +454,28 @@
   "reportIssue": "Laporkan masalah",
   "reportRecipe": "Laporkan resep",
   "reportUser": "Laporkan pengguna",
-  "reset": "Reset",
+  "reset": "Atur ulang",
   "save": "Simpan",
   "search": "Cari",
   "searchHint": "Mencari sesuatu?",
   "send": "Kirim",
   "server": "Server",
-  "serverChange": "Beralih Server",
+  "serverChange": "Ganti server",
   "sessions": "Sesi",
   "set": "Atur",
   "settings": "Pengaturan",
   "setupTitle": "Halo! Siap berbelanja?",
   "share": "Bagikan",
   "shoppingList": "Daftar belanja",
-  "shoppingListDelete": "Hapus Daftar belanja",
+  "shoppingListContainsEntries": "{entriesCount, plural, =0{Daftar belanja tidak berisi item apa pun.} =1{Daftar belanja berisi 1 item.} other{Daftar belanja berisi {entriesCount} item.}}",
+  "shoppingListDelete": "Hapus daftar belanja",
   "shoppingListDeleteConfirmation": "Apa kamu yakin ingin menghapus {shoppingList}?",
-  "shoppingListEdit": "Ubah Daftar belanja",
+  "shoppingListEdit": "Edit daftar belanja",
   "shoppingListEmpty": "Daftar belanjaannya kosong. Tambahkan item menggunakan fungsi pencarian di atas.",
   "shoppingListKeepAwake": "Tetap nyalakan layar saat berbelanja",
   "shoppingListStyle": "Gaya daftar belanja",
   "shoppingLists": "Daftar belanja",
+  "showPastPlans": "Tampilkan semua rencana",
   "signInWith": "Masuk dengan {provider}",
   "signup": "Daftar",
   "skip": "Lewati",
@@ -498,6 +508,7 @@
   "tutorialRecipeMore": "Untuk informasi lebih lanjut, kunjungi [documantation]({url}).",
   "uncategorized": "Tak berkategori",
   "underConstruction": "Dalam Pengembangan",
+  "undo": "Urungkan",
   "unlink": "Hapus tautan",
   "unreachableMessage": "Hmmmm… tidak dapat menjangkau server",
   "unsavedChangesBody": "Apa kamu yakin ingin kembali?",

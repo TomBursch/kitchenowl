@@ -1,5 +1,5 @@
 import 'package:collection/collection.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kitchenowl/app.dart';
@@ -136,12 +136,13 @@ class _RecipeListPageState extends State<RecipeListPage> {
                             children: state.tags
                                 .sorted((a, b) =>
                                     (state is FilteredListRecipeListState)
-                                        ? state.selectedTags
-                                            .contains(a)
-                                            .hashCode
-                                            .compareTo(state.selectedTags
-                                                .contains(b)
-                                                .hashCode)
+                                        ? (state.selectedTags.contains(a)
+                                                ? 0
+                                                : 1)
+                                            .compareTo(
+                                                state.selectedTags.contains(b)
+                                                    ? 0
+                                                    : 1)
                                         : 0)
                                 .map((tag) {
                           return Padding(

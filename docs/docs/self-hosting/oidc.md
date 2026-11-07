@@ -5,7 +5,7 @@ OIDC allow users to sign in with social logins or third party issuer. KitchenOwl
 For self-hosted instances the custom provider is the most interesting one.
 
 ### Setup
-Inside your OIDC you need to configure a new client, with the following to redirect URIs:
+Inside your OIDC you need to configure a new client, with the following two redirect URIs:
 
 <div class="annotate" markdown>
 - `FRONT_URL(1)/signin/redirect` 
@@ -101,7 +101,7 @@ Place this in your Authelia [configuration.yaml](https://www.authelia.com/config
         - email
         - profile
     redirect_uris:
-        - https://your.domain.here/signin/redirect # Put the same value as FRONT_URL, appended with /signin/redirect
+        - https://your.domain.here/signin/redirect # The redirect URI should match ${FRONT_URL}/signin/redirect
         - kitchenowl:/signin/redirect
     response_modes:
     userinfo_signing_algorithm: none

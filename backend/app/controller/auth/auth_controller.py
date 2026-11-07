@@ -3,7 +3,7 @@ import uuid
 import gevent
 
 from oic import rndstr
-from oic.oic.message import AuthorizationResponse
+from oic.oic.message import AuthorizationResponse, UserInfoErrorResponse
 from oic.oauth2.message import ErrorResponse
 from app.helpers import validate_args
 from flask import jsonify, Blueprint
@@ -373,6 +373,62 @@ def deleteLongLivedToken(id):
     return jsonify({"msg": "DONE"})
 
 
+@auth.route("oidc/<provider>", methods=["DELETE"])
+@jwt_required()
+def unlinkOIDC(provider: str):
+    """Unlink an OIDC provider from the current user.
+    ---
+    delete:
+      summary: Unlink OIDC account
+      description: >
+        Removes the link between the current user and the given OIDC provider.
+        Refused if it would leave the user without any way to log in
+        (no password, or password login disabled, and no other linked provider).
+      parameters:
+        - in: path
+          name: provider
+          schema:
+            type: string
+          required: true
+          description: OIDC provider name (custom, google, apple)
+      responses:
+        200:
+          description: Provider unlinked
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+        400:
+          description: Unlinking would remove the last login method
+        401:
+          description: Unauthorized
+        404:
+          description: Provider not linked
+      security:
+        - bearerAuth: []
+    """
+    user: User = current_user
+    if not user:
+        raise UnauthorizedRequest(message="Unauthorized: IP {}".format(getClientIp()))
+
+    links = [link for link in user.oidc_links if link.provider == provider]
+    if not links:
+        raise NotFoundRequest()
+
+    remaining_links = [link for link in user.oidc_links if link.provider != provider]
+    can_use_password = bool(user.password) and not DISABLE_USERNAME_PASSWORD_LOGIN
+    if not can_use_password and not remaining_links:
+        return "Request invalid: last login method", 400
+
+    for link in links:
+        link.delete()
+
+    return jsonify({"msg": "DONE"})
+
+
 if FRONT_URL and len(oidc_clients) > 0:
 
     @auth.route("oidc", methods=["GET"])
@@ -569,6 +625,20 @@ if FRONT_URL and len(oidc_clients) > 0:
             ).save()
             oidcLink.user = current_user
         if not oidcLink:
+            if getattr(client, "userinfo_endpoint", None):
+                try:
+                    userinfo_resp = client.do_user_info_request(
+                        method="GET",
+                        state=oidc_request.state,
+                        behavior="use_authorization_header",
+                    )
+                    if not isinstance(
+                        userinfo_resp, (ErrorResponse, UserInfoErrorResponse)
+                    ):
+                        userinfo.update(userinfo_resp)
+                except Exception:
+                    pass
+
             if "email" in userinfo:
                 if User.find_by_email(userinfo["email"].strip()):
                     return "Request invalid: email", 400
@@ -606,6 +676,7 @@ if FRONT_URL and len(oidc_clients) > 0:
                 newUser.photo = file_has_access_or_download(
                     userinfo["picture"],
                     user=newUser,
+                    trusted_url=True,
                 )
                 newUser.save()
 

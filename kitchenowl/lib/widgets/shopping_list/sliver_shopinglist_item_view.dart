@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:kitchenowl/app.dart';
 import 'package:kitchenowl/enums/shoppinglist_sorting.dart';
 import 'package:kitchenowl/kitchenowl.dart';

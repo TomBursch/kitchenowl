@@ -1,17 +1,4 @@
 {
-  "@about": {},
-  "@accountCreate": {},
-  "@accountCreateHint": {},
-  "@accountCreateTitle": {},
-  "@accountDelete": {},
-  "@accountDeleteConfirmation": {},
-  "@accountLinkedWithOtherUser": {},
-  "@accountsLinked": {},
-  "@add": {},
-  "@addCategory": {},
-  "@addDescriptionFromSource": {},
-  "@addItemTitle": {},
-  "@addLanguage": {},
   "@addLanguageConfirm": {
     "placeholders": {
       "lang": {
@@ -39,8 +26,6 @@
   "@addRecipeToPlannerShort": {
     "description": "A shorter title/button text used wherever the space is limited. Excludes the number of yields."
   },
-  "@addShoppingList": {},
-  "@addTag": {},
   "@addedBy": {
     "placeholders": {
       "name": {
@@ -49,24 +34,9 @@
       }
     }
   },
-  "@address": {},
-  "@admin": {},
-  "@analysingWebsite": {},
-  "@appDescription": {},
   "@appTitle": {
     "description": "The title of the app"
   },
-  "@automaticIngredientDetection": {},
-  "@back": {},
-  "@balances": {},
-  "@budget": {},
-  "@budgetSet": {},
-  "@camera": {},
-  "@cancel": {},
-  "@categories": {},
-  "@categoriesMerge": {},
-  "@category": {},
-  "@categoryDelete": {},
   "@categoryDeleteConfirmation": {
     "placeholders": {
       "category": {
@@ -75,7 +45,6 @@
       }
     }
   },
-  "@categoryEdit": {},
   "@categoryExpenseDeleteConfirmation": {
     "placeholders": {
       "category": {
@@ -84,40 +53,6 @@
       }
     }
   },
-  "@changeIcon": {},
-  "@clear": {},
-  "@colorSelect": {},
-  "@confirm": {},
-  "@cookingTime": {},
-  "@copied": {},
-  "@daily": {},
-  "@darkmode": {},
-  "@date": {},
-  "@defaultKey": {},
-  "@defaultWord": {},
-  "@delete": {},
-  "@description": {},
-  "@discover": {},
-  "@done": {},
-  "@dynamicAccentColor": {},
-  "@email": {},
-  "@emailInvalid": {},
-  "@emailNotVerified": {},
-  "@emailResendVerification": {},
-  "@emailSuccessfullyVerified": {},
-  "@emailUpdate": {},
-  "@emailUsed": {},
-  "@error": {},
-  "@excludeFromStatistics": {},
-  "@expense": {},
-  "@expenseAdd": {},
-  "@expenseAmount": {},
-  "@expenseCategories": {},
-  "@expenseEdit": {},
-  "@expenseEmpty": {},
-  "@expenseFactor": {},
-  "@expenseOverviewComparedToPreviousMonth": {},
-  "@expenseOverviewExpenses": {},
   "@expenseOverviewTotalTitle": {
     "placeholders": {
       "month": {
@@ -126,10 +61,6 @@
       }
     }
   },
-  "@expensePaidBy": {},
-  "@expensePaidFor": {},
-  "@expenseReceivedBy": {},
-  "@export": {},
   "@fieldCannotBeEmpty": {
     "placeholders": {
       "field": {
@@ -138,10 +69,6 @@
       }
     }
   },
-  "@forceOfflineMode": {},
-  "@gallery": {},
-  "@grid": {},
-  "@helpTranslate": {},
   "@hi": {
     "placeholders": {
       "name": {
@@ -150,13 +77,22 @@
       }
     }
   },
-  "@icon": {},
-  "@imageSelect": {},
-  "@import": {},
-  "@importStartedHint": {},
-  "@income": {},
-  "@ingredients": {},
-  "@itemDelete": {},
+  "@householdDeleteConfirmation": {
+    "placeholders": {
+      "household": {
+        "example": "Home",
+        "type": "String"
+      }
+    }
+  },
+  "@householdLeaveConfirmation": {
+    "placeholders": {
+      "household": {
+        "example": "Home",
+        "type": "String"
+      }
+    }
+  },
   "@itemDeleteConfirmation": {
     "placeholders": {
       "item": {
@@ -165,18 +101,32 @@
       }
     }
   },
-  "@items": {},
-  "@itemsAdd": {},
-  "@language": {},
-  "@languageSelect": {},
-  "@larger": {},
-  "@lastUsed": {},
-  "@list": {},
-  "@lltWarningTitle": {},
-  "@login": {},
-  "@loginTo": {},
-  "@loginToAddToShoppingList": {},
-  "@logout": {},
+  "@itemsMergeConfirmation": {
+    "placeholders": {
+      "item": {
+        "example": "Cake",
+        "type": "String"
+      },
+      "other": {
+        "example": "Cake",
+        "type": "String"
+      }
+    }
+  },
+  "@link": {
+    "description": "The verb, as in link social account (e.g. Google)"
+  },
+  "@linkNoun": {
+    "description": "The noun, as in share using a link (URL)"
+  },
+  "@lltDeleteConfirmation": {
+    "placeholders": {
+      "token": {
+        "example": "HomeAssistant",
+        "type": "String"
+      }
+    }
+  },
   "@logoutName": {
     "placeholders": {
       "name": {
@@ -185,25 +135,6 @@
       }
     }
   },
-  "@longerThanExpected": {},
-  "@markAsPaid": {},
-  "@mealPlanner": {},
-  "@member": {},
-  "@memberAdd": {},
-  "@memberRemove": {},
-  "@members": {},
-  "@merge": {},
-  "@minutesAbbrev": {},
-  "@moneyTransfer": {},
-  "@monthly": {},
-  "@more": {},
-  "@name": {},
-  "@next": {},
-  "@noTags": {},
-  "@none": {},
-  "@now": {},
-  "@offlineMessage": {},
-  "@onboardingLoading": {},
   "@onboardingSettingsTitle": {
     "placeholders": {
       "name": {
@@ -212,10 +143,6 @@
       }
     }
   },
-  "@onboardingTitle": {},
-  "@or": {},
-  "@other": {},
-  "@overview": {},
   "@owesAB": {
     "placeholders": {
       "nameA": {
@@ -228,19 +155,18 @@
       }
     }
   },
-  "@pageNotFound": {},
-  "@password": {},
-  "@passwordFieldTooShort": {},
-  "@passwordForgot": {},
-  "@passwordRepeat": {},
-  "@passwordReset": {},
-  "@passwordSave": {},
-  "@personal": {},
-  "@plannerTitle": {},
-  "@preparationTime": {},
-  "@reason": {},
-  "@recentItemsCategorize": {},
-  "@recipeAdd": {},
+  "@privacyPolicyAgree": {
+    "placeholders": {
+      "privacyPolicy": {
+        "example": "Privacy Policy",
+        "type": "String"
+      },
+      "terms": {
+        "example": "Terms & Conditions",
+        "type": "String"
+      }
+    }
+  },
   "@recipeAddToHousehold": {
     "placeholders": {
       "householdName": {
@@ -249,8 +175,6 @@
       }
     }
   },
-  "@recipeAddUrl": {},
-  "@recipeDelete": {},
   "@recipeDeleteConfirmation": {
     "placeholders": {
       "recipe": {
@@ -259,33 +183,21 @@
       }
     }
   },
-  "@recipeEdit": {},
-  "@recipeEmpty": {},
-  "@recipeEmptySearch": {},
-  "@recipeImageSelect": {},
-  "@recipeNew": {},
-  "@recipeSource": {},
-  "@recipes": {},
-  "@recipesPopular": {},
-  "@recipesRecent": {},
-  "@recipesSuggested": {},
-  "@refresh": {},
-  "@remove": {},
-  "@rename": {},
-  "@reportIssue": {},
-  "@reportRecipe": {},
-  "@reportUser": {},
-  "@reset": {},
-  "@save": {},
-  "@search": {},
-  "@searchHint": {},
-  "@send": {},
-  "@server": {},
-  "@settings": {},
-  "@setupTitle": {},
-  "@share": {},
-  "@shoppingList": {},
-  "@shoppingListDelete": {},
+  "@recipeGoToInHousehold": {
+    "placeholders": {
+      "householdName": {
+        "example": "Home",
+        "type": "String"
+      }
+    }
+  },
+  "@shoppingListContainsEntries": {
+    "placeholders": {
+      "entriesCount": {
+        "type": "num"
+      }
+    }
+  },
   "@shoppingListDeleteConfirmation": {
     "placeholders": {
       "shoppingList": {
@@ -294,7 +206,41 @@
       }
     }
   },
-  "@shoppingListEdit": {},
+  "@signInWith": {
+    "placeholders": {
+      "provider": {
+        "example": "Authentik",
+        "type": "String"
+      }
+    }
+  },
+  "@tagDeleteConfirmation": {
+    "placeholders": {
+      "tag": {
+        "example": "Lunch",
+        "type": "String"
+      }
+    }
+  },
+  "@tutorialRecipeMore": {
+    "placeholders": {
+      "url": {
+        "example": "https://...",
+        "type": "String"
+      }
+    }
+  },
+  "@unlink": {
+    "description": "As in remove link to social account (e.g. Google)"
+  },
+  "@userDeleteConfirmation": {
+    "placeholders": {
+      "user": {
+        "example": "Tom",
+        "type": "String"
+      }
+    }
+  },
   "about": "關於",
   "accountCreate": "建立帳號",
   "accountCreateHint": "您的使用者名稱和姓名是公開的，因此請選擇您願意與他人分享的內容。",
@@ -306,12 +252,12 @@
   "add": "新增",
   "addCategory": "新增分類",
   "addDescriptionFromSource": "從來源新增內容",
-  "addItemTitle": "新增物品",
+  "addItemTitle": "新增項目",
   "addLanguage": "新增語言",
-  "addLanguageConfirm": "您確定要將語言設定為'{lang}'嗎？此操作無法撤銷，並將為您的家庭新增項目與類別。",
-  "addNumberIngredients": "新增 {number} 材料",
-  "addRecipeToPlanner": "新增（{number}份）膳食計劃",
-  "addRecipeToPlannerShort": "新增到膳食計劃",
+  "addLanguageConfirm": "您確定要將語言設定為'{lang}'嗎？此操作無法取消，並將為您的家庭新增項目與分類。",
+  "addNumberIngredients": "新增 {number} 份材料",
+  "addRecipeToPlanner": "新增（{number}人份）餐點規劃",
+  "addRecipeToPlannerShort": "新增到餐點規劃",
   "addShoppingList": "新增購物清單",
   "addTag": "新增標簽",
   "addedBy": "由{name}添加",
@@ -327,8 +273,9 @@
   "budgetSet": "設定預算",
   "camera": "相機",
   "cancel": "取消",
+  "cards": "卡片",
   "categories": "分類",
-  "categoriesMerge": "合并分類",
+  "categoriesMerge": "合併分類",
   "category": "分類",
   "categoryDelete": "刪除分類",
   "categoryDeleteConfirmation": "您確定要刪除{category}嗎？此操作將從所有項目中移除此分類。",
@@ -337,10 +284,12 @@
   "changeIcon": "修改圖示",
   "clear": "清除",
   "colorSelect": "選擇顔色",
+  "compact": "壓縮",
   "confirm": "確定",
   "cookingTime": "烹調時間",
   "copied": "已複製",
-  "daily": "日常",
+  "daily": "每天",
+  "dangerZone": "危險設定",
   "darkmode": "深色模式",
   "date": "日期",
   "defaultKey": "預設金鑰",
@@ -364,7 +313,7 @@
   "expenseAmount": "金額",
   "expenseCategories": "開支類別",
   "expenseEdit": "編輯開支",
-  "expenseEmpty": "未發現任何開支計劃，請先建立一個開支計劃！",
+  "expenseEmpty": "沒有任何支出，創建一個吧!",
   "expenseFactor": "開支原因",
   "expenseOverviewComparedToPreviousMonth": "於前幾個月相比",
   "expenseOverviewExpenses": "開支",
@@ -372,37 +321,68 @@
   "expensePaidBy": "付費人",
   "expensePaidFor": "付費項",
   "expenseReceivedBy": "收件人",
+  "expenseReceivedFor": "支出用途",
   "export": "匯出",
+  "features": "功能",
   "fieldCannotBeEmpty": "{field}不能為空白",
   "forceOfflineMode": "强制離綫模式",
   "gallery": "相冊",
+  "general": "一般",
+  "go": "Go",
   "grid": "網格",
   "helpTranslate": "協助翻譯",
   "hi": "你好 {name}!",
-  "icon": "圖標",
+  "hidePastPlans": "隱藏過去的計畫",
+  "household": "家庭",
+  "householdDelete": "刪除家庭",
+  "householdDeleteConfirmation": "你確定要刪除 {household}嗎? 這會刪除與這個家庭有關的所有項目、食譜以及相關費用。",
+  "householdEmpty": "目前沒有任何家庭，請先新增一個家庭!",
+  "householdLeave": "離開家庭",
+  "householdLeaveConfirmation": "你確定要離開 {household}嗎?",
+  "householdNew": "新增家庭",
+  "householdSwitch": "切換家庭",
+  "households": "家庭",
+  "icon": "圖示",
   "imageSelect": "選擇圖片",
   "import": "匯入",
   "importStartedHint": "開始匯入，可能需要等待幾分鐘。",
   "income": "收入",
   "ingredients": "食材",
-  "itemDelete": "刪除物件",
-  "itemDeleteConfirmation": "確定要刪除 {item} 嗎? 這會刪除所有包含在内的食譜.",
+  "ingredientsOptional": "可選食材",
+  "itemDelete": "刪除項目",
+  "itemDeleteConfirmation": "確定要刪除 {item} 嗎? 這將會從所有包含此項目的食譜中將其移除。",
+  "itemRemoveInteraction": "刪除項目的互動",
+  "itemSize": "項目尺寸",
   "items": "物品",
   "itemsAdd": "增加物品",
+  "itemsMerge": "合併項目",
+  "itemsMergeConfirmation": "確定要合併 {item} 跟 {other} 嗎? 此操作將無法取消。",
+  "itemsOptional": "可選項目",
+  "itemsRecent": "最近的項目",
   "language": "語言",
   "languageSelect": "選擇語言",
   "larger": "大於",
   "lastUsed": "最後使用",
+  "link": "連結",
+  "linkNoun": "連結",
+  "linkRecipeDescription": "擁有鏈接的人都可以查看。",
   "list": "清單",
+  "lltCreate": "建立長效 Token",
+  "lltDelete": "刪除長效 Token",
+  "lltDeleteConfirmation": "確定要刪除長效 Token'{token}'嗎？此操作無法復原。",
+  "lltNotShownAgain": "請妥善保存此 Token；關閉後將無法再次查看",
+  "lltWarningContent": "您確定要建立長效 Token 嗎？這可能存在安全疑慮。此 Token 不會過期且擁有您帳號的完整存取權限。",
   "lltWarningTitle": "你知道你在幹嘛嗎？",
+  "llts": "長效 Token",
   "login": "登入",
   "loginTo": "登入到",
   "loginToAddToShoppingList": "登入即可增加食譜到您的購物清單",
   "logout": "登出",
   "logoutName": "登出 {name}",
+  "longPressToReorder": "長按以重新下單",
   "longerThanExpected": "這比預期的久",
   "markAsPaid": "標記爲已付款",
-  "mealPlanner": "膳食計劃",
+  "mealPlanner": "餐點規劃器",
   "member": "成員",
   "memberAdd": "增加成員",
   "memberRemove": "移除成員",
@@ -418,25 +398,40 @@
   "none": "無",
   "now": "現在",
   "offlineMessage": "您處於離綫狀態",
+  "okay": "Okay",
   "onboardingLoading": "匯入語言中，可能需要稍等一下。請耐心等待 :)",
   "onboardingSettingsTitle": "您好 {name}，一起來設定服務器吧!",
   "onboardingTitle": "來創建一個用戶",
+  "optional": "可選",
   "or": "或",
+  "ordering": "訂購",
   "other": "其他",
   "overview": "總覽",
   "owesAB": "{nameA} 欠 {nameB}",
   "pageNotFound": "找不到這個頁面",
+  "parent": "家長",
+  "parentRights": "可以變更家庭設定",
   "password": "密碼",
   "passwordFieldTooShort": "密碼太短",
   "passwordForgot": "忘記密碼？",
   "passwordRepeat": "重複密碼",
+  "passwordRepeatNoMatch": "密碼不相符",
   "passwordReset": "重置密碼",
   "passwordSave": "更新密碼",
   "personal": "個人",
-  "plannerTitle": "您的膳食計劃",
+  "planner": "規劃者",
+  "plannerEmpty": "尚未規劃任何餐點，先從你的食譜中選擇一道吧！",
+  "plannerTitle": "已規劃的餐點",
   "preparationTime": "準備時長",
+  "privacyPolicy": "隱私權政策",
+  "privacyPolicyAgree": "建立帳號即表示您同意我們的{privacyPolicy}與{terms}",
+  "private": "私人",
+  "privateRecipeDescription": "只有家庭成員才可以查看食譜。",
+  "profile": "個人檔案",
+  "public": "公開",
+  "publicRecipeDescription": "此食譜為公開食譜，可能將會推薦給其他使用者。",
   "reason": "原因",
-  "recentItemsCategorize": "分類最近的物件",
+  "recentItemsCategorize": "分類最近的項目",
   "recipeAdd": "增加食譜",
   "recipeAddToHousehold": "增加到 {householdName}",
   "recipeAddUrl": "從 URL 新增食譜",
@@ -445,14 +440,22 @@
   "recipeEdit": "修改食譜",
   "recipeEmpty": "沒有食譜，新增一個吧！",
   "recipeEmptySearch": "沒有食譜 :(",
+  "recipeGoToInHousehold": "已新增過，前往{householdName}中的食譜",
   "recipeImageSelect": "選擇食譜圖片",
   "recipeNew": "新食譜",
   "recipeSource": "食譜來源",
   "recipes": "食譜",
+  "recipesCurated": "精選食譜",
+  "recipesDiscover": "探索食譜",
+  "recipesNewestCommunity": "最新社群食譜",
+  "recipesOverwrite": "覆蓋食譜",
+  "recipesOverwriteDescription": "啟用後，將會覆蓋名稱相同的既有食譜",
   "recipesPopular": "最近夯的食譜",
   "recipesRecent": "最近",
   "recipesSuggested": "建議",
-  "refresh": "刷新",
+  "redo": "重做",
+  "refresh": "重新整理",
+  "rememberLastShoppingList": "記住上次使用的購物清單",
   "remove": "移除",
   "rename": "重新命名",
   "reportIssue": "回報問題",
@@ -463,12 +466,82 @@
   "search": "搜索",
   "searchHint": "在尋找什麽嗎？",
   "send": "發送",
-  "server": "服務器",
+  "server": "伺服器",
+  "serverChange": "切換伺服器",
+  "sessions": "連線階段",
+  "set": "設定",
   "settings": "設定",
   "setupTitle": "嗨！準備好要去購物了嗎？",
   "share": "分享",
   "shoppingList": "購物清單",
+  "shoppingListContainsEntries": "{entriesCount, plural, =0{採買清單中沒有任何項目。} =1{採買清單中有 1 個項目。} other{採買清單共有 {entriesCount} 個項目。}}",
   "shoppingListDelete": "刪除購物清單",
   "shoppingListDeleteConfirmation": "是否確定要刪除 {shoppingList}？",
-  "shoppingListEdit": "修改購物清單"
+  "shoppingListEdit": "修改購物清單",
+  "shoppingListEmpty": "採買清單目前是空的。請使用上方的搜尋功能來新增項目。",
+  "shoppingListKeepAwake": "在購物時保持螢幕開啟",
+  "shoppingListStyle": "購物清單樣式",
+  "shoppingLists": "購物清單",
+  "showPastPlans": "查看全部計畫",
+  "signInWith": "使用 {provider} 登入",
+  "signup": "註冊",
+  "skip": "跳過",
+  "smaller": "較小",
+  "sortingAlgorithmic": "按演算法排序",
+  "sortingAlphabetical": "按字母排序",
+  "start": "開始",
+  "supportDevelopment": "支持開發團隊",
+  "swipeToDelete": "滑動以刪除",
+  "swipeToDeleteAndLongPressToReorder": "滑動以刪除，長按以重新排序",
+  "swipeToRemove": "滑動以移除",
+  "tagDelete": "刪除標籤",
+  "tagDeleteConfirmation": "確定要刪除{tag}嗎？這將會從所有包含此標籤的食譜中將其移除。",
+  "tagEdit": "編輯標籤",
+  "tags": "標籤",
+  "tagsPopular": "熱門標籤",
+  "tap": "點擊",
+  "terms": "服務與使用條款",
+  "themeDark": "深色",
+  "themeLight": "淺色",
+  "themeMode": "主題",
+  "themeSystem": "系統",
+  "today": "今天",
+  "tomorrow": "明天",
+  "total": "總計",
+  "totalTime": "總計時間",
+  "tutorialItemDescription1": "搜尋項目時，您可以在開頭輸入數量，系統會自動將其設為數量描述。",
+  "tutorialItemDescription2": "或者，如果只填數量還不夠，可以使用逗號來分隔項目名稱與描述。",
+  "tutorialRecipeDescription": "您可以在食譜中使用 Markdown 語法。基本功能包括：使用井號「#」標示標題，使用數字列表代表製作步驟，以及在食材名稱前加上「@」符號來引用食材。",
+  "tutorialRecipeMore": "如需更多資訊，請參閱 [說明文件]({url})。",
+  "uncategorized": "未分類",
+  "underConstruction": "功能開發中",
+  "undo": "復原",
+  "unlink": "取消連結",
+  "unreachableMessage": "嗯… 無法連結伺服器",
+  "unsavedChangesBody": "確定要返回嗎？",
+  "unsavedChangesTitle": "您還有尚未儲存的更動",
+  "unsupportedBackendMessage": "不支援此伺服器版本，請更新後端系統",
+  "unsupportedFrontendMessage": "不支援此應用程式版本，請更新應用程式",
+  "unsupportedScrapeMessage": "不支援此網站",
+  "usedIn": "用於",
+  "user": "使用者",
+  "userAdd": "新增使用者",
+  "userDelete": "刪除使用者",
+  "userDeleteConfirmation": "確定要刪除 {user}嗎?",
+  "userNotSignedIn": "您需要先登入才能連結帳號",
+  "userSearchHint": "輸入使用者名稱",
+  "username": "使用者名稱",
+  "usernameInvalid": "使用者名稱不能包含「@」",
+  "usernameUnavailable": "此使用者名稱無法使用",
+  "users": "使用者",
+  "website": "網站",
+  "weekly": "每週",
+  "welcomeBack": "歡迎回來",
+  "writeMarkdownHere": "這裡可以使用 Markdown！",
+  "wrongUsernameOrPassword": "錯誤的使用者名稱或密碼",
+  "yearly": "每年",
+  "yes": "是",
+  "yesterday": "昨天",
+  "yields": "份量",
+  "you": "你"
 }

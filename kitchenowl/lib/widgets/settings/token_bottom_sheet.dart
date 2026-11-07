@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/token.dart';
 import 'package:kitchenowl/widgets/settings/token_card.dart';

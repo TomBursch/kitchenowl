@@ -176,6 +176,14 @@
       }
     }
   },
+  "@recipeGenerateTokens": {
+    "placeholders": {
+      "count": {
+        "example": "1250",
+        "type": "int"
+      }
+    }
+  },
   "@recipeGoToInHousehold": {
     "placeholders": {
       "householdName": {
@@ -239,7 +247,7 @@
   "accountCreateHint": "Je gebruikersnaam en naam zijn openbaar, dus kies iets dat je met anderen wil delen.",
   "accountCreateTitle": "KitchenOwl account aanmaken",
   "accountDelete": "Verwijder account",
-  "accountDeleteConfirmation": "Weet jij zeker dat je je account wil verwijderen?",
+  "accountDeleteConfirmation": "Weet je zeker dat je jouw account wil verwijderen?",
   "accountLinkedWithOtherUser": "Account is al gelinkt aan een andere gebruiker",
   "accountsLinked": "Gelinkte profielen",
   "add": "Toevoegen",
@@ -289,9 +297,12 @@
   "defaultWord": "Standaard",
   "delete": "Verwijder",
   "description": "Beschrijving",
+  "detectingIngredients": "Ingrediënten worden gedetecteerd...",
+  "detectingIngredientsAi": "Ingrediënten worden gedetecteerd met AI...",
   "discover": "Ontdek",
   "done": "Gedaan",
   "dynamicAccentColor": "Dynamische accentkleur",
+  "edit": "Bewerken",
   "email": "Email",
   "emailInvalid": "Ongeldige email",
   "emailNotVerified": "Niet geverifieerd",
@@ -317,6 +328,7 @@
   "expenseReceivedFor": "Ontvangen voor",
   "export": "Exporteren",
   "features": "Eigenschappen",
+  "fetchingWebsite": "Website wordt geladen...",
   "fieldCannotBeEmpty": "{field} kan niet leeg zijn.",
   "forceOfflineMode": "Offline modus forceren",
   "gallery": "Galerij",
@@ -325,6 +337,7 @@
   "grid": "Rooster",
   "helpTranslate": "Help vertalen",
   "hi": "Hallo {name}!",
+  "hidePastPlans": "Verberg eerder geplande maaltijden",
   "household": "Huishouden",
   "householdDelete": "Verwijder huishouden",
   "householdDeleteConfirmation": "Weet u zeker dat u {household} wilt verwijderen? Dit verwijdert alle artikelen, recepten en uitgaven van dat huishouden.",
@@ -394,6 +407,7 @@
   "onboardingLoading": "Taal importeren, dit kan even duren. Wees geduldig :)",
   "onboardingSettingsTitle": "Hoi {name}, laten we de server opzetten!",
   "onboardingTitle": "Laten we een gebruiker maken",
+  "openUrl": "Open URL",
   "optional": "Optioneel",
   "or": "of",
   "ordering": "Bestellen",
@@ -432,6 +446,18 @@
   "recipeEdit": "Recept bewerken",
   "recipeEmpty": "Geen recepten, begin er maar aan!",
   "recipeEmptySearch": "Geen recepten gevonden :(",
+  "recipeGenerate": "Recept genereren met AI",
+  "recipeGenerateFollowUpAnother": "Stel een ander recept voor",
+  "recipeGenerateFollowUpDetailed": "Leg de stappen wat gedetailleerder uit",
+  "recipeGenerateFollowUpVegetarian": "Maak het vegetarisch",
+  "recipeGenerateHint": "Beschrijf een gerecht of lijst de ingrediënten op…",
+  "recipeGenerateQuestion": "Wat wil je vandaag koken?",
+  "recipeGenerateSuggestionFewIngredients": "Stel een mediterraan hoofdgerecht voor met maximaal 5 ingrediënten (basisproducten zoals zout, peper, olie en bouillon niet meegerekend).",
+  "recipeGenerateSuggestionFridge": "Ik heb alleen aardappelen, tomaten, kaas, yoghurt en eieren in mijn koelkast. Wat kan ik maken?",
+  "recipeGenerateSuggestionMealPrep": "Een eiwitrijke lunch die ik voor de hele werkweek van tevoren kan klaarmaken.",
+  "recipeGenerateSuggestionQuick": "Een vegetarisch doordeweeks avondmaal voor twee personen dat in minder dan 30 minuten op tafel staat.",
+  "recipeGenerateSuggestions": "Voorgestelde prompts",
+  "recipeGenerateTokens": "{count} tokens",
   "recipeGoToInHousehold": "Reeds toegevoegd, ga naar het recept in {householdName}",
   "recipeImageSelect": "Selecteer een receptafbeelding",
   "recipeNew": "Nieuw recept",
@@ -455,6 +481,7 @@
   "reportUser": "Gebruiker rapporteren",
   "reset": "Resetten",
   "save": "Bewaar",
+  "scrapingUsingAi": "Recept ophalen met AI...",
   "search": "Zoeken",
   "searchHint": "Zoek je iets?",
   "send": "Sturen",
@@ -474,6 +501,7 @@
   "shoppingListKeepAwake": "Houd het scherm aan tijdens het winkelen",
   "shoppingListStyle": "Boodschappenlijst stijl",
   "shoppingLists": "Boodschappenlijstjes",
+  "showPastPlans": "Toon alle geplande maaltijden",
   "signInWith": "Inloggen met {provider}",
   "signup": "Registreren",
   "skip": "Overslaan",

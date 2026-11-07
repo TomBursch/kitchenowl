@@ -73,6 +73,7 @@ def scrapeHTMLStream(
     try:
         scraper = scrape_html(html, url, supported_only=False)
     except Exception:
+        current_app.logger.exception("Failed to scrape HTML from %s", url)
         return None
     recipe = Recipe()
     try:

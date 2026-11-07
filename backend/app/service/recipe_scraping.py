@@ -1,6 +1,7 @@
 from collections.abc import Generator
 import re
 from typing import Any
+from flask import current_app
 from recipe_scrapers.__version__ import __version__ as recipe_scrapers_version
 from requests_hardened import Config, Manager
 import requests
@@ -125,8 +126,12 @@ def scrapeStream(
     try:
         res = request_manager.send_request("GET", url)
     except Exception:
+        current_app.logger.exception("Failed to fetch recipe from %s", url)
         return None
     if res.status_code != requests.codes.ok:
+        current_app.logger.warning(
+            "Failed to fetch recipe from %s, status code: %s", url, res.status_code
+        )
         return None
 
     if kitchenowlMatch and "<title>KitchenOwl</title>" in res.text:

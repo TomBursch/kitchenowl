@@ -51,7 +51,7 @@ dependencies:
   responsive_builder: ^0.7.0
 
   dynamic_color: ^2.1.0
-  flutter_localized_locales: ^2.0.5
+  world_countries: ^4.7.0
 
   flutter_markdown_plus: ^1.0.7
   markdown: ^7.1.1

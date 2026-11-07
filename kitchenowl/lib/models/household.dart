@@ -11,6 +11,7 @@ class Household extends Model {
   final String? image;
   final String? imageHash;
   final String? language;
+  final String? currency;
   final bool? featurePlanner;
   final bool? featureExpenses;
   final List<ViewsEnum>? viewOrdering;
@@ -26,6 +27,7 @@ class Household extends Model {
     this.image,
     this.imageHash,
     this.language,
+    this.currency,
     this.featurePlanner,
     this.featureExpenses,
     this.viewOrdering,
@@ -55,6 +57,7 @@ class Household extends Model {
       image: map['photo'],
       imageHash: map['photo_hash'],
       language: map['language'],
+      currency: map['currency'],
       featurePlanner: map['planner_feature'] ?? false,
       featureExpenses: map['expenses_feature'] ?? false,
       description: map['description'],
@@ -72,6 +75,7 @@ class Household extends Model {
     String? name,
     String? image,
     String? language,
+    String? currency,
     String? description,
     String? link,
     bool? verified,
@@ -85,6 +89,7 @@ class Household extends Model {
         image: image ?? this.image,
         imageHash: imageHash,
         language: language ?? this.language,
+        currency: currency ?? this.currency,
         featurePlanner: featurePlanner ?? this.featurePlanner,
         featureExpenses: featureExpenses ?? this.featureExpenses,
         viewOrdering: viewOrdering ?? this.viewOrdering,
@@ -100,6 +105,7 @@ class Household extends Model {
         image,
         imageHash,
         language,
+        currency,
         featurePlanner,
         featureExpenses,
         viewOrdering,
@@ -121,6 +127,9 @@ class Household extends Model {
     }
     if (language != null) {
       data['language'] = language;
+    }
+    if (currency != null) {
+      data['currency'] = currency;
     }
     if (featurePlanner != null) {
       data['planner_feature'] = featurePlanner;

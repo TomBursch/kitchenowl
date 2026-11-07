@@ -1,17 +1,17 @@
-import 'package:flutter_localized_locales/flutter_localized_locales.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:world_countries/world_countries.dart';
 
 void main() {
   testWidgets('provides Material localizations for German', (tester) async {
     await tester.pumpWidget(
       MaterialApp(
         locale: const Locale('de'),
-        localizationsDelegates: [
+        localizationsDelegates: const [
           AppLocalizations.delegate,
           ...GlobalMaterialLocalizations.delegates,
-          LocaleNamesLocalizationsDelegate(),
+          TypedLocaleDelegate(),
         ],
         supportedLocales:
             const [Locale('en')] + AppLocalizations.supportedLocales,
@@ -21,6 +21,7 @@ void main() {
         ),
       ),
     );
+    await tester.pumpAndSettle();
 
     expect(tester.takeException(), isNull);
   });

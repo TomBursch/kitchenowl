@@ -448,14 +448,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_localized_locales:
-    dependency: "direct main"
-    description:
-      name: flutter_localized_locales
-      sha256: "478d10535edf07292e34cb4c757882edeeaf96d5e3dbb04b42733038bd41dd3f"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.5"
   flutter_markdown_plus:
     dependency: "direct main"
     description:
@@ -724,6 +716,30 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.0"
+  l10n_countries:
+    dependency: transitive
+    description:
+      name: l10n_countries
+      sha256: "6cec4213a2aac896645a0e10de84d35e72bde1c828d0e245a499da7907fc3e2c"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.2.0"
+  l10n_currencies:
+    dependency: transitive
+    description:
+      name: l10n_currencies
+      sha256: f5019012369f305a8c336e21798d74e46daf656ab7fecd3f1f9a7b8d2e6fac8d
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.2.0"
+  l10n_languages:
+    dependency: transitive
+    description:
+      name: l10n_languages
+      sha256: "01a1ef7005a1d4a5623e2c1493ab8e08f93cdc1d5ef2082006feb165dd8efc55"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.2.0"
   leak_tracker:
     dependency: transitive
     description:
@@ -1028,6 +1044,30 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.28.0"
+  sealed_countries:
+    dependency: transitive
+    description:
+      name: sealed_countries
+      sha256: c58fad383e245f4ed6b0b89bc8f8028dcaae7e9a64d59ab298ef5367c60ce599
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.4.2"
+  sealed_currencies:
+    dependency: transitive
+    description:
+      name: sealed_currencies
+      sha256: "86d7f402406bed7de6b2ace3c7c12b1a2488260a2e1327e0b1188572ea0e3cca"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.4.1"
+  sealed_languages:
+    dependency: transitive
+    description:
+      name: sealed_languages
+      sha256: "0a3dfb7ea748de29d697fb98c1480eac6e0e379f29ef86b16f931b033d7abe20"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.4.1"
   share_handler:
     dependency: "direct main"
     description:
@@ -1513,6 +1553,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.1"
+  world_countries:
+    dependency: "direct main"
+    description:
+      name: world_countries
+      sha256: "63cb7bd6e0270b5c6637fc845de3cb0b8b8f801e0db8afd5cab1d2698bb841a4"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.7.0"
+  world_flags:
+    dependency: transitive
+    description:
+      name: world_flags
+      sha256: "5366d68363b2612a7b3eb573059eb86171767396cdf376a9503d0f4e67562f8d"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.6.0"
   xdg_directories:
     dependency: transitive
     description:
@@ -1538,5 +1594,5 @@ packages:
     source: hosted
     version: "3.1.4"
 sdks:
-  dart: ">=3.13.0 <4.0.0"
+  dart: ">=3.13.5 <4.0.0"
   flutter: ">=3.47.5"

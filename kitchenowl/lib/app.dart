@@ -8,7 +8,6 @@ import 'package:flutter/foundation.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_localized_locales/flutter_localized_locales.dart';
 import 'package:kitchenowl/config.dart';
 import 'package:kitchenowl/cubits/auth_cubit.dart';
 import 'package:kitchenowl/cubits/server_info_cubit.dart';
@@ -24,6 +23,7 @@ import 'package:kitchenowl/styles/themes.dart';
 import 'package:share_handler/share_handler.dart';
 import 'package:image_picker_android/image_picker_android.dart';
 import 'package:image_picker_platform_interface/image_picker_platform_interface.dart';
+import 'package:world_countries/world_countries.dart';
 
 class App extends StatefulWidget {
   static App? _instance;
@@ -219,10 +219,10 @@ class _AppState extends State<App> with WidgetsBindingObserver {
                   ),
                   onGenerateTitle: (BuildContext context) =>
                       AppLocalizations.of(context)!.appTitle,
-                  localizationsDelegates: [
+                  localizationsDelegates: const [
                     ...AppLocalizations.localizationsDelegates,
                     ...GlobalMaterialLocalizations.delegates,
-                    LocaleNamesLocalizationsDelegate(),
+                    TypedLocaleDelegate(),
                   ],
                   supportedLocales:
                       const [Locale('en')] + AppLocalizations.supportedLocales,

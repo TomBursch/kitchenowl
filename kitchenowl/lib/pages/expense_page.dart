@@ -103,7 +103,8 @@ class _ExpensePageState extends State<ExpensePage> {
                         ),
                         Text(
                           NumberFormat.simpleCurrency(
-                                  locale: state.household.language)
+                                  locale: state.household.currency ??
+                                      state.household.language)
                               .format(state.expense.amount.abs()),
                           style: Theme.of(context).textTheme.displayMedium,
                           textAlign: TextAlign.center,
@@ -180,7 +181,8 @@ class _ExpensePageState extends State<ExpensePage> {
                             member?.name ?? AppLocalizations.of(context)!.other,
                           ),
                           subtitle: Text(NumberFormat.simpleCurrency(
-                                  locale: state.household.language)
+                                  locale: state.household.currency ??
+                                      state.household.language)
                               .format(
                             (state.expense.amount *
                                     state.expense.paidFor[i].factor /

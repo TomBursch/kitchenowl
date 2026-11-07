@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
+import 'package:kitchenowl/helpers/localized_language.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_localized_locales/flutter_localized_locales.dart';
 import 'package:kitchenowl/cubits/household_add_update/household_add_update_cubit.dart';
 import 'package:kitchenowl/enums/views_enum.dart';
 import 'package:kitchenowl/kitchenowl.dart';
@@ -77,17 +77,26 @@ class SliverHouseholdFeatureSettings<
                 previous.supportedLanguages != current.supportedLanguages,
             builder: (context, state) {
               if (state.language != null && !languageCanBeChanged) {
-                return Text(LocaleNames.of(context)!.nameOf(state.language!) ??
-                    state.supportedLanguages?[state.language!] ??
-                    state.language!);
+                return Text(
+                  LocalizedLanguage.nameOf(
+                        context,
+                        state.language,
+                        state.supportedLanguages,
+                      ) ??
+                      state.language!,
+                );
               }
 
               return LoadingElevatedButton(
                 child: Text(
-                    LocaleNames.of(context)!.nameOf(state.language ?? "") ??
-                        state.supportedLanguages?[state.language] ??
-                        state.language ??
-                        AppLocalizations.of(context)!.set),
+                  LocalizedLanguage.nameOf(
+                        context,
+                        state.language,
+                        state.supportedLanguages,
+                      ) ??
+                      state.language ??
+                      AppLocalizations.of(context)!.set,
+                ),
                 onPressed: () async {
                   final language = await showModalBottomSheet<Nullable<String>>(
                     context: context,

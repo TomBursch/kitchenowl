@@ -447,7 +447,8 @@ class _AddUpdateExpensePageState extends State<AddUpdateExpensePage> {
                   (context, i) => PaidForWidget(
                     user: widget.household.member![i],
                     cubit: cubit,
-                    locale: widget.household.language,
+                    locale:
+                        widget.household.currency ?? widget.household.language,
                   ),
                   childCount: widget.household.member?.length ?? 0,
                 ),

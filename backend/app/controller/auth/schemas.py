@@ -70,6 +70,11 @@ class LoginOIDC(Schema):
         required=True,
         load_only=True,
     )
+    name = fields.String(
+        validate=lambda a: a and not a.isspace(),
+        required=False,
+        load_only=True,
+    )
     device = fields.String(
         validate=lambda a: a and not a.isspace(),
         required=False,

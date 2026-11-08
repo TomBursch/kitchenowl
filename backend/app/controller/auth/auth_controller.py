@@ -1,4 +1,5 @@
 from datetime import datetime, timezone
+import hashlib
 import uuid
 import gevent
 
@@ -598,7 +599,11 @@ if FRONT_URL and len(oidc_clients) > 0:
                 )
             )
         userinfo = tokenResponse["id_token"]
-        if userinfo["nonce"] != oidc_request.nonce:
+        expected_nonce_sha256 = hashlib.sha256(
+            oidc_request.nonce.encode("utf-8")
+        ).hexdigest()
+        if userinfo.get("nonce") not in (oidc_request.nonce, expected_nonce_sha256):
+            oidc_request.delete()
             raise UnauthorizedRequest(
                 message="Unauthorized: IP {} login attempt for OIDC failed: mismatched nonce".format(
                     getClientIp()
@@ -639,11 +644,20 @@ if FRONT_URL and len(oidc_clients) > 0:
                 except Exception:
                     pass
 
+            if "name" not in userinfo and "name" in args:
+                userinfo["name"] = args["name"]
+
             if "email" in userinfo:
                 if User.find_by_email(userinfo["email"].strip()):
                     return "Request invalid: email", 400
             elif EMAIL_MANDATORY:
                 return "Request invalid: email", 400
+
+            email_prefix = (
+                userinfo["email"].split("@", 1)[0].strip()
+                if "email" in userinfo
+                else None
+            )
 
             username = (
                 userinfo["preferred_username"].lower().replace(" ", "").replace("@", "")
@@ -656,18 +670,26 @@ if FRONT_URL and len(oidc_clients) > 0:
                     if "name" in userinfo
                     else None
                 )
+            if not username or User.find_by_username(username):
+                username = (
+                    email_prefix.lower().replace(" ", "").replace("@", "")
+                    if email_prefix
+                    else None
+                )
+            if not username or User.find_by_username(username):
+                username = userinfo["sub"].lower().replace(" ", "").replace("@", "")
                 if not username or User.find_by_username(username):
-                    username = userinfo["sub"].lower().replace(" ", "").replace("@", "")
-                    if not username or User.find_by_username(username):
-                        username = uuid.uuid4().hex
+                    username = uuid.uuid4().hex
             newUser = User(
                 username=username,
                 name=(
-                    userinfo["name"].strip() if "name" in userinfo else userinfo["sub"]
+                    userinfo["name"].strip()
+                    if "name" in userinfo and userinfo["name"].strip()
+                    else (email_prefix or userinfo["sub"])
                 ),
                 email=userinfo["email"].strip() if "email" in userinfo else None,
                 email_verified=(
-                    userinfo["email_verified"]
+                    userinfo["email_verified"] in (True, "true", "True")
                     if "email_verified" in userinfo
                     else False
                 ),

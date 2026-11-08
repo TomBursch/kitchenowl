@@ -544,12 +544,17 @@ class ApiService {
     return Map<String, String>.from((jsonDecode(res.body)));
   }
 
-  Future<(String?, String?)> loginOIDC(String state, String code) async {
+  Future<(String?, String?)> loginOIDC(
+    String state,
+    String code, {
+    String? name,
+  }) async {
     final res = await post(
       '/auth/callback',
       jsonEncode({
         'state': state,
         'code': code,
+        if (name != null && name.isNotEmpty) 'name': name,
         if (await Config.deviceName != null) 'device': await Config.deviceName,
       }),
     );

@@ -1,15 +1,81 @@
+#!/usr/bin/env python3
+import argparse
+import sys
+import time
 from os import listdir
 from os.path import isfile, join
-import time
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        description="Manage KitchenOwl (starts interactive menu if no task flags are given)",
+    )
+    parser.add_argument(
+        "--run-jobs",
+        action="store_true",
+        help="Run all periodic jobs (monthly, daily, half-hourly)",
+    )
+    parser.add_argument(
+        "--send-terms-mail",
+        action="store_true",
+        help="Send updated terms mail to all users with a verified email",
+    )
+    parser.add_argument(
+        "--send-verification-mail",
+        action="store_true",
+        help="Send verification mail to unverified users",
+    )
+    parser.add_argument(
+        "--delay",
+        type=float,
+        default=0.0,
+        help="Delay between sending mails in seconds (default: 0)",
+    )
+    parser.add_argument(
+        "--import-files",
+        action="store_true",
+        help="Import files from the upload folder",
+    )
+    parser.add_argument(
+        "--delete-unused-files",
+        action="store_true",
+        help="Delete unused files",
+    )
+    parser.add_argument(
+        "--recalculate-blurhashes",
+        action="store_true",
+        help="Generate missing blur-hashes for files",
+    )
+    parser.add_argument(
+        "--delete-empty-households",
+        action="store_true",
+        help="Delete empty households",
+    )
+    return parser.parse_args()
+
+
+if __name__ == "__main__":
+    args = parse_args()
+
 import blurhash
 from PIL import Image
 from tqdm import tqdm
+
 from app import app, db
 from app.config import UPLOAD_FOLDER
 from app.jobs import jobs
-from app.models import User, File, Household, HouseholdMember, ChallengeMailVerify
+from app.models import (
+    ChallengeMailVerify,
+    File,
+    Household,
+    HouseholdMember,
+    User,
+)
 from app.service import mail
-from app.service.delete_unused import deleteEmptyHouseholds, deleteUnusedFiles
+from app.service.delete_unused import (
+    deleteEmptyHouseholds,
+    deleteUnusedFiles,
+)
 from app.service.recalculate_blurhash import recalculateBlurhashes
 
 
@@ -41,6 +107,50 @@ def importFiles():
         raise e
 
 
+def sendVerificationMails(delay: float = 0):
+    if not mail.mailConfigured():
+        print("Mail service not configured")
+        return
+    for user in tqdm(
+        User.query.filter(
+            User.email != None,
+            (User.email_verified == False) | (User.email_verified == None),
+        ).all(),
+        desc="Sending verification mails",
+    ):
+        if len(user.verify_mail_challenge) == 0:
+            mail.sendVerificationMail(
+                user.id, ChallengeMailVerify.create_challenge(user)
+            )
+            if delay > 0:
+                time.sleep(delay)
+
+
+def sendTermsUpdateMails(delay: float = 0):
+    if not mail.mailConfigured():
+        print("Mail service not configured")
+        return
+    for user in tqdm(
+        User.query.filter(
+            User.email != None,
+            User.email_verified == True,
+        ).all(),
+        desc="Sending terms update mails",
+    ):
+        mail.sendTermsUpdateMail(user.id)
+        if delay > 0:
+            time.sleep(delay)
+
+
+def runJobs():
+    print("Starting jobs (might take a while)...")
+    with app.app_context():
+        jobs.monthly()
+        jobs.daily()
+        jobs.halfHourly()
+    print("Done!")
+
+
 def manageHouseholds():
     while True:
         print("""
@@ -67,6 +177,7 @@ What next?
     3. Update user
     4. Delete user
     5. Send verification mail to unverified users
+    6. Send updated terms mail to verified users
     (q) Go back""")
         selection = input("Your selection (q):")
         if selection == "1":
@@ -91,22 +202,11 @@ What next?
             else:
                 user.delete()
         elif selection == "5":
-            if not mail.mailConfigured():
-                print("Mail service not configured")
-                continue
             delay = float(input("Delay between mails in seconds (0):") or "0")
-            for user in tqdm(
-                User.query.filter(
-                    (User.email_verified == False) | (User.email_verified == None)
-                ).all(),
-                desc="Sending mails",
-            ):
-                if len(user.verify_mail_challenge) == 0:
-                    mail.sendVerificationMail(
-                        user.id, ChallengeMailVerify.create_challenge(user)
-                    )
-                    if delay > 0:
-                        time.sleep(delay)
+            sendVerificationMails(delay)
+        elif selection == "6":
+            delay = float(input("Delay between mails in seconds (0):") or "0")
+            sendTermsUpdateMails(delay)
         else:
             return
 
@@ -170,6 +270,41 @@ What next?
 
 # docker exec -it [backend container name] python manage.py
 if __name__ == "__main__":
+    has_flag = any(
+        [
+            args.run_jobs,
+            args.send_terms_mail,
+            args.send_verification_mail,
+            args.import_files,
+            args.delete_unused_files,
+            args.recalculate_blurhashes,
+            args.delete_empty_households,
+        ]
+    )
+
+    if has_flag:
+        if args.import_files:
+            with app.app_context():
+                importFiles()
+        if args.delete_unused_files:
+            with app.app_context():
+                print(f"Deleted {deleteUnusedFiles()} unused files")
+        if args.recalculate_blurhashes:
+            with app.app_context():
+                print(f"Updated {recalculateBlurhashes()} files")
+        if args.delete_empty_households:
+            with app.app_context():
+                print(f"Deleted {deleteEmptyHouseholds()} unused households")
+        if args.send_verification_mail:
+            with app.app_context():
+                sendVerificationMails(args.delay)
+        if args.send_terms_mail:
+            with app.app_context():
+                sendTermsUpdateMails(args.delay)
+        if args.run_jobs:
+            runJobs()
+        sys.exit()
+
     while True:
         print("""
 Manage KitchenOwl\n---\nWhat do you want to do?
@@ -189,11 +324,6 @@ Manage KitchenOwl\n---\nWhat do you want to do?
             with app.app_context():
                 manageFiles()
         elif selection == "4":
-            print("Starting jobs (might take a while)...")
-            with app.app_context():
-                jobs.monthly()
-                jobs.daily()
-                jobs.halfHourly()
-            print("Done!")
+            runJobs()
         else:
-            exit()
+            sys.exit()

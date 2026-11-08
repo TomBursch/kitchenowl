@@ -33,6 +33,8 @@ class SettingsCubit extends Cubit<SettingsState> {
         .readBool(key: 'restoreLastShoppingList');
     final shoppingListKeepAwake = PreferenceStorage.getInstance()
         .readBool(key: 'shoppingListKeepAwake');
+    final advancedRecipesControl = PreferenceStorage.getInstance()
+        .readBool(key: 'advancedRecipesControl');
 
     Config.deviceInfo = DeviceInfoPlugin().deviceInfo;
     Config.packageInfo = PackageInfo.fromPlatform();
@@ -59,6 +61,7 @@ class SettingsCubit extends Cubit<SettingsState> {
       recentItemsCategorize: await recentItemsCategorize ?? false,
       restoreLastShoppingList: await restoreLastShoppingList ?? false,
       shoppingListKeepAwake: await shoppingListKeepAwake ?? false,
+      advancedRecipesControl: await advancedRecipesControl ?? false,
     ));
   }
 
@@ -142,6 +145,14 @@ class SettingsCubit extends Cubit<SettingsState> {
     );
     emit(state.copyWith(shoppingListKeepAwake: shoppingListKeepAwake));
   }
+
+  void setAdvancedRecipesControl(bool advancedRecipesControl) {
+    PreferenceStorage.getInstance().writeBool(
+      key: 'advancedRecipesControl',
+      value: advancedRecipesControl,
+    );
+    emit(state.copyWith(advancedRecipesControl: advancedRecipesControl));
+  }
 }
 
 class SettingsState extends Equatable {
@@ -156,6 +167,7 @@ class SettingsState extends Equatable {
   final bool recentItemsCategorize;
   final bool restoreLastShoppingList;
   final bool shoppingListKeepAwake;
+  final bool advancedRecipesControl;
 
   const SettingsState({
     this.themeMode = ThemeMode.system,
@@ -169,6 +181,7 @@ class SettingsState extends Equatable {
     this.recentItemsCategorize = false,
     this.restoreLastShoppingList = false,
     this.shoppingListKeepAwake = false,
+    this.advancedRecipesControl = false,
   });
 
   SettingsState copyWith({
@@ -183,6 +196,7 @@ class SettingsState extends Equatable {
     bool? recentItemsCategorize,
     bool? restoreLastShoppingList,
     bool? shoppingListKeepAwake,
+    bool? advancedRecipesControl,
   }) =>
       SettingsState(
         themeMode: themeMode ?? this.themeMode,
@@ -200,6 +214,8 @@ class SettingsState extends Equatable {
             restoreLastShoppingList ?? this.restoreLastShoppingList,
         shoppingListKeepAwake:
             shoppingListKeepAwake ?? this.shoppingListKeepAwake,
+        advancedRecipesControl:
+            advancedRecipesControl ?? this.advancedRecipesControl,
       );
 
   @override
@@ -215,5 +231,6 @@ class SettingsState extends Equatable {
         recentItemsCategorize,
         restoreLastShoppingList,
         shoppingListKeepAwake,
+        advancedRecipesControl,
       ];
 }

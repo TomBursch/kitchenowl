@@ -606,6 +606,19 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Server Management
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -617,6 +630,34 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#command-line-flags" class="md-nav__link">
+    <span class="md-ellipsis">
+      Command Line Flags
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -836,6 +877,23 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#command-line-flags" class="md-nav__link">
+    <span class="md-ellipsis">
+      Command Line Flags
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -864,7 +922,7 @@ Which will prompt you for what you want to do:
 What do you want to do?
 1.  Manage users
 2.  Manage households
-3.  Import files
+3.  Manage images/files
 4.  Run all jobs
 (q) Exit
 Your selection (q):
@@ -874,8 +932,60 @@ Some things that you can do with this:</p>
 <ul>
 <li>Add/Update/Remove users </li>
 <li>Add users to households</li>
+<li>Send verification or updated terms mails to users</li>
+<li>Import files, delete unused files/empty households, and generate missing blur-hashes</li>
 <li>Run jobs like regenerating item orderings and suggestions</li>
 </ul>
+<h2 id="command-line-flags">Command Line Flags</h2>
+<p>You can also run specific tasks non-interactively by passing flags to <code>manage.py</code>:</p>
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>BACKEND_CONTAINER_NAME<span class="w"> </span>python<span class="w"> </span>manage.py<span class="w"> </span>--run-jobs
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Flag</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-h</code>, <code>--help</code></td>
+<td>Show help message and exit</td>
+</tr>
+<tr>
+<td><code>--run-jobs</code></td>
+<td>Run all periodic jobs (monthly, daily, half-hourly)</td>
+</tr>
+<tr>
+<td><code>--send-terms-mail</code></td>
+<td>Send updated terms mail to all users with a verified email</td>
+</tr>
+<tr>
+<td><code>--send-verification-mail</code></td>
+<td>Send verification mail to unverified users</td>
+</tr>
+<tr>
+<td><code>--delay &lt;seconds&gt;</code></td>
+<td>Delay between sending mails in seconds (default: <code>0</code>)</td>
+</tr>
+<tr>
+<td><code>--import-files</code></td>
+<td>Import files from the upload folder</td>
+</tr>
+<tr>
+<td><code>--delete-unused-files</code></td>
+<td>Delete unused files</td>
+</tr>
+<tr>
+<td><code>--recalculate-blurhashes</code></td>
+<td>Generate missing blur-hashes for files</td>
+</tr>
+<tr>
+<td><code>--delete-empty-households</code></td>
+<td>Delete empty households</td>
+</tr>
+</tbody>
+</table>
 
 
 

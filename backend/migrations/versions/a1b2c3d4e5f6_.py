@@ -1,7 +1,7 @@
 """add recipe_tombstone table
 
 Revision ID: a1b2c3d4e5f6
-Revises: 0b10d67750be
+Revises: ff57ce339705
 Create Date: 2026-07-11 00:00:00.000000
 
 """
@@ -11,7 +11,7 @@ import sqlalchemy as sa
 
 # revision identifiers, used by Alembic.
 revision = 'a1b2c3d4e5f6'
-down_revision = '0b10d67750be'
+down_revision = 'ff57ce339705'
 branch_labels = None
 depends_on = None
 

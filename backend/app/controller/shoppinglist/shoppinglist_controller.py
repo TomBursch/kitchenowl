@@ -8,6 +8,7 @@ from app.models import (
     Status,
     Association,
     ShoppinglistItems,
+    ShoppinglistLocation,
 )
 from app.helpers import validate_args, authorize_household
 from .schemas import (
@@ -32,12 +33,26 @@ shoppinglist = Blueprint("shoppinglist", __name__)
 shoppinglistHousehold = Blueprint("shoppinglist", __name__)
 
 
+def _setLocations(shoppinglist: Shoppinglist, locations: list[dict]):
+    shoppinglist.locations = [
+        ShoppinglistLocation(
+            name=(location.get("name") or "").strip() or None,
+            latitude=location["latitude"],
+            longitude=location["longitude"],
+            radius=location["radius"],
+        )
+        for location in locations
+    ]
+
+
 @shoppinglistHousehold.route("", methods=["POST"])
 @jwt_required()
 @authorize_household()
 @validate_args(CreateList)
 def createShoppinglist(args, household_id):
     shoppinglist = Shoppinglist(name=args["name"], household_id=household_id)
+    if "locations" in args:
+        _setLocations(shoppinglist, args["locations"])
     shoppinglist.save()
     shoppinglist_dict = shoppinglist.obj_to_dict()
     socketio.emit(
@@ -99,9 +114,17 @@ def updateShoppinglist(args, id):
 
     if "name" in args:
         shoppinglist.name = args["name"]
+    if "locations" in args:
+        _setLocations(shoppinglist, args["locations"])
 
     shoppinglist.save()
-    return jsonify(shoppinglist.obj_to_dict())
+    shoppinglist_dict = shoppinglist.obj_to_dict()
+    socketio.emit(
+        "shoppinglist:update",
+        {"shoppinglist": shoppinglist_dict},
+        to="household/" + str(shoppinglist.household_id),
+    )
+    return jsonify(shoppinglist_dict)
 
 
 @shoppinglist.route("/<int:id>", methods=["DELETE"])

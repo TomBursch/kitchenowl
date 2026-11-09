@@ -224,6 +224,7 @@
   "@languageSelect": {},
   "@larger": {},
   "@lastUsed": {},
+  "@latitude": {},
   "@link": {
     "description": "The verb, as in link social account (e.g. Google)"
   },
@@ -246,6 +247,63 @@
   "@lltWarningContent": {},
   "@lltWarningTitle": {},
   "@llts": {},
+  "@locationArrivalNotificationsForList": {},
+  "@locationAutoSwitch": {},
+  "@locationBackgroundPermissionHint": {},
+  "@locationBasedShoppingLists": {},
+  "@locationBasedShoppingListsDescription": {},
+  "@locationConfirmSwitch": {},
+  "@locationIgnoreEmptyLists": {},
+  "@locationNotificationBody": {
+    "placeholders": {
+      "count": {
+        "type": "num"
+      },
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "@locationNotificationBodyEmpty": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "@locationNotificationChannel": {},
+  "@locationNotificationTitle": {
+    "placeholders": {
+      "location": {
+        "type": "String"
+      }
+    }
+  },
+  "@locationNotifyOnArrival": {},
+  "@locationNotifyOncePerVisit": {},
+  "@locationOnlyThisDevice": {},
+  "@locationShowOnMap": {},
+  "@locationSwitchConfirmContent": {
+    "placeholders": {
+      "location": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "@locationSwitchConfirmTitle": {},
+  "@locationSwitched": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "@locationUnavailable": {},
+  "@locationUseCurrent": {},
+  "@locationUseStoreLocations": {},
   "@login": {},
   "@loginTo": {},
   "@loginToAddToShoppingList": {},
@@ -260,6 +318,7 @@
   },
   "@longPressToReorder": {},
   "@longerThanExpected": {},
+  "@longitude": {},
   "@markAsPaid": {},
   "@mealPlanner": {},
   "@member": {},
@@ -339,6 +398,7 @@
   "@profile": {},
   "@public": {},
   "@publicRecipeDescription": {},
+  "@radius": {},
   "@reason": {},
   "@recentItemsCategorize": {},
   "@shoppingListKeepAwake": {},
@@ -445,6 +505,18 @@
   },
   "@shoppingListEdit": {},
   "@shoppingListEmpty": {},
+  "@shoppingListLocationAdd": {},
+  "@shoppingListLocationEdit": {},
+  "@shoppingListLocationNameHint": {},
+  "@shoppingListLocations": {},
+  "@shoppingListLocationsCount": {
+    "placeholders": {
+      "count": {
+        "type": "num"
+      }
+    }
+  },
+  "@shoppingListLocationsEmpty": {},
   "@shoppingListStyle": {},
   "@shoppingLists": {},
   "@signInWith": {
@@ -674,6 +746,7 @@
   "languageSelect": "Select a language",
   "larger": "Larger",
   "lastUsed": "Last used",
+  "latitude": "Latitude",
   "link": "Link",
   "linkNoun": "Link",
   "linkRecipeDescription": "Anyone with the link to this recipe can view it.",
@@ -685,6 +758,27 @@
   "lltWarningContent": "Are you sure you want to create a long-lived token? This could potentially be a security risk. The token does not expire and gives full access to your account.",
   "lltWarningTitle": "Do you know what you're doing?",
   "llts": "Long-lived tokens",
+  "locationArrivalNotificationsForList": "Arrival notifications for this list",
+  "locationAutoSwitch": "Switch shopping list automatically",
+  "locationBackgroundPermissionHint": "To be notified while KitchenOwl is closed, allow location access all the time.",
+  "locationBasedShoppingLists": "Location-based shopping lists",
+  "locationBasedShoppingListsDescription": "Use the locations assigned to your shopping lists when you arrive at a store",
+  "locationConfirmSwitch": "Ask before switching",
+  "locationIgnoreEmptyLists": "Ignore empty lists",
+  "locationNotificationBody": "{count, plural, =1{You have 1 item on your {name} list} other{You have {count} items on your {name} list}}",
+  "locationNotificationBodyEmpty": "Your {name} list is empty",
+  "locationNotificationChannel": "Shopping list reminders",
+  "locationNotificationTitle": "You've arrived at {location}",
+  "locationNotifyOnArrival": "Notify on arrival",
+  "locationNotifyOncePerVisit": "Notify only once per visit",
+  "locationOnlyThisDevice": "Only applies to this device",
+  "locationShowOnMap": "Show on map",
+  "locationSwitchConfirmContent": "You are near {location}. Do you want to switch to the shopping list {name}?",
+  "locationSwitchConfirmTitle": "Switch shopping list?",
+  "locationSwitched": "Switched to {name} based on your location",
+  "locationUnavailable": "Your location could not be determined. Please check the location permission.",
+  "locationUseCurrent": "Use current location",
+  "locationUseStoreLocations": "Use store locations",
   "login": "Login",
   "loginTo": "Login to",
   "loginToAddToShoppingList": "Log in to add this recipe to your shopping list",
@@ -692,6 +786,7 @@
   "logoutName": "Logout {name}",
   "longPressToReorder": "Long press to reorder",
   "longerThanExpected": "This is taking longer than expected",
+  "longitude": "Longitude",
   "markAsPaid": "Mark as paid",
   "mealPlanner": "Meal planner",
   "member": "Member",
@@ -742,6 +837,7 @@
   "profile": "Profile",
   "public": "Public",
   "publicRecipeDescription": "The recipe is public and might be suggested to others.",
+  "radius": "Radius",
   "reason": "Reason",
   "recentItemsCategorize": "Categorize recent items",
   "recipeAdd": "Add recipe",
@@ -805,6 +901,12 @@
   "shoppingListEdit": "Edit shopping list",
   "shoppingListEmpty": "The shopping list is empty. Add an item using the search function above.",
   "shoppingListKeepAwake": "Keep screen on while shopping",
+  "shoppingListLocationAdd": "Add location",
+  "shoppingListLocationEdit": "Edit location",
+  "shoppingListLocationNameHint": "Name (e.g. Lidl Main Street)",
+  "shoppingListLocations": "Locations",
+  "shoppingListLocationsCount": "{count, plural, =0{No locations} =1{1 location} other{{count} locations}}",
+  "shoppingListLocationsEmpty": "No locations yet. Add the stores where you use this shopping list, e.g. every branch of your supermarket.",
   "shoppingListStyle": "Shopping list style",
   "shoppingLists": "Shopping lists",
   "showPastPlans": "Show all plans",

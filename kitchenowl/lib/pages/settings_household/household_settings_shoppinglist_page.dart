@@ -3,11 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/cubits/household_add_update/household_update_cubit.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/shoppinglist.dart';
+import 'package:kitchenowl/pages/settings_household/household_settings_shoppinglist_locations_page.dart';
 import 'package:kitchenowl/widgets/dismissible_card.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
 enum _ShoppinglistAction {
   rename,
+  locations,
   delete;
 }
 
@@ -102,11 +104,11 @@ class HouseholdSettingsShoppinglistPage extends StatelessWidget {
                       title: Text(
                         state.shoppingLists.elementAt(i).name,
                       ),
-                      subtitle: i == 0
-                          ? Text(
-                              '(${AppLocalizations.of(context)!.defaultWord})',
-                            )
-                          : null,
+                      subtitle: _buildSubtitle(
+                        context,
+                        state.shoppingLists.elementAt(i),
+                        i == 0,
+                      ),
                       onTap: () async {
                         _handleAction(
                           context,
@@ -149,6 +151,17 @@ class HouseholdSettingsShoppinglistPage extends StatelessWidget {
                                           onPressed: () => Navigator.of(context)
                                               .pop(_ShoppinglistAction.rename),
                                         ),
+                                        ActionChip(
+                                          avatar: const Icon(
+                                              Icons.location_on_rounded),
+                                          label: Text(
+                                            AppLocalizations.of(context)!
+                                                .shoppingListLocations,
+                                          ),
+                                          onPressed: () => Navigator.of(context)
+                                              .pop(_ShoppinglistAction
+                                                  .locations),
+                                        ),
                                         if (i != 0)
                                           ActionChip(
                                             avatar: const Icon(
@@ -182,6 +195,21 @@ class HouseholdSettingsShoppinglistPage extends StatelessWidget {
     );
   }
 
+  Widget? _buildSubtitle(
+    BuildContext context,
+    ShoppingList shoppingList,
+    bool isDefault,
+  ) {
+    final parts = [
+      if (isDefault) '(${AppLocalizations.of(context)!.defaultWord})',
+      if (shoppingList.locations.isNotEmpty)
+        AppLocalizations.of(context)!
+            .shoppingListLocationsCount(shoppingList.locations.length),
+    ];
+
+    return parts.isEmpty ? null : Text(parts.join(' · '));
+  }
+
   //ignore: long-method
   Future<void> _handleAction(
     BuildContext context,
@@ -212,6 +240,17 @@ class HouseholdSettingsShoppinglistPage extends StatelessWidget {
             shoppingLists.elementAt(shoppingListIndex).copyWith(name: res),
           );
         }
+        break;
+      case _ShoppinglistAction.locations:
+        final cubit = BlocProvider.of<HouseholdUpdateCubit>(context);
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => BlocProvider.value(
+            value: cubit,
+            child: HouseholdSettingsShoppinglistLocationsPage(
+              shoppingListId: shoppingLists.elementAt(shoppingListIndex).id!,
+            ),
+          ),
+        ));
         break;
       case _ShoppinglistAction.delete:
         if (await confirmDeleteShoppingList(

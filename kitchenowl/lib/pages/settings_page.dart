@@ -20,8 +20,10 @@ import 'package:kitchenowl/pages/household_update_page.dart';
 import 'package:kitchenowl/pages/reports_list_page.dart';
 import 'package:kitchenowl/pages/settings_server_user_page.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
+import 'package:kitchenowl/services/location_service.dart';
 import 'package:kitchenowl/styles/colors.dart';
 import 'package:kitchenowl/widgets/settings/color_button.dart';
+import 'package:kitchenowl/widgets/settings/sliver_location_settings.dart';
 import 'package:kitchenowl/widgets/sliver_expansion_tile.dart';
 import 'package:kitchenowl/widgets/user_list_tile.dart';
 import 'package:sliver_tools/sliver_tools.dart';
@@ -316,6 +318,11 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
           ),
         ),
+        if (LocationService.isLocationSupported)
+          const SliverCrossAxisConstrained(
+            maxCrossAxisExtent: 1600,
+            child: SliverLocationSettings(),
+          ),
         SliverCrossAxisConstrained(
           maxCrossAxisExtent: 1600,
           child: BlocBuilder<SettingsCubit, SettingsState>(

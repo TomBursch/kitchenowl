@@ -1,4 +1,4 @@
-from marshmallow import fields, Schema, EXCLUDE
+from marshmallow import fields, Schema, EXCLUDE, validate
 
 
 class GetShoppingLists(Schema):
@@ -24,12 +24,26 @@ class AddRecipeItems(Schema):
     items = fields.List(fields.Nested(RecipeItem))
 
 
+class ShoppinglistLocation(Schema):
+    class Meta:
+        unknown = EXCLUDE
+
+    name = fields.String(
+        load_default=None, allow_none=True, validate=validate.Length(max=128)
+    )
+    latitude = fields.Float(required=True, validate=validate.Range(min=-90, max=90))
+    longitude = fields.Float(required=True, validate=validate.Range(min=-180, max=180))
+    radius = fields.Integer(load_default=150, validate=validate.Range(min=50, max=5000))
+
+
 class CreateList(Schema):
     name = fields.String(required=True, validate=lambda a: a and not a.isspace())
+    locations = fields.List(fields.Nested(ShoppinglistLocation))
 
 
 class UpdateList(Schema):
     name = fields.String(validate=lambda a: a and not a.isspace())
+    locations = fields.List(fields.Nested(ShoppinglistLocation))
 
 
 class GetItems(Schema):

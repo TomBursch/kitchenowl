@@ -2,6 +2,7 @@ import 'package:kitchenowl/config.dart';
 import 'package:kitchenowl/cubits/auth_cubit.dart';
 import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
+import 'package:kitchenowl/services/location_service.dart';
 import 'package:kitchenowl/services/storage/mem_storage.dart';
 import 'package:kitchenowl/services/storage/storage.dart';
 import 'package:kitchenowl/services/transaction_handler.dart';
@@ -25,10 +26,22 @@ class BackgroundTask {
   }
 
   static Future<void> runHeadless() async {
+    if (!await connectHeadless()) return;
+
+    final preferenceStorage = PreferenceStorage.getInstance();
+    await Future.wait([
+      TransactionHandler.getInstance().runOpenTransactions(),
+      _refreshShoppingLists(preferenceStorage),
+    ]);
+  }
+
+  /// Connects the [ApiService] to the server outside of the app's UI, e.g.
+  /// in a headless background task. Returns true if authenticated.
+  static Future<bool> connectHeadless() async {
     final preferenceStorage = PreferenceStorage.getInstance();
     final forcedOfflineMode =
         await preferenceStorage.readBool(key: 'forcedOfflineMode') ?? false;
-    if (forcedOfflineMode) return;
+    if (forcedOfflineMode) return false;
 
     Config.packageInfo = PackageInfo.fromPlatform();
     final url =
@@ -45,12 +58,8 @@ class BackgroundTask {
     });
 
     await ApiService.connectTo(url, refreshToken: token);
-    if (!ApiService.getInstance().isAuthenticated()) return;
 
-    await Future.wait([
-      TransactionHandler.getInstance().runOpenTransactions(),
-      _refreshShoppingLists(preferenceStorage),
-    ]);
+    return ApiService.getInstance().isAuthenticated();
   }
 
   static Future<void> _refreshShoppingLists(
@@ -69,6 +78,7 @@ class BackgroundTask {
     if (shoppingLists != null) {
       await MemStorage.getInstance()
           .writeShoppingLists(household, shoppingLists);
+      await LocationService.syncGeofences(household, shoppingLists);
     }
   }
 }

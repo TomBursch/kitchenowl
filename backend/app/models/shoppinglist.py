@@ -45,6 +45,26 @@ class Shoppinglist(Model, DbModelAuthorizeMixin):
         ),
     )
 
+    locations: Mapped[List["ShoppinglistLocation"]] = cast(
+        Mapped[List["ShoppinglistLocation"]],
+        db.relationship(
+            "ShoppinglistLocation",
+            back_populates="shoppinglist",
+            cascade="all, delete-orphan",
+            order_by="ShoppinglistLocation.id",
+            lazy="selectin",
+        ),
+    )
+
+    def obj_to_dict(
+        self,
+        skip_columns: list[str] | None = None,
+        include_columns: list[str] | None = None,
+    ) -> dict[str, Any]:
+        res = super().obj_to_dict(skip_columns, include_columns)
+        res["locations"] = [location.obj_to_dict() for location in self.locations]
+        return res
+
     @classmethod
     def getDefault(cls, household_id: int) -> Self:
         return cast(
@@ -54,6 +74,28 @@ class Shoppinglist(Model, DbModelAuthorizeMixin):
 
     def isDefault(self) -> bool:
         return self.id == self.getDefault(self.household_id).id
+
+
+class ShoppinglistLocation(Model):
+    __tablename__ = "shoppinglist_location"
+
+    id: Mapped[int] = db.Column(db.Integer, primary_key=True)
+    shoppinglist_id: Mapped[int] = db.Column(
+        db.Integer, db.ForeignKey("shoppinglist.id"), nullable=False, index=True
+    )
+    name: Mapped[str | None] = db.Column(db.String(128), nullable=True)
+    latitude: Mapped[float] = db.Column(db.Float, nullable=False)
+    longitude: Mapped[float] = db.Column(db.Float, nullable=False)
+    # Geofence radius in meters
+    radius: Mapped[int] = db.Column(db.Integer, nullable=False, default=150)
+
+    shoppinglist: Mapped["Shoppinglist"] = cast(
+        Mapped["Shoppinglist"],
+        db.relationship(
+            "Shoppinglist",
+            back_populates="locations",
+        ),
+    )
 
 
 class ShoppinglistItems(Model):

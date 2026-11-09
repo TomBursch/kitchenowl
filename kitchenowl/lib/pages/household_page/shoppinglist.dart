@@ -8,6 +8,7 @@ import 'package:kitchenowl/cubits/shoppinglist_cubit.dart';
 import 'package:kitchenowl/enums/shoppinglist_sorting.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/kitchenowl.dart';
+import 'package:kitchenowl/services/location_service.dart';
 import 'package:kitchenowl/widgets/choice_scroll.dart';
 import 'package:kitchenowl/widgets/shopping_list/shopping_list_choice_chip.dart';
 import 'package:kitchenowl/widgets/shopping_list/sliver_shopinglist_item_view.dart';
@@ -20,23 +21,106 @@ class ShoppinglistPage extends StatefulWidget {
   _ShoppinglistPageState createState() => _ShoppinglistPageState();
 }
 
-class _ShoppinglistPageState extends State<ShoppinglistPage> {
+class _ShoppinglistPageState extends State<ShoppinglistPage>
+    with WidgetsBindingObserver {
   final TextEditingController searchController = TextEditingController();
+  bool _checkingLocation = false;
+  // The shopping list whose location the user is currently at and that was
+  // already offered/switched to. Reset once the user leaves the location.
+  int? _handledLocationShoppingListId;
 
   @override
   void initState() {
     super.initState();
-    searchController.text = BlocProvider.of<ShoppinglistCubit>(context).query;
+    WidgetsBinding.instance.addObserver(this);
+    final cubit = BlocProvider.of<ShoppinglistCubit>(context);
+    searchController.text = cubit.query;
     if (BlocProvider.of<SettingsCubit>(context).state.shoppingListKeepAwake) {
       WakelockPlus.enable();
+    }
+    if (cubit.state.shoppinglists.isNotEmpty) {
+      _checkLocation();
+    } else {
+      cubit.stream
+          .firstWhere((state) => state.shoppinglists.isNotEmpty)
+          .then((_) => _checkLocation())
+          .catchError((_) {});
     }
   }
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     WakelockPlus.disable();
     searchController.dispose();
     super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) _checkLocation();
+  }
+
+  /// Switches to the shopping list assigned to the current location
+  Future<void> _checkLocation() async {
+    if (_checkingLocation || !mounted) return;
+    final settings = BlocProvider.of<SettingsCubit>(context).state.location;
+    if (!settings.enabled || !settings.autoSwitch) return;
+    final cubit = BlocProvider.of<ShoppinglistCubit>(context);
+    if (!cubit.state.shoppinglists.values
+        .any((list) => list.locations.isNotEmpty)) {
+      return;
+    }
+
+    _checkingLocation = true;
+    try {
+      final position = await LocationService.getCurrentPosition();
+      if (position == null || !mounted) return;
+      final match = LocationService.findShoppingListAt(
+        cubit.state.shoppinglists.values,
+        position.latitude,
+        position.longitude,
+      );
+      if (match == null) {
+        _handledLocationShoppingListId = null;
+        return;
+      }
+      final (shoppingList, location) = match;
+      if (shoppingList.id == _handledLocationShoppingListId) return;
+      _handledLocationShoppingListId = shoppingList.id;
+      if (shoppingList.id == cubit.state.selectedShoppinglistId) return;
+
+      if (settings.confirmSwitch) {
+        final confirmed = await askForConfirmation(
+          context: context,
+          title: Text(AppLocalizations.of(context)!.locationSwitchConfirmTitle),
+          content: Text(
+            AppLocalizations.of(context)!.locationSwitchConfirmContent(
+              (location.name?.isNotEmpty ?? false)
+                  ? location.name!
+                  : shoppingList.name,
+              shoppingList.name,
+            ),
+          ),
+          confirmText: AppLocalizations.of(context)!.yes,
+          confirmBackgroundColor: null,
+          confirmForegroundColor: null,
+        );
+        if (!confirmed || !mounted) return;
+        cubit.setShoppingList(shoppingList);
+      } else {
+        cubit.setShoppingList(shoppingList);
+        showSnackbar(
+          context: context,
+          width: null,
+          content: Text(
+            AppLocalizations.of(context)!.locationSwitched(shoppingList.name),
+          ),
+        );
+      }
+    } finally {
+      _checkingLocation = false;
+    }
   }
 
   @override

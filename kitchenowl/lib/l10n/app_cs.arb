@@ -176,6 +176,14 @@
       }
     }
   },
+  "@recipeGenerateTokens": {
+    "placeholders": {
+      "count": {
+        "example": "1250",
+        "type": "int"
+      }
+    }
+  },
   "@recipeGoToInHousehold": {
     "placeholders": {
       "householdName": {
@@ -225,6 +233,14 @@
   },
   "@unlink": {
     "description": "As in remove link to social account (e.g. Google)"
+  },
+  "@unlinkConfirm": {
+    "placeholders": {
+      "provider": {
+        "example": "OIDC",
+        "type": "String"
+      }
+    }
   },
   "@userDeleteConfirmation": {
     "placeholders": {
@@ -281,6 +297,7 @@
   "confirm": "Potvrdit",
   "cookingTime": "Délka přípravy",
   "copied": "Zkopírováno",
+  "currency": "Měna",
   "daily": "Denně",
   "dangerZone": "Zóna nebezpečí",
   "darkmode": "Tmavý režim",
@@ -289,6 +306,8 @@
   "defaultWord": "Výchozí",
   "delete": "Smazat",
   "description": "Popis",
+  "detectingIngredients": "Rozpoznávám ingredience...",
+  "detectingIngredientsAi": "Rozpoznávám ingredience pomocí AI...",
   "discover": "Objevit",
   "done": "Hotovo",
   "dynamicAccentColor": "Dynamický odstín",
@@ -318,6 +337,7 @@
   "expenseReceivedFor": "Přijato od",
   "export": "Exportovat",
   "features": "Funkce",
+  "fetchingWebsite": "Stahuji webovou stránku...",
   "fieldCannotBeEmpty": "{field} nesmí být prázdné.",
   "forceOfflineMode": "Vynutit offline mód",
   "gallery": "Galerie",
@@ -435,6 +455,18 @@
   "recipeEdit": "Upravit recept",
   "recipeEmpty": "Žádné recepty, začněte přidáním jednoho!",
   "recipeEmptySearch": "Nenašli jsme žádné recepty :(",
+  "recipeGenerate": "Vygenerovat recept pomocí AI",
+  "recipeGenerateFollowUpAnother": "Navrhni jiný recept",
+  "recipeGenerateFollowUpDetailed": "Vysvětli kroky detilněji",
+  "recipeGenerateFollowUpVegetarian": "Předělěj to vegetariánsky",
+  "recipeGenerateHint": "Popište chod nebo vyjmenujte vaše ingredience…",
+  "recipeGenerateQuestion": "Co by jste dnes rád/a uvařil/a?",
+  "recipeGenerateSuggestionFewIngredients": "Navrhni středomořský hlavní chod s maximálně 5 ingrediencemi (běžné položky jako sůl, pepř, olej nebo vývar se nepočítají).",
+  "recipeGenerateSuggestionFridge": "V lednici mám pouze brmbory, rajčata, sýr, jogurt a vejce. Co mohu uvařit?",
+  "recipeGenerateSuggestionMealPrep": "Oběd s svzsokým obsahem proteinu, který mohu připravit a vystačí na celý týden.",
+  "recipeGenerateSuggestionQuick": "Vegetariánská včeře ve všední den pro 2, která je hotová do 30 minut.",
+  "recipeGenerateSuggestions": "Navrhované prompty",
+  "recipeGenerateTokens": "{count} tokenů",
   "recipeGoToInHousehold": "Už přidáno – přejděte na recept v {householdName}",
   "recipeImageSelect": "Vyberte obrázek receptu",
   "recipeNew": "Nový recept",
@@ -458,6 +490,7 @@
   "reportUser": "Nahlásit uživatele",
   "reset": "Resetovat",
   "save": "Uložit",
+  "scrapingUsingAi": "Extrahuji recept pomocí AI...",
   "search": "Hledat",
   "searchHint": "Hledáte něco?",
   "send": "Odeslat",
@@ -512,6 +545,8 @@
   "underConstruction": "Ve vývoji",
   "undo": "Zpět",
   "unlink": "Zrušit propojení",
+  "unlinkConfirm": "Opravdu chcete odpojit svůj účet {provider}? Přihlášení prostřednictvím tohoto účtu již nebude možné.",
+  "unlinkLastLoginMethod": "Toto je jediný způsob, jak se přihlásit. Nejprve si nastavte heslo nebo propojte jiný účet.",
   "unreachableMessage": "Hmmmm… neleze se spojit se serverem",
   "unsavedChangesBody": "Jste si jistý, že se chcete vrátit?",
   "unsavedChangesTitle": "Máte neuložené změny",

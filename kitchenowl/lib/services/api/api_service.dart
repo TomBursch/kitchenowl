@@ -228,6 +228,26 @@ class ApiService {
         ),
       );
 
+  Future<http.StreamedResponse> postStream(
+    String url,
+    dynamic body, {
+    Map<String, String>? extraHeaders,
+    Encoding? encoding,
+    Duration? timeout,
+  }) =>
+      _handleStreamRequest(
+        timeout: timeout,
+        () {
+          final request = http.Request('POST', Uri.parse(baseUrl + url));
+          request.headers.addAll(headers);
+          if (extraHeaders != null) request.headers.addAll(extraHeaders);
+          if (encoding != null) request.encoding = encoding;
+          if (body != null) request.body = body;
+
+          return _client.send(request);
+        },
+      );
+
   Future<http.Response> postBytes(String url, NamedByteArray array) =>
       _handleRequest(
         timeout: _TIMEOUT_FILE_UPLOAD,
@@ -302,6 +322,32 @@ class ApiService {
     }
 
     return http.Response('', 500);
+  }
+
+  Future<http.StreamedResponse> _handleStreamRequest(
+    Future<http.StreamedResponse> Function() request, {
+    bool refreshOnException = true,
+    Duration? timeout,
+  }) async {
+    try {
+      http.StreamedResponse response =
+          await request().timeout(timeout ?? _TIMEOUT);
+
+      if ((!isConnected() && refreshOnException) ||
+          response.statusCode == 401) {
+        await refresh();
+        if (response.statusCode == 401 && isAuthenticated()) {
+          response = await request().timeout(timeout ?? _TIMEOUT);
+        }
+      }
+
+      return response;
+    } catch (e) {
+      debugPrint(e.toString());
+      if (refreshOnException) await refresh();
+    }
+
+    return http.StreamedResponse(const Stream.empty(), 500);
   }
 
   void _setConnectionState(Connection newState) {
@@ -498,12 +544,17 @@ class ApiService {
     return Map<String, String>.from((jsonDecode(res.body)));
   }
 
-  Future<(String?, String?)> loginOIDC(String state, String code) async {
+  Future<(String?, String?)> loginOIDC(
+    String state,
+    String code, {
+    String? name,
+  }) async {
     final res = await post(
       '/auth/callback',
       jsonEncode({
         'state': state,
         'code': code,
+        if (name != null && name.isNotEmpty) 'name': name,
         if (await Config.deviceName != null) 'device': await Config.deviceName,
       }),
     );
@@ -542,5 +593,14 @@ class ApiService {
     }
 
     return (null, null, null);
+  }
+
+  /// Unlinks the given OIDC provider from the current user.
+  /// Returns null on success, otherwise the error message from the server.
+  Future<String?> unlinkOIDC(String provider) async {
+    final res = await delete('/auth/oidc/$provider');
+    if (res.statusCode == 200) return null;
+
+    return res.body;
   }
 }

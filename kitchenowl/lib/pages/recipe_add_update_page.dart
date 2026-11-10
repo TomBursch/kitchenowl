@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:kitchenowl/cubits/auth_cubit.dart';
 import 'package:kitchenowl/cubits/household_cubit.dart';
 import 'package:kitchenowl/cubits/recipe_add_update_cubit.dart';
+import 'package:kitchenowl/cubits/settings_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/models/item.dart';
@@ -705,11 +706,15 @@ class _AddUpdateRecipePageState extends State<AddUpdateRecipePage> {
                               ),
                             ),
                           ),
-                        if (context
-                                .read<AuthCubit>()
-                                .getUser()
-                                ?.hasServerAdminRights() ??
-                            false)
+                        if ((context
+                                    .read<AuthCubit>()
+                                    .getUser()
+                                    ?.hasServerAdminRights() ??
+                                false) &&
+                            context
+                                .watch<SettingsCubit>()
+                                .state
+                                .advancedRecipesControl)
                           SliverToBoxAdapter(
                             child: CheckboxListTile(
                               contentPadding: EdgeInsets.symmetric(

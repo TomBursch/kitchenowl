@@ -22,7 +22,7 @@ class ExpenseItemWidget extends StatelessWidget {
   final Expense expense;
   final void Function()? onUpdated;
   final bool displayPersonalAmount;
-  final String? locale;
+  final String? currency;
 
   const ExpenseItemWidget({
     super.key,
@@ -30,7 +30,7 @@ class ExpenseItemWidget extends StatelessWidget {
     this.household,
     this.onUpdated,
     this.displayPersonalAmount = false,
-    this.locale,
+    this.currency,
   });
 
   @override
@@ -49,7 +49,7 @@ class ExpenseItemWidget extends StatelessWidget {
     }
 
     String formattedAmount =
-        NumberFormat.simpleCurrency(locale: locale).format(amount);
+        NumberFormat.simpleCurrency(locale: currency).format(amount);
 
     if (expense.excludeFromStatistics) {
       formattedAmount = "($formattedAmount)";

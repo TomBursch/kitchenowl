@@ -1,0 +1,8 @@
+- Show longer ingredient names in recipe ingredient cards
+- Open URL from item description on long press
+- Sort and search shopping list items ignoring diacritics
+- On plans: Long-press for removing, press for open recipe
+- Fix ingredients overlap in recipe descriptions
+- Add household currency setting
+- New and updated translations
+- Many other bug fixes and minor improvements

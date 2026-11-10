@@ -2,6 +2,7 @@ from typing import Any, Self, TYPE_CHECKING, cast
 from app import db
 from .shoppinglist import ShoppinglistItems
 from sqlalchemy import func
+from sqlalchemy.dialects.postgresql import distinct_on
 from sqlalchemy.orm import Mapped
 
 import enum
@@ -112,7 +113,7 @@ class History(Model):
                     cls.status == Status.DROPPED,
                     cls.item_id.notin_(sq),
                 )
-                .distinct(cls.item_id)
+                .ext(distinct_on(cls.item_id))
                 .order_by(cls.item_id, cls.created_at.desc())
                 .subquery()
             )

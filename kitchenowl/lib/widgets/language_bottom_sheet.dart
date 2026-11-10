@@ -1,6 +1,6 @@
 import 'package:collection/collection.dart';
+import 'package:kitchenowl/helpers/localized_language.dart';
 import 'package:material_ui/material_ui.dart';
-import 'package:flutter_localized_locales/flutter_localized_locales.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 
 class LanguageBottomSheet extends StatefulWidget {
@@ -53,7 +53,14 @@ class _LanguageBottomSheetState extends State<LanguageBottomSheet> {
           ),
           for (final e in (widget.supportedLanguages?.entries
                   .map((e) => MapEntry(
-                      e.key, LocaleNames.of(context)!.nameOf(e.key) ?? e.value))
+                        e.key,
+                        LocalizedLanguage.nameOf(
+                              context,
+                              e.key,
+                              widget.supportedLanguages,
+                            ) ??
+                            e.value,
+                      ))
                   .sorted((a, b) {
                 if (AppLocalizations.of(context)!.localeName == b.key ||
                     AppLocalizations.of(context)!.localeName == a.key)

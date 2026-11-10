@@ -458,6 +458,23 @@ class _SettingsPageState extends State<SettingsPage> {
                         ),
                       ),
                     ),
+                  if (user.hasServerAdminRights())
+                    ListTile(
+                      title: const Text("Advanced recipes control"),
+                      leading: const Icon(Icons.admin_panel_settings_rounded),
+                      onTap: () => BlocProvider.of<SettingsCubit>(context)
+                          .setAdvancedRecipesControl(
+                        !BlocProvider.of<SettingsCubit>(context)
+                            .state
+                            .advancedRecipesControl,
+                      ),
+                      trailing: KitchenOwlSwitch(
+                        value: state.advancedRecipesControl,
+                        onChanged: (value) =>
+                            BlocProvider.of<SettingsCubit>(context)
+                                .setAdvancedRecipesControl(value),
+                      ),
+                    ),
                 ],
               ),
             ),

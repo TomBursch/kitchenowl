@@ -200,10 +200,13 @@ class _PlannerPageState extends State<PlannerPage> {
                                     title: plan.recipe.name,
                                     selected: true,
                                     description: plan.yields?.toString(),
-                                    onPressed: () {
+                                    onLongPressedIcon: const Icon(
+                                      Icons.done_rounded,
+                                    ),
+                                    onLongPressed: () {
                                       cubit.remove(plan.recipe);
                                     },
-                                    onLongPressed: () => _openRecipePage(
+                                    onPressed: () => _openRecipePage(
                                       context,
                                       cubit,
                                       plan.recipe,
@@ -255,13 +258,16 @@ class _PlannerPageState extends State<PlannerPage> {
                                               !_toDate(plan.cookingDate!)
                                                   .isBefore(
                                                       _toDate(DateTime.now())),
-                                          onPressed: () {
+                                          onLongPressedIcon: const Icon(
+                                            Icons.done_rounded,
+                                          ),
+                                          onLongPressed: () {
                                             cubit.remove(
                                               plan.recipe,
                                               plan.cookingDate,
                                             );
                                           },
-                                          onLongPressed: () => _openRecipePage(
+                                          onPressed: () => _openRecipePage(
                                             context,
                                             cubit,
                                             plan.recipe,

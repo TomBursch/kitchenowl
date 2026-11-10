@@ -18,11 +18,14 @@ abstract class HouseholdAddUpdateCubit<State extends HouseholdAddUpdateState>
   void resetViewOrder();
 
   Future<void> setLanguage(String? langCode);
+
+  Future<void> setCurrency(String? currency);
 }
 
 abstract class HouseholdAddUpdateState extends Equatable {
   final String name;
   final String? language;
+  final String? currency;
   final bool featurePlanner;
   final bool featureExpenses;
   final List<ViewsEnum> viewOrdering;
@@ -32,6 +35,7 @@ abstract class HouseholdAddUpdateState extends Equatable {
   const HouseholdAddUpdateState({
     this.name = "",
     this.language,
+    this.currency,
     this.featurePlanner = true,
     this.featureExpenses = true,
     this.viewOrdering = ViewsEnum.values,
@@ -42,6 +46,7 @@ abstract class HouseholdAddUpdateState extends Equatable {
   List<Object?> get props => [
         name,
         language,
+        currency,
         featurePlanner,
         featureExpenses,
         viewOrdering,

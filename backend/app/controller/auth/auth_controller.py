@@ -1,9 +1,10 @@
 from datetime import datetime, timezone
+import hashlib
 import uuid
 import gevent
 
 from oic import rndstr
-from oic.oic.message import AuthorizationResponse
+from oic.oic.message import AuthorizationResponse, UserInfoErrorResponse
 from oic.oauth2.message import ErrorResponse
 from app.helpers import validate_args
 from flask import jsonify, Blueprint
@@ -373,6 +374,62 @@ def deleteLongLivedToken(id):
     return jsonify({"msg": "DONE"})
 
 
+@auth.route("oidc/<provider>", methods=["DELETE"])
+@jwt_required()
+def unlinkOIDC(provider: str):
+    """Unlink an OIDC provider from the current user.
+    ---
+    delete:
+      summary: Unlink OIDC account
+      description: >
+        Removes the link between the current user and the given OIDC provider.
+        Refused if it would leave the user without any way to log in
+        (no password, or password login disabled, and no other linked provider).
+      parameters:
+        - in: path
+          name: provider
+          schema:
+            type: string
+          required: true
+          description: OIDC provider name (custom, google, apple)
+      responses:
+        200:
+          description: Provider unlinked
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+        400:
+          description: Unlinking would remove the last login method
+        401:
+          description: Unauthorized
+        404:
+          description: Provider not linked
+      security:
+        - bearerAuth: []
+    """
+    user: User = current_user
+    if not user:
+        raise UnauthorizedRequest(message="Unauthorized: IP {}".format(getClientIp()))
+
+    links = [link for link in user.oidc_links if link.provider == provider]
+    if not links:
+        raise NotFoundRequest()
+
+    remaining_links = [link for link in user.oidc_links if link.provider != provider]
+    can_use_password = bool(user.password) and not DISABLE_USERNAME_PASSWORD_LOGIN
+    if not can_use_password and not remaining_links:
+        return "Request invalid: last login method", 400
+
+    for link in links:
+        link.delete()
+
+    return jsonify({"msg": "DONE"})
+
+
 if FRONT_URL and len(oidc_clients) > 0:
 
     @auth.route("oidc", methods=["GET"])
@@ -542,7 +599,11 @@ if FRONT_URL and len(oidc_clients) > 0:
                 )
             )
         userinfo = tokenResponse["id_token"]
-        if userinfo["nonce"] != oidc_request.nonce:
+        expected_nonce_sha256 = hashlib.sha256(
+            oidc_request.nonce.encode("utf-8")
+        ).hexdigest()
+        if userinfo.get("nonce") not in (oidc_request.nonce, expected_nonce_sha256):
+            oidc_request.delete()
             raise UnauthorizedRequest(
                 message="Unauthorized: IP {} login attempt for OIDC failed: mismatched nonce".format(
                     getClientIp()
@@ -569,11 +630,34 @@ if FRONT_URL and len(oidc_clients) > 0:
             ).save()
             oidcLink.user = current_user
         if not oidcLink:
+            if getattr(client, "userinfo_endpoint", None):
+                try:
+                    userinfo_resp = client.do_user_info_request(
+                        method="GET",
+                        state=oidc_request.state,
+                        behavior="use_authorization_header",
+                    )
+                    if not isinstance(
+                        userinfo_resp, (ErrorResponse, UserInfoErrorResponse)
+                    ):
+                        userinfo.update(userinfo_resp)
+                except Exception:
+                    pass
+
+            if "name" not in userinfo and "name" in args:
+                userinfo["name"] = args["name"]
+
             if "email" in userinfo:
                 if User.find_by_email(userinfo["email"].strip()):
                     return "Request invalid: email", 400
             elif EMAIL_MANDATORY:
                 return "Request invalid: email", 400
+
+            email_prefix = (
+                userinfo["email"].split("@", 1)[0].strip()
+                if "email" in userinfo
+                else None
+            )
 
             username = (
                 userinfo["preferred_username"].lower().replace(" ", "").replace("@", "")
@@ -586,18 +670,26 @@ if FRONT_URL and len(oidc_clients) > 0:
                     if "name" in userinfo
                     else None
                 )
+            if not username or User.find_by_username(username):
+                username = (
+                    email_prefix.lower().replace(" ", "").replace("@", "")
+                    if email_prefix
+                    else None
+                )
+            if not username or User.find_by_username(username):
+                username = userinfo["sub"].lower().replace(" ", "").replace("@", "")
                 if not username or User.find_by_username(username):
-                    username = userinfo["sub"].lower().replace(" ", "").replace("@", "")
-                    if not username or User.find_by_username(username):
-                        username = uuid.uuid4().hex
+                    username = uuid.uuid4().hex
             newUser = User(
                 username=username,
                 name=(
-                    userinfo["name"].strip() if "name" in userinfo else userinfo["sub"]
+                    userinfo["name"].strip()
+                    if "name" in userinfo and userinfo["name"].strip()
+                    else (email_prefix or userinfo["sub"])
                 ),
                 email=userinfo["email"].strip() if "email" in userinfo else None,
                 email_verified=(
-                    userinfo["email_verified"]
+                    userinfo["email_verified"] in (True, "true", "True")
                     if "email_verified" in userinfo
                     else False
                 ),

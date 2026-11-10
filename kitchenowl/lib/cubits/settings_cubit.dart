@@ -52,6 +52,8 @@ class SettingsCubit extends Cubit<SettingsState> {
         .readBool(key: 'restoreLastShoppingList');
     final shoppingListKeepAwake = PreferenceStorage.getInstance()
         .readBool(key: 'shoppingListKeepAwake');
+    final advancedRecipesControl = PreferenceStorage.getInstance()
+        .readBool(key: 'advancedRecipesControl');
     final shoppingListAskQuantity = PreferenceStorage.getInstance()
         .readBool(key: 'shoppingListAskQuantity');
     final shoppingListUnits =
@@ -84,6 +86,7 @@ class SettingsCubit extends Cubit<SettingsState> {
       recentItemsCategorize: await recentItemsCategorize ?? false,
       restoreLastShoppingList: await restoreLastShoppingList ?? false,
       shoppingListKeepAwake: await shoppingListKeepAwake ?? false,
+      advancedRecipesControl: await advancedRecipesControl ?? false,
       shoppingListAskQuantity: await shoppingListAskQuantity ?? false,
       shoppingListUnits:
           _decodeList(await shoppingListUnits) ?? kShoppingListUnitsDefault,
@@ -173,6 +176,14 @@ class SettingsCubit extends Cubit<SettingsState> {
     emit(state.copyWith(shoppingListKeepAwake: shoppingListKeepAwake));
   }
 
+  void setAdvancedRecipesControl(bool advancedRecipesControl) {
+    PreferenceStorage.getInstance().writeBool(
+      key: 'advancedRecipesControl',
+      value: advancedRecipesControl,
+    );
+    emit(state.copyWith(advancedRecipesControl: advancedRecipesControl));
+  }
+
   void setShoppingListAskQuantity(bool shoppingListAskQuantity) {
     PreferenceStorage.getInstance().writeBool(
       key: 'shoppingListAskQuantity',
@@ -250,6 +261,7 @@ class SettingsState extends Equatable {
   final bool recentItemsCategorize;
   final bool restoreLastShoppingList;
   final bool shoppingListKeepAwake;
+  final bool advancedRecipesControl;
   final bool shoppingListAskQuantity;
   final List<String> shoppingListUnits;
   final List<String> shoppingListCustomUnits;
@@ -266,6 +278,7 @@ class SettingsState extends Equatable {
     this.recentItemsCategorize = false,
     this.restoreLastShoppingList = false,
     this.shoppingListKeepAwake = false,
+    this.advancedRecipesControl = false,
     this.shoppingListAskQuantity = false,
     this.shoppingListUnits = kShoppingListUnitsDefault,
     this.shoppingListCustomUnits = const [],
@@ -290,6 +303,7 @@ class SettingsState extends Equatable {
     bool? recentItemsCategorize,
     bool? restoreLastShoppingList,
     bool? shoppingListKeepAwake,
+    bool? advancedRecipesControl,
     bool? shoppingListAskQuantity,
     List<String>? shoppingListUnits,
     List<String>? shoppingListCustomUnits,
@@ -310,6 +324,8 @@ class SettingsState extends Equatable {
             restoreLastShoppingList ?? this.restoreLastShoppingList,
         shoppingListKeepAwake:
             shoppingListKeepAwake ?? this.shoppingListKeepAwake,
+        advancedRecipesControl:
+            advancedRecipesControl ?? this.advancedRecipesControl,
         shoppingListAskQuantity:
             shoppingListAskQuantity ?? this.shoppingListAskQuantity,
         shoppingListUnits: shoppingListUnits ?? this.shoppingListUnits,
@@ -330,6 +346,7 @@ class SettingsState extends Equatable {
         recentItemsCategorize,
         restoreLastShoppingList,
         shoppingListKeepAwake,
+        advancedRecipesControl,
         shoppingListAskQuantity,
         shoppingListUnits,
         shoppingListCustomUnits,

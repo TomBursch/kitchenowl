@@ -93,6 +93,7 @@
   "@confirm": {},
   "@cookingTime": {},
   "@copied": {},
+  "@currency": {},
   "@daily": {},
   "@dangerZone": {},
   "@darkmode": {},
@@ -101,6 +102,8 @@
   "@defaultWord": {},
   "@delete": {},
   "@description": {},
+  "@detectingIngredients": {},
+  "@detectingIngredientsAi": {},
   "@discover": {},
   "@done": {},
   "@dynamicAccentColor": {},
@@ -137,6 +140,7 @@
   "@expenseReceivedFor": {},
   "@export": {},
   "@features": {},
+  "@fetchingWebsite": {},
   "@fieldCannotBeEmpty": {
     "placeholders": {
       "field": {
@@ -361,6 +365,27 @@
     }
   },
   "@recipeEdit": {},
+  "@recipeGenerate": {},
+  "@recipeGenerateAbort": {},
+  "@recipeGenerateAdd": {},
+  "@recipeGenerateFollowUpAnother": {},
+  "@recipeGenerateFollowUpDetailed": {},
+  "@recipeGenerateFollowUpVegetarian": {},
+  "@recipeGenerateHint": {},
+  "@recipeGenerateQuestion": {},
+  "@recipeGenerateSuggestionFewIngredients": {},
+  "@recipeGenerateSuggestionFridge": {},
+  "@recipeGenerateSuggestionQuick": {},
+  "@recipeGenerateSuggestionMealPrep": {},
+  "@recipeGenerateSuggestions": {},
+  "@recipeGenerateTokens": {
+    "placeholders": {
+      "count": {
+        "example": "1250",
+        "type": "int"
+      }
+    }
+  },
   "@recipeEmpty": {},
   "@recipeEmptySearch": {},
   "@recipeGoToInHousehold": {
@@ -393,6 +418,7 @@
   "@reportUser": {},
   "@reset": {},
   "@save": {},
+  "@scrapingUsingAi": {},
   "@search": {},
   "@searchHint": {},
   "@send": {},
@@ -484,6 +510,15 @@
   "@unlink": {
     "description": "As in remove link to social account (e.g. Google)"
   },
+  "@unlinkConfirm": {
+    "placeholders": {
+      "provider": {
+        "example": "OIDC",
+        "type": "String"
+      }
+    }
+  },
+  "@unlinkLastLoginMethod": {},
   "@unreachableMessage": {},
   "@unsavedChangesBody": {},
   "@unsavedChangesTitle": {},
@@ -566,6 +601,7 @@
   "confirm": "Confirm",
   "cookingTime": "Cooking time",
   "copied": "Copied",
+  "currency": "Currency",
   "daily": "Daily",
   "dangerZone": "Danger Zone",
   "darkmode": "Dark mode",
@@ -574,6 +610,8 @@
   "defaultWord": "Default",
   "delete": "Delete",
   "description": "Description",
+  "detectingIngredients": "Detecting ingredients...",
+  "detectingIngredientsAi": "Detecting ingredients with AI...",
   "discover": "Discover",
   "done": "Done",
   "dynamicAccentColor": "Dynamic accent color",
@@ -603,6 +641,7 @@
   "expenseReceivedFor": "Received for",
   "export": "Export",
   "features": "Features",
+  "fetchingWebsite": "Fetching website...",
   "fieldCannotBeEmpty": "{field} cannot be empty.",
   "forceOfflineMode": "Force offline mode",
   "gallery": "Gallery",
@@ -721,6 +760,18 @@
   "recipeEdit": "Edit recipe",
   "recipeEmpty": "No recipes, start by adding one!",
   "recipeEmptySearch": "No recipes found :(",
+  "recipeGenerate": "Generate recipe with AI",
+  "recipeGenerateFollowUpAnother": "Suggest a different recipe",
+  "recipeGenerateFollowUpDetailed": "Explain the steps in more detail",
+  "recipeGenerateFollowUpVegetarian": "Make it vegetarian",
+  "recipeGenerateHint": "Describe a dish or list your ingredients…",
+  "recipeGenerateQuestion": "What would you like to cook today?",
+  "recipeGenerateSuggestionFewIngredients": "Suggest a Mediterranean main dish with no more than 5 ingredients (not counting staples like salt, pepper, oil, broth).",
+  "recipeGenerateSuggestionFridge": "I only have potatoes, tomatoes, cheese, yoghurt and eggs in my fridge. What can I cook?",
+  "recipeGenerateSuggestionQuick": "A vegetarian weeknight dinner for 2 that is ready in under 30 minutes.",
+  "recipeGenerateSuggestionMealPrep": "A high-protein lunch I can meal-prep for the whole work week.",
+  "recipeGenerateSuggestions": "Suggested prompts",
+  "recipeGenerateTokens": "{count} tokens",
   "recipeGoToInHousehold": "Already added, go to recipe in {householdName}",
   "recipeImageSelect": "Select a recipe image",
   "recipeNew": "New recipe",
@@ -744,6 +795,7 @@
   "reportUser": "Report user",
   "reset": "Reset",
   "save": "Save",
+  "scrapingUsingAi": "Extracting recipe with AI...",
   "search": "Search",
   "searchHint": "Looking for something?",
   "send": "Send",
@@ -802,6 +854,8 @@
   "units": "Units",
   "unitsHint": "Units shown when asking for the quantity",
   "unlink": "Unlink",
+  "unlinkConfirm": "Do you really want to unlink your {provider} account? You will no longer be able to sign in with it.",
+  "unlinkLastLoginMethod": "This is your only way to sign in. Set a password or link another account first.",
   "unreachableMessage": "Hmmmm… couldn't reach server",
   "unsavedChangesBody": "Are you sure you want to go back?",
   "unsavedChangesTitle": "You have unsaved changes",

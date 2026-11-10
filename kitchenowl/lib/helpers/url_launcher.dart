@@ -46,6 +46,12 @@ Future<void> openUrl(BuildContext context, String url,
         );
 }
 
+Future<void> closeUrl() async {
+  if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
+    await ct.closeCustomTabs();
+  }
+}
+
 bool isValidUrl(String url) {
   try {
     final uri = Uri.parse(url);

@@ -78,7 +78,8 @@ class _ExpenseMonthListPageState extends State<ExpenseMonthListPage> {
                         onUpdated: cubit.refresh,
                         displayPersonalAmount:
                             widget.sorting == ExpenselistSorting.personal,
-                        locale: state.household.language,
+                        currency: state.household.currency ??
+                            state.household.language,
                       ),
                     ),
                     removeItemBuilder: (context, expense, animation) =>
@@ -91,7 +92,8 @@ class _ExpenseMonthListPageState extends State<ExpenseMonthListPage> {
                         onUpdated: cubit.refresh,
                         displayPersonalAmount:
                             widget.sorting == ExpenselistSorting.personal,
-                        locale: state.household.language,
+                        currency: state.household.currency ??
+                            state.household.language,
                       ),
                     ),
                     items: state.expenses,

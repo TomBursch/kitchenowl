@@ -176,6 +176,14 @@
       }
     }
   },
+  "@recipeGenerateTokens": {
+    "placeholders": {
+      "count": {
+        "example": "1250",
+        "type": "int"
+      }
+    }
+  },
   "@shoppingListContainsEntries": {
     "placeholders": {
       "entriesCount": {
@@ -273,6 +281,7 @@
   "confirm": "Bestätigen",
   "cookingTime": "Kochzeit",
   "copied": "Kopiert",
+  "currency": "Währung",
   "daily": "Täglich",
   "dangerZone": "Gefahrenzone",
   "darkmode": "Nachtmodus",
@@ -281,6 +290,8 @@
   "defaultWord": "Standard",
   "delete": "Löschen",
   "description": "Beschreibung",
+  "detectingIngredients": "Erkenne Zutaten...",
+  "detectingIngredientsAi": "Erkenne Zutaten mit KI...",
   "discover": "Entdecken",
   "done": "Fertig",
   "dynamicAccentColor": "Dynamische Akzentfarbe",
@@ -310,6 +321,7 @@
   "expenseReceivedFor": "Erhalten für",
   "export": "Exportieren",
   "features": "Eigenschaften",
+  "fetchingWebsite": "Lade Webseite...",
   "fieldCannotBeEmpty": "{field} darf nicht leer sein.",
   "forceOfflineMode": "Offline Modus erzwingen",
   "gallery": "Galerie",
@@ -425,8 +437,20 @@
   "recipeDelete": "Rezept löschen",
   "recipeDeleteConfirmation": "Bist du dir sicher, dass du {recipe} löschen möchtest?",
   "recipeEdit": "Rezept bearbeiten",
-  "recipeEmpty": "Keine Rezepte, fange and welche zu erstellen!",
+  "recipeEmpty": "Noch keine Rezepte. Fange an, welche zu erstellen!",
   "recipeEmptySearch": "Keine Rezepte gefunden :(",
+  "recipeGenerate": "Generiere Rezept mit KI",
+  "recipeGenerateFollowUpAnother": "Schlage ein anderes Rezept vor",
+  "recipeGenerateFollowUpDetailed": "Erkläre die Schritte detaillierter",
+  "recipeGenerateFollowUpVegetarian": "Mach es vegetarisch",
+  "recipeGenerateHint": "Beschreibe ein Gericht oder liste deine Zutaten…",
+  "recipeGenerateQuestion": "Was möchtest du heute kochen?",
+  "recipeGenerateSuggestionFewIngredients": "Empfehle mir ein mediterranes Hauptgericht mit nicht mehr als 5 Zutaten (zähle nicht Dinge wie Salz, Pfeffer, Öl, Brühe).",
+  "recipeGenerateSuggestionFridge": "Ich habe nur Kartoffeln, Tomaten, Käse, Joghurt und Eier in meinem Kühlschrank. Was kann ich kochen?",
+  "recipeGenerateSuggestionMealPrep": "Ein High-Protein-Mittagessen, das ich für die ganze Arbeitswoche vorbereiten kann.",
+  "recipeGenerateSuggestionQuick": "Ein vegetarisches Wochenabendessen für 2, das in weniger als 30 Minuten bereit ist.",
+  "recipeGenerateSuggestions": "Empfohlene Nachrichten",
+  "recipeGenerateTokens": "{count} Token",
   "recipeGoToInHousehold": "Bereits hinzugefügt, gehe zum Rezept in {householdName}",
   "recipeImageSelect": "Wähle ein Rezeptbild",
   "recipeNew": "Neues Rezept",
@@ -450,6 +474,7 @@
   "reportUser": "Benutzer melden",
   "reset": "Zurücksetzen",
   "save": "Speichern",
+  "scrapingUsingAi": "Extrahiere Rezept mit AI...",
   "search": "Suche",
   "searchHint": "Suchst du etwas?",
   "send": "Senden",
@@ -504,6 +529,8 @@
   "underConstruction": "Baustelle",
   "undo": "Rückgängig machen",
   "unlink": "Verknüpfung aufheben",
+  "unlinkConfirm": "Möchtest du die Verknüpfung mit deinem {provider}-Konto wirklich aufheben? Du kannst dich dann nicht mehr damit anmelden.",
+  "unlinkLastLoginMethod": "Dies ist deine einzige Anmeldemöglichkeit. Lege zuerst ein Passwort fest oder verknüpfe ein anderes Konto.",
   "unreachableMessage": "Hmmmm… der Server konnte nicht erreicht werden",
   "unsavedChangesBody": "Bist du sicher, dass du zurückgehen möchtest?",
   "unsavedChangesTitle": "Du hast ungespeicherte Änderungen",

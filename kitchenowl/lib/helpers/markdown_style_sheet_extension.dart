@@ -6,7 +6,6 @@ extension MarkdownStyleSheetMaterialUi on MarkdownStyleSheet {
     assert(theme.textTheme.bodyMedium?.fontSize != null);
     return MarkdownStyleSheet(
       a: const TextStyle(color: Colors.blue),
-      p: theme.textTheme.bodyMedium,
       pPadding: EdgeInsets.zero,
       code: theme.textTheme.bodyMedium!.copyWith(
         backgroundColor: theme.cardTheme.color,

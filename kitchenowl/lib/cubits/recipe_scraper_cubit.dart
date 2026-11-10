@@ -12,21 +12,26 @@ class RecipeScraperCubit extends Cubit<RecipeScraperState> {
   final Household household;
 
   RecipeScraperCubit(this.household, this.url)
-      : super(RecipeScraperLoadingState()) {
+      : super(const RecipeScraperLoadingState()) {
     scrapeRecipe();
   }
 
   Future<void> scrapeRecipe() async {
-    final res = await ApiService.getInstance().scrapeRecipe(household, url);
-
-    if (res.$1 != null) {
-      emit(RecipeScraperLoadedState.fromScrape(res.$1!));
-    } else if (res.$2 == 400) {
-      emit(RecipeScraperUnsupportedState());
-    } else if (res.$2 == 403) {
-      emit(RecipeScraperForbiddenState());
-    } else {
-      emit(RecipeScraperErrorState());
+    await for (final event
+        in ApiService.getInstance().scrapeRecipeStream(household, url)) {
+      if (isClosed) return;
+      switch (event) {
+        case RecipeScrapeStatusEvent(:final status):
+          emit(RecipeScraperLoadingState(status: status));
+        case RecipeScrapeDoneEvent(:final scrape):
+          emit(RecipeScraperLoadedState.fromScrape(scrape));
+        case RecipeScrapeErrorEvent(statusCode: 400):
+          emit(RecipeScraperUnsupportedState());
+        case RecipeScrapeErrorEvent(statusCode: 403):
+          emit(RecipeScraperForbiddenState());
+        case RecipeScrapeErrorEvent():
+          emit(RecipeScraperErrorState());
+      }
     }
   }
 
@@ -69,7 +74,14 @@ abstract class RecipeScraperState extends Equatable {
   List<Object?> get props => [];
 }
 
-class RecipeScraperLoadingState extends RecipeScraperState {}
+class RecipeScraperLoadingState extends RecipeScraperState {
+  final RecipeScrapeStatus? status;
+
+  const RecipeScraperLoadingState({this.status});
+
+  @override
+  List<Object?> get props => [status];
+}
 
 class RecipeScraperErrorState extends RecipeScraperState {}
 

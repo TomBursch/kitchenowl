@@ -1,0 +1,8 @@
+Hey {name} (@{username}),
+
+Your KitchenOwl account has been inactive for a while and is scheduled to be deleted soon.
+If you wish to keep your account, please sign in: {link}
+
+If you no longer need your account, no action is required and it will be deleted automatically.
+
+Have any questions? Check out {privacy_link}

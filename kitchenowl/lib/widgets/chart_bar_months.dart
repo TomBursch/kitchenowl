@@ -13,6 +13,7 @@ class ChartBarMonths extends StatefulWidget {
   final int selectedMonth;
   final int numberOfMonthsToShow;
   final int monthOffset;
+  final String? currency;
 
   ChartBarMonths({
     super.key,
@@ -22,6 +23,7 @@ class ChartBarMonths extends StatefulWidget {
     required this.selectedMonth,
     this.numberOfMonthsToShow = 5,
     this.monthOffset = 0,
+    this.currency,
   }) : categoriesById =
             Map.fromEntries(categories.map((e) => MapEntry(e.id!, e)));
 
@@ -154,7 +156,9 @@ class _ChartBarMonthsState extends State<ChartBarMonths> {
       meta: meta,
       child: Text(
         showText
-            ? NumberFormat.simpleCurrency(decimalDigits: 0).format(value)
+            ? NumberFormat.simpleCurrency(
+                    locale: widget.currency, decimalDigits: 0)
+                .format(value)
             : "",
         style: const TextStyle(fontSize: 10),
         textAlign: TextAlign.center,

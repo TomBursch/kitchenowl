@@ -156,7 +156,11 @@ def resendVerificationMail():
         raise Exception("Mail service not configured")
 
     if not user.email_verified:
-        mail.sendVerificationMail(user.id, ChallengeMailVerify.create_challenge(user))
+        gevent.spawn(
+            mail.sendVerificationMail,
+            user.id,
+            ChallengeMailVerify.create_challenge(user),
+        )
     return jsonify({"msg": "DONE"})
 
 
@@ -198,5 +202,9 @@ def forgotPassword(args):
         return jsonify({"msg": "DONE"})
 
     # if user.email_verified:
-    mail.sendPasswordResetMail(user, ChallengePasswordReset.create_challenge(user))
+    gevent.spawn(
+        mail.sendPasswordResetMail,
+        user.id,
+        ChallengePasswordReset.create_challenge(user),
+    )
     return jsonify({"msg": "DONE"})

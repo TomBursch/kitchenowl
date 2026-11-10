@@ -25,6 +25,7 @@ Environment variables for `tombursch/kitchenowl` and `tombursch/kitchenowl-backe
 | `DISABLE_USERNAME_PASSWORD_LOGIN`          | `false`                    | If set, allows login only through OpenID Connect (OIDC). Be aware: this automatically disables `OPEN_REGISTRATION`                                    |
 | `DISABLE_ONBOARDING`                       | `false`                    | If set, disables the onboarding process (i.e. creating a user if none are present on the server). If set the first user has to manually be added      |
 | `OPEN_REGISTRATION`                        | `false`                    | If set, allows anyone to create an account on your server                                                                                             |
+| `KITCHENOWL_MCP_ENABLED`                   | `false`                    | If set, enables the MCP (Model Context Protocol) server at `/mcp`. See [MCP Server](../reference/MCP.md)                                             |
 | `EMAIL_MANDATORY`                          | `false`                    | Makes the email a mandatory field when registering (Only relevant if `OPEN_REGISTRATION` is set)                                                      |
 | `COLLECT_METRICS`                          | `false`                    | Enables a Prometheus metrics endpoint at `/metrics/`. If enabled can be reached over the frontend container on port 9100 (e.g. `front:9100/metrics/`) |
 | `METRICS_USER`                             | `kitchenowl`               | Metrics basic auth username                                                                                                                           |
@@ -62,6 +63,7 @@ Environment variables for `tombursch/kitchenowl` and `tombursch/kitchenowl-backe
 | `GOOGLE_CLIENT_SECRET_FILE`                |                            | Allows setting GOOGLE_CLIENT_SECRET from a file path, will override GOOGLE_CLIENT_SECRET                                                              |
 | `LLM_MODEL`                                |                            | Set a custom ingredient detection strategy for scraped recipes from the web. More at [Ingredient Parsing](./ingredient_parsing.md)                    |
 | `LLM_API_URL`                              |                            |                                                                                                                                                       |
+| `LLM_RECIPE_GENERATION`                    | `true` if `LLM_MODEL` set  | Enables the AI recipe generator ("AI" button when adding recipes). Requires `LLM_MODEL`                                                             |
 | `OPENAI_API_KEY`/`OPENROUTER_API_KEY`/etc. |                            | Depends on which provider you choose. See [LiteLLM docs](https://docs.litellm.ai/docs/providers)                                                      |
 | `BASE_HREF`                                |                            | Sets the subdirectory KitchenOwl is hosted at. Must begin and end with a slash `/`. Only applicable to `tombursch/kitchenowl`                         |
 

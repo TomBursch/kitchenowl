@@ -57,6 +57,10 @@ enum OIDCProivder {
           state: res.$2,
           nonce: res.$3,
         );
+        final nameParts = [
+          credential.givenName?.trim(),
+          credential.familyName?.trim(),
+        ].where((s) => s != null && s.isNotEmpty).join(' ');
         return await BlocProvider.of<AuthCubit>(context).loginOIDC(
           credential.state!,
           credential.authorizationCode,
@@ -67,6 +71,7 @@ enum OIDCProivder {
                 : AppLocalizations.of(context)!.error),
             width: null,
           ),
+          nameParts.isNotEmpty ? nameParts : null,
         );
       } catch (_) {
         showSnackbar(

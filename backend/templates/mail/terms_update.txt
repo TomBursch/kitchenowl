@@ -1,0 +1,8 @@
+Hey {name} (@{username}),
+
+We are writing to let you know that we have updated our Terms of Service and Privacy Policy.
+You can review the updated documents here:
+- Terms of Service: {terms_link}
+- Privacy Policy: {privacy_link}
+
+By continuing to use KitchenOwl, you agree to the updated Terms of Service. If you do not agree, you can delete your account at any time in your profile settings.

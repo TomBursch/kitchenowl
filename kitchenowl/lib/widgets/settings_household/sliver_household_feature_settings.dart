@@ -1,12 +1,13 @@
 import 'package:flutter/foundation.dart';
+import 'package:kitchenowl/helpers/localized_language.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_localized_locales/flutter_localized_locales.dart';
 import 'package:kitchenowl/cubits/household_add_update/household_add_update_cubit.dart';
 import 'package:kitchenowl/enums/views_enum.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/widgets/language_bottom_sheet.dart';
 import 'package:reorderables/reorderables.dart';
+import 'package:world_countries/world_countries.dart';
 
 import 'view_settings_list_tile.dart';
 
@@ -77,17 +78,26 @@ class SliverHouseholdFeatureSettings<
                 previous.supportedLanguages != current.supportedLanguages,
             builder: (context, state) {
               if (state.language != null && !languageCanBeChanged) {
-                return Text(LocaleNames.of(context)!.nameOf(state.language!) ??
-                    state.supportedLanguages?[state.language!] ??
-                    state.language!);
+                return Text(
+                  LocalizedLanguage.nameOf(
+                        context,
+                        state.language,
+                        state.supportedLanguages,
+                      ) ??
+                      state.language!,
+                );
               }
 
               return LoadingElevatedButton(
                 child: Text(
-                    LocaleNames.of(context)!.nameOf(state.language ?? "") ??
-                        state.supportedLanguages?[state.language] ??
-                        state.language ??
-                        AppLocalizations.of(context)!.set),
+                  LocalizedLanguage.nameOf(
+                        context,
+                        state.language,
+                        state.supportedLanguages,
+                      ) ??
+                      state.language ??
+                      AppLocalizations.of(context)!.set,
+                ),
                 onPressed: () async {
                   final language = await showModalBottomSheet<Nullable<String>>(
                     context: context,
@@ -121,6 +131,56 @@ class SliverHouseholdFeatureSettings<
               );
             },
           ),
+        ),
+        BlocBuilder<Cubit, State>(
+          buildWhen: (previous, current) =>
+              previous.featureExpenses != current.featureExpenses ||
+              previous.currency != current.currency ||
+              previous.language != current.language,
+          builder: (context, state) {
+            if (!state.featureExpenses) return const SizedBox();
+            final selectedCurrency =
+                LocalizedLanguage.currencyOf(state.currency ?? state.language);
+
+            return ListTile(
+              title: Text(AppLocalizations.of(context)!.currency),
+              leading: const Icon(Icons.currency_exchange_rounded),
+              contentPadding: const EdgeInsets.only(left: 16, right: 21),
+              trailing: LoadingElevatedButton(
+                child: Text(
+                  LocalizedLanguage.currencyNameOf(context, selectedCurrency) ??
+                      AppLocalizations.of(context)!.set,
+                ),
+                onPressed: () async {
+                  final currency = await CurrencyPicker(
+                    currencies: LocalizedLanguage.supportedCurrencies(context),
+                    chosen: [if (selectedCurrency != null) selectedCurrency],
+                    searchBar: TextField(
+                      decoration: InputDecoration(
+                        isDense: true,
+                        border: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(14)),
+                        ),
+                        prefixIcon: const Icon(Icons.search),
+                        labelText: AppLocalizations.of(context)!.searchHint,
+                      ),
+                    ),
+                    itemBuilder: (props, tile) => tile?.copyWith(
+                      chosenIcon: const Icon(Icons.check_circle_rounded),
+                    ),
+                  ).showInModalBottomSheet(
+                    context,
+                    showDragHandle: true,
+                    shape: null,
+                  );
+                  if (currency == null || !context.mounted) return;
+                  final locale = LocalizedLanguage.localeForCurrency(currency);
+                  if (locale == null) return;
+                  await BlocProvider.of<Cubit>(context).setCurrency(locale);
+                },
+              ),
+            );
+          },
         ),
       ]),
     );

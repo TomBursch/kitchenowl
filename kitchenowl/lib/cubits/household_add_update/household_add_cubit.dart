@@ -84,6 +84,7 @@ class HouseholdAddCubit extends HouseholdAddUpdateCubit<HouseholdAddState> {
       name: _state.name,
       image: image,
       language: _state.language,
+      currency: _state.currency,
       featurePlanner: _state.featurePlanner,
       featureExpenses: _state.featureExpenses,
       viewOrdering: _state.viewOrdering,
@@ -93,7 +94,17 @@ class HouseholdAddCubit extends HouseholdAddUpdateCubit<HouseholdAddState> {
 
   @override
   Future<void> setLanguage(String? langCode) {
-    emit(state.copyWith(language: Nullable(langCode)));
+    emit(state.copyWith(
+      language: Nullable(langCode),
+      currency: Nullable(langCode),
+    ));
+
+    return Future.value();
+  }
+
+  @override
+  Future<void> setCurrency(String? currency) {
+    emit(state.copyWith(currency: Nullable(currency)));
 
     return Future.value();
   }
@@ -107,6 +118,7 @@ class HouseholdAddState extends HouseholdAddUpdateState {
     super.name = "",
     this.image,
     super.language,
+    super.currency,
     super.featurePlanner = true,
     super.featureExpenses = true,
     super.viewOrdering = ViewsEnum.values,
@@ -118,6 +130,7 @@ class HouseholdAddState extends HouseholdAddUpdateState {
     String? name,
     NamedByteArray? image,
     Nullable<String>? language,
+    Nullable<String>? currency,
     bool? featurePlanner,
     bool? featureExpenses,
     List<ViewsEnum>? viewOrdering,
@@ -128,6 +141,7 @@ class HouseholdAddState extends HouseholdAddUpdateState {
         name: name ?? this.name,
         image: image ?? this.image,
         language: (language ?? Nullable(this.language)).value,
+        currency: (currency ?? Nullable(this.currency)).value,
         featurePlanner: featurePlanner ?? this.featurePlanner,
         featureExpenses: featureExpenses ?? this.featureExpenses,
         viewOrdering: viewOrdering ?? this.viewOrdering,

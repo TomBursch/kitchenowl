@@ -273,14 +273,18 @@ def getExpenseOverview(args, household_id):
     if frame < 1:
         groupByStr += " HH24" if "postgresql" in db.engine.name else " %H"
 
-    by_subframe_query = Expense.query.filter(
-        Expense.household_id == household_id,
-        Expense.exclude_from_statistics == False,
-    ).group_by(
-        func.to_char(Expense.date, groupByStr).label("day")
+    # One expression, so SELECT and GROUP BY share a bind parameter: Postgres
+    # treats to_char(date, $1) and to_char(date, $2) as different columns.
+    subframe_day = (
+        func.to_char(Expense.date, groupByStr)
         if "postgresql" in db.engine.name
         else func.strftime(groupByStr, Expense.date)
     )
+
+    by_subframe_query = Expense.query.filter(
+        Expense.household_id == household_id,
+        Expense.exclude_from_statistics == False,
+    ).group_by(subframe_day)
 
     if "view" in args and args["view"] == 1:
         filterQuery = (
@@ -352,9 +356,7 @@ def getExpenseOverview(args, household_id):
             "by_subframe": {
                 e.day: (float(e.balance) or 0)
                 for e in by_subframe_query.with_entities(
-                    func.to_char(Expense.date, groupByStr).label("day")
-                    if "postgresql" in db.engine.name
-                    else func.strftime(groupByStr, Expense.date).label("day"),
+                    subframe_day.label("day"),
                     func.sum(Expense.amount * factor).label("balance"),
                 )
                 .filter(*getFilterForStepAgo(stepAgo))

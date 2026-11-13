@@ -73,6 +73,7 @@ HEALTHCHECK --interval=30s --timeout=3s CMD curl -f http://localhost/ || exit 1
 
 # Set ENV
 ENV BACK_URL='back:5000'
+ENV FRONTEND_PORT=80
 
 # Expose the web server
-EXPOSE 80
+EXPOSE ${FRONTEND_PORT}

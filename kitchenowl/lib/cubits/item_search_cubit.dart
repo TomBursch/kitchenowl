@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kitchenowl/helpers/item_name.dart';
 import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
@@ -38,7 +39,7 @@ class ItemSearchCubit extends Cubit<ItemSearchState> {
         ));
       }
       if (items.isEmpty ||
-          items[0].name.toLowerCase() != queryName.toLowerCase()) {
+          normalizeItemName(items[0].name) != normalizeItemName(queryName)) {
         items.add(ItemWithDescription(
           name: queryName,
           description: queryDescription ?? '',

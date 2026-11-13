@@ -325,11 +325,13 @@ else:
 
 # Load ICU extension and enable WAL for sqlite
 if DB_URL.drivername == "sqlite":
+    from app.util.normalize_item_name import unaccent
 
     def on_sqlite_connect(conn, unused):
         conn.enable_load_extension(True)
         conn.load_extension(cast(str, sqlite_icu.extension_path()).replace(".so", ""))
         conn.enable_load_extension(False)
+        conn.create_function("unaccent", 1, unaccent)
 
         cursor = conn.cursor()
         cursor.execute("PRAGMA journal_mode=WAL")

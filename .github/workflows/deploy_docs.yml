@@ -12,13 +12,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout main
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
-      - uses: actions/setup-python@v4
+      - name: Set up Python
+        uses: actions/setup-python@v7
         with:
-          python-version: 3.12
+          python-version: "3.14"
       - name: Install Dependencies
         run: pip install -r docs/requirements.txt
       - name: Setup Docs Deploy

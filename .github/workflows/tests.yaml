@@ -17,7 +17,7 @@ jobs:
     name: Analyze
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Clone Flutter repository with stable channel
         uses: subosito/flutter-action@v2
         with:
@@ -35,7 +35,7 @@ jobs:
     name: Tests
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       # Set up Flutter.
       - name: Clone Flutter repository with stable channel
         uses: subosito/flutter-action@v2
@@ -49,7 +49,7 @@ jobs:
         working-directory: kitchenowl
 
       # upload test results
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: success() || failure() # run this step even if previous step failed
         with:
           name: test-results

@@ -6,6 +6,9 @@ import 'package:kitchenowl/services/storage/mem_storage.dart';
 import 'package:kitchenowl/services/transaction.dart';
 import 'package:fuzzywuzzy/fuzzywuzzy.dart';
 
+// Offline-only: returns the locally synced full-detail store.
+// Online fetching goes through RecipeListCubit.getRecipesPaginated and
+// RecipeSyncService, never through this transaction.
 class TransactionRecipeGetRecipes extends Transaction<List<Recipe>> {
   final Household household;
 
@@ -21,14 +24,7 @@ class TransactionRecipeGetRecipes extends Transaction<List<Recipe>> {
   }
 
   @override
-  Future<List<Recipe>?> runOnline() async {
-    final recipes = await ApiService.getInstance().getRecipes(household);
-    if (recipes != null) {
-      MemStorage.getInstance().writeRecipes(household, recipes);
-    }
-
-    return recipes;
-  }
+  Future<List<Recipe>?> runOnline() => runLocal();
 }
 
 class TransactionRecipeGetRecipesFiltered extends Transaction<List<Recipe>> {

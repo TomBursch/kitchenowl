@@ -95,6 +95,7 @@ class RecipeCard extends StatelessWidget {
                         ),
                         child: FadeInImage(
                           fit: BoxFit.cover,
+                          transition: FadeInImageTransition.fadeInOver,
                           placeholder: recipe.imageHash != null
                               ? BlurHashImage(recipe.imageHash!)
                               : MemoryImage(kTransparentImage) as ImageProvider,

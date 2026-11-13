@@ -77,6 +77,7 @@ class FlexibleImageSpaceBar extends StatelessWidget {
                 },
                 blendMode: BlendMode.dstIn,
                 child: FadeInImage(
+                  transition: FadeInImageTransition.fadeInOver,
                   placeholder: imageHash != null
                       ? BlurHashImage(imageHash!)
                       : MemoryImage(kTransparentImage) as ImageProvider,

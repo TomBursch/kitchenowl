@@ -29,6 +29,7 @@ class HouseholdImage extends StatelessWidget {
             SizedBox.expand(
               child: FadeInImage(
                 fit: BoxFit.cover,
+                transition: FadeInImageTransition.fadeInOver,
                 placeholder: household.imageHash != null
                     ? BlurHashImage(household.imageHash!)
                     : MemoryImage(kTransparentImage) as ImageProvider,

@@ -1,12 +1,15 @@
 from __future__ import annotations
-from typing import Any, Optional, Self, List, TYPE_CHECKING, cast
+
+from typing import TYPE_CHECKING, Any, List, Optional, Self, cast
 
 from sqlalchemy import func
+from sqlalchemy.orm import Mapped
+
 from app import db
 from app.helpers import DbModelAuthorizeMixin
 from app.models.category import Category
 from app.util import description_merger
-from sqlalchemy.orm import Mapped
+from app.util.normalize_item_name import unaccent
 
 Model = db.Model
 if TYPE_CHECKING:
@@ -192,12 +195,14 @@ class Item(Model, DbModelAuthorizeMixin):
     @classmethod
     def find_name_starts_with(cls, household_id: int, starts_with: str) -> Self | None:
         starts_with = starts_with.strip()
-        return (cls.query.filter(
-            cls.household_id == household_id,
-            func.lower(cls.name).like(func.lower(starts_with) + "%"),
+        return (
+            cls.query.filter(
+                cls.household_id == household_id,
+                func.lower(cls.name).like(func.lower(starts_with) + "%"),
+            )
+            .order_by(cls.name)
+            .first()
         )
-        .order_by(cls.name)
-        .first())
 
     @classmethod
     def search_name(cls, name: str, household_id: int) -> list[Self]:
@@ -207,15 +212,19 @@ class Item(Model, DbModelAuthorizeMixin):
                 cls.query.filter(
                     cls.household_id == household_id,
                     func.levenshtein(
-                        func.lower(func.substring(cls.name, 1, len(name))),
-                        name[:128].lower(),
+                        func.unaccent(
+                            func.lower(func.substring(cls.name, 1, len(name)))
+                        ),
+                        func.unaccent(name[:128].lower()),
                     )
                     < 4,
                 )
                 .order_by(
                     func.levenshtein(
-                        func.lower(func.substring(cls.name, 1, len(name))),
-                        name[:128].lower(),
+                        func.unaccent(
+                            func.lower(func.substring(cls.name, 1, len(name)))
+                        ),
+                        func.unaccent(name[:128].lower()),
                     ),
                     cls.support.desc(),
                 )
@@ -239,6 +248,7 @@ class Item(Model, DbModelAuthorizeMixin):
             return found
 
         # name is no regex
+        name = unaccent(name.strip()) or ""
         starts_with = "{0}%".format(name)
         contains = "%{0}%".format(name)
         one_error: List[str] = []
@@ -249,7 +259,8 @@ class Item(Model, DbModelAuthorizeMixin):
         for looking_for in [starts_with, contains] + one_error:
             res = (
                 cls.query.filter(
-                    cls.name.ilike(looking_for), cls.household_id == household_id
+                    func.unaccent(cls.name).ilike(looking_for),
+                    cls.household_id == household_id,
                 )
                 .order_by(cls.support.desc(), cls.name)
                 .all()

@@ -60,8 +60,8 @@ class Recipe(Model, DbModelAuthorizeMixin):
     )
 
     # Server suggestion metrics
-    server_curated: Mapped[bool] = db.Column(db.Boolean, default=False)
-    server_scrapes: Mapped[int] = db.Column(db.Integer, default=0)
+    server_curated: Mapped[bool] = db.Column(db.Boolean, default=False, nullable=False)
+    server_scrapes: Mapped[int] = db.Column(db.Integer, default=0, nullable=False)
 
     # Internal meal planner suggestion score and rank
     suggestion_score: Mapped[int] = db.Column(db.Integer, server_default="0")

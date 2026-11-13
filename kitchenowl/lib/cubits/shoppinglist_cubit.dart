@@ -4,6 +4,7 @@ import 'package:collection/collection.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/enums/shoppinglist_sorting.dart';
+import 'package:kitchenowl/helpers/item_name.dart';
 import 'package:kitchenowl/models/category.dart';
 import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/models/item.dart';
@@ -455,8 +456,8 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
 
       _mergeShoppinglistItems(loadedItems, shoppinglist?.items);
       if (loadedItems.isEmpty ||
-          !loadedItems
-              .any((e) => e.name.toLowerCase() == queryName.toLowerCase())) {
+          !loadedItems.any((e) =>
+              normalizeItemName(e.name) == normalizeItemName(queryName))) {
         loadedItems.add(ItemWithDescription(
           name: queryName,
           description: queryDescription ?? '',

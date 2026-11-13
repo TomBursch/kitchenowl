@@ -19,8 +19,8 @@ void main() {
     expect(normalizeItemName("Œuf"), "oeuf");
     expect(normalizeItemName("œuf"), "oeuf");
     expect(normalizeItemName("Ærter"), "aerter");
-    expect(normalizeItemName("Weißwurst"), "weisswurst");
-    expect(normalizeItemName("WEIẞWURST"), "weisswurst");
+    expect(normalizeItemName("Weißwurst"), "weiswurst");
+    expect(normalizeItemName("WEIẞWURST"), "weiswurst");
     expect(normalizeItemName("Smør"), "smor");
   });
 

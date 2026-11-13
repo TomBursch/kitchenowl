@@ -312,6 +312,18 @@ class _SettingsPageState extends State<SettingsPage> {
                     ),
                   ),
                 ),
+                if (state.shoppingListListView)
+                  SwitchListTile(
+                    title:
+                        Text(AppLocalizations.of(context)!.shoppingListCheckboxMode),
+                    subtitle: Text(AppLocalizations.of(context)!
+                        .shoppingListCheckboxModeDescription),
+                    secondary: const Icon(Icons.check_box_outlined),
+                    value: state.shoppingListCheckboxMode,
+                    onChanged: (value) =>
+                        BlocProvider.of<SettingsCubit>(context)
+                            .setShoppingListCheckboxMode(value),
+                  ),
               ]),
             ),
           ),

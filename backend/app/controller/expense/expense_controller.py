@@ -1,4 +1,3 @@
-import calendar
 from datetime import datetime, timezone, timedelta
 from dateutil.relativedelta import relativedelta
 from sqlalchemy.sql.expression import desc
@@ -327,9 +326,8 @@ def getExpenseOverview(args, household_id):
             start = datetime.now(timezone.utc).date() - timedelta(days=stepAgo)
             end = start + timedelta(hours=24)
         elif frame == 1:  # weekly
-            start = datetime.now(timezone.utc).date() - relativedelta(
-                days=7, weekday=calendar.MONDAY, weeks=stepAgo
-            )
+            today = datetime.now(timezone.utc).date()
+            start = today - timedelta(days=today.weekday(), weeks=stepAgo)
             end = start + timedelta(days=7)
         elif frame == 2:  # monthly
             start = thisMonthStart - relativedelta(months=stepAgo)

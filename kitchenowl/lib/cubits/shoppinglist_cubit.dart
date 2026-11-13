@@ -105,16 +105,18 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
 
   void onShoppinglistItemRemove(dynamic data) {
     final item = ShoppinglistItem.fromJson(data["item"]);
+    final hard = data["hard"] == true;
     TransactionHandler.getInstance().runTransaction(
       TransactionShoppingListRemoveItem(
         household: household,
         shoppinglist: ShoppingList.fromJson(data["shoppinglist"]),
         item: item,
+        hard: hard,
       ),
       forceOffline: true,
       saveTransaction: false,
     );
-    removeLocally(item, data["shoppinglist"]["id"]);
+    removeLocally(item, shoppinglistId: data["shoppinglist"]["id"], hard: hard);
   }
 
   Future<void> search(String query) => refresh(query: query);
@@ -171,20 +173,22 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
     }
   }
 
-  Future<void> remove(ShoppinglistItem item) async {
+  Future<void> remove(ShoppinglistItem item, {bool hard = false}) async {
     final _state = state;
-    removeLocally(item);
+    removeLocally(item, hard: hard);
     if (!await TransactionHandler.getInstance()
         .runTransaction(TransactionShoppingListRemoveItem(
       household: household,
       shoppinglist: _state.selectedShoppinglist!,
       item: item,
+      hard: hard,
     ))) {
       await refresh();
     }
   }
 
-  void removeLocally(ShoppinglistItem item, [int? shoppinglistId]) {
+  void removeLocally(ShoppinglistItem item,
+      {int? shoppinglistId, bool hard = false}) {
     final _state = state;
     shoppinglistId ??= _state.selectedShoppinglist?.id;
     if (shoppinglistId == null) return;
@@ -194,20 +198,24 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
     final l = List.of(shoppinglist.items);
     l.removeWhere((e) => e.name == item.name);
     final recent = List.of(shoppinglist.recentItems);
-    recent.removeWhere((e) => e.name == item.name);
-    recent.insert(0, ItemWithDescription.fromItem(item: item));
+    if (!hard) {
+      recent.removeWhere((e) => e.name == item.name);
+      recent.insert(0, ItemWithDescription.fromItem(item: item));
+    }
     if (_state is SearchShoppinglistCubitState) {
       final result = List.of(_state.result);
       final index = result.indexOf(item);
       if (index >= 0) {
         result.removeAt(index);
-        result.insert(
-          index,
-          ItemWithDescription.fromItem(
-            item: item,
-            description: item.description,
-          ),
-        );
+        if (!hard) {
+          result.insert(
+            index,
+            ItemWithDescription.fromItem(
+              item: item,
+              description: item.description,
+            ),
+          );
+        }
       }
       emit(_state.copyWith(
           shoppinglists: _replaceAndUpdateShoppingLists(_state.shoppinglists,
@@ -231,7 +239,7 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
     emit(state.copyWith(selectedListItems: l));
   }
 
-  Future<void> confirmRemove() async {
+  Future<void> confirmRemove({bool hard = false}) async {
     final _state = state;
     if (_state.selectedShoppinglist == null ||
         _state.selectedListItems.isEmpty) {
@@ -242,10 +250,12 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
     final l = List.of(_state.selectedShoppinglist!.items);
     l.removeWhere(selectedItems.contains);
     final recent = List.of(_state.selectedShoppinglist!.recentItems);
-    recent.insertAll(
-      0,
-      selectedItems.map((e) => ItemWithDescription.fromItem(item: e)),
-    );
+    if (!hard) {
+      recent.insertAll(
+        0,
+        selectedItems.map((e) => ItemWithDescription.fromItem(item: e)),
+      );
+    }
 
     if (_state is SearchShoppinglistCubitState) {
       final result = List.of(_state.result);
@@ -253,10 +263,12 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
         final index = result.indexOf(item);
         if (index >= 0) {
           result.removeAt(index);
-          result.insert(
-            index,
-            ItemWithDescription.fromItem(item: item),
-          );
+          if (!hard) {
+            result.insert(
+              index,
+              ItemWithDescription.fromItem(item: item),
+            );
+          }
         }
       }
       emit(_state.copyWith(
@@ -280,6 +292,7 @@ class ShoppinglistCubit extends Cubit<ShoppinglistCubitState> {
       household: household,
       shoppinglist: _state.selectedShoppinglist!,
       items: selectedItems,
+      hard: hard,
     ))) {
       await refresh();
     }

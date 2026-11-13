@@ -3,10 +3,16 @@ import 'package:collection/collection.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/app.dart';
+import 'package:kitchenowl/cubits/household_cubit.dart';
 import 'package:kitchenowl/cubits/settings_cubit.dart';
 import 'package:kitchenowl/cubits/shoppinglist_cubit.dart';
 import 'package:kitchenowl/enums/shoppinglist_sorting.dart';
+import 'package:kitchenowl/enums/update_enum.dart';
+import 'package:kitchenowl/helpers/build_context_extension.dart';
+import 'package:kitchenowl/helpers/url_launcher.dart';
 import 'package:kitchenowl/models/item.dart';
+import 'package:kitchenowl/models/update_value.dart';
+import 'package:kitchenowl/pages/item_page.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/widgets/choice_scroll.dart';
 import 'package:kitchenowl/widgets/shopping_list/shopping_list_choice_chip.dart';
@@ -22,6 +28,93 @@ class ShoppinglistPage extends StatefulWidget {
 
 class _ShoppinglistPageState extends State<ShoppinglistPage> {
   final TextEditingController searchController = TextEditingController();
+
+  Future<void> _showItemMenu(
+    BuildContext context,
+    ShoppinglistCubit cubit,
+    Item item, {
+    required SettingsState settingsState,
+  }) async {
+    final url =
+        item is ItemWithDescription ? extractSingleUrl(item.description) : null;
+    await showModalBottomSheet<void>(
+      context: context,
+      showDragHandle: true,
+      useRootNavigator: true,
+      builder: (ctx) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (item is ShoppinglistItem) ...[
+              ListTile(
+                leading: const Icon(Icons.remove_shopping_cart_outlined),
+                title: Text(AppLocalizations.of(ctx)!.remove),
+                onTap: () {
+                  Navigator.of(ctx).pop();
+                  cubit.remove(item);
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.delete_forever_outlined),
+                title: Text(
+                  AppLocalizations.of(ctx)!.shoppingListRemoveAndForget,
+                ),
+                onTap: () {
+                  Navigator.of(ctx).pop();
+                  cubit.remove(item, hard: true);
+                },
+              ),
+            ],
+            ListTile(
+              leading: const Icon(Icons.edit_outlined),
+              title: Text(AppLocalizations.of(ctx)!.edit),
+              onTap: () async {
+                Navigator.of(ctx).pop();
+                final res = await Navigator.of(context, rootNavigator: true)
+                    .push<UpdateValue<Item>>(
+                  MaterialPageRoute(builder: (innerCtx) {
+                    Widget page = ItemPage(
+                      item: item,
+                      shoppingList: cubit.state.selectedShoppinglist,
+                      categories: cubit.state.categories,
+                      advancedView: ShoppingListStyle(
+                        listStyle: settingsState.listStyle,
+                        isList: settingsState.shoppingListListView,
+                        gridSize: settingsState.gridSize,
+                      ).advancedItemView,
+                    );
+                    final householdCubit = context.readOrNull<HouseholdCubit>();
+                    if (householdCubit != null) {
+                      page = BlocProvider.value(
+                        value: householdCubit,
+                        child: page,
+                      );
+                    }
+                    return page;
+                  }),
+                );
+                if (res != null &&
+                    (res.state == UpdateEnum.deleted ||
+                        res.state == UpdateEnum.updated)) {
+                  cubit.refresh();
+                }
+              },
+            ),
+            if (url != null)
+              ListTile(
+                leading: const Icon(Icons.open_in_new_rounded),
+                title: Text(AppLocalizations.of(ctx)!.openUrl),
+                onTap: () {
+                  Navigator.of(ctx).pop();
+                  openUrl(context, url);
+                },
+              ),
+            const SizedBox(height: 8),
+          ],
+        ),
+      ),
+    );
+  }
 
   @override
   void initState() {
@@ -193,6 +286,9 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                                       cubit.add(item);
                                     }
                                   }),
+                                  onLongPressed: Nullable((Item item) =>
+                                      _showItemMenu(context, cubit, item,
+                                          settingsState: settingsState)),
                                 ),
                               ],
                             ),
@@ -250,6 +346,9 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                                           cubit.add(item);
                                         }
                                       }),
+                                      onLongPressed: Nullable((item) =>
+                                          _showItemMenu(context, cubit, item,
+                                              settingsState: settingsState)),
                                       onRecentPressed: Nullable(cubit.add),
                                       onRefresh: cubit.refresh,
                                     ),

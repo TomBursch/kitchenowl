@@ -154,12 +154,14 @@ class TransactionShoppingListRemoveItem extends Transaction<bool> {
   final Household household;
   final ShoppingList shoppinglist;
   final ShoppinglistItem item;
+  final bool hard;
 
   TransactionShoppingListRemoveItem({
     DateTime? timestamp,
     required this.household,
     required this.item,
     required this.shoppinglist,
+    this.hard = false,
   }) : super.internal(
           timestamp ?? DateTime.now(),
           "TransactionShoppingListDeleteItem",
@@ -174,6 +176,7 @@ class TransactionShoppingListRemoveItem extends Transaction<bool> {
         shoppinglist: ShoppingList.fromJson(map['shoppinglist']),
         item: ShoppinglistItem.fromJson(map['item']),
         timestamp: timestamp,
+        hard: map['hard'] == true,
       );
 
   @override
@@ -185,6 +188,7 @@ class TransactionShoppingListRemoveItem extends Transaction<bool> {
       'household': household.toJsonWithId(),
       "shoppinglist": shoppinglist.toJsonWithId(),
       "item": item.toJsonWithId(),
+      if (hard) "hard": true,
     });
 
   @override
@@ -195,8 +199,10 @@ class TransactionShoppingListRemoveItem extends Transaction<bool> {
         shoppingLists.where((e) => e.id == shoppinglist.id).firstOrNull;
     if (latestShoppingList == null) return false;
     latestShoppingList.items.removeWhere((e) => e.name == item.name);
-    latestShoppingList.recentItems.removeWhere((e) => e.name == item.name);
-    latestShoppingList.recentItems.insert(0, item);
+    if (!hard) {
+      latestShoppingList.recentItems.removeWhere((e) => e.name == item.name);
+      latestShoppingList.recentItems.insert(0, item);
+    }
     MemStorage.getInstance().writeShoppingLists(household, shoppingLists);
 
     return true;
@@ -206,7 +212,8 @@ class TransactionShoppingListRemoveItem extends Transaction<bool> {
   Future<bool?> runOnline() {
     runLocal();
 
-    return ApiService.getInstance().removeItem(shoppinglist, item, timestamp);
+    return ApiService.getInstance()
+        .removeItem(shoppinglist, item, timestamp, hard);
   }
 }
 
@@ -214,12 +221,14 @@ class TransactionShoppingListRemoveItems extends Transaction<bool> {
   final Household household;
   final ShoppingList shoppinglist;
   final List<ShoppinglistItem> items;
+  final bool hard;
 
   TransactionShoppingListRemoveItems({
     DateTime? timestamp,
     required this.household,
     required this.items,
     required this.shoppinglist,
+    this.hard = false,
   }) : super.internal(
           timestamp ?? DateTime.now(),
           "TransactionShoppingListDeleteItems",
@@ -236,6 +245,7 @@ class TransactionShoppingListRemoveItems extends Transaction<bool> {
             .map((e) => ShoppinglistItem.fromJson(e))
             .toList(),
         timestamp: timestamp,
+        hard: map['hard'] == true,
       );
 
   @override
@@ -247,6 +257,7 @@ class TransactionShoppingListRemoveItems extends Transaction<bool> {
       'household': household.toJsonWithId(),
       "shoppinglist": shoppinglist.toJsonWithId(),
       "items": items.map((e) => e.toJsonWithId()).toList(),
+      if (hard) "hard": true,
     });
 
   @override
@@ -258,7 +269,9 @@ class TransactionShoppingListRemoveItems extends Transaction<bool> {
     if (latestShoppingList == null) return false;
     latestShoppingList.items
         .removeWhere((e) => items.map((e) => e.name).contains(e.name));
-    latestShoppingList.recentItems.insertAll(0, items);
+    if (!hard) {
+      latestShoppingList.recentItems.insertAll(0, items);
+    }
     MemStorage.getInstance().writeShoppingLists(household, shoppingLists);
 
     return true;
@@ -268,7 +281,8 @@ class TransactionShoppingListRemoveItems extends Transaction<bool> {
   Future<bool?> runOnline() {
     runLocal();
 
-    return ApiService.getInstance().removeItems(shoppinglist, items, timestamp);
+    return ApiService.getInstance()
+        .removeItems(shoppinglist, items, timestamp, hard);
   }
 }
 

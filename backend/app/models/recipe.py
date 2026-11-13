@@ -275,7 +275,7 @@ class Recipe(Model, DbModelAuthorizeMixin):
         from app.models import Household
 
         if household_id is not None:
-            query.filter(
+            query = query.filter(
                 cls.household_id == household_id,
             )
         else:

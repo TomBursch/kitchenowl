@@ -485,6 +485,10 @@ if FRONT_URL and len(oidc_clients) > 0:
             )
         state = rndstr()
         nonce = rndstr()
+        pkce_methods = client.provider_info.get("code_challenge_methods_supported", [])
+        pkce_args, code_verifier = (
+            client.add_code_challenge() if "S256" in pkce_methods else ({}, None)
+        )
         redirect_uri = (
             ("kitchenowl:" + ("" if OIDC_RFC_COMPLIANT_REDIRECT else "//"))
             if "kitchenowl_scheme" in args and args["kitchenowl_scheme"]
@@ -497,6 +501,7 @@ if FRONT_URL and len(oidc_clients) > 0:
             "nonce": nonce,
             "state": state,
             "redirect_uri": redirect_uri,
+            **pkce_args,
         }
 
         auth_req = client.construct_AuthorizationRequest(request_args=args)
@@ -506,6 +511,7 @@ if FRONT_URL and len(oidc_clients) > 0:
             provider=provider,
             nonce=nonce,
             redirect_uri=redirect_uri,
+            code_verifier=code_verifier,
             user_id=current_user.id if current_user else None,
         ).save()
         return jsonify({"login_url": login_url, "state": state, "nonce": nonce})
@@ -588,6 +594,7 @@ if FRONT_URL and len(oidc_clients) > 0:
             request_args={
                 "code": args["code"],
                 "redirect_uri": oidc_request.redirect_uri,
+                "code_verifier": oidc_request.code_verifier,
             },
             authn_method="client_secret_post",
         )

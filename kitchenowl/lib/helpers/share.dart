@@ -1,8 +1,6 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:kitchenowl/kitchenowl.dart';
-import 'package:universal_html/html.dart' as html;
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
@@ -15,36 +13,24 @@ abstract class Share {
     String content,
     String filename,
   ) async {
-    if (kIsWeb) {
-      final url = Uri.dataFromString(
-        content,
-        mimeType: 'text/plain',
-        encoding: utf8,
-      );
-      final anchor = html.document.createElement('a') as html.AnchorElement
-        ..href = url.toString()
-        ..style.display = 'none'
-        ..download = filename;
-      html.document.body?.children.add(anchor);
-
-      anchor.click();
-
-      html.document.body?.children.remove(anchor);
-      html.Url.revokeObjectUrl(url.toString());
-    } else if (Platform.isLinux || Platform.isMacOS || Platform.isWindows) {
+    final bytes = Uint8List.fromList(utf8.encode(content));
+    if (kIsWeb ||
+        defaultTargetPlatform == TargetPlatform.linux ||
+        defaultTargetPlatform == TargetPlatform.macOS ||
+        defaultTargetPlatform == TargetPlatform.windows) {
       await FilePicker.saveFile(
         dialogTitle: 'Please select an output file:',
         allowedExtensions: ['json'],
         type: FileType.custom,
         fileName: filename,
-        bytes: Uint8List.fromList(content.codeUnits),
+        bytes: bytes,
       );
     } else {
       final box = context.findRenderObject() as RenderBox?;
       SharePlus.Share.shareXFiles(
         [
           SharePlus.XFile.fromData(
-            Uint8List.fromList(content.codeUnits),
+            bytes,
             name: filename,
             mimeType: 'application/json',
           ),
@@ -56,7 +42,9 @@ abstract class Share {
 
   static Future<void> shareUri(BuildContext context, Uri uri) async {
     final box = context.findRenderObject() as RenderBox?;
-    if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
+    if (!kIsWeb &&
+        (defaultTargetPlatform == TargetPlatform.android ||
+            defaultTargetPlatform == TargetPlatform.iOS)) {
       SharePlus.Share.shareUri(
         uri,
         sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size,

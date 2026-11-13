@@ -11,6 +11,12 @@ server {
         client_max_body_size 32M;
         try_files $uri $uri/ /index.html;
     }
+    location ~* ^/(index\.html|flutter_bootstrap\.js|flutter_service_worker\.js|manifest\.json|version\.json)$ {
+        add_header Cache-Control "no-cache";
+    }
+    location ~* ^/assets/|\.(js|mjs|wasm|symbols)$ {
+        add_header Cache-Control "public, max-age=31536000, immutable";
+    }
     location /api/ {
         include uwsgi_params;
         uwsgi_pass ${BACK_URL};

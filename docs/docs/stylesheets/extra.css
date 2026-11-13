@@ -1,10 +1,73 @@
-[data-md-color-primary="kitchenowl"] {
-  --md-primary-fg-color: #20ac64;
-  --md-primary-fg-color--light: #20ac64;
-  --md-primary-fg-color--dark: #198a50;
-  --md-accent-fg-color: #20ac64;
+/* ==========================================================================
+   KitchenOwl Brand Theme:
+   - Primary Green: #20AC64 (matching AppColors.green from app)
+   - Dark Theme Background: #303030 (matching app dark background)
+   ========================================================================== */
+
+/* Remove underline from all links */
+a,
+.md-typeset a,
+.md-typeset a:hover,
+.md-typeset a:focus {
+  text-decoration: none;
 }
 
-[data-md-color-scheme="slate"] {
+/* Light Scheme */
+:root,
+[data-md-color-scheme="default"],
+[data-md-color-primary="custom"],
+[data-md-color-accent="custom"] {
+  --md-primary-fg-color: #20ac64;
+  --md-primary-fg-color--light: #23be6e;
+  --md-primary-fg-color--dark: #198a50;
+  --md-accent-fg-color: #20ac64;
+  --md-accent-fg-color--transparent: rgba(32, 172, 100, 0.12);
+  --md-typeset-a-color: #20ac64;
+}
+
+/* Menubar & nav logo in light mode: display the KitchenOwl green icon */
+[data-md-color-scheme="default"] .md-header .md-logo img,
+[data-md-color-scheme="default"] .md-logo img {
+  content: url("../img/icon-green.png");
+}
+
+/* Fallback for environments where content replacement on img is unsupported */
+@supports not (content: url("../img/icon-green.png")) {
+  [data-md-color-scheme="default"] .md-header .md-logo img,
+  [data-md-color-scheme="default"] .md-logo img {
+    filter: brightness(0) saturate(100%) invert(53%) sepia(51%) saturate(632%) hue-rotate(101deg) brightness(94%) contrast(89%);
+  }
+}
+
+/* Dark Scheme (Slate / Dark Grey #303030) */
+[data-md-color-scheme="slate"],
+[data-md-color-scheme="slate"][data-md-color-primary="custom"],
+[data-md-color-scheme="slate"][data-md-color-accent="custom"] {
+  /* Match KitchenOwl app dark theme background */
   --md-default-bg-color: #303030;
+  --md-default-bg-color--light: rgba(48, 48, 48, 0.75);
+  --md-default-bg-color--lighter: rgba(48, 48, 48, 0.5);
+  --md-default-bg-color--lightest: rgba(48, 48, 48, 0.25);
+
+  /* Modern theme RGB tokens */
+  --color-background: 48 48 48;
+  --color-background-subtle: 40 40 40;
+  --color-backdrop: 32 32 32;
+
+  /* Code blocks with clean contrast against #303030 */
+  --md-code-bg-color: #242424;
+  --md-code-bg-color--light: #2a2a2a;
+  --md-code-bg-color--lighter: #2f2f2f;
+
+  /* Footer colors */
+  --md-footer-bg-color: #272727;
+  --md-footer-bg-color--dark: #202020;
+
+  /* KitchenOwl Green in dark mode */
+  --md-primary-fg-color: #20ac64;
+  --md-primary-fg-color--light: #26cf78;
+  --md-primary-fg-color--dark: #198a50;
+  --md-accent-fg-color: #26cf78;
+  --md-accent-fg-color--transparent: rgba(38, 207, 120, 0.15);
+  --md-typeset-a-color: #26cf78;
 }

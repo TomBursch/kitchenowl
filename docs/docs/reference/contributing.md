@@ -63,7 +63,7 @@ The `description` is a descriptive summary of the change the PR will make.
     - Create a python environment `python3 -m venv venv`
     - Activate your python environment `source venv/bin/activate` (environment can be deactivated with `deactivate`)
     - Install dependencies `pip3 install -r requirements.txt`
-    - Run docs: `mkdocs serve`
+    - Run docs: `zensical serve`
 
 === "Website"
     - [Install Hugo](https://gohugo.io/getting-started/quick-start/)

@@ -1,4 +1,2 @@
-mkdocs-material==9.6.14
-mkdocs==1.6.1
-neoteroi-mkdocs==1.1.2
-mike==2.1.3
+zensical
+git+https://github.com/squidfunk/mike.git

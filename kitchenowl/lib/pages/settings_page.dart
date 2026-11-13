@@ -19,6 +19,7 @@ import 'package:kitchenowl/pages/household_member_page.dart';
 import 'package:kitchenowl/pages/household_update_page.dart';
 import 'package:kitchenowl/pages/reports_list_page.dart';
 import 'package:kitchenowl/pages/settings_server_user_page.dart';
+import 'package:kitchenowl/pages/settings_units_page.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
 import 'package:kitchenowl/styles/colors.dart';
 import 'package:kitchenowl/widgets/settings/color_button.dart';
@@ -385,6 +386,35 @@ class _SettingsPageState extends State<SettingsPage> {
                               .setRecentItemsCategorize(value),
                     ),
                   ),
+                  ListTile(
+                    title: Text(
+                      AppLocalizations.of(context)!.shoppingListAskQuantity,
+                    ),
+                    leading: const Icon(Icons.edit_note_rounded),
+                    onTap: () => BlocProvider.of<SettingsCubit>(context)
+                        .setShoppingListAskQuantity(
+                      !BlocProvider.of<SettingsCubit>(context)
+                          .state
+                          .shoppingListAskQuantity,
+                    ),
+                    trailing: KitchenOwlSwitch(
+                      value: state.shoppingListAskQuantity,
+                      onChanged: (value) =>
+                          BlocProvider.of<SettingsCubit>(context)
+                              .setShoppingListAskQuantity(value),
+                    ),
+                  ),
+                  if (state.shoppingListAskQuantity)
+                    ListTile(
+                      title: Text(AppLocalizations.of(context)!.units),
+                      leading: const Icon(Icons.straighten_rounded),
+                      trailing: const Icon(Icons.chevron_right_rounded),
+                      onTap: () => Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const SettingsUnitsPage(),
+                        ),
+                      ),
+                    ),
                   if (!kIsWeb)
                     ListTile(
                       title: Text(

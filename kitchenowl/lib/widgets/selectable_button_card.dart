@@ -91,6 +91,9 @@ class _SelectableButtonCardState extends State<SelectableButtonCard> {
                   Tooltip(
                     message: widget.title,
                     waitDuration: const Duration(milliseconds: 500),
+                    triggerMode: widget.onLongPressed != null
+                        ? TooltipTriggerMode.manual
+                        : null,
                     child: Text(
                       widget.title,
                       style: TextStyle(

@@ -79,7 +79,7 @@ def deleteCategoryById(id):
 @validate_args(DeleteCategory)
 def deleteCategoryByName(args, household_id):
     if "name" in args:
-        category = Category.find_by_name(args["name"], household_id)
+        category = Category.find_by_name(household_id, args["name"])
         if category:
             category.delete()
             return jsonify({"msg": "DONE"})

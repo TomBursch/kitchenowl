@@ -138,7 +138,10 @@ class Recipe extends Model {
       );
 
   Recipe withYields(int? yields) {
-    if (yields == null || yields == this.yields) return this;
+    // A recipe without servings (yields 0) cannot be scaled: Fraction(x, 0)
+    // throws, e.g. when the planner opens it with the plan's yields.
+    if (yields == null || yields <= 0 || this.yields <= 0) return this;
+    if (yields == this.yields) return this;
 
     return copyWith(
       items: items

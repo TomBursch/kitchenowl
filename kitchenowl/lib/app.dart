@@ -16,6 +16,7 @@ import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/router.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
 import 'package:kitchenowl/services/background_task.dart';
+import 'package:kitchenowl/services/location_service.dart';
 import 'package:kitchenowl/services/storage/storage.dart';
 import 'package:kitchenowl/services/transaction_handler.dart';
 import 'package:kitchenowl/styles/colors.dart';
@@ -80,6 +81,10 @@ class _AppState extends State<App> with WidgetsBindingObserver {
       });
     }
 
+    LocationService.requestedShoppingList
+        .addListener(_handleRequestedShoppingList);
+    LocationService.initialize();
+
     if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
       BackgroundFetch.configure(
         BackgroundFetchConfig(
@@ -122,8 +127,16 @@ class _AppState extends State<App> with WidgetsBindingObserver {
     }
   }
 
+  void _handleRequestedShoppingList() {
+    final request = LocationService.requestedShoppingList.value;
+    if (request == null) return;
+    router.go("/household/${request.householdId}/items");
+  }
+
   @override
   void dispose() {
+    LocationService.requestedShoppingList
+        .removeListener(_handleRequestedShoppingList);
     WidgetsBinding.instance.removeObserver(this);
     _intentDataStreamSubscription?.cancel();
     super.dispose();

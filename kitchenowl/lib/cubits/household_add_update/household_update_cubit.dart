@@ -32,12 +32,14 @@ class HouseholdUpdateCubit
         .getSupportedLanguages()
         .then((value) => emit(state.copyWith(supportedLanguages: value)));
     ApiService.getInstance().onShoppinglistAdd(onShoppinglistAdd);
+    ApiService.getInstance().onShoppinglistUpdate(onShoppinglistAdd);
     ApiService.getInstance().onShoppinglistDelete(onShoppinglistDelete);
   }
 
   @override
   Future<void> close() {
     ApiService.getInstance().offShoppinglistAdd(onShoppinglistAdd);
+    ApiService.getInstance().offShoppinglistUpdate(onShoppinglistAdd);
     ApiService.getInstance().offShoppinglistDelete(onShoppinglistDelete);
     return super.close();
   }
@@ -195,8 +197,19 @@ class HouseholdUpdateCubit
     return res;
   }
 
-  Future<bool> updateShoppingList(ShoppingList shoppingList) async {
-    final res = await ApiService.getInstance().updateShoppingList(shoppingList);
+  Future<bool> updateShoppingList(
+    ShoppingList shoppingList, {
+    bool updateLocations = false,
+  }) async {
+    emit(state.copyWith(
+      shoppingLists: state.shoppingLists
+          .map((e) => e.id == shoppingList.id ? shoppingList : e)
+          .toList(),
+    ));
+    final res = await ApiService.getInstance().updateShoppingList(
+      shoppingList,
+      updateLocations: updateLocations,
+    );
     refresh();
 
     return res;

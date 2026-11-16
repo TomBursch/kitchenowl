@@ -7,7 +7,7 @@ from .history import History, Status
 from .recipe import RecipeTags, RecipeItems, Recipe
 from .planner import Planner
 from .tag import Tag
-from .shoppinglist import ShoppinglistItems, Shoppinglist
+from .shoppinglist import ShoppinglistItems, Shoppinglist, ShoppinglistLocation
 from .recipe_history import RecipeHistory
 from .expense_category import ExpenseCategory
 from .category import Category

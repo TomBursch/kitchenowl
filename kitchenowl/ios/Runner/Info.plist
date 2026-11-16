@@ -131,6 +131,10 @@
 	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>Take recipe images</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Notify you about your shopping list when you arrive at a store, even while KitchenOwl is closed</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Assign stores to shopping lists and switch to the matching shopping list when you arrive</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Select recipe images</string>
 	<key>UIApplicationSceneManifest</key>
@@ -159,6 +163,7 @@
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
+		<string>location</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>

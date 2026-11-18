@@ -75,4 +75,4 @@ HEALTHCHECK --interval=30s --timeout=3s CMD curl -f http://localhost/ || exit 1
 ENV BACK_URL='back:5000'
 
 # Expose the web server
-EXPOSE 80
+EXPOSE 8080

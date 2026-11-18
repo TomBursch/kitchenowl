@@ -14,6 +14,10 @@ server {
     location ~* ^/(index\.html|flutter_bootstrap\.js|flutter_service_worker\.js|manifest\.json|version\.json)$ {
         add_header Cache-Control "no-cache";
     }
+    location ~* \.mjs$ {
+        default_type application/javascript;
+        add_header Cache-Control "public, max-age=31536000, immutable";
+    }
     location ~* ^/assets/|\.(js|mjs|wasm|symbols)$ {
         add_header Cache-Control "public, max-age=31536000, immutable";
     }

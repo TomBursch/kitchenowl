@@ -6,16 +6,22 @@ from typing import Any, cast
 from urllib.parse import urljoin, urlparse
 from flask import current_app
 from html_text import extract_text
-from litellm import completion
-from recipe_scrapers import scrape_html
-from recipe_scrapers._exceptions import RecipeScrapersExceptions
 from app.models.tag import Tag
-from app.service.ingredient_parsing import parseIngredientsStream
+from app.service.ingredient_parsing import completion, parseIngredientsStream
 from app.models import Recipe, Item, Household
 from app.config import SUPPORTED_LANGUAGES
 
 LLM_MODEL = os.getenv("LLM_MODEL")
 LLM_API_URL = os.getenv("LLM_API_URL")
+
+
+def scrape_html(*args, **kwargs):
+    # recipe_scrapers loads all of its scrapers on import: only do that when a
+    # recipe is scraped
+    from recipe_scrapers import scrape_html as recipe_scrapers_scrape_html
+
+    return recipe_scrapers_scrape_html(*args, **kwargs)
+
 
 RECIPE_SCHEMA = {
     "type": "object",
@@ -70,6 +76,8 @@ def fixRelativeUrl(url: str, baseUrl: str) -> str:
 def scrapeHTMLStream(
     url: str, html: str, household: Household
 ) -> Generator[dict[str, Any], None, dict[str, Any] | None]:
+    from recipe_scrapers._exceptions import RecipeScrapersExceptions
+
     try:
         scraper = scrape_html(html, url, supported_only=False)
     except Exception:

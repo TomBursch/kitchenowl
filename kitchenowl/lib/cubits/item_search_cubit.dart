@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/helpers/item_name.dart';
 import 'package:kitchenowl/models/household.dart';
@@ -38,17 +39,40 @@ class ItemSearchCubit extends Cubit<ItemSearchState> {
           description: description,
         ));
       }
-      if (items.isEmpty ||
-          normalizeItemName(items[0].name) != normalizeItemName(queryName)) {
-        items.add(ItemWithDescription(
-          name: queryName,
-          description: queryDescription ?? '',
-        ));
-      }
+      items = withExactMatchFirst(items, queryName, queryDescription);
       emit(ItemSearchState(state.selectedItems, query, items));
     } else {
       emit(ItemSearchState(state.selectedItems, query, state.searchResults));
     }
+  }
+
+  /// Returns [items] with the item named [queryName] in the first position,
+  /// so that confirming the search adds what was typed rather than a
+  /// similar item. An already known item is moved to the front, otherwise
+  /// a new item is created for [queryName].
+  @visibleForTesting
+  static List<Item> withExactMatchFirst(
+    List<Item> items,
+    String queryName,
+    String? queryDescription,
+  ) {
+    final result = List<Item>.from(items);
+    final exactIndex = result.indexWhere(
+      (e) => normalizeItemName(e.name) == normalizeItemName(queryName),
+    );
+    if (exactIndex > 0) {
+      result.insert(0, result.removeAt(exactIndex));
+    } else if (exactIndex < 0) {
+      result.insert(
+        0,
+        ItemWithDescription(
+          name: queryName,
+          description: queryDescription ?? '',
+        ),
+      );
+    }
+
+    return result;
   }
 
   /// Scans the [query] for a comma and if found,

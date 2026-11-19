@@ -36,23 +36,32 @@ def importRecipe(household_id: int, args: dict, overwrite: bool = False):
 
     recipe.save()
 
+    # An overwritten recipe already has items and tags: keep the ones in the
+    # file, drop the rest, as the recipe update endpoint does.
     if "items" in args:
+        item_names = [e["name"] for e in args["items"]]
+        for con in list(recipe.items):
+            if con.item.name not in item_names:
+                con.delete()
         for recipeItem in args["items"]:
             item = Item.find_by_name(household_id, recipeItem["name"])
             if not item:
                 item = Item.create_by_name(household_id, recipeItem["name"])
-            con = RecipeItems(
-                description=recipeItem["description"], optional=recipeItem["optional"]
-            )
+            con = RecipeItems.find_by_ids(recipe.id, item.id) or RecipeItems()
+            con.description = recipeItem["description"]
+            con.optional = recipeItem["optional"]
             con.item = item
             con.recipe = recipe
             con.save()
     if "tags" in args:
+        for con in list(recipe.tags):
+            if con.tag.name not in args["tags"]:
+                con.delete()
         for tagName in args["tags"]:
             tag = Tag.find_by_name(household_id, tagName)
             if not tag:
                 tag = Tag.create_by_name(household_id, tagName)
-            con = RecipeTags()
+            con = RecipeTags.find_by_ids(recipe.id, tag.id) or RecipeTags()
             con.tag = tag
             con.recipe = recipe
             con.save()

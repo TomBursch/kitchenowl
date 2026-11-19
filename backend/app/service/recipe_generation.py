@@ -2,12 +2,10 @@ import json
 import os
 from typing import Any, cast
 
-from litellm import completion
-
 from app.config import SUPPORTED_LANGUAGES
 from app.models import Household, Item
 from app.models.tag import Tag
-from app.service.ingredient_parsing import LLM_API_URL, LLM_MODEL
+from app.service.ingredient_parsing import LLM_API_URL, LLM_MODEL, completion
 
 LLM_RECIPE_GENERATION = (
     bool(LLM_MODEL) and os.getenv("LLM_RECIPE_GENERATION", "True").lower() == "true"

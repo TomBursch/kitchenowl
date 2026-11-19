@@ -1,15 +1,16 @@
 from app import app, db
 from app.models import Item, Association
 
-import pandas as pd
-from mlxtend.frequent_patterns import apriori
-from mlxtend.preprocessing import TransactionEncoder
-from mlxtend.frequent_patterns import association_rules as arule
-
 
 def findItemSuggestions(shopping_instances):
     if not shopping_instances or len(shopping_instances) == 0:
         return
+
+    # Imported on first use: pandas and mlxtend are only needed by this nightly job
+    import pandas as pd
+    from mlxtend.frequent_patterns import apriori
+    from mlxtend.frequent_patterns import association_rules as arule
+    from mlxtend.preprocessing import TransactionEncoder
 
     # prepare data set
     te = TransactionEncoder()

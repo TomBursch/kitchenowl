@@ -7,7 +7,7 @@ class SelectableButtonCard extends StatefulWidget {
   final bool selected;
   final void Function()? onPressed;
   final void Function()? onLongPressed;
-  final Widget? extraOption;
+  final Widget Function(ValueChanged<bool>)? extraOptionBuilder;
   final Widget onLongPressedIcon;
 
   const SelectableButtonCard({
@@ -18,7 +18,7 @@ class SelectableButtonCard extends StatefulWidget {
     this.onPressed,
     this.onLongPressed,
     this.selected = false,
-    this.extraOption,
+    this.extraOptionBuilder,
     this.onLongPressedIcon = const Icon(Icons.more_horiz_rounded),
   });
 
@@ -28,6 +28,14 @@ class SelectableButtonCard extends StatefulWidget {
 
 class _SelectableButtonCardState extends State<SelectableButtonCard> {
   bool mouseHover = false;
+  bool extraOptionMenuOpen = false;
+
+  void _setExtraOptionMenuOpen(bool open) {
+    extraOptionMenuOpen = open;
+    if (mounted && !open) {
+      setState(() => mouseHover = false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,6 +56,7 @@ class _SelectableButtonCardState extends State<SelectableButtonCard> {
           });
         },
         onExit: (event) {
+          if (extraOptionMenuOpen) return;
           setState(() {
             mouseHover = false;
           });
@@ -59,8 +68,13 @@ class _SelectableButtonCardState extends State<SelectableButtonCard> {
           child: Stack(
             alignment: AlignmentDirectional.topEnd,
             children: [
-              if (widget.extraOption != null && mouseHover) widget.extraOption!,
-              if (widget.extraOption == null &&
+              if (widget.extraOptionBuilder != null)
+                Visibility(
+                  visible: mouseHover || extraOptionMenuOpen,
+                  maintainState: true,
+                  child: widget.extraOptionBuilder!(_setExtraOptionMenuOpen),
+                ),
+              if (widget.extraOptionBuilder == null &&
                   widget.onLongPressed != null &&
                   mouseHover)
                 IconButton(

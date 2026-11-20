@@ -234,6 +234,14 @@
   "@unlink": {
     "description": "As in remove link to social account (e.g. Google)"
   },
+  "@unlinkConfirm": {
+    "placeholders": {
+      "provider": {
+        "example": "OIDC",
+        "type": "String"
+      }
+    }
+  },
   "@userDeleteConfirmation": {
     "placeholders": {
       "user": {
@@ -289,6 +297,7 @@
   "confirm": "Bevestigen",
   "cookingTime": "Kooktijd",
   "copied": "Gekopieerd",
+  "currency": "Valuta",
   "daily": "Dagelijks",
   "dangerZone": "Gevaren gebied",
   "darkmode": "Donkere modus",
@@ -536,6 +545,8 @@
   "underConstruction": "Onder constructie",
   "undo": "Ongedaan maken",
   "unlink": "Ontkoppelen",
+  "unlinkConfirm": "Wil je je {provider} account echt ontkoppelen? Je kunt dan niet meer inloggen met dit account.",
+  "unlinkLastLoginMethod": "Dit is de enige manier om in te loggen. Stel een wachtwoord in of koppel eerst een andere account.",
   "unreachableMessage": "Hmmmm... kon server niet bereiken",
   "unsavedChangesBody": "Weet u zeker dat u terug wilt gaan?",
   "unsavedChangesTitle": "U heeft niet-opgeslagen wijzigingen",

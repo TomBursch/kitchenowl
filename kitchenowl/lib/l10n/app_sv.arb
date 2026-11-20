@@ -176,6 +176,14 @@
       }
     }
   },
+  "@recipeGenerateTokens": {
+    "placeholders": {
+      "count": {
+        "example": "1250",
+        "type": "int"
+      }
+    }
+  },
   "@recipeGoToInHousehold": {
     "placeholders": {
       "householdName": {
@@ -225,6 +233,14 @@
   },
   "@unlink": {
     "description": "As in remove link to social account (e.g. Google)"
+  },
+  "@unlinkConfirm": {
+    "placeholders": {
+      "provider": {
+        "example": "OIDC",
+        "type": "String"
+      }
+    }
   },
   "@userDeleteConfirmation": {
     "placeholders": {
@@ -281,6 +297,7 @@
   "confirm": "Bekräfta",
   "cookingTime": "Tillagningstid",
   "copied": "Kopierad",
+  "currency": "Valuta",
   "daily": "Daglig",
   "dangerZone": "Farozon",
   "darkmode": "Mörkt läge",
@@ -289,6 +306,8 @@
   "defaultWord": "Standard",
   "delete": "Ta bort",
   "description": "Beskrivning",
+  "detectingIngredients": "Upptäcker ingredienser...",
+  "detectingIngredientsAi": "Upptäcker ingredienser med AI...",
   "discover": "Upptäcka",
   "done": "Klar",
   "dynamicAccentColor": "Dynamisk accentfärg",
@@ -318,6 +337,7 @@
   "expenseReceivedFor": "Mottaget för",
   "export": "Exportera",
   "features": "Funktioner",
+  "fetchingWebsite": "Hämtar webbplats...",
   "fieldCannotBeEmpty": "{field} kan inte vara tomt.",
   "forceOfflineMode": "Tvinga offline-läge",
   "gallery": "Galleri",
@@ -435,6 +455,18 @@
   "recipeEdit": "Ändra recept",
   "recipeEmpty": "Inga recept, börja med att lägga till ett!",
   "recipeEmptySearch": "Hittar inga recept :(",
+  "recipeGenerate": "Generera recept med AI",
+  "recipeGenerateFollowUpAnother": "Föreslå ett annat recept",
+  "recipeGenerateFollowUpDetailed": "Förklara stegen mer detaljerat",
+  "recipeGenerateFollowUpVegetarian": "Gör den vegetarisk",
+  "recipeGenerateHint": "Beskriv en rätt eller lista dina ingredienserna…",
+  "recipeGenerateQuestion": "Vad skulle du vilja laga idag?",
+  "recipeGenerateSuggestionFewIngredients": "Föreslå en huvudrätt från Medelhavsområdet med högst 5 ingredienser (basvaror som salt, peppar, olja och buljong räknas inte in).",
+  "recipeGenerateSuggestionFridge": "Jag har bara potatis, tomater, ost, yoghurt och ägg i kylskåpet. Vad kan jag laga?",
+  "recipeGenerateSuggestionMealPrep": "En proteinrik lunch som jag kan förbereda för hela arbetsveckan.",
+  "recipeGenerateSuggestionQuick": "En vegetarisk vardagsmiddag för 2 som är klar på under 30 minuter.",
+  "recipeGenerateSuggestions": "Förslag på prompter",
+  "recipeGenerateTokens": "{count} tokens",
   "recipeGoToInHousehold": "Redan tillagd, gå till receptet i {householdName}",
   "recipeImageSelect": "Välj en bild till receptet",
   "recipeNew": "Nytt recept",
@@ -458,6 +490,7 @@
   "reportUser": "Rapportera användaren",
   "reset": "Återställ",
   "save": "Spara",
+  "scrapingUsingAi": "Hämtar recept med hjälp av AI...",
   "search": "Sök",
   "searchHint": "Letar du efter något?",
   "send": "Skicka",
@@ -512,6 +545,8 @@
   "underConstruction": "Under konstruktion",
   "undo": "Ångra",
   "unlink": "Avlänka",
+  "unlinkConfirm": "Vill du verkligen koppla bort ditt {provider}-konto? Du kommer inte längre att kunna logga in med det.",
+  "unlinkLastLoginMethod": "Detta är ditt enda sätt att logga in. Ange ett lösenord eller koppla ett annat konto först.",
   "unreachableMessage": "Hmmmm... kan inte nå servern",
   "unsavedChangesBody": "Är du säker på att du vill gå tillbaka?",
   "unsavedChangesTitle": "Du har ändringar som inte är sparade",

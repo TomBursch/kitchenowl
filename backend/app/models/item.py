@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Any, List, Optional, Self, cast
 
 from sqlalchemy import func
-from sqlalchemy.orm import Mapped
+from sqlalchemy.orm import Mapped, joinedload
 
 from app import db
 from app.helpers import DbModelAuthorizeMixin
@@ -93,9 +93,18 @@ class Item(Model, DbModelAuthorizeMixin):
     ) -> dict[str, Any]:
         res = super().obj_to_dict(skip_columns, include_columns)
         if self.category_id:
-            category = cast(Category, Category.find_by_id(self.category_id))
+            category = cast(Category, self.category)
             res["category"] = category.obj_to_dict()
         return res
+
+    @classmethod
+    def all_from_household_by_name(cls, household_id: int) -> list[Self]:
+        return (
+            cls.query.options(joinedload(cls.category))
+            .filter(cls.household_id == household_id)
+            .order_by(cls.name)
+            .all()
+        )
 
     def obj_to_export_dict(self) -> dict[str, Any]:
         res = {

@@ -19,6 +19,7 @@ class ItemPopupMenuButton extends StatelessWidget {
   final void Function(String) setName;
   final void Function(Item) mergeItem;
   final void Function() deleteItem;
+  final ValueChanged<bool>? onMenuVisibilityChanged;
 
   const ItemPopupMenuButton({
     super.key,
@@ -28,12 +29,23 @@ class ItemPopupMenuButton extends StatelessWidget {
     required this.setName,
     required this.mergeItem,
     required this.deleteItem,
+    this.onMenuVisibilityChanged,
   });
 
   @override
   Widget build(BuildContext context) {
-    return PopupMenuButton(
-      itemBuilder: (BuildContext context) => <PopupMenuEntry<_ItemAction>>[
+    return PopupMenuButton<_ItemAction>(
+      icon: const Icon(Icons.more_vert_rounded),
+      onOpened: () => onMenuVisibilityChanged?.call(true),
+      onCanceled: () => onMenuVisibilityChanged?.call(false),
+      onSelected: (action) async {
+        try {
+          await _handleItemAction(context, action);
+        } finally {
+          onMenuVisibilityChanged?.call(false);
+        }
+      },
+      itemBuilder: (context) => <PopupMenuEntry<_ItemAction>>[
         if (household != null)
           PopupMenuItem<_ItemAction>(
             value: _ItemAction.changeIcon,
@@ -56,7 +68,6 @@ class ItemPopupMenuButton extends StatelessWidget {
             child: Text(AppLocalizations.of(context)!.delete),
           ),
       ],
-      onSelected: (action) => _handleItemAction(context, action),
     );
   }
 
@@ -78,11 +89,17 @@ class ItemPopupMenuButton extends StatelessWidget {
           context: context,
           builder: (BuildContext context) {
             return TextDialog(
-              title: AppLocalizations.of(context)!.categoryEdit,
+              title: AppLocalizations.of(context)!.rename,
               doneText: AppLocalizations.of(context)!.rename,
               hintText: AppLocalizations.of(context)!.name,
               initialText: item.name,
               isInputValid: (s) => s.trim().isNotEmpty && s != item.name,
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: Text(AppLocalizations.of(context)!.cancel),
+                ),
+              ],
             );
           },
         );

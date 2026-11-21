@@ -9,7 +9,7 @@ class SelectableButtonListTile extends StatefulWidget {
   final bool raised;
   final void Function()? onPressed;
   final void Function()? onLongPressed;
-  final Widget? extraOption;
+  final Widget Function(ValueChanged<bool>)? extraOptionBuilder;
   final ListStyle listStyle;
 
   const SelectableButtonListTile({
@@ -21,7 +21,7 @@ class SelectableButtonListTile extends StatefulWidget {
     this.onPressed,
     this.onLongPressed,
     this.raised = true,
-    this.extraOption,
+    this.extraOptionBuilder,
     this.listStyle = ListStyle.cards,
   });
 
@@ -32,6 +32,14 @@ class SelectableButtonListTile extends StatefulWidget {
 
 class _SelectableButtonListTileState extends State<SelectableButtonListTile> {
   bool mouseHover = false;
+  bool extraOptionMenuOpen = false;
+
+  void _setExtraOptionMenuOpen(bool open) {
+    extraOptionMenuOpen = open;
+    if (mounted && !open) {
+      setState(() => mouseHover = false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,6 +50,7 @@ class _SelectableButtonListTileState extends State<SelectableButtonListTile> {
         });
       },
       onExit: (event) {
+        if (extraOptionMenuOpen) return;
         setState(() {
           mouseHover = false;
         });
@@ -91,8 +100,12 @@ class _SelectableButtonListTileState extends State<SelectableButtonListTile> {
         onTap: widget.onPressed,
         onLongPress: widget.onLongPressed,
         contentPadding: const EdgeInsets.only(left: 16, right: 8),
-        trailing: (widget.extraOption != null && mouseHover)
-            ? widget.extraOption
+        trailing: widget.extraOptionBuilder != null
+            ? Visibility(
+                visible: mouseHover || extraOptionMenuOpen,
+                maintainState: true,
+                child: widget.extraOptionBuilder!(_setExtraOptionMenuOpen),
+              )
             : (widget.onLongPressed != null && mouseHover)
                 ? IconButton(
                     onPressed: widget.onLongPressed,

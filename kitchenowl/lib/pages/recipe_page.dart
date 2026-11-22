@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:kitchenowl/app.dart';
 import 'package:kitchenowl/cubits/auth_cubit.dart';
 import 'package:kitchenowl/cubits/recipe_cubit.dart';
+import 'package:kitchenowl/cubits/settings_cubit.dart';
 import 'package:kitchenowl/enums/update_enum.dart';
 import 'package:kitchenowl/helpers/share.dart';
 import 'package:kitchenowl/models/household.dart';
@@ -85,6 +86,12 @@ class _RecipePageState extends State<RecipePage> {
             }
           },
           builder: (context, state) {
+            final settings = context.watch<SettingsCubit>().state;
+            final ingredientListStyle = ShoppingListStyle(
+              isList: settings.shoppingListListView,
+              listStyle: settings.listStyle,
+              gridSize: settings.gridSize,
+            );
             final left = <Widget>[
               SliverPadding(
                 padding: const EdgeInsets.fromLTRB(16, 4, 16, 0),
@@ -230,6 +237,7 @@ class _RecipePageState extends State<RecipePage> {
                   ),
                 if (state.recipe.items.where((e) => !e.optional).isNotEmpty)
                   SliverItemGridList(
+                    shoppingListStyle: ingredientListStyle,
                     items: state.dynamicRecipe.items
                         .where((e) => !e.optional)
                         .toList(),
@@ -250,6 +258,7 @@ class _RecipePageState extends State<RecipePage> {
                   ),
                 if (state.recipe.items.where((e) => e.optional).isNotEmpty)
                   SliverItemGridList(
+                    shoppingListStyle: ingredientListStyle,
                     items: state.dynamicRecipe.items
                         .where((e) => e.optional)
                         .toList(),

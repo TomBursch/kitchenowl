@@ -4,9 +4,9 @@ services:
     restart: unless-stopped
     # environment:
     #   - BACK_URL=back:5000 # Change this if you rename the containers
-    #   - FRONTEND_PORT=80 # If you change this port you have to adjust the port mapping below as well
+    #   - FRONTEND_PORT=8080 # If you change this port you have to adjust the port mapping below as well
     ports:
-      - "80:80"
+      - "80:8080"
     depends_on:
       - back
   back:

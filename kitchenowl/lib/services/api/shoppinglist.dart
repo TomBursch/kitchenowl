@@ -43,12 +43,17 @@ extension ShoppinglistApi on ApiService {
     return res.statusCode == 200;
   }
 
+  /// Updates the shopping list. Locations are only sent with
+  /// [updateLocations] as older servers do not support them.
   Future<bool> updateShoppingList(
-    ShoppingList shoppingList,
-  ) async {
+    ShoppingList shoppingList, {
+    bool updateLocations = false,
+  }) async {
     final res = await post(
       route(shoppinglist: shoppingList),
-      jsonEncode(shoppingList.toJson()),
+      jsonEncode(updateLocations
+          ? shoppingList.toJsonWithLocations()
+          : shoppingList.toJson()),
     );
 
     return res.statusCode == 200;
@@ -150,6 +155,14 @@ extension ShoppinglistApi on ApiService {
 
   void offShoppinglistAdd(dynamic Function(dynamic) handler) {
     socket.off("shoppinglist:add", handler);
+  }
+
+  void onShoppinglistUpdate(dynamic Function(dynamic) handler) {
+    socket.on("shoppinglist:update", handler);
+  }
+
+  void offShoppinglistUpdate(dynamic Function(dynamic) handler) {
+    socket.off("shoppinglist:update", handler);
   }
 
   void onShoppinglistDelete(dynamic Function(dynamic) handler) {

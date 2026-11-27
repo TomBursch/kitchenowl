@@ -18,8 +18,10 @@ import 'package:kitchenowl/pages/analytics_page.dart';
 import 'package:kitchenowl/pages/household_member_page.dart';
 import 'package:kitchenowl/pages/household_update_page.dart';
 import 'package:kitchenowl/pages/reports_list_page.dart';
+import 'package:kitchenowl/pages/settings_location_page.dart';
 import 'package:kitchenowl/pages/settings_server_user_page.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
+import 'package:kitchenowl/services/location_service.dart';
 import 'package:kitchenowl/styles/colors.dart';
 import 'package:kitchenowl/widgets/settings/color_button.dart';
 import 'package:kitchenowl/widgets/sliver_expansion_tile.dart';
@@ -312,6 +314,23 @@ class _SettingsPageState extends State<SettingsPage> {
                     ),
                   ),
                 ),
+                if (LocationService.isLocationSupported)
+                  ListTile(
+                    title: Text(
+                      AppLocalizations.of(context)!.locationBasedShoppingLists,
+                    ),
+                    subtitle: Text(
+                      SettingsLocationPage.summary(context, state.location),
+                    ),
+                    leading: const Icon(Icons.location_on_rounded),
+                    onTap: () => Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (ctx) => SettingsLocationPage(
+                          household: widget.household,
+                        ),
+                      ),
+                    ),
+                  ),
               ]),
             ),
           ),

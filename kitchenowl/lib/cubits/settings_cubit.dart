@@ -4,6 +4,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitchenowl/config.dart';
 import 'package:kitchenowl/kitchenowl.dart';
+import 'package:kitchenowl/services/location_service.dart';
 import 'package:kitchenowl/services/storage/storage.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
@@ -31,10 +32,12 @@ class SettingsCubit extends Cubit<SettingsState> {
         PreferenceStorage.getInstance().readBool(key: 'recentItemsCategorize');
     final restoreLastShoppingList = PreferenceStorage.getInstance()
         .readBool(key: 'restoreLastShoppingList');
-    final shoppingListKeepAwake = PreferenceStorage.getInstance()
-        .readBool(key: 'shoppingListKeepAwake');
-    final advancedRecipesControl = PreferenceStorage.getInstance()
-        .readBool(key: 'advancedRecipesControl');
+    final shoppingListKeepAwake =
+        PreferenceStorage.getInstance().readBool(key: 'shoppingListKeepAwake');
+    final advancedRecipesControl =
+        PreferenceStorage.getInstance().readBool(key: 'advancedRecipesControl');
+
+    final locationSettings = LocationService.readSettings();
 
     Config.deviceInfo = DeviceInfoPlugin().deviceInfo;
     Config.packageInfo = PackageInfo.fromPlatform();
@@ -62,6 +65,7 @@ class SettingsCubit extends Cubit<SettingsState> {
       restoreLastShoppingList: await restoreLastShoppingList ?? false,
       shoppingListKeepAwake: await shoppingListKeepAwake ?? false,
       advancedRecipesControl: await advancedRecipesControl ?? false,
+      location: await locationSettings,
     ));
   }
 
@@ -146,6 +150,81 @@ class SettingsCubit extends Cubit<SettingsState> {
     emit(state.copyWith(shoppingListKeepAwake: shoppingListKeepAwake));
   }
 
+  /// Enables location based shopping lists. Returns false if the location
+  /// permission was not granted.
+  Future<bool> setLocationEnabled(bool enabled) async {
+    if (enabled) {
+      final granted = await LocationService.requestPermission(
+        background:
+            LocationService.isGeofencingSupported && state.location.notify,
+      );
+      if (!granted) return false;
+      if (state.location.notify) {
+        await LocationService.requestNotificationPermission();
+      }
+    }
+    await PreferenceStorage.getInstance()
+        .writeBool(key: LocationService.prefEnabled, value: enabled);
+    emit(state.copyWith(location: state.location.copyWith(enabled: enabled)));
+    await LocationService.syncGeofencesFromCache();
+
+    return true;
+  }
+
+  Future<void> setLocationNotify(bool notify) async {
+    if (notify) {
+      await LocationService.requestPermission(background: true);
+      await LocationService.requestNotificationPermission();
+    }
+    await PreferenceStorage.getInstance()
+        .writeBool(key: LocationService.prefNotify, value: notify);
+    emit(state.copyWith(location: state.location.copyWith(notify: notify)));
+    await LocationService.syncGeofencesFromCache();
+  }
+
+  void setLocationNotifyOncePerVisit(bool value) {
+    PreferenceStorage.getInstance()
+        .writeBool(key: LocationService.prefNotifyOncePerVisit, value: value);
+    emit(state.copyWith(
+      location: state.location.copyWith(notifyOncePerVisit: value),
+    ));
+  }
+
+  void setLocationIgnoreEmptyLists(bool value) {
+    PreferenceStorage.getInstance()
+        .writeBool(key: LocationService.prefIgnoreEmptyLists, value: value);
+    emit(state.copyWith(
+      location: state.location.copyWith(ignoreEmptyLists: value),
+    ));
+  }
+
+  void setLocationAutoSwitch(bool value) {
+    PreferenceStorage.getInstance()
+        .writeBool(key: LocationService.prefAutoSwitch, value: value);
+    emit(state.copyWith(location: state.location.copyWith(autoSwitch: value)));
+  }
+
+  void setLocationConfirmSwitch(bool value) {
+    PreferenceStorage.getInstance()
+        .writeBool(key: LocationService.prefConfirmSwitch, value: value);
+    emit(state.copyWith(
+      location: state.location.copyWith(confirmSwitch: value),
+    ));
+  }
+
+  Future<void> setShoppingListLocationMuted(
+    int shoppingListId,
+    bool muted,
+  ) async {
+    await LocationService.setShoppingListMuted(shoppingListId, muted);
+    final ids = Set.of(state.location.mutedShoppingLists);
+    muted ? ids.add(shoppingListId) : ids.remove(shoppingListId);
+    emit(state.copyWith(
+      location: state.location.copyWith(mutedShoppingLists: ids),
+    ));
+    await LocationService.syncGeofencesFromCache();
+  }
+
   void setAdvancedRecipesControl(bool advancedRecipesControl) {
     PreferenceStorage.getInstance().writeBool(
       key: 'advancedRecipesControl',
@@ -168,6 +247,7 @@ class SettingsState extends Equatable {
   final bool restoreLastShoppingList;
   final bool shoppingListKeepAwake;
   final bool advancedRecipesControl;
+  final ShoppingListLocationSettings location;
 
   const SettingsState({
     this.themeMode = ThemeMode.system,
@@ -182,6 +262,7 @@ class SettingsState extends Equatable {
     this.restoreLastShoppingList = false,
     this.shoppingListKeepAwake = false,
     this.advancedRecipesControl = false,
+    this.location = const ShoppingListLocationSettings(),
   });
 
   SettingsState copyWith({
@@ -197,6 +278,7 @@ class SettingsState extends Equatable {
     bool? restoreLastShoppingList,
     bool? shoppingListKeepAwake,
     bool? advancedRecipesControl,
+    ShoppingListLocationSettings? location,
   }) =>
       SettingsState(
         themeMode: themeMode ?? this.themeMode,
@@ -216,6 +298,7 @@ class SettingsState extends Equatable {
             shoppingListKeepAwake ?? this.shoppingListKeepAwake,
         advancedRecipesControl:
             advancedRecipesControl ?? this.advancedRecipesControl,
+        location: location ?? this.location,
       );
 
   @override
@@ -232,5 +315,6 @@ class SettingsState extends Equatable {
         restoreLastShoppingList,
         shoppingListKeepAwake,
         advancedRecipesControl,
+        location,
       ];
 }

@@ -74,6 +74,9 @@ dependencies:
   wakelock_plus: ^1.2.10
   fuzzywuzzy: ^1.2.0
   diacritic: ^0.1.6
+  native_geofence: ^1.5.1
+  geolocator: ^14.0.1
+  flutter_local_notifications: ^23.0.0
 
 dev_dependencies:
   flutter_test:

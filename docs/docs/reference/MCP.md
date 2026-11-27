@@ -141,6 +141,17 @@ All tools return JSON, both as readable text content and as `structuredContent`.
 | Tool | Arguments | Description |
 | --- | --- | --- |
 | `list_items` | `household_id` (`search`) | List household items, optionally filtered by a name search. Returns at most 100 items. |
+| `update_item` | `item_id` (`name`, `icon`, `category_id` or `category_name`) | Change an item's name, icon or category; omitted fields are left unchanged. `icon` must be one of the names returned by `list_item_icons`; `category_name` is matched case-insensitively against the household's categories. Pass `null` as `icon` or `category_id` to remove it. Unknown icons and categories, or a name already used by another item, are rejected with a `reason` (`unknown_icon` with `suggestions`, `category_not_found` with the available `categories`, `name_taken` with `existing_item_id`) and nothing is changed. |
+| `list_item_icons` | (`search`) | List the icon names the apps can display, optionally filtered by a substring (e.g. `tomato`). |
+
+Items without a category have `category_id: null` in `list_items` and `list_shoppinglist_items`.
+
+### Categories
+
+| Tool | Arguments | Description |
+| --- | --- | --- |
+| `list_categories` | `household_id` | List the item categories of a household in shopping list order (`id`, `name`, `default_key`, `ordering`). |
+| `create_category` | `household_id`, `name` | Create a category (returns the existing category if the name is already used, ignoring case). |
 
 ### Recipes
 

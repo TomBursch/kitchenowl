@@ -2,6 +2,7 @@
 import sys
 import os
 import glob
+import json
 
 try:
     import fontforge
@@ -136,3 +137,8 @@ class ItemIcons {
             f.write(f"""  static const IconData {name} = IconData({i+FIRST_FONT_CHARACTER_INDEX}, fontFamily: _kFontFam, fontPackage: _kFontPkg);\n""")
 
         f.write("""}\n""")
+
+    # The backend validates icon names (e.g. in the MCP server) against this list
+    with open(folderPath + '/../backend/templates/item_icons.json', 'w') as f:
+        json.dump(names, f, indent=2)
+        f.write("\n")

@@ -10,11 +10,13 @@ from typing import Any
 
 from flask import Blueprint, Response, jsonify, request, url_for
 from flask_jwt_extended import current_user, jwt_required
+from sqlalchemy import func
 
 from app import db
 from app.config import BACKEND_VERSION
 from app.errors import NotFoundRequest
 from app.models import (
+    Category,
     Expense,
     File,
     History,
@@ -35,6 +37,13 @@ from app.models.recipe import (
     transform_cooking_date_to_day,
 )
 from app.service.recipe_scraping import scrape
+from app.controller.item.schemas import UpdateItem
+from app.service.update_item import update_item
+from app.util.item_icons import (
+    is_known_item_icon,
+    known_item_icons,
+    similar_item_icons,
+)
 
 mcp = Blueprint("mcp", __name__)
 
@@ -420,6 +429,105 @@ def _tool_create_tag(args: dict[str, Any]) -> Any:
     if not tag:
         tag = Tag.create_by_name(household_id, name)
     return tag.obj_to_full_dict()
+
+
+def _tool_list_categories(args: dict[str, Any]) -> Any:
+    household_id = int(args["household_id"])
+    _require_household_access(household_id)
+    categories = Category.all_by_ordering(household_id)
+    return {"items": [c.obj_to_dict() for c in categories]}
+
+
+def _tool_create_category(args: dict[str, Any]) -> Any:
+    household_id = int(args["household_id"])
+    _require_household_access(household_id)
+    name = str(args["name"]).strip()[:128]
+    if not name:
+        return {"created": False, "reason": "empty_name"}
+
+    category = _find_category_by_name(household_id, name)
+    if not category:
+        category = Category.create_by_name(household_id, name)
+    return category.obj_to_dict()
+
+
+def _find_category_by_name(household_id: int, name: str) -> Category | None:
+    # Exact match first, then ignoring case (lowered on the database side so
+    # both sides use the same folding).
+    category = Category.find_by_name(household_id, name)
+    if category:
+        return category
+    return Category.query.filter(
+        Category.household_id == household_id,
+        func.lower(Category.name) == func.lower(name),
+    ).first()
+
+
+def _tool_list_item_icons(args: dict[str, Any]) -> Any:
+    search = str(args.get("search", "")).strip().lower()
+    return {"items": [i for i in known_item_icons() if search in i]}
+
+
+def _tool_update_item(args: dict[str, Any]) -> Any:
+    item_id = int(args["item_id"])
+    item = Item.find_by_id(item_id)
+    if not item:
+        raise NotFoundRequest()
+    item.checkAuthorized()
+
+    # Everything is checked before update_item runs, so a rejected call
+    # changes nothing.
+    payload: dict[str, Any] = {}
+
+    if "category_id" in args and "category_name" in args:
+        raise ValueError("Pass either category_id or category_name, not both")
+    if "category_id" in args:
+        category_id = args["category_id"]
+        payload["category"] = (
+            None if category_id is None else {"id": int(category_id)}
+        )
+    elif "category_name" in args:
+        category_name = str(args["category_name"] or "").strip()
+        if not category_name:
+            payload["category"] = None
+        else:
+            category = _find_category_by_name(item.household_id, category_name)
+            if not category:
+                return {
+                    "updated": False,
+                    "reason": "category_not_found",
+                    "categories": [
+                        c.name for c in Category.all_by_ordering(item.household_id)
+                    ],
+                }
+            payload["category"] = {"id": category.id}
+
+    if "icon" in args:
+        icon = str(args["icon"] or "").strip()
+        if icon and not is_known_item_icon(icon):
+            return {
+                "updated": False,
+                "reason": "unknown_icon",
+                "icon": icon,
+                "suggestions": similar_item_icons(icon),
+            }
+        payload["icon"] = icon or None
+
+    if "name" in args:
+        name = str(args["name"] or "").strip()[:128]
+        if not name:
+            return {"updated": False, "reason": "empty_name"}
+        existing = Item.find_by_name(item.household_id, name)
+        if existing and existing.id != item.id:
+            return {
+                "updated": False,
+                "reason": "name_taken",
+                "existing_item_id": existing.id,
+            }
+        payload["name"] = name
+
+    update_item(item, UpdateItem().load(payload))
+    return item.obj_to_dict()
 
 
 def _tool_create_shoppinglist(args: dict[str, Any]) -> Any:
@@ -850,6 +958,46 @@ TOOLS: dict[str, tuple[dict[str, Any], Callable[[dict[str, Any]], Any]]] = {
         },
         _tool_create_tag,
     ),
+    "list_categories": (
+        {
+            "type": "object",
+            "properties": {"household_id": {"type": "integer"}},
+            "required": ["household_id"],
+        },
+        _tool_list_categories,
+    ),
+    "create_category": (
+        {
+            "type": "object",
+            "properties": {
+                "household_id": {"type": "integer"},
+                "name": {"type": "string"},
+            },
+            "required": ["household_id", "name"],
+        },
+        _tool_create_category,
+    ),
+    "list_item_icons": (
+        {
+            "type": "object",
+            "properties": {"search": {"type": "string"}},
+        },
+        _tool_list_item_icons,
+    ),
+    "update_item": (
+        {
+            "type": "object",
+            "properties": {
+                "item_id": {"type": "integer"},
+                "name": {"type": "string"},
+                "icon": {"type": ["string", "null"]},
+                "category_id": {"type": ["integer", "null"]},
+                "category_name": {"type": ["string", "null"]},
+            },
+            "required": ["item_id"],
+        },
+        _tool_update_item,
+    ),
     "create_shoppinglist": (
         {
             "type": "object",
@@ -1033,6 +1181,26 @@ TOOL_DESCRIPTIONS = {
     "search_recipes": (
         "Search household recipe names and return paginated id and name references. "
         "Use additional_fields for selected bulk data, or get_recipe for one full recipe."
+    ),
+    "list_categories": (
+        "List the item categories of a household in shopping list order, with "
+        "id, name, default_key and ordering."
+    ),
+    "create_category": (
+        "Create an item category, or return the existing one with that name "
+        "(ignoring case)."
+    ),
+    "list_item_icons": (
+        "List the icon names the KitchenOwl apps can display, optionally filtered "
+        "by a substring such as 'tomato'. Only these names are accepted by "
+        "update_item."
+    ),
+    "update_item": (
+        "Change an item's name, icon or category; omitted fields stay as they are. "
+        "icon must be a name from list_item_icons (null removes it). Set the "
+        "category with category_id or category_name (see list_categories); null "
+        "removes it. Unknown icons, unknown categories and names already used by "
+        "another item are rejected with a reason and nothing is changed."
     ),
 }
 

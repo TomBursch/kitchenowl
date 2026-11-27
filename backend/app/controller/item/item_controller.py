@@ -4,6 +4,7 @@ from app.errors import InvalidUsage, NotFoundRequest
 import app.util.description_splitter as description_splitter
 from flask_jwt_extended import jwt_required
 from app.models import Item, RecipeItems, Recipe, Category
+from app.service.update_item import update_item
 from .schemas import SearchByNameRequest, UpdateItem, AddItem
 
 item = Blueprint("item", __name__)
@@ -106,27 +107,6 @@ def updateItem(args, id):
         raise NotFoundRequest()
     item.checkAuthorized()
 
-    if "category" in args:
-        if not args["category"]:
-            item.category = None
-        elif "id" in args["category"]:
-            category = Category.find_by_id(args["category"]["id"])
-            if not category or category.household_id != item.household_id:
-                raise InvalidUsage()
-            item.category = category
-        else:
-            raise InvalidUsage()
-    if "icon" in args:
-        item.icon = args["icon"]
-    if "name" in args and args["name"] != item.name:
-        newName: str = args["name"].strip()[:128]
-        if not Item.find_by_name(item.household_id, newName):
-            item.name = newName
-    item.save()
-
-    if "merge_item_id" in args and args["merge_item_id"] != id:
-        mergeItem = Item.find_by_id(args["merge_item_id"])
-        if mergeItem:
-            item.merge(mergeItem)
+    update_item(item, args)
 
     return jsonify(item.obj_to_dict())

@@ -41,6 +41,7 @@ class OIDCRequest(Model):
     provider: Mapped[str] = db.Column(db.String(24), primary_key=True)
     nonce: Mapped[str] = db.Column(db.String(256), nullable=False)
     redirect_uri: Mapped[str] = db.Column(db.String(256), nullable=False)
+    code_verifier: Mapped[str | None] = db.Column(db.String(128), nullable=True)
     user_id: Mapped[int | None] = db.Column(
         db.Integer, db.ForeignKey("user.id"), nullable=True
     )

@@ -162,9 +162,11 @@ def scrapeHTMLStream(
     recipe.source = url
     items = {}
     # Relies on site meta data to detect language. Possible mismatch if there is a spanish recipe on a english website
-    sourceLanguageCode = (
-        scraper.language() or ""
-    )  # Fallback to handle None cases and default to LLM if in use
+    sourceLanguageCode = ""
+    try:
+        sourceLanguageCode = scraper.language() or ""
+    except RecipeScrapersExceptions:
+        pass
     parsed_ingredients = yield from parseIngredientsStream(
         scraper.ingredients(), household.language, sourceLanguageCode, household
     )

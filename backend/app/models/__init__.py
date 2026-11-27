@@ -4,7 +4,7 @@ from .association import Association
 from .expense import Expense, ExpensePaidFor
 from .settings import Settings
 from .history import History, Status
-from .recipe import RecipeTags, RecipeItems, Recipe
+from .recipe import RecipeTags, RecipeItems, Recipe, RecipeTombstone
 from .planner import Planner
 from .tag import Tag
 from .shoppinglist import ShoppinglistItems, Shoppinglist

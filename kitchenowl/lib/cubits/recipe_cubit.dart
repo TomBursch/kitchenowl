@@ -73,10 +73,18 @@ class RecipeCubit extends Cubit<RecipeState> {
 
     Recipe? inHouseholdRecipe;
     if (state.household != null && recipe.householdId != state.household!.id) {
-      final allRecipes = await TransactionHandler.getInstance().runTransaction(
+      var allRecipes = await TransactionHandler.getInstance().runTransaction(
         TransactionRecipeGetRecipes(household: state.household!),
         forceOffline: true,
       );
+      // Cold-cache fallback: MemStorage is empty on first launch before the
+      // background sync has run. Fetch a slim page directly so the "already
+      // added" indicator works without waiting for a full sync.
+      if (allRecipes.isEmpty) {
+        final result =
+            await ApiService.getInstance().getRecipesPaginated(state.household!);
+        allRecipes = result?.items ?? [];
+      }
       inHouseholdRecipe = allRecipes.firstWhereOrNull((r) {
         if (r.source.trim().isEmpty) return false;
         final match = RegExp(

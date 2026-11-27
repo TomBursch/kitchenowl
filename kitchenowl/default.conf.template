@@ -7,6 +7,11 @@ server {
 
     server_name _;
 
+    include mime.types;
+    types {
+        text/javascript mjs;
+    }
+
     location / {
         client_max_body_size 32M;
         try_files $uri $uri/ /index.html;

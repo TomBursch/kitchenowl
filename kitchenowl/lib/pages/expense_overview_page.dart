@@ -15,7 +15,7 @@ import 'package:kitchenowl/widgets/chart_bar_member_distribution.dart';
 import 'package:kitchenowl/widgets/chart_bar_months.dart';
 import 'package:kitchenowl/widgets/chart_line_current_month.dart';
 import 'package:kitchenowl/widgets/expense_category_icon.dart';
-import 'package:responsive_builder/responsive_builder.dart';
+import 'package:kitchenowl/helpers/responsive.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
 class ExpenseOverviewPage extends StatefulWidget {

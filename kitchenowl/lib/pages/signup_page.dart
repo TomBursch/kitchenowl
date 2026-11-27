@@ -11,7 +11,7 @@ import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/router.dart';
 import 'package:kitchenowl/styles/color_mapper.dart';
 import 'package:kitchenowl/widgets/create_user_form_fields.dart';
-import 'package:responsive_builder/responsive_builder.dart';
+import 'package:kitchenowl/helpers/responsive.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
 class SignupPage extends StatefulWidget {

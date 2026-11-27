@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:material_ui/material_ui.dart';
 import 'package:kitchenowl/kitchenowl.dart';
-import 'package:responsive_builder/responsive_builder.dart';
+import 'package:kitchenowl/helpers/responsive.dart';
 
 class KitchenowlSearchAnchor extends StatelessWidget {
   final FutureOr<Iterable<String>> Function(BuildContext, SearchController)

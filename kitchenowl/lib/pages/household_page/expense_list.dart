@@ -13,7 +13,7 @@ import 'package:kitchenowl/widgets/chart_pie_current_month.dart';
 import 'package:kitchenowl/widgets/choice_scroll.dart';
 import 'package:kitchenowl/widgets/expense/timeframe_dropdown_button.dart';
 import 'package:kitchenowl/widgets/expense_item.dart';
-import 'package:responsive_builder/responsive_builder.dart';
+import 'package:kitchenowl/helpers/responsive.dart';
 
 class ExpenseListPage extends StatefulWidget {
   const ExpenseListPage({super.key});

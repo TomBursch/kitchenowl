@@ -5,7 +5,7 @@ import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/recipe.dart';
 import 'package:kitchenowl/widgets/recipe_card.dart';
 import 'package:kitchenowl/widgets/shimmer_recipe_card.dart';
-import 'package:responsive_builder/responsive_builder.dart';
+import 'package:kitchenowl/helpers/responsive.dart';
 
 class SliverRecipeCarousel extends StatelessWidget {
   final List<Recipe> recipes;

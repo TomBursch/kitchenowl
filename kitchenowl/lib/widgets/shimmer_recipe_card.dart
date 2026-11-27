@@ -1,6 +1,6 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:kitchenowl/widgets/shimmer_card.dart';
-import 'package:responsive_builder/responsive_builder.dart';
+import 'package:kitchenowl/helpers/responsive.dart';
 import 'package:shimmer/shimmer.dart';
 
 class ShimmerRecipeCard extends StatelessWidget {

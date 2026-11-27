@@ -20,7 +20,7 @@ import 'package:kitchenowl/widgets/recipe_markdown_body.dart';
 import 'package:kitchenowl/widgets/recipe_source_chip.dart';
 import 'package:kitchenowl/widgets/report_dialog.dart';
 import 'package:kitchenowl/widgets/sliver_with_pinned_footer.dart';
-import 'package:responsive_builder/responsive_builder.dart';
+import 'package:kitchenowl/helpers/responsive.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 import 'package:tuple/tuple.dart';
 

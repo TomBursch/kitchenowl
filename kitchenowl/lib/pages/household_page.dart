@@ -14,7 +14,7 @@ import 'package:kitchenowl/pages/household_page/household_navigation_rail.dart';
 import 'package:kitchenowl/pages/household_page/more.dart';
 import 'package:kitchenowl/pages/page_not_found.dart';
 import 'package:kitchenowl/router.dart';
-import 'package:responsive_builder/responsive_builder.dart';
+import 'package:kitchenowl/helpers/responsive.dart';
 
 class HouseholdPage extends StatefulWidget {
   final Household household;

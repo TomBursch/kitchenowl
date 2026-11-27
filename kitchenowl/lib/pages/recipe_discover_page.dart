@@ -7,7 +7,7 @@ import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/pages/recipe_list_display_page.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
 import 'package:kitchenowl/widgets/sliver_recipe_carousel.dart';
-import 'package:responsive_builder/responsive_builder.dart';
+import 'package:kitchenowl/helpers/responsive.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
 class RecipeDiscoverPage extends StatefulWidget {

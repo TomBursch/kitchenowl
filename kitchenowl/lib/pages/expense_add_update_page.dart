@@ -12,7 +12,7 @@ import 'package:kitchenowl/models/expense_category.dart';
 import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/models/member.dart';
 import 'package:kitchenowl/widgets/expense_add_update/paid_for_widget.dart';
-import 'package:responsive_builder/responsive_builder.dart';
+import 'package:kitchenowl/helpers/responsive.dart';
 
 class AddUpdateExpensePage extends StatefulWidget {
   final Household household;

@@ -16,7 +16,7 @@ import 'package:kitchenowl/pages/item_page.dart';
 import 'package:kitchenowl/pages/item_search_page.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/widgets/recipe_time_settings.dart';
-import 'package:responsive_builder/responsive_builder.dart';
+import 'package:kitchenowl/helpers/responsive.dart';
 import 'package:tuple/tuple.dart';
 
 class AddUpdateRecipePage extends StatefulWidget {

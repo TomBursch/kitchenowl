@@ -12,7 +12,7 @@ import 'package:kitchenowl/enums/oidc_provider.dart';
 import 'package:kitchenowl/services/api/api_service.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/styles/color_mapper.dart';
-import 'package:responsive_builder/responsive_builder.dart';
+import 'package:kitchenowl/helpers/responsive.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 import 'package:kitchenowl/pages/splash_page.dart';
 

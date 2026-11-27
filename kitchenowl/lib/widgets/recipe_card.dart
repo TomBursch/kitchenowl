@@ -8,7 +8,7 @@ import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/models/household.dart';
 import 'package:kitchenowl/models/recipe.dart';
 import 'package:kitchenowl/services/storage/storage.dart';
-import 'package:responsive_builder/responsive_builder.dart';
+import 'package:kitchenowl/helpers/responsive.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:tuple/tuple.dart';
 

@@ -3,7 +3,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:intl/intl.dart';
 import 'package:kitchenowl/models/expense_overview.dart';
-import 'package:responsive_builder/responsive_builder.dart';
+import 'package:kitchenowl/helpers/responsive.dart';
 
 class ChartLineCurrentMonth extends StatefulWidget {
   final ExpenseOverview data;

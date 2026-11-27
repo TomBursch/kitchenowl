@@ -48,8 +48,6 @@ dependencies:
   diffutil_dart: ^5.0.0
   background_fetch: ^2.0.1
 
-  responsive_builder: ^0.7.0
-
   dynamic_color: ^2.1.0
   world_countries: ^4.7.0
 

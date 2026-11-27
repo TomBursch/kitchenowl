@@ -7,13 +7,12 @@ from sqlalchemy.orm import Mapped
 
 from app import db
 from app.helpers import DbModelAuthorizeMixin
-from app.models.category import Category
 from app.util import description_merger
 from app.util.normalize_item_name import unaccent
 
 Model = db.Model
 if TYPE_CHECKING:
-    from app.models import Household, RecipeItems, ShoppinglistItems
+    from app.models import Category, Household, RecipeItems, ShoppinglistItems
     from app.helpers.db_model_base import DbModelBase
 
     Model = DbModelBase
@@ -42,9 +41,10 @@ class Item(Model, DbModelAuthorizeMixin):
         ),
     )
     category: Mapped[Optional["Category"]] = cast(
-        Mapped["Category"],
+        Mapped[Optional["Category"]],
         db.relationship(
             "Category",
+            lazy="joined",
         ),
     )
 
@@ -92,9 +92,8 @@ class Item(Model, DbModelAuthorizeMixin):
         include_columns: list[str] | None = None,
     ) -> dict[str, Any]:
         res = super().obj_to_dict(skip_columns, include_columns)
-        if self.category_id:
-            category = cast(Category, Category.find_by_id(self.category_id))
-            res["category"] = category.obj_to_dict()
+        if self.category:
+            res["category"] = self.category.obj_to_dict()
         return res
 
     def obj_to_export_dict(self) -> dict[str, Any]:

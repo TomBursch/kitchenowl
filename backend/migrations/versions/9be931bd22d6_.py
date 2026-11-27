@@ -1,7 +1,7 @@
 """add shoppinglist locations
 
 Revision ID: 9be931bd22d6
-Revises: c2e936c8ab31
+Revises: 545f81967c0f
 Create Date: 2026-11-08 22:05:25.750778
 
 """
@@ -11,7 +11,7 @@ import sqlalchemy as sa
 
 # revision identifiers, used by Alembic.
 revision = '9be931bd22d6'
-down_revision = 'c2e936c8ab31'
+down_revision = '545f81967c0f'
 branch_labels = None
 depends_on = None
 

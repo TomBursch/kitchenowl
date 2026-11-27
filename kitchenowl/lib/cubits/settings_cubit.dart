@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:collection/collection.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:equatable/equatable.dart';
 import 'package:material_ui/material_ui.dart';
@@ -6,6 +9,22 @@ import 'package:kitchenowl/config.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/services/storage/storage.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+
+/// Units offered when asking for the quantity. Symbols only, so they need no
+/// translation and add up on the server.
+const kShoppingListUnits = [
+  'kg',
+  'g',
+  'l',
+  'dl',
+  'cl',
+  'ml',
+  'mg',
+  'oz',
+  'lb',
+  'fl oz',
+];
+const kShoppingListUnitsDefault = ['kg', 'g', 'l', 'dl', 'cl', 'ml'];
 
 class SettingsCubit extends Cubit<SettingsState> {
   SettingsCubit() : super(const SettingsState()) {
@@ -35,6 +54,12 @@ class SettingsCubit extends Cubit<SettingsState> {
         .readBool(key: 'shoppingListKeepAwake');
     final advancedRecipesControl = PreferenceStorage.getInstance()
         .readBool(key: 'advancedRecipesControl');
+    final shoppingListAskQuantity = PreferenceStorage.getInstance()
+        .readBool(key: 'shoppingListAskQuantity');
+    final shoppingListUnits =
+        PreferenceStorage.getInstance().read(key: 'shoppingListUnits');
+    final shoppingListCustomUnits =
+        PreferenceStorage.getInstance().read(key: 'shoppingListCustomUnits');
 
     Config.deviceInfo = DeviceInfoPlugin().deviceInfo;
     Config.packageInfo = PackageInfo.fromPlatform();
@@ -62,6 +87,11 @@ class SettingsCubit extends Cubit<SettingsState> {
       restoreLastShoppingList: await restoreLastShoppingList ?? false,
       shoppingListKeepAwake: await shoppingListKeepAwake ?? false,
       advancedRecipesControl: await advancedRecipesControl ?? false,
+      shoppingListAskQuantity: await shoppingListAskQuantity ?? false,
+      shoppingListUnits:
+          _decodeList(await shoppingListUnits) ?? kShoppingListUnitsDefault,
+      shoppingListCustomUnits:
+          _decodeList(await shoppingListCustomUnits) ?? const <String>[],
     ));
   }
 
@@ -153,6 +183,70 @@ class SettingsCubit extends Cubit<SettingsState> {
     );
     emit(state.copyWith(advancedRecipesControl: advancedRecipesControl));
   }
+
+  void setShoppingListAskQuantity(bool shoppingListAskQuantity) {
+    PreferenceStorage.getInstance().writeBool(
+      key: 'shoppingListAskQuantity',
+      value: shoppingListAskQuantity,
+    );
+    emit(state.copyWith(shoppingListAskQuantity: shoppingListAskQuantity));
+  }
+
+  void setShoppingListUnitEnabled(String unit, bool enabled) {
+    final units = state.shoppingListUnits.where((e) => e != unit).toList();
+    if (enabled) units.add(unit);
+    _writeUnits(units: units);
+  }
+
+  void addShoppingListCustomUnit(String unit) {
+    // A comma separates entries in a description, so it can't be in a unit
+    unit = unit.replaceAll(',', ' ').trim().replaceAll(RegExp(r'\s+'), ' ');
+    if (unit.isEmpty) return;
+    final existing = state.allShoppingListUnits
+        .firstWhereOrNull((e) => e.toLowerCase() == unit.toLowerCase());
+    if (existing != null) {
+      setShoppingListUnitEnabled(existing, true);
+      return;
+    }
+    _writeUnits(
+      units: [...state.shoppingListUnits, unit],
+      customUnits: [...state.shoppingListCustomUnits, unit],
+    );
+  }
+
+  void removeShoppingListCustomUnit(String unit) {
+    _writeUnits(
+      units: state.shoppingListUnits.where((e) => e != unit).toList(),
+      customUnits:
+          state.shoppingListCustomUnits.where((e) => e != unit).toList(),
+    );
+  }
+
+  void _writeUnits({List<String>? units, List<String>? customUnits}) {
+    if (units != null) {
+      PreferenceStorage.getInstance()
+          .write(key: 'shoppingListUnits', value: jsonEncode(units));
+    }
+    if (customUnits != null) {
+      PreferenceStorage.getInstance().write(
+        key: 'shoppingListCustomUnits',
+        value: jsonEncode(customUnits),
+      );
+    }
+    emit(state.copyWith(
+      shoppingListUnits: units,
+      shoppingListCustomUnits: customUnits,
+    ));
+  }
+
+  static List<String>? _decodeList(String? value) {
+    if (value == null) return null;
+    try {
+      return List<String>.from(jsonDecode(value));
+    } catch (_) {
+      return null;
+    }
+  }
 }
 
 class SettingsState extends Equatable {
@@ -168,6 +262,9 @@ class SettingsState extends Equatable {
   final bool restoreLastShoppingList;
   final bool shoppingListKeepAwake;
   final bool advancedRecipesControl;
+  final bool shoppingListAskQuantity;
+  final List<String> shoppingListUnits;
+  final List<String> shoppingListCustomUnits;
 
   const SettingsState({
     this.themeMode = ThemeMode.system,
@@ -182,7 +279,17 @@ class SettingsState extends Equatable {
     this.restoreLastShoppingList = false,
     this.shoppingListKeepAwake = false,
     this.advancedRecipesControl = false,
+    this.shoppingListAskQuantity = false,
+    this.shoppingListUnits = kShoppingListUnitsDefault,
+    this.shoppingListCustomUnits = const [],
   });
+
+  List<String> get allShoppingListUnits =>
+      {...kShoppingListUnits, ...shoppingListCustomUnits}.toList();
+
+  /// Units shown when asking for the quantity, in display order.
+  List<String> get visibleShoppingListUnits =>
+      allShoppingListUnits.where(shoppingListUnits.contains).toList();
 
   SettingsState copyWith({
     ThemeMode? themeMode,
@@ -197,6 +304,9 @@ class SettingsState extends Equatable {
     bool? restoreLastShoppingList,
     bool? shoppingListKeepAwake,
     bool? advancedRecipesControl,
+    bool? shoppingListAskQuantity,
+    List<String>? shoppingListUnits,
+    List<String>? shoppingListCustomUnits,
   }) =>
       SettingsState(
         themeMode: themeMode ?? this.themeMode,
@@ -216,6 +326,11 @@ class SettingsState extends Equatable {
             shoppingListKeepAwake ?? this.shoppingListKeepAwake,
         advancedRecipesControl:
             advancedRecipesControl ?? this.advancedRecipesControl,
+        shoppingListAskQuantity:
+            shoppingListAskQuantity ?? this.shoppingListAskQuantity,
+        shoppingListUnits: shoppingListUnits ?? this.shoppingListUnits,
+        shoppingListCustomUnits:
+            shoppingListCustomUnits ?? this.shoppingListCustomUnits,
       );
 
   @override
@@ -232,5 +347,8 @@ class SettingsState extends Equatable {
         restoreLastShoppingList,
         shoppingListKeepAwake,
         advancedRecipesControl,
+        shoppingListAskQuantity,
+        shoppingListUnits,
+        shoppingListCustomUnits,
       ];
 }

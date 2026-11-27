@@ -9,6 +9,7 @@ import 'package:kitchenowl/enums/shoppinglist_sorting.dart';
 import 'package:kitchenowl/models/item.dart';
 import 'package:kitchenowl/kitchenowl.dart';
 import 'package:kitchenowl/widgets/choice_scroll.dart';
+import 'package:kitchenowl/widgets/shopping_list/quantity_bottom_sheet.dart';
 import 'package:kitchenowl/widgets/shopping_list/shopping_list_choice_chip.dart';
 import 'package:kitchenowl/widgets/shopping_list/sliver_shopinglist_item_view.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
@@ -39,6 +40,28 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
     super.dispose();
   }
 
+  Future<void> _addItem(ShoppinglistCubit cubit, Item item) async {
+    if (!App.settings.shoppingListAskQuantity) return cubit.add(item);
+
+    final description = await showModalBottomSheet<String>(
+      context: context,
+      isScrollControlled: true,
+      showDragHandle: true,
+      useRootNavigator: true,
+      builder: (context) => QuantityBottomSheet(
+        item: item,
+        units: App.settings.visibleShoppingListUnits,
+        initialDescription:
+            item is ItemWithDescription ? item.description : null,
+      ),
+    );
+    if (description == null) return;
+
+    return cubit.add(
+      ItemWithDescription.fromItem(item: item, description: description),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final cubit = BlocProvider.of<ShoppinglistCubit>(context);
@@ -67,7 +90,7 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                     final state = cubit.state;
                     if (state is SearchShoppinglistCubitState) {
                       if (state.result.first is! ShoppinglistItem) {
-                        cubit.add(state.result.first);
+                        _addItem(cubit, state.result.first);
                       }
                     } else {
                       cubit.search(searchController.text);
@@ -190,7 +213,7 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                                         cubit.selectItem(item);
                                       }
                                     } else {
-                                      cubit.add(item);
+                                      _addItem(cubit, item);
                                     }
                                   }),
                                 ),
@@ -247,10 +270,13 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                                             cubit.selectItem(item);
                                           }
                                         } else {
-                                          cubit.add(item);
+                                          _addItem(cubit, item);
                                         }
                                       }),
-                                      onRecentPressed: Nullable(cubit.add),
+                                      onRecentPressed: Nullable(
+                                        (ItemWithDescription item) =>
+                                            _addItem(cubit, item),
+                                      ),
                                       onRefresh: cubit.refresh,
                                     ),
                                   ],

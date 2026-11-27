@@ -3,13 +3,13 @@ from lark import Lark, Transformer, Tree, Token
 from lark.visitors import Interpreter
 import re
 
-grammar = r"""
-start: (NUMBER unit?)? NAME? (NUMBER unit?)?
+from app.util import units
 
-unit: COUNT | SI_WEIGHT | SI_VOLUME
-COUNT.5: "x"i
-SI_WEIGHT.5: "mg"i | "g"i | "kg"i
-SI_VOLUME.5: "ml"i | "l"i
+grammar = r"""
+start: (NUMBER unit? OF?)? NAME? (NUMBER unit?)?
+
+unit: """ + units.NAMED + units.TERMINALS + r"""
+OF.4: /of\b/i
 NAME: /[^ ][^0-9]*/
 
 DECIMAL: INT "." INT? | "." INT | INT "," INT
@@ -51,6 +51,8 @@ class Printer(Interpreter):
         res = ""
         for child in start.children:
             if isinstance(child, Tree):
+                if res and child.children[0].type in units.SPACED:
+                    res += " "
                 res += self.visit(child)
             elif child.type == "NUMBER":
                 value = round(child.value, 5)

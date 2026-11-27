@@ -125,9 +125,12 @@ class _HouseholdSettingsItemsPageState
     );
   }
 
-  Widget _itemPopmenuBuilder(Item item) => ItemPopupMenuButton(
+  Widget _itemPopmenuBuilder(
+          Item item, ValueChanged<bool> onMenuVisibilityChanged) =>
+      ItemPopupMenuButton(
         item: item,
         household: widget.household,
+        onMenuVisibilityChanged: onMenuVisibilityChanged,
         setIcon: (icon) => cubit.setIcon(item, icon),
         setName: (name) => cubit.setName(item, name),
         mergeItem: (other) => cubit.mergeItem(item, other),

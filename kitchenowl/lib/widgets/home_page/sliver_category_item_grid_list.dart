@@ -18,7 +18,7 @@ class SliverCategoryItemGridList<T extends Item> extends StatefulWidget {
   final ShoppingList? shoppingList; // forwarded to item page on long press
   final bool Function(T)? selected;
   final bool isLoading;
-  final Widget Function(T)? extraOption;
+  final Widget Function(T, ValueChanged<bool>)? extraOption;
   final bool isSubTitle;
   final bool splitByCategories;
   final ShoppingListStyle shoppingListStyle;

@@ -83,11 +83,17 @@ class ItemWrapMenu extends StatelessWidget {
           context: context,
           builder: (BuildContext context) {
             return TextDialog(
-              title: AppLocalizations.of(context)!.categoryEdit,
+              title: AppLocalizations.of(context)!.rename,
               doneText: AppLocalizations.of(context)!.rename,
               hintText: AppLocalizations.of(context)!.name,
               initialText: item.name,
               isInputValid: (s) => s.trim().isNotEmpty && s != item.name,
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: Text(AppLocalizations.of(context)!.cancel),
+                ),
+              ],
             );
           },
         );

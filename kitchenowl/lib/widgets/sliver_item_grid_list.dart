@@ -22,7 +22,7 @@ class SliverItemGridList<T extends Item> extends StatelessWidget {
   final ShoppingList? shoppingList; // forwarded to item page on long press
   final bool Function(T)? selected;
   final bool isLoading;
-  final Widget Function(T)? extraOption;
+  final Widget Function(T, ValueChanged<bool>)? extraOption;
   final ShoppingListStyle shoppingListStyle;
   final EdgeInsetsGeometry padding;
 
@@ -67,7 +67,10 @@ class SliverItemGridList<T extends Item> extends StatelessWidget {
               onLongPressed:
                   (onLongPressed ?? Nullable((item) => openMenu(context, item)))
                       .value,
-              extraOption: extraOption?.call(items[i]),
+              extraOptionBuilder: extraOption == null
+                  ? null
+                  : (onMenuVisibilityChanged) =>
+                      extraOption!(items[i], onMenuVisibilityChanged),
             ),
     );
 

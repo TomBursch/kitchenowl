@@ -5,9 +5,6 @@ import re
 from typing import Any, cast
 
 from flask import current_app
-import ingredient_parser
-import ingredient_parser.dataclasses
-from litellm import completion
 
 from app.config import SUPPORTED_LANGUAGES
 from app.models import Household, Item
@@ -15,6 +12,15 @@ from app.models import Household, Item
 LLM_MODEL = os.getenv("LLM_MODEL")
 LLM_API_URL = os.getenv("LLM_API_URL")
 NLP_IF_EN = os.getenv("NLP_IF_EN")
+
+
+def completion(*args, **kwargs):
+    # litellm takes about 260 MB of memory once imported, and many instances
+    # never configure an LLM: import it on the first call only.
+    from litellm import completion as litellm_completion
+
+    return litellm_completion(*args, **kwargs)
+
 
 INGREDIENT_SCHEMA = {
     "type": "object",
@@ -56,6 +62,10 @@ class IngredientParsingResult:
 
 
 def parseNLP(ingredients: list[str]) -> list[IngredientParsingResult]:
+    # The NLP model (with nltk) takes about 185 MB: import it on first use only
+    import ingredient_parser
+    import ingredient_parser.dataclasses
+
     def nlpAmountToDescription(
         amount: ingredient_parser.dataclasses.IngredientAmount
         | ingredient_parser.dataclasses.CompositeIngredientAmount,

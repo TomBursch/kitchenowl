@@ -2,7 +2,7 @@ from collections.abc import Generator
 import re
 from typing import Any
 from flask import current_app
-from recipe_scrapers.__version__ import __version__ as recipe_scrapers_version
+from importlib.metadata import version
 from requests_hardened import Config, Manager
 import requests
 from app.config import FRONT_URL
@@ -16,6 +16,8 @@ from app.service.recipe_public_scraping import (
     scrapeHTMLStream,
 )
 
+# read from the package metadata: importing recipe_scrapers loads every scraper
+recipe_scrapers_version = version("recipe-scrapers")
 # taken from the recipe-scrapers library to circumvent anti-scraping measures that block requests with the default user agent
 USER_AGENT = f"Mozilla/5.0 (compatible; Windows NT 10.0; Win64; x64; rv:{recipe_scrapers_version}) recipe-scrapers/{recipe_scrapers_version}"
 

@@ -9,6 +9,10 @@ class ShoppingItemWidget<T extends Item> extends StatelessWidget {
   final T item;
   final void Function(T)? onPressed;
   final void Function(T)? onLongPressed;
+
+  /// When set (and gridStyle = false), an unchecked checkbox is shown as the
+  /// leading widget; tapping it invokes this callback.
+  final void Function(T)? onCheckboxPressed;
   final bool selected;
   final Widget? extraOption;
 
@@ -23,6 +27,7 @@ class ShoppingItemWidget<T extends Item> extends StatelessWidget {
     required this.item,
     this.onPressed,
     this.onLongPressed,
+    this.onCheckboxPressed,
     this.selected = false,
     this.gridStyle = true,
     this.listStyle = ListStyle.cards,
@@ -58,6 +63,9 @@ class ShoppingItemWidget<T extends Item> extends StatelessWidget {
             onPressed: onPressed != null ? () => onPressed!(item) : null,
             onLongPressed:
                 onLongPressed != null ? () => onLongPressed!(item) : null,
+            onCheckboxPressed: onCheckboxPressed != null
+                ? () => onCheckboxPressed!(item)
+                : null,
             extraOption: extraOption,
           );
   }

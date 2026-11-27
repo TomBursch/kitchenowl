@@ -142,6 +142,8 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                   buildWhen: (previous, current) =>
                       previous.shoppingListListView !=
                           current.shoppingListListView ||
+                      previous.shoppingListCheckboxMode !=
+                          current.shoppingListCheckboxMode ||
                       previous.listStyle != current.listStyle ||
                       previous.gridSize != current.gridSize,
                   builder: (context, settingsState) => PageTransitionSwitcher(
@@ -238,18 +240,32 @@ class _ShoppinglistPageState extends State<ShoppinglistPage> {
                                           state.selectedListItems,
                                       sorting: state.sorting,
                                       shoppingList: state.selectedShoppinglist,
-                                      onPressed: Nullable((Item item) {
-                                        if (item is ShoppinglistItem) {
-                                          if (App.settings
-                                              .shoppingListTapToRemove) {
-                                            cubit.remove(item);
-                                          } else {
-                                            cubit.selectItem(item);
-                                          }
-                                        } else {
-                                          cubit.add(item);
-                                        }
-                                      }),
+                                      // In checkbox mode the row tap opens the
+                                      // item page (the default fallback in
+                                      // SliverItemGridList when onPressed is
+                                      // null) and the leading checkbox removes
+                                      // the item.
+                                      onPressed:
+                                          (App.settings.shoppingListListView &&
+                                                  App.settings
+                                                      .shoppingListCheckboxMode)
+                                              ? null
+                                              : Nullable((Item item) {
+                                                  if (item
+                                                      is ShoppinglistItem) {
+                                                    if (App
+                                                        .settings
+                                                        .shoppingListTapToRemove) {
+                                                      cubit.remove(item);
+                                                    } else {
+                                                      cubit.selectItem(item);
+                                                    }
+                                                  } else {
+                                                    cubit.add(item);
+                                                  }
+                                                }),
+                                      onCheckboxPressed:
+                                          Nullable(cubit.remove),
                                       onRecentPressed: Nullable(cubit.add),
                                       onRefresh: cubit.refresh,
                                     ),

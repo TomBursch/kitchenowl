@@ -79,7 +79,7 @@ def addPlannedRecipe(args, household_id):
         raise NotFoundRequest()
     recipe.checkAuthorized()
     cooking_date = (
-        datetime.fromtimestamp(args["cooking_date"] / 1000, timezone.utc).date()
+        datetime.fromtimestamp((args["cooking_date"] + 43200000) / 1000, timezone.utc).date()
         if "cooking_date" in args
         else date.min
     )
@@ -120,17 +120,31 @@ def removePlannedRecipeById(args, household_id, id):
     if not recipe:
         raise NotFoundRequest()
 
-    cooking_date = (
-        datetime.fromtimestamp(args["cooking_date"] / 1000, timezone.utc).date()
-        if "cooking_date" in args
-        else date.min
-    )
-    if "day" in args:
+    planner = None
+    if "cooking_date" in args:
+        ts = args["cooking_date"] / 1000
+        candidates = [
+            datetime.fromtimestamp(ts + 43200, timezone.utc).date(),
+            datetime.fromtimestamp(ts, timezone.utc).date(),
+        ]
+        for cand in candidates:
+            planner = Planner.find_by_datetime(
+                household_id, recipe_id=recipe.id, cooking_date=cand
+            )
+            if planner:
+                break
+    elif "day" in args:
         # if outdated "day" was used, transform it into next date with that weekday
         cooking_date = next_weekday(args["day"])
-    planner = Planner.find_by_datetime(
-        household_id, recipe_id=recipe.id, cooking_date=cooking_date
-    )
+        planner = Planner.find_by_datetime(
+            household_id, recipe_id=recipe.id, cooking_date=cooking_date
+        )
+
+    if not planner:
+        planner = Planner.query.filter_by(
+            household_id=household_id, recipe_id=recipe.id
+        ).first()
+
     if planner:
         planner.delete()
         RecipeHistory.create_dropped(recipe, household_id)
